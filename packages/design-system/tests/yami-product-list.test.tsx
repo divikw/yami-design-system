@@ -279,6 +279,37 @@ describe("YAMI ProductList contracts", () => {
     expect(next.getAttribute("aria-disabled")).toBe("true")
   })
 
+  it("returns a scrolled rail to the first product when entering mobile", async () => {
+    let onBreakpointChange: ((event: MediaQueryListEvent) => void) | undefined
+    const removeEventListener = vi.fn()
+    Object.defineProperty(window, "matchMedia", {
+      configurable: true,
+      value: vi.fn().mockReturnValue({
+        matches: false,
+        addEventListener: (_type: string, listener: (event: MediaQueryListEvent) => void) => {
+          onBreakpointChange = listener
+        },
+        removeEventListener,
+      }),
+    })
+
+    await act(async () => {
+      root.render(<ProductList title="Featured" products={products} />)
+    })
+
+    const rail = container.querySelector<HTMLElement>('[data-slot="product-list-items"]')!
+    Object.defineProperties(rail, {
+      clientWidth: { configurable: true, value: 300 },
+      scrollWidth: { configurable: true, value: 900 },
+      scrollLeft: { configurable: true, writable: true, value: 600 },
+    })
+
+    await act(async () => onBreakpointChange?.({ matches: true } as MediaQueryListEvent))
+
+    expect(rail.scrollLeft).toBe(0)
+    expect(removeEventListener).not.toHaveBeenCalled()
+  })
+
   it("renders themed banner semantics and atmospheric decoration", async () => {
     await act(async () => {
       root.render(

@@ -12,7 +12,7 @@
       "canvas": 24
     },
     "area": {
-      "count": 5,
+      "count": 6,
       "canvas": 24
     },
     "base": {
@@ -206,9 +206,9 @@
       "sha1": "e80188afde"
     },
     {
-      "name": "canada",
+      "name": "canada-flag",
       "category": "area",
-      "path": "assets/icons/area/canada.svg",
+      "path": "assets/icons/area/canada-flag.svg",
       "width": 24,
       "height": 24,
       "sha1": "1fa9cf5928"
@@ -238,9 +238,17 @@
       "sha1": "4d9662e9e0"
     },
     {
-      "name": "united-states",
+      "name": "korea-flag",
       "category": "area",
-      "path": "assets/icons/area/united-states.svg",
+      "path": "assets/icons/area/korea-flag.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "d563d11788"
+    },
+    {
+      "name": "united-states-flag",
+      "category": "area",
+      "path": "assets/icons/area/united-states-flag.svg",
       "width": 24,
       "height": 24,
       "sha1": "1e16839cec"

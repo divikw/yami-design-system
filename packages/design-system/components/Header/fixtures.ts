@@ -34,7 +34,7 @@ const darkLogoZh = new URL('../../assets/logos/yami-ui-cn-pc-fill-inverse.svg', 
 const darkMobileLogoEn = new URL('../../assets/logos/yami-ui-en-mobile-fill-inverse.svg', import.meta.url).href
 // Locale flag comes from the maintained DS icon set (Assets → Icons → area),
 // not from this component's fixture folder.
-const flagUs = new URL('../../assets/icons/area/united-states.svg', import.meta.url).href
+const flagUs = new URL('../../assets/icons/area/united-states-flag.svg', import.meta.url).href
 const SEARCH_SUGGESTION_IMAGES = {
   mat: new URL('./assets/search-suggestions/mat.jpeg', import.meta.url).href,
   'matcha bowl': new URL('./assets/search-suggestions/matcha-bowl.jpeg', import.meta.url).href,

@@ -5,6 +5,8 @@ Source: `design-guidelines/icons/*.svg` — legacy line-style, 24pt canvas, 1.5p
 ## Available (copied locally, 22 icons)
 arrow-down, arrow-left, arrow-right, arrow-up, asterisk, book, cancel, file, folder, grid-view, menu, mobile, moon, paint-board, panel-left, pc, search, sun, tablet, test-tube, web-design, logo-full
 
+The country flags share the `area/<country>-flag.svg` naming convention: `canada-flag`, `korea-flag`, and `united-states-flag`.
+
 ## Figma imports
 
 - arrow-down → `action/arrow-down.svg` (`action / arrow-down`, node `7815:28956`)
@@ -19,6 +21,8 @@ arrow-down, arrow-left, arrow-right, arrow-up, asterisk, book, cancel, file, fol
 - cart → `base/cart.svg` (`tabbar / cart-line`, node `1624:151015`)
 - same-day → `base/same-day.svg` (`base / same-day`, node `7785:7598`)
 - communications → `communications/*.svg` (`Communications` component set, node `7788:8314`): comment, like, liked, more, translate. The inactive glyphs follow the shared `currentColor` contract; `liked` retains Figma's `Text/$text-brand` color (`#ED0000`).
+
+- korea-flag → `area/korea-flag.svg` ([Figma](https://www.figma.com/design/6oOAy72DBff4P6NzJYc2hi/YAMI-UI-UX-Guidelines?node-id=7931-586), node `7931:586`, `Country=Country3`). Preserves the source colors and 24×18 flag at y=3 on a 24×24 canvas. Separate from the Korean landmark illustration in `area/korea.svg`.
 
 ## Missing — substitute from Lucide
 Required for UI kits but not in source set. Use Lucide CDN as temporary fallback (1.5–2px stroke, close visual match). **Flagged — replace with Figma-exported SVGs when available.**
