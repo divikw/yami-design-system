@@ -1,0 +1,33 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(0 3)">
+<g clip-path="url(#yami-flag-korea-clip)">
+<rect width="24" height="18" rx="2" fill="white"/>
+<path d="M22 17V18H2V17H22ZM23 16V2C23 1.44771 22.5523 1 22 1H2C1.44772 1 1 1.44772 1 2V16C1 16.5523 1.44772 17 2 17V18L1.7959 17.9893C0.787223 17.887 0 17.0357 0 16V2C0 0.895431 0.895431 2.0133e-08 2 0H22C23.1046 0 24 0.895431 24 2V16C24 17.0357 23.2128 17.887 22.2041 17.9893L22 18V17C22.5523 17 23 16.5523 23 16Z" fill="black" fill-opacity="0.08" style="fill:black;fill-opacity:0.08;"/>
+<path d="M15.443 8.99961C15.443 9.86042 13.9014 12.0124 11.9998 12.0124C10.0983 12.0124 8.55673 9.86033 8.55673 8.99961C8.55673 7.09803 10.0983 5.55651 11.9998 5.55651C13.9014 5.55651 15.443 7.09803 15.443 8.99961Z" fill="#D80027" style="fill:#D80027;fill:color(display-p3 0.8471 0.0000 0.1529);fill-opacity:1;"/>
+<path d="M15.443 8.99954C15.443 10.9011 13.9014 12.4426 11.9998 12.4426C10.0983 12.4426 8.55673 10.9011 8.55673 8.99954" fill="#0052B4" style="fill:#0052B4;fill:color(display-p3 0.0000 0.3216 0.7059);fill-opacity:1;"/>
+<path d="M16.5644 11.1305L15.6514 12.0435L16.26 12.6521L17.1731 11.7391L16.5644 11.1305Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M15.0434 12.6516L14.1304 13.5646L14.7391 14.1733L15.6521 13.2602L15.0434 12.6516Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M18.391 12.9554L17.478 13.8684L18.0866 14.4771L18.9997 13.5641L18.391 12.9554Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M16.87 14.4777L15.9571 15.3907L16.5657 15.9992L17.4787 15.0863L16.87 14.4777Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M17.4777 12.043L16.5647 12.9559L17.1734 13.5645L18.0863 12.6515L17.4777 12.043Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M15.9567 13.5644L15.0438 14.4775L15.6524 15.086L16.5654 14.173L15.9567 13.5644Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M15.0433 3.52148L17.478 5.9561L18.0866 5.34746L15.652 2.91285L15.0433 3.52148Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M14.1308 4.43461L15.0438 5.34761L15.6524 4.73902L14.7394 3.82602L14.1308 4.43461Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M15.6517 5.95646L16.5647 6.86945L17.1733 6.26086L16.2603 5.34787L15.6517 5.95646Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M15.9555 2.6086L16.8686 3.5216L17.4772 2.91296L16.5642 1.99996L15.9555 2.6086Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M17.4784 4.13031L18.3913 5.0433L19 4.43466L18.087 3.52167L17.4784 4.13031Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M8.04329 15.3903L5.60868 12.9557L5.00004 13.5644L7.43464 15.999L8.04329 15.3903Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M8.956 14.4777L8.04293 13.5647L7.43437 14.1732L8.34735 15.0862L8.956 14.4777Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M7.43502 12.9559L6.52199 12.043L5.91335 12.6516L6.82635 13.5646L7.43502 12.9559Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M9.86991 13.5648L7.4353 11.1302L6.82666 11.7389L9.26126 14.1735L9.86991 13.5648Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M5.61012 5.04265L8.04478 2.60803L7.43613 1.99939L5.00148 4.43402L5.61012 5.04265Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M6.52159 5.95611L8.95625 3.52148L8.3476 2.91285L5.91294 5.34747L6.52159 5.95611Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<path d="M7.43493 6.86909L9.86955 4.43447L9.26099 3.82587L6.82633 6.2605L7.43493 6.86909Z" fill="black" style="fill:black;fill-opacity:1;"/>
+</g>
+<defs>
+<clipPath id="yami-flag-korea-clip">
+<rect width="24" height="18" fill="white" style="fill:white;fill-opacity:1;"/>
+</clipPath>
+</defs>
+</g>
+</svg>

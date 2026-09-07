@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   Badge, Button, Card, Checkbox, Divider, Footer, HorizontalScrollList,
-  ProductList, Tabs, TabsContent, TabsList, TabsTrigger, useHorizontalScrollList,
+  ProductList, Tabs, TabsList, TabsTrigger, useHorizontalScrollList,
 } from "@yami/design-system";
 import {
   appStoreHref, asset, calculateSavings, campaignCopy, campaignProducts,
@@ -16,7 +16,7 @@ import styles from "./AppDownloadPage.module.css";
 
 const homeFooter = createEcommerceHomeFixture("en").footer;
 const arrowDown = new URL("../../../design-system/assets/icons/system/arrow-down.svg", import.meta.url).href;
-const localeFlag = new URL("../../../design-system/assets/icons/area/united-states.svg", import.meta.url).href;
+const localeFlag = new URL("../../../design-system/assets/icons/area/korea-flag.svg", import.meta.url).href;
 const desktopLogo = new URL("../../../design-system/assets/logos/yami-ui-en-pc-fill.svg", import.meta.url).href;
 const logo = new URL("../../../design-system/assets/logos/yami-ui-en-mobile-fill.svg", import.meta.url).href;
 const sectionIds = ["welcome-coupon", "discount-products", "coupon-guide", "savings-calculator"];
@@ -45,24 +45,34 @@ function SavingsCalculator({ locale, onGuide }: { locale: AppDownloadLocale; onG
       <h2>{ko ? "내 혜택 미리 계산해보기" : "Calculate My Savings"}</h2>
       <p className={styles.subtitle}>{ko ? "쿠폰과 배송비 혜택을 직접 확인해보세요" : "Check your exact discount and shipping benefits live"}</p>
       </div>
-      <Tabs value={mode} onValueChange={(value) => setMode(value as "welcome" | "app")}>
-        <TabsList variant="primary" styleVariant="b" fullWidth className={styles.calculatorTabs} aria-label={ko ? "쿠폰 선택" : "Choose coupon"}>
-          <TabsTrigger value="welcome"><span className={styles.couponTab}><span>{ko ? "쿠폰 1" : "Coupon 1"}</span>{t.tab1Title_combo1010}</span></TabsTrigger>
-          <TabsTrigger value="app"><span className={styles.couponTab}><span>{ko ? "쿠폰 2" : "Coupon 2"}</span>{t.tab2Title}</span></TabsTrigger>
-        </TabsList>
-        <p className={styles.modeHint}>{mode === "welcome" ? t.tab1Badge : t.tab2Badge}</p>
+      <div className={styles.calculatorTabs} role="tablist" aria-label={ko ? "쿠폰 선택" : "Choose coupon"}>
+        <button id="calculator-tab-welcome" type="button" role="tab" className={styles.calculatorTab} aria-selected={mode === "welcome"} aria-controls="calculator-panel-welcome" onClick={() => setMode("welcome")}>
+          <span className={styles.couponTab}>
+            <span className={styles.couponTabLabel}>{ko ? "쿠폰 1" : "Coupon 1"}</span>
+            <span className={styles.couponTabTitle}>{t.tab1Title_combo1010}</span>
+            <span className={styles.calculatorTabHint}>{t.tab1Badge}</span>
+          </span>
+        </button>
+        <button id="calculator-tab-app" type="button" role="tab" className={styles.calculatorTab} aria-selected={mode === "app"} aria-controls="calculator-panel-app" onClick={() => setMode("app")}>
+          <span className={styles.couponTab}>
+            <span className={styles.couponTabLabel}>{ko ? "쿠폰 2" : "Coupon 2"}</span>
+            <span className={styles.couponTabTitle}>{t.tab2Title}</span>
+            <span className={styles.calculatorTabHint}>{t.tab2Badge}</span>
+          </span>
+        </button>
+      </div>
         <Card padding="lg" className={styles.calculatorCard}>
           <div className={styles.calculatorInput}>
           <div className={styles.amountHeading}>
             <div><h3>{mode === "welcome" ? t.card1Title : t.card2Title}</h3><p>{mode === "welcome" ? t.sliderHint : selected.length ? t.selectedCount.replace("{count}", String(selected.length)) : (ko ? "상품을 선택하면 할인과 최종 결제 금액을 확인할 수 있어요." : "Select products to see your discount and final payment.")}</p></div>
             <strong>{money(result.subtotal)}</strong>
           </div>
-          <TabsContent value="welcome" className={styles.calculatorControls}>
+          <div id="calculator-panel-welcome" role="tabpanel" aria-labelledby="calculator-tab-welcome" hidden={mode !== "welcome"} className={styles.calculatorControls}>
             <label className={styles.srOnly} htmlFor="campaign-order-amount">{t.card1Title}</label>
             <input id="campaign-order-amount" className={styles.slider} type="range" min={12} max={100} step={1} value={amount} onChange={(event) => setAmount(Number(event.target.value))} aria-valuetext={money(amount)} />
             <div className={styles.ticks} aria-hidden="true">{[12, 25, 50, 75, 100].map((value) => <span key={value} style={{ left: `${(value - 12) / 88 * 100}%` }}>{money(value).replace(".00", "")}</span>)}</div>
-          </TabsContent>
-          <TabsContent value="app" className={styles.calculatorControls}>
+          </div>
+          <div id="calculator-panel-app" role="tabpanel" aria-labelledby="calculator-tab-app" hidden={mode !== "app"} className={styles.calculatorControls}>
             <div className={styles.selectionNavigation}>
               <span>{ko ? `추천 상품 ${featuredProducts.length}개` : `${featuredProducts.length} featured products`}</span>
               <div>
@@ -83,7 +93,7 @@ function SavingsCalculator({ locale, onGuide }: { locale: AppDownloadLocale; onG
               </li>)}
             </HorizontalScrollList>
             <p className={styles.moreDeals}>{ko ? "추천 상품 일부입니다. 더 많은 혜택 상품은 " : "These are a few featured picks. See more deals "}<a href="#discount-products">{ko ? "여기" : "here"}</a></p>
-          </TabsContent>
+          </div>
           </div>
           <div className={styles.calculatorDetails}>
           <dl className={styles.breakdown}>
@@ -105,14 +115,13 @@ function SavingsCalculator({ locale, onGuide }: { locale: AppDownloadLocale; onG
           <progress className={styles.progress} max={1} value={result.progress} aria-label={ko ? "무료 배송까지" : "Progress to free shipping"} />
           </div>
         </Card>
-      </Tabs>
     </div>
   </section>;
 }
 
 export interface AppDownloadPageProps { initialLocale?: AppDownloadLocale; contentMaxWidth?: number | string }
 
-export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1920 }: AppDownloadPageProps) {
+export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }: AppDownloadPageProps) {
   const [locale, setLocale] = useState(initialLocale);
   const [category, setCategory] = useState<string>("beauty");
   const [activeSection, setActiveSection] = useState(sectionIds[0]);

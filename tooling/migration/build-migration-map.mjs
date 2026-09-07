@@ -15,6 +15,9 @@ const retiredRuleFiles = new Set([
 ]);
 
 function classify(source) {
+  if (source === "assets/icons/area/canada.svg" || source === "assets/icons/area/united-states.svg") {
+    return { disposition: "migrated", destination: `packages/design-system/${source.replace(".svg", "-flag.svg")}` };
+  }
   if (source === "readiness-baseline.json") return { disposition: "excluded", reason: "Design Labs evaluation output" };
   if (retiredRuleFiles.has(source)) return { disposition: "excluded", reason: "Retired no-gradient rule" };
   if (source === "design-system.meta.json") return { disposition: "rebuilt", destination: "packages/design-system/design-system.meta.json" };

@@ -73,14 +73,16 @@
 .guideHeading p { color: var(--text-secondary); }
 .video { display: block; width: min(100%, 380px); aspect-ratio: 9 / 16; margin: 0; border: 6px solid var(--border-focus); border-radius: 32px; background: var(--surface-inverse); object-fit: cover; }
 .calculatorSection { padding: var(--space-800) var(--space-200); background: var(--brand-tertiary); }
-.calculator { max-width: 480px; margin: auto; display: flex; flex-direction: column; gap: var(--space-400); }
-.calculatorHeading { display: flex; flex-direction: column; gap: var(--space-050); }
-.calculatorTabs { width: 100%; }
-.calculatorTabs > div { width: 100%; }
-.calculatorTabs [role="tab"] { flex: 1; min-height: 76px; }
+.calculator { max-width: 480px; margin: auto; display: flex; flex-direction: column; gap: var(--space-200); }
+.calculatorHeading { display: flex; flex-direction: column; gap: var(--space-050); margin-bottom: var(--space-200); }
+.calculatorTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-100); width: 100%; }
+.calculatorTab { min-width: 0; min-height: 76px; padding: var(--space-100); border: 2px solid transparent; border-radius: var(--radius-component-default); background: var(--surface-primary); color: var(--text-secondary); font: inherit; cursor: pointer; }
+.calculatorTab[aria-selected="true"] { border-color: var(--border-focus); color: var(--text-primary); }
+.calculatorTab:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
 .couponTab { display: flex; flex-direction: column; gap: var(--space-050); padding: var(--space-100) 0; white-space: normal; }
-.couponTab > span { text-transform: uppercase; font-size: var(--font-size-caption-sm); }
-.modeHint { text-align: center; padding: var(--space-100); color: var(--text-secondary); font-size: var(--font-size-caption-sm); }
+.couponTabLabel { text-transform: uppercase; font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
+.couponTabTitle { color: var(--text-primary); font-weight: var(--font-weight-emphasize); }
+.calculatorTabHint { color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
 .calculatorCard { padding: var(--space-400); }
 .calculatorCard > [data-slot="card-content"] { display: flex; flex-direction: column; gap: var(--space-300); }
 .calculatorInput { display: flex; flex-direction: column; gap: var(--space-200); min-width: 0; }
@@ -143,7 +145,7 @@
     height: var(--space-400);
     min-height: var(--space-400);
     padding: 0 var(--space-150);
-    font-size: var(--font-size-caption-sm);
+    font-size: var(--font-size-body-md);
   }
   .hero { padding: var(--space-400) var(--space-200); }
   .heroCopy {
@@ -172,8 +174,8 @@
   .couponCode { gap: var(--space-050); }
   .couponCode button { min-height: 32px; }
   .calculatorCard { padding: var(--space-300); }
-  .calculatorTabs [role="tab"] { padding-inline: var(--space-050); }
-  .couponTab { font-size: var(--font-size-caption-sm); }
+  .calculatorTab { padding-inline: var(--space-050); }
+  .couponTab { font-size: var(--font-size-body-md); }
   .bottom { padding: var(--space-400) var(--space-200); }
 }
 @media (hover: hover) and (pointer: fine) {
@@ -183,6 +185,7 @@
 
 
 .footerContainer { overflow-x: auto; background: var(--surface-inverse); }
+.root [data-slot="product-list-container"] { max-width: var(--campaign-content-max-width); }
 
 .selectionCheck [role="checkbox"] { border-color: var(--border-focus); }
 
@@ -210,10 +213,6 @@
 
   .header > div {
     padding-inline: var(--space-600);
-  }
-
-  .root [data-slot="product-list-container"] {
-    max-width: var(--campaign-content-max-width);
   }
 
   .footerContainer > footer {

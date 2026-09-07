@@ -158,6 +158,24 @@ export function ProductList(props: ProductListProps) {
   }, [firstProductId, layout, products.length, updateRailState, value]);
 
   useLayoutEffect(() => {
+    if (
+      layout !== "rail" ||
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 1023.98px)");
+    const resetRailAtMobileStart = (event: MediaQueryListEvent) => {
+      if (!event.matches || !railRef.current) return;
+      railRef.current.scrollLeft = 0;
+      updateRailState();
+    };
+
+    mobileQuery.addEventListener?.("change", resetRailAtMobileStart);
+    return () => mobileQuery.removeEventListener?.("change", resetRailAtMobileStart);
+  }, [layout, updateRailState]);
+
+  useLayoutEffect(() => {
     const frame = railFrameRef.current;
     const media = frame?.querySelector<HTMLElement>('[data-slot="product-card-media"]');
     if (headingAlign !== "center" || layout !== "rail" || !frame || !media) return;

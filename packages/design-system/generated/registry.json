@@ -135,7 +135,7 @@
       "status": "beta",
       "version": "0.2.0",
       "path": "registry-items/header.json",
-      "digest": "630db78b8eeedf89f7edf08d6d6c9ae8f70ea6e726accbc8f76f9d245c7d8060"
+      "digest": "f6c2ebebd4788339944545c16ab22f1f7a23f470b5b0f299dbd73662dcbcce88"
     },
     {
       "name": "hero-banner",
@@ -180,7 +180,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "7ebeeddf3672e4f954207673a52e1f334372671d1bdd9d00cb4439f0559a4bef"
+      "digest": "7bfde9e4a41fe3630589cdc6f5ebcdb73f69729ccda0bc3f309e427e987e4b57"
     },
     {
       "name": "product-media-gallery",

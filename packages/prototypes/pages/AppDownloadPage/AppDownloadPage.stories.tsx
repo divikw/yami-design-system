@@ -63,13 +63,13 @@ export const SectionNavigation: Story = {
 };
 
 export const ContentWidth: Story = {
-  args: { initialLocale: "en", contentMaxWidth: 1280 },
+  args: { initialLocale: "en", contentMaxWidth: 1440 },
   play: async ({ canvasElement }) => {
     const page = canvasElement.querySelector<HTMLElement>('[data-slot="app-download-page"]')!;
     const header = page.querySelector<HTMLElement>("header > div")!;
     const products = page.querySelector<HTMLElement>('[data-slot="product-list-container"]')!;
-    await expect(header.getBoundingClientRect().width).toBe(1280);
-    await expect(products.getBoundingClientRect().width).toBe(1280);
+    await expect(header.getBoundingClientRect().width).toBe(1440);
+    await expect(products.getBoundingClientRect().width).toBe(1440);
     await expect(getComputedStyle(products).padding).toBe("32px 48px");
     for (const section of page.querySelectorAll<HTMLElement>("main > section:not(#discount-products)")) {
       await expect(getComputedStyle(section).paddingTop).toBe("32px");
