@@ -16,7 +16,7 @@
     "vitest": "4.1.11"
   },
   "dependencies": {
-    "@hugeicons/core-free-icons": "4.3.0",
+    "@hugeicons/core-free-icons": "4.3.2",
     "iron-session": "9.0.1"
   }
 }

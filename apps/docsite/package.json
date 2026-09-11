@@ -16,8 +16,8 @@
     "generate:blog-covers": "node scripts/generate-blog-covers.mjs"
   },
   "dependencies": {
-    "@base-ui/react": "1.7.0",
-    "@hugeicons/core-free-icons": "4.3.0",
+    "@base-ui/react": "1.8.0",
+    "@hugeicons/core-free-icons": "4.3.2",
     "@hugeicons/react": "1.1.10",
     "@yami/design-system": "workspace:*",
     "@yami/site-access": "workspace:*",
@@ -35,7 +35,7 @@
     "@playwright/test": "1.62.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
-    "playwright": "1.62.1",
+    "playwright": "1.63.0",
     "playwright-core": "1.62.1",
     "puppeteer-core": "25.9.0",
     "typescript": "6.0.3",
