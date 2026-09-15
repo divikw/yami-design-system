@@ -70,13 +70,13 @@ export const ContentWidth: Story = {
     const products = page.querySelector<HTMLElement>('[data-slot="product-list-container"]')!;
     await expect(header.getBoundingClientRect().width).toBe(1440);
     await expect(products.getBoundingClientRect().width).toBe(1440);
-    await expect(getComputedStyle(products).padding).toBe("32px 48px");
+    await expect(getComputedStyle(products).padding).toBe("48px");
     for (const section of page.querySelectorAll<HTMLElement>("main > section:not(#discount-products)")) {
-      await expect(getComputedStyle(section).paddingTop).toBe("32px");
-      await expect(getComputedStyle(section).paddingBottom).toBe("32px");
+      await expect(getComputedStyle(section).paddingTop).toBe("48px");
+      await expect(getComputedStyle(section).paddingBottom).toBe("48px");
     }
     await userEvent.click(within(page.querySelector("nav")!).getByRole("tab", { name: "How to Use" }));
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    await expect(within(page).queryByRole("link", { name: "Claim Your App-Only Deal", exact: true })).not.toBeInTheDocument();
+    await expect(within(page).queryByRole("link", { name: "Claim Your App-Only Deal", exact: true })).toBeInTheDocument();
   },
 };
