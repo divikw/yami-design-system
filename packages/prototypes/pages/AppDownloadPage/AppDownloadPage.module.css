@@ -40,9 +40,8 @@
 .downloadLinks { display: flex; gap: var(--space-150); justify-content: center; align-items: center; }
 .downloadButtons { display: flex; gap: var(--space-150); justify-content: center; align-items: center; flex-wrap: wrap; }
 .downloadLinks a { display: flex; align-items: center; min-height: 48px; }
-.downloadLinks img { display: block; height: 44px; width: 150px; object-fit: contain; }
 .downloadLinks .qr { padding: var(--space-100); background: var(--surface-primary); border: 1px solid var(--border-focus); border-radius: var(--radius-surface-default); margin-left: var(--space-050); }
-.downloadLinks .qr img { width: 80px; height: 80px; }
+.downloadLinks .qr img { display: block; object-fit: contain; width: 80px; height: 80px; }
 .hero .downloadLinks, .bottom .downloadLinks { flex-direction: column; row-gap: var(--space-200); }
 .hero .downloadButtons, .bottom .downloadButtons { column-gap: var(--space-100); }
 .hero .downloadLinks .qr, .bottom .downloadLinks .qr { margin-left: 0; }
@@ -120,16 +119,16 @@
 .selectionNavigation > div { display: flex; gap: var(--space-100); }
 .selectionNavigation img { width: 16px; height: 16px; }
 .selectionRail { display: flex; list-style: none; gap: var(--space-150); padding: 0; margin: 0; }
-.selectionProduct { flex: 0 0 128px; min-width: 0; scroll-snap-align: start; border: 1px solid var(--border-default); border-radius: var(--radius-component-default); padding: var(--space-100); }
+.selectionProduct { cursor: pointer; flex: 0 0 128px; min-width: 0; scroll-snap-align: start; border: 1px solid var(--border-default); border-radius: var(--radius-component-default); padding: var(--space-100); }
 .selectionProduct[data-selected="true"] { border-color: var(--border-focus); outline: 1px solid var(--border-focus); outline-offset: -2px; background: var(--surface-secondary); }
 .selectionProduct:focus-within { outline: 2px solid var(--border-focus); outline-offset: -2px; }
-.selectionProduct label { display: flex; flex-direction: column; position: relative; cursor: pointer; gap: var(--space-050); }
-.selectionProduct label > img { width: 100%; aspect-ratio: 1; object-fit: contain; background: var(--surface-primary); }
+.selectionProduct .selectionBody { display: flex; flex-direction: column; position: relative; cursor: pointer; gap: var(--space-050); }
+.selectionProduct .selectionBody > img { width: 100%; aspect-ratio: 1; object-fit: contain; background: var(--surface-primary); }
 .selectionCheck { background: var(--surface-primary); border-radius: var(--radius-tag-primary); position: absolute; top: var(--space-050); right: var(--space-050); }
 .selectionTitle { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .selectionProduct strong { color: var(--text-primary); font-variant-numeric: tabular-nums; }
 .selectionProduct small, .selectionProduct > a { font-size: var(--font-size-caption-sm); color: var(--text-secondary); }
-.selectionProduct > a { display: inline-block; padding-top: var(--space-100); text-decoration: underline; }
+.root .selectionProduct > a { display: inline-block; padding-top: var(--space-100); text-decoration: underline; }
 .moreDeals { margin: 0; font-size: var(--font-size-caption-sm); }
 .moreDeals a { text-decoration: underline; color: var(--text-emphasis); }
 .bottom { background: var(--surface-primary); }
@@ -205,9 +204,6 @@
 .ticks span:last-child { transform: translateX(-100%); }
 
 @media (max-width: 1023px) {
-  .downloadButtons { width: 100%; max-width: 308px; flex-wrap: nowrap; }
-  .downloadButtons a { flex: 1; min-width: 0; }
-  .downloadButtons img { width: 100%; height: auto; }
   .header > div > a, .root .shopLink { position: relative; }
   .header > div > a::after, .root .shopLink::after {
     content: "";
@@ -229,3 +225,17 @@
 .hero, .bottom, .couponSection, .guideSection, .calculatorSection, .root [data-slot="product-list"][data-appearance="background"] [data-slot="product-list-container"], .footerContainer [data-slot="footer-closing-bar"] {
   padding-block: var(--campaign-section-padding-block);
 }
+
+@media (max-width: 1023px) {
+  .selectionNavigation > div { display: none; }
+}
+
+.selectionProduct > a:hover { cursor: pointer; color: var(--text-primary); text-decoration: underline; }
+
+.appPriceLabel { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
+.root :global(#discount-products) [data-slot="product-card-price"] { flex-wrap: wrap; overflow: visible; }
+.root :global(#discount-products) [data-slot="product-card-price"] > span:first-child { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-050); overflow: visible; }
+
+.root .dealComparePrice { display: inline-block; color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); text-decoration: underline; cursor: pointer; }
+
+.root :global(#discount-products) [data-slot="product-card-unit-price"] { padding-top: var(--space-050); }

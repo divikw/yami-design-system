@@ -17,8 +17,26 @@
     "SocialVideoCardProps",
     "SocialVideoProduct"
   ],
-  "composes": ["Button"],
+  "composes": [
+    "Button"
+  ],
   "props": {
+    "videoSrc": {
+      "type": "string",
+      "required": false,
+      "description": "Optional muted, looping autoplay video for SocialVideoCard; preserves the existing card media layout."
+    },
+    "headingAlign": {
+      "type": "\"start\" | \"center\"",
+      "required": false,
+      "default": "start",
+      "description": "Align the shared heading and supporting copy."
+    },
+    "description": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Optional supporting copy below a centered heading."
+    },
     "title": {
       "type": "ReactNode",
       "required": true,
@@ -61,6 +79,18 @@
       "type": "SocialVideoProduct[]",
       "required": false,
       "description": "Optional product footer data for SocialVideoCard; omit product images to render the caption in a text-only footer on either breakpoint."
+    },
+    "dividerPosition": {
+      "type": "\"top\" | \"bottom\" | \"none\"",
+      "default": "top",
+      "required": false,
+      "description": "Desktop section divider edge. Mobile card surface omits the divider."
+    },
+    "dividerVariant": {
+      "type": "\"gray\" | \"black\"",
+      "default": "gray",
+      "required": false,
+      "description": "Gray 1px or theme-aware black 2px section divider."
     }
   },
   "rules": {
@@ -139,16 +169,28 @@
   "accessibility": {
     "wcagLevel": "AA",
     "tapTargetMin": 44,
-    "keyboardNav": ["tab", "shift+tab", "enter"],
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "enter"
+    ],
     "ariaPattern": "labelled section containing a horizontal list of article cards and optional links and paging buttons",
     "structure": "The visible heading labels the section. Each video is an article; video and product destinations remain separate links.",
     "interaction": "Mobile uses native horizontal scrolling. Desktop exposes overflow-aware previous and next controls."
   },
   "dependencies": {
-    "runtime": ["react", "./Button"],
+    "runtime": [
+      "react",
+      "./Button"
+    ],
     "peer": [],
-    "devOnly": ["@figma/code-connect", "@storybook/react-vite"]
+    "devOnly": [
+      "@figma/code-connect",
+      "@storybook/react-vite"
+    ]
   },
   "usageRef": "./usage.md",
-  "examples": ["./examples.tsx#SocialMediaGalleryExample"]
+  "examples": [
+    "./examples.tsx#SocialMediaGalleryExample"
+  ]
 }

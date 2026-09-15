@@ -56,7 +56,7 @@ export function ReviewCard({
   className,
   ...rest
 }: ReviewCardProps) {
-  const productContent = (
+  const productContent = product ? (
     <>
       <img
         ref={prepareProgressiveImage}
@@ -76,7 +76,7 @@ export function ReviewCard({
         <p className={styles.productName}>{product.name}</p>
       </div>
     </>
-  );
+  ) : null;
 
   return (
     <article
@@ -84,6 +84,7 @@ export function ReviewCard({
       className={cx(styles.card, className)}
       data-slot="review-card"
       data-review-id={id}
+      data-has-product={Boolean(product)}
     >
       <StarRating rating={rating} />
       <p className={styles.review} data-slot="review-card-content">
@@ -92,7 +93,7 @@ export function ReviewCard({
       <div className={styles.reviewer} data-slot="review-card-reviewer">
         {reviewer}
       </div>
-      {product.href ? (
+      {product && (product.href ? (
         <a
           className={styles.product}
           href={product.href}
@@ -104,7 +105,7 @@ export function ReviewCard({
         <div className={styles.product} data-slot="review-card-product">
           {productContent}
         </div>
-      )}
+      ))}
     </article>
   );
 }

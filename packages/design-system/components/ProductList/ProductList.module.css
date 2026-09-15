@@ -819,8 +819,6 @@
 }
 
 .railFrame { display: contents; }
-.root[data-heading-align="center"] .heading { justify-content: center; padding-inline: 0; text-align: center; }
-.root[data-heading-align="center"] [data-slot="product-list-copy"] { align-items: center; flex-direction: column; }
 .root[data-heading-align="center"] .tabsList { width: max-content; max-width: 100%; margin-inline: auto; justify-content: flex-start; }
 .root[data-heading-align="center"] .railFrame { display: block; position: relative; min-width: 0; width: 100%; }
 @media (min-width: 1024px) {

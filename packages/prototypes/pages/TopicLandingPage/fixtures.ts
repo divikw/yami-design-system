@@ -436,12 +436,12 @@ export function createTopicLandingPageFixture(
       reviews: reviewList.reviews.map((review, index) => ({
         ...review,
         review: copy.reviews[index],
-        product: {
+        product: review.product ? {
           ...review.product,
           imageAlt: copy.reviewProductNames[index],
           name: copy.reviewProductNames[index],
           href: review.product.href?.replace("/en/", `/${locale}/`),
-        },
+        } : undefined,
       })),
       mobileSurface: "plain",
       dividerPosition: "top",

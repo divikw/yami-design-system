@@ -19,6 +19,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
 
 export function ReviewList({
   title,
+  description,
+  headingAlign = "start",
   titleFontFamily = "sans",
   mobileTitle,
   reviews,
@@ -48,6 +50,7 @@ export function ReviewList({
       {...rest}
       className={cx(styles.root, className)}
       data-slot="review-list"
+      data-heading-align={headingAlign}
       data-mobile-surface={mobileSurface}
       data-divider-position={dividerPosition}
       data-divider-variant={dividerVariant}
@@ -55,15 +58,17 @@ export function ReviewList({
     >
       <div className={styles.container} data-slot="review-list-container">
         <SectionHeading
+          align={headingAlign}
           id={titleId}
           title={title}
+          description={description}
           titleFontFamily={titleFontFamily}
           mobileTitle={mobileTitle ?? title}
           slot="review-list"
           className={styles.heading}
           viewAllHref={viewAllHref}
           viewAllLabel={viewAllLabel}
-          actions={railState.canScroll ? (
+          actions={headingAlign === "start" && railState.canScroll ? (
             <RailNavigation
               className={styles.railActions}
               previousLabel={previousLabel}
@@ -77,6 +82,7 @@ export function ReviewList({
           ) : null}
         />
 
+        <div className={styles.railFrame}>
         <HorizontalScrollList
           as="ul"
           ref={listRef}
@@ -90,6 +96,13 @@ export function ReviewList({
             </li>
           ))}
         </HorizontalScrollList>
+          {headingAlign === "center" && railState.canScroll && <RailNavigation
+            className={styles.edgeNavigation}
+            previousLabel={previousLabel} nextLabel={nextLabel}
+            previousDisabled={railState.atStart} nextDisabled={railState.atEnd}
+            onPrevious={() => scrollByPage(-1)} onNext={() => scrollByPage(1)}
+          />}
+        </div>
       </div>
     </section>
   );

@@ -3,21 +3,22 @@ import { expect, userEvent, within } from "storybook/test";
 import { AppDownloadPage } from "./AppDownloadPage";
 
 const meta = {
-  title: "YAMI/Pages/App Download",
+  title: "YAMI/Pages/App Download/V1",
   component: AppDownloadPage,
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen", controls: { disable: true } },
   globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
 } satisfies Meta<typeof AppDownloadPage>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Korean: Story = { args: { initialLocale: "ko" } };
-export const English: Story = { args: { initialLocale: "en" } };
+export const PC: Story = { args: { initialLocale: "ko" } };
 export const Mobile: Story = {
   args: { initialLocale: "ko" },
   globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
 };
 export const Interactions: Story = {
+  tags: ["!dev"],
   args: { initialLocale: "en" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -40,6 +41,7 @@ export const Interactions: Story = {
 };
 
 export const SectionNavigation: Story = {
+  tags: ["!dev"],
   args: { initialLocale: "en" },
   play: async ({ canvasElement }) => {
     const nav = within(canvasElement.querySelector("nav")!);
@@ -63,6 +65,7 @@ export const SectionNavigation: Story = {
 };
 
 export const ContentWidth: Story = {
+  tags: ["!dev"],
   args: { initialLocale: "en", contentMaxWidth: 1440 },
   play: async ({ canvasElement }) => {
     const page = canvasElement.querySelector<HTMLElement>('[data-slot="app-download-page"]')!;

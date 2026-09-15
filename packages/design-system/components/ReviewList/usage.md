@@ -51,3 +51,7 @@ The section heading labels the review rail. Each rating is exposed as an
 accessible five-point image label, reviewer names remain text, and product
 images require meaningful alternative text. A product `href` turns the footer
 into a native keyboard-reachable link.
+
+Omit `product` on a review when it describes the shopping experience without a related product. Pass `description` for supporting section copy.
+
+With `headingAlign="center"`, paging controls sit at the vertical center of the content rail, one on each side. Controls are hidden when all items fit; on mobile they are hidden in favor of touch scrolling.

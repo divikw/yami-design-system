@@ -12,6 +12,7 @@ import {
   type AppDownloadLocale,
 } from "./fixtures";
 import { createEcommerceHomeFixture } from "../EcommerceHome/fixtures";
+import { StoreDownloadButtons } from "./StoreDownloadButtons";
 import styles from "./AppDownloadPage.module.css";
 
 const homeFooter = createEcommerceHomeFixture("en").footer;
@@ -23,10 +24,7 @@ const sectionIds = ["welcome-coupon", "discount-products", "coupon-guide", "savi
 
 function DownloadLinks() {
   return <div className={styles.downloadLinks}>
-    <div className={styles.downloadButtons}>
-    <a href={appStoreHref} aria-label="Download on the App Store"><img src={asset("Download_on_the_App_Store_Badge.svg")} alt="Download on the App Store" /></a>
-    <a href={playStoreHref} aria-label="Get it on Google Play"><img src={asset("Google_Play_Store_badge_EN.svg")} alt="Get it on Google Play" /></a>
-    </div>
+    <StoreDownloadButtons className={styles.downloadButtons} appStoreHref={appStoreHref} playStoreHref={playStoreHref} />
     <a className={styles.qr} href={downloadHref} aria-label="Scan QR Code to download"><img src={asset("download-qr.svg")} alt="" /></a>
   </div>;
 }
@@ -81,14 +79,17 @@ function SavingsCalculator({ locale, onGuide }: { locale: AppDownloadLocale; onG
               </div>
             </div>
             <HorizontalScrollList as="ul" ref={listRef} onScroll={updateState} className={styles.selectionRail} aria-label={ko ? "혜택 계산 상품" : "Products for savings calculation"}>
-              {featuredProducts.map((product) => <li key={product.sku} className={styles.selectionProduct} data-selected={selected.includes(product.sku)}>
-                <label>
+              {featuredProducts.map((product) => <li key={product.sku} className={styles.selectionProduct} data-selected={selected.includes(product.sku)} onClick={(event) => {
+                if ((event.target as HTMLElement).closest('a, [role="checkbox"], input')) return;
+                setSelected((current) => current.includes(product.sku) ? current.filter((sku) => sku !== product.sku) : [...current, product.sku]);
+              }}>
+                <div className={styles.selectionBody}>
                   <img src={productImage(product)} alt="" loading="lazy" />
                   <span className={styles.selectionCheck}><Checkbox checked={selected.includes(product.sku)} onCheckedChange={(checked) => setSelected((current) => checked ? [...current, product.sku] : current.filter((sku) => sku !== product.sku))} aria-label={product.name[locale]} /></span>
                   <span className={styles.selectionTitle}>{product.name[locale]}</span>
                   <strong>{money(product.yamiPrice)}</strong>
                   <small>{ko ? "(할인 전 가격)" : "(Before discount)"}</small>
-                </label>
+                </div>
                 <a href={productHref(product, locale)}>{ko ? "웹 가격과 비교해보기" : "Compare Web Price"}</a>
               </li>)}
             </HorizontalScrollList>
@@ -256,7 +257,7 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
                     setCopyFailed(true);
                   }
                 }}>{copiedCode === coupon.code ? (ko ? "복사됨" : "Copied") : (ko ? "복사" : "Copy")}</button></div>
-                <button type="button" onClick={() => showGuide(index ? 23 : 0)}>{ko ? "적용법 보기" : "How to use"} <span aria-hidden="true">↗</span></button>
+                <button type="button" onClick={() => showGuide(index ? 23 : 0)}>{ko ? "적용법 보기" : "How to use"}</button>
               </div>
             </div>)}
           </div>
@@ -284,7 +285,8 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
           products={campaignProducts.filter((product) => product.category === category).map((product) => ({
             id: product.sku, title: product.name[locale], image: productImage(product), imageAlt: product.name[locale],
             href: productHref(product, locale), brand: product.brand[locale], brandHref: productHref(product, locale),
-            priceCurrent: money(product.appPrice), priceOriginal: money(product.originalPrice),
+            priceCurrent: <>{money(product.appPrice)} <span className={styles.appPriceLabel}>{ko ? "(앱 전용가)" : "(App Price)"}</span></>, priceOriginal: money(product.originalPrice),
+            unitPrice: <a className={styles.dealComparePrice} href={productHref(product, locale)}>{ko ? "웹 가격과 비교해보기" : "Compare Web Price"}</a>,
             badges: [{ type: "discount" as const, label: `${product.discountPercent}% OFF` }],
           }))}
         />
@@ -311,6 +313,6 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
         </div>
       </section>
     </main>
-    {showSticky && <a className={styles.stickyCta} href={downloadHref}>{ko ? "앱 전용 첫 구매 혜택 받기" : "Claim Your App-Only Deal"}<img src={asset("chevron-right.svg")} alt="" /></a>}
+    {showSticky && <a className={styles.stickyCta} href={appStoreHref}>{ko ? "앱 전용 첫 구매 혜택 받기" : "Claim Your App-Only Deal"}<img src={asset("chevron-right.svg")} alt="" /></a>}
   </div><div className={styles.footerContainer} style={pageStyle} lang="en"><Footer {...homeFooter} /></div></>;
 }

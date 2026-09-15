@@ -1,3 +1,4 @@
+import type { SectionDividerProps } from "../sectionDivider.types";
 import type { HTMLAttributes, ReactNode } from "react";
 import type { ImageLoadingStrategy, ImageSource } from "../image.types";
 
@@ -22,6 +23,8 @@ export interface SocialVideoCardProps
   posterSrc: ImageSource;
   /** Accessible description of the poster frame. */
   posterAlt: string;
+  /** Optional muted, looping autoplay video displayed in the existing media area. */
+  videoSrc?: string;
   /** Social account name. */
   username: ReactNode;
   /** Decorative social platform mark used beside the creator handle. */
@@ -37,11 +40,13 @@ export interface SocialVideoCardProps
 }
 
 export interface SocialMediaGalleryProps
-  extends Omit<HTMLAttributes<HTMLElement>, "children" | "title"> {
+  extends Omit<HTMLAttributes<HTMLElement>, "children" | "title">, SectionDividerProps {
   /** Desktop section heading. */
   title: ReactNode;
   /** Optional mobile heading; falls back to title. */
   mobileTitle?: ReactNode;
+  description?: ReactNode;
+  headingAlign?: "start" | "center";
   /** Ordered social video cards. */
   cards: SocialVideoCardProps[];
   /** Optional destination for the desktop view-all action. */

@@ -180,7 +180,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "7bfde9e4a41fe3630589cdc6f5ebcdb73f69729ccda0bc3f309e427e987e4b57"
+      "digest": "7d579effafcccb24e1a134e68ad6cf79a58e3260f328925208eff8b14274c6fb"
     },
     {
       "name": "product-media-gallery",
@@ -216,7 +216,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "5ad7dd59d7631c7902af3e09176f1cc0e31be17c50b255a4167b712dda79b94d"
+      "digest": "dcd656daadfb07f4d076cdec66e4b4c1a416a16d2a16a16f192f94bab1f68660"
     },
     {
       "name": "sheet",
@@ -243,7 +243,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/social-media-gallery.json",
-      "digest": "a1932172abeffab3b1bb95595b5684dbfba32ddf8bc3de7ddfc4c8315f731d5d"
+      "digest": "0836dc5774acd034b4ac6dd3cc046b807a8bcabeef724fb22c6488d45505526f"
     },
     {
       "name": "tabs",

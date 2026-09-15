@@ -38,6 +38,10 @@ function getPageDistance(rail: HTMLUListElement) {
 export function SocialMediaGallery({
   title,
   mobileTitle,
+  description,
+  headingAlign = "start",
+  dividerPosition = "top",
+  dividerVariant = "gray",
   cards,
   viewAllHref,
   viewAllLabel = "See all",
@@ -89,18 +93,24 @@ export function SocialMediaGallery({
       {...rest}
       className={cx(styles.root, className)}
       data-slot="social-media-gallery"
+      data-heading-align={headingAlign}
+      data-divider-position={dividerPosition}
+      data-divider-variant={dividerVariant}
       aria-labelledby={titleId}
     >
       <div className={styles.container} data-slot="social-media-gallery-container">
         <SectionHeading
+          align={headingAlign}
           id={titleId}
           title={title}
+          description={description}
+          slot="social-media-gallery"
           mobileTitle={mobileTitle ?? title}
           className={styles.heading}
           actionsClassName={styles.actions}
           viewAllHref={viewAllHref}
           viewAllLabel={viewAllLabel}
-          actions={
+          actions={headingAlign === "center" ? undefined :
             <RailNavigation
               previousLabel={previousLabel}
               nextLabel={nextLabel}
@@ -113,6 +123,7 @@ export function SocialMediaGallery({
           }
         />
 
+        <div className={styles.railFrame}>
         <ImageLoadingWindow strategy={imageLoadingStrategy} rootRef={railRef}>
           <ul
             ref={railRef}
@@ -131,6 +142,13 @@ export function SocialMediaGallery({
           ))}
           </ul>
         </ImageLoadingWindow>
+          {headingAlign === "center" && !(edges.atStart && edges.atEnd) && <RailNavigation
+            className={styles.edgeNavigation}
+            previousLabel={previousLabel} nextLabel={nextLabel}
+            previousDisabled={edges.atStart} nextDisabled={edges.atEnd}
+            onPrevious={() => scrollRail(-1)} onNext={() => scrollRail(1)}
+          />}
+        </div>
       </div>
     </section>
   );

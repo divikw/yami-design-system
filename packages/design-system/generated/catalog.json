@@ -4561,6 +4561,11 @@
           "RailNavigation"
         ],
         "props": {
+          "description": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional supporting copy for the section heading."
+          },
           "title": {
             "type": "ReactNode",
             "required": true,
@@ -4616,6 +4621,12 @@
             "required": false,
             "default": "gray",
             "description": "Gray renders the 1px structural separator; black renders the theme-aware 2px emphasis separator."
+          },
+          "headingAlign": {
+            "type": "\"start\" | \"center\"",
+            "required": false,
+            "default": "start",
+            "description": "Centered headings place paging controls at the content rail edges when it overflows."
           }
         },
         "rules": {
@@ -5092,6 +5103,22 @@
           "Button"
         ],
         "props": {
+          "videoSrc": {
+            "type": "string",
+            "required": false,
+            "description": "Optional muted, looping autoplay video for SocialVideoCard; preserves the existing card media layout."
+          },
+          "headingAlign": {
+            "type": "\"start\" | \"center\"",
+            "required": false,
+            "default": "start",
+            "description": "Align the shared heading and supporting copy."
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional supporting copy below a centered heading."
+          },
           "title": {
             "type": "ReactNode",
             "required": true,
@@ -5134,6 +5161,18 @@
             "type": "SocialVideoProduct[]",
             "required": false,
             "description": "Optional product footer data for SocialVideoCard; omit product images to render the caption in a text-only footer on either breakpoint."
+          },
+          "dividerPosition": {
+            "type": "\"top\" | \"bottom\" | \"none\"",
+            "default": "top",
+            "required": false,
+            "description": "Desktop section divider edge. Mobile card surface omits the divider."
+          },
+          "dividerVariant": {
+            "type": "\"gray\" | \"black\"",
+            "default": "gray",
+            "required": false,
+            "description": "Gray 1px or theme-aware black 2px section divider."
           }
         },
         "rules": {

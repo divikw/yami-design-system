@@ -1,0 +1,143 @@
+{
+  "source": "https://yami-app-download.vercel.app/#sns-trend",
+  "capturedAt": "2026-09-15",
+  "ko": {
+    "title": "화제의 트렌드",
+    "description": "인플루언서들이 직접 추천하는 Yami 필수 쇼핑 아이템"
+  },
+  "en": {
+    "title": "Social Trends",
+    "description": "What influencers are loving right now"
+  },
+  "cards": [
+    {
+      "id": "117",
+      "video": "scraper_117_480.mp4",
+      "poster": "117.jpg",
+      "products": [
+        {
+          "id": "1030414901",
+          "image": "medi.png",
+          "title": "PDRN Pink Collagen Glow Jelly Mist Serum, 100ml",
+          "href": "https://www.yami.com/us/ko/p/pdrn-pink-collagen-glow-jelly-mist-serum-100ml/1030414901?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "1271",
+      "video": "scraper_1271_480.mp4",
+      "poster": "1271.jpg",
+      "products": [
+        {
+          "id": "1026137041",
+          "image": "Foodology.jpg",
+          "title": "Coleology Cutting Jelly, 10 Pouches",
+          "href": "https://www.yami.com/us/ko/p/coleology-cutting-jelly-10-pouch/1026137041?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "id": "1147045451",
+          "image": "proteenone.png",
+          "title": "Proteeone Pouch, Grain Flavor, 1.41 oz",
+          "href": "https://www.yami.com/us/ko/p/proteeone-pouch-grain-flavor-1-41-oz/1147045451?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "1283",
+      "video": "scraper_1283_480.mp4",
+      "poster": "1283.jpg",
+      "products": [
+        {
+          "id": "1023627411",
+          "image": "AMUSE.png",
+          "title": "Powder Lip & Cheek, #10 Scoop",
+          "href": "https://www.yami.com/us/ko/p/amuse-powder-lip-cheek-10-scoop-25/1023627411?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "1318",
+      "video": "scraper_1318_480.mp4",
+      "poster": "1318.jpg",
+      "products": [
+        {
+          "id": "1022436351",
+          "image": "BOJ.jpg",
+          "title": "Relief Sun Aqua-fresh Rice + B5 Sunscreen",
+          "href": "https://www.yami.com/us/ko/p/beauty-of-joseon-soothing-sunscreen-moisturizer-with-rice-b5-spf50-pa-1-7-fl-oz/1022436351?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "672",
+      "video": "scraper_672_480.mp4",
+      "poster": "672.jpg",
+      "products": [
+        {
+          "id": "3127198921",
+          "image": "menokin.png",
+          "title": "30 Seconds Quick Bubble Mask, Repair, 95ml",
+          "href": "https://www.yami.com/us/ko/p/30-seconds-quick-bubble-mask-repair-95ml-3-21-fl-oz/3127198921?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "673",
+      "video": "scraper_673_480.mp4",
+      "poster": "673.jpg",
+      "products": [
+        {
+          "id": "1022494441",
+          "image": "medicube.png",
+          "title": "PDRN Pink Peptide Serum, 30ml",
+          "href": "https://www.yami.com/us/ko/p/pdrn-pink-peptide-serum/1022494441?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "117-repeat",
+      "video": "scraper_117_480.mp4",
+      "poster": "117.jpg",
+      "products": [
+        {
+          "id": "1030414901",
+          "image": "medi.png",
+          "title": "PDRN Pink Collagen Glow Jelly Mist Serum, 100ml",
+          "href": "https://www.yami.com/us/ko/p/pdrn-pink-collagen-glow-jelly-mist-serum-100ml/1030414901?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "1271-repeat",
+      "video": "scraper_1271_480.mp4",
+      "poster": "1271.jpg",
+      "products": [
+        {
+          "id": "1026137041",
+          "image": "Foodology.jpg",
+          "title": "Coleology Cutting Jelly, 10 Pouches",
+          "href": "https://www.yami.com/us/ko/p/coleology-cutting-jelly-10-pouch/1026137041?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "id": "1147045451",
+          "image": "proteenone.png",
+          "title": "Proteeone Pouch, Grain Flavor, 1.41 oz",
+          "href": "https://www.yami.com/us/ko/p/proteeone-pouch-grain-flavor-1-41-oz/1147045451?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "1283-repeat",
+      "video": "scraper_1283_480.mp4",
+      "poster": "1283.jpg",
+      "products": [
+        {
+          "id": "1023627411",
+          "image": "AMUSE.png",
+          "title": "Powder Lip & Cheek, #10 Scoop",
+          "href": "https://www.yami.com/us/ko/p/amuse-powder-lip-cheek-10-scoop-25/1023627411?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    }
+  ]
+}
