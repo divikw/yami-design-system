@@ -28,7 +28,7 @@ export interface ReviewCardProps
   /** Anonymized reviewer name. */
   reviewer: ReactNode;
   /** Product associated with the review. */
-  product: ReviewProduct;
+  product?: ReviewProduct;
 }
 
 export interface ReviewListProps
@@ -36,6 +36,10 @@ export interface ReviewListProps
     SectionDividerProps {
   /** Visible section heading and accessible label. */
   title: ReactNode;
+  /** Supporting copy displayed with the section heading. */
+  description?: ReactNode;
+  /** Centered headings place paging controls at the sides of the content rail. */
+  headingAlign?: "start" | "center";
   /** Optional serif treatment for editorial section headings. */
   titleFontFamily?: "sans" | "serif";
   /** Optional mobile-only heading; falls back to title. */

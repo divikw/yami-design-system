@@ -18,8 +18,16 @@
     "ReviewCardProps",
     "ReviewProduct"
   ],
-  "composes": ["SectionHeading", "RailNavigation"],
+  "composes": [
+    "SectionHeading",
+    "RailNavigation"
+  ],
   "props": {
+    "description": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Optional supporting copy for the section heading."
+    },
     "title": {
       "type": "ReactNode",
       "required": true,
@@ -75,6 +83,12 @@
       "required": false,
       "default": "gray",
       "description": "Gray renders the 1px structural separator; black renders the theme-aware 2px emphasis separator."
+    },
+    "headingAlign": {
+      "type": "\"start\" | \"center\"",
+      "required": false,
+      "default": "start",
+      "description": "Centered headings place paging controls at the content rail edges when it overflows."
     }
   },
   "rules": {
@@ -125,16 +139,26 @@
   "accessibility": {
     "wcagLevel": "AA",
     "tapTargetMin": 44,
-    "keyboardNav": ["tab", "enter", "arrow keys"],
+    "keyboardNav": [
+      "tab",
+      "enter",
+      "arrow keys"
+    ],
     "ariaPattern": "Labelled review rail with accessible rating images and native product links.",
     "structure": "The shared SectionHeading labels the rail; each list item contains one ReviewCard article.",
     "interaction": "Product footers are keyboard-reachable links when href is supplied, and rail controls respect reduced motion."
   },
   "dependencies": {
-    "runtime": ["react", "./SectionHeading", "./Button/RailNavigation"],
+    "runtime": [
+      "react",
+      "./SectionHeading",
+      "./Button/RailNavigation"
+    ],
     "peer": [],
     "devOnly": []
   },
   "usageRef": "./usage.md",
-  "examples": ["./examples.tsx#ReviewListExample"]
+  "examples": [
+    "./examples.tsx#ReviewListExample"
+  ]
 }

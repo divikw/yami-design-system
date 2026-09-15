@@ -25,7 +25,7 @@
 
 .list {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--space-200);
   margin: 0;
   padding: 0;
@@ -39,6 +39,7 @@
 }
 
 .item {
+  display: flex;
   min-width: 0;
   flex: 0 0 calc((100% - 2 * var(--space-200)) / 3);
   scroll-snap-align: start;
@@ -165,6 +166,7 @@
 }
 
 .card {
+  width: 100%;
   display: flex;
   min-width: 0;
   box-sizing: border-box;
@@ -349,4 +351,30 @@
   line-height: var(--line-height-body-md);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.railFrame { display: contents; }
+.root[data-heading-align="center"] .railFrame { display: block; position: relative; min-width: 0; width: 100%; }
+.edgeNavigation { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.edgeNavigation > button { position: absolute; top: 50%; pointer-events: auto; }
+.edgeNavigation > button[data-direction="left"] { left: 0; transform: translate(-50%, -50%); }
+.edgeNavigation > button[data-direction="right"] { right: 0; transform: translate(50%, -50%); }
+@media (max-width: 1023px) {
+  .edgeNavigation { display: none; }
+}
+
+.card[data-has-product="false"] {
+  padding: var(--space-200) var(--space-150) var(--space-150);
+}
+
+.card[data-has-product="false"] .review {
+  flex: 1;
+  display: block;
+  height: auto;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+.card[data-has-product="false"] .review > strong {
+  font-size: var(--font-size-body-xl);
 }

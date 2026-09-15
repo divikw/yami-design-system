@@ -1,0 +1,253 @@
+{
+  "source": "https://yami-app-download.vercel.app/#brand-special",
+  "capturedAt": "2026-09-15",
+  "brands": [
+    {
+      "name": "3CE",
+      "image": "brand-01.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/3CE.png"
+    },
+    {
+      "name": "ARENCIA",
+      "image": "brand-02.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/ARENCIA.png"
+    },
+    {
+      "name": "DR.HOWS",
+      "image": "brand-03.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/DR.HOWS.png"
+    },
+    {
+      "name": "DRG",
+      "image": "brand-04.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/DRG.jpg"
+    },
+    {
+      "name": "RYO",
+      "image": "brand-05.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/RYO.png"
+    },
+    {
+      "name": "구달",
+      "image": "brand-06.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EA%B5%AC%EB%8B%AC.jpg"
+    },
+    {
+      "name": "네오플램",
+      "image": "brand-07.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%84%A4%EC%98%A4%ED%94%8C%EB%9E%A8.png"
+    },
+    {
+      "name": "농심",
+      "image": "brand-08.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%86%8D%EC%8B%AC.png"
+    },
+    {
+      "name": "닥터알데하",
+      "image": "brand-09.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%EC%95%8C%EB%8D%B0%ED%95%98.jpg"
+    },
+    {
+      "name": "닥터자르트",
+      "image": "brand-10.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%EC%9E%90%EB%A5%B4%ED%8A%B8.png"
+    },
+    {
+      "name": "닥터하우스",
+      "image": "brand-11.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%ED%95%98%EC%9A%B0%EC%8A%A4.png"
+    },
+    {
+      "name": "락토핏",
+      "image": "brand-12.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%9D%BD%ED%86%A0%ED%95%8F.png"
+    },
+    {
+      "name": "롯데",
+      "image": "brand-13.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%A1%AF%EB%8D%B0.png"
+    },
+    {
+      "name": "메디큐브",
+      "image": "brand-14.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%A9%94%EB%94%94%ED%81%90%EB%B8%8C.jpg"
+    },
+    {
+      "name": "바이오댄스",
+      "image": "brand-15.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%B0%94%EC%9D%B4%EC%98%A4%EB%8C%84%EC%8A%A4.png"
+    },
+    {
+      "name": "베베숲",
+      "image": "brand-16.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%B2%A0%EB%B2%A0%EC%88%B2.jpg"
+    },
+    {
+      "name": "빙그레",
+      "image": "brand-17.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EB%B9%99%EA%B7%B8%EB%A0%88.png"
+    },
+    {
+      "name": "삼양",
+      "image": "brand-18.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%82%BC%EC%96%91.png"
+    },
+    {
+      "name": "생활공작소",
+      "image": "brand-19.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%83%9D%ED%99%9C%EA%B3%B5%EC%9E%91%EC%86%8C.jpg"
+    },
+    {
+      "name": "설화수",
+      "image": "brand-20.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%84%A4%ED%99%94%EC%88%98.png"
+    },
+    {
+      "name": "센텔라",
+      "image": "brand-21.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%84%BC%ED%85%94%EB%9D%BC.jpg"
+    },
+    {
+      "name": "쓰임",
+      "image": "brand-22.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%93%B0%EC%9E%84.png"
+    },
+    {
+      "name": "아누아",
+      "image": "brand-23.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%EB%88%84%EC%95%84.png"
+    },
+    {
+      "name": "아비브",
+      "image": "brand-24.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%EB%B9%84%EB%B8%8C.png"
+    },
+    {
+      "name": "아토팜",
+      "image": "brand-25.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%ED%86%A0%ED%8C%9C.png"
+    },
+    {
+      "name": "에스트라",
+      "image": "brand-26.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%97%90%EC%8A%A4%ED%8A%B8%EB%9D%BC.png"
+    },
+    {
+      "name": "오뚜기",
+      "image": "brand-27.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EB%9A%9C%EA%B8%B0.png"
+    },
+    {
+      "name": "오리온",
+      "image": "brand-28.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EB%A6%AC%EC%98%A8.png"
+    },
+    {
+      "name": "오설록",
+      "image": "brand-29.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EC%84%A4%EB%A1%9D.jpg"
+    },
+    {
+      "name": "웅진",
+      "image": "brand-30.jpg",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%9B%85%EC%A7%84.jpg"
+    },
+    {
+      "name": "정관장",
+      "image": "brand-31.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%A0%95%EA%B4%80%EC%9E%A5.png"
+    },
+    {
+      "name": "정샘물",
+      "image": "brand-32.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%A0%95%EC%83%98%EB%AC%BC.png"
+    },
+    {
+      "name": "조선미녀",
+      "image": "brand-33.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%EC%A1%B0%EC%84%A0%EB%AF%B8%EB%85%80.png"
+    },
+    {
+      "name": "토리든",
+      "image": "brand-34.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%ED%86%A0%EB%A6%AC%EB%93%A0.png"
+    },
+    {
+      "name": "해태",
+      "image": "brand-35.png",
+      "source": "https://yami-app-download.vercel.app/BRAND/%ED%95%B4%ED%83%9C.png"
+    }
+  ],
+  "ko": {
+    "title": "야미의 특별함",
+    "description": "야미만의 차별화 포인트",
+    "brandsTitle": "실시간 인기 한국 브랜드",
+    "strengthsTitle": "야미의 특별한 강점",
+    "strengths": [
+      [
+        "50만+",
+        "누적 활성 사용자"
+      ],
+      [
+        "2,000+",
+        "아시안 브랜드 입점"
+      ],
+      [
+        "당일 배송",
+        "LA·NJ 일부 지역"
+      ],
+      [
+        "미국 전역 배송",
+        "하와이·알래스카 포함"
+      ],
+      [
+        "무료 배송",
+        "$49 이상 구매 시"
+      ],
+      [
+        "한인 구매팀 보유",
+        "100% 정품 소싱"
+      ],
+      [
+        "서울 오피스 론칭",
+        "한국 직배송"
+      ]
+    ]
+  },
+  "en": {
+    "title": "Why Yami",
+    "description": "What makes Yami different",
+    "brandsTitle": "TRENDING ASIAN BRANDS",
+    "strengthsTitle": "OUR CORE STRENGTHS",
+    "strengths": [
+      [
+        "50만+",
+        "Active Users"
+      ],
+      [
+        "2,000+",
+        "Asian Brands"
+      ],
+      [
+        "Same-Day Delivery",
+        "Select LA & NJ Areas"
+      ],
+      [
+        "Nationwide Shipping",
+        "Incl. HI & AK"
+      ],
+      [
+        "Free Shipping",
+        "Orders Over $49"
+      ],
+      [
+        "Korean Buying Team",
+        "100% Genuine Sourcing"
+      ],
+      [
+        "Seoul Office Launched",
+        "Direct Shipping from Korea"
+      ]
+    ]
+  }
+}

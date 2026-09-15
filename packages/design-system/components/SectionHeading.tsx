@@ -6,7 +6,9 @@ export type SectionHeadingProps = {
   /** Links the heading to the section it labels. */
   id?: string;
   title: ReactNode;
-  /** Optional supporting copy rendered to the right of the title. */
+  /** Center stacks the title and supporting copy with shared spacing. */
+  align?: "start" | "center";
+  /** Optional supporting copy rendered beside the title, or below it when centered. */
   description?: ReactNode;
   /** Shown below 1024px in place of `title`; omit to use one title at every width. */
   mobileTitle?: ReactNode;
@@ -44,6 +46,7 @@ export type SectionHeadingProps = {
 export function SectionHeading({
   id,
   title,
+  align = "start",
   description,
   mobileTitle,
   mobileTitleSize = 20,
@@ -66,6 +69,8 @@ export function SectionHeading({
     <div
       className={join(styles.root, className)}
       data-slot={slotName("heading")}
+      data-section-heading="true"
+      data-align={align}
       data-description={description ? "true" : undefined}
     >
       <div className={styles.copy} data-slot={slotName("copy")}>
@@ -77,6 +82,7 @@ export function SectionHeading({
             titleClassName,
           )}
           data-slot={slotName("title")}
+          data-section-heading-title="true"
           data-mobile-title-size={mobileTitleSize}
         >
           {mobileTitle === undefined ? (

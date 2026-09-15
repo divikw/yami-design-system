@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 import styles from "./SocialMediaGallery.module.css";
 import { ResponsiveImage } from "../ResponsiveImage";
 import type {
@@ -49,8 +51,34 @@ function CardMedia({
   href,
   posterSrc,
   posterAlt,
-}: Pick<SocialVideoCardProps, "href" | "posterSrc" | "posterAlt">) {
-  const media = (
+  videoSrc,
+}: Pick<SocialVideoCardProps, "href" | "posterSrc" | "posterAlt" | "videoSrc">) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        video.muted = true;
+        void video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [videoSrc]);
+
+  const media = videoSrc ? (
+    <video
+      ref={videoRef}
+      className={styles.poster}
+      src={videoSrc}
+      poster={typeof posterSrc === "string" ? posterSrc : undefined}
+      aria-label={posterAlt}
+      autoPlay muted loop playsInline preload="metadata"
+    />
+  ) : (
     <ResponsiveImage
       className={styles.poster}
       source={posterSrc}
@@ -63,7 +91,7 @@ function CardMedia({
   if (!href) return media;
 
   return (
-    <a className={styles.mediaLink} href={href}>
+    <a className={styles.mediaLink} href={href} aria-label={posterAlt}>
       {media}
     </a>
   );
@@ -74,6 +102,7 @@ export function SocialVideoCard({
   posterSrc,
   posterAlt,
   username,
+  videoSrc,
   platformIconSrc,
   caption,
   href,
@@ -112,9 +141,9 @@ export function SocialVideoCard({
       data-has-products={visibleProducts.length > 0 ? "true" : "false"}
     >
       <div className={styles.media} data-slot="social-video-card-media">
-        <CardMedia href={href} posterSrc={posterSrc} posterAlt={posterAlt} />
+        <CardMedia href={href} posterSrc={posterSrc} posterAlt={posterAlt} videoSrc={videoSrc} />
 
-        <div className={styles.identity}>
+        {username && <div className={styles.identity}>
           <ResponsiveImage
             className={styles.platform}
             source={platformIconSrc}
@@ -124,7 +153,7 @@ export function SocialVideoCard({
             height="24"
           />
           <span className={styles.handle}>{username}</span>
-        </div>
+        </div>}
       </div>
 
       <div

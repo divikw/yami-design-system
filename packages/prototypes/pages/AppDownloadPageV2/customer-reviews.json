@@ -1,0 +1,77 @@
+{
+  "source": "https://yami-app-download.vercel.app/#customer-reviews",
+  "capturedAt": "2026-09-15",
+  "en": {
+    "title": "Real Customer Reviews",
+    "description": "Verified 5-star reviews from our U.S. customers"
+  },
+  "ko": {
+    "title": "믿을 수 있는 실제 구매 후기",
+    "description": "미국 현지 고객들이 직접 작성한 별 5개 리얼 리뷰"
+  },
+  "reviews": [
+    {
+      "id": "gomiinny",
+      "rating": 5,
+      "reviewer": "gomiinny • MAY-2026",
+      "title": "아마존보다 저렴하고 독점 상품도 많아요",
+      "review": "아마존/Weee보다 확실히 저렴해서 좋았어요. 프로틴바, 닥터지 스캘프 샴푸처럼 타 플랫폼엔 없는 제품도 있고, 메디힐 같은 화장품 브랜드는 할인폭도 커서 매력적이에요."
+    },
+    {
+      "id": "happilyeverafter-lucy",
+      "rating": 5,
+      "reviewer": "happilyeverafter_lucy • MAY-2026",
+      "title": "무료배송 기준이 확실히 경쟁력 있어요",
+      "review": "무료배송 기준이 $49라 타 플랫폼보다 경쟁력 있어요. 여러 아시아 국가 식품을 한 곳에서 살 수 있는 것도 큰 장점입니다."
+    },
+    {
+      "id": "yuki-kubota",
+      "rating": 5,
+      "reviewer": "Yuki Kubota • JAN-2026",
+      "title": "Fast delivery, exactly what I wanted",
+      "review": "I was skeptical at first, but the welcome discount plus new year sale made it worth trying. My package arrived in just a few days, and everything was exactly what I was looking for. Highly recommend!"
+    },
+    {
+      "id": "athena-woods",
+      "rating": 5,
+      "reviewer": "Athena Woods • JAN-2026",
+      "title": "Finally found my favorite Asian snacks",
+      "review": "I generally love this app, as it makes some of my favorite Asian snacks and drinks available now that I moved away from H-Mart."
+    },
+    {
+      "id": "megan-leblanc",
+      "rating": 5,
+      "reviewer": "Megan LeBlanc • JUN-2026",
+      "title": "Fair prices, fast shipping",
+      "review": "Fair prices and very fast shipping. Great for people that love trying new foods."
+    },
+    {
+      "id": "bear-rabbit",
+      "rating": 5,
+      "reviewer": "Bear Rabbit • FEB-2026",
+      "title": "Delivery is amazingly fast",
+      "review": "One of my favorite Asian shop apps — delivery took only a day or two for me, and the snacks and skincare items are truly one of a kind. Great for gifts too!"
+    },
+    {
+      "id": "tea-mac",
+      "rating": 5,
+      "reviewer": "Tea Mac • MAR-2026",
+      "title": "A dependable way to get Asian food",
+      "review": "I can't buy certain Asian food items where I live — being able to order online with a dependable company is great. Highly recommend!"
+    },
+    {
+      "id": "gnarly-elf",
+      "rating": 5,
+      "reviewer": "gnarly elf • JUL-2025",
+      "title": "Great variety, packed well",
+      "review": "App has a great variety of stuff, packs items well, and shipping is very quick!"
+    },
+    {
+      "id": "veronica-owen",
+      "rating": 5,
+      "reviewer": "Veronica Owen • NOV-2024",
+      "title": "Half the price of other apps",
+      "review": "I love this app so much I tell everyone about it! My favorite ramen is half the price of other shopping apps, and there are tons of options to choose from. Highly recommend!"
+    }
+  ]
+}

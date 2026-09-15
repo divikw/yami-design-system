@@ -30,5 +30,12 @@ product image slots remain white.
   footer, or multiple products for 56px thumbnails and an optional more count.
 
 Use a concise `posterAlt`, stable IDs, real destinations, and localized labels.
-The image is the video poster; playback behavior belongs to the consuming
-application rather than this catalog surface.
+The image is the default video poster. Set `videoSrc` on a card for muted,
+looping inline autoplay without native controls, preserving the poster layout.
+The optional `href` remains the destination for opening the full video. Pass `username={null}` when the source does not identify a creator to omit
+the identity overlay. Use `headingAlign="center"` and `description` for a centered
+campaign heading with supporting copy. The default remains start-aligned.
+
+With `headingAlign="center"`, paging controls sit at the vertical center of the content rail, one on each side. Controls are hidden when all items fit; on mobile they are hidden in favor of touch scrolling.
+
+Desktop dividers use `dividerPosition="top" | "bottom" | "none"` and `dividerVariant="gray" | "black"`, matching ProductList. Defaults are top/gray. The inset mobile card omits dividers.
