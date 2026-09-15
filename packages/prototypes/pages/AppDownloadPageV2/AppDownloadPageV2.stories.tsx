@@ -181,6 +181,7 @@ export const SocialVideoOverflow: Story = {
 
 export const MobileSocialVideoOverflow: Story = {
   ...SocialVideoOverflow,
+  tags: ["!dev"],
   globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
   play: async ({ canvasElement }) => {
     const rail = canvasElement.querySelector<HTMLElement>('[data-slot="social-media-gallery-list"]')!;
