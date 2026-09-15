@@ -6,6 +6,7 @@
   line-height: var(--line-height-body-md);
   --campaign-header-height: 64px;
 }
+.root, .footerContainer { --campaign-section-padding-block: var(--space-400); }
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .root h1, .root h2, .root h3, .root p { margin: 0; }
 .root h1, .root h2, .root h3, .root strong { font-weight: var(--font-weight-emphasize); }
@@ -26,7 +27,8 @@
 .flag { display: block; width: 20px; height: 20px; object-fit: contain; }
 .shopLink, .dealsLink, .stickyCta { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-100); min-height: 48px; padding: var(--space-150) var(--space-300); font-weight: var(--font-weight-emphasize); }
 .root .shopLink { height: var(--space-500); min-height: var(--space-500); padding-block: 0; background: var(--button-primary); color: var(--text-primary-inverse); border-radius: var(--radius-button-primary); }
-.hero { display: flex; flex-direction: column; gap: var(--space-400); padding: var(--space-1000) var(--space-200); background: var(--brand-tertiary); text-align: center; }
+.hero { background: var(--brand-tertiary); }
+.downloadContainer { box-sizing: border-box; width: 100%; max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; gap: var(--space-400); text-align: center; }
 .offerBadge { display: inline-block; background: color-mix(in srgb, var(--fill-promotion-primary) 8%, var(--brand-tertiary)); color: var(--text-emphasis); font-weight: var(--font-weight-emphasize); border-radius: var(--radius-button-primary); padding: var(--space-100) var(--space-200); }
 .heroCopy { display: flex; flex-direction: column; align-items: center; gap: var(--space-200); }
 .heroHeading { display: flex; flex-direction: column; align-items: center; gap: 0; row-gap: var(--space-200); }
@@ -45,20 +47,24 @@
 .hero .downloadButtons, .bottom .downloadButtons { column-gap: var(--space-100); }
 .hero .downloadLinks .qr, .bottom .downloadLinks .qr { margin-left: 0; }
 .sectionNav { display: flex; justify-content: flex-start; align-items: center; position: sticky; top: var(--campaign-header-height); z-index: 20; background: var(--surface-inverse); overflow-x: auto; scrollbar-width: none; }
-.couponSection, .guideSection { padding: var(--space-800) var(--space-300); background: color-mix(in srgb, var(--brand-tertiary) 90%, var(--fill-promotion-primary) 10%); }
-.couponPanel { max-width: 768px; margin: auto; padding: var(--space-500) var(--space-400); text-align: center; }
+.couponSection { padding-inline: var(--space-300); background: color-mix(in srgb, var(--brand-tertiary) 90%, var(--fill-promotion-primary) 10%); }
+.couponPanel { box-sizing: border-box; width: 100%; max-width: 768px; margin: auto; padding: var(--space-500) var(--space-400); text-align: center; }
 .eyebrow { color: var(--text-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); font-weight: var(--font-weight-emphasize); letter-spacing: 1px; }
 .subtitle { color: var(--text-secondary); text-align: center; }
 .couponPanel > [data-slot="card-content"] { display: flex; flex-direction: column; align-items: center; gap: var(--space-400); width: 100%; }
 .couponHeading { display: flex; flex-direction: column; gap: var(--space-100); }
 .couponTitleGroup { display: flex; flex-direction: column; gap: var(--space-050); }
 .couponTitleGroup p { color: var(--text-secondary); }
-.coupons { width: 100%; max-width: 448px; display: grid; gap: var(--space-400); }
-.coupon { position: relative; background: var(--fill-promotion-primary); color: var(--text-on-emphasis); border-radius: var(--radius-surface-default); padding: var(--space-300) var(--space-500) var(--space-200); text-align: left; }
+.coupons { width: 100%; max-width: 512px; display: grid; gap: var(--space-200); }
+.coupon { background: var(--fill-promotion-primary); color: var(--text-on-emphasis); border-radius: var(--radius-surface-default); padding: var(--space-200) var(--space-250) var(--space-150); text-align: left; display: flex; flex-direction: column; gap: var(--space-150); }
 .coupon:last-child { background: var(--button-emphasis-active); }
-.couponBadge { position: absolute; left: 50%; top: 0; transform: translate(-50%, -60%); max-width: 100%; white-space: nowrap; }
-.couponCode { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-050); font-size: var(--font-size-caption-sm); }
-.couponCode button { padding: var(--space-050) 0; background: none; border: 0; color: inherit; font-size: inherit; text-decoration: underline; min-height: 36px; }
+.couponBadge { font-size: var(--font-size-caption-md); line-height: var(--line-height-caption-md); }
+.coupon h3 { line-height: 1.4; }
+.couponAmount { font-size: 32px; font-weight: var(--font-weight-emphasize); }
+.couponCode { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-100); padding-top: var(--space-100); border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent); font-size: var(--font-size-caption-md); }
+.couponCopy { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-100); }
+.couponCopy > span { font-weight: var(--font-weight-emphasize); user-select: all; }
+.couponCode button { padding: var(--space-050) 0; background: none; border: 0; color: inherit; font-size: inherit; text-decoration: underline; min-height: 36px; cursor: pointer; }
 .couponCode button:focus-visible { outline-color: var(--border-focus-inverse); }
 .terms { display: flex; flex-direction: column; gap: var(--space-200); width: 100%; max-width: 512px; text-align: left; color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); }
 .termsCopy { display: flex; flex-direction: column; gap: var(--space-050); }
@@ -68,12 +74,13 @@
   .root .dealsLink { font-size: var(--font-size-button-lg-desktop); }
 }
 .dealsLink img { width: 16px; height: 16px; filter: brightness(0) invert(1); }
-.guideSection { display: flex; flex-direction: column; align-items: center; gap: var(--space-400); text-align: center; }
+.guideSection { background: color-mix(in srgb, var(--brand-tertiary) 90%, var(--fill-promotion-primary) 10%); }
+.guideContainer { box-sizing: border-box; width: 100%; max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; align-items: center; gap: var(--space-400); text-align: center; }
 .guideHeading { display: flex; flex-direction: column; align-items: center; gap: var(--space-050); }
 .guideHeading p { color: var(--text-secondary); }
-.video { display: block; width: min(100%, 380px); aspect-ratio: 9 / 16; margin: 0; border: 6px solid var(--border-focus); border-radius: 32px; background: var(--surface-inverse); object-fit: cover; }
-.calculatorSection { padding: var(--space-800) var(--space-200); background: var(--brand-tertiary); }
-.calculator { max-width: 480px; margin: auto; display: flex; flex-direction: column; gap: var(--space-200); }
+.video { display: block; width: min(100%, 400px); aspect-ratio: 9 / 16; margin: 0; border: 6px solid var(--border-focus); border-radius: 32px; background: var(--surface-inverse); object-fit: cover; }
+.calculatorSection { padding-inline: var(--space-200); background: var(--brand-tertiary); }
+.calculator { box-sizing: border-box; width: 100%; max-width: 480px; margin: auto; display: flex; flex-direction: column; gap: var(--space-200); }
 .calculatorHeading { display: flex; flex-direction: column; gap: var(--space-050); margin-bottom: var(--space-200); }
 .calculatorTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-100); width: 100%; }
 .calculatorTab { min-width: 0; min-height: 76px; padding: var(--space-100); border: 2px solid transparent; border-radius: var(--radius-component-default); background: var(--surface-primary); color: var(--text-secondary); font: inherit; cursor: pointer; }
@@ -125,9 +132,9 @@
 .selectionProduct > a { display: inline-block; padding-top: var(--space-100); text-decoration: underline; }
 .moreDeals { margin: 0; font-size: var(--font-size-caption-sm); }
 .moreDeals a { text-decoration: underline; color: var(--text-emphasis); }
-.bottom { display: flex; flex-direction: column; gap: var(--space-400); text-align: center; padding: var(--space-1000) var(--space-200); background: var(--surface-primary); }
+.bottom { background: var(--surface-primary); }
 .bottom h2 { margin: 0; font-size: var(--font-size-heading-4xl); line-height: var(--line-height-heading-4xl); }
-.root .stickyCta { position: fixed; z-index: 40; bottom: max(var(--space-300), env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(480px, calc(100% - 32px)); min-height: 64px; border-radius: var(--radius-button-primary); background: var(--button-emphasis); color: var(--text-on-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); text-align: center; }
+.root .stickyCta { position: fixed; z-index: 40; bottom: max(var(--space-300), env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(480px, calc(100% - 32px)); min-height: 64px; border-radius: var(--radius-component-default); background: var(--button-emphasis); color: var(--text-on-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); text-align: center; }
 .stickyCta img { width: 18px; height: 18px; filter: invert(1); }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 1023px) {
@@ -147,68 +154,42 @@
     padding: 0 var(--space-150);
     font-size: var(--font-size-body-md);
   }
-  .hero { padding: var(--space-400) var(--space-200); }
-  .heroCopy {
-    padding-top: var(--space-400);
-    padding-bottom: 0;
-  }
-  .hero .downloadLinks, .bottom .downloadLinks {
-    padding-bottom: var(--space-400);
-  }
-  .bottom .heroHeading {
-    padding-top: var(--space-400);
-  }
   .hero h1 { font-size: var(--font-size-heading-2xl); line-height: var(--line-height-heading-2xl); letter-spacing: -1px; }
   .heroDescription { font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
   .downloadLinks { flex-direction: column; gap: var(--space-150); }
   .downloadLinks .qr { display: none; }
   .root h2 { font-size: var(--font-size-heading-xl); line-height: var(--line-height-heading-xl); }
-  .couponSection, .guideSection, .calculatorSection { padding: var(--space-400) var(--space-200); }
+  .couponSection, .calculatorSection { padding-inline: var(--space-200); }
   .video {
-    width: min(calc(100% - var(--space-600)), 380px);
+    width: min(calc(100% - var(--space-600)), 400px);
     margin-inline: var(--space-300);
   }
   .couponPanel { padding: var(--space-300) var(--space-250); }
-  .coupon { padding: var(--space-250) var(--space-300) var(--space-150); }
   .coupon h3 { font-size: var(--font-size-body-md); }
   .couponCode { gap: var(--space-050); }
   .couponCode button { min-height: 32px; }
   .calculatorCard { padding: var(--space-300); }
   .calculatorTab { padding-inline: var(--space-050); }
   .couponTab { font-size: var(--font-size-body-md); }
-  .bottom { padding: var(--space-400) var(--space-200); }
 }
 @media (hover: hover) and (pointer: fine) {
   .root .shopLink:hover, .root .dealsLink:hover { background: var(--button-primary-active); }
   .root .stickyCta:hover { background: var(--button-emphasis-active); }
 }
 
-
 .footerContainer { overflow-x: auto; background: var(--surface-inverse); }
 .root [data-slot="product-list-container"] { max-width: var(--campaign-content-max-width); }
+.root [data-slot="product-list-heading"][data-description="true"] [data-slot="product-list-copy"] { row-gap: var(--space-050); }
 
 .selectionCheck [role="checkbox"] { border-color: var(--border-focus); }
 
 @media (min-width: 1024px) {
-  .hero, .couponSection, .guideSection, .calculatorSection, .bottom {
-    padding-block: var(--space-400);
-    padding-inline: max(var(--space-600), calc((100% - var(--campaign-content-max-width)) / 2 + var(--space-600)));
+  .root, .footerContainer {
+    --campaign-section-padding-block: var(--space-600);
   }
 
-  .heroCopy {
-    padding-top: var(--space-800);
-  }
-
-  .hero .downloadLinks, .bottom .downloadLinks {
-    padding-bottom: var(--space-800);
-  }
-
-  .guideSection .video {
-    padding-left: 0;
-  }
-
-  .bottom .heroHeading {
-    padding-top: var(--space-800);
+  .downloadContainer, .guideContainer, .calculatorSection, .couponSection {
+    padding-inline: var(--space-600);
   }
 
   .header > div {
@@ -216,7 +197,7 @@
   }
 
   .footerContainer > footer {
-    --footer-gutter-outer: max(var(--space-600), calc(100% - var(--campaign-content-max-width) / 2 + var(--space-600)));
+    --footer-content-max-width: var(--campaign-content-max-width);
   }
 }
 
@@ -243,3 +224,8 @@
 .sectionNav > div { width: 100%; min-width: 0; }
 
 .sectionNav [role="tablist"] { align-self: center; }
+
+/* Page-level section rhythm; ProductList owns its spacing on the inner container. */
+.hero, .bottom, .couponSection, .guideSection, .calculatorSection, .root [data-slot="product-list"][data-appearance="background"] [data-slot="product-list-container"], .footerContainer [data-slot="footer-closing-bar"] {
+  padding-block: var(--campaign-section-padding-block);
+}

@@ -123,6 +123,8 @@ export interface AppDownloadPageProps { initialLocale?: AppDownloadLocale; conte
 
 export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }: AppDownloadPageProps) {
   const [locale, setLocale] = useState(initialLocale);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [copyFailed, setCopyFailed] = useState(false);
   const [category, setCategory] = useState<string>("beauty");
   const [activeSection, setActiveSection] = useState(sectionIds[0]);
   const [showSticky, setShowSticky] = useState(false);
@@ -137,13 +139,11 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
 
   useEffect(() => {
     const update = () => {
-      const hero = root.current?.querySelector<HTMLElement>("[data-campaign-hero]");
-      const protectedContentVisible = ["coupon-guide", "savings-calculator", "bottom-cta-section"].some((id) => {
-        const bounds = root.current?.querySelector(`#${id}`)?.getBoundingClientRect();
-        return bounds && bounds.top < window.innerHeight && bounds.bottom > 128;
-      });
-      const bottom = root.current?.querySelector("#bottom-cta-section")?.getBoundingClientRect();
-      setShowSticky((hero?.getBoundingClientRect().bottom ?? Infinity) < 64 && !protectedContentVisible && (bottom?.bottom ?? Infinity) > 128);
+      const downloadButtons = root.current?.querySelector<HTMLElement>(`[data-campaign-hero] .${styles.downloadButtons}`);
+      const bounds = downloadButtons?.getBoundingClientRect();
+      const headerBottom = root.current?.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
+      const downloadButtonsVisible = bounds && bounds.bottom > headerBottom && bounds.top < window.innerHeight;
+      setShowSticky(Boolean(bounds && !downloadButtonsVisible));
       if (pendingSection.current) return;
       let active = sectionIds[0];
       for (const id of sectionIds) {
@@ -159,6 +159,7 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) resumeTracking();
     };
     window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
     window.addEventListener("scrollend", resumeTracking);
     window.addEventListener("wheel", resumeTracking, { passive: true });
     window.addEventListener("touchstart", resumeTracking, { passive: true });
@@ -166,6 +167,7 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
     update();
     return () => {
       window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
       window.removeEventListener("scrollend", resumeTracking);
       window.removeEventListener("wheel", resumeTracking);
       window.removeEventListener("touchstart", resumeTracking);
@@ -206,17 +208,19 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
     </div></header>
     <main>
       <section className={styles.hero} data-campaign-hero>
-        <div className={styles.heroCopy}>
-          <div className={styles.heroHeading}>
-          <span className={styles.offerBadge}>{t.hero.badge}</span>
-          <div className={styles.heroTitleGroup}>
-            <h1>{t.hero.headline}</h1>
-            <p className={styles.heroDescription}>{t.hero.subheadline}</p>
+        <div className={styles.downloadContainer}>
+          <div className={styles.heroCopy}>
+            <div className={styles.heroHeading}>
+            <span className={styles.offerBadge}>{t.hero.badge}</span>
+            <div className={styles.heroTitleGroup}>
+              <h1>{t.hero.headline}</h1>
+              <p className={styles.heroDescription}>{t.hero.subheadline}</p>
+            </div>
+            </div>
+            <p className={styles.appNotice}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>{t.hero.appOnlyNotice}</p>
           </div>
-          </div>
-          <p className={styles.appNotice}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>{t.hero.appOnlyNotice}</p>
+          <DownloadLinks />
         </div>
-        <DownloadLinks />
       </section>
       <nav className={styles.sectionNav} aria-label={ko ? "페이지 섹션" : "Page sections"}>
         <Tabs value={activeSection} onValueChange={(id) => {
@@ -240,10 +244,23 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
           </div>
           <div className={styles.coupons}>
             {[t.coupon.first, t.coupon.returning].map((coupon, index) => <div className={styles.coupon} key={coupon.code}>
-              <Badge className={styles.couponBadge} color="yellow" emphasis="secondary">{coupon.badge}</Badge>
-              <h3>{coupon.title}</h3><div className={styles.couponCode}>APP ONLY <span aria-hidden="true">|</span> {ko ? "쿠폰코드 :" : "Code:"} <button type="button" onClick={() => showGuide(index ? 23 : 0)}>{coupon.code}</button><button type="button" onClick={() => showGuide(index ? 23 : 0)}>{ko ? "적용법 보기" : "How to use"}</button></div>
+              <p className={styles.couponBadge}>{ko ? (index ? "다음 주문" : "첫 주문") : (index ? "Next order" : "First order")} · {coupon.badge}</p>
+              <h3>{coupon.title.split(/(\$[\d,]+)/).map((part, partIndex) => part.startsWith("$") ? <strong className={styles.couponAmount} key={partIndex}>{part}</strong> : part)}</h3>
+              <div className={styles.couponCode}>
+                <div className={styles.couponCopy}>{ko ? "쿠폰코드:" : "Code:"} <span>{coupon.code}</span><button type="button" aria-label={`${ko ? "복사" : "Copy"} ${coupon.code}`} onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(coupon.code);
+                    setCopiedCode(coupon.code);
+                    setCopyFailed(false);
+                  } catch {
+                    setCopyFailed(true);
+                  }
+                }}>{copiedCode === coupon.code ? (ko ? "복사됨" : "Copied") : (ko ? "복사" : "Copy")}</button></div>
+                <button type="button" onClick={() => showGuide(index ? 23 : 0)}>{ko ? "적용법 보기" : "How to use"} <span aria-hidden="true">↗</span></button>
+              </div>
             </div>)}
           </div>
+          <p className={styles.srOnly} role="status">{copyFailed ? (ko ? "복사하지 못했어요. 쿠폰코드를 직접 선택해 복사해 주세요." : "Could not copy. Select the coupon code to copy it manually.") : copiedCode ? `${copiedCode} ${ko ? "복사됨" : "copied"}` : ""}</p>
           <div className={styles.terms}>
             <Divider />
             <div className={styles.termsCopy}>
@@ -272,22 +289,26 @@ export function AppDownloadPage({ initialLocale = "ko", contentMaxWidth = 1440 }
           }))}
         />
       <section id="coupon-guide" className={styles.guideSection}>
-        <div className={styles.guideHeading}>
-          <h2>{t.nav.categories.couponGuide}</h2>
-          <p>{ko ? "영상 속에 숨겨진 추가 혜택을 확인해보세요" : "Watch the video to discover hidden extra benefits"}</p>
+        <div className={styles.guideContainer}>
+          <div className={styles.guideHeading}>
+            <h2>{t.nav.categories.couponGuide}</h2>
+            <p>{ko ? "영상 속에 숨겨진 추가 혜택을 확인해보세요" : "Watch the video to discover hidden extra benefits"}</p>
+          </div>
+          <video className={styles.video} ref={video} controls muted loop playsInline preload="metadata" aria-label={ko ? "쿠폰 적용 안내 영상" : "Coupon redemption tutorial"}><source src={asset("Final_video_0811.mp4")} type="video/mp4" /></video>
         </div>
-        <video className={styles.video} ref={video} controls muted loop playsInline preload="metadata" aria-label={ko ? "쿠폰 적용 안내 영상" : "Coupon redemption tutorial"}><source src={asset("Final_video_0811.mp4")} type="video/mp4" /></video>
       </section>
       <SavingsCalculator locale={locale} onGuide={() => showGuide(12)} />
       <section className={styles.bottom} id="bottom-cta-section">
-        <div className={styles.heroHeading}>
-          <span className={styles.offerBadge}>{t.bottom.badge_combo1010}</span>
-          <div className={styles.heroTitleGroup}>
-            <h2>{t.bottom.title}</h2>
-            <p className={styles.heroDescription}>{t.bottom.subtitle}</p>
+        <div className={styles.downloadContainer}>
+          <div className={styles.heroHeading}>
+            <span className={styles.offerBadge}>{t.bottom.badge_combo1010}</span>
+            <div className={styles.heroTitleGroup}>
+              <h2>{t.bottom.title}</h2>
+              <p className={styles.heroDescription}>{t.bottom.subtitle}</p>
+            </div>
           </div>
+          <DownloadLinks />
         </div>
-        <DownloadLinks />
       </section>
     </main>
     {showSticky && <a className={styles.stickyCta} href={downloadHref}>{ko ? "앱 전용 첫 구매 혜택 받기" : "Claim Your App-Only Deal"}<img src={asset("chevron-right.svg")} alt="" /></a>}
