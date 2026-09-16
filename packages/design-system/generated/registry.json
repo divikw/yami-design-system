@@ -216,7 +216,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "655873a1c2ec81e9df82e0928a7366f72087d2d821cda46530160238aa727d58"
+      "digest": "ec7344765666b96faf0f1c4b9dc732848f1adc65b064a3b06bd84bd2a05f73cb"
     },
     {
       "name": "sheet",

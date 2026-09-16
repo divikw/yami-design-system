@@ -40,6 +40,8 @@ export interface ReviewListProps
   description?: ReactNode;
   /** Centered headings place paging controls at the sides of the content rail. */
   headingAlign?: "start" | "center";
+  /** Opt in to equal-height cards; content preserves the original review layout. */
+  cardHeight?: "content" | "equal";
   /** Optional serif treatment for editorial section headings. */
   titleFontFamily?: "sans" | "serif";
   /** Optional mobile-only heading; falls back to title. */

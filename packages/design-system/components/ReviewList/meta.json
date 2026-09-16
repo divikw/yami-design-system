@@ -84,6 +84,12 @@
       "default": "gray",
       "description": "Gray renders the 1px structural separator; black renders the theme-aware 2px emphasis separator."
     },
+    "cardHeight": {
+      "type": "\"content\" | \"equal\"",
+      "required": false,
+      "default": "content",
+      "description": "Content preserves individual card heights; equal explicitly stretches cards to the tallest review without changing mobile widths."
+    },
     "headingAlign": {
       "type": "\"start\" | \"center\"",
       "required": false,
