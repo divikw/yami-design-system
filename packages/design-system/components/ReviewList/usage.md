@@ -1,5 +1,7 @@
 # ReviewList
 
+`cardHeight="content"` is the compatibility default: cards retain their own height and are vertically centered. Use `cardHeight="equal"` explicitly for campaign reviews that should stretch to the tallest card. This choice is independent of heading alignment and preserves the 344px mobile card width in both modes. New page requirements must not change the default layout of existing consumers.
+
 `ReviewList` is a customer-review rail with the same section heading anatomy as
 `ProductList`. Each rail item is the exported `ReviewCard` child: a rating,
 review copy, anonymized reviewer and the related product footer.

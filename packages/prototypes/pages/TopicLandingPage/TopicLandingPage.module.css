@@ -315,7 +315,7 @@ main.main[data-title-font-family="sans"]
   .reviewList
     > [data-slot="review-list"]
     > [data-slot="review-list-container"]
-    > [data-slot="review-list-items"]
+    [data-slot="review-list-items"]
     > li {
     flex-basis: calc((100% - 2 * var(--space-150)) / 3);
   }
@@ -325,7 +325,7 @@ main.main[data-title-font-family="sans"]
   .standardRail
     > [data-slot="product-list"]
     > [data-slot="product-list-container"]
-    > [data-slot="product-list-items"]
+    [data-slot="product-list-items"]
     > [data-slot="product-list-item"] {
     flex-basis: calc((100% - 60px) / 6);
   }

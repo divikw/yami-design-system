@@ -25,7 +25,7 @@
 
 .list {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: var(--space-200);
   margin: 0;
   padding: 0;
@@ -39,7 +39,6 @@
 }
 
 .item {
-  display: flex;
   min-width: 0;
   flex: 0 0 calc((100% - 2 * var(--space-200)) / 3);
   scroll-snap-align: start;
@@ -166,7 +165,6 @@
 }
 
 .card {
-  width: 100%;
   display: flex;
   min-width: 0;
   box-sizing: border-box;
@@ -351,6 +349,18 @@
   line-height: var(--line-height-body-md);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.root[data-card-height="equal"] .list {
+  align-items: stretch;
+}
+
+.root[data-card-height="equal"] .item {
+  display: flex;
+}
+
+.root[data-card-height="equal"] .card {
+  width: 100%;
 }
 
 .railFrame { display: contents; }
