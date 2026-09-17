@@ -37,6 +37,7 @@ export function ProductCard({
   countdown,
   badges,
   onAddToCart,
+  addButtonDisabled = false,
   addButtonAriaLabel = "Add to cart",
   href,
 }: ProductCardProps) {
@@ -63,6 +64,7 @@ export function ProductCard({
             presentation === "compact" ? undefined : onAddToCart
           }
           addButtonAriaLabel={addButtonAriaLabel}
+          addButtonDisabled={addButtonDisabled}
           priceBadge={presentation === "minimal" ? priceCurrent : undefined}
           href={href}
           linkLabel={title}
@@ -89,6 +91,7 @@ export function ProductCard({
                 presentation === "compact" ? onAddToCart : undefined
               }
               addButtonAriaLabel={addButtonAriaLabel}
+          addButtonDisabled={addButtonDisabled}
             />
           </div>
         )}

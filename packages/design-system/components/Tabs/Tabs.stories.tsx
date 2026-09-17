@@ -330,6 +330,14 @@ export const AllVariantsContract: Story = {
       }
     }
 
+    for (const trigger of canvasElement.querySelectorAll<HTMLElement>('[role="tablist"][data-variant="tertiary"] [role="tab"]')) {
+      const background = getComputedStyle(trigger, "::before")
+      if (trigger.getBoundingClientRect().height !== (window.innerWidth >= 1024 ? 36 : 32) ||
+          background.top !== "0px" || background.bottom !== "0px") {
+        throw new Error("Tertiary tabs must match their visible capsule height")
+      }
+    }
+
     const initialWidth = showcaseStack.style.width
     const initialMaxWidth = showcaseStack.style.maxWidth
     try {

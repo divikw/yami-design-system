@@ -10,7 +10,6 @@ export function BrandProductRailExample() {
   return (
     <BrandProductRail
       title={copy.title}
-      mobileTitle={copy.mobileTitle}
       campaigns={createBrandProductCampaigns("zh")}
       tabs={copy.tabs.map((label, index) => ({
         value: `category-${index + 1}`,

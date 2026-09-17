@@ -1,5 +1,7 @@
 # App Download Page
 
+> **Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。
+
 Reference: https://yami-app-download.vercel.app/short (captured 2026-09-05).
 
 This page preserves the reference campaign content, section order, 75 products across four categories, tutorial video, Korean/English copy, and both savings-calculator modes. Product imagery, video, and store badges are bundled locally. Prices are captured fixtures, not a live commerce feed; product and download links open the original destinations.

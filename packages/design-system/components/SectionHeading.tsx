@@ -8,6 +8,8 @@ export type SectionHeadingProps = {
   title: ReactNode;
   /** Center stacks the title and supporting copy with shared spacing. */
   align?: "start" | "center";
+  /** Optional alignment below 1024px; card sections use start. */
+  mobileAlign?: "start" | "center";
   /** Optional supporting copy rendered beside the title, or below it when centered. */
   description?: ReactNode;
   /** Shown below 1024px in place of `title`; omit to use one title at every width. */
@@ -21,6 +23,8 @@ export type SectionHeadingProps = {
    */
   viewAllHref?: string;
   viewAllLabel?: ReactNode;
+  /** In centered layouts, link the whole title with a trailing arrow. */
+  centeredTitleLink?: boolean;
   /** Rail paging, or whatever else the section puts after the view-all. */
   actions?: ReactNode;
   /**
@@ -47,11 +51,13 @@ export function SectionHeading({
   id,
   title,
   align = "start",
+  mobileAlign = align,
   description,
   mobileTitle,
   mobileTitleSize = 20,
   viewAllHref,
   viewAllLabel,
+  centeredTitleLink = false,
   actions,
   slot,
   titleFontFamily = "sans",
@@ -71,6 +77,8 @@ export function SectionHeading({
       data-slot={slotName("heading")}
       data-section-heading="true"
       data-align={align}
+      data-mobile-align={mobileAlign}
+      data-centered-title-link={centeredTitleLink && resolvedViewAllHref ? "true" : undefined}
       data-description={description ? "true" : undefined}
     >
       <div className={styles.copy} data-slot={slotName("copy")}>
@@ -85,7 +93,15 @@ export function SectionHeading({
           data-section-heading-title="true"
           data-mobile-title-size={mobileTitleSize}
         >
-          {mobileTitle === undefined ? (
+          {centeredTitleLink && resolvedViewAllHref ? (
+            <>
+              <span className={styles.unlinkedTitle}>{title}</span>
+              <a className={styles.titleLink} href={resolvedViewAllHref}>
+                <span>{title}</span>
+                <span className={styles.titleLinkArrow} data-icon="arrow-right" aria-hidden="true" />
+              </a>
+            </>
+          ) : mobileTitle === undefined ? (
             title
           ) : (
             <>
@@ -107,6 +123,7 @@ export function SectionHeading({
         <div
           className={join(styles.actions, actionsClassName)}
           data-slot={slotName("actions")}
+          data-only-view-all={!actions ? "true" : undefined}
         >
           {resolvedViewAllHref && (
             <>

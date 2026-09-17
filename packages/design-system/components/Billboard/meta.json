@@ -4,7 +4,7 @@
   "category": "composite",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
+  "description": "Floating Bars / 活动快捷浮动栏. Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -60,9 +60,8 @@
     "--stroke-thick",
     "--radius-surface-default",
     "--font-family-ios",
-    "--layout-page-margin-card",
+    "--space-200",
     "--space-025",
-    "--space-400",
     "--space-600"
   ],
   "tokenBindings": {
@@ -72,14 +71,14 @@
     },
     "--radius-surface-default": {
       "property": "border-radius",
-      "selector": ".link and .root below 1024px"
+      "selector": ".link"
     },
-    "--layout-page-margin-card": {
-      "property": "margin-inline",
+    "--space-200": {
+      "property": "padding",
       "selector": ".root below 1024px"
     },
     "--space-600": {
-      "property": "padding-inline",
+      "property": "padding",
       "selector": ".root from 1024px"
     }
   },

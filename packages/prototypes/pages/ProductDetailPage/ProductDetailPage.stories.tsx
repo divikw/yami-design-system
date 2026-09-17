@@ -186,8 +186,9 @@ async function verifyDetailDisclosures(
 }
 
 const meta = {
-  title: "YAMI/Pages/Product Detail/Beauty",
-  tags: ["!autodocs"],
+  id: "yami-pages-product-detail-beauty",
+  title: "YAMI/Pages/Product Detail/Draft/Beauty",
+  tags: ["!autodocs", "draft"],
   component: ProductDetailPage,
   parameters: {
     layout: "fullscreen",
@@ -195,7 +196,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Responsive YAMI PDP based on the live Torriden product information architecture, with the original stacked media stream replaced by ProductMediaGallery's single-window interaction.",
+          "**Draft · 草稿**：尚未定稿或完成 review。\n\nResponsive YAMI PDP based on the live Torriden product information architecture, with the original stacked media stream replaced by ProductMediaGallery's single-window interaction.",
       },
       story: { inline: false, height: "1800px" },
     },

@@ -1,6 +1,6 @@
 import baseMeta, * as examples from "./ProductList.story-examples";
 
-export default { ...baseMeta, title: "YAMI/Components/Commerce/Product List/PC" };
+export default { ...baseMeta, tags: ["!dev", "!autodocs"], id: "yami-components-commerce-product-list-pc", title: "YAMI/Modules/Commerce/Product List/PC" };
 
 export const StandardRail = { ...examples.StandardRail, name: "Standard" };
 export const RailWithIntroContent = { ...examples.RailWithIntroContent, name: "With introduction" };

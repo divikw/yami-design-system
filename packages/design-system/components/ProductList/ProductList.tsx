@@ -300,6 +300,7 @@ export function ProductList(props: ProductListProps) {
       <div className={styles.container} data-slot="product-list-container">
         <SectionHeading
           align={headingAlign}
+          mobileAlign={mobileSurface === "card" ? "start" : headingAlign}
           slot="product-list"
           id={titleId}
           title={title}

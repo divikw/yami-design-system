@@ -1,18 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { ReviewList } from "./ReviewList";
+import type { ReviewListProps } from "./ReviewList.types";
+
 import styles from "./ReviewList.stories.module.css";
 import {
   createReviewListProps,
   type ReviewListLocale,
 } from "./fixtures";
 
+type ReviewListStoryArgs = ReviewListProps & { showProduct: boolean };
+
 function localeFromGlobals(value: unknown): ReviewListLocale {
   return value === "zh" ? "zh" : "en";
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Review List",
+  id: "yami-components-commerce-review-list",
+  title: "YAMI/Modules/Commerce/Review List",
   component: ReviewList,
   decorators: [
     (Story) => (
@@ -26,7 +31,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A responsive review rail that reuses the shared ProductList heading anatomy and renders each customer review with the exported ReviewCard child.",
+          "响应式用户评论列表，复用 ProductList 的标题结构，通过 ReviewCard 展示评分、评论、用户昵称及可选关联商品。省略每条评论的 product 可展示纯评论；预览中可通过 showProduct 切换。",
       },
       source: {
         language: "tsx",
@@ -38,44 +43,58 @@ import { createReviewListProps } from "@yami/design-system/components/ReviewList
     },
   },
   argTypes: {
+    showProduct: {
+      control: { type: "boolean" },
+      description: "预览是否显示关联商品。关闭后仅展示评分、评论和用户昵称；实际使用时省略评论数据中的 product。",
+    },
     mobileSurface: {
       options: ["card", "plain"],
       control: { type: "radio" },
       description:
-        "Mobile section surface. Card preserves the inset rounded panel; plain is full-bleed with 16px content padding and supports dividers.",
+        "移动端外观：card 为内缩圆角面板；plain 为通栏布局，内容内边距 16px，并支持分割线。",
     },
     dividerPosition: {
       options: ["top", "bottom", "none"],
       control: { type: "radio" },
       description:
-        "Section divider edge. Always supported on desktop; on mobile it is available only for the plain surface.",
+        "分割线位置。PC 始终支持，Mobile 仅 plain 外观支持。",
     },
     dividerVariant: {
       options: ["gray", "black"],
       control: { type: "radio" },
-      description: "Gray renders at 1px; black emphasis renders at 2px.",
+      description: "gray 为 1px 灰色分割线；black 为 2px 强调分割线。",
     },
   },
   args: {
     ...createReviewListProps(),
+    showProduct: true,
     mobileSurface: "card",
     dividerPosition: "top",
     dividerVariant: "gray",
   },
-} satisfies Meta<typeof ReviewList>;
+} satisfies Meta<ReviewListStoryArgs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
-  render: (args, { globals }) => (
-    <ReviewList
-      {...createReviewListProps(localeFromGlobals(globals.locale))}
-      mobileSurface={args.mobileSurface}
-      dividerPosition={args.dividerPosition}
-      dividerVariant={args.dividerVariant}
-    />
-  ),
+  tags: ["!dev", "!autodocs"],
+  render: (args, { globals }) => {
+    const { showProduct, ...componentArgs } = args;
+    const localized = createReviewListProps(localeFromGlobals(globals.locale));
+    const overrides = Object.fromEntries(
+      Object.entries(componentArgs).filter(([key, value]) =>
+        JSON.stringify(value) !== JSON.stringify(meta.args[key as keyof typeof meta.args]),
+      ),
+    );
+    const props = { ...localized, ...overrides } as ReviewListProps;
+    return (
+      <ReviewList
+        {...props}
+        reviews={showProduct ? props.reviews : props.reviews.map((review) => ({ ...review, product: undefined }))}
+      />
+    );
+  },
   play: async ({ canvasElement }) => {
     const root = canvasElement.querySelector<HTMLElement>(
       '[data-slot="review-list"]',
@@ -219,6 +238,12 @@ export const BlackBottomDivider: Story = {
   },
 };
 
+export const PC: Story = {
+  ...Showcase,
+  tags: ["dev", "autodocs"],
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+};
+
 export const Mobile: Story = {
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: Showcase.render,
@@ -288,6 +313,7 @@ export const Mobile: Story = {
 
 export const MobilePlain: Story = {
   name: "Mobile / Plain",
+  tags: ["!dev", "!autodocs"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   args: {
     mobileSurface: "plain",
@@ -348,4 +374,32 @@ export const MobilePlain: Story = {
       );
     }
   },
+};
+
+export const WithoutProduct: Story = {
+  tags: ["!dev", "!autodocs"],
+  args: { showProduct: false },
+  render: Showcase.render,
+  play: async ({ canvasElement }) => {
+    const cards = canvasElement.querySelectorAll('[data-slot="review-card"]');
+    if (cards.length !== 3 || canvasElement.querySelector('[data-slot="review-card-product"]')) {
+      throw new Error("Without-product reviews must retain all cards and omit product footers");
+    }
+    for (const card of cards) {
+      for (const slot of ["rating", "content", "reviewer"]) {
+        if (!card.querySelector(`[data-slot="review-card-${slot}"]`)?.textContent?.trim() && slot !== "rating") {
+          throw new Error("Without-product reviews must preserve their review content and reviewer");
+        }
+      }
+      if (!card.querySelector('[data-slot="review-card-rating"]')) {
+        throw new Error("Without-product reviews must preserve their rating");
+      }
+    }
+  },
+};
+
+export const MobileWithoutProduct: Story = {
+  ...WithoutProduct,
+  tags: ["!dev", "!autodocs"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
 };

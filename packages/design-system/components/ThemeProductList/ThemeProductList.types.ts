@@ -8,7 +8,7 @@ export interface ThemeProductListContent {
     alt: string;
     objectPosition?: string;
   };
-  /** Pre-sampled color from the image's lower copy region. Prevents a foreground-color flash before client-side sampling completes. */
+  /** 图片底部文字区域的预采样颜色，避免客户端采样完成前文字颜色闪烁。 */
   backgroundColor?: string;
   title: ReactNode;
   description: ReactNode;
@@ -38,6 +38,6 @@ export interface ThemeProductListProps
     | "leadingContent"
   > {
   content: ThemeProductListContent;
-  /** Optional tab-driven content sets. When present, each tab swaps both the editorial panel and products. */
+  /** 可选的主题分组，切换标签时同时更新主题内容和商品。 */
   themes?: ThemeProductListTheme[];
 }

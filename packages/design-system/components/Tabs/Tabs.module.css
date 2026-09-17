@@ -296,12 +296,12 @@
 }
 
 .list[data-variant="tertiary"] {
-  min-height: var(--space-600);
+  min-height: var(--space-400);
   gap: var(--space-050);
 }
 
 .list[data-variant="tertiary"] .trigger {
-  height: var(--space-600);
+  height: var(--space-400);
   padding-inline: var(--space-150);
   color: var(--text-primary);
   font-size: var(--font-size-body-md);
@@ -310,7 +310,7 @@
 }
 
 .list[data-variant="tertiary"] .trigger::before {
-  inset-block: var(--space-100);
+  inset-block: 0;
 }
 
 .list[data-variant="tertiary"] .trigger[data-state="active"] {
@@ -422,9 +422,20 @@
   .root[data-orientation="horizontal"]
     .list[data-variant="tertiary"]
     .trigger::before {
-    inset-block: calc(var(--space-050) + var(--space-025));
+    inset-block: 0;
   }
 }
 
 .list[data-align="center"] { justify-content: safe center; }
 .list[data-edge-padding="true"][data-variant] { box-sizing: border-box; padding-inline: var(--space-200); scroll-padding-inline: var(--space-200); }
+
+
+@media (min-width: 1024px) {
+  .list[data-variant="tertiary"] {
+    min-height: calc(var(--space-400) + var(--space-050));
+  }
+
+  .list[data-variant="tertiary"] .trigger {
+    height: calc(var(--space-400) + var(--space-050));
+  }
+}

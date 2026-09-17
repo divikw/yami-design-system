@@ -1,44 +1,23 @@
 # ThemeProductList
 
-An editorial product rail that reserves the first two product-card slots for
-an image-led theme link, then continues with the shared ProductCard rail.
+主题商品列表，将主题图片、标题和说明与商品横向列表组合，复用 ProductList 的标题、标签、翻页和加购能力。
 
-## When to use
+## 预览与配置
 
-Use it when a themed landing page needs a short visual entry point beside a
-curated product collection. The component keeps the ProductList heading, tabs,
-rail navigation and quick-add behavior, while the content panel owns its image
-alt text, contrast overlay and description.
+Storybook 提供 PC 和 Mobile 预览，通过 `mobileSurface` 切换 `card` / `plain`。属性名与选项保持英文。提供 `themes` 时，切换标签会同时更新主题内容与商品。
 
-## Content
+## 主题内容
 
-- Provide a meaningful `content.image.alt` for the theme artwork.
-- Keep `content.title` short enough for the bottom overlay and use the
-  description for one concise supporting sentence.
-- Add `content.href` when the panel should link to the theme destination.
-- Reuse the ProductList fixture catalogue or pass the same product data shape.
+为 `content.image.alt` 提供有意义的替代文本。`content.title` 使用简短标题，`content.description` 提供辅助说明；需要跳转时设置 `content.href`。商品使用 ProductList 的数据结构。
 
-## Responsive behavior
+## 响应式布局
 
-At desktop widths the inner list is capped at 1440px and the content panel is
-exactly two product-card widths plus one gap. At smaller widths the content
-panel becomes a full-width row below the tabs, and the horizontal product rail
-starts on the following row. The panel remains keyboard reachable when
-`content.href` is supplied.
+PC 内容最大宽度 1440px，商品位数量根据实际内容容器宽度调整：572px 起三个、768px 起四个、1104px 起五个、1344px 起六个，更窄时为两个。主题面板占两个商品卡片宽度加一个间距，并随同排内容等高伸展，保留完整圆角；图片保持比例并裁切填充面板。Mobile 将主题面板放在标签下方，商品列表在下一行横向滚动。
 
-## Mobile surface
+默认 `mobileSurface="card"` 为内缩圆角面板；`plain` 使用直角通栏布局、16px 内容内边距、全宽标签和商品滚动区域，并支持上下分割线。两种模式的主题面板均位于商品列表上方。
 
-`mobileSurface="card"` is the default and keeps the inset rounded section. Use
-`mobileSurface="plain"` to reuse ProductList's full-bleed mobile surface: square
-outer corners, 16px content alignment, full-width tabs and product scrolling,
-and mobile top/bottom divider support. The image-led content panel remains
-stacked above the product rail in both modes. The inner product rail always uses
-the `Without Background` surface, and its ProductCard children always use the
-plain 0px-padding surface; `mobileSurface` changes only the outer section.
+内部商品列表与商品卡片使用 `plain` 外观，商品卡片内边距为 0；`mobileSurface` 只影响外层模块。
 
-## Accessibility
+## 无障碍
 
-The panel image is semantic and requires alt text. The overlay copy remains
-selectable DOM text. When `content.href` is supplied, the panel is a native link
-with the shared focus token and the surrounding products remain independently
-reachable.
+主题图片需要替代文本，叠加文案保留为可选择的 DOM 文本。提供 `content.href` 后主题面板使用原生链接和共用焦点样式，商品链接仍可独立访问。

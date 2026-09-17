@@ -8,18 +8,33 @@ import type { ProductCardProps } from "./ProductCard.types";
 type ProductLocale = "zh" | "en";
 
 const meta = {
-  title: "YAMI/Components/Commerce/ProductCard",
+  id: "yami-components-commerce-productcard",
+  title: "YAMI/Components/Commerce/Products/Product Card",
   component: ProductCard,
+  decorators: [
+    (Story, { args }) => (
+      <div data-slot="product-card-canvas" style={{
+        boxSizing: "border-box",
+        minHeight: "100vh",
+        padding: "var(--space-200)",
+        background: args.surface === "card" ? "var(--background-secondary)" : "var(--background-primary)",
+      }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
-    layout: "padded",
+    layout: "fullscreen",
     docs: {
       description: {
         component:
-          "Figma-backed YAMI desktop product tile. Internal anatomy is split into media, summary, and offer sections while the public API remains ProductCard + ProductCardAddButton.",
+          "商品卡片，由图片、商品信息和价格优惠区域组成。PC、Mobile 使用同一组件，可通过 Controls 切换形态、背景及加购禁用状态。",
       },
     },
   },
   args: {
+    presentation: "rich",
+    addButtonDisabled: false,
     surface: "plain",
     image:
       "https://cdn.yamibuy.net/item/3ccf61fd74fd43320d647a1b8779a978_757x757.webp",
@@ -39,11 +54,13 @@ const meta = {
     badges: [{ label: "-16%", type: "discount" }],
   },
   argTypes: {
+    presentation: { options: ["rich", "minimal", "compact"], control: "radio", description: "展示形态：完整卡片、图片为主或横向商品行。" },
+    addButtonDisabled: { control: "boolean", description: "是否禁用卡片内的加购按钮。" },
     surface: {
       options: ["card", "plain"],
       control: { type: "inline-radio" },
       description:
-        "Plain is the default and removes outer padding; card adds 2px padding over a visual background.",
+        "plain 默认无外部内边距；card 在背景上增加 2px 内边距。",
     },
   },
 } satisfies Meta<typeof ProductCard>;
@@ -85,6 +102,7 @@ const gridStyle: CSSProperties = {
 };
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const product = getProduct(globals.locale);
 
@@ -174,28 +192,31 @@ export const Showcase: Story = {
 };
 
 export const Playground: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (args, { globals }) => {
-    const product = getProduct(globals.locale);
-
+    const localized = getProduct(globals.locale);
+    const overrides = Object.fromEntries(Object.entries(args).filter(([key, value]) =>
+      JSON.stringify(value) !== JSON.stringify(meta.args[key as keyof typeof meta.args]),
+    ));
+    const product = { ...localized, ...overrides } as ProductCardProps;
+    const compact = args.presentation === "compact";
+    const width = compact ? 480 : globals.viewport?.value === "yamiMobile" ? 152 : 200;
     return (
-      <div style={{ width: 200 }}>
-        <ProductCard
-          {...args}
-          {...product}
-          surface={args.surface}
-          onAddToCart={() => {}}
-        />
+      <div style={{ width: `min(${width}px, 100%)` }}>
+        <ProductCard {...product} presentation={args.presentation} surface={args.surface} addButtonDisabled={args.addButtonDisabled} onAddToCart={() => {}} />
       </div>
     );
   },
 };
 
 export const WithBackground: Story = {
+  tags: ["!dev", "!autodocs"],
   args: { surface: "card" },
   render: Playground.render,
 };
 
 export const WithoutBackground: Story = {
+  tags: ["!dev", "!autodocs"],
   args: { surface: "plain" },
   render: Playground.render,
   play: async ({ canvasElement }) => {
@@ -209,6 +230,7 @@ export const WithoutBackground: Story = {
 };
 
 export const LongContent: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const product = getProduct(globals.locale);
 
@@ -221,6 +243,7 @@ export const LongContent: Story = {
 };
 
 export const Horizontal: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const product = getProduct(globals.locale);
 
@@ -283,6 +306,7 @@ export const Horizontal: Story = {
 };
 
 export const AdaptiveSalesLabel: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const product = {
       ...getProduct(globals.locale),
@@ -341,6 +365,7 @@ export const AdaptiveSalesLabel: Story = {
 };
 
 export const PresentationMatrix: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const product = getProduct(globals.locale);
 
@@ -374,5 +399,32 @@ export const PresentationMatrix: Story = {
 };
 
 export const DisabledAddButton: Story = {
-  render: () => <ProductCardAddButton disabled />,
+  tags: ["!dev", "!autodocs"],
+  render: (_args, { globals }) => (
+    <div>
+      <ProductCardAddButton disabled />
+      {(["rich", "minimal", "compact"] as const).map((presentation) => (
+        <ProductCard key={presentation} {...getProduct(globals.locale)} presentation={presentation} addButtonDisabled onAddToCart={() => { throw new Error("Disabled quick add must not fire"); }} />
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const buttons = canvasElement.querySelectorAll<HTMLButtonElement>("button");
+    if (buttons.length !== 4 || Array.from(buttons).some((button) => !button.disabled)) {
+      throw new Error("All ProductCard presentations must disable quick add");
+    }
+    buttons.forEach((button) => button.click());
+  },
+};
+
+
+export const PC: Story = {
+  name: "PC",
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  render: Playground.render,
+};
+
+export const Mobile: Story = {
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: Playground.render,
 };

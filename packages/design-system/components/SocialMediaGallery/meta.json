@@ -4,7 +4,7 @@
   "category": "composite",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Responsive YAMI social video gallery with product and pure-video card variants across PC and mobile layouts.",
+  "description": "响应式社交视频列表，支持纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
   "figma": {
     "fileKey": "6oOAy72DBff4P6NzJYc2hi",
     "nodeId": "6993:63493",
@@ -24,73 +24,73 @@
     "videoSrc": {
       "type": "string",
       "required": false,
-      "description": "Optional muted, looping autoplay video for SocialVideoCard; preserves the existing card media layout."
+      "description": "可选的静音循环自动播放视频，保留卡片媒体布局。"
     },
     "headingAlign": {
       "type": "\"start\" | \"center\"",
       "required": false,
       "default": "start",
-      "description": "Align the shared heading and supporting copy."
+      "description": "标题与辅助说明的对齐方式，移动端卡片固定左对齐。"
     },
     "description": {
       "type": "ReactNode",
       "required": false,
-      "description": "Optional supporting copy below a centered heading."
+      "description": "标题旁的可选辅助说明。"
     },
     "title": {
       "type": "ReactNode",
       "required": true,
-      "description": "Desktop section heading and accessible section label."
+      "description": "PC 模块标题，同时作为无障碍标签。"
     },
     "mobileTitle": {
       "type": "ReactNode",
       "required": false,
-      "description": "Optional mobile heading; falls back to title."
+      "description": "移动端专用标题，未设置时使用 title。"
     },
     "cards": {
       "type": "SocialVideoCardProps[]",
       "required": true,
-      "description": "Ordered social video cards with stable IDs."
+      "description": "按顺序展示的视频卡片，需提供稳定 ID。"
     },
     "viewAllHref": {
       "type": "string",
       "required": false,
-      "description": "Optional desktop view-all destination."
+      "description": "查看全部的可选跳转地址。"
     },
     "viewAllLabel": {
       "type": "ReactNode",
       "required": false,
       "default": "See all",
-      "description": "Localized desktop view-all label."
+      "description": "查看全部的本地化文案。"
     },
     "previousLabel": {
       "type": "string",
       "required": false,
       "default": "Previous social videos",
-      "description": "Localized previous-page control label."
+      "description": "上一页按钮的本地化标签。"
     },
     "nextLabel": {
       "type": "string",
       "required": false,
       "default": "Next social videos",
-      "description": "Localized next-page control label."
+      "description": "下一页按钮的本地化标签。"
     },
     "products": {
       "type": "SocialVideoProduct[]",
       "required": false,
-      "description": "Optional product footer data for SocialVideoCard; omit product images to render the caption in a text-only footer on either breakpoint."
+      "description": "卡片底部的可选商品数据，未提供商品时两端均显示纯文案。"
     },
     "dividerPosition": {
       "type": "\"top\" | \"bottom\" | \"none\"",
       "default": "top",
       "required": false,
-      "description": "Desktop section divider edge. Mobile card surface omits the divider."
+      "description": "PC 分割线位置，移动端卡片不显示分割线。"
     },
     "dividerVariant": {
       "type": "\"gray\" | \"black\"",
       "default": "gray",
       "required": false,
-      "description": "Gray 1px or theme-aware black 2px section divider."
+      "description": "gray 为 1px 灰线，black 为 2px 强调分割线。"
     }
   },
   "rules": {

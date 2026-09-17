@@ -84,17 +84,11 @@
       "default": "gray",
       "description": "Gray renders the 1px structural separator; black renders the theme-aware 2px emphasis separator."
     },
-    "cardHeight": {
-      "type": "\"content\" | \"equal\"",
-      "required": false,
-      "default": "content",
-      "description": "Content preserves individual card heights; equal explicitly stretches cards to the tallest review without changing mobile widths."
-    },
     "headingAlign": {
       "type": "\"start\" | \"center\"",
       "required": false,
       "default": "start",
-      "description": "Centered headings place paging controls at the content rail edges when it overflows."
+      "description": "移动端 card 标题固定左对齐；PC 和移动端 plain 支持居中，PC 居中时翻页按钮位于列表两侧。"
     }
   },
   "rules": {

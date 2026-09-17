@@ -537,7 +537,7 @@
         "category": "composite",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
+        "description": "Floating Bars / 活动快捷浮动栏. Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -593,9 +593,8 @@
           "--stroke-thick",
           "--radius-surface-default",
           "--font-family-ios",
-          "--layout-page-margin-card",
+          "--space-200",
           "--space-025",
-          "--space-400",
           "--space-600"
         ],
         "tokenBindings": {
@@ -605,14 +604,14 @@
           },
           "--radius-surface-default": {
             "property": "border-radius",
-            "selector": ".link and .root below 1024px"
+            "selector": ".link"
           },
-          "--layout-page-margin-card": {
-            "property": "margin-inline",
+          "--space-200": {
+            "property": "padding",
             "selector": ".root below 1024px"
           },
           "--space-600": {
-            "property": "padding-inline",
+            "property": "padding",
             "selector": ".root from 1024px"
           }
         },
@@ -669,15 +668,16 @@
           "Tabs"
         ],
         "props": {
+          "headingAlign": {
+            "type": "\"start\" | \"center\"",
+            "required": false,
+            "default": "start",
+            "description": "Center the heading and place desktop paging controls at the content edges."
+          },
           "title": {
             "type": "ReactNode",
             "required": true,
-            "description": "Visible section heading and accessible label."
-          },
-          "mobileTitle": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "Optional mobile-only section heading; falls back to title."
+            "description": "Shared visible section heading and accessible label on mobile and desktop."
           },
           "titleFontFamily": {
             "type": "\"sans\" | \"serif\"",
@@ -3966,7 +3966,7 @@
         "category": "composite",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Accessible PDP media gallery with one square viewing window, thumbnail selection, previous and next controls, and responsive rail placement.",
+        "description": "草稿，尚未定稿或完成 review。商品详情页媒体画廊，支持缩略图、箭头和键盘切换图片。",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -4194,7 +4194,7 @@
         "category": "composite",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Full PDP review section with aggregate rating, star distribution, filters, sorting, review cards, and progressive disclosure.",
+        "description": "草稿，尚未定稿或完成 review。商品详情页评价区域，包含评分分布、筛选、排序和响应式评价卡片。",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -4622,17 +4622,11 @@
             "default": "gray",
             "description": "Gray renders the 1px structural separator; black renders the theme-aware 2px emphasis separator."
           },
-          "cardHeight": {
-            "type": "\"content\" | \"equal\"",
-            "required": false,
-            "default": "content",
-            "description": "Content preserves individual card heights; equal explicitly stretches cards to the tallest review without changing mobile widths."
-          },
           "headingAlign": {
             "type": "\"start\" | \"center\"",
             "required": false,
             "default": "start",
-            "description": "Centered headings place paging controls at the content rail edges when it overflows."
+            "description": "移动端 card 标题固定左对齐；PC 和移动端 plain 支持居中，PC 居中时翻页按钮位于列表两侧。"
           }
         },
         "rules": {
@@ -5092,7 +5086,7 @@
         "category": "composite",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Responsive YAMI social video gallery with product and pure-video card variants across PC and mobile layouts.",
+        "description": "响应式社交视频列表，支持纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
           "nodeId": "6993:63493",
@@ -5112,73 +5106,73 @@
           "videoSrc": {
             "type": "string",
             "required": false,
-            "description": "Optional muted, looping autoplay video for SocialVideoCard; preserves the existing card media layout."
+            "description": "可选的静音循环自动播放视频，保留卡片媒体布局。"
           },
           "headingAlign": {
             "type": "\"start\" | \"center\"",
             "required": false,
             "default": "start",
-            "description": "Align the shared heading and supporting copy."
+            "description": "标题与辅助说明的对齐方式，移动端卡片固定左对齐。"
           },
           "description": {
             "type": "ReactNode",
             "required": false,
-            "description": "Optional supporting copy below a centered heading."
+            "description": "标题旁的可选辅助说明。"
           },
           "title": {
             "type": "ReactNode",
             "required": true,
-            "description": "Desktop section heading and accessible section label."
+            "description": "PC 模块标题，同时作为无障碍标签。"
           },
           "mobileTitle": {
             "type": "ReactNode",
             "required": false,
-            "description": "Optional mobile heading; falls back to title."
+            "description": "移动端专用标题，未设置时使用 title。"
           },
           "cards": {
             "type": "SocialVideoCardProps[]",
             "required": true,
-            "description": "Ordered social video cards with stable IDs."
+            "description": "按顺序展示的视频卡片，需提供稳定 ID。"
           },
           "viewAllHref": {
             "type": "string",
             "required": false,
-            "description": "Optional desktop view-all destination."
+            "description": "查看全部的可选跳转地址。"
           },
           "viewAllLabel": {
             "type": "ReactNode",
             "required": false,
             "default": "See all",
-            "description": "Localized desktop view-all label."
+            "description": "查看全部的本地化文案。"
           },
           "previousLabel": {
             "type": "string",
             "required": false,
             "default": "Previous social videos",
-            "description": "Localized previous-page control label."
+            "description": "上一页按钮的本地化标签。"
           },
           "nextLabel": {
             "type": "string",
             "required": false,
             "default": "Next social videos",
-            "description": "Localized next-page control label."
+            "description": "下一页按钮的本地化标签。"
           },
           "products": {
             "type": "SocialVideoProduct[]",
             "required": false,
-            "description": "Optional product footer data for SocialVideoCard; omit product images to render the caption in a text-only footer on either breakpoint."
+            "description": "卡片底部的可选商品数据，未提供商品时两端均显示纯文案。"
           },
           "dividerPosition": {
             "type": "\"top\" | \"bottom\" | \"none\"",
             "default": "top",
             "required": false,
-            "description": "Desktop section divider edge. Mobile card surface omits the divider."
+            "description": "PC 分割线位置，移动端卡片不显示分割线。"
           },
           "dividerVariant": {
             "type": "\"gray\" | \"black\"",
             "default": "gray",
             "required": false,
-            "description": "Gray 1px or theme-aware black 2px section divider."
+            "description": "gray 为 1px 灰线，black 为 2px 强调分割线。"
           }
         },
         "rules": {
@@ -5317,7 +5311,7 @@
               "secondaryButton": "3112:22838"
             }
           },
-          "sizeDelta": "Mobile Primary Style A uses 56px list height and 18/24 text; WEB Primary uses 48px and 16/20. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 44px on both mobile and PC. Tertiary keeps a 48px trigger and hit target at every width; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint.",
+          "sizeDelta": "Mobile Primary Style A uses 56px list height and 18/24 text; WEB Primary uses 48px and 16/20. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 44px on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
           "stateMapping": "Figma State=Default/Skeleton maps to TabsList skeleton=false/true. Selected/default tab states map to data-state='active'/'inactive'. Hover/focus are code-only interaction states; disabled is a code-side accessibility state for product use."
         },
         "variants": {
@@ -5851,7 +5845,7 @@
         "category": "composite",
         "status": "experimental",
         "version": "0.8.1",
-        "description": "Responsive theme storytelling hero with a two-column desktop composition, a localized expandable three-line desktop and two-line mobile description, optional size-configurable descriptive Badges, one or two configurable actions and full-bleed mobile artwork.",
+        "description": "响应式主题展示模块，PC 双栏布局，Mobile 使用通栏图片与底部文字，支持可展开说明和关键词标签，默认不显示操作按钮。",
         "figma": {
           "nodeId": "1877:43111",
           "componentKey": null,
@@ -5871,67 +5865,67 @@
           "title": {
             "type": "ReactNode",
             "required": true,
-            "description": "Visible theme positioning heading."
+            "description": "主题标题。"
           },
           "description": {
             "type": "ReactNode",
             "required": true,
-            "description": "Selectable supporting theme copy clamped to three lines on desktop and two lines on mobile until expanded."
+            "description": "主题辅助说明，PC 默认最多三行，Mobile 最多两行，超出时可展开。"
           },
           "descriptionExpandLabel": {
             "type": "ReactNode",
             "required": false,
             "default": "More",
-            "description": "Localized plain-text action shown only when the responsive description line limit overflows."
+            "description": "展开描述的本地化文案。"
           },
           "descriptionCollapseLabel": {
             "type": "ReactNode",
             "required": false,
             "default": "Less",
-            "description": "Localized plain-text action used to restore the responsive description line limit."
+            "description": "收起描述的本地化文案。"
           },
           "tags": {
             "type": "readonly string[]",
             "required": false,
-            "description": "Optional short descriptive keywords rendered with the shared non-interactive Badge."
+            "description": "可选的简短关键词，以不可交互的 Badge 展示。"
           },
           "tagSize": {
             "type": "BadgeSize",
             "required": false,
             "default": "sm",
-            "description": "Preferred size for each keyword Badge. Use sm for compact metadata or md for more prominent desktop labels; ThemeHero compacts both to sm geometry below 1024px."
+            "description": "关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。"
           },
           "tagTone": {
             "type": "BadgeTone",
             "required": false,
             "default": "dark",
-            "description": "Filled or outlined polarity for the composed Badges."
+            "description": "标签明暗样式，默认 dark。"
           },
           "image": {
             "type": "ThemeHeroImage",
             "required": true,
-            "description": "Foreground campaign artwork with meaningful alt text and intrinsic dimensions."
+            "description": "主题图片，包含替代文本、原始尺寸及可选裁切焦点。"
           },
           "backgroundImageSrc": {
             "type": "string",
             "required": false,
-            "description": "Alternate decorative source for the blurred full-bleed atmosphere; defaults to image.src."
+            "description": "可选的模糊背景图片，默认使用主题图片。"
           },
           "cta": {
             "type": "ThemeHeroCta",
             "required": false,
-            "description": "Optional primary action rendered with the shared white inverse Button."
+            "description": "可选主操作按钮，默认不显示。"
           },
           "secondaryCta": {
             "type": "ThemeHeroCta",
             "required": false,
-            "description": "Optional lower-emphasis action rendered with the shared transparent inverse Button and a one-pixel outline."
+            "description": "可选次操作按钮，默认不显示。"
           },
           "imageLoading": {
             "type": "\"eager\" | \"lazy\"",
             "required": false,
             "default": "lazy",
-            "description": "Foreground artwork loading strategy."
+            "description": "主题图片加载策略。"
           }
         },
         "rules": {
@@ -6203,7 +6197,7 @@
         "category": "composite",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Ranked search terms with the results behind each one — a rail of keyword cards on desktop, a ranked accordion on mobile.",
+        "description": "热门搜索模块：PC 使用横向搜索词卡片，每项展示前两个关联商品；Mobile 使用排名折叠列表，各项可独立展开，横向浏览关联商品并进入搜索结果。",
         "figma": {
           "nodeId": "866:44808",
           "componentKey": null,
@@ -6220,60 +6214,66 @@
           "RailNavigation"
         ],
         "props": {
+          "headingAlign": {
+            "type": "\"start\" | \"center\"",
+            "required": false,
+            "default": "start",
+            "description": "标题对齐方式：start 左对齐，center 居中；PC 居中时翻页按钮显示在内容区两侧。"
+          },
           "title": {
             "type": "ReactNode",
             "required": true,
-            "description": "Section title. `mobileTitle` swaps in a shorter one below 1024px."
+            "description": "模块标题。"
           },
           "keywords": {
             "type": "TrendingSearchKeyword[]",
             "required": true,
-            "description": "Ranked terms. Each carries its search `href`, an optional `tagline`, a mobile-only `thumbnail`, and the `products` the term returns — three or more, since desktop previews two and mobile scrolls the rest."
+            "description": "按排名排列的搜索词及关联商品，包含搜索链接、推荐说明和移动端缩略图；PC 每个搜索词展示前两个商品，移动端可横向滚动查看全部商品。"
           },
           "seeAllLabel": {
             "type": "ReactNode",
             "required": false,
             "default": "See all",
-            "description": "Desktop per-card link copy. The term is appended out of sight so the links are not identical."
+            "description": "PC 搜索词卡片的“查看全部”链接文案。"
           },
           "expandLabel": {
             "type": "(keyword: string) => string",
             "required": false,
-            "description": "Accessible name for a mobile row toggle, given the term."
+            "description": "根据搜索词生成移动端展开按钮的无障碍名称。"
           },
           "defaultExpandedId": {
             "type": "string",
             "required": false,
-            "description": "Which row opens first on mobile. Defaults to the top-ranked term."
+            "description": "移动端默认展开的搜索词 ID；未设置时展开排名第一项，各项可独立展开和收起。"
           },
           "dividerPosition": {
             "type": "\"top\" | \"bottom\" | \"none\"",
             "required": false,
             "default": "none",
-            "description": "Optional desktop-only full-width section divider edge."
+            "description": "分割线位置：top 顶部、bottom 底部、none 不显示；仅 PC 生效。"
           },
           "dividerVariant": {
             "type": "\"gray\" | \"black\"",
             "required": false,
             "default": "gray",
-            "description": "Divider color and width treatment: gray is 1px and black is 2px emphasis."
+            "description": "分割线样式：gray 为 1px 灰色分割线，black 为 2px 强调分割线。"
           },
           "onAddToCart": {
             "type": "(productId: string) => void",
             "required": false,
-            "description": "Quick-add handler forwarded to every product card."
+            "description": "点击商品加购按钮时的回调，参数为商品 ID。"
           },
           "previousLabel": {
             "type": "string",
             "required": false,
             "default": "Previous searches",
-            "description": "Accessible name for the desktop rail's back button."
+            "description": "PC 上一页按钮的无障碍名称。"
           },
           "nextLabel": {
             "type": "string",
             "required": false,
             "default": "Next searches",
-            "description": "Accessible name for the desktop rail's forward button."
+            "description": "PC 下一页按钮的无障碍名称。"
           }
         },
         "rules": {
@@ -6312,6 +6312,7 @@
           "--font-size-body-md",
           "--line-height-body-md",
           "--font-size-caption-md",
+          "--font-size-caption-sm",
           "--line-height-caption-md",
           "--font-weight-emphasize",
           "--space-025",

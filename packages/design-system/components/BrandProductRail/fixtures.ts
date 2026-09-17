@@ -326,7 +326,6 @@ const campaignSources = [
 export const brandProductRailCopy = {
   zh: {
     title: "美护调理 流行趋势",
-    mobileTitle: "品牌官方合作",
     tabs: [
       "全部",
       "食品杂货",
@@ -344,7 +343,6 @@ export const brandProductRailCopy = {
   },
   en: {
     title: "Beauty Brands to Try",
-    mobileTitle: "Official Partnership",
     tabs: [
       "All",
       "Grocery",
@@ -401,7 +399,6 @@ export function createBrandProductRailProps(
   const copy = brandProductRailCopy[locale];
   return {
     title: copy.title,
-    mobileTitle: copy.mobileTitle,
     campaigns: createBrandProductCampaigns(locale),
     tabs: copy.tabs.map((label, index) => ({
       value: `brand-category-${index + 1}`,

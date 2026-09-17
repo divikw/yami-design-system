@@ -69,7 +69,7 @@ function getPageDistance(rail: HTMLUListElement) {
 
 export function BrandProductRail({
   title,
-  mobileTitle,
+  headingAlign = "start",
   titleFontFamily = "sans",
   campaigns,
   mobileSurface = "card",
@@ -141,6 +141,7 @@ export function BrandProductRail({
       className={cx(styles.root, className)}
       aria-labelledby={titleId}
       data-slot="brand-product-rail"
+      data-heading-align={headingAlign}
       data-mobile-surface={mobileSurface}
       data-divider-position={dividerPosition}
       data-divider-variant={dividerVariant}
@@ -148,15 +149,17 @@ export function BrandProductRail({
       <div className={styles.container} data-slot="brand-product-rail-container">
         <div className={styles.header}>
           <SectionHeading
+            align={headingAlign}
+            centeredTitleLink
+            mobileAlign={mobileSurface === "card" ? "start" : headingAlign}
             id={titleId}
             title={title}
-            mobileTitle={mobileTitle ?? title}
             titleFontFamily={titleFontFamily}
             className={styles.heading}
             actionsClassName={styles.actions}
             viewAllHref={viewAllHref}
             viewAllLabel={viewAllLabel}
-            actions={!edges.atStart || !edges.atEnd ? (
+            actions={headingAlign !== "center" && (!edges.atStart || !edges.atEnd) ? (
               <RailNavigation
                 className={styles.railActions}
                 buttonClassName={styles.railButton}
@@ -193,6 +196,7 @@ export function BrandProductRail({
           )}
         </div>
 
+        <div className={styles.railFrame}>
         <ImageLoadingWindow strategy={imageLoadingStrategy} rootRef={railRef}>
           <ul
             id={listId}
@@ -261,6 +265,19 @@ export function BrandProductRail({
           ))}
           </ul>
         </ImageLoadingWindow>
+          {headingAlign === "center" && !(edges.atStart && edges.atEnd) && (
+            <RailNavigation
+              className={styles.edgeNavigation}
+              buttonClassName={styles.railButton}
+              previousLabel={previousLabel}
+              nextLabel={nextLabel}
+              previousDisabled={edges.atStart}
+              nextDisabled={edges.atEnd}
+              onPrevious={() => scrollRail(-1)}
+              onNext={() => scrollRail(1)}
+            />
+          )}
+        </div>
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { RailNavigation } from "../Button/RailNavigation";
@@ -12,8 +12,13 @@ import { HorizontalScrollList } from "./HorizontalScrollList";
 import storyStyles from "./HorizontalScrollList.stories.module.css";
 import { useHorizontalScrollList } from "./useHorizontalScrollList";
 
+type PreviewArgs = ComponentProps<typeof HorizontalScrollList> & {
+  navigation: "top" | "sides";
+};
+
 const meta = {
-  title: "YAMI/Components/Commerce/Product List/Horizontal Scroll List",
+  id: "yami-components-commerce-product-list-horizontal-scroll-list",
+  title: "YAMI/Components/Commerce/Products/Horizontal Scroll List",
   component: HorizontalScrollList,
   decorators: [
     (Story, context) => (
@@ -31,28 +36,39 @@ const meta = {
     docs: {
       description: {
         component:
-          "Polymorphic finite horizontal list with native scrolling, hidden scrollbars, item snapping, and a shared controller hook for paging controls.",
+          "横向滚动列表，支持原生滚动、隐藏滚动条和卡片吸附。PC、Mobile 分别展示桌面和移动端；通过 Controls 切换背景、PC 导航位置及启用状态。导航按钮由调用方结合共享控制器提供。",
       },
     },
   },
   args: {
     as: "ul",
     enabled: true,
+    navigation: "top",
     surface: "plain",
   },
   argTypes: {
     as: {
       options: ["div", "ul", "ol"],
-      control: { type: "select" },
+      control: false,
+      description: "列表使用的语义标签；此商品示例固定使用 ul。",
     },
-    enabled: { control: "boolean" },
+    enabled: {
+      control: "boolean",
+      description: "是否启用横向滚动和键盘聚焦。关闭后由调用方负责布局。",
+    },
+    navigation: {
+      options: ["top", "sides"],
+      control: { type: "inline-radio" },
+      description: "PC 导航位置：top 为右上角，sides 为内容区两侧。仅用于示例组合；Mobile 使用触摸滚动，不显示导航按钮。",
+    },
     surface: {
+      description: "背景形式：card 使用带背景的商品展示，plain 使用页面背景。",
       options: ["card", "plain"],
       control: { type: "inline-radio" },
     },
     children: { control: false },
   },
-} satisfies Meta<typeof HorizontalScrollList>;
+} satisfies Meta<PreviewArgs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -178,6 +194,12 @@ function assertResponsiveProductRail(
     throw new Error("Horizontal Scroll List must render the shared ProductCard fixture");
   }
 
+  const cards = Array.from(list.querySelectorAll<HTMLElement>('[data-slot="card"]'));
+  const heights = cards.map((card) => card.getBoundingClientRect().height);
+  if (cards.length !== 18 || Math.max(...heights) - Math.min(...heights) > 1) {
+    throw new Error("Horizontal Scroll List cards must have equal heights despite different content lengths");
+  }
+
   const listStyle = getComputedStyle(list);
   const toolbarStyle = getComputedStyle(toolbar);
   const canvasStyle = getComputedStyle(storyCanvas);
@@ -276,19 +298,22 @@ function assertResponsiveProductRail(
 }
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (args, { globals }) => (
     <Example
       enabled={args.enabled}
+      navigation={args.navigation}
       locale={globals.locale === "en" ? "en" : "zh"}
       surface={args.surface}
     />
   ),
   play: async ({ args, canvasElement }) => {
-    assertResponsiveProductRail(canvasElement, args.surface);
+    if (args.enabled) assertResponsiveProductRail(canvasElement, args.surface);
   },
 };
 
 export const WithBackground: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "With Background",
   args: { surface: "card" },
   render: Showcase.render,
@@ -296,6 +321,7 @@ export const WithBackground: Story = {
 };
 
 export const WithoutBackground: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Without Background",
   args: { surface: "plain" },
   render: Showcase.render,
@@ -303,7 +329,7 @@ export const WithoutBackground: Story = {
 };
 
 export const PC: Story = {
-  name: "PC · Top right navigation",
+  name: "PC",
   globals: {
     viewport: { value: "yamiDesktopMd", isRotated: false },
   },
@@ -320,10 +346,12 @@ export const Mobile: Story = {
 };
 
 export const Disabled: Story = {
+  tags: ["!dev", "!autodocs"],
   args: { enabled: false },
   render: (args, { globals }) => (
     <Example
       enabled={args.enabled}
+      navigation={args.navigation}
       locale={globals.locale === "en" ? "en" : "zh"}
       surface={args.surface}
     />
@@ -343,13 +371,14 @@ export const Disabled: Story = {
 };
 
 export const PCSideNavigation: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "PC · Side navigation",
   globals: PC.globals,
   render: (args, { globals }) => (
     <Example enabled={args.enabled} locale={globals.locale === "en" ? "en" : "zh"} surface={args.surface} navigation="sides" />
   ),
   play: async ({ args, canvasElement }) => {
-    assertResponsiveProductRail(canvasElement, args.surface);
+    if (args.enabled) assertResponsiveProductRail(canvasElement, args.surface);
     const image = canvasElement.querySelector<HTMLElement>('[data-slot="product-card-media"]')!;
     const buttons = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="horizontal-scroll-list-toolbar"] button');
     const rect = image.getBoundingClientRect();

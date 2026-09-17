@@ -45,7 +45,6 @@
   min-width: 0;
 }
 
-/* The desktop/mobile title swap comes from SectionHeading. */
 .tabs {
   display: none;
 }
@@ -528,5 +527,45 @@
 @media (prefers-reduced-motion: reduce) {
   .list {
     scroll-behavior: auto;
+  }
+}
+
+.railFrame {
+  display: contents;
+}
+
+.root[data-heading-align="center"] .railFrame {
+  display: block;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+}
+
+.edgeNavigation {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.edgeNavigation > button {
+  position: absolute;
+  top: 50%;
+  pointer-events: auto;
+}
+
+.edgeNavigation > button[data-direction="left"] {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.edgeNavigation > button[data-direction="right"] {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+@media (max-width: 1023px) {
+  .edgeNavigation {
+    display: none;
   }
 }

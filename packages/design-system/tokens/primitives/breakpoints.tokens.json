@@ -17,6 +17,10 @@
       "$type": "dimension",
       "$value": "1440px"
     },
+    "desktop-wide": {
+      "$type": "dimension",
+      "$value": "1680px"
+    },
     "desktop-xl": {
       "$type": "dimension",
       "$value": "1920px"

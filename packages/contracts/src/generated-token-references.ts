@@ -39,6 +39,7 @@ export const registeredTokenReferenceTypes = {
   "brand.tertiary": "color",
   "breakpoints.desktop": "dimension",
   "breakpoints.desktop-lg": "dimension",
+  "breakpoints.desktop-wide": "dimension",
   "breakpoints.desktop-xl": "dimension",
   "breakpoints.mobile": "dimension",
   "breakpoints.tablet": "dimension",

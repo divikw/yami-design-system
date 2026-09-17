@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.8.1",
-  "description": "Responsive theme storytelling hero with a two-column desktop composition, a localized expandable three-line desktop and two-line mobile description, optional size-configurable descriptive Badges, one or two configurable actions and full-bleed mobile artwork.",
+  "description": "响应式主题展示模块，PC 双栏布局，Mobile 使用通栏图片与底部文字，支持可展开说明和关键词标签，默认不显示操作按钮。",
   "source": "components/ThemeHero",
   "files": [
     {
@@ -166,5 +166,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "34bfe5819bd195d2ef27621f70fb3bdb09cdbb685b04af77913d11c5587d1d42"
+  "contentDigest": "20ed9f3614e310b7fd65b46fa65ffaeea73d64fc66042d94dbbb3ad4a4c21054"
 }

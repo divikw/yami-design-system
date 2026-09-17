@@ -1,260 +1,75 @@
-# ProductCard — Usage
+# ProductCard — 使用说明
 
-## When to use
+## 使用场景
 
-- **Product grids** on Home / Category / Search result pages
-- **Horizontal scroll rails** — "Just for You", "Today's Deals", cross-sell carousels
-- **PDP recommendations** — "Customers also bought" strips
+用于首页、分类、搜索结果的商品网格，横向推荐列表，以及详情页的关联推荐。不用于购物车、订单记录、文章卡片或详情页主图区域。
 
-## When NOT to use
+## Storybook 预览
 
-- **Cart line items** — those have quantity controls and pricing math; use a dedicated `<CartLineItem>` (future)
-- **Order history entries** — dedicated `<OrderSummary>` component (future)
-- **PDP main image block** — the PDP hero needs much more real estate and structure
+保留 Docs、PC、Mobile。PC 与 Mobile 使用同一组件，通过 Controls 切换 presentation、surface 和 addButtonDisabled，并编辑商品字段。属性和选项使用英文，说明使用中文。
 
-## Anatomy
+长内容、销量自适应、形态矩阵等边界场景保留为隐藏测试。
 
-```
-┌─────────────────────┐
-│ New  -10%          │  ← ProductCardMedia: badges, max 2
-│   [product image]   │  ← AspectRatio ratio={1}
-│                [+] │  ← ProductCardAddButton overlay, bottom-right
-├─────────────────────┤
-│ Brand ›             │  ← ProductCardSummary
-│ Product title       │  ← title: body-md, 2-line clamp
-│ up to two lines...  │
-│ #1 ranking          │
-│ 4.8 ★ (1.2k) · sold │
-│ $12.99   $19.99     │  ← ProductCardOffer
-│ unit price · pack   │
-│ VVIP campaign price │
-│ Ends in 2d…         │
-└─────────────────────┘
-```
+## 结构与形态
 
-### Internal component boundary
+内部由 ProductCardMedia（图片和徽标）、ProductCardSummary（商品信息）、ProductCardOffer（价格和优惠）组成。公开接口为 ProductCard 和可独立使用的 ProductCardAddButton。
 
-- `ProductCardMedia` owns image geometry and overlays.
-- `ProductCardSummary` owns product identity and behavioral proof.
-- `ProductCardOffer` owns pricing, campaigns, and urgency.
-- These anatomy components are intentionally internal. Consumers use one coherent `ProductCard` API; only the independently interactive `ProductCardAddButton` is publicly exported.
-
-When no image is available, `ProductCardMedia` renders a quiet, compact 8px-spaced diagonal line pattern instead of an icon. The SVG pattern uses semantic neutral tokens, contains no gradient, and is decorative (`aria-hidden`) because the adjacent product title already provides the accessible identity.
-
-## Presentations
-
-`presentation="rich"` remains the default and preserves the original
-ProductCard DOM and interaction contract.
-
-| Presentation | Use |
+| presentation | 用途 |
 |---|---|
-| `rich` | Full commerce information in grids, rails, and waterfall layouts |
-| `minimal` | Image-first grid with a price badge and optional quick add |
-| `compact` | Standalone horizontal row with 132×132 media, flexible right-side product information, and quick add beside price |
+| rich | 默认完整卡片，展示品牌、标题、排行、评分、销量、价格及优惠 |
+| minimal | 图片为主，带价格徽标和可选加购按钮 |
+| compact | 横向商品行，图片 132×132，右侧信息自适应，加购位于价格旁 |
 
-ProductList chooses these presentations from its layout. Pass
-`presentation` directly only when ProductCard is used outside ProductList.
+没有图片时显示中性的斜线占位图，作为装饰隐藏于辅助技术，商品身份由标题提供。标题最多两行，超出省略。
 
-## Surfaces
+## 背景与属性
 
-Use `surface="card"` when the product card sits on a visible background; it
-keeps 2px outer padding. Use `surface="plain"` for a background-free list; it
-removes the outer padding and is the default for standalone cards.
+surface 默认 plain，去除外部内边距。card 适合背景上的商品卡片，保留 2px 内边距。
 
-## Props
-
-### Required
-
-- `href` — product destination shared by the media and title links
-- `title` — product title, will be clamped to 2 lines
-- `priceCurrent` — display string (format upstream, e.g. `formatPrice(product.price)`)
-
-### Common optional
-
-- `image` + `imageAlt` — paired contract; when image is provided, alt is required for a11y
-- `imageLoading` + `imageFetchPriority` — defaults to lazy/auto; use eager/high only for an above-fold LCP image
-- `brand` + `brandHref` — paired contract for the clickable trailing-arrow brand row; the brand stays at `caption-sm` (12/14) on PC and Mobile
-- `priceOriginal` — only when discounted
-- `unitPrice` — unit/bundle price and pack information
-- `ranking` — ranking badge copy
-- `rating` + `ratingCount` — when product has reviews
-- `soldCount` — sales proof shown alongside rating metadata
-- `promotions` — loyalty and campaign rows
-- `countdown` — campaign ending copy
-- `badges` — 0-2 product-image badges; only `sale`, `low-price`, `discount`, `new`, `hot`, `exclusive`, and `choice`
-- `onAddToCart` — callback; omit to hide the button
-
-### ProductCardAddButton child
-
-`ProductCardAddButton` is the dedicated quick-add action from Figma `Button / add to cart` (node `2410:30647`). ProductCard renders it over the bottom-right of `ProductCardMedia` for rich and minimal presentations. Compact rows place the same action to the right of the price. It is also exported for ProductCard compositions that need to position the action independently.
-
-- Mobile: 40×40 visual control with a 22px cart-add icon
-- PC: 42×42 visual control with a 24px icon
-- Pointer target: at least 44×44
-- PC hover/pressed: YAMI emphasis red with a white icon
-- Its image-overlay surface is independent of light/dark theme and is not an `inverse` alias
-
-## Badge strategy (max 2)
-
-Follow the hierarchy from design.md:
-
-1. **Promotional badge first** (red) — `Sale`, `Low Price`, or a `discount` value such as `–30%`
-2. **Status badge second** — `New`, `Hot`, `Exclusive`, or `Choice`
-
-```tsx
-<ProductCard
-  // ...
-  badges={[
-    { label: "–30%", type: "discount" }, // promotional
-    { label: "NEW", type: "new" }, // status
-  ]}
-/>
-```
-
-`Best Sellers` and `price` badges belong outside the product-image overlay. Don't stack all eligible signals—pick the 2 most decision-relevant for that context.
-
-## Price formatting
-
-`priceCurrent` and `priceOriginal` are `ReactNode` — the component doesn't format prices. Format in the caller using `new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(...)` or equivalent.
+- 必填：href、title、priceCurrent。
+- image 与 imageAlt 配套；提供图片时必须提供替代文本。
+- imageLoading 默认 lazy，imageFetchPriority 默认 auto；仅首屏关键图片使用 eager/high。
+- brand 与 brandHref 配套；品牌行在 PC、Mobile 均为 12px 字号、14px 行高。
+- priceOriginal 用于划线原价，unitPrice 用于单位或组合价格。
+- ranking、rating、ratingCount、soldCount 用于排行、评分及销量；空间不足时隐藏无法完整显示的销量。
+- promotions 和 countdown 用于优惠及活动倒计时。
+- onAddToCart 省略时隐藏加购按钮；addButtonDisabled 禁用按钮，addButtonAriaLabel 提供无障碍名称。
 
 ```tsx
 <ProductCard
   href="/product/example"
-  title="Example product"
+  image={product.image}
+  imageAlt="保湿面霜 100ml"
+  title="保湿面霜 100ml"
   priceCurrent="$12.99"
   priceOriginal="$19.99"
+  presentation="rich"
+  surface="plain"
+  addButtonDisabled={false}
+  onAddToCart={() => addToCart(product.id)}
 />
 ```
 
-For multi-currency stores, format based on user locale before passing in.
+## 加购按钮
 
-## Link vs click behavior
+rich、minimal 的按钮位于图片右下角，compact 位于价格旁。独立按钮 ProductCardAddButton 使用 disabled 属性禁用；卡片内按钮使用 addButtonDisabled。
 
-### Product media and title links
+Mobile 按钮视觉尺寸 40×40、图标 22px；PC 为 42×42、图标 24px；指针目标至少 44×44。PC 悬停及按下时使用强调红与白色图标。图片上的按钮背景不随页面明暗主题变化。
 
-```tsx
-<ProductCard
-  href={`/product/${product.id}`}
-  // ...
-/>
-```
+## 徽标与价格
 
-The image and title both navigate to the same PDP destination. Rating, price,
-promotion, and countdown content remain outside those links. The brand link and
-Add button remain independent sibling interactions, and quick add stays above
-the media link so adding a product never triggers navigation.
+图片最多展示两个徽标，优先促销信息（sale、low-price、discount），其次商品状态（new、hot、exclusive、choice）。best-sellers 和 price 不属于此图片徽标接口。超过两个的徽标会被截断，调用方应选择最相关的信息。
 
-## Common patterns
+priceCurrent、priceOriginal 接收 ReactNode，货币与数字格式由调用方根据地区格式化。有原价时当前价格使用强调色。
 
-### Basic grid cell
+## 链接与无障碍
 
-```tsx
-{
-  products.map((p) => (
-    <ProductCard
-      key={p.id}
-      href={`/product/${p.id}`}
-      image={p.image}
-      imageAlt={p.title}
-      brand={p.brand}
-      brandHref={`/brands/${p.brandSlug}`}
-      title={p.title}
-      priceCurrent={formatPrice(p.price)}
-      priceOriginal={p.originalPrice ? formatPrice(p.originalPrice) : undefined}
-      rating={p.rating}
-      ratingCount={formatCount(p.reviewCount)}
-      badges={p.badges}
-      onAddToCart={() => addToCart(p.id)}
-    />
-  ));
-}
-```
+图片和标题跳转到同一个商品地址；评分、价格、优惠和倒计时位于链接之外。品牌链接与加购按钮独立，加购不触发商品跳转。不要在 ProductCard 外再包一层链接。
 
-### Minimal (no ratings, no badges)
+商品图片应提供准确的 imageAlt；仅在相邻文本已充分表达且确属冗余图片时使用空替代文本。加购按钮名称应与页面语言一致。
 
-```tsx
-<ProductCard
-  presentation="minimal"
-  href={`/product/${p.id}`}
-  image={p.image}
-  imageAlt={p.title}
-  title={p.title}
-  priceCurrent={formatPrice(p.price)}
-  onAddToCart={() => addToCart(p.id)}
-/>
-```
+## 相关资源
 
-### Compact horizontal row
-
-```tsx
-<ProductCard
-  presentation="compact"
-  href={`/product/${p.id}`}
-  image={p.image}
-  imageAlt={p.title}
-  brand={p.brand}
-  brandHref={`/brands/${p.brandSlug}`}
-  title={p.title}
-  priceCurrent={formatPrice(p.price)}
-  onAddToCart={() => addToCart(p.id)}
-/>
-```
-
-### Navigation-only (no Add button)
-
-```tsx
-<ProductCard
-  href={`/product/${p.id}`}
-  image={p.image}
-  imageAlt={p.title}
-  title={p.title}
-  priceCurrent={formatPrice(p.price)}
-  // no onAddToCart → + button hidden
-/>
-```
-
-## Anti-patterns
-
-### ✗ More than 2 badges
-
-```tsx
-badges={[
-  { label: 'New', type: 'new' },
-  { label: 'Sale', type: 'sale' },
-  { label: 'Hot', type: 'hot' }, {/* silently dropped */}
-]}
-```
-
-Component truncates to 2 automatically. Pick the 2 most relevant.
-
-### ✗ Missing alt
-
-```tsx
-<ProductCard
-  href="/product/snack"
-  image={url}
-  title="Snack"
-  priceCurrent="$3.99"
-/> {/* type error: imageAlt is required with image */}
-```
-
-Pass `imageAlt={title}` for product images, or `imageAlt=""` only if the title fully describes the product for screen readers.
-
-### ✗ Nested links
-
-```tsx
-<a href="...">
-  <ProductCard href="...">...</ProductCard> {/* <a> inside <a>; HTML invalid */}
-</a>
-```
-
-### ✗ Using ProductCard for non-product content
-
-ProductCard is a product tile. Don't use it for blog posts, articles, or generic content cards — build or reach for a more appropriate component (future `<ContentCard>`, `<ArticleCard>`).
-
-## Related
-
-- Composes: `<Card>`, `<AspectRatio>`, `<Badge>`, `<ProductCardAddButton>`
-- Rules: `red-usage`, `numerals-font`, `card-no-border`, `type-hierarchy` — `../../design.md`
-- Copy spec — `../../content/copy-patterns.md#product-card-pattern`
-- Labels — `../../../copy-library/ui/labels.i18n.json` (meta.new, meta.sale, meta.bestseller)
+- 组合组件：Card、AspectRatio、Badge、ProductCardAddButton。
+- 规则：red-usage、numerals-font、card-no-border、type-hierarchy。
+- 文案规范：`../../content/copy-patterns.md#product-card-pattern`。

@@ -3,10 +3,15 @@ import { expect, userEvent, within } from "storybook/test";
 import { AppDownloadPage } from "./AppDownloadPage";
 
 const meta = {
-  title: "YAMI/Pages/App Download/V1",
+  id: "yami-pages-app-download-v1",
+  title: "YAMI/Pages/App Download/Draft/V1",
   component: AppDownloadPage,
-  tags: ["!autodocs"],
-  parameters: { layout: "fullscreen", controls: { disable: true } },
+  tags: ["!autodocs", "draft"],
+  parameters: {
+    layout: "fullscreen",
+    controls: { disable: true },
+    docs: { description: { component: "**Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。" } },
+  },
   globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
 } satisfies Meta<typeof AppDownloadPage>;
 export default meta;

@@ -1,42 +1,21 @@
-# ProductList — Usage
+# ProductList — 使用说明
 
-## When to use
+## 使用场景
 
-Use `ProductList` for a titled, data-driven collection of commerce products:
+用于带标题的商品集合，包括首页推荐、活动横向列表，以及支持加载更多的商品网格。购物车、订单或商品比较应使用对应的专用组件。
 
-- Homepage recommendation and campaign rails
-- Waterfall collections with a load-more action
+## Storybook 预览
 
-Use a dedicated cart, order, or comparison component when rows need quantity,
-fulfillment, or multi-product selection controls.
+侧栏仅保留 Docs、PC、Mobile。通过 Controls 切换 `appearance`、`layout`、`headingAlign`、`mobileSurface` 和 `loading` 等配置。属性名和选项值使用英文，说明使用中文。
 
-## Storybook examples
+切换活动外观时，预览会提供默认素材，也可通过属性覆盖。细分示例和交互测试保留，但不显示在侧栏。`Horizontal Scroll List` 是独立的滚动容器，与 Product List 位于同一级。
 
-- **Overview**: entry point for the component.
-- **PC**: desktop standard rail, introduction, banner or background with card/plain surfaces, and waterfall.
-- **Centered**: desktop centered-heading variants for standard, background, and banner sections.
-- **Mobile**: mobile surfaces, title sizes, and centered variants.
-- **States**: loading skeletons across layouts.
+## 布局与商品
 
-Story definitions and interaction checks are shared in `ProductList.story-examples.tsx`.
-Contract-only checks remain testable but are hidden from the browsing sidebar.
-
-## Layouts
-
-The shared section heading supports `mobileTitleSize={20}` (default, 28px line
-height, weight 400) and `mobileTitleSize={16}` (20px line height, Chinese weight
-600 / English weight 500) below 1024px. Language is resolved from the inherited
-`lang` attribute; mark mixed-language title spans with their own `lang`.
-This option does not change desktop typography or heading spacing.
-
-`ProductList` keeps every card in one collection visually consistent. The
-component chooses the matching `ProductCard` presentation; callers cannot mix
-presentations inside a list.
-
-| `layout` | Card presentation | Behavior |
+| layout | 卡片形式 | 行为 |
 |---|---|---|
-| `rail` | `rich` | Mobile swipe rail; paginated PC rail with 4–8 cards |
-| `waterfall` | `rich` | Two columns on mobile, responsive grid on desktop |
+| rail | rich | Mobile 原生滑动；PC 分页展示 4–8 张卡片 |
+| waterfall | rich | Mobile 两列，PC 响应式网格 |
 
 ```tsx
 <ProductList
@@ -47,207 +26,88 @@ presentations inside a list.
 />
 ```
 
-Each product must have a stable `id`; all remaining fields are standard
-`ProductCard` data. The list passes the clicked product ID to
-`onAddToCart` while preserving ProductCard's independent navigation links.
-Standard lists render `plain` product cards without outer padding. Themed and
-atmospheric lists render `card` product cards with 2px outer padding so cards
-remain separated from the collection's background color or artwork.
+每件商品需要稳定的 `id`，其他字段使用 ProductCard 数据。加购回调接收商品 id，商品链接与加购按钮保持独立。同一列表的卡片展示形式保持一致。
 
-Use `introContent` for full-width editorial context that belongs between the
-heading controls and the product collection, such as a single-brand overview.
-It renders once and does not occupy a product slot. `leadingContent` remains
-the separate pattern for an editorial panel that intentionally participates in
-the rail geometry.
+标准列表使用 plain 商品卡片；活动卡片外观使用 card 商品卡片及 2px 外边内衬，与背景区分。
+`introContent` 在标题下方、商品集合上方渲染一次，不占商品位置；`leadingContent` 用于参与横向列表布局的引导内容，Mobile 上显示在列表之前。
 
-## Section divider
+## 标题与对齐
 
-The list keeps its existing top gray divider by default. `dividerPosition`
-accepts `top`, `bottom`, or `none`. `dividerVariant="gray"` renders the 1px
-structural line; `dividerVariant="black"` renders the theme-aware 2px emphasis
-line. Desktop always honors this configuration. On mobile it is available only
-when `mobileSurface="plain"`; the default card surface ignores mobile dividers.
+小于 1024px 时，`mobileTitleSize={20}` 默认使用 28px 行高、400 字重；16px 使用 20px 行高，中文 600、英文 500 字重，由继承的 `lang` 决定。此配置不影响 PC 排版与标题间距。
 
-Themed and atmospheric desktop lists are intended to sit inside an outer frame
-with `32px` vertical and `48px` horizontal padding. The component keeps its
-own denser internal content padding; consumers should apply the outer frame at
-the page or composition layer. Themed rails use the shared
-`HorizontalScrollList` card surface; standard and atmospheric rails retain the
-plain surface.
+`headingAlign="center"` 支持 standard、background 和 themed-background 通栏布局。标题与未溢出的标签居中，溢出的标签左对齐并横向滚动；隐藏查看全部链接。PC 横向列表按钮放在内容区两侧，与商品图片垂直居中。Mobile 保留手势滚动，不显示箭头。
+
+Mobile 的 card 外观始终保持标题左对齐，plain 外观支持居中。默认对齐方式为 start。
+
+## 分割线与移动端外观
+
+默认顶部灰色分割线。`dividerPosition` 支持 top、bottom、none；gray 为 1px，black 为随主题变化的 2px 强调线。PC 始终支持，Mobile 仅 plain 外观支持。
+
+`mobileSurface="card"` 保留内缩圆角背景。plain 去除外部 8px 留白和圆角，内容内边距由 8px 增至 16px。网格布局中，card 间距 8px，plain 间距 16px。
+
+活动卡片式 PC 列表由页面组合层提供上下 32px、左右 48px 的外部留白，组件自身保留内部间距。
+
+## 标签
+
+标签使用 YAMI 胶囊样式。组件只报告选择结果，不自行筛选商品。
 
 ```tsx
 <ProductList
-  title="New Arrivals"
-  products={products}
-  dividerPosition="bottom"
-  dividerVariant="black"
-/>
-```
-
-## Mobile surface
-
-`mobileSurface="card"` is the default and preserves the inset rounded section.
-Use `mobileSurface="plain"` when the collection needs to meet both screen edges.
-The plain surface removes the outer 8px inset, removes the section radius, and
-increases the component content padding from 8px to 16px. It also enables the
-same top/bottom divider configuration used on desktop. In the waterfall layout,
-the card surface keeps an 8px grid gap; the plain surface uses a 16px grid gap
-and square outer corners.
-
-```tsx
-<ProductList
-  title="New Arrivals"
-  products={products}
-  mobileSurface="plain"
-  dividerPosition="bottom"
-  dividerVariant="black"
-/>
-```
-
-## Tabs
-
-Tabs reuse the YAMI tertiary pill treatment. Selection is reported to the
-caller; `ProductList` does not filter products internally.
-
-```tsx
-<ProductList
-  title="New Arrivals"
+  title="新品推荐"
   products={visibleProducts}
   tabs={[
-    { value: "all", label: "All" },
-    { value: "beauty", label: "Beauty" },
-    { value: "sold-out", label: "Sold out", disabled: true },
+    { value: "all", label: "全部" },
+    { value: "beauty", label: "美妆" },
+    { value: "sold-out", label: "已售罄", disabled: true },
   ]}
   value={category}
   onValueChange={setCategory}
 />
 ```
 
-Omit `value` and use `defaultValue` for uncontrolled selection.
+非受控模式省略 value，使用 defaultValue。
 
-## Appearance
+## 外观
 
-- `standard` uses the primary page surface.
-- `themed` requires `banner={{ src, alt }}`. Add `mobileSrc` when the campaign
-  has mobile-specific art direction; it is used below 1024px and falls back to
-  `src` when omitted. Write alt text that communicates the shared campaign
-  represented by both images. Add a precomputed
-  `backgroundColor` to carry the banner's dominant color into the content
-  surface. When `mobileSrc` has a different bottom-edge color, add
-  `mobileBackgroundColor`; it is used below 1024px and falls back to
-  `backgroundColor` when omitted. The component falls back to
-  `--surface-secondary` when neither color is provided.
-- `themed-background` keeps the themed `banner` and its responsive background
-  colors, with a full-width square section, white product cards, and standard list
-  spacing (PC 48px horizontal; mobile plain 16px). 中文：保留顶部活动横幅和背景，外层不做圆角卡片，每件商品使用完整白底卡片。
-- `background` adds `backgroundColor` and responsive `backgroundImage` artwork
-  behind the normal list. It keeps white product cards, standard PC spacing,
-  and defaults to the full-width mobile plain layout (16px padding). There is no
-  inset rounded campaign panel. 中文：普通商品列表底层增加背景色和背景图，每件商品使用完整白底卡片。
-- `atmospheric` accepts a precomputed bottom-edge `backgroundColor` for the
-  campaign surface and image-to-surface gradient, `backgroundImage` for
-  desktop decorative artwork, and an optional
-  `backgroundImageMobile` for mobile and tablet. The mobile image falls back
-  to `backgroundImage` when omitted. Decorative artwork adds no duplicate
-  accessible image content.
+- `standard`：标准页面背景。
+- `themed`：带活动横幅的卡片式模块，必须提供 `banner`。`mobileSrc` 用于小于 1024px 的素材，未提供时回退到 src。可分别指定 backgroundColor 和 mobileBackgroundColor；未提供移动端颜色时回退到 PC 颜色，都未提供时使用 `--surface-secondary`。
+- `themed-background`：保留横幅和响应式背景色，采用通栏直角外层及白底商品卡片；PC 水平留白 48px，Mobile plain 为 16px。
+- `background`：标准列表底层增加背景色和背景图，商品使用完整白底卡片；保留 PC 标准间距，Mobile 默认通栏 plain 布局。
+- `atmospheric`：氛围背景卡片式模块，backgroundColor 用于背景及图片过渡，backgroundImage 为 PC 素材，backgroundImageMobile 为 Mobile 素材，未提供时回退到 PC 素材。装饰背景不重复提供无障碍图片内容。
 
 ```tsx
 <ProductList
-  title="Summer Refresh"
+  title="夏日焕新"
   products={products}
   appearance="themed"
   banner={{
     src: campaignBanner,
     mobileSrc: campaignBannerMobile,
-    alt: "Summer Refresh beauty event",
+    alt: "夏日美妆焕新活动",
     backgroundColor: "#E4E5F0",
     mobileBackgroundColor: "#F9EAF3",
   }}
 />
 ```
 
-Extract `backgroundColor` and `mobileBackgroundColor` when campaign artwork is
-uploaded or built. Avoid runtime canvas sampling: remote image CORS, loading
-latency, and hydration can otherwise make the surface color unreliable.
+在素材上传或构建阶段提取底部背景色，避免运行时取色带来的跨域、加载延迟或水合问题。横幅与背景图通过渐变融入指定颜色。氛围素材保持低对比度，确保文字和商品可读。
 
-The themed banner uses the same color for a decorative overlay that fades from
-transparent at the top to fully opaque at the bottom, visually connecting the
-artwork with the content surface.
+## 加载与分页
+
+`loading` 隐藏商品并显示与布局匹配的骨架，同时暴露 aria-busy。`loadingLabel` 提供无障碍提示，骨架本身不被辅助技术朗读。减少动态效果模式下关闭闪光动画。
 
 ```tsx
-<ProductList
-  title="Popular This Week"
-  products={products}
-  appearance="atmospheric"
-  backgroundColor="#FFF8EB"
-  backgroundImage={atmosphericDesktop}
-  backgroundImageMobile={atmosphericMobile}
-/>
+<ProductList title="精选商品" products={[]} layout="waterfall" loading loadingLabel="正在加载商品" skeletonCount={4} />
 ```
 
-Keep text and product cards readable over atmospheric artwork. The component
-places cards on `--surface-primary`; artwork should remain low contrast. Sample
-the bottom strip of each campaign asset when preparing it and use that color
-for `backgroundColor`. The component fades the lower half of the responsive
-artwork into the supplied color.
+横向列表在 Mobile 使用原生滚动和吸附；PC 从 1024px 起通过按钮分页，可见数量随视口增加，从四张递增至 1920px 时八张。按钮每次切换一整页，到边界后禁用。
 
-## Loading
+仅 `layout="waterfall"` 且 `hasMore` 为 true 时显示加载更多按钮，点击调用 onLoadMore。
 
-Set `loading` to hide product data and render a layout-specific skeleton. The
-section exposes `aria-busy`; `loadingLabel` is announced while the visual
-skeleton remains hidden from assistive technology.
+## 无障碍与相关资源
 
-```tsx
-<ProductList
-  title="精选商品"
-  products={[]}
-  layout="waterfall"
-  loading
-  loadingLabel="Loading products"
-  skeletonCount={4}
-/>
-```
+模块通过可见标题命名；商品使用 list/listitem 语义。活动横幅必须提供 alt。viewAllLabel、loadMoreLabel、loadingLabel 应与页面语言一致。
 
-Skeleton geometry follows the actual layout rather than the Figma skeleton
-specimen. Shimmer is disabled when reduced motion is requested.
-
-## Rail behavior
-
-On mobile, Rail uses native horizontal overflow and scroll snap. On PC
-(`1024px`–`1920px`), overflow is clipped and products can only be paged with
-the arrow buttons. The visible count increases with viewport width: four cards
-at `1024px`, then five, six, and seven cards, up to eight cards at `1920px`.
-Each arrow advances one complete visible page and disables at its boundary.
-
-## Waterfall load more
-
-The load-more action only appears when `layout="waterfall"` and `hasMore` are
-both set.
-
-```tsx
-<ProductList
-  title="More to Explore"
-  products={products}
-  layout="waterfall"
-  hasMore={pageInfo.hasNextPage}
-  onLoadMore={loadNextPage}
-/>
-```
-
-## Accessibility
-
-- The section is labelled by its visible heading.
-- Product containers use `list` / `listitem` semantics.
-- Banner alt text is required for themed appearance.
-- Localize `viewAllLabel`, `loadMoreLabel`, and `loadingLabel`.
-- Product links and quick-add buttons remain independent controls.
-
-## Related
-
-- Composes: `<ProductCard>`, `<Tabs>`, `<Button>`
-- Product anatomy and badge rules: `../ProductCard/usage.md`
-- Rules: `red-usage`, `tap-target`, `focus-style`, `no-custom-radii`
-
-## Centered plain sections
-
-Use `headingAlign="center"` for the plain Standard, Background, and Themed Background layouts. It centers the heading and tabs when they fit; overflowing tabs stay left-aligned and scroll horizontally. View-all links are omitted. On desktop (1024px and wider), rail arrows sit halfway across each collection edge and remain vertically centered on the product image area. Mobile hides the arrows and retains swipe scrolling. Existing layouts default to `headingAlign="start"`.
+- 组合组件：ProductCard、Tabs、Button。
+- 商品结构与徽标规则：`../ProductCard/usage.md`。
+- 规则：red-usage、tap-target、focus-style、no-custom-radii。

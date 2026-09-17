@@ -1,5 +1,7 @@
 # Trending Searches
 
+**Stable**: PC and Mobile have been reviewed and approved.
+
 The terms shoppers are searching for, each with the results behind it.
 
 ## When to use
@@ -53,3 +55,14 @@ Supply `expandLabel` to name the row toggles for the same reason.
 
 `thumbnail.alt` should be empty: the row already carries the term as text, and
 the image repeats it.
+
+## Centered heading
+
+Set `headingAlign="center"` to center the section title and place desktop paging
+controls at the left and right edges of the content rail. Controls disappear
+when all items fit and disable at the scroll boundaries. Below 1024px, paging
+controls stay hidden and the existing mobile interaction remains unchanged.
+The default is `headingAlign="start"`.
+
+Mobile card sections keep their title left-aligned, including when
+`headingAlign="center"` is selected. Desktop still uses the selected alignment.

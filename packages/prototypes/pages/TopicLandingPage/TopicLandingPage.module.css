@@ -232,6 +232,12 @@ main.main[data-title-font-family="sans"]
   margin-inline: auto;
 }
 
+@media (max-width: 1023px) {
+  .main [data-slot="product-list-heading"] {
+    padding-inline: 0;
+  }
+}
+
 @media (min-width: 1024px) {
   .main[data-motion-ready="true"]
     [data-slot="topic-landing-waterfall-section"]

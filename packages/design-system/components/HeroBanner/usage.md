@@ -1,34 +1,36 @@
-# HeroBanner — Usage
+# HeroBanner — 使用说明
 
-## When to use
+## 使用场景
 
-Use `HeroBanner` for the homepage campaign rail shown directly below primary
-navigation. The same component owns both responsive presentations:
+用于首页主导航下方的活动横幅。同一个组件负责 PC 和 Mobile 的响应式展示：
 
-- Below `1024px`, cards are fixed at `320 × 360`, separated by `8px`, and use
-  native horizontal scrolling with `8px` page margins.
-- From `1024px`, cards retain the `8:9` ratio and fill two, three, or four
-  columns. The desktop controls page one complete visible group at a time.
+- 小于 `1024px`：卡片固定为 `320 × 360`，卡片间距 `8px`，页面边距 `8px`，支持原生横向滑动。
+- 从 `1024px` 起：卡片保持 `8:9` 比例，根据视口显示两列、三列或四列；桌面按钮每次切换一组可见卡片。
 
 ```tsx
 <HeroBanner
   items={promotions}
-  ariaLabel="Featured promotions"
-  previousLabel="Previous promotions"
-  nextLabel="Next promotions"
+  ariaLabel="精选活动"
+  previousLabel="上一组活动"
+  nextLabel="下一组活动"
 />
 ```
 
-Do not create separate PC and Mobile components. Responsive CSS changes card
-count and interaction without changing the content model or DOM order.
+无需拆分 PC 和 Mobile 组件。响应式样式负责调整卡片数量和交互，内容模型和 DOM 顺序保持一致。
 
-## Section divider
+## Storybook 预览
 
-`HeroBanner` has no divider by default. Set `dividerPosition` to `top` or
-`bottom` when the page composition needs a section boundary; choose `none` to
-remove it. `dividerVariant="gray"` uses the existing 1px structural line, while
-`dividerVariant="black"` uses the theme-aware 2px emphasis line.
-Divider configuration is desktop-only and is ignored below 1024px.
+- `PC`：完整模块的桌面预览。
+- `Mobile`：完整模块的移动端预览。
+- `Card`：单张卡片预览，通过 `cardVariant` 切换四种内容形态。该选项仅用于 Storybook，不是组件属性。
+
+分割线和其他细分场景保留为隐藏测试示例。
+
+## 模块分割线
+
+默认不显示分割线。`dividerPosition` 可设置为 `top`、`bottom` 或 `none`。
+`dividerVariant="gray"` 使用 1px 结构分割线，`dividerVariant="black"` 使用随主题变化的 2px 强调分割线。
+分割线仅 PC 生效，小于 `1024px` 时忽略此配置。
 
 ```tsx
 <HeroBanner
@@ -38,76 +40,61 @@ Divider configuration is desktop-only and is ignored below 1024px.
 />
 ```
 
-## Card subcomponents
+## 卡片子组件
 
-`HeroBanner` selects one of four public card subcomponents from the supplied
-content:
+`HeroBanner` 根据传入内容选择以下四种公开卡片子组件：
 
-- `HeroBannerImageOnlyCard` — campaign image only.
-- `HeroBannerImageTextCard` — image with title and optional description.
-- `HeroBannerImageTextProductsCard` — image, copy, and up to four products.
-- `HeroBannerProductsOnlyCard` — title and products without a campaign image or description.
+- `HeroBannerImageOnlyCard`：纯活动图片。
+- `HeroBannerImageTextCard`：图片、标题和可选描述。
+- `HeroBannerImageTextProductsCard`：图片、文字和最多四个商品。
+- `HeroBannerProductsOnlyCard`：标题和商品，不包含活动图片或描述。
 
-Every item needs a stable `id` and destination `href`. Image variants require
-semantic campaign alt text. Product-only variants require a title and at least
-one product.
+每个活动需要稳定的 `id` 和跳转地址 `href`。图片需要有意义的替代文本；纯商品卡片需要标题和至少一个商品。
 
 ```tsx
 {
   id: "street-food",
   href: "/campaigns/street-food",
-  image: {
-    src: streetFoodArtwork,
-    alt: "Asian street food and drinks",
-  },
-  title: "Midnight Street Food",
-  description: "Explore Asian night bites",
+  image: { src: streetFoodArtwork, alt: "亚洲街头美食与饮品活动" },
+  title: "深夜街头美食",
+  description: "探索亚洲夜市美味",
   backgroundColor: "#FFD4B4",
   products: [
-    { src: bottledTea, alt: "Bottled green tea" },
-    { src: spicySnack, alt: "Spicy snack" },
-    { src: cornChips, alt: "Corn chips" },
+    { src: bottledTea, alt: "瓶装绿茶" },
+    { src: spicySnack, alt: "辣味零食" },
+    { src: cornChips, alt: "玉米脆片" },
   ],
 }
 ```
 
-One to three thumbnails use the horizontal strip from Figma. Four thumbnails
-use the `2 × 2` product grid. More than four are intentionally ignored; add
-another campaign item instead.
+一至三个商品使用横排布局，四个商品使用 `2 × 2` 网格。超过四个的商品不会展示，应拆分为其他活动卡片。
 
-An image-only item remains a normal campaign link. Its image `alt` becomes the
-link's accessible name, so describe the destination rather than visual texture.
-Product-only cards do not render an empty image placeholder; their campaign
-surface and product tiles fill the full card.
+纯图片卡片仍然是活动链接，图片 `alt` 会成为链接的无障碍名称，应描述跳转内容。
+纯商品卡片不会预留空白图片区域，背景和商品区域填满整张卡片；完整模块在移动端隐藏此形态，Card 预览仍可单独查看。
 
-## Interaction
+## 交互
 
-Mobile uses native touch scrolling and scroll snap. Desktop arrow buttons use
-the same `36px` YAMI rail-navigation control as ProductList and disable at the
-first/last page. `prefers-reduced-motion` changes programmatic paging from
-smooth to immediate.
+移动端使用原生触摸滚动和滚动吸附。桌面箭头使用与 ProductList 一致的 `36px` 导航按钮，在首尾页禁用对应方向。
+用户启用减少动态效果时，程序翻页改为即时切换。
 
-The desktop progress track reports how many banners have been revealed through
-the current viewport against the total banner count. A four-column rail starts
-at `4 / 12`, and the final viewport ends at `12 / 12`. Localize `ariaLabel`,
-`previousLabel`, and `nextLabel`.
+桌面进度表示当前视口已展示到的横幅数量与总数。例如四列布局从 `4 / 12` 开始，最后一屏为 `12 / 12`。
+请提供与页面语言一致的 `ariaLabel`、`previousLabel` 和 `nextLabel`。
 
-## Campaign color
+自动切换每次前进一张，到末尾后循环。组件离开视口、页面隐藏、鼠标悬停或内部持有焦点时暂停；减少动态效果模式下关闭。
 
-Image-and-copy cards sample the dominant color from the artwork's lower edge
-after the image loads. The component uses that color for both the content
-surface and the functional `24px` image-to-surface fade required by the Figma
-component. `backgroundColor` remains the loading and cross-origin fallback; it
-is campaign content supplied by the CMS, not a reusable design token.
+## 活动背景色
 
-Copy color is derived from the sampled campaign surface and does not follow the
-page's light or dark theme. Bright artwork uses fixed black copy. Dark artwork
-uses fixed white copy; when necessary, the sampled surface is darkened just
-enough to retain at least `4.5:1` contrast for body-size text.
+图文卡片在图片加载后提取图片底部的主色，用作文字区背景及 `24px` 图片渐变过渡。
+`backgroundColor` 是加载期间或跨域取色失败时的回退值，属于活动内容，不是可复用的设计 token。
 
-## Related
+文字颜色根据活动背景决定，不随页面明暗主题变化：浅色背景使用黑色文字，深色背景使用白色文字。
+必要时会加深背景，保证正文至少 `4.5:1` 的对比度。
 
-- Composes: `<Button>`
-- PC Figma: `3053:7724`
-- Mobile Figma: `3056:37111`
-- Mobile page placement: `6962:102970`
+纯商品卡片未指定背景色时，借用相邻卡片的图片取色结果。独立预览没有相邻卡片，因此提供固定背景色。
+
+## 相关资源
+
+- 组合组件：`<Button>`
+- PC Figma：`3053:7724`
+- Mobile Figma：`3056:37111`
+- 移动端页面位置：`6962:102970`

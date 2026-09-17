@@ -1,5 +1,8 @@
 # ProductReviewSection
 
+> **Draft · 草稿**：当前组件及全部预览内容尚未定稿或完成 review。
+
+
 Use `ProductReviewSection` for a PDP's full customer-review area. It combines
 the aggregate score, five-to-one-star distribution, review filters, sorting,
 review cards, and progressive disclosure in one labelled section.

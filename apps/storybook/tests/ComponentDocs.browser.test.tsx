@@ -11,8 +11,8 @@ describe("component docs usage content", () => {
       "YAMI/Components/Commerce/Product Card",
     );
 
-    expect(usage).toContain("# ProductCard — Usage");
-    expect(usage).toContain("## When to use");
+    expect(usage).toContain("# ProductCard — 使用说明");
+    expect(usage).toContain("## 使用场景");
   });
 
   test("resolves Card, which previously had no Storybook docs entry", async () => {

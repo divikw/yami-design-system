@@ -1,59 +1,25 @@
 # ReviewList
 
-`cardHeight="content"` is the compatibility default: cards retain their own height and are vertically centered. Use `cardHeight="equal"` explicitly for campaign reviews that should stretch to the tallest card. This choice is independent of heading alignment and preserves the 344px mobile card width in both modes. New page requirements must not change the default layout of existing consumers.
+用户评论横向列表，复用 ProductList 的标题结构。每项由 ReviewCard 展示评分、评论、匿名昵称及可选关联商品。
 
-`ReviewList` is a customer-review rail with the same section heading anatomy as
-`ProductList`. Each rail item is the exported `ReviewCard` child: a rating,
-review copy, anonymized reviewer and the related product footer.
+## 预览与配置
 
-## When to use
+Storybook 提供 PC 和 Mobile 预览。通过 `showProduct` 预览带商品或纯评论样式；此项仅用于 Storybook，实际使用时省略每条评论的 `product`。通过 `mobileSurface` 切换 `card` / `plain`，通过 `headingAlign` 和分割线属性调整展示。属性名与选项保持英文。
 
-Use it for a curated set of customer reviews that should sit alongside other
-commerce collection sections. Pass the reviews in the order they should appear
-and keep the review copy in the caller's locale.
+同一列表的评论卡片自动等高，由最高的内容决定高度，不设置固定高度。PC、Mobile 及带商品、纯评论样式均采用此规则；移动端卡片宽度保持 344px。
 
-## Responsive behavior
+## 响应式布局
 
-The rail shows three cards at a 1440px content width and four cards at a 1920px
-content width, using the same desktop container and gap rhythm as ProductList.
-Below the desktop breakpoint it uses the ProductList mobile rail geometry:
-fixed 344px cards, page-card side gutters and native horizontal scrolling, with
-one card visible on a phone. The mobile surface uses the secondary gray page
-background and the shared mobile heading: a localized title plus the circular
-view-all action when `viewAllHref` is provided. Without a destination the title
-renders without an action. Previous/next paging controls appear on desktop only,
-matching ProductList.
+桌面常规显示三张卡片，1920px 起显示四张；移动端采用原生横向滚动。翻页按钮仅在桌面内容溢出时显示，标题居中时位于列表两侧。
 
-## Mobile surface
+移动端 `card` 外观的标题始终左对齐；`headingAlign="center"` 仅对 PC 和移动端 `plain` 生效。
 
-`mobileSurface="card"` is the default and preserves the inset rounded section.
-Use `mobileSurface="plain"` for a full-bleed section with square outer corners,
-16px content padding, and the same mobile divider support as `ProductList`.
+移动端默认 `mobileSurface="card"`，采用内缩圆角面板和灰色画布。`plain` 为直角通栏布局，内容内边距 16px。提供 `viewAllHref` 时显示查看全部入口。
 
-## Section divider
+## 分割线
 
-The list uses the same desktop section-divider contract as `ProductList`. It
-defaults to a 1px gray line above the section. Set `dividerPosition` to `top`,
-`bottom`, or `none`; set `dividerVariant` to `gray` or `black`. The black
-variant uses the theme-aware 2px emphasis divider. On mobile, divider
-configuration is available only when `mobileSurface="plain"`.
+默认顶部 1px 灰线。`dividerPosition` 支持 `top`、`bottom`、`none`；`dividerVariant` 支持 `gray`（1px）和 `black`（2px）。移动端仅 `plain` 支持分割线。
 
-```tsx
-<ReviewList
-  title="Customer Reviews"
-  reviews={reviews}
-  dividerPosition="bottom"
-  dividerVariant="black"
-/>
-```
+## 内容与无障碍
 
-## Accessibility
-
-The section heading labels the review rail. Each rating is exposed as an
-accessible five-point image label, reviewer names remain text, and product
-images require meaningful alternative text. A product `href` turns the footer
-into a native keyboard-reachable link.
-
-Omit `product` on a review when it describes the shopping experience without a related product. Pass `description` for supporting section copy.
-
-With `headingAlign="center"`, paging controls sit at the vertical center of the content rail, one on each side. Controls are hidden when all items fit; on mobile they are hidden in favor of touch scrolling.
+按展示顺序传入 `reviews`，由调用方提供对应语言的评论。无关联商品时省略 `product`；辅助说明使用 `description`。评分提供五星制无障碍标签，图片需要有意义的替代文本，商品 `href` 使用可通过键盘访问的原生链接。

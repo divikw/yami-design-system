@@ -12,9 +12,9 @@ import styles from "./HorizontalScrollList.module.css";
 export type HorizontalScrollListSurface = "card" | "plain";
 
 export type HorizontalScrollListBaseProps = {
-  /** Applies the finite horizontal scrolling behavior and focusability. */
+  /** 是否启用横向滚动和键盘聚焦。 */
   enabled?: boolean;
-  /** Optional visual surface. `card` adds 8px spacing over the caller background. */
+  /** 可选背景形式。`card` 在调用方提供的背景上增加 8px 内边距。 */
   surface?: HorizontalScrollListSurface;
   children?: ReactNode;
 };
@@ -25,7 +25,7 @@ export type HorizontalScrollListProps<T extends ElementType = "div"> =
       ComponentPropsWithoutRef<T>,
       keyof HorizontalScrollListBaseProps | "as"
     > & {
-      /** Semantic element rendered for the list. Defaults to `div`. */
+      /** 列表使用的语义标签，默认为 `div`。 */
       as?: T;
     };
 

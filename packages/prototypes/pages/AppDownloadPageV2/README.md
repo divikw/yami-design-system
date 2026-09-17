@@ -1,5 +1,7 @@
 # App Download Page V2
 
+> **Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。
+
 Starts from V1 with the same content, styles, and behavior. Component, CSS, fixtures, and reference data are owned by this version so they can evolve independently. Images, video, and store badges reuse `../AppDownloadPage/assets/`.
 
 Visible stories: PC and Mobile under `YAMI/Pages/App Download/V2`, both initially in Korean with an in-page language switch. Interactions, SectionNavigation, and ContentWidth remain test-only stories, hidden from browsing.
