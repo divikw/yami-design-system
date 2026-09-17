@@ -47,7 +47,8 @@ function getProps(locale: BrandProductRailLocale): BrandProductRailProps {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Brand Product Rail",
+  id: "yami-components-commerce-brand-product-rail",
+  title: "YAMI/Modules/Commerce/Brand Product Rail",
   component: BrandProductRail,
   decorators: [
     (Story, context) => {
@@ -82,22 +83,23 @@ const meta = {
     },
   },
   argTypes: {
+    headingAlign: { options: ["start", "center"], control: { type: "radio" } },
     mobileSurface: {
       options: ["card", "plain"],
       control: { type: "radio" },
       description:
-        "Mobile section surface. Plain is square, full-bleed, and uses 16px content padding.",
+        "移动端外观：card 为卡片；plain 为直角通栏，内容内边距为 16px。",
     },
     dividerPosition: {
       options: ["top", "bottom", "none"],
       control: { type: "radio" },
       description:
-        "Section divider edge. Card mobile ignores it; plain mobile preserves it.",
+        "分隔线位置：top 为顶部，bottom 为底部，none 为隐藏。移动端卡片不显示，通栏模式保留。",
     },
     dividerVariant: {
       options: ["gray", "black"],
       control: { type: "radio" },
-      description: "Gray renders at 1px; black emphasis renders at 2px.",
+      description: "分隔线样式：gray 为 1px 灰线，black 为 2px 黑色强调线。",
     },
   },
   args: {
@@ -112,11 +114,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
     return (
       <BrandProductRail
         {...getProps(locale)}
+        headingAlign={args.headingAlign}
         mobileSurface={args.mobileSurface}
         dividerPosition={args.dividerPosition}
         dividerVariant={args.dividerVariant}
@@ -397,6 +401,7 @@ function renderResponsiveStory(
   return (
     <BrandProductRail
       {...getProps(locale)}
+      headingAlign={args.headingAlign}
       mobileSurface={args.mobileSurface}
       dividerPosition={args.dividerPosition}
       dividerVariant={args.dividerVariant}
@@ -588,6 +593,7 @@ async function verifyDesktopResponsiveLayout(context: {
 
 export const Mobile: Story = {
   name: "Mobile",
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: renderResponsiveStory,
 };
 
@@ -686,6 +692,14 @@ export const MobilePlainCoverage: Story = {
 
 export const Pc: Story = {
   name: "PC",
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
   render: renderResponsiveStory,
   play: verifyDesktopResponsiveLayout,
+};
+
+export const Centered: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: Showcase.render,
+  args: { headingAlign: "center" },
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
 };

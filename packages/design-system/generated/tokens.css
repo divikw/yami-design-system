@@ -39,6 +39,7 @@
   --brand-tertiary: var(--color-red-50);
   --breakpoints-desktop: 1024px;
   --breakpoints-desktop-lg: 1440px;
+  --breakpoints-desktop-wide: 1680px;
   --breakpoints-desktop-xl: 1920px;
   --breakpoints-mobile: 402px;
   --breakpoints-tablet: 768px;
@@ -305,10 +306,10 @@
   --fill-tertiary: var(--color-neutral-50);
   --fill-warning-primary: var(--color-yellow-500);
   --fill-warning-secondary: var(--color-amber-50);
-  --font-family-android: 'GT Walsheim', 'Noto Sans SC', sans-serif;
-  --font-family-ios: 'GT Walsheim', 'Noto Sans SC', sans-serif;
+  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-family-serif: 'Source Serif 4 Variable', 'Noto Serif SC', serif;
-  --font-family-win: 'GT Walsheim', 'Noto Sans SC', sans-serif;
+  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-weight-emphasize: 500;
   --font-weight-normal: 400;
   --font-weight-semibold: 600;

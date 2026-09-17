@@ -13,6 +13,7 @@
   );
   overflow: hidden;
   border-radius: var(--radius-component-default);
+  clip-path: inset(0 round var(--radius-component-default));
   background: var(--surface-secondary);
   color: var(--color-white-1000);
 }
@@ -125,5 +126,18 @@
   .description {
     font-size: var(--font-size-caption-md);
     line-height: var(--line-height-caption-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .content,
+  .link {
+    height: auto;
+    flex: 1;
+  }
+
+  .link {
+    display: flex;
+    min-width: 0;
   }
 }

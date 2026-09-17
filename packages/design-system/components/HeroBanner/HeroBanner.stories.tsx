@@ -11,6 +11,7 @@ import type {
   HeroBannerImageTextItem,
   HeroBannerImageTextProductsItem,
   HeroBannerItem,
+  HeroBannerProps,
   HeroBannerProductsOnlyItem,
 } from "./HeroBanner.types";
 import {
@@ -323,7 +324,8 @@ function createAdditionalVariantItems(
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Hero Banner",
+  id: "yami-components-commerce-hero-banner",
+  title: "YAMI/Modules/Commerce/Hero Banner",
   component: HeroBanner,
   subcomponents: {
     HeroBannerImageOnlyCard,
@@ -343,7 +345,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One responsive YAMI campaign banner. Mobile uses fixed 320×360 cards in a native swipe rail; PC pages two, three, or four equal 8:9 cards according to the viewport.",
+          "响应式活动横幅。Mobile 使用固定 320×360 卡片，支持原生横向滑动；PC 根据视口显示两列、三列或四列等宽的 8:9 卡片。PC、Mobile 用于预览完整模块，Card 用于切换并预览单张卡片的四种内容形态。",
       },
     },
   },
@@ -351,12 +353,12 @@ const meta = {
     dividerPosition: {
       options: ["top", "bottom", "none"],
       control: { type: "radio" },
-      description: "Desktop-only section divider edge; ignored below 1024px.",
+      description: "分割线位置，仅 PC 生效；视口小于 1024px 时不显示。",
     },
     dividerVariant: {
       options: ["gray", "black"],
       control: { type: "radio" },
-      description: "Gray renders at 1px; black emphasis renders at 2px.",
+      description: "gray 为 1px 灰色分割线，black 为 2px 强调分割线。",
     },
   },
   args: {
@@ -373,6 +375,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
     return (
@@ -471,6 +474,7 @@ export const Showcase: Story = {
 };
 
 export const BlackBottomDivider: Story = {
+  tags: ["!dev", "!autodocs"],
   args: {
     dividerPosition: "bottom",
     dividerVariant: "black",
@@ -500,6 +504,7 @@ export const BlackBottomDivider: Story = {
 };
 
 export const MobileDividerDisabled: Story = {
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -521,6 +526,7 @@ export const MobileDividerDisabled: Story = {
 };
 
 export const ContentVariants: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
     return (
@@ -576,6 +582,7 @@ export const ContentVariants: Story = {
 };
 
 export const ImageOnlyCard: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Image Only",
   render: (_args, { globals }) => {
     const [item] = createVariantItems(localeFromGlobals(globals.locale));
@@ -588,6 +595,7 @@ export const ImageOnlyCard: Story = {
 };
 
 export const ImageTextCard: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Image with Text",
   render: (_args, { globals }) => {
     const [, item] = createVariantItems(localeFromGlobals(globals.locale));
@@ -600,6 +608,7 @@ export const ImageTextCard: Story = {
 };
 
 export const ImageTextProductsCard: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Image with Text and Products",
   render: (_args, { globals }) => {
     const [, , item] = createVariantItems(
@@ -614,12 +623,13 @@ export const ImageTextProductsCard: Story = {
 };
 
 export const ProductsOnlyCard: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Products Only",
   parameters: {
     docs: {
       description: {
         story:
-          'This card declares no surface of its own — inside `HeroBanner` it borrows a sibling\'s artwork and samples it, landing on exactly the colour that sibling paints. Rendered standalone there is no list to borrow from, so the story supplies a flat colour instead.',
+          "纯商品卡片在 HeroBanner 中借用相邻卡片的图片取色结果作为背景；独立预览时没有相邻卡片，因此使用指定的背景色。",
       },
     },
   },
@@ -773,5 +783,45 @@ export const CounterTracksLeftmostCard: Story = {
         );
       }
     }
+  },
+};
+
+
+export const Pc: Story = {
+  name: "PC",
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  render: Showcase.render,
+};
+
+export const Mobile: Story = {
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: Showcase.render,
+};
+
+type CardVariant = "image-only" | "image-text" | "image-text-products" | "products-only";
+
+export const Card: StoryObj<HeroBannerProps & { cardVariant: CardVariant }> = {
+  args: { cardVariant: "image-only" },
+  argTypes: {
+    cardVariant: {
+      description: "单张卡片的内容形态：纯图片、图片与文字、图片文字与商品、纯商品。",
+      options: ["image-only", "image-text", "image-text-products", "products-only"],
+      control: { type: "select" },
+    },
+  },
+  parameters: {
+    controls: { include: ["cardVariant"] },
+    docs: { description: { story: "通过 cardVariant 切换四种卡片形态。此配置仅用于预览，不是 HeroBanner 的组件属性。纯商品卡片使用独立预览背景色。" } },
+  },
+  render: ({ cardVariant }, { globals }) => {
+    const [image, text, products, productsOnly] = createVariantItems(localeFromGlobals(globals.locale));
+    return (
+      <div className={storyStyles.cardPreview}>
+        {cardVariant === "image-only" && <HeroBannerImageOnlyCard item={image} priority />}
+        {cardVariant === "image-text" && <HeroBannerImageTextCard item={text} priority />}
+        {cardVariant === "image-text-products" && <HeroBannerImageTextProductsCard item={products} priority />}
+        {cardVariant === "products-only" && <HeroBannerProductsOnlyCard item={productsOnly} borrowedSurface={{ color: "#E8F1D8" }} />}
+      </div>
+    );
   },
 };

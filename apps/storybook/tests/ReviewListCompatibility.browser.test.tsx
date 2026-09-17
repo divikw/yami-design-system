@@ -7,7 +7,7 @@ import { ReviewList } from "@yami/design-system/components/ReviewList";
 import "@yami/design-system/tokens.css";
 
 test.each([390, 1440, 1920])(
-  "preserves default review geometry alongside opt-in equal cards at %ipx",
+  "automatically equalizes review heights and preserves responsive widths at %ipx",
   async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
     const container = document.createElement("div");
@@ -24,24 +24,25 @@ test.each([390, 1440, 1920])(
         <>
           <ReviewList title="Default" reviews={reviews} />
           <ReviewList title="Centered default" headingAlign="center" reviews={reviews} />
-          <ReviewList title="Campaign" cardHeight="equal" headingAlign="center" reviews={reviews} />
+          <ReviewList title="Centered plain" headingAlign="center" mobileSurface="plain" reviews={reviews} />
         </>,
       ));
       const sections = container.querySelectorAll('[data-slot="review-list"]');
+      const headingAlignments = Array.from(sections, (section) =>
+        getComputedStyle(section.querySelector('[data-slot="review-list-title"]')!).textAlign,
+      );
+      expect(headingAlignments[1]).toBe(width < 1024 ? "start" : "center");
+      expect(headingAlignments[2]).toBe("center");
       const rects = (section: Element) => Array.from(
         section.querySelectorAll('[data-slot="review-card"]'),
         (card) => card.getBoundingClientRect(),
       );
-      for (const section of [sections[0], sections[1]]) {
-        const [short, long] = rects(section);
-        expect(long.height - short.height).toBeGreaterThan(20);
-        expect(Math.abs(short.y + short.height / 2 - long.y - long.height / 2)).toBeLessThan(1);
-      }
-      const [short, long] = rects(sections[2]);
-      expect(Math.abs(short.height - long.height)).toBeLessThan(1);
-      expect(Math.abs(short.y - long.y)).toBeLessThan(1);
       for (const section of sections) {
-        const [card] = rects(section);
+        const [card, other] = rects(section);
+        expect(Math.abs(card.height - other.height)).toBeLessThan(1);
+        expect(Math.abs(card.y - other.y)).toBeLessThan(1);
+        const copy = section.querySelectorAll<HTMLElement>('[data-slot="review-card-content"]')[1];
+        expect(copy.scrollHeight).toBeLessThanOrEqual(copy.clientHeight + 1);
         const rail = section.querySelector('[data-slot="review-list-items"]')!;
         if (width < 1024) {
           expect(card.width).toBeCloseTo(344, 0);

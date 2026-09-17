@@ -4,7 +4,7 @@
   "category": "composite",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Full PDP review section with aggregate rating, star distribution, filters, sorting, review cards, and progressive disclosure.",
+  "description": "草稿，尚未定稿或完成 review。商品详情页评价区域，包含评分分布、筛选、排序和响应式评价卡片。",
   "figma": { "nodeId": null, "componentKey": null },
   "exports": [
     "ProductReviewSection",

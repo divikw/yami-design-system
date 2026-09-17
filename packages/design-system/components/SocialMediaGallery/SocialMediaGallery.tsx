@@ -101,6 +101,7 @@ export function SocialMediaGallery({
       <div className={styles.container} data-slot="social-media-gallery-container">
         <SectionHeading
           align={headingAlign}
+          mobileAlign={"start"}
           id={titleId}
           title={title}
           description={description}

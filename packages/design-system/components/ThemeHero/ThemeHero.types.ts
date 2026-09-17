@@ -8,22 +8,22 @@ import type {
 import type { BadgeSize, BadgeTone } from "../Badge";
 
 export interface ThemeHeroImage {
-  /** Image source for both the primary artwork and, by default, the atmosphere. */
+  /** 主题图片地址，同时作为默认装饰背景。 */
   src: string;
-  /** Meaningful description of the foreground brand artwork. */
+  /** 主题图片的替代文本。 */
   alt: string;
-  /** Intrinsic width used to reserve the foreground image ratio. */
+  /** 图片原始宽度，用于保留宽高比。 */
   width: number;
-  /** Intrinsic height used to reserve the foreground image ratio. */
+  /** 图片原始高度，用于保留宽高比。 */
   height: number;
-  /** CSS object-position derived from the asset focal point. */
+  /** 根据图片焦点设置的 CSS object-position。 */
   objectPosition?: string;
 }
 
 export interface ThemeHeroCta {
   label: string;
   ariaLabel?: string;
-  /** ID of the section controlled by this action. */
+  /** 按钮所控制区域的 ID。 */
   controls?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
@@ -33,27 +33,24 @@ export interface ThemeHeroProps
   extends Omit<HTMLAttributes<HTMLElement>, "children" | "title"> {
   title: ReactNode;
   description: ReactNode;
-  /** Localized label for expanding a description that exceeds its responsive line limit. */
+  /** 展开描述的本地化文案。 */
   descriptionExpandLabel?: ReactNode;
-  /** Localized label for restoring the responsive description line limit. */
+  /** 收起描述的本地化文案。 */
   descriptionCollapseLabel?: ReactNode;
-  /** Optional short descriptive keywords rendered as non-interactive Badges. */
+  /** 可选的简短关键词，以不可交互的 Badge 展示。 */
   tags?: readonly string[];
-  /**
-   * Preferred Badge geometry tier. ThemeHero compacts tags to sm below 1024px.
-   * Defaults to sm.
-   */
+  /** 关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。 */
   tagSize?: BadgeSize;
-  /** Translucent Badge polarity. Defaults to dark. */
+  /** 标签明暗样式，默认 dark。 */
   tagTone?: BadgeTone;
   image: ThemeHeroImage;
-  /** Optional alternate source for the blurred decorative atmosphere. */
+  /** 可选的模糊背景图片，默认使用主题图片。 */
   backgroundImageSrc?: string;
-  /** Pre-sampled bottom-edge color used by the adaptive mobile scrim. */
+  /** 图片底边预采样颜色，用于移动端自适应遮罩。 */
   backgroundColor?: string;
-  /** Primary action rendered as the high-emphasis inverse button. */
+  /** 可选主操作按钮，默认不显示。 */
   cta?: ThemeHeroCta;
-  /** Optional lower-emphasis companion action. */
+  /** 可选次操作按钮，默认不显示。 */
   secondaryCta?: ThemeHeroCta;
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
 }

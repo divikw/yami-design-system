@@ -348,7 +348,6 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         id="reviews"
         className={styles.reviews}
         headingAlign="center"
-        cardHeight="equal"
         title={customerReviews[locale].title}
         description={customerReviews[locale].description}
         reviews={customerReviews.reviews.map((review) => ({

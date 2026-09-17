@@ -49,7 +49,7 @@ function localeFromGlobals(value: unknown): ProductLocale {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Product List",
+  title: "YAMI/Components/Commerce/Products/Product List",
   component: ProductList,
   decorators: [
     (Story) => (
@@ -66,36 +66,40 @@ const meta = {
       source: { type: "code" },
       description: {
         component:
-          "Responsive, data-driven YAMI product collection. It composes ProductCard, Tabs, and Button into rail and waterfall layouts with standard, themed, and atmospheric surfaces.",
+          "响应式商品列表，组合 ProductCard、Tabs 和 Button，支持横向滚动与网格布局。通过 PC、Mobile 预览，在 Controls 中切换标题对齐、外观、布局和加载状态。",
       },
     },
   },
   argTypes: {
-    headingAlign: { options: ["start", "center"], control: { type: "radio" }, description: "Heading alignment; centered rails move desktop navigation to the image edges." },
+    appearance: { options: ["standard", "background", "themed", "themed-background", "atmospheric"], control: "select", description: "模块外观：标准、背景、横幅卡片、横幅通栏或氛围卡片。切换时预览提供对应的默认素材，可自行覆盖。" },
+    layout: { options: ["rail", "waterfall"], control: "radio", description: "布局：rail 横向滚动，waterfall 响应式商品网格。" },
+    loading: { control: "boolean", description: "显示加载骨架并隐藏商品内容。" },
+    headingAlign: { options: ["start", "center"], control: { type: "radio" }, description: "标题对齐方式；居中时，PC 横向列表的翻页按钮放在内容区两侧。" },
     mobileTitleSize: {
       options: [20, 16],
       control: { type: "radio" },
-      description: "Mobile heading size below 1024px; desktop typography is unchanged.",
+      description: "小于 1024px 时的标题字号，不影响 PC 排版。",
     },
     mobileSurface: {
       options: ["card", "plain"],
       control: { type: "radio" },
       description:
-        "Mobile section surface. Plain is full-bleed with 16px content padding and supports dividers; card keeps the inset rounded surface and ignores mobile dividers.",
+        "Mobile 外观：plain 为通栏布局，内容内边距 16px，支持分割线；card 保留内缩圆角背景，不显示分割线。",
     },
     dividerPosition: {
       options: ["top", "bottom", "none"],
       control: { type: "radio" },
       description:
-        "Section divider edge. Always supported on desktop; on mobile it is available only for the plain surface.",
+        "分割线位置。PC 始终支持；Mobile 仅 plain 外观支持。",
     },
     dividerVariant: {
       options: ["gray", "black"],
       control: { type: "radio" },
-      description: "Gray renders at 1px; black emphasis renders at 2px.",
+      description: "gray 为 1px 灰色分割线，black 为 2px 强调分割线。",
     },
   },
   args: {
+    loading: false,
     title: "产品列表",
     products: createProductListProducts("en"),
     appearance: "standard",
@@ -285,6 +289,7 @@ export const MobileTitleSizes: Story = {
         return (
           style.fontSize !== (index < 2 ? "20px" : "16px") ||
           style.lineHeight !== (index < 2 ? "28px" : "20px") ||
+          Math.abs(title.getBoundingClientRect().height - parseFloat(style.lineHeight)) > 1 ||
           style.fontWeight !== ["400", "400", "600", "500"][index]
         );
       }) ||
@@ -1151,8 +1156,23 @@ async function verifyCenteredRail({ canvasElement }: { canvasElement: HTMLElemen
       !close(left.y + left.height / 2, media.y + media.height / 2) || !close(right.y + right.height / 2, media.y + media.height / 2))) throw new Error("Centered heading or edge button geometry is incorrect");
   const tabRect = tabs.getBoundingClientRect();
   if (tabs.scrollWidth <= tabs.clientWidth + 1 && !close(tabRect.x + tabRect.width / 2, rail.x + rail.width / 2)) throw new Error("Fitting tabs must be centered");
-  if (tabs.scrollWidth > tabs.clientWidth + 1 && (tabs.scrollLeft !== 0 || getComputedStyle(tabs).justifyContent !== "flex-start")) throw new Error("Overflowing tabs must start left-aligned");
+  if (tabs.scrollWidth > tabs.clientWidth + 1 && (tabs.scrollLeft !== 0 || !["flex-start", "safe center"].includes(getComputedStyle(tabs).justifyContent))) throw new Error("Overflowing tabs must start left-aligned");
+  if (tabs.scrollWidth > tabs.clientWidth + 1) {
+    const container = root.querySelector<HTMLElement>('[data-slot="product-list-container"]')!;
+    const contentLeft = container.getBoundingClientRect().left + parseFloat(getComputedStyle(container).paddingLeft);
+    const firstTab = tabs.querySelector<HTMLElement>('[role="tab"]')!;
+    if (!close(firstTab.getBoundingClientRect().left, contentLeft)) {
+      throw new Error("Overflowing tabs must align with the content edge without duplicate padding");
+    }
+  }
   if (window.innerWidth < 1024) {
+    if (!close(title.getBoundingClientRect().height, parseFloat(getComputedStyle(title).lineHeight))) {
+      throw new Error("Centered mobile title height must follow its line height");
+    }
+    const bounds = root.getBoundingClientRect();
+    if (!close(tabRect.left, bounds.left) || !close(tabRect.right, bounds.right)) {
+      throw new Error("Mobile centered tabs must scroll across the full section width");
+    }
     if (getComputedStyle(previous.parentElement!).display !== "none") throw new Error("Mobile edge arrows must be hidden");
     return;
   }
@@ -1182,3 +1202,27 @@ export const ThemedBackgroundCentered: Story = { ...centeredRailStory("themed-ba
 export const StandardCenteredMobile: Story = { ...StandardCentered, name: "Standard / Centered Mobile", globals: { viewport: { value: "yamiMobileLg", isRotated: false } } };
 export const BackgroundCenteredMobile: Story = { ...BackgroundCentered, name: "Background / Centered Mobile", globals: { viewport: { value: "yamiMobileLg", isRotated: false } } };
 export const ThemedBackgroundCenteredMobile: Story = { ...ThemedBackgroundCentered, name: "Themed / Plain Centered Mobile", globals: { viewport: { value: "yamiMobileLg", isRotated: false } } };
+
+
+export const renderPreview: NonNullable<Story["render"]> = (args, { globals }) => {
+  const locale = localeFromGlobals(globals.locale);
+  const appearance = args.appearance ?? "standard";
+  const themed = appearance === "themed" || appearance === "themed-background";
+  const background = appearance === "background" || appearance === "atmospheric";
+  const props = {
+    ...getProps(locale),
+    ...args,
+    products: JSON.stringify(args.products) === JSON.stringify(meta.args.products)
+      ? createProductListProducts(locale)
+      : args.products,
+    ...(themed ? {
+      banner: args.banner ?? { src: bannerSrc, mobileSrc: bannerMobileSrc, alt: "精选优惠活动", backgroundColor: "#E4E5F0" },
+    } : { banner: undefined }),
+    ...(background ? {
+      backgroundImage: args.backgroundImage ?? atmosphereDesktopSrc,
+      backgroundImageMobile: args.backgroundImageMobile ?? atmosphereMobileSrc,
+      backgroundColor: args.backgroundColor ?? "#FFF8EB",
+    } : { backgroundImage: undefined, backgroundImageMobile: undefined, backgroundColor: undefined }),
+  } as ProductListProps;
+  return <ProductList {...props} />;
+};

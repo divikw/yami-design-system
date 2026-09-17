@@ -63,55 +63,50 @@ interface HeroBannerCardProps<TItem extends HeroBannerItem> {
 
 export interface HeroBannerImageOnlyCardProps
   extends HeroBannerCardProps<HeroBannerImageOnlyItem> {
+  /** 图片加载时机：eager 立即加载，lazy 延迟加载。 */
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
   priority?: boolean;
 }
 
 export interface HeroBannerImageTextCardProps
   extends HeroBannerCardProps<HeroBannerImageTextItem> {
+  /** 图片加载时机：eager 立即加载，lazy 延迟加载。 */
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
   priority?: boolean;
 }
 
 export interface HeroBannerImageTextProductsCardProps
   extends HeroBannerCardProps<HeroBannerImageTextProductsItem> {
+  /** 图片加载时机：eager 立即加载，lazy 延迟加载。 */
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
   priority?: boolean;
 }
 
 export interface HeroBannerProductsOnlyCardProps
   extends HeroBannerCardProps<HeroBannerProductsOnlyItem> {
-  /**
-   * Surface borrowed from a sibling when the card declares none of its own.
-   * Supplied by `HeroBanner`, which owns the list and therefore the palette.
-   *
-   * `imageSrc` is the sibling's artwork, not its colour: sibling cards sample
-   * their own artwork and paint the sampled result, so borrowing the declared
-   * hex would land on a colour no card actually shows. Sampling the same image
-   * reproduces the sibling's surface exactly. `color` is the sibling's declared
-   * value, used until sampling resolves. `item.backgroundColor` always wins.
-   */
+  /** 借用相邻卡片的背景。imageSrc 用于图片取色，color 用于取色完成前的回退；item.backgroundColor 优先。 */
   borrowedSurface?: { imageSrc?: ImageSource; color?: string };
 }
 
 export interface HeroBannerProps
   extends Omit<HTMLAttributes<HTMLElement>, "children">,
     SectionDividerProps {
+  /** 活动卡片列表，支持四种内容形态。 */
   items: HeroBannerItem[];
+  /** 横幅区域的无障碍名称。 */
   ariaLabel?: string;
+  /** 上一页按钮的无障碍名称。 */
   previousLabel?: string;
+  /** 下一页按钮的无障碍名称。 */
   nextLabel?: string;
+  /** 图片加载时机：eager 立即加载，lazy 延迟加载。 */
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
+  /** 图片加载策略：native 使用浏览器原生机制，windowed 按可见范围加载。 */
   imageLoadingStrategy?: ImageLoadingStrategy;
-  /**
-   * Advances one card on an interval and wraps at the end. Pauses while the
-   * banner is outside the viewport, the tab is hidden, the rail is hovered,
-   * or focus is held inside it. Stays off for readers who ask for reduced
-   * motion.
-   */
+  /** 定时前进一张并循环。离开视口、页面隐藏、鼠标悬停或内部持有焦点时暂停；减少动态效果模式下关闭。 */
   autoAdvance?: boolean;
-  /** Seconds between automatic advances. */
+  /** 自动切换的间隔，单位为秒。 */
   autoAdvanceInterval?: number;
-  /** Reports the rendered surface color beneath the active banner copy. */
+  /** 当前横幅文字区域背景色变化时的回调。 */
   onActiveSurfaceColorChange?: (color: string) => void;
 }

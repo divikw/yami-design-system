@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Ranked search terms with the results behind each one — a rail of keyword cards on desktop, a ranked accordion on mobile.",
+  "description": "热门搜索模块：PC 使用横向搜索词卡片，每项展示前两个关联商品；Mobile 使用排名折叠列表，各项可独立展开，横向浏览关联商品并进入搜索结果。",
   "source": "components/TrendingSearches",
   "files": [
     {
@@ -70,6 +70,7 @@
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-caption-md",
+      "--font-size-caption-sm",
       "--font-size-heading-xl",
       "--font-weight-emphasize",
       "--layout-page-margin-card",
@@ -146,5 +147,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "7250984fc8261205c4ccc4e05b188b7392a034290aad580e0e8d14814eb5258f"
+  "contentDigest": "27440320242ed1064b02abe7388ebe02ba2fd51c841f171ba897aa5b8fe2a64c"
 }

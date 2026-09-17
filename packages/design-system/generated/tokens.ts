@@ -193,6 +193,10 @@ export const tokens = {
     "$type": "dimension",
     "$value": "1440px"
   },
+  "breakpoints.desktop-wide": {
+    "$type": "dimension",
+    "$value": "1680px"
+  },
   "breakpoints.desktop-xl": {
     "$type": "dimension",
     "$value": "1920px"
@@ -1315,17 +1319,19 @@ export const tokens = {
     "$type": "fontFamily",
     "$value": {
       "EN": "GT Walsheim",
-      "CN": "Noto Sans SC"
+      "CN": "PingFang SC",
+      "CN-Windows": "Microsoft YaHei"
     },
-    "$description": "Android 中文系统字体回退，适用于中文内容与系统原生体验场景。"
+    "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。"
   },
   "font-family.ios": {
     "$type": "fontFamily",
     "$value": {
       "EN": "GT Walsheim",
-      "CN": "Noto Sans SC"
+      "CN": "PingFang SC",
+      "CN-Windows": "Microsoft YaHei"
     },
-    "$description": "品牌字体，适用于英文标题与营销文案。中文正文需搭配指定 fallback，不建议直接作为全局正文字体。"
+    "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。"
   },
   "font-family.serif": {
     "$type": "fontFamily",
@@ -1339,9 +1345,10 @@ export const tokens = {
     "$type": "fontFamily",
     "$value": {
       "EN": "GT Walsheim",
-      "CN": "Noto Sans SC"
+      "CN": "PingFang SC",
+      "CN-Windows": "Microsoft YaHei"
     },
-    "$description": "Android 中文系统字体回退，适用于中文内容与系统原生体验场景。"
+    "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。"
   },
   "font-weight.emphasize": {
     "$type": "fontWeight",

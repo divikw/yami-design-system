@@ -1,4 +1,9 @@
-# Billboard
+# Floating Bars / 活动快捷浮动栏
+
+Public React export: `Billboard`.
+
+Section padding is 48px on all sides from 1024px, and 16px on all sides below
+1024px. Artwork remains centered with a maximum width of 1440px.
 
 A full-bleed promotional band whose entire content is one image.
 

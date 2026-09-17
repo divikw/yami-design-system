@@ -12,6 +12,7 @@
 }
 
 .container {
+  container: social-gallery / inline-size;
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -56,30 +57,32 @@
   display: none;
 }
 
-/* Desktop shows a whole number of cards per view — 4 from 1024, 5 from 1280,
- * 6 from 1440 — so a row never ends on a sliced card. The width follows from
- * the count rather than the other way round: a 240px floor used to win below
- * ~1520 and left the last card cut off mid-view. */
+/* Desktop columns follow the available rail width, including embedded Docs.
+ * Narrow containers retain at least 180px per card; full-width desktop keeps
+ * the existing 4/5/6-column rhythm after the 96px section padding. */
 .item {
   min-width: 0;
-  flex: 0 0 calc((100% - 3 * var(--space-200)) / 4);
+  flex: 0 0 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
 
 @media (min-width: 1024px) {
   .item { scroll-snap-stop: normal; }
-}
-
-@media (min-width: 1280px) {
-  .item {
-    flex-basis: calc((100% - 4 * var(--space-200)) / 5);
+  @container social-gallery (min-width: 376px) {
+    .item { flex-basis: calc((100% - var(--space-200)) / 2); }
   }
-}
-
-@media (min-width: 1440px) {
-  .item {
-    flex-basis: calc((100% - 5 * var(--space-200)) / 6);
+  @container social-gallery (min-width: 572px) {
+    .item { flex-basis: calc((100% - 2 * var(--space-200)) / 3); }
+  }
+  @container social-gallery (min-width: 768px) {
+    .item { flex-basis: calc((100% - 3 * var(--space-200)) / 4); }
+  }
+  @container social-gallery (min-width: 1184px) {
+    .item { flex-basis: calc((100% - 4 * var(--space-200)) / 5); }
+  }
+  @container social-gallery (min-width: 1344px) {
+    .item { flex-basis: calc((100% - 5 * var(--space-200)) / 6); }
   }
 }
 

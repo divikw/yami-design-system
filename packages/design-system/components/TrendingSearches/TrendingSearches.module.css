@@ -206,8 +206,8 @@
   margin: 0;
   border-radius: var(--radius-component-default);
   background: var(--badge-bg-secondary-purple);
-  padding: 6px var(--space-100);
-  font-size: var(--font-size-body-md);
+  padding: var(--space-050) var(--space-100);
+  font-size: var(--font-size-caption-sm);
   line-height: var(--line-height-body-md);
 }
 
@@ -446,6 +446,7 @@
 
   .tagline {
     gap: var(--space-100);
+    font-size: var(--font-size-body-md);
     border-radius: 0;
     background: none;
     padding: 0;
@@ -509,5 +510,45 @@
 @media (min-width: 1680px) {
   .item {
     flex-basis: calc((100% - var(--space-600)) / 4);
+  }
+}
+
+.railFrame {
+  display: contents;
+}
+
+.root[data-heading-align="center"] .railFrame {
+  display: block;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+}
+
+.edgeNavigation {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.edgeNavigation > button {
+  position: absolute;
+  top: 50%;
+  pointer-events: auto;
+}
+
+.edgeNavigation > button[data-direction="left"] {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.edgeNavigation > button[data-direction="right"] {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+@media (max-width: 1023px) {
+  .edgeNavigation {
+    display: none;
   }
 }

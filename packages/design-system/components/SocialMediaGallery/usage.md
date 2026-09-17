@@ -1,41 +1,27 @@
 # SocialMediaGallery
 
-Use `SocialMediaGallery` for a horizontally paged collection of social video
-posters. Each entry is rendered by the exported `SocialVideoCard` child
-component and supports exactly three footer treatments: no products renders the
-video description, one product renders its square image and title, and multiple
-products render three 56px square image slots plus an optional 56px-high
-overflow count that fills the remaining width. The count represents every
-product not rendered in those three slots. The footer uses the default gray surface while
-product image slots remain white.
+响应式社交视频列表，每项使用 SocialVideoCard 展示封面、账号信息和关联内容。Storybook 提供 PC、Mobile 两个预览。
 
-```tsx
-<SocialMediaGallery
-  title="Real People, Real Reviews"
-  mobileTitle="Real People, Real Reviews"
-  cards={cards}
-  viewAllHref="/social"
-/>
-```
+## 底部内容
 
-## Responsive contract
+- 无商品：显示视频文案。
+- 单商品：显示 56px 正方形商品图片和标题。
+- 多商品：卡片宽度小于 228px 时显示两张缩略图，否则显示三张；其余商品合并为数量提示。商品图片为白底，底部区域使用灰底。
 
-- At 1024px and above, the gallery has a subtle top divider, 48px inline and
-  32px block padding, and six equal cards in the viewport. Each card crops a
-  9:16 source into a 3:4 media area and uses a 72px footer.
-- Below 1024px, the gallery becomes a rounded mobile surface with 240px cards
-  in a native horizontal rail. Each card uses a 240×320 media area.
-- PC and mobile both support cards with or without product images. Omit
-  `products` for a text-only footer; pass one product for a 56px image-and-title
-  footer, or multiple products for 56px thumbnails and an optional more count.
+## 响应式规则
 
-Use a concise `posterAlt`, stable IDs, real destinations, and localized labels.
-The image is the default video poster. Set `videoSrc` on a card for muted,
-looping inline autoplay without native controls, preserving the poster layout.
-The optional `href` remains the destination for opening the full video. Pass `username={null}` when the source does not identify a creator to omit
-the identity overlay. Use `headingAlign="center"` and `description` for a centered
-campaign heading with supporting copy. The default remains start-aligned.
+1024px 起使用 PC 布局，模块上下内边距 32px，左右 48px。列数按实际列表容器宽度决定：376px 起两列、572px 起三列、768px 起四列、1184px 起五列、1344px 起六列；更窄时为一列。完整 PC 页面保持原有四至六列节奏，嵌入 Docs 等较窄容器时自动减少列数，避免挤压商品区。
 
-With `headingAlign="center"`, paging controls sit at the vertical center of the content rail, one on each side. Controls are hidden when all items fit; on mobile they are hidden in favor of touch scrolling.
+低于 1024px 使用移动端圆角面板，卡片宽 240px，媒体区域为 240×320px，支持原生横向滚动。两端媒体比例均为 3:4，底部高度为 72px。
 
-Desktop dividers use `dividerPosition="top" | "bottom" | "none"` and `dividerVariant="gray" | "black"`, matching ProductList. Defaults are top/gray. The inset mobile card omits dividers.
+## 标题与导航
+
+标题默认左对齐。PC 设置 `headingAlign="center"` 后标题居中，翻页按钮位于内容两侧；移动端卡片标题始终左对齐。`description` 提供辅助说明，`viewAllHref` 提供查看全部入口。内容未溢出时隐藏翻页按钮，移动端使用触摸滚动。
+
+## 分割线
+
+PC 的 `dividerPosition` 支持 `top`、`bottom`、`none`，`dividerVariant` 支持 `gray`（1px）与 `black`（2px），默认 top/gray。移动端圆角面板不显示分割线。
+
+## 视频与无障碍
+
+提供有意义的 `posterAlt`、稳定的 ID、真实跳转地址及本地化标签。默认展示视频封面，设置 `videoSrc` 后在媒体区域静音循环自动播放；`href` 可链接到完整视频。来源未提供作者时传入 `username={null}`，隐藏账号叠加层。

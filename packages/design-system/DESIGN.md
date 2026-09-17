@@ -17,7 +17,8 @@ brand:
 typography:
   brand: "GT Walsheim"
   cn_ios: "PingFang SC"
-  cn_android: "Noto Sans SC"
+  cn_android: "system-ui"
+  cn_windows: "Microsoft YaHei"
   serif_en: "Source Serif 4 Variable"
   serif_cn: "Noto Serif SC"
   weights: [400, 500, 600] # normal 400; emphasis EN 500 / CN 600; serif 600 preserved
@@ -45,7 +46,7 @@ tokens_source: ./tokens.css
 
 **Surface:** web · **Category:** E-Commerce — Chinese-American Asian grocery, U.S. market · **Voice:** bilingual CN + EN, CN-primary · **Mode:** Light + Dark
 
-In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with near-black ink. In Dark, page and component surfaces use neutral-950/900 with light reading colors. The operational red ramp carries action, promotion, and error semantics in both themes; brand red (`#FF0000`) remains Logo-only. **No box-shadow growth on hover.** **No emoji in product UI.** Numerals — every price, every count, every SKU — always render in **GT Walsheim**; CJK body text is **PingFang SC** on iOS / web and **Noto Sans SC** on Android, with embedded digits and Latin characters staying in GT Walsheim. The rhythm is dense but never noisy: an 8px base grid, five semantic radius slots (`4 / 8 / 8 / 12 / 9999`) covering every container, and a hard cap of **one emphasis button per screen** keeping conversion priority unambiguous.
+In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with near-black ink. In Dark, page and component surfaces use neutral-950/900 with light reading colors. The operational red ramp carries action, promotion, and error semantics in both themes; brand red (`#FF0000`) remains Logo-only. **No box-shadow growth on hover.** **No emoji in product UI.** Numerals — every price, every count, every SKU — always render in **GT Walsheim**; CJK body text is native system fonts: **PingFang SC** on Apple platforms, **Microsoft YaHei** on Windows, and the system sans-serif fallback on Android, with embedded digits and Latin characters staying in GT Walsheim. The rhythm is dense but never noisy: an 8px base grid, five semantic radius slots (`4 / 8 / 8 / 12 / 9999`) covering every container, and a hard cap of **one emphasis button per screen** keeping conversion priority unambiguous.
 
 > **Two-file projection model**: this file (`DESIGN.md`) is the comprehensive spec + rules SSOT. For a 30-second brand entry (designers / PMs / stakeholders), read [`DESIGN.compact.md`](./DESIGN.compact.md) instead. Repository CI validates the migrated sources with `pnpm test`, `pnpm check:generated`, and `pnpm check:boundaries`.
 
@@ -140,9 +141,9 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 
 | Token                   | Value                          | Use                                                                    |
 | ----------------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| `--font-family-ios`     | `GT Walsheim` + `Noto Sans SC` | Brand Latin, numerals, prices, and CN fallback for iOS / web surfaces. |
-| `--font-family-android` | `GT Walsheim` + `Noto Sans SC` | Android typography stack from Figma.                                   |
-| `--font-family-win`     | `GT Walsheim` + `Noto Sans SC` | Windows typography stack from Figma.                                   |
+| `--font-family-ios`     | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Brand Latin, numerals, prices, and CN fallback for iOS / web surfaces. |
+| `--font-family-android` | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Shared native fallback stack; legacy platform name.                                   |
+| `--font-family-win`     | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Shared native fallback stack; legacy platform name.                                   |
 | `--font-family-serif`   | `Source Serif 4 Variable` + `Noto Serif SC` | Approved editorial display and heading variants only; Latin uses optical sizing; never body or functional text. |
 
 ### Weights
@@ -260,7 +261,8 @@ Figma currently does not provide a YAMI elevation token collection. Components m
 | `--breakpoints-tablet`     | `768px`  | Reserved — no current `@media` emissions                               |
 | `--breakpoints-desktop`    | `1024px` | **Layout overrides apply.** Page margins jump to 48px.                 |
 | `--breakpoints-desktop-lg` | `1440px` | Desktop-LG layout mode; typography remains aligned with Desktop.      |
-| `--breakpoints-desktop-xl` | `1920px` | Reserved                                                               |
+| `--breakpoints-desktop-wide` | `1680px` | Wide desktop layout breakpoint; product rails show seven cards. Typography remains aligned with Desktop. |
+| `--breakpoints-desktop-xl` | `1920px` | Extra-wide desktop layout breakpoint; product rails show eight cards. |
 
 Storybook validates mobile layouts at 360px (supported floor), 375px (primary
 design target), and 402px (supplemental Figma target). These are verification
@@ -388,7 +390,7 @@ YAMI's current inventory is generated in [`generated/catalog.json`](./generated/
 | **States**              | active · inactive · disabled · focus-visible · skeleton                                                 |
 | **Responsive behavior** | Filled Primary Style B and Tertiary selection surfaces are 32px below `1024px` and 36px from the shared Desktop breakpoint. Secondary keeps its underline treatment. |
 | **Typography**          | Primary Style A uses `heading-md` on mobile and `body-xl` on WEB; compact tabs use `body-md`.           |
-| **Tap target**          | Tertiary keeps a 48px trigger/hit target; its centered pill visual is 32px on Mobile/Tablet and 36px on Desktop. (rule `tap-target`) |
+| **Tap target**          | Tertiary visual, layout, and hit-target heights match: 32px on Mobile/Tablet and 36px on Desktop. No invisible extension overlaps adjacent controls. |
 | **Focus**               | 2px `--border-focus` outline; inverse uses `--border-focus-inverse`.                                    |
 | **ARIA**                | Compound `tablist` / `tab` / `tabpanel`; arrow keys, Home/End, controlled and uncontrolled state.       |
 
@@ -530,12 +532,14 @@ Responsive curated-review rail that composes ReviewCard children with the shared
 
 ### Billboard — `components/Billboard/` _(composite)_
 
+Display name: **Floating Bars / 活动快捷浮动栏**.
+
 Full-bleed promotional band whose entire content is one campaign image.
 
 | Axis | Contract |
 | --- | --- |
 | **Composition** | One link wraps one `picture`. There is no text layer: the offer, its styling and its call to action are drawn into the artwork, which is what lets campaign teams ship a finished image instead of a copy deck. |
-| **Geometry** | The band spans the page and its artwork stops at 1440px behind the standard 48px gutter — narrower than the page's 1920px content box, because one strip of artwork stretched edge to edge reads as a banner ad. Below 1024px the band becomes one of the page's cards, taking `--layout-page-margin-card` and `--radius-surface-default` like ProductList and ShortcutRail. |
+| **Geometry** | The band spans the page with 48px padding on all sides from 1024px (`--space-600`) and 16px below 1024px (`--space-200`). Artwork is centered with a 1440px maximum width and `--radius-surface-default` corners. |
 | **Responsive behavior** | `image.mobile` swaps artwork below 1024px, for campaigns whose desktop lettering is unreadable at phone widths. Each artwork carries its intrinsic `width`/`height`, which reserve the band's height before it loads — the band has nothing else to establish a ratio from. |
 | **Structure** | A labelled region wrapping a single anchor, `label` naming both. Naming only the region leaves the link nameless: a link takes its name from its content, and the content is artwork whose `alt` is empty because it would only repeat that label. |
 
@@ -626,7 +630,7 @@ Responsive social video discovery rail for homepage and editorial surfaces.
 | Axis | Contract |
 | --- | --- |
 | **Composition** | The gallery delegates every entry to the exported `SocialVideoCard` child component. Cards support pure-video, single-product, and multi-product variants on both PC and mobile. |
-| **PC geometry** | The section uses a 1px `--divider-default` top rule, 48px inline and 32px block padding, and six equal cards per viewport. Each card crops a 9:16 source into a 3:4 media area and adds a 72px footer. |
+| **PC geometry** | The section uses a 1px `--divider-default` top rule, 48px inline and 32px block padding, and one to six equal cards based on the available rail container width (2 at 376px, 3 at 572px, 4 at 768px, 5 at 1184px, 6 at 1344px). Each card crops a 9:16 source into a 3:4 media area and adds a 72px footer. |
 | **Mobile geometry** | The section becomes a rounded surface. Cards are fixed at 240px in a native horizontal rail; media is 240 × 320 and the footer is 68px. |
 | **Content** | Creator identity and captions are caller-provided. One product renders image plus copy, multiple products render image tiles and an optional more count, and omission renders the caption in a text-only footer. |
 | **Structure** | The visible heading labels a semantic list of article cards. Video, product, view-all, and paging destinations remain independent controls; desktop paging composes shared rail Buttons. |
@@ -966,9 +970,9 @@ Rating star:        #FA8005                (--color-amber-500)
   --overlay-scrim: var(--color-black-700);
 
   /* === Typography families === */
-  --font-family-ios: "GT Walsheim", "Noto Sans SC", sans-serif;
-  --font-family-android: "GT Walsheim", "Noto Sans SC", sans-serif;
-  --font-family-win: "GT Walsheim", "Noto Sans SC", sans-serif;
+  --font-family-ios: "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-family-android: "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-family-win: "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-weight-normal: 400;
   --font-weight-emphasize: 500;
 
@@ -1043,11 +1047,11 @@ Rating star:        #FA8005                (--color-amber-500)
 
   /* Font families — full token names */
   --font-family-ios:
-    "GT Walsheim", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+    "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-family-android:
-    "GT Walsheim", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+    "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   --font-family-win:
-    "GT Walsheim", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+    "GT Walsheim", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 
   /* Type scale */
   --font-size-display-xl: 32px;

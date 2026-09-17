@@ -23,53 +23,55 @@ export type ProductCardPresentation = "rich" | "minimal" | "compact";
 export type ProductCardSurface = "card" | "plain";
 
 interface ProductCardBaseProps {
-  /** Visual anatomy. rich preserves the full card, minimal is media-only, compact is a horizontal list row. */
+  /** 展示形态：rich 完整卡片，minimal 图片为主，compact 横向商品行。 */
   presentation?: ProductCardPresentation;
-  /** Outer spacing context. Plain is the default; card adds 2px padding over a visual background. */
+  /** 外观：plain 默认无外部内边距，card 在背景上保留 2px 内边距。 */
   surface?: ProductCardSurface;
-  /** Product title. Clamped to 2 lines with ellipsis. */
+  /** 商品标题，最多显示两行，超出省略。 */
   title: ReactNode;
-  /** Current selling price. Uses emphasis color only when priceOriginal is present. */
+  /** 当前售价；存在原价时使用强调色。 */
   priceCurrent: ReactNode;
-  /** Original price for strike-through. Omit when no discount. */
+  /** 划线原价，无折扣时省略。 */
   priceOriginal?: ReactNode;
-  /** Unit or bundle price, including pack information when relevant. */
+  /** 单位或组合价格，可包含包装规格。 */
   unitPrice?: ReactNode;
-  /** Ranking label such as “#1 Most in Cart Masks”. */
+  /** 排行榜文案，例如“面膜加购榜第 1 名”。 */
   ranking?: ReactNode;
-  /** Star rating (0-5). Omit to hide rating metadata. */
+  /** 评分，范围 0–5；省略时隐藏。 */
   rating?: number;
-  /** Rating count (e.g. "1,888"). */
+  /** 评价数量，例如“1,888”。 */
   ratingCount?: ReactNode;
-  /** Sold count shown after rating metadata. */
+  /** 评分后方的销量文案。 */
   soldCount?: ReactNode;
-  /** Campaign and loyalty promotion rows below pricing. */
+  /** 价格下方的活动或会员优惠信息。 */
   promotions?: ProductCardPromotion[];
-  /** Countdown copy such as “Ends in 2d 16:28:09”. */
+  /** 活动倒计时文案。 */
   countdown?: ReactNode;
-  /** Product-image badges. Limited to sale, low-price, discount, new, hot, exclusive, and choice; max 2 are rendered. */
+  /** 图片徽标，最多显示两个；支持 sale、low-price、discount、new、hot、exclusive、choice。 */
   badges?: ProductBadge[];
-  /** Callback for quick add. Compact rows place the action beside price; other presentations overlay media. */
+  /** 加购回调；compact 显示在价格旁，其他形态显示在图片上。 */
   onAddToCart?: MouseEventHandler<HTMLButtonElement>;
-  /** Accessible name for the quick-add action. */
+  /** 加购按钮的无障碍名称。 */
   addButtonAriaLabel?: string;
-  /** Product destination shared by the media and title links. */
+  /** 是否禁用加购按钮。 */
+  addButtonDisabled?: boolean;
+  /** 商品图片与标题共用的跳转地址。 */
   href: string;
 }
 
 type ProductCardImageProps =
   | {
-      /** Product image URL. */
+      /** 商品图片地址或响应式图片资源。 */
       image: ImageSource;
-      /** Accessible product image description. Required whenever image is provided. */
+      /** 商品图片的替代文本，提供图片时必填。 */
       imageAlt: string;
-      /** Native image loading strategy. Defaults to lazy; use eager for above-fold cards. */
+      /** 图片加载时机，默认 lazy；首屏图片可用 eager。 */
       imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
-      /** Native fetch priority. Use high only for an above-fold LCP candidate. */
+      /** 图片请求优先级，仅首屏关键图片使用 high。 */
       imageFetchPriority?: ImgHTMLAttributes<HTMLImageElement>["fetchPriority"];
     }
   | {
-      /** Omit image to render the neutral placeholder. */
+      /** 省略图片时显示中性占位图。 */
       image?: undefined;
       imageAlt?: never;
       imageLoading?: never;
@@ -78,9 +80,9 @@ type ProductCardImageProps =
 
 type ProductCardBrandProps =
   | {
-      /** Brand name above the title. */
+      /** 标题上方的品牌名称。 */
       brand: ReactNode;
-      /** Brand destination used by the trailing-arrow link. */
+      /** 品牌链接的跳转地址。 */
       brandHref: string;
     }
   | {

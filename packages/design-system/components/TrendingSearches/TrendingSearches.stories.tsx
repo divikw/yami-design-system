@@ -12,8 +12,24 @@ function localeFromGlobals(value: unknown): TrendingSearchesLocale {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Trending Searches",
+  id: "yami-components-commerce-trending-searches",
+  title: "YAMI/Modules/Commerce/Trending Searches",
   component: TrendingSearches,
+  argTypes: {
+    dividerPosition: { description: "分割线位置：top 顶部、bottom 底部、none 不显示；仅 PC 生效。" },
+    dividerVariant: { description: "分割线样式：gray 为 1px 灰色分割线，black 为 2px 强调分割线。" },
+    title: { description: "模块标题。" },
+    headingAlign: { description: "标题对齐方式：start 左对齐，center 居中；PC 居中时翻页按钮显示在内容区两侧。", options: ["start", "center"], control: { type: "radio" } },
+    mobileTitle: { description: "小于 1024px 时显示的移动端标题；未设置时使用 title。" },
+    keywords: { description: "按排名排列的搜索词及关联商品，包含搜索链接、推荐说明和移动端缩略图；PC 每个搜索词展示前两个商品，移动端可横向滚动查看全部商品。" },
+    seeAllLabel: { description: "PC 搜索词卡片的“查看全部”链接文案。" },
+    previousLabel: { description: "PC 上一页按钮的无障碍名称。" },
+    nextLabel: { description: "PC 下一页按钮的无障碍名称。" },
+    expandLabel: { description: "根据搜索词生成移动端展开按钮的无障碍名称。" },
+    defaultExpandedId: { description: "移动端默认展开的搜索词 ID；未设置时展开排名第一项，各项可独立展开和收起。" },
+    onAddToCart: { description: "点击商品加购按钮时的回调，参数为商品 ID。" },
+    imageLoadingStrategy: { description: "商品图片加载策略：native 使用原生懒加载，windowed 根据可视窗口加载。" },
+  },
   decorators: [
     (Story) => (
       <div
@@ -29,7 +45,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The terms shoppers are searching for, each with the results behind it. The two breakpoints are different layouts over the same data: desktop is a rail of keyword cards showing every term's leading two results, mobile is a ranked disclosure list where each term independently opens onto a scrolling rail and a search CTA.",
+          "**稳定版**：PC 和 Mobile 已完成评审。\n\n热门搜索模块：PC 使用横向搜索词卡片，每项展示前两个关联商品；Mobile 使用排名折叠列表，各项可独立展开，横向浏览关联商品并进入搜索结果。",
       },
       // Rendered in its own frame, like BrandProductRail and Footer. Inline,
       // the component sits in the docs document and its media queries read the
@@ -47,9 +63,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
-  render: (_args, { globals }) => (
+  tags: ["!dev", "!autodocs"],
+  render: (args, { globals }) => (
     <TrendingSearches
       {...createTrendingSearchesProps(localeFromGlobals(globals.locale))}
+      headingAlign={args.headingAlign}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -297,6 +315,13 @@ export const Showcase: Story = {
   },
 };
 
+export const Pc: Story = {
+  name: "PC",
+  render: Showcase.render,
+  play: Showcase.play,
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+};
+
 export const MobileAccordion: Story = {
   name: "Mobile",
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
@@ -365,14 +390,15 @@ export const MobileAccordion: Story = {
     if (!mobileTagline) throw new Error("Mobile tagline did not render");
     const mobileTaglineStyle = getComputedStyle(mobileTagline);
     if (
-      mobileTaglineStyle.paddingTop !== "6px" ||
+      mobileTaglineStyle.fontSize !== "12px" ||
+      mobileTaglineStyle.paddingTop !== "4px" ||
       mobileTaglineStyle.paddingRight !== "8px" ||
-      mobileTaglineStyle.paddingBottom !== "6px" ||
+      mobileTaglineStyle.paddingBottom !== "4px" ||
       mobileTaglineStyle.paddingLeft !== "8px" ||
       mobileTaglineStyle.columnGap !== "12px"
     ) {
       throw new Error(
-        "Mobile tagline must use 6px vertical padding, 8px inline padding, and a 12px column gap",
+        "Mobile tagline must use 12px text, 4px vertical padding, 8px inline padding, and a 12px column gap",
       );
     }
     if (getComputedStyle(secondPanel).display !== "none") {
@@ -550,5 +576,15 @@ export const MobileAccordion: Story = {
     ) {
       throw new Error("Only the row clicked a second time should hide");
     }
+
+    // Restore the preview after the interaction check without changing real keyboard focus styles.
+    toggles[1].blur();
   },
+};
+
+export const Centered: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: Showcase.render,
+  args: { headingAlign: "center" },
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
 };

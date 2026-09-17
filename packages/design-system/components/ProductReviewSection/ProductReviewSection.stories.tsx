@@ -126,14 +126,16 @@ const baseArgs: ProductReviewSectionProps = {
 };
 
 const meta = {
-  title: "YAMI/Components/Commerce/Product Review Section",
+  id: "yami-components-commerce-product-review-section",
+  title: "YAMI/Modules/Commerce/Product Review Section/Draft",
+  tags: ["draft"],
   component: ProductReviewSection,
   parameters: {
     layout: "fullscreen",
     docs: {
       description: {
         component:
-          "A data-driven PDP review section with rating distribution, review filters, sorting, responsive review cards, and progressive disclosure.",
+          "**Draft · 草稿**：尚未定稿或完成 review。商品详情页评价区域，包含评分分布、筛选、排序和响应式评价卡片。",
       },
     },
   },

@@ -11,7 +11,9 @@ function localeFromGlobals(value: unknown): SearchResultsLocale {
 }
 
 const meta = {
-  title: "YAMI/Pages/Search Results",
+  id: "yami-pages-search-results",
+  title: "YAMI/Pages/Search Results/Draft",
+  tags: ["draft"],
   component: SearchResultsPage,
   parameters: {
     layout: "fullscreen",
@@ -19,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Responsive YAMI search-results template with controlled header search, quick filters, sorting, a waterfall product grid, and an empty state.",
+          "**Draft · 草稿**：尚未定稿或完成 review。\n\nResponsive YAMI search-results template with controlled header search, quick filters, sorting, a waterfall product grid, and an empty state.",
       },
       story: { inline: false, height: "1600px" },
     },

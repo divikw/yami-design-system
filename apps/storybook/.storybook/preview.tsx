@@ -15,6 +15,7 @@ const YAMI_VIEWPORTS = {
   yamiDesktop: { name: "YAMI Desktop (1024)", styles: { width: "1024px", height: "768px" }, type: "desktop" as const },
   yamiDesktopMd: { name: "YAMI Desktop-md (1280)", styles: { width: "1280px", height: "800px" }, type: "desktop" as const },
   yamiDesktopLg: { name: "YAMI Desktop-lg (1440)", styles: { width: "1440px", height: "900px" }, type: "desktop" as const },
+  yamiDesktopWide: { name: "YAMI Desktop-wide (1680)", styles: { width: "1680px", height: "1050px" }, type: "desktop" as const },
   yamiDesktopXl: { name: "YAMI Desktop-xl (1920)", styles: { width: "1920px", height: "1080px" }, type: "desktop" as const }
 };
 
@@ -49,6 +50,7 @@ const preview: Preview = {
             "Primitives",
             "Assets",
             "Components",
+            "Modules",
             "Pages",
             [
               "Ecommerce Home",

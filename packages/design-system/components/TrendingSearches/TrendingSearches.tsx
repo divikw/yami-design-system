@@ -70,6 +70,7 @@ function ChevronIcon({ direction }: { direction: "down" | "right" }) {
  */
 export function TrendingSearches({
   title,
+  headingAlign = "start",
   mobileTitle,
   keywords,
   seeAllLabel = "See all",
@@ -130,19 +131,22 @@ export function TrendingSearches({
       {...rest}
       className={cx(styles.root, className)}
       data-slot="trending-searches"
+      data-heading-align={headingAlign}
       data-divider-position={dividerPosition}
       data-divider-variant={dividerVariant}
       aria-labelledby={titleId}
     >
       <div className={styles.container} data-slot="trending-searches-container">
         <SectionHeading
+            align={headingAlign}
+            mobileAlign={"start"}
           id={titleId}
           title={title}
           mobileTitle={mobileTitle ?? title}
           slot="trending-searches"
           className={styles.heading}
           actionsClassName={styles.actions}
-          actions={
+          actions={headingAlign === "center" ? undefined :
             <RailNavigation
               className={styles.railActions}
               previousLabel={previousLabel}
@@ -156,6 +160,7 @@ export function TrendingSearches({
           }
         />
 
+        <div className={styles.railFrame}>
         <ImageLoadingWindow strategy={imageLoadingStrategy} rootRef={railRef}>
           <ul
             ref={railRef}
@@ -278,6 +283,19 @@ export function TrendingSearches({
           })}
           </ul>
         </ImageLoadingWindow>
+          {headingAlign === "center" && !(edges.atStart && edges.atEnd) && (
+            <RailNavigation
+              className={styles.edgeNavigation}
+              buttonClassName={styles.railButton}
+              previousLabel={previousLabel}
+              nextLabel={nextLabel}
+              previousDisabled={edges.atStart}
+              nextDisabled={edges.atEnd}
+              onPrevious={() => scrollRail(-1)}
+              onNext={() => scrollRail(1)}
+            />
+          )}
+        </div>
       </div>
     </section>
   );

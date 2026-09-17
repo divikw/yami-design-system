@@ -21,7 +21,6 @@ export function ReviewList({
   title,
   description,
   headingAlign = "start",
-  cardHeight = "content",
   titleFontFamily = "sans",
   mobileTitle,
   reviews,
@@ -52,7 +51,6 @@ export function ReviewList({
       className={cx(styles.root, className)}
       data-slot="review-list"
       data-heading-align={headingAlign}
-      data-card-height={cardHeight}
       data-mobile-surface={mobileSurface}
       data-divider-position={dividerPosition}
       data-divider-variant={dividerVariant}
@@ -61,6 +59,7 @@ export function ReviewList({
       <div className={styles.container} data-slot="review-list-container">
         <SectionHeading
           align={headingAlign}
+          mobileAlign={mobileSurface === "card" ? "start" : headingAlign}
           id={titleId}
           title={title}
           description={description}

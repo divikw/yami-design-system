@@ -36,8 +36,12 @@ const usageByComponent = new Map(
 );
 
 function getUsageLoaderForTitle(title: string) {
-  const componentName = title.split("/").at(-1) ?? title;
-  return usageByComponent.get(normalizeComponentName(componentName));
+  const segments = title.split("/");
+  const componentName = segments.at(-1) === "Draft"
+    ? segments.at(-2) ?? title
+    : segments.at(-1) ?? title;
+  const normalizedName = normalizeComponentName(componentName);
+  return usageByComponent.get(normalizedName === "floatingbars" ? "billboard" : normalizedName);
 }
 
 export async function loadUsageForTitle(title: string) {

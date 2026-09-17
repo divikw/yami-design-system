@@ -4,7 +4,7 @@
   "category": "composite",
   "status": "experimental",
   "version": "0.8.1",
-  "description": "Responsive theme storytelling hero with a two-column desktop composition, a localized expandable three-line desktop and two-line mobile description, optional size-configurable descriptive Badges, one or two configurable actions and full-bleed mobile artwork.",
+  "description": "响应式主题展示模块，PC 双栏布局，Mobile 使用通栏图片与底部文字，支持可展开说明和关键词标签，默认不显示操作按钮。",
   "figma": {
     "nodeId": "1877:43111",
     "componentKey": null,
@@ -16,72 +16,75 @@
     "ThemeHeroImage",
     "ThemeHeroProps"
   ],
-  "composes": ["Badge", "Button"],
+  "composes": [
+    "Badge",
+    "Button"
+  ],
   "props": {
     "title": {
       "type": "ReactNode",
       "required": true,
-      "description": "Visible theme positioning heading."
+      "description": "主题标题。"
     },
     "description": {
       "type": "ReactNode",
       "required": true,
-      "description": "Selectable supporting theme copy clamped to three lines on desktop and two lines on mobile until expanded."
+      "description": "主题辅助说明，PC 默认最多三行，Mobile 最多两行，超出时可展开。"
     },
     "descriptionExpandLabel": {
       "type": "ReactNode",
       "required": false,
       "default": "More",
-      "description": "Localized plain-text action shown only when the responsive description line limit overflows."
+      "description": "展开描述的本地化文案。"
     },
     "descriptionCollapseLabel": {
       "type": "ReactNode",
       "required": false,
       "default": "Less",
-      "description": "Localized plain-text action used to restore the responsive description line limit."
+      "description": "收起描述的本地化文案。"
     },
     "tags": {
       "type": "readonly string[]",
       "required": false,
-      "description": "Optional short descriptive keywords rendered with the shared non-interactive Badge."
+      "description": "可选的简短关键词，以不可交互的 Badge 展示。"
     },
     "tagSize": {
       "type": "BadgeSize",
       "required": false,
       "default": "sm",
-      "description": "Preferred size for each keyword Badge. Use sm for compact metadata or md for more prominent desktop labels; ThemeHero compacts both to sm geometry below 1024px."
+      "description": "关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。"
     },
     "tagTone": {
       "type": "BadgeTone",
       "required": false,
       "default": "dark",
-      "description": "Filled or outlined polarity for the composed Badges."
+      "description": "标签明暗样式，默认 dark。"
     },
     "image": {
       "type": "ThemeHeroImage",
       "required": true,
-      "description": "Foreground campaign artwork with meaningful alt text and intrinsic dimensions."
+      "description": "主题图片，包含替代文本、原始尺寸及可选裁切焦点。"
     },
     "backgroundImageSrc": {
       "type": "string",
       "required": false,
-      "description": "Alternate decorative source for the blurred full-bleed atmosphere; defaults to image.src."
+      "description": "可选的模糊背景图片，默认使用主题图片。"
     },
     "cta": {
       "type": "ThemeHeroCta",
       "required": false,
-      "description": "Optional primary action rendered with the shared white inverse Button."
+      "description": "可选主操作按钮，默认不显示。"
     },
     "secondaryCta": {
       "type": "ThemeHeroCta",
       "required": false,
-      "description": "Optional lower-emphasis action rendered with the shared transparent inverse Button and a one-pixel outline."
+      "description": "可选次操作按钮，默认不显示。"
     },
     "imageLoading": {
       "type": "\"eager\" | \"lazy\"",
       "required": false,
       "default": "lazy",
-      "description": "Foreground artwork loading strategy."
+      "description": "主题图片加载策略。"
     }
   },
   "rules": {
@@ -175,16 +178,26 @@
     "role": "section with heading, descriptive copy, optional keyword list, image and optional action group",
     "wcagLevel": "AA",
     "tapTargetMin": 44,
-    "keyboardNav": ["tab", "enter", "space"],
+    "keyboardNav": [
+      "tab",
+      "enter",
+      "space"
+    ],
     "ariaPattern": "decorative atmosphere hidden from assistive technology; meaningful foreground image alt; native heading and buttons with optional aria-controls relationships",
     "structure": "The visible h2 introduces selectable supporting copy, an optional list of non-interactive keyword Badges and up to two actions. The blurred duplicate is decorative; the foreground image is semantic.",
     "interaction": "Both optional CTAs compose the shared Button and inherit its keyboard, disabled and focus behavior."
   },
   "dependencies": {
-    "runtime": ["react", "Badge", "Button"],
+    "runtime": [
+      "react",
+      "Badge",
+      "Button"
+    ],
     "peer": [],
     "devOnly": []
   },
   "usageRef": "./usage.md",
-  "examples": ["./examples.tsx#ThemeHeroExample"]
+  "examples": [
+    "./examples.tsx#ThemeHeroExample"
+  ]
 }
