@@ -93,6 +93,8 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(disclosure).toHaveAttribute("aria-expanded", "true");
   }
 
+  const root = canvasElement.ownerDocument.documentElement;
+  const originalOverflow = root.style.overflow;
   {
     const trigger = canvas.getByRole("button", { name: fixture.copy.openImagePreview });
     await userEvent.click(trigger);
@@ -101,11 +103,10 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(within(preview).getByRole("img")).toHaveAttribute("alt", fixture.images[0].alt);
     await userEvent.click(within(preview).getByRole("button", { name: fixture.copy.closeImagePreview }));
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(root.style.overflow).toBe(originalOverflow));
     await expect(trigger).toHaveFocus();
   }
   const nutritionTrigger = canvas.getByRole("button", { name: fixture.nutrition!.title, exact: true });
-  const root = canvasElement.ownerDocument.documentElement;
-  const originalOverflow = root.style.overflow;
   let sheetScrollTop = 0;
   if (mobile) {
     await expect(canvas.queryByRole("table", { name: fixture.nutrition!.title })).toBeNull();
