@@ -471,6 +471,8 @@ export const ScrollableSelection: Story = {
       throw new Error("Scrollable Tabs test fixture did not render")
     }
 
+    await canvasElement.ownerDocument.fonts.ready
+
     const initialListRect = list.getBoundingClientRect()
     if (lastTab.getBoundingClientRect().right <= initialListRect.right) {
       throw new Error("Scrollable Tabs test fixture must begin clipped")

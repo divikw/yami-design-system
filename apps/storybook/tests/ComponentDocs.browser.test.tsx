@@ -21,6 +21,12 @@ describe("component docs usage content", () => {
     );
   });
 
+  test("resolves renamed modules and draft groups to their source usage guides", async () => {
+    expect(await loadUsageForTitle("YAMI/Modules/Commerce/Floating Bars")).toContain("# ");
+    expect(await loadUsageForTitle("YAMI/Modules/Commerce/Product Review Section/Draft")).toContain("# ProductReviewSection");
+    expect(await loadUsageForTitle("YAMI/Components/Commerce/Product Media Gallery/Draft")).toContain("# ProductMediaGallery");
+  });
+
   test("demotes the usage title below the component page title", () => {
     expect(formatUsageMarkdown("# Button — Usage\n\n## When to use")).toBe(
       "## Button — Usage\n\n## When to use",

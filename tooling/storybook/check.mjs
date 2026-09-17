@@ -41,6 +41,11 @@ const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const entries = Object.values(index.entries ?? {});
 const docsEntries = entries.filter((entry) => entry.type === "docs");
 const docsComponentNames = new Set(docsEntries.map((entry) => normalizeComponentName(entry.title.split("/").at(-1))));
+for (const component of componentDocs) {
+  if (docsEntries.some((entry) => path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath)) {
+    docsComponentNames.add(normalizeComponentName(component.name));
+  }
+}
 const storySources = new Map(await Promise.all(componentDocs.map(async (component) => [
   normalizeComponentName(component.name),
   await fs.readFile(component.storyPath, "utf8"),
