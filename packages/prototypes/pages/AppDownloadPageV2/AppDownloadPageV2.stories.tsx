@@ -27,6 +27,33 @@ export const Mobile: Story = {
   args: { initialLocale: "ko" },
   globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobileLg", isRotated: false } } : {}) },
 };
+export const StoryBanner: Story = {
+  tags: ["!dev", "!autodocs"],
+  args: { initialLocale: "ko" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const main = canvasElement.querySelector("main")!;
+    const banner = main.querySelector<HTMLElement>('[data-slot="section-banner"]')!;
+    await expect(banner.nextElementSibling).toBe(main.querySelector("#brand-special"));
+    await expect(within(banner).getByRole("heading", { name: "Best Stories & Products" })).toBeVisible();
+    await expect(within(banner).getByText("See what's trending on Yami")).toBeVisible();
+    const cards = banner.querySelectorAll('[data-slot="hero-banner-item"]');
+    await expect(new Set(Array.from(cards, (card) => card.getAttribute("href"))).size).toBe(8);
+    for (const card of cards) {
+      await expect(card.getAttribute("data-hero-banner-content")).toBe("image-text-products");
+      await expect(card.getAttribute("href")).toContain("/en/story/");
+    }
+    await userEvent.click(canvas.getByRole("button", { name: "Switch to English" }));
+    await expect(banner.querySelector('[data-slot="hero-banner-item"]')?.getAttribute("href")).toContain("/en/story/");
+    await expect(within(banner).getByRole("heading", { level: 2 })).toHaveTextContent("Best Stories & Products");
+  },
+};
+
+export const StoryBannerMobile: Story = {
+  ...StoryBanner,
+  tags: ["!dev", "!autodocs"],
+  globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
+};
 export const Interactions: Story = {
   tags: ["!dev"],
   args: { initialLocale: "en" },

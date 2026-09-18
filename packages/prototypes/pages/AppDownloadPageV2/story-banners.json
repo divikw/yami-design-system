@@ -1,0 +1,215 @@
+{
+  "source": "https://yami-app-download.vercel.app/#story-carousel",
+  "title": "Best Stories & Products",
+  "items": [
+    {
+      "id": "card-1",
+      "href": "https://www.yami.com/en/story/pgKy8dGBr?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/98847dffe2bbbf4d219259b340a5a980_0x0.png"
+      },
+      "title": "K-Beauty Hot Pick",
+      "description": "Top trending skincare & makeup",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/2f157220b65390ea69d473d9465af6ce_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/unove-hair-perfume-mist-tender-bloom/1190006331?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/2e0f294143ceefa2c22f989c292c8d0d_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/relief-sun-rice-probiotics-sunscreen-50ml/1023243641?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/ae0098084ab6443469b417144717af5e_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/essential-skin-nuder-cushion-in-fair-light/1023164341?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-2",
+      "href": "https://www.yami.com/en/story/pgMdwAAMe?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/672a42b92f22b51c2c8c59c8b1fb3c90_0x0.png"
+      },
+      "title": "Anua: Activate Your Glow",
+      "description": "Heartleaf soothing & pore care favorites",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/53c27b31bddf648653cb157eabb12387_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/anua-heartleaf-77-soothing-toner-250ml/3022001991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/46599a6d114ea0788382a0f6144fcb2b_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/anua-heartleaf-quercetinol-pore-deep-cleansing-foam-150ml/3022097991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/ca24d59a467a7de30aac56830ca2af50_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/anua-heartleaf-pore-control-cleansing-oil-200ml/3022073991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-3",
+      "href": "https://www.yami.com/en/story/pgqG4Q50r?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/492563a0d79f25aa9708dbd8f12fe873_0x0.jpg"
+      },
+      "title": "BB LAB: Beyond Skincare",
+      "description": "Premium inner beauty collagen supplements",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/810d41157e2eb0290ead6973b6d70e8d_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/bb-lab-low-molecular-collagen-powder-30pcs/1019047781?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/984ab430967feeca9d9d601b34a729fe_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/bb-lab-low-molecular-collagen-powder-30pcs/1019047781?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/1d457ff9ac9d3476ab033c70239fb100_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/bb-lab-glutathione-white-powder-30pcs/3023055991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-4",
+      "href": "https://m.yami.com/en/story/pgadBkaea?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/b3630859564c9a27d9475c25968031fb_0x0.png"
+      },
+      "title": "Travel Light, Glow Right",
+      "description": "Essential sunscreens & travel kits",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/6537035432905cf418bb871bd535cbde_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/skin1004-madagascar-centella-hyalu-cica-water-fit-sun-serum-spf50-50ml/3022037991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/31d60c94075a13434387fe7c68c96660_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/round-lab-birch-juice-moisturizing-sunscreen-spf50-50ml/3022021481?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/0be02cffb530cce0a79b8dcb5f90720b_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/d-alba-piemonte-waterfull-essence-sunscreen-spf50-50ml/3017053591?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-5",
+      "href": "https://www.yami.com/en/story/pgje2r4lO?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/280bb471834a9a1872bb0969ea948848_0x0.jpg"
+      },
+      "title": "PDRN Skin Renewal",
+      "description": "Advanced cellular skin regeneration",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/164b35a9c33cd869832ccb57da73b63a_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/vt-cosmetics-reedle-shot-100-essence-50ml/3022137991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/d9c6dc330c63a473ec75fbb8525697cb_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/vt-cosmetics-pdrn-essence-100-30ml/3022141591?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/a7661b34f50edaac7e95bf6d955dbad3_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/vt-cosmetics-pdrn-reedle-shot-100-essence-50ml/3022143591?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-6",
+      "href": "https://www.yami.com/en/story/pgMdq0d8p?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/2eb7a5ff92900064994948c6dc9a361c_0x0.png"
+      },
+      "title": "Double Cleanse, Double Glow",
+      "description": "Perfect deep cleansing routines",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/3a62043912e0c08161cfeb29bdda0c2b_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/anua-heartleaf-pore-control-cleansing-oil-200ml/3022073991?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/c07b045d30015d3d6ad90491d6c6fdb8_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/manyo-factory-pure-cleansing-oil-200ml/1017013891?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/a2bd9a372edfe8c078468b0f1fe5a3de_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/banila-co-clean-it-zero-cleansing-balm-original-100ml/1017001491?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-7",
+      "href": "https://www.yami.com/en/story/pg4Az663o?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/f5a7fedcfc9cdcf2bf7ae659c396afa6_0x0.jpg"
+      },
+      "title": "Delicious K-Food Treats",
+      "description": "Satisfy your sweet & spicy cravings",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/02a42ab7fff4a2ca2f2d1ac608c53975_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/gilim-honey-butter-almond-250g/1021000141?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/2596b68f85b93a4915796b90bfef6a75_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/cw-chewy-chocolate-chip-cookie-240g/1021003491?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/2fcc81385f5298ea6039f56892031a06_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/orion-kkobuk-chip-sweet-vanilla-flavor-80g/1021013491?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    },
+    {
+      "id": "card-8",
+      "href": "https://www.yami.com/en/story/pgx6b1gVW?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr",
+      "image": {
+        "src": "https://cdn.yamibuy.net/mkpl/3f829a98923b64c1ae2f510dcaa610cb_0x0.jpg"
+      },
+      "title": "Mid Year Sale 랭킹",
+      "description": "Unbelievable savings on K-Beauty & K-Food",
+      "products": [
+        {
+          "src": "https://cdn.yamibuy.net/item/ef4fee2da5f686ab7440fbaaee256ddc_300x300.webp",
+          "alt": "Product thumbnail 1",
+          "href": "https://www.yami.com/us/ko/p/dr-g-red-blemish-clear-soothing-cream-70ml/3022001291?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/1729b341d5272a84236797a828980176_300x300.webp",
+          "alt": "Product thumbnail 2",
+          "href": "https://www.yami.com/us/ko/p/ryo-hair-loss-care-shampoo-for-oily-scalp-400ml/1018001291?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        },
+        {
+          "src": "https://cdn.yamibuy.net/item/2a0dda158310fb73b85809e39945a8d2_300x300.webp",
+          "alt": "Product thumbnail 3",
+          "href": "https://www.yami.com/us/ko/p/vt-cosmetics-cica-daily-soothing-mask-30ea/3022001491?utm_source=webpage&utm_medium=sns&utm_campaign=appdownload_082026_kr"
+        }
+      ]
+    }
+  ],
+  "description": "See what's trending on Yami"
+}

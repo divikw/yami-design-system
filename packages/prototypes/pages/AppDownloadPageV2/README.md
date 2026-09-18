@@ -8,6 +8,8 @@ Visible stories: PC and Mobile under `YAMI/Pages/App Download/V2`, both initiall
 
 Preview: http://localhost:6006/?path=/story/yami-pages-app-download-v2--pc
 
+A centered SectionBanner appears immediately before Why Yami, after the savings calculator. Its eight cards use the source order, artwork, titles, descriptions, product thumbnails, and story destinations captured from https://yami-app-download.vercel.app/#story-carousel in `story-banners.json`. The source keeps card copy and story destinations in English in both locales; the module title and description use the requested English source copy in both locales. Product destinations are retained in the snapshot for reference; the existing SectionBanner interaction remains one story link per card. Component UI, sizing, navigation, and contentMaxWidth are unchanged.
+
 Validation: `pnpm validate`; `pnpm --filter @yami/storybook exec vitest run --project storybook AppDownloadPage`.
 
 V2 adds Social Trends after the calculator, using SocialMediaGallery with a centered heading and the same poster cards as EcommerceHome. The six videos, seven product images, product links, and Korean/English headings come from https://yami-app-download.vercel.app/#sns-trend (captured 2026-09-15). Media and extracted poster frames are bundled in `assets/social/`; source content is recorded in `social-trends.json`. Videos autoplay muted and loop inline in the same card layout. Clicking a video opens its bundled file. The source does not identify creator accounts, so these cards omit the creator overlay.

@@ -7,6 +7,7 @@
   --campaign-header-height: 64px;
 }
 .root, .footerContainer { --campaign-section-padding-block: var(--space-400); }
+.root .storyBanner { max-width: var(--campaign-content-max-width); }
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .root h1, .root h2, .root h3, .root p { margin: 0; }
 .root h1, .root h2, .root h3, .root strong { font-weight: var(--font-weight-emphasize); }

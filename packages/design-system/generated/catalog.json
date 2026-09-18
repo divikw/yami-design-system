@@ -4702,6 +4702,90 @@
       }
     },
     {
+      "id": "SectionBanner",
+      "source": "components/SectionBanner",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "SectionBanner",
+        "category": "composite",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "页面中部的带标题活动横幅，复用 SectionHeading 和 HeroBanner。",
+        "figma": {
+          "notes": "由现有 SectionHeading 和 HeroBanner 组合，无独立 Figma 节点。"
+        },
+        "exports": [
+          "SectionBanner",
+          "SectionBannerProps",
+          "SectionBannerItem"
+        ],
+        "composes": [
+          "HeroBanner"
+        ],
+        "props": {
+          "title": {
+            "type": "ReactNode",
+            "required": true,
+            "description": "整组 Banner 上方的模块标题。"
+          },
+          "items": {
+            "type": "SectionBannerItem[]",
+            "required": true,
+            "description": "仅支持图文商品卡和纯商品卡。"
+          },
+          "autoAdvance": {
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "description": "自动轮播；离开视口时暂停。"
+          },
+          "headingAlign": {
+            "type": "\"start\" | \"center\"",
+            "required": false,
+            "default": "start",
+            "description": "模块标题左对齐或居中，PC、Mobile 均生效。"
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "模块标题的补充描述；居中时位于标题下方。"
+          }
+        },
+        "rules": {
+          "typography": {
+            "ruleId": "type-hierarchy",
+            "note": "复用 SectionHeading 的标题层级。"
+          }
+        },
+        "tokens": [
+          "--space-200",
+          "--space-300",
+          "--space-400",
+          "--space-600",
+          "--surface-primary",
+          "--font-family-ios",
+          "--layout-page-margin-card"
+        ],
+        "accessibility": {
+          "wcagLevel": "AA",
+          "structure": "h2 通过 aria-labelledby 命名 Banner region。",
+          "interaction": "PC 使用左右两侧的轮播按钮，Mobile 横向滑动；继承 HeroBanner 的键盘导航、减少动态效果和离屏暂停行为。"
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "./HeroBanner"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#SectionBannerExample"
+        ]
+      }
+    },
+    {
       "id": "Sheet",
       "source": "components/Sheet",
       "meta": {
