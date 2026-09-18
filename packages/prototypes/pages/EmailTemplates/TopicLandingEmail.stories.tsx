@@ -78,6 +78,7 @@ const meta = {
   title: "YAMI/Pages/Email Templates/Topic Landing Push",
   component: TopicLandingEmail,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopMd" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -90,7 +91,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopMd", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createTopicLandingEmailProps("en"),
   render: (args, { globals }) => (
@@ -106,7 +107,7 @@ type Story = StoryObj<typeof meta>;
 
 export const BrandExample: Story = {
   name: "Brand example",
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const root = canvasElement.querySelector<HTMLElement>(
       '[data-slot="topic-landing-email"]',
     );
@@ -495,5 +496,5 @@ export const BrandExample: Story = {
     if (root.querySelectorAll('[data-slot="topic-landing-email-products"] li').length !== 6) {
       throw new Error("Topic Landing email must show six popular picks");
     }
-  },
+  } : undefined,
 };

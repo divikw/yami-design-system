@@ -6,11 +6,17 @@ export const Showcase = { ...examples.Showcase, tags: ["!dev", "!autodocs"], pla
 
 export const PC = {
   name: "PC",
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
   render: examples.renderPreview,
 };
 
 export const Mobile = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: examples.renderPreview,
 };

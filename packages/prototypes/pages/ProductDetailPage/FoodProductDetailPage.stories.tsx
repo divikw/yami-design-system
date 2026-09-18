@@ -30,11 +30,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = {
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}) },
 };
 
 const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {

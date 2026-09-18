@@ -8,19 +8,21 @@ const meta = {
   component: AppDownloadPage,
   tags: ["!autodocs", "draft"],
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopLg" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: { description: { component: "**Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。" } },
   },
-  globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
+  globals: { theme: "light", ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 } satisfies Meta<typeof AppDownloadPage>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = { args: { initialLocale: "ko" } };
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobileLg" } },
   args: { initialLocale: "ko" },
-  globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobileLg", isRotated: false } } : {}) },
 };
 export const Interactions: Story = {
   tags: ["!dev"],

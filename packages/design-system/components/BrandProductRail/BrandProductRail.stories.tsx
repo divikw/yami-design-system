@@ -593,7 +593,10 @@ async function verifyDesktopResponsiveLayout(context: {
 
 export const Mobile: Story = {
   name: "Mobile",
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: renderResponsiveStory,
 };
 
@@ -692,9 +695,12 @@ export const MobilePlainCoverage: Story = {
 
 export const Pc: Story = {
   name: "PC",
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
   render: renderResponsiveStory,
-  play: verifyDesktopResponsiveLayout,
+  play: import.meta.env.MODE === "test" ? verifyDesktopResponsiveLayout : undefined,
 };
 
 export const Centered: Story = {

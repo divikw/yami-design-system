@@ -561,16 +561,22 @@ export const MobileWithActions: Story = {
 };
 
 export const PC: Story = {
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
-  play: async ({ canvasElement }) => {
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     if (!canvasElement.querySelector('[data-slot="theme-hero"]') ||
         canvasElement.querySelector('[data-slot="theme-hero-actions"]')) {
       throw new Error("Default ThemeHero must render without action buttons");
     }
-  },
+  } : undefined,
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  play: PC.play,
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? PC.play : undefined,
 };

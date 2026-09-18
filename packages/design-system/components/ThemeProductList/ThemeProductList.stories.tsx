@@ -284,12 +284,19 @@ export const Showcase: Story = {
 export const PC: Story = {
   ...Showcase,
   tags: ["dev", "autodocs"],
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  play: Showcase.play,
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
 };
 
 export const MobilePlain: Story = {

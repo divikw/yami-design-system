@@ -168,16 +168,22 @@ export const EnglishArtworkContract: Story = {
 
 export const Pc: Story = {
   name: "PC",
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
   render: Showcase.render,
-  play: Showcase.play,
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
 };
 
 export const MobileCard: Story = {
   name: "Mobile",
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: Showcase.render,
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const band = canvasElement.querySelector<HTMLElement>(
       '[data-slot="billboard"]',
     );
@@ -214,5 +220,5 @@ export const MobileCard: Story = {
         `Mobile billboard reserved ${source.getAttribute("width")}x${source.getAttribute("height")} for artwork that is ${image.naturalWidth}x${image.naturalHeight}`,
       );
     }
-  },
+  } : undefined,
 };

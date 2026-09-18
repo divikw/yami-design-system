@@ -366,11 +366,17 @@ export const Centered: Story = {
 export const Pc: Story = {
   name: "PC",
   render: Showcase.render,
-  play: Showcase.play,
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
 };
 
 export const Mobile: Story = {
   render: Showcase.render,
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
 };
