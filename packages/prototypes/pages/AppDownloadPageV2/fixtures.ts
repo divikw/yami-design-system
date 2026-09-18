@@ -1,4 +1,6 @@
 import reference from "./reference.json";
+import storyBanners from "./story-banners.json";
+import type { SectionBannerItem } from "@yami/design-system";
 
 export type AppDownloadLocale = "ko" | "en";
 export type CampaignProduct = (typeof reference.products)[number];
@@ -21,6 +23,20 @@ export const productHref = (product: CampaignProduct, locale: AppDownloadLocale)
 export const asset = (name: string) => new URL(`../AppDownloadPage/assets/${name}`, import.meta.url).href;
 export const productImage = (product: CampaignProduct) => asset(product.image.split("/").pop()!);
 export const money = (amount: number) => `$${amount.toFixed(2)}`;
+
+export const appDownloadBannerTitle = storyBanners.title;
+export const appDownloadBannerDescription = storyBanners.description;
+
+export function createAppDownloadBanners(): SectionBannerItem[] {
+  return storyBanners.items.map((item) => ({
+    id: item.id,
+    href: item.href,
+    image: { src: item.image.src, alt: item.title },
+    title: item.title,
+    description: item.description,
+    products: item.products.map(({ src, alt }) => ({ src, alt })),
+  }));
+}
 
 /** Reference campaign rules; money is calculated in cents to avoid rounding drift. */
 export function calculateSavings(mode: "welcome" | "app", amount: number, products: CampaignProduct[] = []) {

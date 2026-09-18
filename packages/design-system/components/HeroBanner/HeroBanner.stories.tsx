@@ -789,7 +789,13 @@ export const CounterTracksLeftmostCard: Story = {
 
 export const Pc: Story = {
   name: "PC",
-  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  parameters: {
+    viewport: { defaultViewport: "yamiDesktopLg" },
+    docs: {
+      story: { inline: false, height: "500px" },
+      canvas: { className: storyStyles.docsPc },
+    },
+  },
   globals: import.meta.env.MODE === "test"
     ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
     : {},
@@ -797,7 +803,13 @@ export const Pc: Story = {
 };
 
 export const Mobile: Story = {
-  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  parameters: {
+    viewport: { defaultViewport: "yamiMobile" },
+    docs: {
+      story: { inline: false, height: "384px" },
+      canvas: { className: storyStyles.docsMobile },
+    },
+  },
   globals: import.meta.env.MODE === "test"
     ? { viewport: { value: "yamiMobile", isRotated: false } }
     : {},

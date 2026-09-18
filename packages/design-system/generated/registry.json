@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "8745b5ee262cd89a899ff9826222474c56bfe788a35c6c2f0f7904b7f413007e"
+      "digest": "e2e9510756ad29ebd306e0ce8eff0ad74cda6c50af1a9c06a710a5c8b26cce0f"
     },
     {
       "name": "activity-page-header",
@@ -144,7 +144,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "cfbdedae705fd7feff8cf9f8f4034b6ad78bba2da76fd7caa4f775b90d4e3bbf"
+      "digest": "6677552c03033ab953a7c3c953107fff16f7aaa68556026d0862d8f8909427cd"
     },
     {
       "name": "horizontal-scroll-list",
@@ -217,6 +217,15 @@
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
       "digest": "a1a0a9f97f9593e404e107e70d387cd7c8e57295f6b283b0456c9dfe4b4d8f0d"
+    },
+    {
+      "name": "section-banner",
+      "title": "SectionBanner",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/section-banner.json",
+      "digest": "d0ea24ae03b16cc43bf8cc260c044f8057a183acc06f147f8a57c660fcf971ce"
     },
     {
       "name": "sheet",

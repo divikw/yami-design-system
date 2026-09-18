@@ -1,7 +1,22 @@
 .canvas {
-  min-height: 100vh;
   padding-block: var(--space-100);
   background: var(--background-primary);
+}
+
+/* Docs embeds need their own viewport so media queries match the preview. */
+.docsPc {
+  container-type: inline-size;
+}
+
+.docsPc [data-story-block] {
+  width: 1440px;
+  zoom: min(1, calc(100cqw / 1440px));
+}
+
+.docsMobile [data-story-block] {
+  width: 375px;
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 .cardPreview {

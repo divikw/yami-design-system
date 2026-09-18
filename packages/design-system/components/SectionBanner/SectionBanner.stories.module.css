@@ -1,0 +1,14 @@
+.docsPc {
+  container-type: inline-size;
+}
+
+.docsPc [data-story-block] {
+  width: 1440px;
+  zoom: min(1, calc(100cqw / 1440px));
+}
+
+.docsMobile [data-story-block] {
+  width: 375px;
+  max-width: 100%;
+  margin-inline: auto;
+}

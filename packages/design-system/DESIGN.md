@@ -579,6 +579,10 @@ Responsive homepage campaign rail shared by PC and Mobile.
 | **Paging** | Mobile uses native overflow and scroll snap. PC composes 36px YAMI icon Buttons, pages one visible group, reports progress, and disables controls at boundaries. |
 | **Structure** | The region contains a semantic list of campaign links. Image variants require meaningful alt text; image-only cards use that alt as the link name. Products-only cards require visible campaign copy and render no empty media placeholder. |
 
+### SectionBanner — `components/SectionBanner/` _(composite)_
+
+Page-middle campaign module that composes SectionHeading above HeroBanner. The required h2 labels the banner region. Desktop uses 32px block padding and a 24px heading gap; mobile uses 16px for both. Only image-text-products and products-only cards are accepted. The heading supports start or center alignment. Desktop uses vertically centered side arrows without a bottom progress indicator; mobile retains swipe navigation.
+
 ### Header — `components/Header/`
 
 PC global navigation band. **PC only** — the mobile header is a separate component and is not yet shipped. Geometry and token bindings are reconciled against the production storefront header; sanctioned-value substitutions are tabled in the component's `usage.md`.

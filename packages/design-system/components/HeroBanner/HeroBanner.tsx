@@ -590,7 +590,7 @@ export function HeroBanner({
       </ImageLoadingWindow>
 
       {items.length > 1 && (
-        <div className={styles.controls}>
+        <div className={styles.controls} data-slot="hero-banner-controls">
           <span
             className={styles.progressLine}
             role="progressbar"

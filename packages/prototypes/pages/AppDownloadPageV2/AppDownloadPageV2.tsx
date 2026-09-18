@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   Badge, Button, Card, Checkbox, Divider, Footer, HorizontalScrollList,
-  ProductCard, ProductList, ReviewList, SocialMediaGallery, Tabs, TabsList, TabsTrigger, useHorizontalScrollList,
+  ProductCard, ProductList, ReviewList, SectionBanner, SocialMediaGallery, Tabs, TabsList, TabsTrigger, useHorizontalScrollList,
 } from "@yami/design-system";
 import {
-  appStoreHref, asset, calculateSavings, campaignCopy, campaignProducts,
-  categories, categoryLabels, downloadHref, featuredProducts,
+  appDownloadBannerDescription, appDownloadBannerTitle, appStoreHref, asset, calculateSavings, campaignCopy, campaignProducts,
+  categories, categoryLabels, createAppDownloadBanners, downloadHref, featuredProducts,
   money, playStoreHref, productHref, productImage,
   type AppDownloadLocale,
 } from "./fixtures";
@@ -173,12 +173,18 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
       pendingSection.current = null;
       update();
     };
+    const onScrollEnd = (event: Event) => {
+      if (event.target !== document) return;
+      const target = pendingSection.current && root.current?.querySelector<HTMLElement>(`#${pendingSection.current}`);
+      if (target && Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop)) > 2) return;
+      resumeTracking();
+    };
     const onKeyDown = (event: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) resumeTracking();
     };
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
-    window.addEventListener("scrollend", resumeTracking);
+    window.addEventListener("scrollend", onScrollEnd);
     window.addEventListener("wheel", resumeTracking, { passive: true });
     window.addEventListener("touchstart", resumeTracking, { passive: true });
     window.addEventListener("keydown", onKeyDown);
@@ -186,7 +192,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
     return () => {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
-      window.removeEventListener("scrollend", resumeTracking);
+      window.removeEventListener("scrollend", onScrollEnd);
       window.removeEventListener("wheel", resumeTracking);
       window.removeEventListener("touchstart", resumeTracking);
       window.removeEventListener("keydown", onKeyDown);
@@ -318,6 +324,16 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         </div>
       </section>
       <SavingsCalculator {...sectionDividers["savings-calculator"]} locale={locale} onGuide={() => showGuide(12)} />
+      <SectionBanner
+        className={styles.storyBanner}
+        title={appDownloadBannerTitle}
+        description={appDownloadBannerDescription}
+        headingAlign="center"
+        items={createAppDownloadBanners()}
+        previousLabel={ko ? "이전 상품" : "Previous products"}
+        nextLabel={ko ? "다음 상품" : "Next products"}
+        imageLoading="eager"
+      />
       <BrandSpecial {...sectionDividers["brand-special"]} locale={locale} />
       <SocialMediaGallery
         {...sectionDividers["sns-trend"]}
