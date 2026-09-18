@@ -241,13 +241,20 @@ export const BlackBottomDivider: Story = {
 export const PC: Story = {
   ...Showcase,
   tags: ["dev", "autodocs"],
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: Showcase.render,
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const root = canvasElement.querySelector<HTMLElement>(
       '[data-slot="review-list"]',
     );
@@ -308,7 +315,7 @@ export const Mobile: Story = {
         "ReviewList mobile must use the shared mobile heading, gray canvas, and 344px cards",
       );
     }
-  },
+  } : undefined,
 };
 
 export const MobilePlain: Story = {

@@ -8,6 +8,7 @@ const meta = {
   title: "YAMI/Pages/Topic Landing Page/Topic",
   component: TopicLandingPage,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopMd" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -20,7 +21,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopMd", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createTopicKeywordLandingPageFixture(),
   render: (args, { globals }) => {
@@ -56,7 +57,7 @@ function assertTopicShortcutRail(canvasElement: HTMLElement) {
 
 export const Pc: Story = {
   name: "Topic — PC",
-  play: async ({ canvasElement, globals }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
     assertTopicShortcutRail(canvasElement);
     const locale = globals.locale === "zh" ? "zh" : "en";
     const topicFixture = createTopicKeywordLandingPageFixture(locale);
@@ -119,7 +120,7 @@ export const Pc: Story = {
         "Matcha Topic must reuse Ecommerce Home search data and link each brand campaign to its product brand destination",
       );
     }
-  },
+  } : undefined,
 };
 
 export const HeroLoading: Story = {
@@ -139,6 +140,8 @@ export const HeroLoading: Story = {
       requestAnimationFrame(() => resolve()),
     );
 
+    if (import.meta.env.MODE !== "test") return;
+
     const tokenProbe = document.createElement("span");
     tokenProbe.style.backgroundColor = "var(--fill-tertiary)";
     document.body.append(tokenProbe);
@@ -157,11 +160,12 @@ export const HeroLoading: Story = {
 };
 
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
   name: "Topic — Mobile",
   globals: {
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     assertTopicShortcutRail(canvasElement);
     const heroHeading = canvasElement.querySelector("h1, h2");
     const heroText = heroHeading?.textContent?.toLowerCase() ?? "";
@@ -185,5 +189,5 @@ export const Mobile: Story = {
         "Matcha Topic must place a plain Brand Product Rail after Popular Picks",
       );
     }
-  },
+  } : undefined,
 };

@@ -509,8 +509,11 @@ export const Mobile: Story = {
       viewMore: "View All Reviews",
     },
   },
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  play: async ({ canvasElement }) => {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     assertVerifiedLabel(canvasElement);
     assertReviewContentLayout(canvasElement);
     assertSummaryPhotos(canvasElement, reviews);
@@ -645,13 +648,16 @@ export const Mobile: Story = {
         "Mobile ProductReviewSection must render a compact summary, reference notice, review rail, and full-width review action inside one white card",
       );
     }
-  },
+  } : undefined,
 };
 
 export const Tablet: Story = {
   name: "Tablet aligned mobile layout",
-  globals: { viewport: { value: "yamiTablet", isRotated: false } },
-  play: async ({ canvasElement }) => {
+  parameters: { viewport: { defaultViewport: "yamiTablet" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiTablet", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const viewportWidth = canvasElement.ownerDocument.defaultView?.innerWidth;
     const container = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-review-section-container"]',
@@ -699,18 +705,21 @@ export const Tablet: Story = {
         "Tablet ProductReviewSection must align with the mobile PDP review layout",
       );
     }
-  },
+  } : undefined,
 };
 
 export const DesktopXl: Story = {
-  globals: { viewport: { value: "yamiDesktopXl", isRotated: false } },
-  play: async ({ canvasElement }) => {
+  parameters: { viewport: { defaultViewport: "yamiDesktopXl" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopXl", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const grid = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-review-grid"]',
     );
     if (!grid) throw new Error("Desktop-xl review grid did not render");
     assertReviewGrid(grid, 4, 2);
-  },
+  } : undefined,
 };
 
 export const AllReviewPhotos: Story = {
@@ -746,8 +755,11 @@ export const AllReviewPhotos: Story = {
 
 export const AllReviewPhotosMobile: Story = {
   args: AllReviewPhotos.args,
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  play: async ({ canvasElement, args }) => {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, args }) => {
     assertSummaryPhotos(canvasElement, args.reviews);
     const rail = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-review-summary-photo-list"]',
@@ -765,7 +777,7 @@ export const AllReviewPhotosMobile: Story = {
     ) {
       throw new Error("Summary photos must scroll within the mobile page width");
     }
-  },
+  } : undefined,
 };
 
 export const WithoutReviewPhotos: Story = {
@@ -788,8 +800,11 @@ export const ContentHeightRows: Story = {
       body: "Very good",
     })),
   },
-  globals: { viewport: { value: "yamiDesktopMd", isRotated: false } },
-  play: async ({ canvasElement }) => {
+  parameters: { viewport: { defaultViewport: "yamiDesktopMd" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopMd", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const grid = canvasElement.querySelector<HTMLElement>('[data-slot="product-review-grid"]')!;
     assertReviewGrid(grid, 3, 2);
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-slot="product-review-card"]'));
@@ -801,7 +816,7 @@ export const ContentHeightRows: Story = {
     ) {
       throw new Error("Each review row must fit its tallest card independently of other rows");
     }
-  },
+  } : undefined,
 };
 
 export const MultipleCardPhotos: Story = {
@@ -833,5 +848,9 @@ export const MultipleCardPhotos: Story = {
 
 export const MultipleCardPhotosMobile: Story = {
   ...MultipleCardPhotos,
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? MultipleCardPhotos.play : undefined,
 };

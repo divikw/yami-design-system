@@ -318,15 +318,21 @@ export const Showcase: Story = {
 export const Pc: Story = {
   name: "PC",
   render: Showcase.render,
-  play: Showcase.play,
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
 };
 
 export const MobileAccordion: Story = {
   name: "Mobile",
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: Showcase.render,
-  play: async ({ canvasElement, userEvent }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, userEvent }) => {
     const root = canvasElement.querySelector<HTMLElement>(
       '[data-slot="trending-searches"]',
     );
@@ -579,7 +585,7 @@ export const MobileAccordion: Story = {
 
     // Restore the preview after the interaction check without changing real keyboard focus styles.
     toggles[1].blur();
-  },
+  } : undefined,
 };
 
 export const Centered: Story = {

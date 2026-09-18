@@ -30,6 +30,7 @@ function createPcDiscoveryFixture() {
 const meta = {
   title: "YAMI/Pages/Search",
   parameters: {
+    viewport: { defaultViewport: "yamiMobile" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -41,7 +42,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
 } satisfies Meta;
 
@@ -49,19 +50,23 @@ export default meta;
 type Story = StoryObj;
 
 export const PcDiscovery: Story = {
+  parameters: { viewport: { defaultViewport: "yamiDesktopXl" } },
   name: "PC — Discovery",
   globals: {
     locale: "en",
-    viewport: { value: "yamiDesktopXl", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopXl", isRotated: false } } : {}),
   },
   render: () => <EcommerceHomeTemplate {...createPcDiscoveryFixture()} />,
   play: async ({ canvasElement }) => {
     const field = canvasElement.querySelector<HTMLInputElement>(
       '[data-slot="header-search"][data-variant="pc"] [data-slot="header-search-field"]',
     );
+    if (!field && import.meta.env.MODE !== "test") return;
     if (!field) throw new Error("PC search field did not render");
 
     await userEvent.click(field);
+
+    if (import.meta.env.MODE !== "test") return;
 
     const panel = canvasElement.querySelector<HTMLElement>(
       '[data-slot="header-search-panel"]',
@@ -122,10 +127,11 @@ export const PcDiscovery: Story = {
 };
 
 export const PcWithQuery: Story = {
+  parameters: { viewport: { defaultViewport: "yamiDesktopXl" } },
   name: "PC — With Query",
   globals: {
     locale: "en",
-    viewport: { value: "yamiDesktopXl", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopXl", isRotated: false } } : {}),
   },
   render: () => (
     <EcommerceHomeTemplate {...createEcommerceHomeFixture("en")} />
@@ -134,10 +140,13 @@ export const PcWithQuery: Story = {
     const field = canvasElement.querySelector<HTMLInputElement>(
       '[data-slot="header-search"][data-variant="pc"] [data-slot="header-search-field"]',
     );
+    if (!field && import.meta.env.MODE !== "test") return;
     if (!field) throw new Error("PC search field did not render");
 
     await userEvent.click(field);
     await userEvent.type(field, "mat");
+
+    if (import.meta.env.MODE !== "test") return;
 
     const panel = canvasElement.querySelector<HTMLElement>(
       '[data-slot="header-search-panel"]',
@@ -159,7 +168,7 @@ export const PcWithQuery: Story = {
 export const MobileDiscovery: Story = {
   name: "Mobile — Discovery",
   render: () => <MobileSearchPage backHref={mobileBackHref} />,
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const page = canvasElement.querySelector<HTMLElement>('[data-slot="mobile-search-page"]');
     const field = canvasElement.querySelector<HTMLInputElement>('input[type="search"]');
     const backLink = canvasElement.querySelector<HTMLAnchorElement>(
@@ -203,7 +212,7 @@ export const MobileDiscovery: Story = {
         "Mobile search must open focused with linked discovery destinations"
       );
     }
-  },
+  } : undefined,
 };
 
 export const MobileWithQuery: Story = {
@@ -214,6 +223,8 @@ export const MobileWithQuery: Story = {
     const field = canvasElement.querySelector<HTMLInputElement>('input[type="search"]');
     if (!field) throw new Error("Mobile search field did not render");
     await userEvent.type(field, "Coffee");
+    if (import.meta.env.MODE !== "test") return;
+
     const suggestions = page?.querySelectorAll<HTMLButtonElement>('[data-slot="mobile-search-suggestions"] > button');
     if (
       field.value !== "Coffee" ||

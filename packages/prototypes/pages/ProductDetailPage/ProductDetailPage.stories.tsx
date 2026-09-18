@@ -230,6 +230,10 @@ type Story = StoryObj<typeof meta>;
 
 export const PDP: Story = {
   name: "PC",
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
 };
 
 async function verifySkuAvailability(canvasElement: HTMLElement) {
@@ -1312,6 +1316,10 @@ export const DesktopRegression: Story = {
 
 export const Mobile: Story = {
   name: "Mobile",
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
 };
 
 export const ChineseRegression: Story = {

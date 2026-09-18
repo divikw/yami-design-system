@@ -54,7 +54,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/billboard.json",
-      "digest": "c04b20598c8b543bc5ccacd599bc8ac4cb4a166448b41976950d0169835a46cb"
+      "digest": "2cd9e3e4793d3cc11498b77c1b2a0c49b37065278607ec05bc56c8bf4b4b4d1d"
     },
     {
       "name": "brand-product-rail",
@@ -63,7 +63,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/brand-product-rail.json",
-      "digest": "bf42c6320e15e8b8ba61980e25c33c57bda184fe8640333608a1bf25c136082e"
+      "digest": "d97342e4d8f90de92b80aeb42188df9e739a96bdad0c50880875980cdb810cdd"
     },
     {
       "name": "button",
@@ -144,7 +144,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "c8a91612eb559d0a3835e775ab01497316eebc66be51052fe1e53fa106e167f4"
+      "digest": "cfbdedae705fd7feff8cf9f8f4034b6ad78bba2da76fd7caa4f775b90d4e3bbf"
     },
     {
       "name": "horizontal-scroll-list",
@@ -180,7 +180,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "e28b0b17fa15c1f5937b3c7634a79782b6eb75249ff48151d32df6fd3869ee1b"
+      "digest": "f444989db9dfe500e3ac71b879de6002197aa98835040832879a2faf27bf9f39"
     },
     {
       "name": "product-media-gallery",
@@ -198,7 +198,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
-      "digest": "88bdd00354e15a5d35a4bdeeefc3e7175374d79202575241de75e88b92508545"
+      "digest": "de2f300fd7084ca375c9d3750cf2e5bf0e91b4ce797a4ac3c440813861e6a594"
     },
     {
       "name": "radio-group",
@@ -216,7 +216,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "5f4aa022da659853347329e75805ed7bffb007707ab319b3cc4783e690b57b7a"
+      "digest": "a1a0a9f97f9593e404e107e70d387cd7c8e57295f6b283b0456c9dfe4b4d8f0d"
     },
     {
       "name": "sheet",
@@ -243,7 +243,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/social-media-gallery.json",
-      "digest": "39b6d65f43cfd7c522f260101f439ba49f0dcac45e78e9755e17795b9c29a941"
+      "digest": "83ecfc97120c8524b14d68f83081857b2e20353a555f273be1a24b3b505ab914"
     },
     {
       "name": "tabs",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "20ed9f3614e310b7fd65b46fa65ffaeea73d64fc66042d94dbbb3ad4a4c21054"
+      "digest": "d39f8169ff5c9e2b1e72e4dda4be9c49b1415263919b6096f7a2774cbc8a93db"
     },
     {
       "name": "theme-product-list",
@@ -279,7 +279,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/theme-product-list.json",
-      "digest": "6d173ed35ae4e20e7966309ef0f7d896e8dc65ff5ab25d76d96aaea83883ac89"
+      "digest": "84a57c75c7ae0c0d351887df254cfd3025d13d1a5b923a3f8cf5c84e89018684"
     },
     {
       "name": "trending-searches",
@@ -288,7 +288,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/trending-searches.json",
-      "digest": "27440320242ed1064b02abe7388ebe02ba2fd51c841f171ba897aa5b8fe2a64c"
+      "digest": "2320292eda5097f5957f40479b2c15360c567b46e4a407b0db19076dada36c33"
     }
   ]
 }
