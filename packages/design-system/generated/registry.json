@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "04c3ea5311c73922dd555c02fdb0792b9f74b32c096b9fad270b5212f24b9f7f"
+      "digest": "1ffbe1fbb16657ec99872e1d7ebcb0f5d5f4b6596415d86e2db1c3617ae43f49"
     },
     {
       "name": "activity-page-header",
@@ -189,7 +189,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "5f9d8b9de3546089c9c91ef66061a8a50bf9d73b43b2ef02f546a3b55e6e302c"
+      "digest": "234f9ef055bf73a9baa684f2771543e02a1e162b19ee139c794d066dc6202f6c"
     },
     {
       "name": "product-review-section",

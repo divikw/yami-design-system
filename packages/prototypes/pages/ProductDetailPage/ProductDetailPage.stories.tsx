@@ -1025,7 +1025,8 @@ export const DesktopRegression: Story = {
       productSummary.parentElement !== productInfo ||
       !productTitle ||
       getComputedStyle(productTitle).fontWeight !== "400" ||
-      getComputedStyle(productTitle).fontSize !== "40px" ||
+      getComputedStyle(productTitle).fontSize !== "24px" ||
+      getComputedStyle(productTitle).lineHeight !== "32px" ||
       getComputedStyle(productSummary).rowGap !== "12px" ||
       !productRanking ||
       productTitle.nextElementSibling !== productRanking ||
@@ -1039,7 +1040,7 @@ export const DesktopRegression: Story = {
       !productPrice ||
       getComputedStyle(productPrice).columnGap !== "8px" ||
       !productCurrentPrice ||
-      getComputedStyle(productCurrentPrice).fontSize !== "28px" ||
+      getComputedStyle(productCurrentPrice).fontSize !== "24px" ||
       !productDiscount ||
       productDiscount.textContent?.trim() !== "22% off" ||
       getComputedStyle(productDiscount).backgroundColor !==
@@ -2018,8 +2019,8 @@ export const MobileRegression: Story = {
       !quantityLabel ||
       getComputedStyle(quantityLabel).display !== "none" ||
       !title ||
-      getComputedStyle(title).fontSize !== "16px" ||
-      getComputedStyle(title).lineHeight !== "20px" ||
+      getComputedStyle(title).fontSize !== "24px" ||
+      getComputedStyle(title).lineHeight !== "32px" ||
       !rating ||
       !ranking ||
       !price ||
@@ -2221,6 +2222,8 @@ export const Tablet: Story = {
       getComputedStyle(productInfoColumn).display !== "contents" ||
       getComputedStyle(gallery).position !== "static" ||
       getComputedStyle(thumbnails).display !== "none" ||
+      Math.abs(stage.getBoundingClientRect().left) > 1 ||
+      Math.abs(stage.getBoundingClientRect().right - window.innerWidth) > 1 ||
       galleryNavigationButtons?.length !== 2 ||
       Array.from(galleryNavigationButtons).some(
         (button) => getComputedStyle(button).display !== "none"

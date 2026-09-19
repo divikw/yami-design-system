@@ -26,6 +26,20 @@ const images = [
   },
 ] as const;
 
+const fewPinnedImages = images.slice(0, 3).map((image, index, collection) => ({
+  ...image,
+  thumbnailPinned: index === collection.length - 1,
+  thumbnailOverlayLabel: index === collection.length - 1 ? "Skin Info" : undefined,
+}));
+
+const overflowPinnedImages = Array.from({ length: 8 }, (_, index) => ({
+  ...images[index % images.length]!,
+  id: `overflow-${index + 1}`,
+  alt: `Product image ${index + 1}`,
+  thumbnailPinned: index === 7,
+  thumbnailOverlayLabel: index === 7 ? "Nutrition Facts" : undefined,
+}));
+
 const meta = {
   title: "YAMI/Components/Commerce/Product Media Gallery",
   component: ProductMediaGallery,
@@ -230,6 +244,97 @@ export const Showcase: Story = {
     await waitFor(() => expect(root.style.overflow).toBe(originalOverflow));
     await userEvent.click(thumbnails[0]);
     gallery.focus();
+  },
+};
+
+export const InlinePinnedReference: Story = {
+  args: { images: fewPinnedImages },
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnails"]',
+    )!;
+    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "inline"));
+    const thumbnails = rail.querySelectorAll<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnail"]',
+    );
+    const previousRect = thumbnails[thumbnails.length - 2]!.getBoundingClientRect();
+    const pinnedRect = thumbnails[thumbnails.length - 1]!.getBoundingClientRect();
+    await expect(Math.abs(pinnedRect.left - previousRect.right - 8)).toBeLessThanOrEqual(0.5);
+    await expect(getComputedStyle(rail, "::after").content).toBe("none");
+  },
+};
+
+export const EdgePinnedReference: Story = {
+  args: { images: overflowPinnedImages },
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnails"]',
+    )!;
+    const scroller = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnail-scroller"]',
+    )!;
+    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
+    const pinned = rail.querySelector<HTMLElement>(':scope > [data-pinned="true"]')!;
+    const railRect = rail.getBoundingClientRect();
+    const pinnedRect = pinned.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    const visibleRegular = Array.from(scroller.children).filter((thumbnail) => {
+      const rect = thumbnail.getBoundingClientRect();
+      return rect.right > scrollerRect.left && rect.left < scrollerRect.right;
+    });
+    if (
+      Math.abs(railRect.right - pinnedRect.right) > 0.5 ||
+      visibleRegular.length !== 5 ||
+      visibleRegular.some((thumbnail) => {
+        const rect = thumbnail.getBoundingClientRect();
+        return rect.left < scrollerRect.left - 0.5 || rect.right > scrollerRect.right + 0.5;
+      }) ||
+      getComputedStyle(rail, "::after").content === "none"
+    ) {
+      throw new Error(
+        "Overflowing galleries must pin the reference image at the edge and expose five complete regular thumbnails",
+      );
+    }
+  },
+};
+
+export const NarrowEdgePinnedReference: Story = {
+  args: { images: overflowPinnedImages },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "400px" }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const gallery = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery"]',
+    )!;
+    const rail = gallery.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnails"]',
+    )!;
+    const scroller = gallery.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnail-scroller"]',
+    )!;
+    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
+    const scrollerRect = scroller.getBoundingClientRect();
+    const visibleRegular = Array.from(scroller.children).filter((thumbnail) => {
+      const rect = thumbnail.getBoundingClientRect();
+      return rect.right > scrollerRect.left && rect.left < scrollerRect.right;
+    });
+    if (
+      Math.abs(gallery.getBoundingClientRect().width - 400) > 0.5 ||
+      visibleRegular.length !== 4 ||
+      visibleRegular.some((thumbnail) => {
+        const rect = thumbnail.getBoundingClientRect();
+        return rect.left < scrollerRect.left - 0.5 || rect.right > scrollerRect.right + 0.5;
+      })
+    ) {
+      throw new Error(
+        "A 400px gallery must step down to four complete regular thumbnails plus the pinned reference slot",
+      );
+    }
   },
 };
 

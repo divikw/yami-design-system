@@ -243,10 +243,14 @@ export function createProductDetailPageFixture(
       { label: "Masks", href: "#masks" },
       { label: "Sheet Masks" },
     ],
-    images: productImages.map(([id, hash, alt]) => ({
+    images: productImages.map(([id, hash, alt], index) => ({
       id,
       src: image(hash),
       alt,
+      ...(index === productImages.length - 1 ? {
+        thumbnailPinned: true,
+        thumbnailOverlayLabel: "Skin Info",
+      } : {}),
     })),
     brand: "Torriden",
     brandHref: "#torriden",
@@ -553,6 +557,7 @@ export function createProductDetailPageFixture(
       shareFacebook: "Share on Facebook",
       shareEmail: "Share by email",
       shareWechat: "Share on WeChat",
+      getAffiliateLink: "Get Affiliate Link",
       quantity: "Quantity",
       decreaseQuantity: "Decrease quantity",
       increaseQuantity: "Increase quantity",
@@ -731,6 +736,7 @@ export function createProductDetailPageFixture(
       shareFacebook: "分享到 Facebook",
       shareEmail: "通过邮件分享",
       shareWechat: "分享到微信",
+      getAffiliateLink: "获取推广链接",
       quantity: "数量",
       decreaseQuantity: "减少数量",
       increaseQuantity: "增加数量",

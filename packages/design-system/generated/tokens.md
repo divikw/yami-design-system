@@ -393,8 +393,8 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `font-weight.emphasize` | locale-zh | fontWeight | `600` |
 | `font-weight.normal` | root | fontWeight | `400` |
 | `font-weight.semibold` | root | fontWeight | `600` |
-| `heading-2xl.font-size` | root | dimension | `28px` |
-| `heading-2xl.line-height` | root | dimension | `36px` |
+| `heading-2xl.font-size` | root | dimension | `24px` |
+| `heading-2xl.line-height` | root | dimension | `32px` |
 | `heading-3xl.font-size` | root | dimension | `32px` |
 | `heading-3xl.line-height` | root | dimension | `40px` |
 | `heading-4xl.font-size` | root | dimension | `40px` |

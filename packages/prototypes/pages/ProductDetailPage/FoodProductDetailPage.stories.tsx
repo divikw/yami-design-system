@@ -55,8 +55,27 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   await expect(bestBefore.getBoundingClientRect().top).toBeGreaterThanOrEqual(bestBefore.previousElementSibling!.getBoundingClientRect().bottom);
   await expect(canvasElement.querySelector('[data-pdp-add-to-cart]')).toBeEnabled();
   await expect(canvasElement.querySelectorAll('[data-slot="product-media-gallery-thumbnail"]')).toHaveLength(9);
+  const affiliateLink = canvasElement.querySelector<HTMLButtonElement>('[data-pdp-affiliate-link="true"]')!;
+  await expect(affiliateLink).toHaveAttribute("data-pdp-affiliate-link", "true");
+  await expect(affiliateLink).toHaveTextContent(fixture.copy.getAffiliateLink);
+  if (!mobile) {
+    await expect(affiliateLink).toBeVisible();
+    await expect(affiliateLink.getBoundingClientRect().height).toBe(32);
+  } else {
+    await expect(affiliateLink).not.toBeVisible();
+  }
   await expect(canvasElement.querySelector('[data-pdp-module="brand-products"]')).toBeNull();
   await expect(canvasElement.querySelector('[data-pdp-module="recently-viewed"]')).toBeNull();
+
+  const pricing = canvasElement.querySelector<HTMLElement>('[data-slot="product-detail-price"]')!;
+  const regularPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-regular"]')!;
+  const giftCardPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-gift-card"]')!;
+  const vvipPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-vvip"]')!;
+  await expect(regularPrice).toHaveTextContent(fixture.priceCurrent);
+  await expect(giftCardPrice).toHaveTextContent(fixture.giftCardPrice!.price);
+  await expect(vvipPrice).toHaveTextContent(fixture.vvipPrice!.price);
+  await expect(regularPrice.nextElementSibling).toBe(giftCardPrice);
+  await expect(giftCardPrice.nextElementSibling).toBe(vvipPrice);
 
   const increase = canvas.getByRole("button", { name: fixture.copy.increaseQuantity, exact: true });
   const decrease = canvas.getByRole("button", { name: fixture.copy.decreaseQuantity, exact: true });
@@ -70,6 +89,27 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   await expect(thumbnails[1]).toHaveAttribute("aria-pressed", "true");
   await userEvent.click(thumbnails[0]!);
   await expect(thumbnails[0]).toHaveAttribute("aria-pressed", "true");
+
+  const nutritionThumbnail = thumbnails[thumbnails.length - 1]!;
+  await expect(nutritionThumbnail).toHaveAttribute("aria-haspopup", "dialog");
+  await expect(nutritionThumbnail).toHaveAttribute("data-pinned", "true");
+  await expect(within(nutritionThumbnail).getByText("Nutrition Facts", { exact: true })).toBeVisible();
+  const thumbnailRail = canvasElement.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnails"]')!;
+  const nutritionRect = nutritionThumbnail.getBoundingClientRect();
+  const thumbnailRailRect = thumbnailRail.getBoundingClientRect();
+  await expect(nutritionRect.width).toBeGreaterThanOrEqual(64);
+  await expect(nutritionRect.width).toBeLessThanOrEqual(80);
+  await expect(nutritionRect.height).toBe(nutritionRect.width);
+  await expect(Math.abs(nutritionRect.right - thumbnailRailRect.right)).toBeLessThanOrEqual(1);
+  await userEvent.click(nutritionThumbnail);
+  const preview = canvas.getByRole("dialog", { name: fixture.copy.galleryLabel });
+  await expect(preview).toBeVisible();
+  await expect(within(preview).getByRole("img")).toHaveAttribute(
+    "alt",
+    fixture.images[fixture.images.length - 1]!.alt,
+  );
+  await userEvent.keyboard("{Escape}");
+  await expect(canvas.queryByRole("dialog")).toBeNull();
 
   const disclosure = canvas.getByRole("button", { name: fixture.copy.specifications, exact: true });
   await userEvent.click(disclosure);

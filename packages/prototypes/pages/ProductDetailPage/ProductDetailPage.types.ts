@@ -7,6 +7,10 @@ import type {
   ProductMediaGalleryItem,
   ProductReviewSectionProps,
 } from "@yami/design-system";
+import type {
+  GiftCardPriceProps,
+  VVIPPriceProps,
+} from "./components/ProductPricing";
 
 export interface ProductDetailBreadcrumbItem {
   label: string;
@@ -100,6 +104,7 @@ export interface ProductDetailPageCopy {
   shareFacebook: string;
   shareEmail: string;
   shareWechat: string;
+  getAffiliateLink: string;
   quantity: string;
   decreaseQuantity: string;
   increaseQuantity: string;
@@ -136,6 +141,8 @@ export interface ProductDetailPageProps
   priceCurrent: string;
   priceOriginal: string;
   discountLabel: string;
+  giftCardPrice?: Pick<GiftCardPriceProps, "label" | "price" | "detailsLabel">;
+  vvipPrice?: Pick<VVIPPriceProps, "label" | "price" | "actionLabel">;
   optionGroups: readonly ProductDetailOptionGroup[];
   /** Complete SKU inventory; omitted combinations are unavailable. Overrides option.unavailable. */
   skus?: readonly {

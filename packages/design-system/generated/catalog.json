@@ -4095,6 +4095,7 @@
           "--space-200",
           "--space-300",
           "--space-400",
+          "--space-500",
           "--space-600",
           "--space-800",
           "--space-1000"
@@ -4147,6 +4148,10 @@
           "--space-400": {
             "property": "mobile next-image preview reservation",
             "selector": ".slide"
+          },
+          "--space-500": {
+            "property": "six-slot thumbnail gap reservation",
+            "selector": ".root"
           },
           "--product-card-add-icon": {
             "property": "color",
