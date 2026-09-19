@@ -150,9 +150,9 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await expect(nutrition).toBeVisible();
   await expect(within(nutrition).getAllByRole("row")).toHaveLength(14);
   await expect(within(nutrition).getByRole("heading", { level: 3, name: fixture.nutrition!.title })).toBeVisible();
-  await expect(getComputedStyle(within(nutrition).getByRole("heading", { level: 3 })).fontSize).toBe(mobile ? "28px" : "40px");
+  await expect(getComputedStyle(within(nutrition).getByRole("heading", { level: 3 })).fontSize).toBe(mobile ? "24px" : "40px");
   await expect(within(nutrition).getByText("160", { exact: true })).toBeVisible();
-  await expect(getComputedStyle(within(nutrition).getByText("160", { exact: true })).fontSize).toBe(mobile ? "20px" : "28px");
+  await expect(getComputedStyle(within(nutrition).getByText("160", { exact: true })).fontSize).toBe(mobile ? "20px" : "24px");
   await expect(within(nutrition).getByRole("rowheader", { name: /5.5g/ })).toBeVisible();
   await expect(within(nutrition).getByRole("rowheader", { name: /85mg/ })).toBeVisible();
   const label = nutrition.parentElement!;

@@ -1044,7 +1044,7 @@ export const DesktopRegression: Story = {
       !productPrice ||
       getComputedStyle(productPrice).columnGap !== "8px" ||
       !productCurrentPrice ||
-      getComputedStyle(productCurrentPrice).fontSize !== "28px" ||
+      getComputedStyle(productCurrentPrice).fontSize !== "24px" ||
       !productDiscount ||
       productDiscount.textContent?.trim() !== "22% off" ||
       getComputedStyle(productDiscount).backgroundColor !==

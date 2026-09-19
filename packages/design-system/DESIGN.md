@@ -177,7 +177,7 @@ emphasis, or replace the literal serif token with the language-aware token.
 | display-sm  | 24      | 32          | `--font-size-display-sm`  | sub-hero                                                                                      |
 | heading-4xl | 40      | 48          | `--font-size-heading-4xl` | Page main title                                                                               |
 | heading-3xl | 32      | 40          | `--font-size-heading-3xl` | Page-level section title                                                                      |
-| heading-2xl | 28      | 36          | `--font-size-heading-2xl` |                                                                                               |
+| heading-2xl | 24      | 32          | `--font-size-heading-2xl` |                                                                                               |
 | heading-xl  | 20      | 28          | `--font-size-heading-xl`  | `h2` baseline                                                                                 |
 | heading-md  | 18      | 24          | `--font-size-heading-md`  | `h3` baseline                                                                                 |
 | heading-sm  | 16      | 20          | `--font-size-heading-sm`  | `h4` baseline                                                                                 |
@@ -793,7 +793,7 @@ Observed failures from real `validateDesign` runs + audit findings in [`decision
 **Why**: The scale has `-sm` / `-md` / `-xl` / `-2xl` etc.; the agent extrapolates a "missing" `-lg` step.
 <!-- /anti-pattern -->
 
-**Why it's wrong**: The `-lg` step doesn't exist in `tokens.css`. YAMI's heading scale is `-sm` (16) / `-md` (18) / `-xl` (20) / `-2xl` (28) / `-3xl` (32) / `-4xl` (40) — no `-lg` step.
+**Why it's wrong**: The `-lg` step doesn't exist in `tokens.css`. YAMI's heading scale is `-sm` (16) / `-md` (18) / `-xl` (20) / `-2xl` (24) / `-3xl` (32) / `-4xl` (40) — no `-lg` step.
 **Fix**: `font-size: var(--font-size-heading-xl);` (inspect `generated/tokens.css` to enumerate the real scale).
 **Catch**: `pnpm check:tokens-in-docs` on docs; `principles/validators/token-exists.ts` on code.
 
