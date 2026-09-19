@@ -63,4 +63,4 @@ sourceRefs:
 
 ## 维护者参考
 
-负责审核、版本记录和发布的团队成员，可查看仓库中的[维护上游版本](https://github.com/divikwu/yami-design-system/blob/main/docs/maintainers/zh/maintain-releases.md)。普通搭建任务无需执行其中的维护步骤。
+负责审核、版本记录和发布的团队成员，可查看仓库中的[维护上游版本](https://github.com/divikw/yami-design-system/blob/main/docs/maintainers/zh/maintain-releases.md)。普通搭建任务无需执行其中的维护步骤。

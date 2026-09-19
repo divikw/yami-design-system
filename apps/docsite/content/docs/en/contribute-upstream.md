@@ -63,4 +63,4 @@ Improvements not yet accepted can stay in your project with their reasons and li
 
 ## Maintainer reference
 
-Team members responsible for review, version records, and releases can read [Maintain upstream versions](https://github.com/divikwu/yami-design-system/blob/main/docs/maintainers/en/maintain-releases.md) in the repository. Regular building tasks do not need to follow those maintenance steps.
+Team members responsible for review, version records, and releases can read [Maintain upstream versions](https://github.com/divikw/yami-design-system/blob/main/docs/maintainers/en/maintain-releases.md) in the repository. Regular building tasks do not need to follow those maintenance steps.
