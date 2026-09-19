@@ -28,7 +28,7 @@ The following workflow is for people who need to build pages locally. You do not
 
 Have these three details ready:
 
-- Main YAMI project: `https://github.com/divikwu/yami-design-system`.
+- Main YAMI project: `https://github.com/divikw/yami-design-system`.
 - The GitHub account or organization you are authorized to use.
 - A full path to a new local directory, such as `/Users/<your-name>/workspace/yami-design-system`.
 
@@ -41,7 +41,7 @@ Replace `<full path to a new local directory>` with the location you intend to u
 ```text
 Fork the following main YAMI Design System repository into my downstream project:
 
-https://github.com/divikwu/yami-design-system
+https://github.com/divikw/yami-design-system
 
 New local directory: <full path to a new local directory>
 
@@ -82,7 +82,7 @@ Do not accept only "the service is healthy," an HTTP 200 response, or a Storyboo
 | --- | --- |
 | GitHub | Current account, fork URL, and confirmation that the fork comes from the correct main project |
 | Local copy | Full new directory path, starting commit, and uncommitted-change status |
-| Remotes | `origin` points to your fork and `upstream` points to `divikwu/yami-design-system` |
+| Remotes | `origin` points to your fork and `upstream` points to `divikw/yami-design-system` |
 | Generation | `pnpm generate` succeeds without deleting the lockfile to bypass an error |
 | Storybook | Actual listener address and the command to start it later |
 | Browser | A specific YAMI Story is open, its preview content renders, and no error prevents use |

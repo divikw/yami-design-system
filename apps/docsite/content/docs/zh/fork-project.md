@@ -28,7 +28,7 @@ sourceRefs:
 
 准备好三项信息：
 
-- YAMI 主项目地址：`https://github.com/divikwu/yami-design-system`。
+- YAMI 主项目地址：`https://github.com/divikw/yami-design-system`。
 - 你获准使用的 GitHub 账号或组织。
 - 一个新的本地目录完整路径，例如 `/Users/<你的名字>/workspace/yami-design-system`。
 
@@ -41,7 +41,7 @@ sourceRefs:
 ```text
 请将下面的 YAMI Design System 主项目 Fork 为我的下游项目：
 
-https://github.com/divikwu/yami-design-system
+https://github.com/divikw/yami-design-system
 
 新的本地目录：<新的本地目录完整路径>
 
@@ -82,7 +82,7 @@ https://github.com/divikwu/yami-design-system
 | --- | --- |
 | GitHub | 当前账号、Fork 地址，以及 Fork 来自正确的主项目 |
 | 本地副本 | 新目录的完整路径、起点提交和未提交修改状态 |
-| 远程仓库 | `origin` 指向你的 Fork，`upstream` 指向 `divikwu/yami-design-system` |
+| 远程仓库 | `origin` 指向你的 Fork，`upstream` 指向 `divikw/yami-design-system` |
 | 生成结果 | `pnpm generate` 成功，未通过删除锁文件绕过错误 |
 | Storybook | 实际监听地址和以后使用的启动命令 |
 | 浏览器 | 打开具体的 YAMI Story，预览内容真实渲染且没有阻止使用的错误 |
