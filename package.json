@@ -66,18 +66,18 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
-    "@changesets/cli": "3.0.1",
+    "@changesets/cli": "3.0.3",
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.62.1",
-    "@types/node": "24.13.3",
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.1",
     "ajv": "8.20.0",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.12.0",
     "sharp": "0.35.4",
     "tsx": "4.23.13",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.69.0",
-    "vitest": "4.1.11"
+    "typescript": "7.0.2",
+    "typescript-eslint": "8.70.0",
+    "vitest": "5.0.1"
   }
 }
