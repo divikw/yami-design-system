@@ -77,7 +77,7 @@ for (const target of pages) {
         await expect(aboutIntro).toHaveCSS("gap", "8px");
         await expect(aboutIntro.getByRole("heading")).toHaveCSS(
           "font-size",
-          scenario.width < 768 ? "24px" : scenario.width < 1024 ? "28px" : "32px",
+          scenario.width < 1024 ? "24px" : "32px",
         );
         await expect(aboutIntro.getByRole("heading")).toHaveCSS("font-family", /Source Serif 4/);
         await expect(aboutIntro.getByRole("heading")).toHaveCSS("font-weight", "400");
@@ -168,7 +168,7 @@ for (const target of pages) {
         await expect(latestHeading.locator("..")).toHaveCSS("align-items", "center");
         await expect(latestHeading).toHaveCSS(
           "font-size",
-          scenario.width < 768 ? "24px" : scenario.width < 1024 ? "28px" : "32px",
+          scenario.width < 1024 ? "24px" : "32px",
         );
         await expect(latestHeading).toHaveCSS("font-family", /Source Serif 4/);
         await expect(latestHeading).toHaveCSS("font-weight", "400");

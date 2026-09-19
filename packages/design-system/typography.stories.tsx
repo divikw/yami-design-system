@@ -100,7 +100,9 @@ function typographySpecimens(doc: TokensJsonDoc): TypographySpecimen[] {
     specimens.set(name, specimen)
   }
 
-  return Array.from(specimens.values())
+  return Array.from(specimens.values()).sort(
+    (a, b) => parseFloat(fallbackValue(b.fontSize) ?? "16px") - parseFloat(fallbackValue(a.fontSize) ?? "16px"),
+  )
 }
 
 function categoryForName(name: string): TypographyCategory {

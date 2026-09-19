@@ -1375,12 +1375,12 @@
   },
   "heading-2xl.font-size": {
     "$type": "dimension",
-    "$value": "28px",
+    "$value": "24px",
     "$description": "用于大标题与重点模块标题。适用于高层级内容分组，不用于首屏营销文案或正文说明。"
   },
   "heading-2xl.line-height": {
     "$type": "dimension",
-    "$value": "36px",
+    "$value": "32px",
     "$description": "用于大标题与重点模块标题。适用于高层级内容分组，不用于首屏营销文案或正文说明。"
   },
   "heading-3xl.font-size": {
