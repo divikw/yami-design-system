@@ -5,15 +5,16 @@ import { ProductDetailPage } from "./ProductDetailPage";
 import { createFoodProductDetailPageFixture, foodProductSource } from "./food-fixtures";
 
 const meta = {
-  title: "YAMI/Pages/Product Detail/Food",
-  tags: ["!autodocs"],
+  id: "yami-pages-product-detail-food",
+  title: "YAMI/Pages/Product Detail/Draft/Food",
+  tags: ["!autodocs", "draft"],
   component: ProductDetailPage,
   parameters: {
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
       description: {
-        component: `食品类 PDP · TSUJIRI 辻利无糖宇治抹茶粉 40g。复用 ProductDetailPage，支持中英文及 PC / Mobile。\n\n[官网商品来源](${foodProductSource.url}) · 采集日期：${foodProductSource.capturedAt}。价格、销量、评分与赏味期限均为该日期的展示快照，并非实时库存或履约承诺。官网只有单一 40g 规格，因此不显示多规格选择器。9 张商品图与 8 款食品推荐使用官网 CDN；需要网络连接。\n\n评价区域显示官网评分分布与 4 条真实评价的摘要／翻译，明确标注并链接回来源，不使用护肤评价、买家照片或个人浏览历史。官网文字未提供的配料、营养及过敏原数据不补造。购物车与评价提交沿用现有原型的演示边界，不执行真实交易。\n\nFood PDP using the shared layout. Prices, ratings and best-before date are a dated snapshot, not live data. Single 40g size; no variant selector. Review summaries are labeled paraphrases. Unverified ingredients, nutrition and allergen data are omitted. Cart and review actions are prototype-only.`,
+        component: `**Draft · 草稿**：尚未定稿或完成 review。\n\n食品类 PDP · TSUJIRI 辻利无糖宇治抹茶粉 40g。复用 ProductDetailPage，支持中英文及 PC / Mobile。\n\n[官网商品来源](${foodProductSource.url}) · 采集日期：${foodProductSource.capturedAt}。价格、销量、评分与赏味期限均为该日期的展示快照，并非实时库存或履约承诺。官网只有单一 40g 规格，因此不显示多规格选择器。9 张商品图与 8 款食品推荐使用官网 CDN；需要网络连接。\n\n评价区域显示官网评分分布与 4 条真实评价的摘要／翻译，明确标注并链接回来源，不使用护肤评价、买家照片或个人浏览历史。官网文字未提供的配料、营养及过敏原数据不补造。购物车与评价提交沿用现有原型的演示边界，不执行真实交易。\n\nFood PDP using the shared layout. Prices, ratings and best-before date are a dated snapshot, not live data. Single 40g size; no variant selector. Review summaries are labeled paraphrases. Unverified ingredients, nutrition and allergen data are omitted. Cart and review actions are prototype-only.`,
       },
       story: { inline: false, height: "1800px" },
     },
@@ -29,11 +30,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = {
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}) },
 };
 
 const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {

@@ -42,9 +42,8 @@ import {
   heroCampaignImages,
   heroProductImages,
   shortcutImages,
-  socialPosterImages,
-  socialProductImages,
 } from "./optimizedImages.generated";
+import { socialVideoCards } from "./social-videos.fixture";
 import { createStorefrontHeader } from "../storefront-header.fixture";
 
 export type EcommerceHomeLocale = "zh" | "en";
@@ -531,25 +530,8 @@ function createSocialGallery(locale: EcommerceHomeLocale) {
   return {
     ...gallery,
     imageLoadingStrategy: "windowed" as const,
-    cards: gallery.cards.map((card, index) => {
-      const assetIndex = index % 6;
-      return {
-        ...card,
-        posterSrc:
-          socialPosterImages[
-            String(assetIndex + 1) as keyof typeof socialPosterImages
-          ],
-        products: card.products?.map((product, productIndex) => ({
-          ...product,
-          imageSrc:
-            socialProductImages[
-              String(
-                ((assetIndex + productIndex) % 5) + 1,
-              ) as keyof typeof socialProductImages
-            ],
-        })),
-      };
-    }),
+    cards: socialVideoCards,
+    viewAllHref: undefined,
   };
 }
 

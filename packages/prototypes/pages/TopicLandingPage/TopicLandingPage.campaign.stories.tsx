@@ -7,6 +7,7 @@ const meta = {
   title: "YAMI/Pages/Topic Landing Page/Campaign",
   component: TopicLandingPage,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopMd" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -19,7 +20,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopMd", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createCampaignTopicLandingPageFixture(),
   render: (args, { globals }) => {
@@ -115,19 +116,20 @@ function assertCampaignBrandTitlesAreVisible(canvasElement: HTMLElement) {
 
 export const Pc: Story = {
   name: "Campaign — PC",
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     assertCampaignShortcuts(canvasElement);
     assertBrandRailTitleFont(canvasElement);
     assertCampaignBrandTitlesAreVisible(canvasElement);
-  },
+  } : undefined,
 };
 
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
   name: "Campaign — Mobile",
   globals: {
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     assertCampaignShortcuts(canvasElement);
     assertBrandRailTitleFont(canvasElement);
     assertCampaignBrandTitlesAreVisible(canvasElement);
@@ -150,5 +152,5 @@ export const Mobile: Story = {
         "Campaign must place a plain Brand Product Rail after Popular Picks",
       );
     }
-  },
+  } : undefined,
 };

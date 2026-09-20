@@ -5,57 +5,55 @@ import type { SectionDividerProps } from "../sectionDivider.types";
 export type ReviewListMobileSurface = "card" | "plain";
 
 export interface ReviewProduct {
-  /** Product image shown in the review footer. */
+  /** 评论底部显示的商品图片。 */
   imageSrc: string;
-  /** Accessible description of the product image. */
+  /** 商品图片的替代文本。 */
   imageAlt: string;
-  /** Product brand shown above the product name. */
+  /** 商品名称上方的品牌。 */
   brand: ReactNode;
-  /** Product name shown in the footer. */
+  /** 评论底部的商品名称。 */
   name: ReactNode;
-  /** Optional destination for the product footer. */
+  /** 关联商品的可选跳转地址。 */
   href?: string;
 }
 
 export interface ReviewCardProps
   extends Omit<HTMLAttributes<HTMLElement>, "children" | "id"> {
-  /** Stable identity for React and analytics hooks. */
+  /** 用于 React 和埋点的稳定标识。 */
   id: string;
-  /** Five-point rating. Fractional values render a half star. */
+  /** 五星制评分，小数评分显示半星。 */
   rating: number;
-  /** Review copy from the customer. */
+  /** 用户评论内容。 */
   review: ReactNode;
-  /** Anonymized reviewer name. */
+  /** 匿名化的评论者昵称。 */
   reviewer: ReactNode;
-  /** Product associated with the review. */
+  /** 评论关联的商品。 */
   product?: ReviewProduct;
 }
 
 export interface ReviewListProps
   extends Omit<HTMLAttributes<HTMLElement>, "children" | "title">,
     SectionDividerProps {
-  /** Visible section heading and accessible label. */
+  /** 模块标题，同时作为无障碍标签。 */
   title: ReactNode;
-  /** Supporting copy displayed with the section heading. */
+  /** 标题旁的辅助说明。 */
   description?: ReactNode;
-  /** Centered headings place paging controls at the sides of the content rail. */
+  /** 标题对齐方式。移动端 card 固定左对齐；PC 和移动端 plain 支持居中，PC 居中时翻页按钮显示在列表两侧。 */
   headingAlign?: "start" | "center";
-  /** Opt in to equal-height cards; content preserves the original review layout. */
-  cardHeight?: "content" | "equal";
-  /** Optional serif treatment for editorial section headings. */
+  /** 标题字体：sans 为无衬线，serif 为衬线。 */
   titleFontFamily?: "sans" | "serif";
-  /** Optional mobile-only heading; falls back to title. */
+  /** 移动端专用标题，未设置时使用 title。 */
   mobileTitle?: ReactNode;
-  /** Ordered review cards shown in the horizontal rail. */
+  /** 按顺序展示的评论卡片。 */
   reviews: ReviewCardProps[];
-  /** Mobile section surface. Plain is full-bleed with 16px content padding and supports section dividers. */
+  /** 移动端外观，plain 为通栏布局，内容内边距 16px，支持分割线。 */
   mobileSurface?: ReviewListMobileSurface;
-  /** Optional destination for the shared desktop/mobile view-all action. */
+  /** PC 和 Mobile 共用的查看全部跳转地址。 */
   viewAllHref?: string;
-  /** Localized view-all label. */
+  /** 查看全部的本地化文案。 */
   viewAllLabel?: ReactNode;
-  /** Localized accessible label for the previous-page control. */
+  /** 上一页按钮的本地化无障碍标签。 */
   previousLabel?: string;
-  /** Localized accessible label for the next-page control. */
+  /** 下一页按钮的本地化无障碍标签。 */
   nextLabel?: string;
 }

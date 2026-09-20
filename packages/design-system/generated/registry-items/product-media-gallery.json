@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Accessible PDP media gallery with one square viewing window, thumbnail selection, previous and next controls, and responsive rail placement.",
+  "description": "草稿，尚未定稿或完成 review。商品详情页媒体画廊，支持缩略图、箭头和键盘切换图片。",
   "source": "components/ProductMediaGallery",
   "files": [
     {
@@ -170,5 +170,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "234f9ef055bf73a9baa684f2771543e02a1e162b19ee139c794d066dc6202f6c"
+  "contentDigest": "c8ebde3bf92558ffc94f009f7c45e9a383a05303af3d9265aa2959f77da5b22c"
 }

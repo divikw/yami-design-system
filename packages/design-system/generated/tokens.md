@@ -76,6 +76,7 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `brand.tertiary` | dark | color | `var(--color-red-950)` |
 | `breakpoints.desktop` | root | dimension | `1024px` |
 | `breakpoints.desktop-lg` | root | dimension | `1440px` |
+| `breakpoints.desktop-wide` | root | dimension | `1680px` |
 | `breakpoints.desktop-xl` | root | dimension | `1920px` |
 | `breakpoints.mobile` | root | dimension | `402px` |
 | `breakpoints.tablet` | root | dimension | `768px` |
@@ -384,10 +385,10 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `fill.warning-primary` | dark | color | `var(--color-yellow-400)` |
 | `fill.warning-secondary` | root | color | `var(--color-amber-50)` |
 | `fill.warning-secondary` | dark | color | `var(--color-amber-950)` |
-| `font-family.android` | root | fontFamily | `'GT Walsheim', 'Noto Sans SC', sans-serif` |
-| `font-family.ios` | root | fontFamily | `'GT Walsheim', 'Noto Sans SC', sans-serif` |
+| `font-family.android` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.ios` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
 | `font-family.serif` | root | fontFamily | `'Source Serif 4 Variable', 'Noto Serif SC', serif` |
-| `font-family.win` | root | fontFamily | `'GT Walsheim', 'Noto Sans SC', sans-serif` |
+| `font-family.win` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
 | `font-weight.emphasize` | root | fontWeight | `500` |
 | `font-weight.emphasize` | locale-en | fontWeight | `500` |
 | `font-weight.emphasize` | locale-zh | fontWeight | `600` |

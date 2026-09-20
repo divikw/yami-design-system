@@ -11,15 +11,18 @@ function localeFromGlobals(value: unknown): SearchResultsLocale {
 }
 
 const meta = {
-  title: "YAMI/Pages/Search Results",
+  id: "yami-pages-search-results",
+  title: "YAMI/Pages/Search Results/Draft",
+  tags: ["draft"],
   component: SearchResultsPage,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopXl" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
       description: {
         component:
-          "Responsive YAMI search-results template with controlled header search, quick filters, sorting, a waterfall product grid, and an empty state.",
+          "**Draft · 草稿**：尚未定稿或完成 review。\n\nResponsive YAMI search-results template with controlled header search, quick filters, sorting, a waterfall product grid, and an empty state.",
       },
       story: { inline: false, height: "1600px" },
     },
@@ -27,7 +30,7 @@ const meta = {
   globals: {
     locale: "en",
     theme: "light",
-    viewport: { value: "yamiDesktopXl", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopXl", isRotated: false } } : {}),
   },
   args: createSearchResultsFixture("en"),
 } satisfies Meta<typeof SearchResultsPage>;
@@ -87,7 +90,7 @@ const renderSimulatedFilterLoading: NonNullable<Story["render"]> = (
 export const Results: Story = {
   name: "PC",
   render: renderResults,
-  play: async ({ canvasElement, globals }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
     const document = canvasElement.ownerDocument;
     const homeLink = canvasElement.querySelector<HTMLAnchorElement>(
       '[data-slot="header-brand"]'
@@ -145,7 +148,7 @@ export const Results: Story = {
         "Search results discovery data must match Ecommerce Home"
       );
     }
-  },
+  } : undefined,
 };
 
 export const ResultsInteractions: Story = {
@@ -671,15 +674,16 @@ function assertMobilePopularRail(canvasElement: HTMLElement) {
 }
 
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
   globals: {
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
   render: (_args, { globals }) => (
     <SearchResultsPage
       {...createSearchResultsStoryFixture(localeFromGlobals(globals.locale))}
     />
   ),
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     assertMobilePopularRail(canvasElement);
     const backLink = canvasElement.querySelector<HTMLAnchorElement>(
       '[data-slot="search-results-mobile-back"]'
@@ -696,7 +700,7 @@ export const Mobile: Story = {
     ) {
       throw new Error("Mobile search results must open in grid view");
     }
-  },
+  } : undefined,
 };
 
 export const MobileInteractions: Story = {
@@ -1079,7 +1083,7 @@ export const FiltersLoading: Story = {
       filtersLoading
     />
   ),
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const busySections = canvasElement.querySelectorAll('[aria-busy="true"]');
     const skeletonLists = canvasElement.querySelectorAll(
       '[data-slot="search-results-filter-skeleton"]'
@@ -1094,7 +1098,7 @@ export const FiltersLoading: Story = {
     if (!(firstChip instanceof HTMLElement) || firstChip.offsetHeight !== 36) {
       throw new Error("Filter loading skeleton does not preserve chip height");
     }
-  },
+  } : undefined,
 };
 
 export const Empty: Story = {

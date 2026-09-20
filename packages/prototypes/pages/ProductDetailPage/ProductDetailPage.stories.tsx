@@ -186,8 +186,9 @@ async function verifyDetailDisclosures(
 }
 
 const meta = {
-  title: "YAMI/Pages/Product Detail/Beauty",
-  tags: ["!autodocs"],
+  id: "yami-pages-product-detail-beauty",
+  title: "YAMI/Pages/Product Detail/Draft/Beauty",
+  tags: ["!autodocs", "draft"],
   component: ProductDetailPage,
   parameters: {
     layout: "fullscreen",
@@ -195,7 +196,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Responsive YAMI PDP based on the live Torriden product information architecture, with the original stacked media stream replaced by ProductMediaGallery's single-window interaction.",
+          "**Draft · 草稿**：尚未定稿或完成 review。\n\nResponsive YAMI PDP based on the live Torriden product information architecture, with the original stacked media stream replaced by ProductMediaGallery's single-window interaction.",
       },
       story: { inline: false, height: "1800px" },
     },
@@ -229,6 +230,10 @@ type Story = StoryObj<typeof meta>;
 
 export const PDP: Story = {
   name: "PC",
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
 };
 
 async function verifySkuAvailability(canvasElement: HTMLElement) {
@@ -1312,6 +1317,10 @@ export const DesktopRegression: Story = {
 
 export const Mobile: Story = {
   name: "Mobile",
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
 };
 
 export const ChineseRegression: Story = {

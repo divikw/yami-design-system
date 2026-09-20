@@ -6,18 +6,52 @@ import { SocialMediaGallery } from "../../../design-system/components/SocialMedi
 import socialTrends from "./social-trends.json";
 
 const meta = {
-  title: "YAMI/Pages/App Download/V2",
+  id: "yami-pages-app-download-v2",
+  title: "YAMI/Pages/App Download/Draft/V2",
   component: AppDownloadPageV2,
-  tags: ["!autodocs"],
-  parameters: { layout: "fullscreen", controls: { disable: true } },
-  globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
+  tags: ["!autodocs", "draft"],
+  parameters: {
+    viewport: { defaultViewport: "yamiDesktopLg" },
+    layout: "fullscreen",
+    controls: { disable: true },
+    docs: { description: { component: "**Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。" } },
+  },
+  globals: { theme: "light", ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 } satisfies Meta<typeof AppDownloadPageV2>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = { args: { initialLocale: "ko" } };
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobileLg" } },
   args: { initialLocale: "ko" },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobileLg", isRotated: false } } : {}) },
+};
+export const StoryBanner: Story = {
+  tags: ["!dev", "!autodocs"],
+  args: { initialLocale: "ko" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const main = canvasElement.querySelector("main")!;
+    const banner = main.querySelector<HTMLElement>('[data-slot="section-banner"]')!;
+    await expect(banner.nextElementSibling).toBe(main.querySelector("#brand-special"));
+    await expect(within(banner).getByRole("heading", { name: "Best Stories & Products" })).toBeVisible();
+    await expect(within(banner).getByText("See what's trending on Yami")).toBeVisible();
+    const cards = banner.querySelectorAll('[data-slot="hero-banner-item"]');
+    await expect(new Set(Array.from(cards, (card) => card.getAttribute("href"))).size).toBe(8);
+    for (const card of cards) {
+      await expect(card.getAttribute("data-hero-banner-content")).toBe("image-text-products");
+      await expect(card.getAttribute("href")).toContain("/en/story/");
+    }
+    await userEvent.click(canvas.getByRole("button", { name: "Switch to English" }));
+    await expect(banner.querySelector('[data-slot="hero-banner-item"]')?.getAttribute("href")).toContain("/en/story/");
+    await expect(within(banner).getByRole("heading", { level: 2 })).toHaveTextContent("Best Stories & Products");
+  },
+};
+
+export const StoryBannerMobile: Story = {
+  ...StoryBanner,
+  tags: ["!dev", "!autodocs"],
   globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
 };
 export const Interactions: Story = {

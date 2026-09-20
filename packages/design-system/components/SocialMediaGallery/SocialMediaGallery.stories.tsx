@@ -14,8 +14,27 @@ function localeFromGlobals(value: unknown): SocialMediaGalleryLocale {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Social Media Gallery",
+  id: "yami-components-commerce-social-media-gallery",
+  title: "YAMI/Modules/Commerce/Social Media Gallery",
   component: SocialMediaGallery,
+  argTypes: {
+    dividerPosition: { description: "PC 分割线位置：top 顶部、bottom 底部、none 不显示。移动端卡片不显示分割线。" },
+    dividerVariant: { description: "分割线样式：gray 为 1px 灰线，black 为 2px 强调分割线。" },
+    title: { description: "PC 模块标题。" },
+    mobileTitle: { description: "移动端专用标题，未设置时使用 title。" },
+    description: { description: "标题旁的辅助说明。" },
+    headingAlign: {
+      options: ["start", "center"],
+      control: { type: "radio" },
+      description: "标题对齐方式。移动端卡片固定左对齐；PC 居中时翻页按钮位于列表两侧。",
+    },
+    cards: { description: "按展示顺序排列的社交视频卡片，支持纯文案、单商品和多商品底部样式。" },
+    viewAllHref: { description: "查看全部的可选跳转地址。" },
+    viewAllLabel: { description: "查看全部的本地化文案。" },
+    previousLabel: { description: "上一页按钮的本地化标签。" },
+    nextLabel: { description: "下一页按钮的本地化标签。" },
+    imageLoadingStrategy: { description: "图片加载策略。" },
+  },
   decorators: [
     (Story) => (
       <div className={styles.canvas}>
@@ -28,7 +47,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Responsive YAMI social video gallery. It composes the exported SocialVideoCard child, supports text-only, single-product, and multiple-product footers on PC and mobile, and provides native scrolling plus desktop pagination controls.",
+          "响应式社交视频列表，支持纯文案、单商品和多商品三种底部样式。PC 根据实际容器宽度调整列数并提供翻页按钮；Mobile 使用横向滑动。",
       },
     },
   },
@@ -39,9 +58,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
-  render: (_args, { globals }) => (
+  tags: ["!dev", "!autodocs"],
+  render: (args, { globals }) => (
     <SocialMediaGallery
       {...createSocialMediaGalleryFixture(localeFromGlobals(globals.locale))}
+      headingAlign={args.headingAlign}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -168,17 +189,14 @@ export const Showcase: Story = {
     }
 
     const firstCard = cards[0];
-    // Desktop fits a whole number of cards per view: 4 from 1024, 5 from 1280,
-    // 6 from 1440. Asserting the count rather than a minimum width, because the
-    // width is derived from the count — every one of these lands under the
-    // 240px floor this used to require.
+    // Column count follows the rail width, including embedded previews.
     if (window.innerWidth >= 1024) {
       const rail = canvasElement.querySelector<HTMLElement>(
         '[data-slot="social-media-gallery-list"]',
       );
       if (!rail) throw new Error("Gallery rail did not render");
       const perView =
-        window.innerWidth >= 1440 ? 6 : window.innerWidth >= 1280 ? 5 : 4;
+        rail.clientWidth >= 1344 ? 6 : rail.clientWidth >= 1184 ? 5 : rail.clientWidth >= 768 ? 4 : rail.clientWidth >= 572 ? 3 : rail.clientWidth >= 376 ? 2 : 1;
       const gap = Number.parseFloat(getComputedStyle(rail).columnGap);
       const cardWidth = firstCard.getBoundingClientRect().width;
       const spanned = cardWidth * perView + gap * (perView - 1);
@@ -218,6 +236,7 @@ export const Showcase: Story = {
 };
 
 export const SingleProduct: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Single Product",
   render: (_args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
@@ -260,6 +279,7 @@ export const SingleProduct: Story = {
 };
 
 export const MultipleProducts: Story = {
+  tags: ["!dev", "!autodocs"],
   name: "Multiple Products",
   render: (_args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
@@ -276,6 +296,7 @@ export const MultipleProducts: Story = {
 };
 
 export const WithoutProducts: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
     const card = createSocialVideoCards(locale).find(
@@ -311,6 +332,7 @@ export const WithoutProducts: Story = {
 
 export const MobileSingleProduct: Story = {
   ...SingleProduct,
+  tags: ["!dev", "!autodocs"],
   name: "Mobile Single Product",
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
@@ -319,6 +341,7 @@ export const MobileSingleProduct: Story = {
 
 export const MobileMultipleProducts: Story = {
   ...MultipleProducts,
+  tags: ["!dev", "!autodocs"],
   name: "Mobile Multiple Products",
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
@@ -327,7 +350,33 @@ export const MobileMultipleProducts: Story = {
 
 export const MobileWithoutProducts: Story = {
   ...WithoutProducts,
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
+};
+
+export const Centered: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: Showcase.render,
+  args: { headingAlign: "center" },
+  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+};
+
+export const Pc: Story = {
+  name: "PC",
+  render: Showcase.render,
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+};
+
+export const Mobile: Story = {
+  render: Showcase.render,
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
 };

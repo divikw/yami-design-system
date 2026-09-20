@@ -5,15 +5,16 @@ import { ProductDetailPage } from "./ProductDetailPage";
 import { beverageProductSource, createBeverageProductDetailPageFixture } from "./beverage-fixtures";
 
 const meta = {
-  title: "YAMI/Pages/Product Detail/Beverage",
-  tags: ["!autodocs"],
+  id: "yami-pages-product-detail-beverage",
+  title: "YAMI/Pages/Product Detail/Draft/Beverage",
+  tags: ["!autodocs", "draft"],
   component: ProductDetailPage,
   parameters: {
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
       description: {
-        component: `饮料类 PDP · BINGGRAE 宾格瑞香蕉味牛奶饮料，200ml × 6盒。复用 ProductDetailPage，支持中英文及 PC / Mobile。\n\n[官网商品来源](${beverageProductSource.url}) · 采集日期：${beverageProductSource.capturedAt}。价格、销量、评分及赏味期限均为该日期的展示快照，并非实时库存或履约承诺。聚焦香蕉口味，官网其他口味未接入，不显示切换控件。官网没有该商品的榜单排名，因此不显示排名徽章。\n\n11 张官网商品静态图（不含视频封面）与 8 款饮料推荐使用官网 CDN，需要网络连接。营养成分表及独立配料模块按[完整包装标签](${beverageProductSource.labelImage})录入，每份为1盒（200ml），每包装6份。官网图库存在不同版本的营养标签，本页只使用所链接版本，不混用其他版本的数值；每日参考值沿用原标签，未列出的值以 — 标示，并非0。配料与牛奶过敏原已单独展示，饮用前请核对实物包装。\n\n评价区域显示官网评分分布及 4 条香蕉口味评价的摘要／翻译，并链接回来源；不使用买家照片、其他产品评价或个人浏览历史。购物车和评价提交仅为原型演示，不执行真实交易。\n\nBeverage PDP using the shared layout. Dated banana-flavor snapshot, not live pricing or stock. Eleven still images; no video or flavor switching. Nutrition and ingredients use one linked packaging label consistently, per 200ml carton. The gallery has differing label versions; daily values follow the linked label and missing values are not inferred. Check the actual pack. Reviews are labeled summaries. Cart and review actions are prototype-only.`,
+        component: `**Draft · 草稿**：尚未定稿或完成 review。\n\n饮料类 PDP · BINGGRAE 宾格瑞香蕉味牛奶饮料，200ml × 6盒。复用 ProductDetailPage，支持中英文及 PC / Mobile。\n\n[官网商品来源](${beverageProductSource.url}) · 采集日期：${beverageProductSource.capturedAt}。价格、销量、评分及赏味期限均为该日期的展示快照，并非实时库存或履约承诺。聚焦香蕉口味，官网其他口味未接入，不显示切换控件。官网没有该商品的榜单排名，因此不显示排名徽章。\n\n11 张官网商品静态图（不含视频封面）与 8 款饮料推荐使用官网 CDN，需要网络连接。营养成分表及独立配料模块按[完整包装标签](${beverageProductSource.labelImage})录入，每份为1盒（200ml），每包装6份。官网图库存在不同版本的营养标签，本页只使用所链接版本，不混用其他版本的数值；每日参考值沿用原标签，未列出的值以 — 标示，并非0。配料与牛奶过敏原已单独展示，饮用前请核对实物包装。\n\n评价区域显示官网评分分布及 4 条香蕉口味评价的摘要／翻译，并链接回来源；不使用买家照片、其他产品评价或个人浏览历史。购物车和评价提交仅为原型演示，不执行真实交易。\n\nBeverage PDP using the shared layout. Dated banana-flavor snapshot, not live pricing or stock. Eleven still images; no video or flavor switching. Nutrition and ingredients use one linked packaging label consistently, per 200ml carton. The gallery has differing label versions; daily values follow the linked label and missing values are not inferred. Check the actual pack. Reviews are labeled summaries. Cart and review actions are prototype-only.`,
       },
       story: { inline: false, height: "1800px" },
     },
@@ -29,11 +30,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = {
-  globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 };
 
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}) },
 };
 
 const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => {
@@ -106,6 +109,8 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(disclosure).toHaveAttribute("aria-expanded", "true");
   }
 
+  const root = canvasElement.ownerDocument.documentElement;
+  const originalOverflow = root.style.overflow;
   {
     const trigger = canvas.getByRole("button", { name: fixture.copy.openImagePreview });
     await userEvent.click(trigger);
@@ -114,11 +119,10 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(within(preview).getByRole("img")).toHaveAttribute("alt", fixture.images[0].alt);
     await userEvent.click(within(preview).getByRole("button", { name: fixture.copy.closeImagePreview }));
     await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(root.style.overflow).toBe(originalOverflow));
     await expect(trigger).toHaveFocus();
   }
   const nutritionTrigger = canvas.getByRole("button", { name: fixture.nutrition!.title, exact: true });
-  const root = canvasElement.ownerDocument.documentElement;
-  const originalOverflow = root.style.overflow;
   let sheetScrollTop = 0;
   if (mobile) {
     await expect(canvas.queryByRole("table", { name: fixture.nutrition!.title })).toBeNull();

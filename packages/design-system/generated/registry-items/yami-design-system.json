@@ -88,6 +88,7 @@
     "product-review-section",
     "radio-group",
     "review-list",
+    "section-banner",
     "sheet",
     "shortcut-rail",
     "social-media-gallery",
@@ -160,6 +161,7 @@
       "--brand-tertiary",
       "--breakpoints-desktop",
       "--breakpoints-desktop-lg",
+      "--breakpoints-desktop-wide",
       "--breakpoints-desktop-xl",
       "--breakpoints-mobile",
       "--breakpoints-tablet",
@@ -551,5 +553,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "1ffbe1fbb16657ec99872e1d7ebcb0f5d5f4b6596415d86e2db1c3617ae43f49"
+  "contentDigest": "e1ea1df7d864425c70dd835d7cdf33643da787becf944d9eded8703ae40fb4d1"
 }

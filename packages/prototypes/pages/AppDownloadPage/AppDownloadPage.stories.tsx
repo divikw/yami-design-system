@@ -3,19 +3,26 @@ import { expect, userEvent, within } from "storybook/test";
 import { AppDownloadPage } from "./AppDownloadPage";
 
 const meta = {
-  title: "YAMI/Pages/App Download/V1",
+  id: "yami-pages-app-download-v1",
+  title: "YAMI/Pages/App Download/Draft/V1",
   component: AppDownloadPage,
-  tags: ["!autodocs"],
-  parameters: { layout: "fullscreen", controls: { disable: true } },
-  globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
+  tags: ["!autodocs", "draft"],
+  parameters: {
+    viewport: { defaultViewport: "yamiDesktopLg" },
+    layout: "fullscreen",
+    controls: { disable: true },
+    docs: { description: { component: "**Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。" } },
+  },
+  globals: { theme: "light", ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopLg", isRotated: false } } : {}) },
 } satisfies Meta<typeof AppDownloadPage>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PC: Story = { args: { initialLocale: "ko" } };
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobileLg" } },
   args: { initialLocale: "ko" },
-  globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
+  globals: { ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobileLg", isRotated: false } } : {}) },
 };
 export const Interactions: Story = {
   tags: ["!dev"],

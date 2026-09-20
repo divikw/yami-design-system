@@ -39,10 +39,16 @@
 }
 
 .item {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   flex: 0 0 152px;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+.item > :global([data-slot="card"]) {
+  flex: 1;
 }
 
 @media (min-width: 1024px) {

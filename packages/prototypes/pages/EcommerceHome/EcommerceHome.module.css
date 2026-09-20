@@ -269,6 +269,15 @@ main.main[data-slot="ecommerce-home-main"]
     gap: var(--layout-page-margin-card);
   }
 
+  .section[data-kind="billboard"] > [data-slot="billboard"] {
+    width: calc(
+      100% - var(--layout-page-margin-card) - var(--layout-page-margin-card)
+    );
+    margin-inline: auto;
+    padding: 0;
+    border-radius: var(--radius-surface-default);
+  }
+
   .main :global([data-slot="shortcut-rail-title"]),
   .main :global([data-slot="product-list-heading"]),
   .main :global([data-slot="trending-searches-heading"]),

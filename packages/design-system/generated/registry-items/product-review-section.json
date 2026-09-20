@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Full PDP review section with aggregate rating, star distribution, filters, sorting, review cards, and progressive disclosure.",
+  "description": "草稿，尚未定稿或完成 review。商品详情页评价区域，包含评分分布、筛选、排序和响应式评价卡片。",
   "source": "components/ProductReviewSection",
   "files": [
     {
@@ -112,5 +112,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4bd23fd5248bc20c7efd793007a0b2149cd55ef0533a7d8f73d322ded630d878"
+  "contentDigest": "de2f300fd7084ca375c9d3750cf2e5bf0e91b4ce797a4ac3c440813861e6a594"
 }

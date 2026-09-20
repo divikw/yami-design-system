@@ -8,14 +8,15 @@ function localeFromGlobals(value: unknown): BillboardLocale {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Billboard",
+  id: "yami-components-commerce-billboard",
+  title: "YAMI/Modules/Commerce/Floating Bars",
   component: Billboard,
   parameters: {
     layout: "fullscreen",
     docs: {
       description: {
         component:
-          "A full-bleed promotional band whose entire content is one image. Campaign teams ship finished artwork — offer, styling and call to action are drawn into it — so the component contributes the band, the link and an accessible name. That name is a prop, because the words on the artwork are pixels a reader cannot reach.",
+          "Floating Bars / 活动快捷浮动栏。\n\nA full-bleed promotional band whose entire content is one image. Campaign teams ship finished artwork — offer, styling and call to action are drawn into it — so the component contributes the band, the link and an accessible name. That name is a prop, because the words on the artwork are pixels a reader cannot reach.",
       },
     },
   },
@@ -26,6 +27,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => (
     <Billboard {...createBillboardProps(localeFromGlobals(globals.locale), "#new-user-offer")} />
   ),
@@ -118,6 +120,9 @@ export const Showcase: Story = {
     const bandBox = band.getBoundingClientRect();
     const imageBox = image.getBoundingClientRect();
     const bandStyle = getComputedStyle(band);
+    if (bandStyle.padding !== "48px") {
+      throw new Error(`PC floating bars must use 48px padding, got ${bandStyle.padding}`);
+    }
     const available =
       bandBox.width -
       parseFloat(bandStyle.paddingLeft) -
@@ -161,22 +166,31 @@ export const EnglishArtworkContract: Story = {
   play: Showcase.play,
 };
 
+export const Pc: Story = {
+  name: "PC",
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  render: Showcase.render,
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
+};
+
 export const MobileCard: Story = {
   name: "Mobile",
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
   render: Showcase.render,
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const band = canvasElement.querySelector<HTMLElement>(
       '[data-slot="billboard"]',
     );
     if (!band) throw new Error("Billboard did not render");
     const style = getComputedStyle(band);
-    // Below 1024 the page stacks white cards on grey, and this band is one of
-    // them — same gutter and corner as ProductList and ShortcutRail.
-    if (style.marginInlineStart !== "8px" || style.borderRadius !== "12px") {
-      throw new Error(
-        `Mobile billboard must inset as a card, got margin ${style.marginInlineStart} and radius ${style.borderRadius}`,
-      );
+    if (style.padding !== "16px") {
+      throw new Error(`Mobile floating bars must use 16px padding, got ${style.padding}`);
     }
 
     // The narrow source carries its own dimensions, since portrait campaign
@@ -206,5 +220,5 @@ export const MobileCard: Story = {
         `Mobile billboard reserved ${source.getAttribute("width")}x${source.getAttribute("height")} for artwork that is ${image.naturalWidth}x${image.naturalHeight}`,
       );
     }
-  },
+  } : undefined,
 };

@@ -59,30 +59,15 @@
   }
 }
 
+/* Keep the artwork inside the responsive section padding. */
 @media (min-width: 1024px) {
-  /* Tighter above and below than the 32px sections use: the bar is a thin
-   * strip of artwork, and section-sized breathing room around it left it
-   * floating in white rather than reading as part of the page. */
   .root {
-    padding: var(--space-200) var(--space-600);
+    padding: var(--space-600);
   }
 }
 
-/* Mobile stacks white cards on a grey canvas, so the band becomes one of them:
- * the same --layout-page-margin-card gutter and --radius-surface-default
- * corner ProductList and ShortcutRail use, so the sections line up down the
- * page. */
 @media (max-width: 1023.98px) {
   .root {
-    width: calc(
-      100% - var(--layout-page-margin-card) - var(--layout-page-margin-card)
-    );
-    margin-inline: var(--layout-page-margin-card);
-    border-radius: var(--radius-surface-default);
-    overflow: hidden;
-  }
-
-  .link {
-    border-radius: 0;
+    padding: var(--space-200);
   }
 }

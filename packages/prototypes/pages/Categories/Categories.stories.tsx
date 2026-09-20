@@ -6,6 +6,7 @@ import { createEcommerceHomeFixture } from "../EcommerceHome/fixtures";
 const meta = {
   title: "YAMI/Pages/Categories",
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopXl" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -17,7 +18,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopXl", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopXl", isRotated: false } } : {}),
   },
   render: (_args, { globals }) => (
     <EcommerceHomeTemplate {...createEcommerceHomeFixture(globals.locale === "en" ? "en" : "zh")} />

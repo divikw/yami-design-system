@@ -6,7 +6,6 @@ products under image-led brand campaigns.
 ```tsx
 <BrandProductRail
   title="美护调理 流行趋势"
-  mobileTitle="品牌官方合作"
   campaigns={campaigns}
   tabs={categoryTabs}
   viewAllHref="/collections/beauty-trends"
@@ -15,6 +14,8 @@ products under image-led brand campaigns.
 ```
 
 ## Composition
+
+`title` supplies the same section heading on mobile and desktop.
 
 - Each brand campaign is rendered with the existing `ProductList`.
 - Each product row is rendered with the existing compact `ProductCard`.
@@ -60,7 +61,7 @@ only on the plain surface.
 ```
 
 At widths below 1024px, the component follows the Figma
-`brand-mobile / campaign` composition: a mobile-specific title, horizontally
+`brand-mobile / campaign` composition: the shared section title, horizontally
 scrollable tertiary tabs, 312px brand panels, 160px campaign art, and the
 existing 96px compact ProductCard rows.
 
@@ -72,3 +73,19 @@ panels use the existing 12px spacing and surface-radius tokens. Compact product
 image surfaces stay white in both color themes so transparent and opaque source
 assets share one visual background. Brand names rendered over campaign artwork
 also stay white instead of changing with the surrounding page theme.
+
+## Centered heading
+
+Set `headingAlign="center"` to center the section title and place desktop paging
+controls at the left and right edges of the content rail. Controls disappear
+when all items fit and disable at the scroll boundaries. Below 1024px, paging
+controls stay hidden and the existing mobile interaction remains unchanged.
+The default is `headingAlign="start"`.
+
+When centered and `viewAllHref` is provided, the title and a trailing
+`arrow-right` icon form one link to that destination. The separate view-all
+label is hidden. Without a destination, the title remains plain text.
+
+Mobile card sections keep their title left-aligned, including when
+`headingAlign="center"` is selected. Desktop still uses the selected alignment.
+Mobile `mobileSurface="plain"` sections may still center their title.

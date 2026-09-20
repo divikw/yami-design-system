@@ -41,14 +41,16 @@ const overflowPinnedImages = Array.from({ length: 8 }, (_, index) => ({
 }));
 
 const meta = {
-  title: "YAMI/Components/Commerce/Product Media Gallery",
+  id: "yami-components-commerce-product-media-gallery",
+  title: "YAMI/Components/Commerce/Product Media Gallery/Draft",
+  tags: ["draft"],
   component: ProductMediaGallery,
   parameters: {
     layout: "centered",
     docs: {
       description: {
         component:
-          "Responsive PDP gallery that keeps product imagery inside one viewing window and provides thumbnail, arrow-button, and keyboard switching.",
+          "**Draft · 草稿**：尚未定稿或完成 review。商品详情页媒体画廊，支持缩略图、箭头和键盘切换图片。",
       },
     },
   },

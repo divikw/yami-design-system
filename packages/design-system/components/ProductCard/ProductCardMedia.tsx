@@ -36,6 +36,7 @@ interface ProductCardMediaProps {
   imageFetchPriority?: ImgHTMLAttributes<HTMLImageElement>["fetchPriority"];
   badges?: ProductBadge[];
   onAddToCart?: MouseEventHandler<HTMLButtonElement>;
+  addButtonDisabled?: boolean;
   addButtonAriaLabel: string;
   priceBadge?: ReactNode;
   href?: string;
@@ -49,6 +50,7 @@ export function ProductCardMedia({
   imageFetchPriority,
   badges,
   onAddToCart,
+  addButtonDisabled = false,
   addButtonAriaLabel,
   priceBadge,
   href,
@@ -159,6 +161,7 @@ export function ProductCardMedia({
             <ProductCardAddButton
               aria-label={addButtonAriaLabel}
               onClick={onAddToCart}
+              disabled={addButtonDisabled}
             />
           </span>
         )}

@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Responsive YAMI social video gallery with product and pure-video card variants across PC and mobile layouts.",
+  "description": "响应式社交视频列表，支持纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
   "source": "components/SocialMediaGallery",
   "files": [
     {
@@ -190,5 +190,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "0836dc5774acd034b4ac6dd3cc046b807a8bcabeef724fb22c6488d45505526f"
+  "contentDigest": "83ecfc97120c8524b14d68f83081857b2e20353a555f273be1a24b3b505ab914"
 }

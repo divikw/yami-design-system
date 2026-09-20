@@ -330,6 +330,14 @@ export const AllVariantsContract: Story = {
       }
     }
 
+    for (const trigger of canvasElement.querySelectorAll<HTMLElement>('[role="tablist"][data-variant="tertiary"] [role="tab"]')) {
+      const background = getComputedStyle(trigger, "::before")
+      if (trigger.getBoundingClientRect().height !== (window.innerWidth >= 1024 ? 36 : 32) ||
+          background.top !== "0px" || background.bottom !== "0px") {
+        throw new Error("Tertiary tabs must match their visible capsule height")
+      }
+    }
+
     const initialWidth = showcaseStack.style.width
     const initialMaxWidth = showcaseStack.style.maxWidth
     try {
@@ -462,6 +470,8 @@ export const ScrollableSelection: Story = {
     if (!list || !middleTab || !lastTab) {
       throw new Error("Scrollable Tabs test fixture did not render")
     }
+
+    await canvasElement.ownerDocument.fonts.ready
 
     const initialListRect = list.getBoundingClientRect()
     if (lastTab.getBoundingClientRect().right <= initialListRect.right) {

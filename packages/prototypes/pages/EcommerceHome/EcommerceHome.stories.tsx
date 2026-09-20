@@ -19,6 +19,7 @@ const meta = {
   title: "YAMI/Pages/Ecommerce Home",
   component: EcommerceHomeTemplate,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopMd" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -31,7 +32,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopMd", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createEcommerceHomeFixture("en"),
 } satisfies Meta<typeof EcommerceHomeTemplate>;
@@ -46,7 +47,7 @@ export const Pc: Story = {
       {...createEcommerceHomeFixture(localeFromGlobals(globals.locale))}
     />
   ),
-  play: async ({ canvasElement, globals }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
     const page = canvasElement.querySelector<HTMLElement>(
       '[data-slot="ecommerce-home"]',
     );
@@ -712,18 +713,19 @@ export const Pc: Story = {
         `The document must not scroll horizontally: ${doc.scrollWidth}px > ${doc.clientWidth}px`,
       );
     }
-  },
+  } : undefined,
 };
 
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
   name: "Mobile",
   globals: {
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
   render: (_args, { globals }) => (
     <EcommerceHomeTemplate
       {...createEcommerceHomeFixture(localeFromGlobals(globals.locale))}
     />
   ),
-  play: Pc.play,
+  play: import.meta.env.MODE === "test" ? Pc.play : undefined,
 };

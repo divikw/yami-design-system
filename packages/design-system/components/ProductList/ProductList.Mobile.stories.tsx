@@ -1,6 +1,6 @@
 import baseMeta, * as examples from "./ProductList.story-examples";
 
-export default { ...baseMeta, title: "YAMI/Components/Commerce/Product List/Mobile" };
+export default { ...baseMeta, tags: ["!dev", "!autodocs"], id: "yami-components-commerce-product-list-mobile", title: "YAMI/Modules/Commerce/Product List/Mobile" };
 
 export const MobileTitleSizes = { ...examples.MobileTitleSizes, name: "Title sizes" };
 export const MobilePlain = { ...examples.MobilePlain, name: "Plain" };

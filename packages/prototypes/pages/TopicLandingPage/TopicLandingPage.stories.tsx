@@ -9,6 +9,7 @@ const meta = {
   title: "YAMI/Pages/Topic Landing Page/Brand",
   component: TopicLandingPage,
   parameters: {
+    viewport: { defaultViewport: "yamiDesktopMd" },
     layout: "fullscreen",
     controls: { disable: true },
     docs: {
@@ -34,7 +35,7 @@ const meta = {
   },
   globals: {
     theme: "light",
-    viewport: { value: "yamiDesktopMd", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createTopicLandingPageFixture(),
   render: (args, { globals }) => {
@@ -56,7 +57,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Pc: Story = {
   name: "Brand — PC",
-  play: async ({ canvasElement, args, globals }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, args, globals }) => {
     const locale = globals.locale === "zh" ? "zh" : "en";
     const localizedArgs = createTopicLandingPageFixture(locale);
     const localizedExpectation =
@@ -1501,15 +1502,16 @@ export const Pc: Story = {
         `Topic landing page interaction checks must not move the visible preview, observed ${maximumStoryScrollDelta}px`,
       );
     }
-  },
+  } : undefined,
 };
 
 export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
   name: "Brand — Mobile",
   globals: {
-    viewport: { value: "yamiMobile", isRotated: false },
+    ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
-  play: Pc.play,
+  play: import.meta.env.MODE === "test" ? Pc.play : undefined,
 };
 
 export const Chinese: Story = {

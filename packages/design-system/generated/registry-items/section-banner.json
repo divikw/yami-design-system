@@ -1,0 +1,82 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "section-banner",
+  "title": "SectionBanner",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "页面中部的带标题活动横幅，复用 SectionHeading 和 HeroBanner。",
+  "source": "components/SectionBanner",
+  "files": [
+    {
+      "source": "components/SectionBanner/fixtures.ts",
+      "target": "components/SectionBanner/fixtures.ts"
+    },
+    {
+      "source": "components/SectionBanner/index.ts",
+      "target": "components/SectionBanner/index.ts"
+    },
+    {
+      "source": "components/SectionBanner/SectionBanner.module.css",
+      "target": "components/SectionBanner/SectionBanner.module.css"
+    },
+    {
+      "source": "components/SectionBanner/SectionBanner.stories.module.css",
+      "target": "components/SectionBanner/SectionBanner.stories.module.css"
+    },
+    {
+      "source": "components/SectionBanner/SectionBanner.tsx",
+      "target": "components/SectionBanner/SectionBanner.tsx"
+    }
+  ],
+  "exports": [
+    "SectionBanner",
+    "SectionBannerItem",
+    "SectionBannerProps"
+  ],
+  "composes": [
+    "HeroBanner"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "./HeroBanner"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/SectionBanner/usage.md",
+    "stories": [
+      "components/SectionBanner/SectionBanner.stories.tsx"
+    ],
+    "examples": [
+      "components/SectionBanner/examples.tsx#SectionBannerExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--font-family-ios",
+      "--layout-page-margin-card",
+      "--space-200",
+      "--space-300",
+      "--space-400",
+      "--space-600",
+      "--surface-primary"
+    ],
+    "rules": [
+      "type-hierarchy"
+    ],
+    "tokenBindings": {}
+  },
+  "quality": {
+    "accessibility": {
+      "wcagLevel": "AA",
+      "structure": "h2 通过 aria-labelledby 命名 Banner region。",
+      "interaction": "PC 使用左右两侧的轮播按钮，Mobile 横向滑动；继承 HeroBanner 的键盘导航、减少动态效果和离屏暂停行为。"
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "d0ea24ae03b16cc43bf8cc260c044f8057a183acc06f147f8a57c660fcf971ce"
+}

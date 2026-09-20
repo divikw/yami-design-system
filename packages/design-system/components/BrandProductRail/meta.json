@@ -18,15 +18,16 @@
   ],
   "composes": ["ProductList", "ProductCard", "Button", "Tabs"],
   "props": {
+    "headingAlign": {
+      "type": "\"start\" | \"center\"",
+      "required": false,
+      "default": "start",
+      "description": "Center the heading and place desktop paging controls at the content edges."
+    },
     "title": {
       "type": "ReactNode",
       "required": true,
-      "description": "Visible section heading and accessible label."
-    },
-    "mobileTitle": {
-      "type": "ReactNode",
-      "required": false,
-      "description": "Optional mobile-only section heading; falls back to title."
+      "description": "Shared visible section heading and accessible label on mobile and desktop."
     },
     "titleFontFamily": {
       "type": "\"sans\" | \"serif\"",

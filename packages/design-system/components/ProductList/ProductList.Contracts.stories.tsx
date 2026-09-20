@@ -1,6 +1,6 @@
 import baseMeta, * as examples from "./ProductList.story-examples";
 
-export default { ...baseMeta, title: "YAMI/Components/Commerce/Product List/Contracts", tags: ["!dev", "!autodocs"] };
+export default { ...baseMeta, id: "yami-components-commerce-product-list-contracts", title: "YAMI/Modules/Commerce/Product List/Contracts", tags: ["!dev", "!autodocs"] };
 
 export const TabChangeResetsRailPosition = { ...examples.TabChangeResetsRailPosition };
 export const BlackBottomDivider = { ...examples.BlackBottomDivider };

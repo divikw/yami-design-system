@@ -5,7 +5,8 @@ import { createThemeProductListProps } from "./fixtures";
 import storyStyles from "./ThemeProductList.stories.module.css";
 
 const meta = {
-  title: "YAMI/Components/Commerce/Theme Product List",
+  id: "yami-components-commerce-theme-product-list",
+  title: "YAMI/Modules/Commerce/Theme Product List",
   component: ThemeProductList,
   decorators: [
     (Story) => (
@@ -19,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A StandardRail-based theme product list. It reserves the first two product-card slots for an image-led content panel with a contrast overlay and description, then continues with the shared ProductList rail.",
+          "主题商品列表：PC 首部使用两个商品卡片宽度展示主题图片及文字，后接商品列表；Mobile 将主题内容置于商品列表上方。",
       },
       source: {
         language: "tsx",
@@ -35,18 +36,18 @@ import { createThemeProductListProps } from "@yami/design-system/components/Them
       options: ["card", "plain"],
       control: { type: "radio" },
       description:
-        "Mobile section surface. Card preserves the inset rounded panel; plain is full-bleed with 16px content padding and supports dividers.",
+        "移动端外观：card 为内缩圆角面板；plain 为通栏布局，内容内边距 16px，并支持分割线。",
     },
     dividerPosition: {
       options: ["top", "bottom", "none"],
       control: { type: "radio" },
       description:
-        "Section divider edge. Always supported on desktop; on mobile it is available only for the plain surface.",
+        "分割线位置。PC 始终支持，Mobile 仅 plain 外观支持。",
     },
     dividerVariant: {
       options: ["gray", "black"],
       control: { type: "radio" },
-      description: "Gray renders at 1px; black emphasis renders at 2px.",
+      description: "gray 为 1px 灰色分割线；black 为 2px 强调分割线。",
     },
   },
   args: {
@@ -61,6 +62,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
   play: async ({ canvasElement }) => {
     const themeList = canvasElement.querySelector<HTMLElement>(
       '[data-slot="theme-product-list"]',
@@ -157,15 +159,11 @@ export const Showcase: Story = {
     const expectedTitleSize =
       window.innerWidth < 1024
         ? "14px"
-        : window.innerWidth >= 1440
-          ? "20px"
-          : "18px";
+        : "18px";
     const expectedTitleLineHeight =
       window.innerWidth < 1024
         ? "20px"
-        : window.innerWidth >= 1440
-          ? "28px"
-          : "24px";
+        : "24px";
     const titleStyle = getComputedStyle(contentTitle);
     if (
       titleStyle.fontSize !== expectedTitleSize ||
@@ -265,31 +263,45 @@ export const Showcase: Story = {
         !container ||
         !canvasStyles ||
         canvasStyles.backgroundColor !== "rgb(245, 245, 245)" ||
-        getComputedStyle(container).rowGap !== "4px" ||
+        getComputedStyle(container).rowGap !== "12px" ||
         getComputedStyle(mobileWrapper).display === "none" ||
         getComputedStyle(desktopWrapper).display !== "none" ||
-        mobileWrapper.getBoundingClientRect().bottom >
-          firstProduct.getBoundingClientRect().top ||
+        Math.abs(firstProduct.getBoundingClientRect().top -
+          mobileWrapper.getBoundingClientRect().bottom - 8) > 1 ||
         listStyles.paddingTop !== "4px" ||
         listStyles.paddingRight !== "8px" ||
         listStyles.paddingBottom !== "4px" ||
         listStyles.paddingLeft !== "8px"
       ) {
         throw new Error(
-          "ThemeProductList mobile must use a 4px container gap and stack its content panel above a 4px/8px padded product rail",
+          "ThemeProductList mobile must use a 12px container gap and an 8px panel-to-card gap above a 4px/8px padded product rail",
         );
       }
     }
   },
 };
 
+export const PC: Story = {
+  ...Showcase,
+  tags: ["dev", "autodocs"],
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
+};
+
 export const Mobile: Story = {
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  play: Showcase.play,
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? Showcase.play : undefined,
 };
 
 export const MobilePlain: Story = {
   name: "Mobile / Plain",
+  tags: ["!dev", "!autodocs"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   args: {
     mobileSurface: "plain",
@@ -355,6 +367,8 @@ export const MobilePlain: Story = {
       listRect.right !== window.innerWidth ||
       list.dataset.surface !== "plain" ||
       firstProduct.getBoundingClientRect().left !== 16 ||
+      Math.abs(firstProduct.getBoundingClientRect().top -
+        mobileContent.getBoundingClientRect().bottom - 8) > 1 ||
       listStyle.columnGap !== "8px" ||
       listStyle.marginLeft !== "-16px" ||
       listStyle.marginRight !== "-16px" ||

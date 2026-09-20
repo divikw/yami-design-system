@@ -4,14 +4,30 @@ import { ThemeHero } from "./ThemeHero";
 import { createThemeHeroProps } from "./fixtures";
 
 const meta = {
-  title: "YAMI/Components/Commerce/Theme Hero",
+  id: "yami-components-commerce-theme-hero",
+  title: "YAMI/Modules/Commerce/Theme Hero",
   component: ThemeHero,
+  argTypes: {
+    title: { description: "主题标题。" },
+    description: { description: "主题辅助说明，PC 默认最多三行，Mobile 最多两行，超出时可展开。" },
+    descriptionExpandLabel: { description: "展开描述的本地化文案。" },
+    descriptionCollapseLabel: { description: "收起描述的本地化文案。" },
+    tags: { description: "可选的简短关键词，以不可交互的 Badge 展示。" },
+    tagSize: { description: "关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。" },
+    tagTone: { description: "标签明暗样式，默认 dark。" },
+    image: { description: "主题图片，包含替代文本、原始尺寸及可选裁切焦点。" },
+    backgroundImageSrc: { description: "可选的模糊背景图片，默认使用主题图片。" },
+    backgroundColor: { description: "图片底边预采样颜色，用于移动端自适应遮罩。" },
+    cta: { description: "可选主操作按钮，默认不显示。" },
+    secondaryCta: { description: "可选次操作按钮，默认不显示。" },
+    imageLoading: { description: "主题图片加载策略。" },
+  },
   parameters: {
     layout: "fullscreen",
     docs: {
       description: {
         component:
-          "A theme storytelling hero with selectable copy, optional primary and secondary actions, and campaign artwork repeated as a blurred atmosphere. Designed from English Site Optimization 2026 node 1877:43111 and informed by the W Concept visual module.",
+          "主题展示模块，结合标题、可展开说明、关键词标签与主题图片。PC 为双栏布局，Mobile 将文字叠加在图片底部；默认不显示操作按钮。",
       },
       source: {
         language: "tsx",
@@ -29,6 +45,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
+  tags: ["!dev", "!autodocs"],
+  args: { cta: { label: "Shop Products" }, secondaryCta: { label: "Explore More" } },
   play: async ({ canvasElement }) => {
     const hero = canvasElement.querySelector<HTMLElement>(
       '[data-slot="theme-hero"]',
@@ -291,9 +309,10 @@ export const Showcase: Story = {
   },
 };
 
-export const Mobile: Story = {
+export const MobileWithActions: Story = {
+  tags: ["!dev", "!autodocs"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  args: { tagSize: "md" },
+  args: { tagSize: "md", cta: { label: "Shop Products" }, secondaryCta: { label: "Explore More" } },
   play: async ({ canvasElement }) => {
     const hero = canvasElement.querySelector<HTMLElement>(
       '[data-slot="theme-hero"]',
@@ -539,4 +558,25 @@ export const Mobile: Story = {
       );
     }
   },
+};
+
+export const PC: Story = {
+  parameters: { viewport: { defaultViewport: "yamiDesktopLg" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiDesktopLg", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
+    if (!canvasElement.querySelector('[data-slot="theme-hero"]') ||
+        canvasElement.querySelector('[data-slot="theme-hero-actions"]')) {
+      throw new Error("Default ThemeHero must render without action buttons");
+    }
+  } : undefined,
+};
+
+export const Mobile: Story = {
+  parameters: { viewport: { defaultViewport: "yamiMobile" } },
+  globals: import.meta.env.MODE === "test"
+    ? { viewport: { value: "yamiMobile", isRotated: false } }
+    : {},
+  play: import.meta.env.MODE === "test" ? PC.play : undefined,
 };

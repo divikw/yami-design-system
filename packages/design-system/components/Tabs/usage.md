@@ -31,7 +31,9 @@
 | `secondary` | Mobile Secondary / WEB Secondary | Sub-section navigation with the same underline treatment on mobile and PC |
 | `tertiary` | Mobile Tertiary | Compact category or filter pills |
 
-Primary Style B and Tertiary keep their compact 32px selected surface throughout Mobile and Tablet widths. At the shared Desktop breakpoint (`min-width: 1024px`), only the visible selected surface grows to 36px; the underlying trigger and hit-target heights do not change.
+Primary Style B keeps its 32px selected surface below 1024px and 36px desktop surface without changing its trigger height.
+
+Tertiary 胶囊标签的视觉、布局和点击区域高度保持一致：小于 1024px 时为 32px，PC 为 36px。透明点击区域不向相邻控件扩展；横向溢出时保留滚动。
 
 ## Inverse
 

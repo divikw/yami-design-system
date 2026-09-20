@@ -1,10 +1,14 @@
 # App Download Page V2
 
+> **Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。
+
 Starts from V1 with the same content, styles, and behavior. Component, CSS, fixtures, and reference data are owned by this version so they can evolve independently. Images, video, and store badges reuse `../AppDownloadPage/assets/`.
 
 Visible stories: PC and Mobile under `YAMI/Pages/App Download/V2`, both initially in Korean with an in-page language switch. Interactions, SectionNavigation, and ContentWidth remain test-only stories, hidden from browsing.
 
 Preview: http://localhost:6006/?path=/story/yami-pages-app-download-v2--pc
+
+A centered SectionBanner appears immediately before Why Yami, after the savings calculator. Its eight cards use the source order, artwork, titles, descriptions, product thumbnails, and story destinations captured from https://yami-app-download.vercel.app/#story-carousel in `story-banners.json`. The source keeps card copy and story destinations in English in both locales; the module title and description use the requested English source copy in both locales. Product destinations are retained in the snapshot for reference; the existing SectionBanner interaction remains one story link per card. Component UI, sizing, navigation, and contentMaxWidth are unchanged.
 
 Validation: `pnpm validate`; `pnpm --filter @yami/storybook exec vitest run --project storybook AppDownloadPage`.
 

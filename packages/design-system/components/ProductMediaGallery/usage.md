@@ -1,5 +1,8 @@
 # ProductMediaGallery
 
+> **Draft · 草稿**：当前组件及全部预览内容尚未定稿或完成 review。
+
+
 Use `ProductMediaGallery` for a PDP media region when several product images
 share one bounded viewing window. It keeps one identity image visible at a time
 and offers thumbnail, previous/next, and keyboard ArrowLeft/ArrowRight
