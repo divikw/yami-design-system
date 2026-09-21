@@ -20,6 +20,7 @@ import {
 
 import styles from "./ProductDetailPage.module.css";
 import { ProductPricing } from "./components/ProductPricing";
+import { ProductStickyPurchaseBar } from "./components/ProductStickyPurchaseBar";
 import type { ProductDetailPageProps } from "./ProductDetailPage.types";
 import { ProductNutritionSheet } from "./ProductNutritionSheet";
 import { ProductDetailSheet } from "./ProductDetailSheet";
@@ -238,7 +239,36 @@ export function ProductDetailPage({
   ...rest
 }: ProductDetailPageProps) {
   const galleryRef = useRef<ProductMediaGalleryHandle>(null);
+  const addToCartRef = useRef<HTMLButtonElement>(null);
   const [nutritionOpen, setNutritionOpen] = useState(false);
+  const [stickyPurchaseVisible, setStickyPurchaseVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    let animationFrame = 0;
+
+    const updateStickyPurchase = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() => {
+        const addToCart = addToCartRef.current;
+        setStickyPurchaseVisible(
+          desktop.matches && Boolean(addToCart && addToCart.getBoundingClientRect().bottom <= 0)
+        );
+      });
+    };
+
+    updateStickyPurchase();
+    window.addEventListener("scroll", updateStickyPurchase, { passive: true });
+    window.addEventListener("resize", updateStickyPurchase);
+    desktop.addEventListener("change", updateStickyPurchase);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", updateStickyPurchase);
+      window.removeEventListener("resize", updateStickyPurchase);
+      desktop.removeEventListener("change", updateStickyPurchase);
+    };
+  }, []);
   function openSourcePreview(event: MouseEvent<HTMLAnchorElement>, sourceHref: string) {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const sourceImage = images.find((image) =>
@@ -279,6 +309,12 @@ export function ProductDetailPage({
     typeof contentMaxWidth === "number"
       ? `${contentMaxWidth}px`
       : contentMaxWidth;
+  const primaryImage = images[0];
+  const primaryImageSrc = primaryImage
+    ? typeof primaryImage.src === "string"
+      ? primaryImage.src
+      : primaryImage.src.src
+    : "";
 
   return (
     <div
@@ -298,6 +334,17 @@ export function ProductDetailPage({
           } as CSSProperties
         }
       >
+        {stickyPurchaseVisible && primaryImage ? (
+          <ProductStickyPurchaseBar
+            imageSrc={primaryImageSrc}
+            imageAlt={primaryImage.alt}
+            brand={brand}
+            title={title}
+            addToCartLabel={copy.addToCart}
+            disabled={!selectionAvailable}
+          />
+        ) : null}
+
         <div className={styles.content} data-slot="product-detail-content">
           <div
             className={styles.utilityRow}
@@ -772,6 +819,7 @@ export function ProductDetailPage({
                       </div>
 
                       <Button
+                        ref={addToCartRef}
                         variant="emphasis"
                         form="full"
                         size="lg"

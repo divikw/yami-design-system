@@ -19,7 +19,7 @@
 
 @media (min-width: 1024px) {
   .root {
-    max-width: calc(var(--space-1000) * 6);
+    max-width: calc(var(--space-1000) * 7);
   }
 }
 
