@@ -39,6 +39,10 @@ const stories = [
 const indexPath = path.join(root, "apps/storybook/storybook-static/index.json");
 const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const entries = Object.values(index.entries ?? {});
+// Draft components expose versioned preview stories before publishing Docs.
+const draftStoryPaths = new Set(entries
+  .filter((entry) => entry.type === "story" && entry.tags?.includes("draft") && entry.title.includes("/Draft/"))
+  .map((entry) => path.resolve(root, "apps/storybook", entry.importPath)));
 const docsEntries = entries.filter((entry) => entry.type === "docs");
 const docsComponentNames = new Set(docsEntries.map((entry) => normalizeComponentName(entry.title.split("/").at(-1))));
 for (const component of componentDocs) {
@@ -64,7 +68,7 @@ function hasOwningDocsEntry(componentName) {
 }
 
 for (const component of componentDocs) {
-  if (!hasOwningDocsEntry(component.name)) {
+  if (!draftStoryPaths.has(component.storyPath) && !hasOwningDocsEntry(component.name)) {
     throw new Error(`${component.name} is missing its Storybook docs entry`);
   }
 }
@@ -78,6 +82,7 @@ if (!bundledDocs.includes("data-yami-docs")) {
   throw new Error("The component usage docs template was not bundled");
 }
 for (const component of componentDocs) {
+  if (draftStoryPaths.has(component.storyPath)) continue;
   const heading = component.usage.split(/\r?\n/, 1)[0];
   if (!bundledDocs.includes(heading)) {
     throw new Error(`${component.name} usage content was not bundled into Storybook`);
