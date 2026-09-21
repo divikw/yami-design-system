@@ -205,6 +205,18 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     await page.viewport(1440, 900);
     expect(dialog.open).toBe(true);
     expect(getComputedStyle(rail).flexDirection).toBe("column");
+    const desktopStage = dialog.querySelector<HTMLElement>('[data-slot="product-media-preview-stage"]')!;
+    const desktopSidebar = dialog.querySelector<HTMLElement>('[data-slot="product-media-preview-sidebar"]')!;
+    const closeButton = dialog.querySelector<HTMLElement>('[aria-label="Close image preview"]')!;
+    const desktopStageRect = desktopStage.getBoundingClientRect();
+    const desktopSidebarRect = desktopSidebar.getBoundingClientRect();
+    expect(desktopStageRect.left).toBe(0);
+    expect(desktopStageRect.right).toBeLessThanOrEqual(desktopSidebarRect.left);
+    expect(desktopSidebarRect.right).toBeLessThan(closeButton.getBoundingClientRect().left);
+    const previousButton = dialog.querySelector<HTMLElement>('[data-rail-navigation-button="true"]')!;
+    const previousRect = previousButton.getBoundingClientRect();
+    const closeRect = closeButton.getBoundingClientRect();
+    expect((previousRect.top + previousRect.bottom) / 2).toBe((closeRect.top + closeRect.bottom) / 2);
     await page.viewport(375, 812);
     expect(getComputedStyle(rail).flexDirection).toBe("row");
     await page.getByRole("button", { name: "Close image preview" }).click();
