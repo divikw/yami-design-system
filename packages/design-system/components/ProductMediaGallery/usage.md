@@ -24,8 +24,10 @@ images instead of leaving an empty gap at the edge; it pins to the final visible
 slot only when the regular thumbnail rail overflows. The edge fade appears only
 in that pinned-overflow state. On desktop, main-gallery thumbnails use six
 complete slots from 424px upward, including the pinned slot, and stay within the
-64–80px range. Narrower containers step down to five or four complete slots.
-Preview-dialog thumbnails retain their existing sizing.
+64–88px range. At the 560px gallery maximum, the six slots resolve to about
+86.7px so five regular thumbnails and the pinned reference remain complete.
+Narrower containers step down to five or four complete slots. Preview-dialog
+thumbnails retain their existing sizing.
 
 The component's 560px maximum applies only from the 1024px desktop breakpoint.
 The PDP sizes the gallery continuously from 280px at a 1024px viewport to 560px

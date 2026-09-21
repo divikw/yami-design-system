@@ -1007,13 +1007,10 @@ export const DesktopRegression: Story = {
       getComputedStyle(detailSubheading.parentElement!).rowGap !== "normal" ||
       !highlightList ||
       getComputedStyle(highlightList).rowGap !== "8px" ||
-      (viewportWidth >= 1280
-        ? gallery.getBoundingClientRect().width < 424 ||
-          gallery.getBoundingClientRect().width > 480
-        : Math.abs(
-            gallery.getBoundingClientRect().width -
-              Math.min(480, overview.getBoundingClientRect().width * 0.4)
-          ) > 1) ||
+      Math.abs(
+        gallery.getBoundingClientRect().width -
+          Math.min(560, Math.max(280, viewportWidth * 0.3125 - 40))
+      ) > 1 ||
       getComputedStyle(gallery).position !== "sticky" ||
       getComputedStyle(gallery).top !== "24px" ||
       overview.parentElement !== leftContent ||
@@ -2303,6 +2300,7 @@ export const StickyPurchaseBar: Story = {
   name: "Sticky purchase bar after Add to Cart",
   tags: ["!dev", "!autodocs"],
   globals: {
+    locale: "en",
     viewport: { value: "yamiDesktopLg", isRotated: false },
   },
   play: async ({ canvasElement }) => {
@@ -2322,10 +2320,24 @@ export const StickyPurchaseBar: Story = {
       canvasElement.querySelector('[data-slot="product-detail-sticky-purchase-bar"]')
     ).toBeNull();
 
-    view.scrollTo({
-      top: view.scrollY + addToCart.getBoundingClientRect().bottom + 1,
-    });
-    await nextFrame();
+    for (
+      let attempt = 0;
+      attempt < 10 && addToCart.getBoundingClientRect().bottom > 0;
+      attempt += 1
+    ) {
+      view.scrollTo({
+        top:
+          view.scrollY +
+          Math.max(view.innerHeight, addToCart.getBoundingClientRect().bottom + 1),
+      });
+      await nextFrame();
+    }
+
+    if (addToCart.getBoundingClientRect().bottom > 0) {
+      throw new Error(
+        "Sticky purchase-bar test must first scroll the original Add to Cart fully above the viewport"
+      );
+    }
 
     const stickyBar = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-detail-sticky-purchase-bar"]'

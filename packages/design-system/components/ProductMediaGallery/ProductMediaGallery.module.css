@@ -2,7 +2,7 @@
   --product-media-thumbnail-size: clamp(
     var(--space-800),
     calc((100cqw - var(--space-500)) / 6),
-    var(--space-1000)
+    calc(var(--space-1000) + var(--space-100))
   );
 
   box-sizing: border-box;
@@ -81,7 +81,7 @@
     --product-media-thumbnail-size: clamp(
       var(--space-800),
       calc((100cqw - var(--space-400)) / 5),
-      var(--space-1000)
+      calc(var(--space-1000) + var(--space-100))
     );
   }
 }
@@ -91,7 +91,7 @@
     --product-media-thumbnail-size: clamp(
       var(--space-800),
       calc((100cqw - var(--space-300)) / 4),
-      var(--space-1000)
+      calc(var(--space-1000) + var(--space-100))
     );
   }
 }
