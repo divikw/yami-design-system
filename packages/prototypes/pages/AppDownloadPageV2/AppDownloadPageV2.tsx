@@ -30,7 +30,7 @@ const arrowDown = new URL("../../../design-system/assets/icons/system/arrow-down
 const localeFlag = new URL("../../../design-system/assets/icons/area/korea-flag.svg", import.meta.url).href;
 const desktopLogo = new URL("../../../design-system/assets/logos/yami-ui-en-pc-fill.svg", import.meta.url).href;
 const logo = new URL("../../../design-system/assets/logos/yami-ui-en-mobile-fill.svg", import.meta.url).href;
-const sectionIds = ["welcome-coupon", "discount-products", "coupon-guide", "savings-calculator", "brand-special", "sns-trend", "reviews"];
+const fullSectionIds = ["welcome-coupon", "discount-products", "coupon-guide", "savings-calculator", "brand-special", "sns-trend", "reviews"];
 
 function DownloadLinks() {
   return <div className={styles.downloadLinks}>
@@ -76,7 +76,7 @@ function SavingsCalculator({ locale, onGuide, ...divider }: { locale: AppDownloa
             <div><h3>{mode === "welcome" ? t.card1Title : (ko ? "선택 상품 쿠폰 적용 후 합계" : "Selected Items After Coupon")}</h3><p>{mode === "welcome" ? t.sliderHint : selected.length ? (ko ? `${selected.length}개 선택 · 배송비 별도` : `${selected.length} selected · Shipping excluded`) : (ko ? "상품을 선택하면 할인과 최종 결제 금액을 확인할 수 있어요." : "Select products to see your discount and final payment.")}</p></div>
             <strong data-testid="selected-items-total">{money(mode === "welcome" ? result.subtotal : Math.max(0, result.subtotal - result.discount))}</strong>
           </div>
-          <div id="calculator-panel-welcome" role="tabpanel" aria-labelledby="calculator-tab-welcome" hidden={mode !== "welcome"} className={styles.calculatorControls}>
+          <div id="calculator-panel-welcome" role="tabpanel" aria-labelledby="calculator-tab-welcome" hidden={mode !== "welcome"} className={styles.calculatorControls} style={{ "--slider-progress": `${(amount - 12) / 88 * 100}%` } as CSSProperties}>
             <label className={styles.srOnly} htmlFor="campaign-order-amount">{t.card1Title}</label>
             <input id="campaign-order-amount" className={styles.slider} type="range" min={12} max={100} step={1} value={amount} onChange={(event) => setAmount(Number(event.target.value))} aria-valuetext={money(amount)} />
             <div className={styles.ticks} aria-hidden="true">{[12, 25, 50, 75, 100].map((value) => <span key={value} style={{ left: `${(value - 12) / 88 * 100}%` }}>{money(value).replace(".00", "")}</span>)}</div>
@@ -137,9 +137,10 @@ function SavingsCalculator({ locale, onGuide, ...divider }: { locale: AppDownloa
   </section>;
 }
 
-export interface AppDownloadPageV2Props { initialLocale?: AppDownloadLocale; contentMaxWidth?: number | string; sectionDividers?: AppDownloadSectionDividers }
+export interface AppDownloadPageV2Props { variant?: "full" | "compact"; initialLocale?: AppDownloadLocale; contentMaxWidth?: number | string; sectionDividers?: AppDownloadSectionDividers }
 
-export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440, sectionDividers = {} }: AppDownloadPageV2Props) {
+export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440, sectionDividers = {}, variant = "full" }: AppDownloadPageV2Props) {
+  const sectionIds = variant === "compact" ? fullSectionIds.slice(0, 4) : fullSectionIds;
   const [locale, setLocale] = useState(initialLocale);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [copyFailed, setCopyFailed] = useState(false);
@@ -161,7 +162,9 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
       const bounds = downloadButtons?.getBoundingClientRect();
       const headerBottom = root.current?.querySelector("header")?.getBoundingClientRect().bottom ?? 0;
       const downloadButtonsVisible = bounds && bounds.bottom > headerBottom && bounds.top < window.innerHeight;
-      setShowSticky(Boolean(bounds && !downloadButtonsVisible));
+      const bottomSection = root.current?.querySelector("#bottom-cta-section")?.getBoundingClientRect();
+      const reachedBottomDownload = bottomSection && bottomSection.top < window.innerHeight;
+      setShowSticky(Boolean(bounds && !downloadButtonsVisible && !reachedBottomDownload));
       if (pendingSection.current) return;
       let active = sectionIds[0];
       for (const id of sectionIds) {
@@ -197,7 +200,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
       window.removeEventListener("touchstart", resumeTracking);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [variant]);
 
   useEffect(() => {
     const player = video.current;
@@ -324,6 +327,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         </div>
       </section>
       <SavingsCalculator {...sectionDividers["savings-calculator"]} locale={locale} onGuide={() => showGuide(12)} />
+      {variant === "full" && <>
       <SectionBanner
         className={styles.storyBanner}
         title={appDownloadBannerTitle}
@@ -374,6 +378,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         previousLabel={ko ? "이전 리뷰" : "Previous reviews"}
         nextLabel={ko ? "다음 리뷰" : "Next reviews"}
       />
+      </>}
       <section {...dividerAttributes({ dividerPosition: "top", dividerVariant: "gray", ...sectionDividers["bottom-cta-section"] })} className={styles.bottom} id="bottom-cta-section">
         <div className={styles.downloadContainer}>
           <div className={styles.heroHeading}>

@@ -144,7 +144,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "6677552c03033ab953a7c3c953107fff16f7aaa68556026d0862d8f8909427cd"
+      "digest": "2d3abf456c702e07f76e921046bc24810addd5788dcaf87628e24aa58bc83e25"
     },
     {
       "name": "horizontal-scroll-list",

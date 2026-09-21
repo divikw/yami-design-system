@@ -1,5 +1,5 @@
 .root { container-type: inline-size; padding-block: var(--campaign-section-padding-block); background: var(--background-secondary); }
-.container { max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; gap: var(--space-400); }
+.container { max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--campaign-section-padding-inline); display: flex; flex-direction: column; gap: var(--space-400); }
 .strength p { color: var(--text-secondary); }
 .video { display: block; width: 100%; max-width: 960px; aspect-ratio: 16 / 9; align-self: center; border-radius: var(--radius-surface-default); background: var(--surface-primary); }
 .brands, .strengths { display: flex; flex-direction: column; gap: var(--space-200); text-align: center; min-width: 0; }
@@ -12,8 +12,8 @@
 .strength > [data-slot="card-content"] { display: flex; flex-direction: column; gap: var(--space-100); height: 100%; justify-content: center; }
 .strength strong { color: var(--text-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); }
 @media (min-width: 1024px) {
-  .container { padding-inline: var(--space-600); gap: var(--space-600); }
-  .strengthRail > li { flex-basis: calc((min(100cqw, var(--campaign-content-max-width)) - 2 * var(--space-600) - 3 * var(--space-200)) / 4); }
+  .container { padding-inline: var(--campaign-section-padding-inline); gap: var(--space-600); }
+  .strengthRail > li { flex-basis: calc((min(100cqw, var(--campaign-content-max-width)) - 2 * var(--campaign-section-padding-inline) - 3 * var(--space-200)) / 4); }
 }
 
 .root .rail, .root .strengthRail { scroll-snap-type: none; scroll-behavior: auto; }

@@ -2,6 +2,7 @@
  * bottom-edge color sampled by the component. */
 
 .root {
+  container: hero-banner / inline-size;
   --section-divider-color: var(--border-default);
   --section-divider-width: var(--stroke-default);
 
@@ -330,7 +331,7 @@
   }
 }
 
-@media (min-width: 1440px) {
+@container hero-banner (width > 1440px) {
   .item {
     --hero-banner-per-view: 4;
   }
