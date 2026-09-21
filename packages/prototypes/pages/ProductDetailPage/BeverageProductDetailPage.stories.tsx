@@ -253,8 +253,8 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
         await expect(within(preview).getByRole("img")).toHaveAttribute("alt", fixture.images[9].alt);
         await userEvent.keyboard("{Escape}");
         await waitFor(() => expect(canvas.queryByRole("dialog", { name: fixture.copy.galleryLabel })).toBeNull());
-        await expect(sourceLink).toHaveFocus();
-        await expect(canvasElement.ownerDocument.documentElement.style.overflow).toBe(originalOverflow);
+        await waitFor(() => expect(sourceLink).toHaveFocus());
+        await waitFor(() => expect(canvasElement.ownerDocument.documentElement.style.overflow).toBe(originalOverflow));
         if (inSheet) {
           await expect(canvas.getByRole("dialog", { name: source.title })).toBeVisible();
           await expect(getComputedStyle(root).overflow).toBe("hidden");
