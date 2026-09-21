@@ -9,6 +9,56 @@ import "@yami/design-system/tokens.css";
 
 const images = meta.args!.images!;
 
+test("desktop thumbnail hover selects images and the main image exposes a cursor-following zoom", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  container.style.width = "480px";
+  document.body.append(container);
+  const root = createRoot(container);
+  const hoverImages = images.map((image, index) => ({
+    ...image,
+    thumbnailPinned: index === images.length - 1,
+    thumbnailOverlayLabel: index === images.length - 1 ? "Skin Info" : undefined,
+  }));
+  try {
+    await page.viewport(1440, 900);
+    flushSync(() => root.render(
+      <ProductMediaGallery images={hoverImages} desktopPreview desktopZoom />
+    ));
+    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
+    const stage = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-stage"]')!;
+    const thumbnails = container.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
+    const pinnedThumbnail = thumbnails[thumbnails.length - 1]!;
+    await page.elementLocator(thumbnails[1]!).hover();
+    await expect.poll(() => gallery.dataset.activeIndex).toBe("1");
+    await page.elementLocator(pinnedThumbnail).hover();
+    await expect.poll(() => gallery.dataset.activeIndex).toBe(String(hoverImages.length - 1));
+    expect(pinnedThumbnail.getAttribute("aria-pressed")).toBe("true");
+    await page.elementLocator(pinnedThumbnail).click();
+    expect(container.querySelector("dialog[open]")).toBeNull();
+
+    await page.elementLocator(stage).hover({ position: { x: 120, y: 180 } });
+    const zoomPane = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-zoom-pane"]')!;
+    const zoomLens = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-zoom-lens"]')!;
+    await expect.poll(() => getComputedStyle(zoomPane).display).toBe("block");
+    expect(getComputedStyle(zoomLens).display).toBe("block");
+    expect(getComputedStyle(zoomPane).backgroundImage).toContain("url(");
+    expect(zoomPane.getBoundingClientRect().left).toBeGreaterThan(stage.getBoundingClientRect().right);
+
+    await page.getByRole("button", { name: "Open image preview" }).click();
+    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    expect(dialog.open).toBe(true);
+    expect(dialog.querySelector('[data-slot="product-media-preview-image"]')?.getAttribute("alt"))
+      .toBe(hoverImages.at(-1)!.alt);
+    await page.getByRole("button", { name: "Close image preview" }).click();
+    await expect.poll(() => container.querySelector("dialog")).toBeNull();
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test("desktop arrows hide after mouse clicks and remain available for keyboard focus", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");

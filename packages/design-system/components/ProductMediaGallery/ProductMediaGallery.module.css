@@ -154,6 +154,11 @@
 }
 
 .stage {
+  --product-media-zoom-x: 50%;
+  --product-media-zoom-y: 50%;
+  --product-media-zoom-lens-x: 50%;
+  --product-media-zoom-lens-y: 50%;
+
   position: relative;
   display: grid;
   min-width: 0;
@@ -164,6 +169,11 @@
   place-items: center;
   border-radius: var(--radius-surface-default);
   background: var(--fill-tertiary);
+}
+
+.zoomPane,
+.zoomLens {
+  display: none;
 }
 
 .navigationButton {
@@ -195,6 +205,56 @@
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .stage[data-zoom-active="true"] {
+    z-index: 3;
+    overflow: visible;
+  }
+
+  .stage[data-zoom-active="true"] .imageRail {
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .zoomPane {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: calc(100% + var(--space-400));
+    z-index: 4;
+    display: none;
+    width: var(--product-media-zoom-pane-size, 100%);
+    height: var(--product-media-zoom-pane-size, 100%);
+    overflow: hidden;
+    border: var(--stroke-default) solid var(--border-default);
+    border-radius: var(--radius-surface-default);
+    background-color: var(--surface-primary);
+    background-repeat: no-repeat;
+    background-position: var(--product-media-zoom-x) var(--product-media-zoom-y);
+    background-size: 250% 250%;
+    pointer-events: none;
+  }
+
+  .stage[data-zoom-active="true"] .zoomPane {
+    display: block;
+  }
+
+  .zoomLens {
+    position: absolute;
+    top: var(--product-media-zoom-lens-y);
+    left: var(--product-media-zoom-lens-x);
+    display: none;
+    width: 40%;
+    height: 40%;
+    transform: translate(-50%, -50%);
+    border: var(--stroke-default) solid var(--border-default);
+    background: var(--product-card-add-surface);
+    pointer-events: none;
+  }
+
+  .stage[data-zoom-active="true"] .zoomLens {
+    display: block;
+  }
+
   .navigationButton {
     visibility: hidden;
     pointer-events: none;
@@ -205,6 +265,10 @@
   .root:not([data-pointer-focus="true"]):has(:focus-visible) .navigationButton {
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .navigationButton {
+    z-index: 5;
   }
 }
 

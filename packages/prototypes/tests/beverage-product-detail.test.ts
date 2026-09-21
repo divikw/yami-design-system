@@ -16,7 +16,6 @@ describe("Beverage product detail fixture", () => {
     expect(fixture.images.at(-1)).toMatchObject({
       thumbnailPinned: true,
       thumbnailOverlayLabel: "Nutrition Facts",
-      thumbnailOpensPreview: true,
     });
     expect(fixture.optionGroups).toEqual([]);
     expect(fixture.skus).toBeUndefined();
@@ -39,13 +38,12 @@ describe("Beverage product detail fixture", () => {
     expect(fixture.specifications.some((item) => item.label === (locale === "zh" ? "配料" : "Ingredients"))).toBe(false);
   });
 
-  it("pins Skin Info on the last beauty thumbnail without assigning its custom click behavior yet", () => {
+  it("pins Skin Info on the last beauty thumbnail with the shared gallery interaction", () => {
     const beauty = createProductDetailPageFixture();
     expect(beauty.images.at(-1)).toMatchObject({
       thumbnailPinned: true,
       thumbnailOverlayLabel: "Skin Info",
     });
-    expect(beauty.images.at(-1)?.thumbnailOpensPreview).toBeUndefined();
   });
 
   it.each(["en", "zh"] as const)("uses source-linked beverage recommendations in %s", (locale) => {

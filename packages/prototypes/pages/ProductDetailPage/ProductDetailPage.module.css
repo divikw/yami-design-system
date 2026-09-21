@@ -1009,6 +1009,10 @@
     align-self: start;
   }
 
+  .gallery[data-zoom-active="true"] {
+    z-index: 2;
+  }
+
   .nutritionLabel {
     padding-inline: var(--space-150);
   }

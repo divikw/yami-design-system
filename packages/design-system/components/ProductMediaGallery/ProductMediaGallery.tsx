@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  type CSSProperties,
   type HTMLAttributes,
   type ImgHTMLAttributes,
+  type PointerEvent,
   forwardRef,
   useImperativeHandle,
   useLayoutEffect,
@@ -23,7 +25,6 @@ export interface ProductMediaGalleryItem {
   alt: string;
   thumbnailPinned?: boolean;
   thumbnailOverlayLabel?: string;
-  thumbnailOpensPreview?: boolean;
 }
 
 export interface ProductMediaGalleryHandle {
@@ -39,6 +40,8 @@ export interface ProductMediaGalleryProps
   previousLabel?: string;
   nextLabel?: string;
   desktopPreview?: boolean;
+  desktopZoom?: boolean;
+  desktopZoomPaneWidth?: number | string;
   mobilePreview?: boolean;
   openPreviewLabel?: string;
   closePreviewLabel?: string;
@@ -67,6 +70,8 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   previousLabel = "Previous image",
   nextLabel = "Next image",
   desktopPreview = false,
+  desktopZoom = false,
+  desktopZoomPaneWidth,
   mobilePreview = false,
   openPreviewLabel = "Open image preview",
   closePreviewLabel = "Close image preview",
@@ -77,6 +82,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
 }, ref) {
   const [pointerFocus, setPointerFocus] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [zoomActive, setZoomActive] = useState(false);
   const [pinnedLayout, setPinnedLayout] = useState<"inline" | "edge">("edge");
   const [selectedIndex, setActiveIndex] = useState(() =>
     clampIndex(defaultIndex, images.length),
@@ -184,25 +190,37 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     return true;
   }
 
+  function updateZoom(event: PointerEvent<HTMLDivElement>) {
+    if (
+      !desktopZoom ||
+      !window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches
+    ) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    const lensX = Math.max(0.2, Math.min(0.8, x));
+    const lensY = Math.max(0.2, Math.min(0.8, y));
+    event.currentTarget.style.setProperty("--product-media-zoom-x", `${x * 100}%`);
+    event.currentTarget.style.setProperty("--product-media-zoom-y", `${y * 100}%`);
+    event.currentTarget.style.setProperty("--product-media-zoom-lens-x", `${lensX * 100}%`);
+    event.currentTarget.style.setProperty("--product-media-zoom-lens-y", `${lensY * 100}%`);
+    setZoomActive(true);
+  }
+
   function renderThumbnail(image: ProductMediaGalleryItem, index: number) {
     return (
       <button
         key={image.id}
         className={styles.thumbnailButton}
         type="button"
-        aria-label={image.thumbnailOpensPreview
-          ? `${openPreviewLabel}: ${image.alt}`
-          : `View image ${index + 1} of ${images.length}: ${image.alt}`}
+        aria-label={`View image ${index + 1} of ${images.length}: ${image.alt}`}
         aria-pressed={index === activeIndex}
-        aria-haspopup={image.thumbnailOpensPreview ? "dialog" : undefined}
-        onClick={() => {
-          if (!image.thumbnailOpensPreview || !openPreviewAt(index)) {
-            selectImage(index);
-          }
+        onPointerEnter={() => {
+          if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) selectImage(index);
         }}
+        onClick={() => selectImage(index)}
         data-slot="product-media-gallery-thumbnail"
         data-selected={index === activeIndex ? "true" : undefined}
-        data-opens-preview={image.thumbnailOpensPreview || undefined}
         data-pinned={image.thumbnailPinned || undefined}
       >
         <ResponsiveImage
@@ -233,6 +251,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       aria-label={galleryLabel}
       data-slot="product-media-gallery"
       data-active-index={activeIndex}
+      data-zoom-active={zoomActive || undefined}
       data-pointer-focus={pointerFocus || undefined}
       tabIndex={rest.tabIndex ?? 0}
       onPointerDown={(event) => {
@@ -280,7 +299,14 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
           : null}
       </div>
 
-      <div className={styles.stage} data-slot="product-media-gallery-stage">
+      <div
+        className={styles.stage}
+        data-slot="product-media-gallery-stage"
+        data-zoom-active={zoomActive || undefined}
+        onPointerEnter={updateZoom}
+        onPointerMove={updateZoom}
+        onPointerLeave={() => setZoomActive(false)}
+      >
         <div
           ref={railRef}
           className={styles.imageRail}
@@ -350,10 +376,34 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
             aria-haspopup="dialog"
             data-slot="product-media-preview-trigger"
             onClick={() => {
-              if (window.matchMedia("(min-width: 1024px)").matches) setPreviewOpen(true);
+              if (window.matchMedia("(min-width: 1024px)").matches) {
+                setZoomActive(false);
+                setPreviewOpen(true);
+              }
             }}
           />
         )}
+
+        {desktopZoom ? (
+          <div
+            className={styles.zoomPane}
+            aria-hidden="true"
+            data-slot="product-media-gallery-zoom-pane"
+            style={{
+              backgroundImage: `url("${typeof activeImage.src === "string" ? activeImage.src : activeImage.src.src}")`,
+              "--product-media-zoom-pane-size": typeof desktopZoomPaneWidth === "number"
+                ? `${desktopZoomPaneWidth}px`
+                : desktopZoomPaneWidth,
+            } as CSSProperties}
+          />
+        ) : null}
+        {desktopZoom ? (
+          <span
+            className={styles.zoomLens}
+            aria-hidden="true"
+            data-slot="product-media-gallery-zoom-lens"
+          />
+        ) : null}
 
         {images.length > 1 ? (
           <>

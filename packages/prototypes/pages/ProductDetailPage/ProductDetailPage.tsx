@@ -239,9 +239,24 @@ export function ProductDetailPage({
   ...rest
 }: ProductDetailPageProps) {
   const galleryRef = useRef<ProductMediaGalleryHandle>(null);
+  const productInfoColumnRef = useRef<HTMLDivElement>(null);
   const addToCartRef = useRef<HTMLButtonElement>(null);
+  const [zoomPaneWidth, setZoomPaneWidth] = useState<number>();
   const [nutritionOpen, setNutritionOpen] = useState(false);
   const [stickyPurchaseVisible, setStickyPurchaseVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    const column = productInfoColumnRef.current;
+    if (!column) return;
+    const updateWidth = () => {
+      const nextWidth = Math.round(column.getBoundingClientRect().width * 100) / 100;
+      setZoomPaneWidth((current) => current === nextWidth ? current : nextWidth);
+    };
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(column);
+    return () => observer.disconnect();
+  }, []);
 
   useLayoutEffect(() => {
     const desktop = window.matchMedia("(min-width: 1024px)");
@@ -417,12 +432,15 @@ export function ProductDetailPage({
                   previousLabel={copy.previousImage}
                   nextLabel={copy.nextImage}
                   desktopPreview
+                  desktopZoom
+                  desktopZoomPaneWidth={zoomPaneWidth}
                   mobilePreview
                   openPreviewLabel={copy.openImagePreview}
                   closePreviewLabel={copy.closeImagePreview}
                 />
 
                 <div
+                  ref={productInfoColumnRef}
                   className={styles.productInfoColumn}
                   data-slot="product-detail-info-column"
                 >
