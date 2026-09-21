@@ -6,8 +6,8 @@
   line-height: var(--line-height-body-md);
   --campaign-header-height: 64px;
 }
-.root, .footerContainer { --campaign-section-padding-block: var(--space-400); }
-.root .storyBanner { max-width: var(--campaign-content-max-width); }
+.root, .footerContainer { --campaign-section-padding-block: var(--space-400); --campaign-section-padding-inline: var(--space-200); }
+.root .storyBanner { max-width: var(--campaign-content-max-width); padding-block: var(--campaign-section-padding-block); }
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .root h1, .root h2, .root h3, .root p { margin: 0; }
 .root h1, .root h2, .root h3, .root strong { font-weight: var(--font-weight-emphasize); }
@@ -21,7 +21,7 @@
 .header > div { max-width: var(--campaign-content-max-width); height: var(--campaign-header-height); margin: auto; padding: 0 var(--space-400); display: flex; align-items: center; justify-content: space-between; }
 .logo { display: block; width: auto; height: 28px; object-fit: contain; }
 @media (min-width: 1024px) {
-  .root, .footerContainer { --campaign-section-padding-block: var(--space-800); }
+  .root, .footerContainer { --campaign-section-padding-block: var(--space-800); --campaign-section-padding-inline: var(--space-600); }
   .logo { height: var(--space-600); }
 }
 .headerActions { display: flex; align-items: center; gap: var(--space-100); }
@@ -54,6 +54,7 @@
 .couponPanel > [data-slot="card-content"] { display: flex; flex-direction: column; align-items: center; gap: var(--space-400); width: 100%; }
 .couponHeading { display: flex; flex-direction: column; gap: var(--space-100); }
 .couponTitleGroup { display: flex; flex-direction: column; gap: var(--space-050); }
+.root .couponTitleGroup h2 { font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
 .couponTitleGroup p { color: var(--text-secondary); }
 .coupons { width: 100%; max-width: 512px; display: grid; gap: var(--space-200); }
 .coupon { background: var(--fill-promotion-primary); color: var(--text-on-emphasis); border-radius: var(--radius-surface-default); padding: var(--space-200) var(--space-250) var(--space-150); text-align: left; display: flex; flex-direction: column; gap: var(--space-150); }
@@ -93,6 +94,7 @@
 .calculatorInput { display: flex; flex-direction: column; gap: var(--space-250); min-width: 0; }
 .calculatorControls[aria-labelledby="calculator-tab-app"]:not([hidden]) { row-gap: var(--space-150); }
 .calculatorControls:not([hidden]) { display: flex; flex-direction: column; gap: var(--space-100); min-width: 0; }
+.calculatorControls[aria-labelledby="calculator-tab-welcome"]:not([hidden]) { gap: 0; padding-bottom: var(--space-100); }
 .calculatorDetails, .calculatorResult { display: flex; flex-direction: column; gap: var(--space-200); }
 .shippingProgress { display: flex; flex-direction: column; gap: var(--space-100); }
 .amountHeading { display: flex; justify-content: space-between; gap: var(--space-100); align-items: center; }
@@ -100,9 +102,15 @@
 .amountHeading > div { display: flex; flex-direction: column; gap: 0; }
 .amountHeading p { font-size: var(--font-size-caption-sm); color: var(--text-secondary); }
 .amountHeading > strong { font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); font-variant-numeric: tabular-nums; }
-.slider { width: 100%; height: 32px; accent-color: var(--button-emphasis); cursor: pointer; margin: 0; }
-.ticks { position: relative; height: 24px; margin: 0 var(--space-100); font-size: var(--font-size-caption-sm); color: var(--text-secondary); }
-.ticks span { position: absolute; transform: translateX(-50%); }
+.slider { position: relative; z-index: 1; appearance: none; width: 100%; height: 32px; background: transparent; border: 0; cursor: pointer; margin: 0; }
+.slider::-webkit-slider-runnable-track { box-sizing: border-box; height: 6px; border: 1px solid color-mix(in srgb, var(--divider-subtle) 60%, transparent); border-radius: var(--radius-button-primary); background: var(--surface-secondary) linear-gradient(to right, var(--button-emphasis) var(--slider-progress), var(--surface-secondary) var(--slider-progress)) no-repeat; background-origin: border-box; }
+.slider::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 0; border-radius: var(--radius-button-primary); background: var(--button-emphasis); }
+.slider::-moz-range-track { box-sizing: border-box; height: 6px; border: 1px solid color-mix(in srgb, var(--divider-subtle) 60%, transparent); border-radius: var(--radius-button-primary); background: var(--surface-secondary); }
+.slider::-moz-range-progress { height: 6px; border: 0; border-radius: var(--radius-button-primary); background: var(--button-emphasis); }
+.slider::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: var(--radius-button-primary); background: var(--button-emphasis); }
+.ticks { position: relative; height: var(--space-400); margin: -13px var(--space-100) 0; pointer-events: none; font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); color: var(--text-secondary); }
+.ticks span { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: var(--space-050); }
+.ticks span::before { content: ""; width: 1px; height: var(--space-100); background: color-mix(in srgb, var(--divider-subtle) 60%, transparent); }
 .breakdown { display: flex; flex-direction: column; gap: var(--space-200); margin: 0; }
 .breakdown > div { display: flex; align-items: center; justify-content: space-between; gap: var(--space-150); }
 .breakdown dt { display: flex; align-items: center; gap: var(--space-100); flex-wrap: wrap; color: var(--text-secondary); }
@@ -192,8 +200,6 @@
   }
 }
 
-.ticks span:first-child { transform: none; }
-.ticks span:last-child { transform: translateX(-100%); }
 
 @media (max-width: 1023px) {
   .header > div > a, .root .shopLink { position: relative; }
@@ -253,9 +259,55 @@
 .selectionProduct [data-slot="product-card-brand"]:hover > span { text-decoration: none; }
 
 .appPriceLabel { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
+.root :global(#discount-products) [data-slot="product-list-container"] > [data-slot="tabs"] { margin-top: calc(30px - var(--space-150)); }
 .root :global(#discount-products) [data-slot="product-card-price"] { flex-wrap: wrap; overflow: visible; }
 .root :global(#discount-products) [data-slot="product-card-price"] > span:first-child { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-050); overflow: visible; }
 
 .root .dealComparePrice { display: inline-block; color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); text-decoration: underline; cursor: pointer; }
 
 .root :global(#discount-products) [data-slot="product-card-unit-price"] { padding-top: var(--space-050); }
+
+/* Outer content gutters are owned by this page, not by individual modules. */
+.root { --layout-page-margin-card: var(--campaign-section-padding-inline); }
+.root .header > div,
+.root .downloadContainer,
+.root .guideContainer,
+.root .calculatorSection,
+.root .couponSection,
+.root [data-slot="product-list-container"],
+.root [data-slot="social-media-gallery-container"],
+.root [data-slot="review-list-container"],
+.root .storyBanner [data-slot="hero-banner"] {
+  padding-inline: var(--campaign-section-padding-inline);
+}
+.root .storyBanner [data-slot="section-banner-heading"] {
+  margin-inline: var(--campaign-section-padding-inline);
+}
+
+@media (max-width: 1023px) {
+  .root .socialTrends {
+    width: 100%;
+    margin-inline: 0;
+    border-radius: 0;
+  }
+  .root .socialTrends [data-slot="social-media-gallery-container"] {
+    gap: var(--space-200);
+  }
+  .root .socialTrends [data-slot="social-media-gallery-heading"] {
+    padding: 0;
+    text-align: center;
+  }
+  .root .socialTrends [data-slot="social-media-gallery-copy"] {
+    flex-direction: column;
+    align-items: center;
+  }
+  .root .socialTrends [data-slot="social-media-gallery-description"] {
+    text-align: center;
+  }
+  .root .socialTrends [data-slot="social-media-gallery-list"] {
+    width: calc(100% + 2 * var(--campaign-section-padding-inline));
+    margin-inline: calc(-1 * var(--campaign-section-padding-inline));
+    padding: 0 var(--campaign-section-padding-inline);
+    scroll-padding-inline: var(--campaign-section-padding-inline);
+  }
+}

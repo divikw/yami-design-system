@@ -2,7 +2,7 @@
 
 > **Draft · 草稿**：当前页面及全部预览内容尚未定稿或完成 review。
 
-Starts from V1 with the same content, styles, and behavior. Component, CSS, fixtures, and reference data are owned by this version so they can evolve independently. Images, video, and store badges reuse `../AppDownloadPage/assets/`.
+V2 owns the shared page implementation, styles, fixtures, and reference data. V1 renders this implementation with `variant="compact"`, omitting Best Stories & Products, Why Yami, Social Trends, Customer Reviews, and their navigation entries. All retained modules share the same behavior and styling. Images, video, and store badges reuse `../AppDownloadPage/assets/`.
 
 Visible stories: PC and Mobile under `YAMI/Pages/App Download/V2`, both initially in Korean with an in-page language switch. Interactions, SectionNavigation, and ContentWidth remain test-only stories, hidden from browsing.
 

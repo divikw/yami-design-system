@@ -29,6 +29,10 @@ export const Interactions: Story = {
   args: { initialLocale: "en" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await expect(canvas.queryByRole("heading", { name: "Best Stories & Products" })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole("tab", { name: "Why Yami" })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole("tab", { name: "Social Trends" })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole("tab", { name: "Real Customer Reviews" })).not.toBeInTheDocument();
     await expect(canvas.getByTestId("final-payment")).toHaveTextContent("$22.99");
     await userEvent.click(canvas.getByRole("tab", { name: "Cookware" }));
     await expect(canvas.getAllByRole("link", { name: "Round Dutch Oven, White Truffle, 4QT", exact: true }).length).toBeGreaterThan(0);
@@ -80,10 +84,10 @@ export const ContentWidth: Story = {
     const products = page.querySelector<HTMLElement>('[data-slot="product-list-container"]')!;
     await expect(header.getBoundingClientRect().width).toBe(1440);
     await expect(products.getBoundingClientRect().width).toBe(1440);
-    await expect(getComputedStyle(products).padding).toBe("48px");
+    await expect(getComputedStyle(products).padding).toBe("64px 48px");
     for (const section of page.querySelectorAll<HTMLElement>("main > section:not(#discount-products)")) {
-      await expect(getComputedStyle(section).paddingTop).toBe("48px");
-      await expect(getComputedStyle(section).paddingBottom).toBe("48px");
+      await expect(getComputedStyle(section).paddingTop).toBe("64px");
+      await expect(getComputedStyle(section).paddingBottom).toBe("64px");
     }
     await userEvent.click(within(page.querySelector("nav")!).getByRole("tab", { name: "How to Use" }));
     await new Promise((resolve) => setTimeout(resolve, 1500));
