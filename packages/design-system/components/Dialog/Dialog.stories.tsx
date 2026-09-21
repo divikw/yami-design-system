@@ -63,11 +63,13 @@ function LongTitleDialogDemo(args: DialogProps) {
 }
 
 const meta = {
-  title: "YAMI/Components/Layout/Dialog",
+  id: "yami-components-layout-dialog",
+  title: "YAMI/Components/Layout/Dialog/Draft/V1",
   component: Dialog,
+  tags: ["!autodocs", "draft"],
   parameters: {
     layout: "fullscreen",
-    docs: { description: { component: "Centered modal for confirmation, alerts, and short tasks on mobile and desktop." } },
+    docs: { description: { component: "**Draft · 草稿**：当前弹窗及全部预览内容尚未定稿或完成 review。" } },
   },
   globals: { locale: "zh", viewport: { value: "yamiMobile", isRotated: false } },
   args: { open: false, title: "确认操作", onClose: () => {}, role: "dialog", variant: "confirmation" },
