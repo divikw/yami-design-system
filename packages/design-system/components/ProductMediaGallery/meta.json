@@ -58,7 +58,7 @@
       "type": "boolean",
       "required": false,
       "default": false,
-      "description": "Enables a full-viewport image dialog from 1024px with a left thumbnail column."
+      "description": "Enables a full-viewport image dialog from 1024px with the contained image centered in the left stage and a right thumbnail column."
     },
     "mobilePreview": {
       "type": "boolean",
