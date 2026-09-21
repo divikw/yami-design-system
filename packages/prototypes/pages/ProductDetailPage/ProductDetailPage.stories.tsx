@@ -1006,11 +1006,13 @@ export const DesktopRegression: Story = {
       getComputedStyle(detailSubheading.parentElement!).rowGap !== "normal" ||
       !highlightList ||
       getComputedStyle(highlightList).rowGap !== "8px" ||
-      Math.abs(
-        gallery.getBoundingClientRect().width /
-          overview.getBoundingClientRect().width -
-          0.4
-      ) > 0.01 ||
+      (viewportWidth >= 1280
+        ? gallery.getBoundingClientRect().width < 424 ||
+          gallery.getBoundingClientRect().width > 480
+        : Math.abs(
+            gallery.getBoundingClientRect().width -
+              Math.min(480, overview.getBoundingClientRect().width * 0.4)
+          ) > 1) ||
       getComputedStyle(gallery).position !== "sticky" ||
       getComputedStyle(gallery).top !== "24px" ||
       overview.parentElement !== leftContent ||

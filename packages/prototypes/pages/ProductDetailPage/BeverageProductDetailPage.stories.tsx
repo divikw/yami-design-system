@@ -74,22 +74,40 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await expect(canvasElement.querySelector("output")).toHaveTextContent("1");
 
   const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
-  await userEvent.click(thumbnails[1]!);
-  await expect(thumbnails[1]).toHaveAttribute("aria-pressed", "true");
-  await userEvent.click(thumbnails[0]!);
-  await expect(thumbnails[0]).toHaveAttribute("aria-pressed", "true");
+  if (!mobile) {
+    await userEvent.click(thumbnails[1]!);
+    await expect(thumbnails[1]).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(thumbnails[0]!);
+    await expect(thumbnails[0]).toHaveAttribute("aria-pressed", "true");
+  }
 
   const nutritionThumbnail = thumbnails[thumbnails.length - 1]!;
   await expect(nutritionThumbnail).toHaveAttribute("aria-haspopup", "dialog");
   await expect(nutritionThumbnail).toHaveAttribute("data-pinned", "true");
-  await expect(within(nutritionThumbnail).getByText("Nutrition Facts", { exact: true })).toBeVisible();
-  await userEvent.click(nutritionThumbnail);
+  if (mobile) {
+    await expect(nutritionThumbnail).not.toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: fixture.copy.openImagePreview, exact: true }));
+  } else {
+    await expect(within(nutritionThumbnail).getByText("Nutrition Facts", { exact: true })).toBeVisible();
+    await userEvent.click(nutritionThumbnail);
+  }
   const nutritionPreview = canvas.getByRole("dialog", { name: fixture.copy.galleryLabel });
   await expect(nutritionPreview).toBeVisible();
+  if (mobile) {
+    await userEvent.click(within(nutritionPreview).getByRole("button", {
+      name: `${fixture.images.length} / ${fixture.images.length}: ${fixture.images.at(-1)!.alt}`,
+      exact: true,
+    }));
+  }
   await expect(within(nutritionPreview).getByRole("img")).toHaveAttribute(
     "alt",
     fixture.images[fixture.images.length - 1]!.alt,
   );
+  await userEvent.click(within(nutritionPreview).getByRole("button", {
+    name: `1 / ${fixture.images.length}: ${fixture.images[0]!.alt}`,
+    exact: true,
+  }));
+  await expect(within(nutritionPreview).getByRole("img")).toHaveAttribute("alt", fixture.images[0]!.alt);
   await userEvent.keyboard("{Escape}");
   await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
 
