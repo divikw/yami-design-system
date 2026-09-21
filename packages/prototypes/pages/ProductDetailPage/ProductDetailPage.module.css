@@ -617,14 +617,18 @@
 }
 
 @media (min-width: 1024px) {
+  .productOverview {
+    --pdp-gallery-width: clamp(
+      calc(var(--space-1000) * 3 + var(--space-500)),
+      calc(31.25vw - var(--space-500)),
+      calc(var(--space-1000) * 7)
+    );
+
+    grid-template-columns: var(--pdp-gallery-width) minmax(0, 1fr);
+  }
+
   .purchaseTags[data-expanded="false"] > li:nth-child(n + 4) {
     display: none;
-  }
-}
-
-@media (min-width: 1280px) {
-  .productOverview {
-    grid-template-columns: minmax(424px, 480px) minmax(0, 1fr);
   }
 }
 

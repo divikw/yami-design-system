@@ -23,14 +23,17 @@ fits, the labeled reference image stays inline immediately after the other
 images instead of leaving an empty gap at the edge; it pins to the final visible
 slot only when the regular thumbnail rail overflows. The edge fade appears only
 in that pinned-overflow state. On desktop, main-gallery thumbnails use six
-complete slots at widths from 424px through the gallery's 480px maximum,
-including the pinned slot, and stay within the 64–80px range. Narrower containers
-step down to five or four complete slots. Preview-dialog thumbnails retain their
-existing sizing.
+complete slots from 424px upward, including the pinned slot, and stay within the
+64–88px range. At the 560px gallery maximum, the six slots resolve to about
+86.7px so five regular thumbnails and the pinned reference remain complete.
+Narrower containers step down to five or four complete slots. Preview-dialog
+thumbnails retain their existing sizing.
 
-The 480px maximum applies only from the 1024px desktop breakpoint. Tablet and
-mobile layouts remain full-width so their horizontal image rail can use the
-complete viewport without clipping the active slide.
+The component's 560px maximum applies only from the 1024px desktop breakpoint.
+The PDP sizes the gallery continuously from 280px at a 1024px viewport to 560px
+at a 1920px viewport. Tablet and mobile layouts remain full-width so their
+horizontal image rail can use the complete viewport without clipping the active
+slide.
 
 The thumbnail rail sits under the square stage at every viewport and scrolls
 horizontally when it exceeds the available width. The component consumes

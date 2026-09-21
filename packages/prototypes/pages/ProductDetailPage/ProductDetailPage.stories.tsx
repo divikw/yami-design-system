@@ -689,6 +689,7 @@ export const DesktopRegression: Story = {
 
     if (
       !gallery ||
+      Math.abs(gallery.getBoundingClientRect().width - 560) > 1 ||
       !activeImage() ||
       !next ||
       !previous ||
@@ -1006,13 +1007,10 @@ export const DesktopRegression: Story = {
       getComputedStyle(detailSubheading.parentElement!).rowGap !== "normal" ||
       !highlightList ||
       getComputedStyle(highlightList).rowGap !== "8px" ||
-      (viewportWidth >= 1280
-        ? gallery.getBoundingClientRect().width < 424 ||
-          gallery.getBoundingClientRect().width > 480
-        : Math.abs(
-            gallery.getBoundingClientRect().width -
-              Math.min(480, overview.getBoundingClientRect().width * 0.4)
-          ) > 1) ||
+      Math.abs(
+        gallery.getBoundingClientRect().width -
+          Math.min(560, Math.max(280, viewportWidth * 0.3125 - 40))
+      ) > 1 ||
       getComputedStyle(gallery).position !== "sticky" ||
       getComputedStyle(gallery).top !== "24px" ||
       overview.parentElement !== leftContent ||
@@ -2254,7 +2252,7 @@ export const Tablet: Story = {
 };
 
 export const DesktopMdBoundary: Story = {
-  name: "Desktop-md boundary",
+  name: "Fluid desktop media at 1280",
   tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiDesktopMd", isRotated: false },
@@ -2284,15 +2282,106 @@ export const DesktopMdBoundary: Story = {
       !stage ||
       getComputedStyle(overview).gridTemplateColumns.split(" ").length !== 2 ||
       getComputedStyle(gallery).position !== "sticky" ||
+      Math.abs(gallery.getBoundingClientRect().width - 360) > 1 ||
+      Math.abs(stage.getBoundingClientRect().width - 360) > 1 ||
       productInfoColumn.getBoundingClientRect().left <=
         gallery.getBoundingClientRect().right ||
       thumbnails.getBoundingClientRect().top <
         stage.getBoundingClientRect().bottom
     ) {
       throw new Error(
-        "PDP must switch to the side-by-side overview at the 1280px desktop-md boundary"
+        "PDP media must use its continuous 360px width at the 1280px viewport"
       );
     }
+  },
+};
+
+export const StickyPurchaseBar: Story = {
+  name: "Sticky purchase bar after Add to Cart",
+  tags: ["!dev", "!autodocs"],
+  globals: {
+    locale: "en",
+    viewport: { value: "yamiDesktopLg", isRotated: false },
+  },
+  play: async ({ canvasElement }) => {
+    const view = canvasElement.ownerDocument.defaultView!;
+    const addToCart = canvasElement.querySelector<HTMLElement>(
+      '[data-pdp-add-to-cart="true"]'
+    )!;
+    const utilityRow = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-detail-utility-row"]'
+    )!;
+    const nextFrame = () =>
+      new Promise<void>((resolve) =>
+        view.requestAnimationFrame(() => view.requestAnimationFrame(() => resolve()))
+      );
+
+    await expect(
+      canvasElement.querySelector('[data-slot="product-detail-sticky-purchase-bar"]')
+    ).toBeNull();
+
+    for (
+      let attempt = 0;
+      attempt < 10 && addToCart.getBoundingClientRect().bottom > 0;
+      attempt += 1
+    ) {
+      view.scrollTo({
+        top:
+          view.scrollY +
+          Math.max(view.innerHeight, addToCart.getBoundingClientRect().bottom + 1),
+      });
+      await nextFrame();
+    }
+
+    if (addToCart.getBoundingClientRect().bottom > 0) {
+      throw new Error(
+        "Sticky purchase-bar test must first scroll the original Add to Cart fully above the viewport"
+      );
+    }
+
+    const stickyBar = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-detail-sticky-purchase-bar"]'
+    );
+    const stickyImage = stickyBar?.querySelector<HTMLImageElement>("img");
+    const stickyBrand = stickyBar?.querySelector<HTMLElement>(
+      '[data-slot="product-detail-sticky-purchase-brand"]'
+    );
+    const stickyTitle = stickyBar?.querySelector<HTMLElement>(
+      '[data-slot="product-detail-sticky-purchase-title"]'
+    );
+    const stickyButton = stickyBar?.querySelector<HTMLButtonElement>(
+      '[data-pdp-sticky-add-to-cart="true"]'
+    );
+
+    if (
+      !stickyBar ||
+      !stickyImage ||
+      !stickyBrand ||
+      !stickyTitle ||
+      !stickyButton ||
+      stickyImage.naturalWidth === 0 ||
+      stickyBrand.textContent?.trim() !== "Torriden" ||
+      !stickyTitle.textContent?.includes("Hyaluronic Acid Mask") ||
+      stickyButton.textContent?.trim() !== "Add to Cart" ||
+      Math.abs(
+        stickyImage.getBoundingClientRect().left -
+          utilityRow.getBoundingClientRect().left
+      ) > 1 ||
+      Math.abs(
+        stickyButton.getBoundingClientRect().right -
+          utilityRow.getBoundingClientRect().right
+      ) > 1
+    ) {
+      throw new Error(
+        "Desktop PDP sticky purchase bar must show the product summary and align with page content after Add to Cart scrolls above the viewport"
+      );
+    }
+
+    view.scrollTo({ top: 0 });
+    await nextFrame();
+    await expect(
+      canvasElement.querySelector('[data-slot="product-detail-sticky-purchase-bar"]')
+    ).toBeNull();
   },
 };
 
@@ -2339,6 +2428,8 @@ export const NarrowDesktop: Story = {
       !stage ||
       getComputedStyle(overview).gridTemplateColumns.split(" ").length !== 2 ||
       getComputedStyle(gallery).position !== "sticky" ||
+      Math.abs(gallery.getBoundingClientRect().width - 280) > 1 ||
+      Math.abs(stage.getBoundingClientRect().width - 280) > 1 ||
       getComputedStyle(purchasePanel).position !== "static" ||
       getComputedStyle(purchasePanel).alignSelf !== "stretch" ||
       getComputedStyle(purchaseSticky).position !== "sticky" ||
@@ -2351,7 +2442,7 @@ export const NarrowDesktop: Story = {
         stage.getBoundingClientRect().bottom
     ) {
       throw new Error(
-        "PDP must preserve the desktop layout between the 1024px and 1280px boundaries"
+        "PDP must begin its continuous desktop media scale at 280px in the 1024px viewport"
       );
     }
   },
