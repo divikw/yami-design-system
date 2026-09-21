@@ -19,6 +19,7 @@ import {
 } from "@yami/design-system";
 
 import styles from "./ProductDetailPage.module.css";
+import { ProductPricing } from "./components/ProductPricing";
 import type { ProductDetailPageProps } from "./ProductDetailPage.types";
 import { ProductNutritionSheet } from "./ProductNutritionSheet";
 import { ProductDetailSheet } from "./ProductDetailSheet";
@@ -215,6 +216,8 @@ export function ProductDetailPage({
   priceCurrent,
   priceOriginal,
   discountLabel,
+  giftCardPrice,
+  vvipPrice,
   optionGroups,
   skus,
   bestBefore,
@@ -337,6 +340,15 @@ export function ProductDetailPage({
                   <img src={icon} alt="" width={20} height={20} />
                 </Button>
               ))}
+              <Button
+                className={styles.affiliateLinkButton}
+                variant="primary"
+                form="inline"
+                size="sm"
+                data-pdp-affiliate-link="true"
+              >
+                {copy.getAffiliateLink}
+              </Button>
             </div>
           </div>
 
@@ -463,23 +475,15 @@ export function ProductDetailPage({
                       </button>
                     </div>
 
-                    <div
-                      className={styles.priceRow}
-                      data-slot="product-detail-price"
-                    >
-                      <strong className={styles.priceCurrent}>
-                        {priceCurrent}
-                      </strong>
-                      <span className={styles.priceOriginal}>
-                        {priceOriginal}
-                      </span>
-                      <span
-                        className={styles.discountText}
-                        data-slot="product-detail-discount"
-                      >
-                        {discountLabel}
-                      </span>
-                    </div>
+                    <ProductPricing
+                      regular={{
+                        currentPrice: priceCurrent,
+                        originalPrice: priceOriginal,
+                        discountLabel,
+                      }}
+                      giftCard={giftCardPrice}
+                      vvip={vvipPrice}
+                    />
                     {optionGroups.length === 0 && (
                       <p
                         className={styles.bestBefore}

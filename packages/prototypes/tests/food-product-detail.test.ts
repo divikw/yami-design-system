@@ -9,6 +9,16 @@ describe("Food product detail fixture", () => {
     expect(foodProductSource.itemNumber).toBe("1020065241");
     expect(fixture.brand).toBe("TSUJIRI");
     expect(fixture.discountLabel).toBe(locale === "zh" ? "89折" : "11% off");
+    expect(fixture.giftCardPrice).toEqual({
+      label: locale === "zh" ? "使用礼卡支付可享专属价：" : "Pay with Gift Card to get sale price:",
+      price: "$9.29",
+      detailsLabel: locale === "zh" ? "详情" : "Details",
+    });
+    expect(fixture.vvipPrice).toEqual({
+      label: locale === "zh" ? "专享价：" : "Price:",
+      price: "$8.99",
+      actionLabel: locale === "zh" ? "以 VVIP 价购买" : "Buy at VVIP Price",
+    });
     expect(fixture.title).toContain("40");
     expect(fixture.images).toHaveLength(9);
     expect(new Set(fixture.images.map((image) => image.src)).size).toBe(9);

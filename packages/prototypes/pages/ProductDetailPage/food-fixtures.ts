@@ -147,6 +147,11 @@ export function createFoodProductDetailPageFixture(
       id: `tsujiri-${index + 1}`,
       src: `https://cdn.yamibuy.net/item/${hash}_757x757.webp`,
       alt: zh ? `${title}，商品图 ${index + 1}` : `${title}, product image ${index + 1}`,
+      ...(index === imageHashes.length - 1 ? {
+        thumbnailPinned: true,
+        thumbnailOverlayLabel: "Nutrition Facts",
+        thumbnailOpensPreview: true,
+      } : {}),
     })),
     brand: "TSUJIRI",
     brandHref: `${site}/b/sujiri/7482`,
@@ -158,6 +163,16 @@ export function createFoodProductDetailPageFixture(
     priceCurrent: "$9.69",
     priceOriginal: "$10.99",
     discountLabel: zh ? "89折" : "11% off",
+    giftCardPrice: {
+      label: zh ? "使用礼卡支付可享专属价：" : "Pay with Gift Card to get sale price:",
+      price: "$9.29",
+      detailsLabel: zh ? "详情" : "Details",
+    },
+    vvipPrice: {
+      label: zh ? "专享价：" : "Price:",
+      price: "$8.99",
+      actionLabel: zh ? "以 VVIP 价购买" : "Buy at VVIP Price",
+    },
     optionGroups: [],
     bestBefore: zh ? "2026年11月30日" : "Nov 30, 2026",
     highlights: zh ? [

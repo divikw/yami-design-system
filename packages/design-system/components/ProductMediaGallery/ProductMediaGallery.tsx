@@ -21,6 +21,9 @@ export interface ProductMediaGalleryItem {
   id: string;
   src: ImageSource;
   alt: string;
+  thumbnailPinned?: boolean;
+  thumbnailOverlayLabel?: string;
+  thumbnailOpensPreview?: boolean;
 }
 
 export interface ProductMediaGalleryHandle {
@@ -74,23 +77,23 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
 }, ref) {
   const [pointerFocus, setPointerFocus] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [pinnedLayout, setPinnedLayout] = useState<"inline" | "edge">("edge");
   const [selectedIndex, setActiveIndex] = useState(() =>
     clampIndex(defaultIndex, images.length),
   );
   const activeIndex = clampIndex(selectedIndex, images.length);
   const railRef = useRef<HTMLDivElement>(null);
+  const thumbnailRailRef = useRef<HTMLDivElement>(null);
+  const thumbnailScrollerRef = useRef<HTMLDivElement>(null);
   const previewPointer = useRef<{ x: number; y: number } | null>(null);
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
+  const pinnedThumbnailIndex = images.findIndex((image) => image.thumbnailPinned);
 
   useImperativeHandle(ref, () => ({
     openPreview(imageId) {
       const index = images.findIndex((image) => image.id === imageId);
-      const enabled = window.matchMedia("(min-width: 1024px)").matches ? desktopPreview : mobilePreview;
-      if (!enabled || index < 0) return false;
-      selectImage(index);
-      setPreviewOpen(true);
-      return true;
+      return openPreviewAt(index);
     },
   }));
 
@@ -110,6 +113,45 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     observer.observe(rail);
     return () => observer.disconnect();
   }, [images.length, previewOpen]);
+
+  useLayoutEffect(() => {
+    const thumbnailRail = thumbnailRailRef.current;
+    const thumbnailScroller = thumbnailScrollerRef.current;
+    if (!thumbnailRail || !thumbnailScroller || pinnedThumbnailIndex < 0) return;
+
+    const updatePinnedLayout = () => {
+      const pinnedThumbnail = thumbnailRail.querySelector<HTMLElement>(
+        ':scope > [data-pinned="true"]',
+      );
+      if (!pinnedThumbnail) return;
+
+      const regularThumbnails = Array.from(
+        thumbnailScroller.querySelectorAll<HTMLElement>(
+          ':scope > [data-slot="product-media-gallery-thumbnail"]',
+        ),
+      );
+      const gap = parseFloat(getComputedStyle(thumbnailRail).columnGap) || 0;
+      const regularWidth = regularThumbnails.reduce(
+        (total, thumbnail) => total + thumbnail.getBoundingClientRect().width,
+        0,
+      );
+      const requiredWidth =
+        regularWidth +
+        gap * Math.max(0, regularThumbnails.length - 1) +
+        (regularThumbnails.length > 0 ? gap : 0) +
+        pinnedThumbnail.getBoundingClientRect().width;
+      const nextLayout = requiredWidth <= thumbnailRail.clientWidth + 0.5
+        ? "inline"
+        : "edge";
+      setPinnedLayout((current) => current === nextLayout ? current : nextLayout);
+    };
+
+    updatePinnedLayout();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(updatePinnedLayout);
+    observer.observe(thumbnailRail);
+    return () => observer.disconnect();
+  }, [images.length, pinnedThumbnailIndex]);
   const activeImage = images[activeIndex];
 
   if (!activeImage) return null;
@@ -130,6 +172,58 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     const nextIndex =
       (activeIndex + step + images.length) % images.length;
     selectImage(nextIndex);
+  }
+
+  function openPreviewAt(index: number) {
+    const enabled = window.matchMedia("(min-width: 1024px)").matches
+      ? desktopPreview
+      : mobilePreview;
+    if (!enabled || index < 0 || index >= images.length) return false;
+    selectImage(index);
+    setPreviewOpen(true);
+    return true;
+  }
+
+  function renderThumbnail(image: ProductMediaGalleryItem, index: number) {
+    return (
+      <button
+        key={image.id}
+        className={styles.thumbnailButton}
+        type="button"
+        aria-label={image.thumbnailOpensPreview
+          ? `${openPreviewLabel}: ${image.alt}`
+          : `View image ${index + 1} of ${images.length}: ${image.alt}`}
+        aria-pressed={index === activeIndex}
+        aria-haspopup={image.thumbnailOpensPreview ? "dialog" : undefined}
+        onClick={() => {
+          if (!image.thumbnailOpensPreview || !openPreviewAt(index)) {
+            selectImage(index);
+          }
+        }}
+        data-slot="product-media-gallery-thumbnail"
+        data-selected={index === activeIndex ? "true" : undefined}
+        data-opens-preview={image.thumbnailOpensPreview || undefined}
+        data-pinned={image.thumbnailPinned || undefined}
+      >
+        <ResponsiveImage
+          className={styles.thumbnailImage}
+          source={image.src}
+          alt=""
+          fallbackWidth={80}
+          fallbackHeight={80}
+          loading="lazy"
+          revealOnLoad={false}
+        />
+        {image.thumbnailOverlayLabel ? (
+          <span
+            className={styles.thumbnailOverlay}
+            data-slot="product-media-gallery-thumbnail-overlay"
+          >
+            {image.thumbnailOverlayLabel}
+          </span>
+        ) : null}
+      </button>
+    );
   }
 
   return (
@@ -164,33 +258,26 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       }}
     >
       <div
+        ref={thumbnailRailRef}
         className={styles.thumbnails}
         role="group"
         aria-label={thumbnailsLabel}
         data-slot="product-media-gallery-thumbnails"
+        data-has-pinned-thumbnail={pinnedThumbnailIndex >= 0 || undefined}
+        data-pinned-layout={pinnedThumbnailIndex >= 0 ? pinnedLayout : undefined}
       >
-        {images.map((image, index) => (
-          <button
-            key={image.id}
-            className={styles.thumbnailButton}
-            type="button"
-            aria-label={`View image ${index + 1} of ${images.length}: ${image.alt}`}
-            aria-pressed={index === activeIndex}
-            onClick={() => selectImage(index)}
-            data-slot="product-media-gallery-thumbnail"
-            data-selected={index === activeIndex ? "true" : undefined}
-          >
-            <ResponsiveImage
-              className={styles.thumbnailImage}
-              source={image.src}
-              alt=""
-              fallbackWidth={72}
-              fallbackHeight={72}
-              loading="lazy"
-              revealOnLoad={false}
-            />
-          </button>
-        ))}
+        <div
+          ref={thumbnailScrollerRef}
+          className={styles.thumbnailScroller}
+          data-slot="product-media-gallery-thumbnail-scroller"
+        >
+          {images.map((image, index) => (
+            index === pinnedThumbnailIndex ? null : renderThumbnail(image, index)
+          ))}
+        </div>
+        {pinnedThumbnailIndex >= 0
+          ? renderThumbnail(images[pinnedThumbnailIndex]!, pinnedThumbnailIndex)
+          : null}
       </div>
 
       <div className={styles.stage} data-slot="product-media-gallery-stage">

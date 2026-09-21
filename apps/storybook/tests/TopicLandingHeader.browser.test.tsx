@@ -40,6 +40,9 @@ test.each(fixtures.flatMap(([name, createFixture]) => [
     const headerHeight = () => header.getBoundingClientRect().height;
     await expect.poll(() => parseFloat(getComputedStyle(tabs).top)).toBeCloseTo(headerHeight(), 1);
 
+    // Clear any category hover left by a previous viewport or test before clicking below the header.
+    await page.elementLocator(header).hover({ position: { x: header.getBoundingClientRect().width - 1, y: 1 } });
+    await expect.poll(() => header.querySelector('[data-slot="header-category-menu"]')).toBeNull();
     await page.getByRole("tab", { name: fixture.primaryTabs.items[1]!.label, exact: true }).click();
     await expect.poll(() => Math.abs(target.getBoundingClientRect().top - tabs.getBoundingClientRect().bottom)).toBeLessThan(2);
     const scrollTop = nested ? container.getBoundingClientRect().top + container.clientTop : 0;

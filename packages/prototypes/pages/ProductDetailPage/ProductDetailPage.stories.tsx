@@ -1006,11 +1006,13 @@ export const DesktopRegression: Story = {
       getComputedStyle(detailSubheading.parentElement!).rowGap !== "normal" ||
       !highlightList ||
       getComputedStyle(highlightList).rowGap !== "8px" ||
-      Math.abs(
-        gallery.getBoundingClientRect().width /
-          overview.getBoundingClientRect().width -
-          0.4
-      ) > 0.01 ||
+      (viewportWidth >= 1280
+        ? gallery.getBoundingClientRect().width < 424 ||
+          gallery.getBoundingClientRect().width > 480
+        : Math.abs(
+            gallery.getBoundingClientRect().width -
+              Math.min(480, overview.getBoundingClientRect().width * 0.4)
+          ) > 1) ||
       getComputedStyle(gallery).position !== "sticky" ||
       getComputedStyle(gallery).top !== "24px" ||
       overview.parentElement !== leftContent ||
@@ -1030,7 +1032,8 @@ export const DesktopRegression: Story = {
       productSummary.parentElement !== productInfo ||
       !productTitle ||
       getComputedStyle(productTitle).fontWeight !== "400" ||
-      getComputedStyle(productTitle).fontSize !== "40px" ||
+      getComputedStyle(productTitle).fontSize !== "24px" ||
+      getComputedStyle(productTitle).lineHeight !== "32px" ||
       getComputedStyle(productSummary).rowGap !== "12px" ||
       !productRanking ||
       productTitle.nextElementSibling !== productRanking ||
@@ -2027,8 +2030,8 @@ export const MobileRegression: Story = {
       !quantityLabel ||
       getComputedStyle(quantityLabel).display !== "none" ||
       !title ||
-      getComputedStyle(title).fontSize !== "16px" ||
-      getComputedStyle(title).lineHeight !== "20px" ||
+      getComputedStyle(title).fontSize !== "24px" ||
+      getComputedStyle(title).lineHeight !== "32px" ||
       !rating ||
       !ranking ||
       !price ||
@@ -2230,6 +2233,8 @@ export const Tablet: Story = {
       getComputedStyle(productInfoColumn).display !== "contents" ||
       getComputedStyle(gallery).position !== "static" ||
       getComputedStyle(thumbnails).display !== "none" ||
+      Math.abs(stage.getBoundingClientRect().left) > 1 ||
+      Math.abs(stage.getBoundingClientRect().right - window.innerWidth) > 1 ||
       galleryNavigationButtons?.length !== 2 ||
       Array.from(galleryNavigationButtons).some(
         (button) => getComputedStyle(button).display !== "none"

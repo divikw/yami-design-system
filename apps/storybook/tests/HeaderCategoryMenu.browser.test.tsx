@@ -321,7 +321,7 @@ test.each(['text', 'images'] as const)('%s Categories opens on mouse hover witho
     expect(document.activeElement).toBe(menu()!.querySelector('button'));
     await userEvent.keyboard('{Escape}');
     await expect.element(trigger).toHaveFocus();
-    expect(menu()).toBeNull();
+    await expect.poll(menu).toBeNull();
 
     await page.getByRole('combobox', { name: 'Search', exact: true }).click();
     expect(container.querySelector('[data-slot="header-search-panel"]')).not.toBeNull();

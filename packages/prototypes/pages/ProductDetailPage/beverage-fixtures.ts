@@ -178,6 +178,11 @@ export function createBeverageProductDetailPageFixture(
       id: `binggrae-${index + 1}`,
       src: `https://cdn.yamibuy.net/item/${hash}_757x757.webp`,
       alt: zh ? `${title}，商品图 ${index + 1}` : `${title}, product image ${index + 1}`,
+      ...(index === imageHashes.length - 1 ? {
+        thumbnailPinned: true,
+        thumbnailOverlayLabel: "Nutrition Facts",
+        thumbnailOpensPreview: true,
+      } : {}),
     })),
     brand: "BINGGRAE",
     brandHref: `${site}/b/binggrae/522`,
