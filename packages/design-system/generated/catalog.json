@@ -4028,6 +4028,17 @@
             "default": false,
             "description": "Enables a full-viewport image dialog from 1024px with the contained image centered in the left stage and a right thumbnail column."
           },
+          "desktopZoom": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Enables a cursor-following magnified image pane beside the main stage from 1024px on hover-capable fine-pointer devices."
+          },
+          "desktopZoomPaneWidth": {
+            "type": "number | string",
+            "required": false,
+            "description": "Optional dynamic magnified-pane width. Numbers resolve to pixels; the pane remains square and defaults to the main stage width."
+          },
           "mobilePreview": {
             "type": "boolean",
             "required": false,

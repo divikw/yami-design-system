@@ -150,7 +150,6 @@ export function createFoodProductDetailPageFixture(
       ...(index === imageHashes.length - 1 ? {
         thumbnailPinned: true,
         thumbnailOverlayLabel: "Nutrition Facts",
-        thumbnailOpensPreview: true,
       } : {}),
     })),
     brand: "TSUJIRI",

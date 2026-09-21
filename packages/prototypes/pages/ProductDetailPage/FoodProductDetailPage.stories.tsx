@@ -96,7 +96,7 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   }
 
   const nutritionThumbnail = thumbnails[thumbnails.length - 1]!;
-  await expect(nutritionThumbnail).toHaveAttribute("aria-haspopup", "dialog");
+  await expect(nutritionThumbnail).not.toHaveAttribute("aria-haspopup");
   await expect(nutritionThumbnail).toHaveAttribute("data-pinned", "true");
   if (mobile) {
     await expect(nutritionThumbnail).not.toBeVisible();
@@ -110,7 +110,10 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
     await expect(nutritionRect.width).toBeLessThanOrEqual(80);
     await expect(nutritionRect.height).toBe(nutritionRect.width);
     await expect(Math.abs(nutritionRect.right - thumbnailRailRect.right)).toBeLessThanOrEqual(1);
-    await userEvent.click(nutritionThumbnail);
+    await userEvent.hover(nutritionThumbnail);
+    await expect(nutritionThumbnail).toHaveAttribute("aria-pressed", "true");
+    await expect(canvas.getByRole("img", { name: fixture.images.at(-1)!.alt })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: fixture.copy.openImagePreview, exact: true }));
   }
   const preview = canvas.getByRole("dialog", { name: fixture.copy.galleryLabel });
   await expect(preview).toBeVisible();
