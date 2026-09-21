@@ -70,8 +70,9 @@ Resizing keeps the active image aligned; empty galleries render nothing.
 
 Set `desktopPreview` on PDPs to open the selected image in a full-viewport
 preview from 1024px. Provide localized `openPreviewLabel` and `closePreviewLabel`.
-The preview uses the primary surface, a centered contained image, a scrollable
-left thumbnail column with previous/next controls, and a top-right close button.
+The preview uses the primary surface, a contained image centered in the available
+left stage, a scrollable right thumbnail column with previous/next controls, and
+a top-right close button.
 The gallery and preview share selection. Arrow keys switch images; Escape or
 the close button dismisses the native modal and restores trigger focus and page
 scroll. Set `mobilePreview` to also enable tap-to-preview below 1024px: a white

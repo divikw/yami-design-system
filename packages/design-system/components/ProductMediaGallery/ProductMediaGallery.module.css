@@ -278,7 +278,9 @@
 
 .previewStage {
   position: absolute;
-  inset: 0 calc(var(--space-800) * 2);
+  inset-block: 0;
+  inset-inline-start: 0;
+  inset-inline-end: calc(var(--space-1000) * 3 + var(--space-300));
 }
 
 .previewImageRail {
@@ -308,11 +310,12 @@
 
 .previewSidebar {
   position: absolute;
-  top: var(--space-400);
-  bottom: var(--space-400);
-  left: var(--space-300);
+  top: var(--space-300);
+  right: calc(var(--space-1000) + var(--space-300));
+  bottom: var(--space-300);
+  left: auto;
   display: flex;
-  width: var(--space-1000);
+  width: calc(var(--space-1000) * 2);
   flex-direction: column;
   align-items: center;
   gap: var(--space-100);

@@ -151,7 +151,7 @@ export function ProductMediaPreview({
           ))}
         </div>
       </div>
-      <div className={styles.previewSidebar}>
+      <div className={styles.previewSidebar} data-slot="product-media-preview-sidebar">
         <RailNavigationButton
           className={styles.previewNavigation}
           direction="left"
