@@ -265,8 +265,8 @@ export const Pc: Story = {
     if (main.dataset.motionReady === "true") {
       for (const target of initialRevealContent) {
         const style = getComputedStyle(target);
-        if (style.animationDuration !== "0.35s" || style.transform !== "none" || style.transitionDuration !== "0s") {
-          throw new Error("Topic landing Hero copy and media must use the shared first-screen fade");
+        if (style.animationDuration !== "0.35s" || style.transitionDuration !== "0s") {
+          throw new Error("Topic landing Hero copy and media must use the shared first-screen slide and fade");
         }
       }
 
@@ -285,8 +285,8 @@ export const Pc: Story = {
 
         if (revealSection.dataset.motionInitial === "true") {
           const style = getComputedStyle(revealContent);
-          if (style.animationDuration !== "0.35s" || style.transform !== "none" || style.transitionDuration !== "0s") {
-            throw new Error("First-screen modules must use the shared first-screen fade");
+          if (style.animationDuration !== "0.35s" || style.transitionDuration !== "0s") {
+            throw new Error("First-screen modules must use the shared first-screen slide and fade");
           }
           continue;
         }
