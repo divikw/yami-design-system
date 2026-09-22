@@ -27,6 +27,14 @@ for (const width of [1280, 390]) {
       expect(heroImage.loading).toBe("eager");
       expect(heroImage.fetchPriority).toBe("high");
       expect(getComputedStyle(tabs).opacity).toBe("1");
+      const scrim = container.querySelector<HTMLElement>('[data-adaptive-image-scrim]')!;
+      // The scrim must sample the Hero image outside the copy container, even
+      // while its sibling text animates. No ancestor may retain an opacity animation.
+      for (let ancestor = scrim.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        expect(getComputedStyle(ancestor).animationName).toBe("none");
+        expect(getComputedStyle(ancestor).opacity).toBe("1");
+      }
+      expect(getComputedStyle(scrim).backdropFilter).toBe("blur(16px)");
       const targets = [...container.querySelectorAll<HTMLElement>('[data-initial-fade="true"]')];
       expect(targets.some(target => target.dataset.slot === "topic-landing-tabs-container")).toBe(true);
       const animations = targets.map(target => {
@@ -48,6 +56,7 @@ for (const width of [1280, 390]) {
       for (const animation of animations) animation.finish();
       for (const target of targets) {
         expect(getComputedStyle(target).opacity).toBe("1");
+        expect(target.getAnimations()).toHaveLength(0);
         expect(new DOMMatrixReadOnly(getComputedStyle(target).transform).m42).toBe(0);
       }
       const shortcuts = container.querySelector<HTMLElement>('[data-slot="topic-landing-shortcut-rail"]')!;

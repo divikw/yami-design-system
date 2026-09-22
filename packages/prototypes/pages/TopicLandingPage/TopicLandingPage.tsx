@@ -392,7 +392,7 @@ export function TopicLandingPage({
         });
       });
       main.querySelectorAll<HTMLElement>(
-        '[data-slot="theme-hero-copy"], [data-slot="theme-hero-media"], [data-slot="topic-landing-tabs-container"]',
+        '[data-slot="theme-hero-copy-content"] > :not([data-adaptive-image-scrim]), [data-slot="theme-hero-media"], [data-slot="topic-landing-tabs-container"]',
       ).forEach((element) => {
         element.dataset.initialFade = "true";
       });
