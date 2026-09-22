@@ -373,7 +373,7 @@ main.main[data-title-font-family="sans"]
 
 /* Content moves together; section backgrounds, sticky position and height stay fixed. */
 .main [data-initial-fade="true"] {
-  animation: initial-content-fade 350ms ease-out both;
+  animation: initial-content-fade 350ms ease-out backwards;
 }
 
 @keyframes initial-content-fade {

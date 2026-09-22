@@ -212,7 +212,7 @@ export const Pc: Story = {
       '[data-motion-reveal="initial"]',
     );
     const initialRevealContent = initialReveal?.querySelectorAll<HTMLElement>(
-      '[data-slot="theme-hero-copy"], [data-slot="theme-hero-media"]',
+      '[data-slot="theme-hero-copy-content"] > :not([data-adaptive-image-scrim]), [data-slot="theme-hero-media"]',
     );
     const scrollReveals = main?.querySelectorAll<HTMLElement>(
       '[data-motion-reveal="scroll"]',
@@ -239,7 +239,7 @@ export const Pc: Story = {
     const isDesktopMotion = page.getBoundingClientRect().width >= 1024;
     if (
       !initialReveal ||
-      initialRevealContent?.length !== 2 ||
+      (!initialRevealContent || initialRevealContent.length < 3) ||
       !scrollReveals ||
       Array.from(scrollReveals).some(
         (section, index) =>
