@@ -11,7 +11,7 @@ import { TopicLandingPage, createTopicLandingPageFixture } from "@yami/prototype
 const imageSrc = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450"><rect width="800" height="450" fill="white"/></svg>');
 
 for (const width of [1280, 390]) {
-  test(`first viewport fades together while the Hero image is pending at ${width}px`, async () => {
+  test(`first viewport slides and fades together while the Hero image is pending at ${width}px`, async () => {
     const originalViewport = { width: innerWidth, height: innerHeight };
     await page.viewport(width, 900);
     const container = document.createElement("div");
@@ -31,14 +31,25 @@ for (const width of [1280, 390]) {
       expect(targets.some(target => target.dataset.slot === "topic-landing-tabs-container")).toBe(true);
       const animations = targets.map(target => {
         expect(getComputedStyle(target).animationDuration).toBe("0.35s");
-        expect(getComputedStyle(target).transform).toBe("none");
+        expect(new DOMMatrixReadOnly(getComputedStyle(target).transform).m42).toBe(24);
         expect(getComputedStyle(target).opacity).toBe("0");
         return target.getAnimations()[0];
       });
       // All content shares the same first paint, including navigation text.
       expect(new Set(animations.map(animation => animation.currentTime)).size).toBe(1);
+      for (const animation of animations) {
+        animation.pause();
+        animation.currentTime = 175;
+      }
+      const halfwayPositions = targets.map(target => new DOMMatrixReadOnly(getComputedStyle(target).transform).m42);
+      expect(halfwayPositions.every(value => value > 0 && value < 24)).toBe(true);
+      expect(new Set(halfwayPositions).size).toBe(1);
+      expect(tabs.getBoundingClientRect().top).toBeCloseTo(tabsTop, 0);
       for (const animation of animations) animation.finish();
-      for (const target of targets) expect(getComputedStyle(target).opacity).toBe("1");
+      for (const target of targets) {
+        expect(getComputedStyle(target).opacity).toBe("1");
+        expect(new DOMMatrixReadOnly(getComputedStyle(target).transform).m42).toBe(0);
+      }
       const shortcuts = container.querySelector<HTMLElement>('[data-slot="topic-landing-shortcut-rail"]')!;
       expect(shortcuts.dataset.motionInitial).toBe("true");
       expect(container.querySelector('[data-slot="topic-landing-review-list"]')?.getAttribute("data-motion-initial")).toBeNull();
