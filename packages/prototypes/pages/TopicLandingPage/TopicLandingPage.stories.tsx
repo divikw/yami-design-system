@@ -263,50 +263,11 @@ export const Pc: Story = {
       );
     }
     if (main.dataset.motionReady === "true") {
-      const previousInitialMotionState = initialReveal.dataset.motionState;
-      delete initialReveal.dataset.motionState;
-      const initialRootStyle = getComputedStyle(initialReveal);
-      const hiddenInitialContent = Array.from(initialRevealContent).map(
-        (target) => {
-          const style = getComputedStyle(target);
-          return {
-            opacity: style.opacity,
-            translateY: new DOMMatrixReadOnly(style.transform).m42,
-          };
-        },
-      );
-
-      initialReveal.dataset.motionState = "visible";
-      const visibleInitialContent = Array.from(initialRevealContent).map(
-        (target) => getComputedStyle(target),
-      );
-
-      if (previousInitialMotionState === undefined) {
-        delete initialReveal.dataset.motionState;
-      } else {
-        initialReveal.dataset.motionState = previousInitialMotionState;
-      }
-
-      if (
-        initialRootStyle.opacity !== "1" ||
-        initialRootStyle.transform !== "none" ||
-        hiddenInitialContent.some(
-          ({ opacity, translateY }) => opacity !== "0" || translateY !== 32,
-        ) ||
-        visibleInitialContent.some((style) => {
-          const durations = style.transitionDuration.split(", ");
-          const timings = style.transitionTimingFunction.split(", ");
-          return (
-            durations.length !== 2 ||
-            durations.some((duration) => duration !== "0.5s") ||
-            timings.length !== 2 ||
-            timings.some((timing) => timing !== "ease-in-out")
-          );
-        })
-      ) {
-        throw new Error(
-          "Topic landing Hero must keep its module static while its copy and media fade upward",
-        );
+      for (const target of initialRevealContent) {
+        const style = getComputedStyle(target);
+        if (style.animationDuration !== "0.35s" || style.transform !== "none" || style.transitionDuration !== "0s") {
+          throw new Error("Topic landing Hero copy and media must use the shared first-screen fade");
+        }
       }
 
       for (const revealSection of Array.from(scrollReveals)) {
@@ -320,6 +281,14 @@ export const Pc: Story = {
               );
         if (!revealContent) {
           throw new Error("Topic landing module content did not render");
+        }
+
+        if (revealSection.dataset.motionInitial === "true") {
+          const style = getComputedStyle(revealContent);
+          if (style.animationDuration !== "0.35s" || style.transform !== "none" || style.transitionDuration !== "0s") {
+            throw new Error("First-screen modules must use the shared first-screen fade");
+          }
+          continue;
         }
 
         const previousMotionState = revealSection.dataset.motionState;
