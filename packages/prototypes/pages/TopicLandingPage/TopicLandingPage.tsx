@@ -79,6 +79,7 @@ export function TopicLandingPage({
   const mainRef = useRef<HTMLElement>(null);
   const globalHeaderRef = useRef<HTMLDivElement>(null);
   const [globalHeaderHeight, setGlobalHeaderHeight] = useState(0);
+  const initialViewportPrepared = useRef(false);
   const primaryTabsRef = useRef<HTMLDivElement>(null);
   const pendingPrimaryTabValueRef = useRef<string | null>(null);
   const [primaryTabValue, setPrimaryTabValue] = useState(
@@ -362,6 +363,48 @@ export function TopicLandingPage({
       target.dataset.motionObserved = "true";
     });
 
+    // Start every first-screen content fade together, independently of image
+    // decoding and the observers used for later scroll reveals.
+    if (!initialViewportPrepared.current) {
+      initialViewportPrepared.current = true;
+      const scrollRoot = resolveTopicLandingScrollRoot(main);
+      const rootBounds = scrollRoot === window
+        ? { top: 0, bottom: window.innerHeight }
+        : (scrollRoot as HTMLElement).getBoundingClientRect();
+      const inInitialViewport = (element: HTMLElement) => {
+        const bounds = element.getBoundingClientRect();
+        return bounds.bottom > Math.max(0, rootBounds.top) &&
+          bounds.top < Math.min(window.innerHeight, rootBounds.bottom) &&
+          bounds.right > 0 && bounds.left < window.innerWidth;
+      };
+      revealTargets.filter(inInitialViewport).forEach((target) => {
+        const targets = waterfallRowByTrigger.get(target) ?? [target];
+        targets.forEach((element) => {
+          element.dataset.motionInitial = "true";
+          const content = element.dataset.motionReveal === "scroll-row"
+            ? element
+            : element.querySelector<HTMLElement>(
+                '[data-slot="shortcut-rail-container"], [data-slot="brand-product-rail-container"], [data-slot="product-list-container"], [data-slot="review-list-container"]',
+              );
+          if (content && !content.parentElement?.closest('[data-initial-fade="true"]')) {
+            content.dataset.initialFade = "true";
+          }
+        });
+      });
+      main.querySelectorAll<HTMLElement>(
+        '[data-slot="theme-hero-copy"], [data-slot="theme-hero-media"], [data-slot="topic-landing-tabs-container"]',
+      ).forEach((element) => {
+        element.dataset.initialFade = "true";
+      });
+      main.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
+        if (!inInitialViewport(image)) return;
+        image.loading = "eager";
+        image.dataset.initialImage = image.complete && image.naturalWidth > 0
+          ? "cached"
+          : "pending";
+      });
+    }
+
     if (reducedMotion) {
       main.dataset.motionReady = "reduced";
       return;
@@ -375,18 +418,6 @@ export function TopicLandingPage({
       return;
     }
 
-    const initialObserver = new IntersectionObserver(
-      (entries) => {
-        entries
-          .filter((entry) => entry.isIntersecting)
-          .forEach((entry) => {
-            const target = entry.target as HTMLElement;
-            target.dataset.motionState = "visible";
-            initialObserver.unobserve(target);
-          });
-      },
-      { rootMargin: SECTION_REVEAL_ROOT_MARGIN },
-    );
     let previousScrollY = window.scrollY;
     let scrollDirection: "down" | "up" = "down";
     let isInitialObservation = true;
@@ -440,11 +471,9 @@ export function TopicLandingPage({
       },
     );
 
-    if (initialReveal) initialObserver.observe(initialReveal);
     revealTargets.forEach((target) => observer.observe(target));
 
     return () => {
-      initialObserver.disconnect();
       observer.disconnect();
       window.removeEventListener("scroll", updateScrollDirection);
       waterfallRowItems.forEach((target) => {
@@ -490,6 +519,7 @@ export function TopicLandingPage({
         {!hiddenModules.includes("hero") && (
           <ThemeHero
             {...hero}
+            imageLoading="eager"
             className={cx(styles.initialReveal, hero.className)}
             data-motion-reveal="initial"
           />

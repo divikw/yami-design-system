@@ -22,14 +22,7 @@
 }
 
 .main[data-motion-ready="true"]
-  [data-motion-reveal="initial"]
-  :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-media"]) {
-  opacity: 0;
-  transform: translate3d(0, 32px, 0);
-}
-
-.main[data-motion-ready="true"]
-  [data-motion-reveal="scroll"]
+  [data-motion-reveal="scroll"]:not([data-motion-initial="true"])
   :is(
     [data-slot="shortcut-rail-container"],
     [data-slot="topic-landing-theme-product-list"]
@@ -52,17 +45,7 @@
 }
 
 .main[data-motion-ready="true"]
-  [data-motion-reveal="initial"][data-motion-state="visible"]
-  :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-media"]) {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition:
-    opacity 500ms ease-in-out,
-    transform 500ms ease-in-out;
-}
-
-.main[data-motion-ready="true"]
-  [data-motion-reveal="scroll"][data-motion-state="visible"]
+  [data-motion-reveal="scroll"]:not([data-motion-initial="true"])[data-motion-state="visible"]
   :is(
     [data-slot="shortcut-rail-container"],
     [data-slot="topic-landing-theme-product-list"]
@@ -88,7 +71,7 @@
 }
 
 .main[data-motion-ready="true"]
-  [data-motion-reveal="scroll"][data-motion-direction="up"]
+  [data-motion-reveal="scroll"]:not([data-motion-initial="true"])[data-motion-direction="up"]
   :is(
     [data-slot="shortcut-rail-container"],
     [data-slot="topic-landing-theme-product-list"]
@@ -249,7 +232,7 @@ main.main[data-title-font-family="sans"]
   }
 
   .main[data-motion-ready="true"]
-    [data-slot="topic-landing-waterfall-section"]:not(
+    [data-slot="topic-landing-waterfall-section"]:not([data-motion-initial="true"]):not(
       [data-motion-state="visible"]
     )
     > [data-slot="product-list"]
@@ -260,7 +243,7 @@ main.main[data-title-font-family="sans"]
   }
 
   .main[data-motion-ready="true"]
-    [data-slot="topic-landing-waterfall-section"][data-motion-state="visible"]
+    [data-slot="topic-landing-waterfall-section"]:not([data-motion-initial="true"])[data-motion-state="visible"]
     > [data-slot="product-list"]
     > [data-slot="product-list-container"]
     > :is([data-slot="product-list-heading"], [data-slot="tabs"]) {
@@ -279,13 +262,13 @@ main.main[data-title-font-family="sans"]
     transition: none;
   }
 
-  .main[data-motion-ready="true"] [data-motion-reveal="scroll-row"] {
+  .main[data-motion-ready="true"] [data-motion-reveal="scroll-row"]:not([data-motion-initial="true"]) {
     opacity: 0;
     transform: translate3d(0, 24px, 0);
   }
 
   .main[data-motion-ready="true"]
-    [data-motion-reveal="scroll-row"][data-motion-state="visible"] {
+    [data-motion-reveal="scroll-row"]:not([data-motion-initial="true"])[data-motion-state="visible"] {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     transition:
@@ -294,7 +277,7 @@ main.main[data-title-font-family="sans"]
   }
 
   .main[data-motion-ready="true"]
-    [data-motion-reveal="scroll-row"][data-motion-direction="up"] {
+    [data-motion-reveal="scroll-row"]:not([data-motion-initial="true"])[data-motion-direction="up"] {
     transition: none;
   }
 
@@ -347,7 +330,7 @@ main.main[data-title-font-family="sans"]
     [data-motion-reveal="initial"]
     :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-media"]),
   .main[data-motion-ready]
-    [data-motion-reveal="scroll"]
+    [data-motion-reveal="scroll"]:not([data-motion-initial="true"])
     :is(
       [data-slot="shortcut-rail-container"],
       [data-slot="topic-landing-theme-product-list"]
@@ -365,10 +348,41 @@ main.main[data-title-font-family="sans"]
         > [data-slot="product-list"]
         > [data-slot="product-list-container"]
     ),
-  .main[data-motion-ready] [data-motion-reveal="scroll-row"] {
+  .main[data-motion-ready] [data-motion-reveal="scroll-row"]:not([data-motion-initial="true"]) {
     opacity: 1;
     transform: none;
     animation: none;
     transition: none;
+  }
+}
+
+/* First-screen images load independently of their already readable content. */
+.main [data-slot="theme-hero-media"] img[data-initial-image="pending"] {
+  transition: opacity 200ms ease-out;
+}
+
+.main img[data-initial-image="cached"] {
+  transition-property: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main img[data-initial-image] {
+    transition: none;
+  }
+}
+
+/* Only content fades: section backgrounds, sticky position and height stay fixed. */
+.main [data-initial-fade="true"] {
+  animation: initial-content-fade 350ms ease-out both;
+}
+
+@keyframes initial-content-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main [data-initial-fade="true"] {
+    animation: none;
   }
 }
