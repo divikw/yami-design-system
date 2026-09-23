@@ -8,7 +8,7 @@ import "@yami/design-system/styles/base.css";
 import { TopicLandingPage } from "../../../packages/prototypes/pages/TopicLandingPage/TopicLandingPage";
 import { createTopicKeywordLandingPageFixture } from "../../../packages/prototypes/pages/TopicLandingPage/topic.fixtures";
 
-test.each([390, 1024, 1280, 1439, 1440, 1680, 1920])(
+test.each([390, 1024, 1199, 1200, 1280, 1281, 1439, 1440, 1441, 1680, 1920])(
   "preserves the Topic page rail columns at %ipx",
   async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
@@ -28,7 +28,10 @@ test.each([390, 1024, 1280, 1439, 1440, 1680, 1920])(
         expect(products.scrollWidth).toBeGreaterThan(products.clientWidth);
         expect(reviews.scrollWidth).toBeGreaterThan(reviews.clientWidth);
       } else {
-        const count = width >= 1440 ? 6 : width >= 1200 ? 5 : 4;
+        // Topic bodies stop growing at 1440px, including their page gutters.
+        const bodyWidth = products.closest('[data-slot="product-list-container"]')!.getBoundingClientRect().width;
+        expect(bodyWidth).toBeLessThanOrEqual(1440);
+        const count = bodyWidth > 1280 ? 6 : bodyWidth >= 1200 ? 5 : 4;
         for (const [list, item, columns] of [[products, product, count], [reviews, review, 3]] as const) {
           const gap = parseFloat(getComputedStyle(list).columnGap);
           const occupied = item.getBoundingClientRect().width * columns + gap * (columns - 1);

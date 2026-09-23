@@ -331,7 +331,7 @@
   }
 }
 
-@container hero-banner (width > 1440px) {
+@container hero-banner (width > 1280px) {
   .item {
     --hero-banner-per-view: 4;
   }
