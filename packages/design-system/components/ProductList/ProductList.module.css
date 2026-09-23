@@ -752,33 +752,19 @@
   }
 }
 
-@media (min-width: 1200px) {
-  .root[data-layout="rail"] .item,
-  .root[data-layout="rail"] .skeletonItem {
-    flex-basis: calc((100% - 48px) / 5);
-  }
+/* Counts use the container border box, including its page gutters. */
+.root[data-layout="rail"] .container[data-rail-columns] .item,
+.root[data-layout="rail"] .container[data-rail-columns] .skeletonItem {
+  flex-basis: calc((100% - (var(--product-list-columns) - 1) * var(--space-150)) / var(--product-list-columns));
 }
 
-@media (min-width: 1440px) {
-  .root[data-layout="rail"] .item,
-  .root[data-layout="rail"] .skeletonItem {
-    flex-basis: calc((100% - 60px) / 6);
-  }
+.root[data-layout="rail"] .container[data-rail-columns="0"] .item,
+.root[data-layout="rail"] .container[data-rail-columns="0"] .skeletonItem {
+  flex-basis: 152px;
 }
 
-@media (min-width: 1680px) {
-  .root[data-layout="rail"] .item,
-  .root[data-layout="rail"] .skeletonItem {
-    flex-basis: calc((100% - 72px) / 7);
-  }
-}
-
-@media (min-width: 1920px) {
-  .root[data-layout="rail"] .item,
-  .root[data-layout="rail"] .skeletonItem {
-    /* Eight equal cards plus seven 12px gaps fill the content area. */
-    flex-basis: calc((100% - 84px) / 8);
-  }
+.root[data-layout="rail"] .container[data-rail-columns="0"] .list {
+  gap: var(--space-100);
 }
 
 /* Banner-led background keeps standard section geometry and white product cards. */

@@ -144,7 +144,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "2d3abf456c702e07f76e921046bc24810addd5788dcaf87628e24aa58bc83e25"
+      "digest": "54b599a258ad10d2a7c0f22c816ddf85dba4323ab15962a1e7fa23b203dfedb0"
     },
     {
       "name": "horizontal-scroll-list",
@@ -180,7 +180,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "f444989db9dfe500e3ac71b879de6002197aa98835040832879a2faf27bf9f39"
+      "digest": "e5563c5454887a6e4892b988bcce1cda171a5f49edc6d4af11fa8e1306c04ec4"
     },
     {
       "name": "product-media-gallery",
@@ -225,7 +225,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/section-banner.json",
-      "digest": "d0ea24ae03b16cc43bf8cc260c044f8057a183acc06f147f8a57c660fcf971ce"
+      "digest": "5cc099661471f82c6b5c83223e9c20d8689f9e490a8c2ec419767466c3aadcab"
     },
     {
       "name": "sheet",
