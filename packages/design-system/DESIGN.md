@@ -342,8 +342,8 @@ The aliases below are the **only** identifiers a component should reference. If 
 | `--button-primary-active`   | `--color-black-1000`            | Hover / pressed                                                |
 | `--button-secondary`        | `--color-black-100` (8% black)  | Soft secondary                                                 |
 | `--button-secondary-active` | `--color-black-200` (17% black) | Hover / pressed                                                |
-| `--button-tertiary`         | `--color-white-1000`            | Ghost / inline                                                 |
-| `--button-tertiary-active`  | `--color-neutral-100`           | Hover / pressed                                                |
+| `--button-tertiary`         | `--color-white-0`               | Transparent low-emphasis button                                 |
+| `--button-tertiary-active`  | `--color-black-100`             | Subtle hover / pressed fill                                     |
 | `--button-disabled`         | `--color-neutral-200`           | Disabled bg — **paired with `--text-disabled`, never opacity** |
 
 ### Overlays
@@ -379,6 +379,16 @@ YAMI's current inventory is generated in [`generated/catalog.json`](./generated/
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
 | **Focus**      | 2px `--border-focus` outline, 2px offset. (rule `focus-style`)                                   |
 | **Icon-only**  | Requires `aria-label`; dev-time console warning if missing.                                      |
+
+### ButtonGroup — `components/ButtonGroup/`
+
+Related actions composed from Button. The group provides an accessible name and an 8px gap (`--space-100`), without overriding child colors, sizes, states, or keyboard behavior.
+
+- Default layout follows content width and wraps when space is limited.
+- `full` gives direct child Buttons equal widths in one row, capped at 480px. Use Button `form="full"` for this layout.
+- Prefer 2–3 short action labels with a consistent Button size. Long labels use Button's truncation; avoid overcrowding narrow containers.
+- Require `aria-label`; Tab visits the buttons in DOM order. Loading and related disabled states remain caller-owned.
+- Public contract: `ButtonGroup`, `ButtonGroupProps`; see `usage.md` and the Showcase, Playground, and Interaction stories.
 
 ### Tabs — `components/Tabs/`
 

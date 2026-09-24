@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "e1ea1df7d864425c70dd835d7cdf33643da787becf944d9eded8703ae40fb4d1"
+      "digest": "ad2ecd7a8389eb7350f7394a37d5006ba8afaaf0d706012f438f19343bc40f94"
     },
     {
       "name": "activity-page-header",
@@ -72,7 +72,16 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/button.json",
-      "digest": "462a56ed497b80176b3064eeaff327a87f459cb459a8a7d73a0bf2e0fff8cfd3"
+      "digest": "7ad304a19e2d31aaa88a7445edff83b2a4ab8db6e43f6d8f241a6258f2bb7c4c"
+    },
+    {
+      "name": "button-group",
+      "title": "ButtonGroup",
+      "type": "component",
+      "status": "stable",
+      "version": "0.1.0",
+      "path": "registry-items/button-group.json",
+      "digest": "3cf336e1a51257f43cd776072f68a3e4bc13b6e81354ee8ff8226ed92f189603"
     },
     {
       "name": "card",

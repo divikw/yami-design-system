@@ -72,6 +72,7 @@
     "billboard",
     "brand-product-rail",
     "button",
+    "button-group",
     "card",
     "checkbox",
     "dialog",
@@ -553,5 +554,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "e1ea1df7d864425c70dd835d7cdf33643da787becf944d9eded8703ae40fb4d1"
+  "contentDigest": "ad2ecd7a8389eb7350f7394a37d5006ba8afaaf0d706012f438f19343bc40f94"
 }

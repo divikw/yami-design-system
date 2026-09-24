@@ -120,10 +120,22 @@
   transform: translate(-50%, -50%);
 }
 
+/* Short text labels still reserve a 44px-wide target without overlapping siblings. */
+.button:not(.iconOnly) {
+  min-width: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Hit-area extender for sm + md TEXT buttons (Phase 12f-3).
    Vertical-only: the pseudo grows the click region to 44px tall while
-   keeping width = visual button width. Text buttons all carry a label
-   so their visual width is already ≥ 44; only height was short.
+   keeping width = visual button width (at least 44px via min-width).
    Why vertical-only (not square 44 like iconOnly): text buttons live
    in tight horizontal rows (filter chips, cart qty rows, inline CTAs)
    where horizontal overflow would steal clicks from siblings. Vertical
@@ -203,8 +215,8 @@
 }
 
 /*
- * tertiary — White fill with transparent hover, for low-emphasis.
- * Often used as a secondary pair to a primary on opposite-polarity surfaces.
+ * tertiary — Transparent at rest, with a subtle hover / pressed fill.
+ * Low-emphasis actions on default and inverse surfaces.
  */
 .tertiary {
   background-color: var(--button-tertiary);
@@ -239,10 +251,6 @@
 .inverse:focus-visible {
   outline-color: var(--border-focus-inverse);
 }
-.inverse[aria-disabled="true"] {
-  background-color: var(--button-disabled-inverse);
-  color: var(--text-disabled-inverse);
-}
 
 .emphasis.inverse {
   background-color: var(--button-emphasis-inverse);
@@ -274,6 +282,11 @@
 }
 .tertiary.inverse:not([aria-disabled="true"]):active {
   background-color: var(--button-tertiary-active-inverse);
+}
+
+.inverse[aria-disabled="true"] {
+  background-color: var(--button-disabled-inverse);
+  color: var(--text-disabled-inverse);
 }
 
 @media (hover: hover) and (pointer: fine) {

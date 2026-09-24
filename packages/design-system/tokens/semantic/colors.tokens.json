@@ -273,12 +273,12 @@
     },
     "tertiary": {
       "$type": "color",
-      "$value": "{color.white.1000}",
-      "$description": "用于弱操作或低干扰按钮，常见于文本型或幽灵按钮样式。"
+      "$value": "{color.white.0}",
+      "$description": "用于弱操作或低干扰按钮，默认背景透明、无描边。"
     },
     "tertiary-active": {
       "$type": "color",
-      "$value": "{color.neutral.100}",
+      "$value": "{color.black.100}",
       "$description": "用于弱操作按钮的最小化交互反馈状态。"
     },
     "tertiary-inverse": {
