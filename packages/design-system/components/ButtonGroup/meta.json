@@ -1,0 +1,71 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "ButtonGroup",
+  "category": "action",
+  "status": "stable",
+  "version": "0.1.0",
+  "description": "Groups related Buttons with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "ButtonGroup",
+    "ButtonGroupProps"
+  ],
+  "composes": [
+    "Button"
+  ],
+  "props": {
+    "full": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Equal-width single-row layout capped at 480px."
+    },
+    "aria-label": {
+      "type": "string",
+      "required": true,
+      "description": "Accessible name of the related actions."
+    },
+    "children": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Direct Button children, normally two or three."
+    }
+  },
+  "rules": {},
+  "tokens": [
+    "--space-100"
+  ],
+  "tokenBindings": {
+    "--space-100": {
+      "property": "gap",
+      "selector": ".group"
+    }
+  },
+  "accessibility": {
+    "role": "group",
+    "wcagLevel": "AA",
+    "tapTargetMin": 44,
+    "keyboardNav": [
+      "tab",
+      "enter",
+      "space"
+    ],
+    "ariaPattern": "group",
+    "notes": "Named group; focus and activation are owned by Button children."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#SettingsActions",
+    "./examples.tsx#CheckoutActions"
+  ]
+}

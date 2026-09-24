@@ -1,0 +1,16 @@
+.group {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 100%;
+  gap: var(--space-100);
+}
+.group > [data-slot="button"]:focus-visible { z-index: 1; }
+.group[data-full="true"] {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 480px;
+}
+.group[data-full="true"] > [data-slot="button"] { flex: 1 1 0; }

@@ -1,0 +1,81 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "button-group",
+  "title": "ButtonGroup",
+  "type": "component",
+  "status": "stable",
+  "version": "0.1.0",
+  "description": "Groups related Buttons with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
+  "source": "components/ButtonGroup",
+  "files": [
+    {
+      "source": "components/ButtonGroup/ButtonGroup.module.css",
+      "target": "components/ButtonGroup/ButtonGroup.module.css"
+    },
+    {
+      "source": "components/ButtonGroup/ButtonGroup.stories.module.css",
+      "target": "components/ButtonGroup/ButtonGroup.stories.module.css"
+    },
+    {
+      "source": "components/ButtonGroup/ButtonGroup.tsx",
+      "target": "components/ButtonGroup/ButtonGroup.tsx"
+    },
+    {
+      "source": "components/ButtonGroup/index.ts",
+      "target": "components/ButtonGroup/index.ts"
+    }
+  ],
+  "exports": [
+    "ButtonGroup",
+    "ButtonGroupProps"
+  ],
+  "composes": [
+    "Button"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/ButtonGroup/usage.md",
+    "stories": [
+      "components/ButtonGroup/ButtonGroup.stories.tsx"
+    ],
+    "examples": [
+      "components/ButtonGroup/examples.tsx#SettingsActions",
+      "components/ButtonGroup/examples.tsx#CheckoutActions"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--space-100"
+    ],
+    "rules": [],
+    "tokenBindings": {
+      "--space-100": {
+        "property": "gap",
+        "selector": ".group"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "group",
+      "wcagLevel": "AA",
+      "tapTargetMin": 44,
+      "keyboardNav": [
+        "tab",
+        "enter",
+        "space"
+      ],
+      "ariaPattern": "group",
+      "notes": "Named group; focus and activation are owned by Button children."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "3cf336e1a51257f43cd776072f68a3e4bc13b6e81354ee8ff8226ed92f189603"
+}

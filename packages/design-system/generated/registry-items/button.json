@@ -14,6 +14,10 @@
       "target": "components/Button/Button.module.css"
     },
     {
+      "source": "components/Button/Button.stories.module.css",
+      "target": "components/Button/Button.stories.module.css"
+    },
+    {
       "source": "components/Button/Button.tsx",
       "target": "components/Button/Button.tsx"
     },
@@ -250,5 +254,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "462a56ed497b80176b3064eeaff327a87f459cb459a8a7d73a0bf2e0fff8cfd3"
+  "contentDigest": "7ad304a19e2d31aaa88a7445edff83b2a4ab8db6e43f6d8f241a6258f2bb7c4c"
 }

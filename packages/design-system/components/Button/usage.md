@@ -17,7 +17,7 @@ Use `<Button>` for any interactive action that is **not navigation between pages
 | `emphasis` | `--button-emphasis` (operational red) + `--text-on-emphasis` (white) | Depends on `form` | Buy Now / Add to Cart / Place Order — the **one** high-priority CTA on the screen |
 | `primary` | `--button-primary` (black) | Depends on `form` | Generic primary actions, form submits, non-emphasis CTAs |
 | `secondary` | `--button-secondary` (grey) | Depends on `form` | Secondary actions paired with a primary (Cancel / Back / Skip) |
-| `tertiary` | `--button-tertiary` (white) | Depends on `form` | Low-emphasis actions; lightweight card-level actions |
+| `tertiary` | `--button-tertiary` (transparent) | Depends on `form` | Low-emphasis actions; lightweight card-level actions |
 
 ### ⚠️ `emphasis-limit` rule (design.md)
 
@@ -35,6 +35,8 @@ Wrong — two red emphasis buttons on the same screen:
 <Button variant="emphasis">Apply Coupon</Button>  {/* ✗ breaks emphasis-limit */}
 ```
 
+Tertiary is a low-emphasis button with a transparent background and no outline at rest, on both default and inverse surfaces. Hover and press add a subtle theme-aware fill; keyboard focus retains the focus ring. Disabled and loading states retain the shared disabled treatment.
+
 ## Sizes
 
 | Size | Mobile | Desktop (≥1024px) | Use when |
@@ -48,7 +50,7 @@ Text-bearing `lg` uses 16px labels on mobile and 18px labels at ≥1024px
 This applies to all hierarchies and both surfaces. Icon-only `lg` and `sm`/`md`
 typography are unchanged.
 
-All sizes meet the `tap-target` rule (≥44pt iOS / 48dp Android) via internal padding even when visible height is shorter.
+Web buttons with `sm` / `md` sizes reserve at least 44px of width for text labels and extend their pointer target to 44px vertically using a pseudo-element; icon buttons extend to 44×44px. This does not reserve layout space: leave enough room around compact buttons to avoid overlapping targets. For a visible 48px mobile target, use `size="lg"`. Native iOS / Android targets are separate platform requirements, not a guarantee of this Web component.
 
 ## Form
 
@@ -64,6 +66,8 @@ The `form` prop mirrors the Figma Form axis (Mobile v2 + PC v2). It controls lay
 <Button form="full" variant="emphasis">Checkout</Button>
 <Button form="icon" variant="secondary" aria-label="Favorite"><HeartIcon /></Button>
 ```
+
+For the standard action-area example, use a container with `width: 100%` and `max-width: 480px`: it fills the available mobile width and caps the desktop width. Dialogs and sidebars may use narrower containers. This is a layout convention; `Button form="full"` itself fills its parent and does not impose a maximum width.
 
 The legacy booleans `fullWidth` and `iconOnly` are `@deprecated` but still work — they map to `form="full"` / `form="icon"`. New code should use `form`.
 
@@ -107,17 +111,32 @@ Set `loading` when the action is in-flight. The button:
 2. Announces `aria-busy="true"` to screen readers
 3. Stays focusable but click-disabled
 
+For asynchronous saves, `loadingDelay={150}` avoids flashing a spinner for fast responses. It delays only the spinner and visual content swap; `aria-busy`, unavailable colors, and click blocking take effect immediately. The default is `0` for immediate loading previews. Finishing or unmounting cancels the pending spinner.
+
 ```tsx
 const [saving, setSaving] = useState(false)
+const savingRef = useRef(false)
 // …
-<Button loading={saving} onClick={async () => {
+<Button loading={saving} loadingDelay={150} onClick={async () => {
+  if (savingRef.current) return
+  savingRef.current = true
   setSaving(true)
-  await save()
-  setSaving(false)
+  try {
+    await save()
+  } finally {
+    savingRef.current = false
+    setSaving(false)
+  }
 }}>Save</Button>
 ```
 
 Don't layer `loading={true} disabled={true}` — loading is enough, and makes the intent clearer.
+
+The synchronous ref guard prevents two calls before React renders the loading state. Button remains controlled: it does not await `onClick` or manage the request for you. Handle request errors in your application.
+
+### Long labels
+
+Text buttons fit their container and truncate overflowing labels with an ellipsis. Icons keep their size; the full text remains in the accessible name. Prefer short action labels, and use `title` or a tooltip when the full wording needs to be available to sighted users. Flex/grid containers may also need `min-width: 0` to allow shrinking.
 
 ## Disabled state
 

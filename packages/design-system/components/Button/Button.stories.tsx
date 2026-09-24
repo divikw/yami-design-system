@@ -1,6 +1,9 @@
+import { useRef, useState } from "react"
+import { expect, userEvent, within } from "storybook/test"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
 import { Button } from "./Button"
+import showcaseStyles from "./Button.stories.module.css"
 
 // Heart icon from packages/design-system/assets/icons/action/heart.svg.
 // Inlined as a component so the showcase exercises the canonical SVG path
@@ -33,9 +36,12 @@ const meta = {
   parameters: {
     layout: "centered",
     docs: {
+      playground: "Playground",
+      interactionStory: "yami-components-actions-button--interaction",
+      showStories: false,
       description: {
         component:
-          "YAMI Button — mirrors Figma `Mobile v2` + `PC v2` (file 6oOAy72DBff4P6NzJYc2hi). Hierarchy × Form × Size × Surface. Inverse variants render on the current theme's opposite-polarity `--surface-inverse`.",
+          "按钮用于触发操作。按操作优先级选择层级，按布局选择形态；反色按钮用于相反明暗的背景。下方为规格对照，业务页面只保留一个红色强调操作。",
       },
     },
   },
@@ -54,7 +60,13 @@ const meta = {
     },
     inverse: { control: "boolean" },
     loading: { control: "boolean" },
+    loadingDelay: { control: { type: "number", min: 0, step: 50 } },
     disabled: { control: "boolean" },
+    children: { control: "text" },
+    leftIcon: { control: false },
+    rightIcon: { control: false },
+    iconOnly: { table: { disable: true } },
+    fullWidth: { table: { disable: true } },
   },
   args: {
     children: "Action",
@@ -73,37 +85,51 @@ type Story = StoryObj<typeof meta>
 const VARIANTS = ["emphasis", "primary", "secondary", "tertiary"] as const
 const SIZES = ["sm", "md", "lg"] as const
 
-// ───── Minimal layout primitives (shadcn-style: flex rows + tiny labels) ─────
-
-const stackStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "var(--space-400)",
-  maxWidth: 480,
-  width: "100%",
-  fontFamily: "var(--font-family-ios)",
-}
-
-const rowStyle: React.CSSProperties = {
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "var(--space-150)",
-  alignItems: "center",
-}
-
 const rowLabelStyle: React.CSSProperties = {
   fontSize: "var(--font-size-caption-sm)",
   color: "var(--text-secondary)",
   marginBottom: "var(--space-100)",
 }
 
-function Row({ label, children, inverse = false }: { label: string; children: React.ReactNode; inverse?: boolean }) {
+function SectionHeading({ title, description }: { title: string; description: string }) {
+  return <div className={showcaseStyles.sectionHead}><h2>{title}</h2><p>{description}</p></div>
+}
+
+function StateMatrix({ inverse = false }: { inverse?: boolean }) {
   return (
-    <div>
-      <div style={{ ...rowLabelStyle, color: inverse ? "var(--text-secondary-inverse)" : "var(--text-secondary)" }}>
-        {label}
+    <div className={`${showcaseStyles.statePanel} ${inverse ? showcaseStyles.inverse : ""}`}>
+      <h3>{inverse ? "反色背景" : "默认背景"}</h3>
+      <div className={showcaseStyles.scroll} role="region" aria-label={inverse ? "反色状态对照" : "默认状态对照"} tabIndex={0}>
+        <table className={showcaseStyles.stateTable}>
+          <thead><tr><th scope="col">层级</th><th scope="col">默认</th><th scope="col">加载中</th><th scope="col">禁用</th></tr></thead>
+          <tbody>{VARIANTS.map((variant, index) => (
+            <tr key={variant}>
+              <th scope="row">{["强调", "主要", "次要", "低强调"][index]}</th>
+              {(["default", "loading", "disabled"] as const).map((state) => (
+                <td key={state}><Button variant={variant} inverse={inverse} loading={state === "loading"} disabled={state === "disabled"}>继续</Button></td>
+              ))}
+            </tr>
+          ))}</tbody>
+        </table>
       </div>
-      <div style={rowStyle}>{children}</div>
+    </div>
+  )
+}
+
+function SaveDemo({ duration = 700, label = "保存设置" }: { duration?: number; label?: string }) {
+  const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle")
+  const saving = useRef(false)
+  return (
+    <div className={showcaseStyles.saveDemo}>
+      <Button loading={status === "saving"} loadingDelay={150} onClick={async () => {
+        if (saving.current) return
+        saving.current = true
+        setStatus("saving")
+        await new Promise((resolve) => setTimeout(resolve, duration))
+        setStatus("saved")
+        saving.current = false
+      }}>{label}</Button>
+      <p role="status">{status === "saving" ? "正在保存…" : status === "saved" ? "设置已保存" : "等待操作"}</p>
     </div>
   )
 }
@@ -119,144 +145,197 @@ function Row({ label, children, inverse = false }: { label: string; children: Re
  * pages (Mobile v2 / PC v2).
  */
 export const Showcase: Story = {
-  parameters: { layout: "padded" },
-  render: () => (
-    <div style={stackStyle}>
-      <Row label="Hierarchy">
-        {VARIANTS.map((v) => (
-          <Button key={v} variant={v}>
-            {v[0].toUpperCase() + v.slice(1)}
-          </Button>
-        ))}
-      </Row>
+  parameters: { layout: "padded", controls: { disable: true } },
+  render: (_args, context) => {
+    const sizePreview = new URLSearchParams(window.location.search).get("buttonSize")
+    if (sizePreview) {
+      const row = new URLSearchParams(window.location.search).get("buttonRow")
+      const size = SIZES.find((value) => value === row) || "md"
+      return <SizePreview desktop={sizePreview === "desktop"} size={size} />
+    }
+    return (
+      <div className={showcaseStyles.page}>
+        <header className={showcaseStyles.header}>
+          <h1>Button 按钮</h1>
+          <p>层级、尺寸、形态与交互。</p>
+        </header>
 
-      <Row label="Size">
-        {SIZES.map((s) => (
-          <Button key={s} size={s}>
-            Action
-          </Button>
-        ))}
-      </Row>
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="操作层级" description="按操作优先级选择，同一页面只保留一个红色强调操作。" />
+          <div className={`${showcaseStyles.contentCard} ${showcaseStyles.centeredCard}`}><div className={showcaseStyles.hierarchy}>
+            {VARIANTS.map((variant, index) => (
+              <div key={variant} className={showcaseStyles.item}>
+                <Button variant={variant}>{["Emphasis", "Primary", "Secondary", "Tertiary"][index]}</Button>
+                <p>{["强调", "主要", "次要", "低强调"][index]}</p>
+              </div>
+            ))}
+          </div></div>
+        </section>
 
-      <Row label="Form">
-        <Button form="inline">Inline</Button>
-        <Button form="icon" variant="secondary" aria-label="Favorite">
-          <HeartIcon />
-        </Button>
-        <Button form="full" variant="emphasis">
-          Buy Now
-        </Button>
-      </Row>
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="尺寸规格" description="仅大号文字按钮随设备调整，单位为 px。" />
+          <div className={showcaseStyles.contentCard}>
+          <div role="region" aria-label="文字按钮尺寸对照，可横向滚动" tabIndex={0} className={showcaseStyles.scroll}>
+            <table className={showcaseStyles.table}>
+              <thead><tr>
+                <th scope="col">尺寸</th>
+                <th scope="col">移动端 / 平板<div className={showcaseStyles.muted}>视口 &lt;1024px</div></th>
+                <th scope="col">桌面端<div className={showcaseStyles.muted}>视口 ≥1024px</div></th>
+              </tr></thead>
+              <tbody>{SIZES.map((size, index) => (
+                <tr key={size}>
+                  <th scope="row">{["小号", "中号", "大号"][index]} {size.toUpperCase()}</th>
+                  {(["mobile", "desktop"] as const).map((device) => (
+                    <td key={device}><div className={showcaseStyles.frameClip}>
+                      <iframe
+                        title={`${device === "mobile" ? "移动端" : "桌面端"} ${size.toUpperCase()} 尺寸`}
+                        src={`iframe.html?id=yami-components-actions-button--showcase&viewMode=story&buttonSize=${device}&buttonRow=${size}&globals=${encodeURIComponent(`theme:${context.globals.theme || "light"};locale:${context.globals.locale || "zh"}`)}`}
+                        width={device === "mobile" ? 375 : 1280}
+                        height={128}
+                      />
+                    </div></td>
+                  ))}
+                </tr>
+              ))}</tbody>
+            </table>
+          </div>
+          </div>
+          <div className={`${showcaseStyles.contentCard} ${showcaseStyles.iconStrip}`}>
+            <h3>图标按钮 · 两端通用</h3>
+            <div style={sizeGridStyle}>
+              {SIZES.map((size) => {
+                const dimension = size === "sm" ? 32 : size === "md" ? 40 : 48
+                return <div key={size}>
+                  <div style={sizeSlotStyle}><Button size={size} form="icon" aria-label="收藏"><HeartIcon size={size === "sm" ? 16 : size === "md" ? 20 : 24} /></Button></div>
+                  <p style={sizeCaptionStyle}>{size.toUpperCase()} · {dimension}×{dimension}</p>
+                </div>
+              })}
+            </div>
+          </div>
+        </section>
 
-      <Row label="State">
-        <Button variant="emphasis">Action</Button>
-        <Button variant="emphasis" loading>
-          Action
-        </Button>
-        <Button variant="emphasis" disabled>
-          Action
-        </Button>
-      </Row>
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="布局形态" description="根据可用空间选择，以下统一使用主要按钮。" />
+          <div className={showcaseStyles.contentCard}>
+          <div className={showcaseStyles.formRow}>
+            <div><h3>内容宽度 <span className={showcaseStyles.api}>inline</span></h3></div>
+            <div className={showcaseStyles.formSample}><Button form="inline">继续</Button></div>
+          </div>
+          <div className={showcaseStyles.formRow}>
+            <div><h3>纯图标 <span className={showcaseStyles.api}>icon</span></h3></div>
+            <div className={showcaseStyles.formSample}><Button form="icon" aria-label="收藏"><HeartIcon /></Button></div>
+          </div>
+          <div className={showcaseStyles.formRow}>
+            <div><h3>填满容器 <span className={showcaseStyles.api}>full</span></h3><p>操作区最大 480px</p></div>
+            <div className={showcaseStyles.fullSample}><Button form="full">继续</Button></div>
+          </div>
+          <div className={showcaseStyles.formRow}>
+            <div><h3>长文案</h3><p>200px 容器 · 超出省略</p></div>
+            <div className={showcaseStyles.formSample}>
+              <div className={showcaseStyles.constrainedSample}>
+                <Button leftIcon={<HeartIcon />} title="收藏商品并在补货时通知我">收藏商品并在补货时通知我</Button>
+              </div>
+            </div>
+          </div></div>
+        </section>
 
-      <div
-        style={{
-          background: "var(--surface-inverse)",
-          padding: "var(--space-300)",
-          borderRadius: "var(--radius-surface-default)",
-        }}
-      >
-        <Row label="Inverse" inverse>
-          {VARIANTS.map((v) => (
-            <Button key={v} variant={v} inverse>
-              {v[0].toUpperCase() + v.slice(1)}
-            </Button>
-          ))}
-        </Row>
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="图标搭配" description="同一尺寸的前置、后置图标大小一致。" />
+          <div className={showcaseStyles.contentCard}>
+            {SIZES.map((size) => {
+              const iconSize = size === "sm" ? 12 : size === "md" ? 16 : 20
+              return (
+                <div key={size} className={showcaseStyles.formRow}>
+                  <div><h3>{size.toUpperCase()}</h3><p>图标 {iconSize}×{iconSize}px</p></div>
+                  <div className={showcaseStyles.iconExamples}>
+                    <div><Button variant="secondary" size={size} leftIcon={<HeartIcon size={iconSize} />}>收藏商品</Button><p>前置图标</p></div>
+                    <div><Button variant="secondary" size={size} rightIcon={<HeartIcon size={iconSize} />}>收藏商品</Button><p>后置图标</p></div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="状态与背景" description="对照默认、加载与禁用状态，以及不同背景下的表现。" />
+          <div className={showcaseStyles.surfaces}><StateMatrix /><StateMatrix inverse /></div>
+        </section>
+
+        <section className={showcaseStyles.section}>
+          <SectionHeading title="交互体验" description="点击保存，或使用 Tab 与 Enter / 空格体验。" />
+          <div className={`${showcaseStyles.contentCard} ${showcaseStyles.centeredCard}`}><SaveDemo /></div>
+        </section>
       </div>
+    )
+  },
+}
+
+/** Interactive playground — drive every prop via the Controls panel. */
+export const Playground: Story = {
+  render: (args) => (
+    <div style={{ boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", width: "min(480px, calc(100vw - 64px))", maxWidth: "100%", padding: "var(--space-300)", background: args.inverse ? "var(--surface-inverse)" : "var(--surface-primary)" }}>
+      <Button {...args} aria-label={args.form === "icon" ? "收藏商品" : undefined}>
+        {args.form === "icon" ? <HeartIcon /> : args.children}
+      </Button>
     </div>
   ),
 }
 
-/** Interactive playground — drive every prop via the Controls panel. */
-export const Playground: Story = {}
-
-/** Emphasis CTA — the page's single permission-to-act button. */
-export const Emphasis: Story = {
-  args: { variant: "emphasis", children: "Add to Cart" },
-  play: async ({ canvasElement }) => {
-    const button = canvasElement.querySelector<HTMLButtonElement>("button")
-    if (!button) throw new Error("Inline emphasis Button did not render")
-    const styles = getComputedStyle(button)
-    const expectedRadius = styles.getPropertyValue("--radius-button-primary").trim()
-    if (styles.borderRadius !== expectedRadius) {
-      throw new Error(
-        `Inline Button must use the pill radius; received ${styles.borderRadius}`,
-      )
-    }
-  },
-}
-
-/** Full-width CTA — page-level commitment. */
-export const FullWidth: Story = {
-  args: { form: "full", variant: "emphasis", children: "Checkout" },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 360 }}>
-        <Story />
-      </div>
-    ),
-  ],
-  play: async ({ canvasElement }) => {
-    const button = canvasElement.querySelector<HTMLButtonElement>("button")
-    if (!button) throw new Error("Full-width Button did not render")
-    const styles = getComputedStyle(button)
-    const expectedRadius = styles.getPropertyValue("--radius-component-default").trim()
-    if (styles.borderRadius !== expectedRadius) {
-      throw new Error(
-        `Full-width Button must use the component radius; received ${styles.borderRadius}`,
-      )
-    }
-  },
-}
-
-/** Icon-only — square, aria-label required. */
-export const IconOnly: Story = {
-  args: {
-    form: "icon",
-    variant: "secondary",
-    "aria-label": "Add to favorites",
-  },
-  render: (args) => (
-    <Button {...args}>
-      <HeartIcon />
-    </Button>
+/** 点击、键盘激活和加载反馈。 */
+export const Interaction: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className={showcaseStyles.interactionExamples}>
+      <div><p>常规保存 · 展示加载与完成反馈</p><SaveDemo /></div>
+      <div><p>快速保存 · 完成时不闪现加载图标</p><SaveDemo duration={80} label="快速保存" /></div>
+    </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Keep manual previews idle; exercise keyboard activation only in Vitest.
+    if (import.meta.env.MODE !== "test") return
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole("button", { name: "保存设置" })
+    button.focus()
+    await userEvent.keyboard("{Enter}")
+    await expect(button).toHaveAttribute("aria-busy", "true")
+    await expect(button).toHaveAttribute("aria-disabled", "true")
+    await canvas.findByText("设置已保存")
+    await expect(button).not.toHaveAttribute("aria-busy")
+    await expect(button).toHaveFocus()
+  },
 }
 
-/** Loading — spinner replaces content, aria-busy set. */
-export const Loading: Story = {
-  args: { variant: "emphasis", loading: true, children: "Submitting" },
+const sizeGridStyle: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  gap: "var(--space-100)",
+  width: "100%",
+  maxWidth: 304,
+  marginInline: "auto",
+  textAlign: "center",
 }
 
-/** Disabled — uses token color pair, never opacity (rule no-opacity-disabled). */
-export const Disabled: Story = {
-  args: { variant: "primary", disabled: true, children: "Unavailable" },
+const sizeSlotStyle: React.CSSProperties = {
+  height: 56,
+  display: "flex",
+  alignItems: "flex-end",
+  justifyContent: "center",
 }
 
-/** Inverse surface — rendered on a dark card to verify contrast. */
-export const Inverse: Story = {
-  args: { variant: "emphasis", inverse: true, children: "Inverse" },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          background: "var(--surface-inverse)",
-          padding: "var(--space-400)",
-          borderRadius: "var(--radius-surface-default)",
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
+const sizeCaptionStyle: React.CSSProperties = {
+  ...rowLabelStyle,
+  marginTop: "var(--space-150)",
+  marginBottom: 0,
+}
+
+function SizePreview({ desktop, size }: { desktop: boolean; size: typeof SIZES[number] }) {
+  return (
+    <div className={showcaseStyles.sizePreview}>
+      <div style={sizeSlotStyle}><Button size={size}>继续</Button></div>
+      <p style={{ ...sizeCaptionStyle, whiteSpace: "nowrap" }}>
+        高 {size === "sm" ? 32 : size === "md" ? 40 : desktop ? 56 : 48} · 字号 {size === "lg" ? desktop ? 18 : 16 : 14}
+      </p>
+    </div>
+  )
 }

@@ -98,6 +98,12 @@
       "default": false,
       "description": "Replaces visuals with a spinner and sets aria-busy."
     },
+    "loadingDelay": {
+      "type": "number",
+      "required": false,
+      "default": 0,
+      "description": "Spinner delay in milliseconds. Busy state and click blocking remain immediate."
+    },
     "disabled": {
       "type": "boolean",
       "required": false,

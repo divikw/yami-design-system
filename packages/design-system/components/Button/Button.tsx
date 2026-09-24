@@ -23,7 +23,7 @@
  * See meta.json for structured spec, usage.md for narrative.
  */
 
-import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from 'react'
+import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useEffect, useState } from 'react'
 
 import styles from './Button.module.css'
 
@@ -58,6 +58,8 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   fullWidth?: boolean
   /** Shows a spinner in place of content; sets aria-busy. Still focusable. */
   loading?: boolean
+  /** Delay the spinner in milliseconds; busy state and click blocking remain immediate. Default: 0. */
+  loadingDelay?: number
   /** HTML form button type; defaults to 'button' (not 'submit'). Use 'submit' inside <form> explicitly. */
   htmlType?: 'button' | 'submit' | 'reset'
   /** Children become the label text (or icon node if form='icon'). */
@@ -86,6 +88,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     iconOnly = false,
     fullWidth = false,
     loading = false,
+    loadingDelay = 0,
     htmlType = 'button',
     disabled,
     children,
@@ -96,6 +99,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   },
   ref,
 ) {
+  const [delayedSpinner, setDelayedSpinner] = useState(false)
+  useEffect(() => {
+    setDelayedSpinner(false)
+    if (!loading || loadingDelay <= 0) return
+    const timer = setTimeout(() => setDelayedSpinner(true), loadingDelay)
+    return () => clearTimeout(timer)
+  }, [loading, loadingDelay])
+  const showSpinner = loading && (loadingDelay <= 0 || delayedSpinner)
   const effectiveForm = resolveForm(form, iconOnly, fullWidth)
   const isIconOnly = effectiveForm === 'icon'
   const isFullWidth = effectiveForm === 'full'
@@ -118,7 +129,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     isIconOnly && styles.iconOnly,
     isFullWidth && styles.fullWidth,
     inverse && styles.inverse,
-    loading && styles.loading,
+    showSpinner && styles.loading,
     className,
   ]
     .filter(Boolean)
@@ -154,7 +165,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         <span className={styles.label}>{children}</span>
       )}
       {rightIcon && !isIconOnly && <span className={styles.icon}>{rightIcon}</span>}
-      {loading && <span className={styles.spinner} aria-hidden="true" />}
+      {showSpinner && <span className={styles.spinner} aria-hidden="true" />}
     </button>
   )
 })
