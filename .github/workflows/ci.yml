@@ -52,7 +52,7 @@ jobs:
       - name: fetch-changeset-base
         if: matrix.check == 'changeset' && github.event_name == 'pull_request'
         run: git fetch --no-tags origin main:refs/heads/main
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@v3
         with:
           runtime: node@24
           cache: true
@@ -81,7 +81,7 @@ jobs:
             command: pnpm test:visual
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@v3
         with:
           runtime: node@24
           cache: true
@@ -107,7 +107,7 @@ jobs:
     container: mcr.microsoft.com/playwright:v1.62.1-noble
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@v3
         with:
           runtime: node@24
           cache: true
