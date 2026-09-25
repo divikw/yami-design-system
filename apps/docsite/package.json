@@ -32,13 +32,13 @@
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
     "@lhci/cli": "0.15.1",
-    "@playwright/test": "1.62.1",
+    "@playwright/test": "1.63.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
     "playwright": "1.62.1",
-    "playwright-core": "1.62.1",
-    "puppeteer-core": "25.9.0",
-    "typescript": "6.0.3",
-    "vitest": "4.1.11"
+    "playwright-core": "1.63.0",
+    "puppeteer-core": "25.11.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.1"
   }
 }
