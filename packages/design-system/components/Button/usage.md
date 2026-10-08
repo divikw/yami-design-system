@@ -6,8 +6,8 @@ Use `<Button>` for any interactive action that is **not navigation between pages
 
 ## When NOT to use
 
-- **Navigation to a different URL** → use `<a>` with button-like styling, not a Button. Semantic `<a>` survives JS-off, supports middle-click, and screen readers announce it correctly.
-- **Inline text action inside a sentence** → use `<a>` styled as `.link`. ("Have an account? <a>Sign in</a>.")
+- **Navigation that looks like a button** → use a semantic `<a>` with button-like styling, not a Button. It survives JS-off, supports middle-click, and screen readers announce it correctly.
+- **Text navigation, including links inside a sentence** → use a semantic `<a>` with the Link text treatment. (`Have an account? <a href="/sign-in">Sign in</a>.`)
 - **Toggling a boolean state** → consider `<Switch>` or `<Checkbox>` instead. Button doesn't convey on/off to assistive tech.
 
 ## Variants
@@ -47,8 +47,8 @@ Tertiary is a low-emphasis button with a transparent background and no outline a
 
 Text-bearing `lg` uses 16px labels on mobile and 18px labels at ≥1024px
 (`--font-size-button-lg-desktop`), including ≥1440px. Line-height stays 20px.
-This applies to all hierarchies and both surfaces. Icon-only `lg` and `sm`/`md`
-typography are unchanged.
+This applies to all four hierarchies and both surfaces. Icon-only `lg` and
+`sm`/`md` typography are unchanged.
 
 Web buttons with `sm` / `md` sizes reserve at least 44px of width for text labels and extend their pointer target to 44px vertically using a pseudo-element; icon buttons extend to 44×44px. This does not reserve layout space: leave enough room around compact buttons to avoid overlapping targets. For a visible 48px mobile target, use `size="lg"`. Native iOS / Android targets are separate platform requirements, not a guarantee of this Web component.
 
@@ -165,6 +165,20 @@ Uses `--button-disabled` background + `--text-disabled` foreground. **Never** us
   <Button variant="primary" htmlType="submit">Save</Button>
 </div>
 ```
+
+### Submit an external form
+
+Because `form` names the Button layout mode, use `htmlForm` for the native HTML
+form-owner attribute when the action is rendered outside its form.
+
+```tsx
+<form id="profile-form">...</form>
+<Button htmlType="submit" htmlForm="profile-form">Save profile</Button>
+```
+
+`htmlForm` is forwarded as the button's native `form` attribute. Set
+`htmlType="submit"` or `htmlType="reset"` when the button should submit or
+reset that external form.
 
 ### Product card "+" button
 

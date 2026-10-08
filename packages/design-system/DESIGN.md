@@ -186,7 +186,7 @@ emphasis, or replace the literal serif token with the language-aware token.
 | body-md     | 14      | 20          | `--font-size-body-md`     | **Default body.** sm/md button label                                                          |
 | caption-md  | 14      | 20          | `--font-size-caption-md`  | Rating row in ProductCard                                                                     |
 | caption-sm  | 12      | 14          | `--font-size-caption-sm`  | ProductCard brand row, smallest legal text and helper labels                                  |
-| link-xl     | 16      | 20          | `--font-size-link-xl`     | Large inline link / link button                                                               |
+| link-xl     | 16      | 20          | `--font-size-link-xl`     | Large inline link                                                                              |
 | link-md     | 14      | 20          | `--font-size-link-md`     | Inline link                                                                                   |
 | link-sm     | 12      | 16          | `--font-size-link-sm`     | Compact link                                                                                  |
 | price-md    | 24      | 32          | `--font-size-price-md`    | Primary price on PDP                                                                          |

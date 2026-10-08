@@ -62,6 +62,8 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   loadingDelay?: number
   /** HTML form button type; defaults to 'button' (not 'submit'). Use 'submit' inside <form> explicitly. */
   htmlType?: 'button' | 'submit' | 'reset'
+  /** Native form owner id for a button rendered outside its associated <form>. */
+  htmlForm?: string
   /** Children become the label text (or icon node if form='icon'). */
   children?: ReactNode
 }
@@ -90,6 +92,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     loading = false,
     loadingDelay = 0,
     htmlType = 'button',
+    htmlForm,
     disabled,
     children,
     className,
@@ -145,6 +148,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {...rest}
       ref={ref}
       type={htmlType}
+      form={htmlForm}
       className={classes}
       data-slot="button"
       aria-disabled={isInert || undefined}

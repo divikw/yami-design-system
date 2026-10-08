@@ -29,6 +29,69 @@ test("warns when an icon button has no accessible label in the Vite browser runt
   }
 });
 
+test("associates a submit button with an external form", () => {
+  const form = document.createElement("form");
+  form.id = "profile-form";
+  const container = document.createElement("div");
+  document.body.append(form, container);
+  const root = createRoot(container);
+  const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
+  form.addEventListener("submit", onSubmit);
+
+  try {
+    flushSync(() => {
+      root.render(
+        <Button htmlForm="profile-form" htmlType="submit">Save</Button>,
+      );
+    });
+
+    const button = container.querySelector("button")!;
+    expect(button).toHaveAttribute("form", "profile-form");
+    button.click();
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  } finally {
+    root.unmount();
+    container.remove();
+    form.remove();
+  }
+});
+
+test("slows the essential loading spinner when reduced motion is requested", () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+
+  try {
+    flushSync(() => root.render(<Button loading>Save</Button>));
+    const spinner = container.querySelector<HTMLElement>('[aria-hidden="true"]')!;
+    expect(getComputedStyle(spinner).animationDuration).toBe("1s");
+
+    const reducedMotionRule = Array.from(document.styleSheets).some((sheet) => {
+      let rules: CSSRuleList;
+      try {
+        rules = sheet.cssRules;
+      } catch {
+        return false;
+      }
+      return Array.from(rules).some((rule) => {
+        if (!(rule instanceof CSSMediaRule) || !rule.conditionText.includes("prefers-reduced-motion: reduce")) {
+          return false;
+        }
+        return Array.from(rule.cssRules).some((nestedRule) =>
+          nestedRule instanceof CSSStyleRule &&
+          nestedRule.selectorText.includes(`.${spinner.className}`) &&
+          ["1.5s", "1500ms"].includes(nestedRule.style.animationDuration),
+        );
+      });
+    });
+
+    expect(reducedMotionRule).toBe(true);
+  } finally {
+    root.unmount();
+    container.remove();
+  }
+});
+
 test.each([375, 1023, 1024, 1440, 1920])(
   "keeps Button size and typography contracts at %ipx",
   async (width) => {

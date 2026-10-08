@@ -882,7 +882,7 @@
         "name": "Button",
         "category": "action",
         "status": "stable",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "description": "YAMI primary interactive element. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
@@ -1035,6 +1035,11 @@
             "required": false,
             "default": "button"
           },
+          "htmlForm": {
+            "type": "string",
+            "required": false,
+            "description": "Native form owner id for a button rendered outside its associated form."
+          },
           "children": {
             "type": "ReactNode",
             "required": false,
@@ -1055,7 +1060,7 @@
               "Promotion / urgency-driven action"
             ],
             "avoidWhen": [
-              "Navigation (use primary or tertiary)",
+              "Navigation (use a semantic anchor)",
               "Secondary actions next to a primary",
               "Cancel / dismiss affordances"
             ],

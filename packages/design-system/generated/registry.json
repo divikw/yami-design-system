@@ -70,9 +70,9 @@
       "title": "Button",
       "type": "component",
       "status": "stable",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "7ad304a19e2d31aaa88a7445edff83b2a4ab8db6e43f6d8f241a6258f2bb7c4c"
+      "digest": "9390f95e6f6d01464a35607421f087a8b866989f1058496f45f3ed3d7fb2aa96"
     },
     {
       "name": "button-group",
