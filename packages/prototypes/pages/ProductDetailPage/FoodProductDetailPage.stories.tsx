@@ -57,7 +57,13 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   await expect(getComputedStyle(bestBefore).borderTopStyle).toBe(mobile ? "solid" : "none");
   await expect(bestBefore.getBoundingClientRect().top).toBeGreaterThanOrEqual(bestBefore.previousElementSibling!.getBoundingClientRect().bottom);
   await expect(canvasElement.querySelector('[data-pdp-add-to-cart]')).toBeEnabled();
-  await expect(canvasElement.querySelectorAll('[data-slot="product-media-gallery-thumbnail"]')).toHaveLength(9);
+  const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
+  if (mobile) {
+    await expect(thumbnails).toHaveLength(fixture.images.length);
+  } else {
+    await expect(thumbnails).toHaveLength(4);
+    await expect(canvasElement.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeVisible();
+  }
   const affiliateLink = canvasElement.querySelector<HTMLButtonElement>('[data-pdp-affiliate-link="true"]')!;
   await expect(affiliateLink).toHaveAttribute("data-pdp-affiliate-link", "true");
   await expect(affiliateLink).toHaveTextContent(fixture.copy.getAffiliateLink);
@@ -87,7 +93,6 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   await userEvent.click(decrease);
   await expect(canvasElement.querySelector("output")).toHaveTextContent("1");
 
-  const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
   if (!mobile) {
     await userEvent.click(thumbnails[1]!);
     await expect(thumbnails[1]).toHaveAttribute("aria-pressed", "true");

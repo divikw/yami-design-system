@@ -158,10 +158,16 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     };
 
     updateThumbnailLayout();
-    if (typeof ResizeObserver === "undefined") return;
+    const frame = requestAnimationFrame(updateThumbnailLayout);
+    if (typeof ResizeObserver === "undefined") {
+      return () => cancelAnimationFrame(frame);
+    }
     const observer = new ResizeObserver(updateThumbnailLayout);
     observer.observe(thumbnailRail);
-    return () => observer.disconnect();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [pinnedThumbnailIndex, regularThumbnails.length]);
   const activeImage = images[activeIndex];
 

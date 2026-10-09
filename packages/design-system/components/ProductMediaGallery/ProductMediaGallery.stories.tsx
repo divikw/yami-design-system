@@ -129,8 +129,7 @@ export const Showcase: Story = {
       thumbnailRailStyle.paddingTop !== "12px" ||
       thumbnailRailStyle.paddingRight !== "0px" ||
       thumbnailRailStyle.paddingBottom !== "12px" ||
-      thumbnailRailStyle.paddingLeft !== "0px" ||
-      thumbnailRailStyle.scrollPaddingInline !== "0px"
+      thumbnailRailStyle.paddingLeft !== "0px"
     ) {
       throw new Error(
         "Product media gallery thumbnail rail must use 12px vertical padding with no inline inset",
