@@ -267,6 +267,13 @@ export const InlinePinnedReference: Story = {
 
 export const EdgePinnedReference: Story = {
   args: { images: overflowPinnedImages, desktopPreview: true },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "560px" }}>
+        <Story />
+      </div>
+    ),
+  ],
   play: async ({ canvasElement }) => {
     const gallery = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery"]',
