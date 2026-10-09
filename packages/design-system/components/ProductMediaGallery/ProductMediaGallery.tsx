@@ -42,6 +42,7 @@ export interface ProductMediaGalleryProps
   desktopPreview?: boolean;
   desktopZoom?: boolean;
   desktopZoomPaneWidth?: number | string;
+  desktopZoomPaneHeight?: number | string;
   mobilePreview?: boolean;
   openPreviewLabel?: string;
   closePreviewLabel?: string;
@@ -72,6 +73,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   desktopPreview = false,
   desktopZoom = false,
   desktopZoomPaneWidth,
+  desktopZoomPaneHeight,
   mobilePreview = false,
   openPreviewLabel = "Open image preview",
   closePreviewLabel = "Close image preview",
@@ -87,14 +89,18 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   const [selectedIndex, setActiveIndex] = useState(() =>
     clampIndex(defaultIndex, images.length),
   );
+  const [visibleRegularThumbnailCount, setVisibleRegularThumbnailCount] = useState(images.length);
+  const [hasThumbnailOverflow, setHasThumbnailOverflow] = useState(false);
   const activeIndex = clampIndex(selectedIndex, images.length);
   const railRef = useRef<HTMLDivElement>(null);
   const thumbnailRailRef = useRef<HTMLDivElement>(null);
-  const thumbnailScrollerRef = useRef<HTMLDivElement>(null);
   const previewPointer = useRef<{ x: number; y: number } | null>(null);
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
   const pinnedThumbnailIndex = images.findIndex((image) => image.thumbnailPinned);
+  const regularThumbnails = images
+    .map((image, index) => ({ image, index }))
+    .filter(({ index }) => index !== pinnedThumbnailIndex);
 
   useImperativeHandle(ref, () => ({
     openPreview(imageId) {
@@ -122,42 +128,47 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
 
   useLayoutEffect(() => {
     const thumbnailRail = thumbnailRailRef.current;
-    const thumbnailScroller = thumbnailScrollerRef.current;
-    if (!thumbnailRail || !thumbnailScroller || pinnedThumbnailIndex < 0) return;
+    if (!thumbnailRail) return;
 
-    const updatePinnedLayout = () => {
-      const pinnedThumbnail = thumbnailRail.querySelector<HTMLElement>(
-        ':scope > [data-pinned="true"]',
-      );
-      if (!pinnedThumbnail) return;
-
-      const regularThumbnails = Array.from(
-        thumbnailScroller.querySelectorAll<HTMLElement>(
-          ':scope > [data-slot="product-media-gallery-thumbnail"]',
-        ),
-      );
+    const updateThumbnailLayout = () => {
       const gap = parseFloat(getComputedStyle(thumbnailRail).columnGap) || 0;
-      const regularWidth = regularThumbnails.reduce(
-        (total, thumbnail) => total + thumbnail.getBoundingClientRect().width,
-        0,
+      // The size token is a responsive clamp(), so obtain the resolved layout width
+      // rather than parsing the custom-property source text.
+      const thumbnailSize = thumbnailRail.querySelector<HTMLElement>("button")
+        ?.getBoundingClientRect().width || 0;
+      if (!thumbnailSize) return;
+
+      const pinnedWidth = pinnedThumbnailIndex >= 0 ? thumbnailSize + gap : 0;
+      const availableWidth = Math.max(0, thumbnailRail.clientWidth - pinnedWidth);
+      const visibleCapacity = Math.max(
+        1,
+        Math.floor((availableWidth + gap + 0.5) / (thumbnailSize + gap)),
       );
-      const requiredWidth =
-        regularWidth +
-        gap * Math.max(0, regularThumbnails.length - 1) +
-        (regularThumbnails.length > 0 ? gap : 0) +
-        pinnedThumbnail.getBoundingClientRect().width;
-      const nextLayout = requiredWidth <= thumbnailRail.clientWidth + 0.5
-        ? "inline"
-        : "edge";
-      setPinnedLayout((current) => current === nextLayout ? current : nextLayout);
+      const nextHasOverflow = regularThumbnails.length > visibleCapacity;
+      const nextVisibleCount = nextHasOverflow
+        ? Math.max(0, visibleCapacity - 1)
+        : regularThumbnails.length;
+
+      setHasThumbnailOverflow((current) => current === nextHasOverflow ? current : nextHasOverflow);
+      setVisibleRegularThumbnailCount((current) => current === nextVisibleCount ? current : nextVisibleCount);
+      if (pinnedThumbnailIndex >= 0) {
+        const nextLayout = nextHasOverflow ? "edge" : "inline";
+        setPinnedLayout((current) => current === nextLayout ? current : nextLayout);
+      }
     };
 
-    updatePinnedLayout();
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(updatePinnedLayout);
+    updateThumbnailLayout();
+    const frame = requestAnimationFrame(updateThumbnailLayout);
+    if (typeof ResizeObserver === "undefined") {
+      return () => cancelAnimationFrame(frame);
+    }
+    const observer = new ResizeObserver(updateThumbnailLayout);
     observer.observe(thumbnailRail);
-    return () => observer.disconnect();
-  }, [images.length, pinnedThumbnailIndex]);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [pinnedThumbnailIndex, regularThumbnails.length]);
   const activeImage = images[activeIndex];
 
   if (!activeImage) return null;
@@ -195,15 +206,52 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       !desktopZoom ||
       !window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches
     ) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    const stage = event.currentTarget;
+    const rect = stage.getBoundingClientRect();
+    const image = stage.querySelector<HTMLImageElement>(
+      'img[data-slot="product-media-gallery-image"]',
+    );
+    const imageRatio = image?.naturalWidth && image.naturalHeight
+      ? image.naturalWidth / image.naturalHeight
+      : rect.width / rect.height;
+    const stageRatio = rect.width / rect.height;
+    const contentWidth = imageRatio >= stageRatio ? rect.width : rect.height * imageRatio;
+    const contentHeight = imageRatio >= stageRatio ? rect.width / imageRatio : rect.height;
+    const contentLeft = (rect.width - contentWidth) / 2;
+    const contentTop = (rect.height - contentHeight) / 2;
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left - contentLeft) / contentWidth));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top - contentTop) / contentHeight));
     const lensX = Math.max(0.2, Math.min(0.8, x));
     const lensY = Math.max(0.2, Math.min(0.8, y));
-    event.currentTarget.style.setProperty("--product-media-zoom-x", `${x * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-y", `${y * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-lens-x", `${lensX * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-lens-y", `${lensY * 100}%`);
+    const zoom = 2.5;
+    const paneWidth = typeof desktopZoomPaneWidth === "number" ? desktopZoomPaneWidth : rect.width;
+    const paneHeight = typeof desktopZoomPaneHeight === "number" ? desktopZoomPaneHeight : rect.height;
+    const initialZoomedWidth = contentWidth * zoom;
+    const initialZoomedHeight = contentHeight * zoom;
+    const coverScale = Math.max(
+      1,
+      paneWidth / initialZoomedWidth,
+      paneHeight / initialZoomedHeight,
+    );
+    const zoomedWidth = initialZoomedWidth * coverScale;
+    const zoomedHeight = initialZoomedHeight * coverScale;
+    const backgroundX = Math.max(
+      paneWidth - zoomedWidth,
+      Math.min(0, paneWidth / 2 - x * zoomedWidth),
+    );
+    const backgroundY = Math.max(
+      paneHeight - zoomedHeight,
+      Math.min(0, paneHeight / 2 - y * zoomedHeight),
+    );
+
+    stage.style.setProperty("--product-media-zoom-background-width", `${zoomedWidth}px`);
+    stage.style.setProperty("--product-media-zoom-background-height", `${zoomedHeight}px`);
+    stage.style.setProperty("--product-media-zoom-background-x", `${backgroundX}px`);
+    stage.style.setProperty("--product-media-zoom-background-y", `${backgroundY}px`);
+    stage.style.setProperty("--product-media-zoom-lens-x", `${contentLeft + lensX * contentWidth}px`);
+    stage.style.setProperty("--product-media-zoom-lens-y", `${contentTop + lensY * contentHeight}px`);
+    stage.style.setProperty("--product-media-zoom-lens-width", `${contentWidth * 0.4}px`);
+    stage.style.setProperty("--product-media-zoom-lens-height", `${contentHeight * 0.4}px`);
     setZoomActive(true);
   }
 
@@ -244,6 +292,38 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     );
   }
 
+  function renderMoreThumbnail(image: ProductMediaGalleryItem, index: number, count: number) {
+    return (
+      <button
+        key={`more-${image.id}`}
+        className={styles.thumbnailButton}
+        type="button"
+        aria-label={`View ${count} more product images, starting with image ${index + 1}`}
+        data-slot="product-media-gallery-more-thumbnail"
+        data-thumbnail-more="true"
+        onPointerEnter={() => {
+          if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) selectImage(index);
+        }}
+        onClick={() => openPreviewAt(index)}
+      >
+        <ResponsiveImage
+          className={styles.thumbnailImage}
+          source={image.src}
+          alt=""
+          fallbackWidth={80}
+          fallbackHeight={80}
+          loading="lazy"
+          revealOnLoad={false}
+        />
+        <span className={styles.thumbnailMoreOverlay} aria-hidden="true">+{count}</span>
+      </button>
+    );
+  }
+
+  const displayedRegularThumbnails = regularThumbnails.slice(0, visibleRegularThumbnailCount);
+  const firstHiddenThumbnail = regularThumbnails[visibleRegularThumbnailCount];
+  const hiddenThumbnailCount = regularThumbnails.length - visibleRegularThumbnailCount;
+
   return (
     <section
       {...rest}
@@ -253,6 +333,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       data-active-index={activeIndex}
       data-zoom-active={zoomActive || undefined}
       data-pointer-focus={pointerFocus || undefined}
+      data-thumbnail-overflow={hasThumbnailOverflow || undefined}
       tabIndex={rest.tabIndex ?? 0}
       onPointerDown={(event) => {
         rest.onPointerDown?.(event);
@@ -286,13 +367,13 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
         data-pinned-layout={pinnedThumbnailIndex >= 0 ? pinnedLayout : undefined}
       >
         <div
-          ref={thumbnailScrollerRef}
           className={styles.thumbnailScroller}
           data-slot="product-media-gallery-thumbnail-scroller"
         >
-          {images.map((image, index) => (
-            index === pinnedThumbnailIndex ? null : renderThumbnail(image, index)
-          ))}
+          {displayedRegularThumbnails.map(({ image, index }) => renderThumbnail(image, index))}
+          {hasThumbnailOverflow && firstHiddenThumbnail
+            ? renderMoreThumbnail(firstHiddenThumbnail.image, firstHiddenThumbnail.index, hiddenThumbnailCount)
+            : null}
         </div>
         {pinnedThumbnailIndex >= 0
           ? renderThumbnail(images[pinnedThumbnailIndex]!, pinnedThumbnailIndex)
@@ -394,6 +475,9 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
               "--product-media-zoom-pane-size": typeof desktopZoomPaneWidth === "number"
                 ? `${desktopZoomPaneWidth}px`
                 : desktopZoomPaneWidth,
+              "--product-media-zoom-pane-height": typeof desktopZoomPaneHeight === "number"
+                ? `${desktopZoomPaneHeight}px`
+                : desktopZoomPaneHeight,
             } as CSSProperties}
           />
         ) : null}

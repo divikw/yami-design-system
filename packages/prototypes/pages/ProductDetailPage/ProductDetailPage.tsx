@@ -239,23 +239,53 @@ export function ProductDetailPage({
   ...rest
 }: ProductDetailPageProps) {
   const galleryRef = useRef<ProductMediaGalleryHandle>(null);
+  const productOverviewRef = useRef<HTMLDivElement>(null);
   const productInfoColumnRef = useRef<HTMLDivElement>(null);
   const addToCartRef = useRef<HTMLButtonElement>(null);
-  const [zoomPaneWidth, setZoomPaneWidth] = useState<number>();
+  const [zoomPaneSize, setZoomPaneSize] = useState<{ width: number; height: number }>();
   const [nutritionOpen, setNutritionOpen] = useState(false);
   const [stickyPurchaseVisible, setStickyPurchaseVisible] = useState(false);
 
   useLayoutEffect(() => {
     const column = productInfoColumnRef.current;
-    if (!column) return;
-    const updateWidth = () => {
-      const nextWidth = Math.round(column.getBoundingClientRect().width * 100) / 100;
-      setZoomPaneWidth((current) => current === nextWidth ? current : nextWidth);
+    const overview = productOverviewRef.current;
+    if (!column || !overview) return;
+    let animationFrame = 0;
+    const updateZoomPaneSize = () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(() => {
+        const gallery = overview.querySelector<HTMLElement>('[data-slot="product-media-gallery"]');
+        const stage = overview.querySelector<HTMLElement>('[data-slot="product-media-gallery-stage"]');
+        if (!gallery || !stage) return;
+
+        const columnRect = column.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+        const galleryHeight = gallery.getBoundingClientRect().height;
+        const visibleContentBottom = Math.min(window.innerHeight, columnRect.bottom);
+        const visibleContentHeight = Math.max(0, visibleContentBottom - stageRect.top);
+        const nextSize = {
+          width: Math.round(columnRect.width * 100) / 100,
+          height: Math.round(Math.max(galleryHeight, visibleContentHeight) * 100) / 100,
+        };
+        setZoomPaneSize((current) => (
+          current?.width === nextSize.width && current.height === nextSize.height
+            ? current
+            : nextSize
+        ));
+      });
     };
-    updateWidth();
-    const observer = new ResizeObserver(updateWidth);
+    updateZoomPaneSize();
+    const observer = new ResizeObserver(updateZoomPaneSize);
     observer.observe(column);
-    return () => observer.disconnect();
+    observer.observe(overview);
+    window.addEventListener("resize", updateZoomPaneSize);
+    window.addEventListener("scroll", updateZoomPaneSize, { passive: true });
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+      window.removeEventListener("resize", updateZoomPaneSize);
+      window.removeEventListener("scroll", updateZoomPaneSize);
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -420,6 +450,7 @@ export function ProductDetailPage({
               data-slot="product-detail-left-content"
             >
               <div
+                ref={productOverviewRef}
                 className={styles.productOverview}
                 data-slot="product-detail-overview"
               >
@@ -433,7 +464,8 @@ export function ProductDetailPage({
                   nextLabel={copy.nextImage}
                   desktopPreview
                   desktopZoom
-                  desktopZoomPaneWidth={zoomPaneWidth}
+                  desktopZoomPaneWidth={zoomPaneSize?.width}
+                  desktopZoomPaneHeight={zoomPaneSize?.height}
                   mobilePreview
                   openPreviewLabel={copy.openImagePreview}
                   closePreviewLabel={copy.closeImagePreview}

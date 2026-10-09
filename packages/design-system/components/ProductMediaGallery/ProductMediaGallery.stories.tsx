@@ -129,8 +129,7 @@ export const Showcase: Story = {
       thumbnailRailStyle.paddingTop !== "12px" ||
       thumbnailRailStyle.paddingRight !== "0px" ||
       thumbnailRailStyle.paddingBottom !== "12px" ||
-      thumbnailRailStyle.paddingLeft !== "0px" ||
-      thumbnailRailStyle.scrollPaddingInline !== "0px"
+      thumbnailRailStyle.paddingLeft !== "0px"
     ) {
       throw new Error(
         "Product media gallery thumbnail rail must use 12px vertical padding with no inline inset",
@@ -267,8 +266,18 @@ export const InlinePinnedReference: Story = {
 };
 
 export const EdgePinnedReference: Story = {
-  args: { images: overflowPinnedImages },
+  args: { images: overflowPinnedImages, desktopPreview: true },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "560px" }}>
+        <Story />
+      </div>
+    ),
+  ],
   play: async ({ canvasElement }) => {
+    const gallery = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery"]',
+    )!;
     const rail = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnails"]',
     )!;
@@ -276,27 +285,30 @@ export const EdgePinnedReference: Story = {
       '[data-slot="product-media-gallery-thumbnail-scroller"]',
     )!;
     await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
+    await waitFor(() => expect(rail).toHaveAttribute("data-thumbnail-overflow", "true"));
     const pinned = rail.querySelector<HTMLElement>(':scope > [data-pinned="true"]')!;
+    const more = rail.querySelector<HTMLButtonElement>(
+      '[data-slot="product-media-gallery-more-thumbnail"]',
+    )!;
     const railRect = rail.getBoundingClientRect();
     const pinnedRect = pinned.getBoundingClientRect();
-    const scrollerRect = scroller.getBoundingClientRect();
-    const visibleRegular = Array.from(scroller.children).filter((thumbnail) => {
-      const rect = thumbnail.getBoundingClientRect();
-      return rect.right > scrollerRect.left && rect.left < scrollerRect.right;
-    });
     if (
       Math.abs(railRect.right - pinnedRect.right) > 0.5 ||
-      visibleRegular.length !== 5 ||
-      visibleRegular.some((thumbnail) => {
-        const rect = thumbnail.getBoundingClientRect();
-        return rect.left < scrollerRect.left - 0.5 || rect.right > scrollerRect.right + 0.5;
-      }) ||
-      getComputedStyle(rail, "::after").content === "none"
+      scroller.children.length !== 5 ||
+      more.textContent !== "+3" ||
+      getComputedStyle(scroller).overflowX !== "hidden"
     ) {
       throw new Error(
-        "Overflowing galleries must pin the reference image at the edge and expose five complete regular thumbnails",
+        "Overflowing galleries must replace the final regular slot with a non-scrolling +N control and pin the reference image at the edge",
       );
     }
+    await userEvent.hover(more);
+    await waitFor(() => expect(gallery).toHaveAttribute("data-active-index", "4"));
+    await userEvent.click(more);
+    await waitFor(() => expect(canvasElement.querySelector("dialog[open]")).not.toBeNull());
+    await expect(
+      canvasElement.querySelector('[data-slot="product-media-preview-image"]'),
+    ).toHaveAttribute("alt", overflowPinnedImages[4]!.alt);
   },
 };
 
@@ -320,21 +332,18 @@ export const NarrowEdgePinnedReference: Story = {
       '[data-slot="product-media-gallery-thumbnail-scroller"]',
     )!;
     await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
-    const scrollerRect = scroller.getBoundingClientRect();
-    const visibleRegular = Array.from(scroller.children).filter((thumbnail) => {
-      const rect = thumbnail.getBoundingClientRect();
-      return rect.right > scrollerRect.left && rect.left < scrollerRect.right;
-    });
+    await waitFor(() => expect(rail).toHaveAttribute("data-thumbnail-overflow", "true"));
+    const more = rail.querySelector<HTMLButtonElement>(
+      '[data-slot="product-media-gallery-more-thumbnail"]',
+    )!;
     if (
       Math.abs(gallery.getBoundingClientRect().width - 400) > 0.5 ||
-      visibleRegular.length !== 4 ||
-      visibleRegular.some((thumbnail) => {
-        const rect = thumbnail.getBoundingClientRect();
-        return rect.left < scrollerRect.left - 0.5 || rect.right > scrollerRect.right + 0.5;
-      })
+      scroller.children.length !== 4 ||
+      more.textContent !== "+4" ||
+      getComputedStyle(scroller).overflowX !== "hidden"
     ) {
       throw new Error(
-        "A 400px gallery must step down to four complete regular thumbnails plus the pinned reference slot",
+        "A 400px gallery must expose three regular thumbnails, a +4 control, and the pinned reference slot without horizontal scrolling",
       );
     }
   },
