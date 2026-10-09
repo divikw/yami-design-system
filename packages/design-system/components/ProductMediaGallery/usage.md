@@ -77,8 +77,9 @@ Set `desktopPreview` on PDPs to open the selected image in a full-viewport
 preview from 1024px. Provide localized `openPreviewLabel` and `closePreviewLabel`.
 Set `desktopZoom` to show an Amazon-style magnified pane beside the gallery while
 a fine pointer moves over the main image. A bounded translucent lens identifies
-the sampled region. Use `desktopZoomPaneWidth` when the pane must match an
-adjacent responsive column; its height follows that width to remain square.
+the sampled region. Use `desktopZoomPaneWidth` and `desktopZoomPaneHeight` when
+the pane must match adjacent responsive content. The zoom source remains aligned
+to the actual contained image, rather than any letterboxing in the main stage.
 Zoom is disabled below 1024px and for coarse pointers; the main image remains
 the preview trigger at every enabled breakpoint.
 The preview uses the primary surface, a contained image centered in the available

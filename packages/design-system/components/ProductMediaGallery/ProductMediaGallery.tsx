@@ -42,6 +42,7 @@ export interface ProductMediaGalleryProps
   desktopPreview?: boolean;
   desktopZoom?: boolean;
   desktopZoomPaneWidth?: number | string;
+  desktopZoomPaneHeight?: number | string;
   mobilePreview?: boolean;
   openPreviewLabel?: string;
   closePreviewLabel?: string;
@@ -72,6 +73,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   desktopPreview = false,
   desktopZoom = false,
   desktopZoomPaneWidth,
+  desktopZoomPaneHeight,
   mobilePreview = false,
   openPreviewLabel = "Open image preview",
   closePreviewLabel = "Close image preview",
@@ -195,15 +197,52 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       !desktopZoom ||
       !window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches
     ) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+    const stage = event.currentTarget;
+    const rect = stage.getBoundingClientRect();
+    const image = stage.querySelector<HTMLImageElement>(
+      'img[data-slot="product-media-gallery-image"]',
+    );
+    const imageRatio = image?.naturalWidth && image.naturalHeight
+      ? image.naturalWidth / image.naturalHeight
+      : rect.width / rect.height;
+    const stageRatio = rect.width / rect.height;
+    const contentWidth = imageRatio >= stageRatio ? rect.width : rect.height * imageRatio;
+    const contentHeight = imageRatio >= stageRatio ? rect.width / imageRatio : rect.height;
+    const contentLeft = (rect.width - contentWidth) / 2;
+    const contentTop = (rect.height - contentHeight) / 2;
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left - contentLeft) / contentWidth));
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top - contentTop) / contentHeight));
     const lensX = Math.max(0.2, Math.min(0.8, x));
     const lensY = Math.max(0.2, Math.min(0.8, y));
-    event.currentTarget.style.setProperty("--product-media-zoom-x", `${x * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-y", `${y * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-lens-x", `${lensX * 100}%`);
-    event.currentTarget.style.setProperty("--product-media-zoom-lens-y", `${lensY * 100}%`);
+    const zoom = 2.5;
+    const paneWidth = typeof desktopZoomPaneWidth === "number" ? desktopZoomPaneWidth : rect.width;
+    const paneHeight = typeof desktopZoomPaneHeight === "number" ? desktopZoomPaneHeight : rect.height;
+    const initialZoomedWidth = contentWidth * zoom;
+    const initialZoomedHeight = contentHeight * zoom;
+    const coverScale = Math.max(
+      1,
+      paneWidth / initialZoomedWidth,
+      paneHeight / initialZoomedHeight,
+    );
+    const zoomedWidth = initialZoomedWidth * coverScale;
+    const zoomedHeight = initialZoomedHeight * coverScale;
+    const backgroundX = Math.max(
+      paneWidth - zoomedWidth,
+      Math.min(0, paneWidth / 2 - x * zoomedWidth),
+    );
+    const backgroundY = Math.max(
+      paneHeight - zoomedHeight,
+      Math.min(0, paneHeight / 2 - y * zoomedHeight),
+    );
+
+    stage.style.setProperty("--product-media-zoom-background-width", `${zoomedWidth}px`);
+    stage.style.setProperty("--product-media-zoom-background-height", `${zoomedHeight}px`);
+    stage.style.setProperty("--product-media-zoom-background-x", `${backgroundX}px`);
+    stage.style.setProperty("--product-media-zoom-background-y", `${backgroundY}px`);
+    stage.style.setProperty("--product-media-zoom-lens-x", `${contentLeft + lensX * contentWidth}px`);
+    stage.style.setProperty("--product-media-zoom-lens-y", `${contentTop + lensY * contentHeight}px`);
+    stage.style.setProperty("--product-media-zoom-lens-width", `${contentWidth * 0.4}px`);
+    stage.style.setProperty("--product-media-zoom-lens-height", `${contentHeight * 0.4}px`);
     setZoomActive(true);
   }
 
@@ -394,6 +433,9 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
               "--product-media-zoom-pane-size": typeof desktopZoomPaneWidth === "number"
                 ? `${desktopZoomPaneWidth}px`
                 : desktopZoomPaneWidth,
+              "--product-media-zoom-pane-height": typeof desktopZoomPaneHeight === "number"
+                ? `${desktopZoomPaneHeight}px`
+                : desktopZoomPaneHeight,
             } as CSSProperties}
           />
         ) : null}
