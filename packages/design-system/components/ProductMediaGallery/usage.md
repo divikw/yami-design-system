@@ -16,17 +16,17 @@ full image position and alt text.
 For a labeled reference image such as a nutrition panel, set
 `thumbnailOverlayLabel` on that image. Keep this reference image at
 the end of the ordered image list and set `thumbnailPinned` when it must remain
-visible in the final position of the first thumbnail viewport. The other
-thumbnails continue to scroll behind their own viewport. When every thumbnail
-fits, the labeled reference image stays inline immediately after the other
-images instead of leaving an empty gap at the edge; it pins to the final visible
-slot only when the regular thumbnail rail overflows. The edge fade appears only
-in that pinned-overflow state. On desktop, main-gallery thumbnails use six
-complete slots from 424px upward, including the pinned slot, and stay within the
-64–88px range. At the 560px gallery maximum, the six slots resolve to about
-86.7px so five regular thumbnails and the pinned reference remain complete.
-Narrower containers step down to five or four complete slots. Preview-dialog
-thumbnails retain their existing sizing.
+visible in the final position of the first thumbnail viewport. On desktop, the
+main-gallery thumbnail rail does not scroll. When regular images overflow, the
+last available regular slot becomes a dark `+N` control: `N` counts only hidden
+regular images, never the pinned reference. Activating it opens the full image
+preview at the first hidden image. On hover-capable desktop devices, hovering
+the `+N` control also selects that first hidden image in the main stage. When all
+regular images fit, the `+N` control is omitted and the labeled reference stays inline immediately after the other
+images instead of leaving an empty gap at the edge. When it overflows, the
+reference pins to the final visible slot. Desktop thumbnails stay within the
+64–88px range; narrower containers reduce the number of complete slots.
+Preview-dialog thumbnails retain their existing sizing.
 
 The component's 560px maximum applies only from the 1024px desktop breakpoint.
 The PDP sizes the gallery continuously from 280px at a 1024px viewport to 560px
@@ -34,8 +34,9 @@ at a 1920px viewport. Tablet and mobile layouts remain full-width so their
 horizontal image rail can use the complete viewport without clipping the active
 slide.
 
-The thumbnail rail sits under the square stage at every viewport and scrolls
-horizontally when it exceeds the available width. The component consumes
+The thumbnail rail sits under the square stage at every viewport. Only the
+mobile gallery rail and preview-dialog thumbnail row can scroll horizontally;
+the desktop main-gallery thumbnail rail uses the `+N` affordance above. The component consumes
 YAMI surface, border, focus, radius, typography, and spacing tokens; callers
 control only the image data and localized labels.
 

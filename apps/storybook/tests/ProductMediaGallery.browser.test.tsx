@@ -59,6 +59,47 @@ test("desktop thumbnail hover selects images and the main image exposes a cursor
   }
 });
 
+test("desktop thumbnail overflow uses a +N preview control instead of horizontal scrolling", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  container.style.width = "480px";
+  document.body.append(container);
+  const root = createRoot(container);
+  const galleryImages = Array.from({ length: 8 }, (_, index) => ({
+    ...images[index % images.length]!,
+    id: `overflow-${index}`,
+    alt: `Overflow product image ${index + 1}`,
+    thumbnailPinned: index === 7,
+    thumbnailOverlayLabel: index === 7 ? "Nutrition Facts" : undefined,
+  }));
+  try {
+    await page.viewport(1440, 900);
+    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview />));
+    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
+    const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnails"]')!;
+    const scroller = container.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnail-scroller"]',
+    )!;
+    await expect.poll(() => rail.dataset.thumbnailOverflow).toBe("true");
+    const more = container.querySelector<HTMLButtonElement>(
+      '[data-slot="product-media-gallery-more-thumbnail"]',
+    )!;
+    expect(getComputedStyle(scroller).overflowX).toBe("hidden");
+    expect(more.textContent).toBe("+3");
+    await page.elementLocator(more).hover();
+    await expect.poll(() => gallery.dataset.activeIndex).toBe("4");
+    await page.elementLocator(more).click();
+    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    expect(dialog.open).toBe(true);
+    expect(dialog.querySelector('[data-slot="product-media-preview-image"]')?.getAttribute("alt"))
+      .toBe(galleryImages[4]!.alt);
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test("desktop arrows hide after mouse clicks and remain available for keyboard focus", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
