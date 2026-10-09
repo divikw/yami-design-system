@@ -21,6 +21,12 @@
   padding-block: 0;
 }
 
+@container hero-banner (1280px < width <= 1440px) {
+  .banner [data-slot="hero-banner-list"] > [role="listitem"] {
+    --hero-banner-per-view: 3;
+  }
+}
+
 @media (min-width: 1024px) {
   .root {
     padding-block: var(--space-400);

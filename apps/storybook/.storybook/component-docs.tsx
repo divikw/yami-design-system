@@ -1,4 +1,5 @@
 import {
+  Canvas,
   Controls,
   Description,
   Markdown,
@@ -56,6 +57,8 @@ export function ComponentDocsPage() {
   const { csfFile, preparedMeta } = useOf("meta", ["meta"]);
   const usageLoader = getUsageLoaderForTitle(preparedMeta.title);
   const [usage, setUsage] = useState<string>();
+  const playgroundExport = preparedMeta.parameters.docs?.playground;
+  const playground = playgroundExport ? csfFile.moduleExports[playgroundExport] : undefined;
   const isSingleStory = Object.keys(csfFile.stories).length === 1;
 
   useEffect(() => {
@@ -77,8 +80,20 @@ export function ComponentDocsPage() {
       <Subtitle />
       <Description of="meta" />
       {isSingleStory ? <Description of="story" /> : null}
-      <Primary />
-      <Controls />
+      {playground ? (
+        <>
+          <h2>交互试用</h2>
+          {preparedMeta.parameters.docs?.interactionStory ? (
+            <p><a href={`/?path=/story/${preparedMeta.parameters.docs.interactionStory}`} target="_top">体验保存、加载与完成反馈</a></p>
+          ) : null}
+          <Canvas of={playground} />
+          <Controls of={playground} />
+          <h2>规格与状态对照</h2>
+          <Primary />
+        </>
+      ) : (
+        <><Primary /><Controls /></>
+      )}
       {usage ? (
         <section data-yami-docs="usage">
           <Markdown>{formatUsageMarkdown(usage)}</Markdown>
@@ -88,7 +103,7 @@ export function ComponentDocsPage() {
           Loading usage guide…
         </p>
       ) : null}
-      {isSingleStory ? null : <Stories />}
+      {isSingleStory || preparedMeta.parameters.docs?.showStories === false ? null : <Stories />}
     </>
   );
 }

@@ -133,7 +133,26 @@ export function ProductList(props: ProductListProps) {
       : "plain";
   const productCardSurface =
     appearance === "standard" || isThemeProductList ? "plain" : "card";
+  const containerRef = useRef<HTMLDivElement>(null);
   const railFrameRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container || layout !== "rail" || leadingContent) return;
+    const updateColumns = () => {
+      const width = container.getBoundingClientRect().width;
+      const columns = width < 1024 ? 0 : width < 1200 ? 4 : width <= 1280 ? 5 : width <= 1440 ? 6 : width <= 1680 ? 7 : 8;
+      container.dataset.railColumns = String(columns);
+      container.style.setProperty("--product-list-columns", String(columns));
+    };
+    updateColumns();
+    const observer = new ResizeObserver(updateColumns);
+    observer.observe(container, { box: "border-box" });
+    return () => {
+      observer.disconnect();
+      delete container.dataset.railColumns;
+      container.style.removeProperty("--product-list-columns");
+    };
+  }, [layout, leadingContent]);
   const titleId = useId();
   const listId = `${titleId}-products`;
   const {
@@ -297,7 +316,7 @@ export function ProductList(props: ProductListProps) {
         </div>
       )}
 
-      <div className={styles.container} data-slot="product-list-container">
+      <div ref={containerRef} className={styles.container} data-slot="product-list-container">
         <SectionHeading
           align={headingAlign}
           mobileAlign={mobileSurface === "card" ? "start" : headingAlign}

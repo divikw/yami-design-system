@@ -21,6 +21,7 @@ import { SectionBanner } from "@yami/design-system";
 - headingAlign 支持 start（默认左对齐）和 center（居中），PC、Mobile 均生效。
 - PC 上下留白 32px，标题与卡片间距 24px；Mobile 上下留白及标题间距为 16px。
 - 卡片保持 HeroBanner 的 8:9 比例；Mobile 固定 320×360，支持横向滑动。
+- PC 默认每屏 3 张；HeroBanner 内容容器宽度大于 1440px 时每屏 4 张（不含左右内边距），等于 1440px 时仍为 3 张。此断点仅用于 SectionBanner。
 - 内容模型为 SectionBannerItem，仅支持「图片＋文字＋商品」和「标题＋商品」两种形态。纯商品卡沿用 HeroBanner 的行为，仅在 PC 展示。
 
 ## 预览

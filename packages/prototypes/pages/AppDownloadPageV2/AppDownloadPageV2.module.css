@@ -57,8 +57,7 @@
 .root .couponTitleGroup h2 { font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
 .couponTitleGroup p { color: var(--text-secondary); }
 .coupons { width: 100%; max-width: 512px; display: grid; gap: var(--space-200); }
-.coupon { background: var(--fill-promotion-primary); color: var(--text-on-emphasis); border-radius: var(--radius-surface-default); padding: var(--space-200) var(--space-250) var(--space-150); text-align: left; display: flex; flex-direction: column; gap: var(--space-150); }
-.coupon:last-child { background: var(--button-emphasis-active); }
+.coupon { background: var(--button-emphasis); color: var(--text-on-emphasis); border-radius: var(--radius-surface-default); padding: var(--space-200) var(--space-250) var(--space-150); text-align: left; display: flex; flex-direction: column; gap: var(--space-150); }
 .couponBadge { font-size: var(--font-size-caption-md); line-height: var(--line-height-caption-md); }
 .coupon h3 { line-height: 1.4; }
 .couponAmount { font-size: 32px; font-weight: var(--font-weight-emphasize); }

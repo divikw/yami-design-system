@@ -52,7 +52,7 @@ sourceRefs:
 
 不要用外观相似的组件替代不同的用户任务或交互语义。例如，链接和按钮可能外观相似，但承担的语义和键盘行为不同。
 
-以 Button 为例，可以在 [Playground](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--playground) 的 Controls 中一次改变一个参数，再查看 [Loading](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--loading) 和 [Disabled](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--disabled) 比较状态。
+以 Button 为例，可以在 [Playground](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--playground) 的 Controls 中一次改变一个参数，再到 [Showcase](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--showcase) 的「状态与背景」区比较默认、加载和禁用状态。
 
 ## 如何查看一个页面
 

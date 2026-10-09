@@ -52,7 +52,7 @@ Do not begin with code properties. First confirm the problem the component solve
 
 Do not substitute a visually similar component when it serves a different user task or interaction meaning. A link and a button may look similar while carrying different semantics and keyboard behavior.
 
-For Button, change one parameter at a time in [Playground](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--playground), then compare [Loading](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--loading) and [Disabled](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--disabled).
+For Button, change one parameter at a time in [Playground](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--playground), then compare default, loading, and disabled states in the states and backgrounds section of [Showcase](https://yds-storybook.vercel.app/?path=/story/yami-components-actions-button--showcase).
 
 ## How to inspect a page
 

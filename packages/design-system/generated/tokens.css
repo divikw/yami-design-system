@@ -58,8 +58,8 @@
   --button-secondary-active: var(--color-black-200);
   --button-secondary-active-inverse: var(--color-white-300);
   --button-secondary-inverse: var(--color-white-200);
-  --button-tertiary: var(--color-white-1000);
-  --button-tertiary-active: var(--color-neutral-100);
+  --button-tertiary: var(--color-white-0);
+  --button-tertiary-active: var(--color-black-100);
   --button-tertiary-active-inverse: var(--color-white-100);
   --button-tertiary-inverse: var(--color-white-0);
   --font-size-caption-md: 14px;

@@ -109,9 +109,9 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `button.secondary-active-inverse` | dark | color | `var(--color-black-200)` |
 | `button.secondary-inverse` | root | color | `var(--color-white-200)` |
 | `button.secondary-inverse` | dark | color | `var(--color-black-100)` |
-| `button.tertiary` | root | color | `var(--color-white-1000)` |
+| `button.tertiary` | root | color | `var(--color-white-0)` |
 | `button.tertiary` | dark | color | `var(--color-white-0)` |
-| `button.tertiary-active` | root | color | `var(--color-neutral-100)` |
+| `button.tertiary-active` | root | color | `var(--color-black-100)` |
 | `button.tertiary-active` | dark | color | `var(--color-white-100)` |
 | `button.tertiary-active-inverse` | root | color | `var(--color-white-100)` |
 | `button.tertiary-active-inverse` | dark | color | `var(--color-black-100)` |

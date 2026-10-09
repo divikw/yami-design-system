@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: weekly
     groups:
+      playwright:
+        patterns:
+          - "@playwright/test"
+          - "playwright"
+          - "playwright-core"
       production-dependencies:
         dependency-type: production
       development-dependencies:
