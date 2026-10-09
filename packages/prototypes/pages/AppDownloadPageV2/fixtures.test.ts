@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateSavings, campaignProducts, featuredProducts } from "./fixtures";
+import { brandHref, calculateSavings, campaignProducts, featuredProducts, productHref } from "./fixtures";
 
 describe("app-download campaign calculation", () => {
   it("includes the hidden 10% perk with the $10 welcome discount", () => {
@@ -23,5 +23,13 @@ describe("app-download campaign calculation", () => {
     expect(campaignProducts).toHaveLength(75);
     expect(new Set(campaignProducts.map((p) => p.sku)).size).toBe(75);
     expect(featuredProducts).toHaveLength(12);
+  });
+  it("links every product brand to its localized brand page", () => {
+    for (const locale of ["ko", "en"] as const) {
+      for (const product of campaignProducts) {
+        expect(brandHref(product, locale)).toMatch(`https://www.yami.com/us/${locale}/b/`);
+        expect(brandHref(product, locale)).not.toBe(productHref(product, locale));
+      }
+    }
   });
 });

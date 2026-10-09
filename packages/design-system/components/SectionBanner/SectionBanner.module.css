@@ -22,7 +22,7 @@
 }
 
 @container hero-banner (1280px < width <= 1440px) {
-  .banner [data-slot="hero-banner-list"] > [role="listitem"] {
+  .banner [data-slot="hero-banner-list"] > [data-image-window-item="true"] {
     --hero-banner-per-view: 3;
   }
 }

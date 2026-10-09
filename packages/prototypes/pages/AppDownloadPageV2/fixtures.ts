@@ -4,6 +4,7 @@ import type { SectionBannerItem } from "@yami/design-system";
 
 export type AppDownloadLocale = "ko" | "en";
 export type CampaignProduct = (typeof reference.products)[number];
+const campaignBrandPaths: Record<string, string> = reference.brands;
 export const campaignProducts = reference.products;
 export const featuredProducts = reference.featuredIds.map(
   (sku) => campaignProducts.find((product) => product.sku === sku)!,
@@ -20,6 +21,8 @@ export const playStoreHref = "https://play.google.com/store/apps/details?id=com.
 export const downloadHref = "https://yami-app-download.vercel.app/get-app";
 export const productHref = (product: CampaignProduct, locale: AppDownloadLocale) =>
   `https://www.yami.com/us/${locale}/${product.slug}`;
+export const brandHref = (product: CampaignProduct, locale: AppDownloadLocale) =>
+  `https://www.yami.com/us/${locale}/${campaignBrandPaths[product.brand.en]}`;
 export const asset = (name: string) => new URL(`../AppDownloadPage/assets/${name}`, import.meta.url).href;
 export const productImage = (product: CampaignProduct) => asset(product.image.split("/").pop()!);
 export const money = (amount: number) => `$${amount.toFixed(2)}`;
