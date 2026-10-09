@@ -6,7 +6,7 @@ import {
   ProductCard, ProductList, ReviewList, SectionBanner, SocialMediaGallery, Tabs, TabsList, TabsTrigger, useHorizontalScrollList,
 } from "@yami/design-system";
 import {
-  appDownloadBannerDescription, appDownloadBannerTitle, appStoreHref, asset, calculateSavings, campaignCopy, campaignProducts,
+  appDownloadBannerDescription, appDownloadBannerTitle, appStoreHref, asset, brandHref, calculateSavings, campaignCopy, campaignProducts,
   categories, categoryLabels, createAppDownloadBanners, downloadHref, featuredProducts,
   money, playStoreHref, productHref, productImage,
   type AppDownloadLocale,
@@ -310,7 +310,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
           previousLabel={ko ? "이전 상품" : "Previous products"} nextLabel={ko ? "다음 상품" : "Next products"}
           products={campaignProducts.filter((product) => product.category === category).map((product) => ({
             id: product.sku, title: product.name[locale], image: productImage(product), imageAlt: product.name[locale],
-            href: productHref(product, locale), brand: product.brand[locale], brandHref: productHref(product, locale),
+            href: productHref(product, locale), brand: product.brand[locale], brandHref: brandHref(product, locale),
             priceCurrent: <>{money(product.appPrice)} <span className={styles.appPriceLabel}>{ko ? "(앱 전용가)" : "(App Price)"}</span></>, priceOriginal: money(product.originalPrice),
             unitPrice: <a className={styles.dealComparePrice} href={productHref(product, locale)}>{ko ? "웹 가격과 비교해보기" : "Compare Web Price"}</a>,
             badges: [{ type: "discount" as const, label: `${product.discountPercent}% OFF` }],
@@ -322,6 +322,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
             align="center" slot="coupon-guide"
             title={t.nav.categories.couponGuide}
             description={ko ? "영상 속에 숨겨진 추가 혜택을 확인해보세요" : "Watch the video to discover hidden extra benefits"}
+            descriptionClassName={styles.guideDescription}
           />
           <video className={styles.video} ref={video} controls muted loop playsInline preload="metadata" aria-label={ko ? "쿠폰 적용 안내 영상" : "Coupon redemption tutorial"}><source src={asset("Final_video_0811.mp4")} type="video/mp4" /></video>
         </div>
