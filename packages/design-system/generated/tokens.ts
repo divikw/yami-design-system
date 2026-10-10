@@ -17,8 +17,8 @@ export const tokens = {
   },
   "badge.bg-primary-green": {
     "$type": "color",
-    "$value": "{color.emerald.600}",
-    "$description": "用于成功、完成与可用状态的主标签背景。"
+    "$value": "{color.emerald.700}",
+    "$description": "用于成功、完成与可用状态的主标签背景，确保浅色主题上的白字满足 AA 对比度。"
   },
   "badge.bg-primary-neutral": {
     "$type": "color",
@@ -34,11 +34,6 @@ export const tokens = {
     "$type": "color",
     "$value": "{color.red.500}",
     "$description": "用于错误、失败或高风险提示的主标签背景。"
-  },
-  "badge.bg-primary-yellow": {
-    "$type": "color",
-    "$value": "{color.amber.600}",
-    "$description": "用于警示、提醒或高亮类主标签背景。"
   },
   "badge.bg-secondary-blue": {
     "$type": "color",
@@ -1507,6 +1502,51 @@ export const tokens = {
     "$type": "dimension",
     "$value": "20px",
     "$description": "用于正文中的主要跳转入口、可点击文案与 Link 按钮。适用于 body-xl 层级的阅读流链接及 Link 类型按钮，不用于标题或价格信息。"
+  },
+  "membership.background.gold": {
+    "$type": "color",
+    "$value": "{color.amber.50}",
+    "$description": "gold 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.ruby": {
+    "$type": "color",
+    "$value": "{color.red.50}",
+    "$description": "ruby 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.ruby-0": {
+    "$type": "color",
+    "$value": "{color.neutral.100}",
+    "$description": "ruby-0 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.silver": {
+    "$type": "color",
+    "$value": "{color.blue.50}",
+    "$description": "silver 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.ring.gold": {
+    "$type": "color",
+    "$value": "#FDA700",
+    "$description": "Gold 会员头像描边，沿用原始会员图标的金色；明暗主题保持一致。"
+  },
+  "membership.ring.ruby": {
+    "$type": "color",
+    "$value": "#FF6155",
+    "$description": "Ruby 会员头像描边，取自官网账户头像实际样式；明暗主题保持一致。"
+  },
+  "membership.ring.ruby-0": {
+    "$type": "color",
+    "$value": "#999999",
+    "$description": "Ruby-0 会员头像描边，沿用原始会员图标的灰色；明暗主题保持一致。"
+  },
+  "membership.ring.silver": {
+    "$type": "color",
+    "$value": "#5196FF",
+    "$description": "Silver 会员头像描边，沿用原始会员图标的蓝色；明暗主题保持一致。"
+  },
+  "membership.separator": {
+    "$type": "color",
+    "$value": "{color.white.1000}",
+    "$description": "会员头像图片与等级描边之间的白色分隔环，明暗主题保持白色。"
   },
   "overlay.default": {
     "$type": "color",

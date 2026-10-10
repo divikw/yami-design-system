@@ -1,0 +1,48 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "membership": {
+    "separator": {
+      "$type": "color",
+      "$value": "{color.white.1000}",
+      "$description": "会员头像图片与等级描边之间的白色分隔环，明暗主题保持白色。"
+    },
+    "ring": {
+      "$type": "color",
+      "ruby-0": {
+        "$value": "#999999",
+        "$description": "Ruby-0 会员头像描边，沿用原始会员图标的灰色；明暗主题保持一致。"
+      },
+      "ruby": {
+        "$value": "#FF6155",
+        "$description": "Ruby 会员头像描边，取自官网账户头像实际样式；明暗主题保持一致。"
+      },
+      "silver": {
+        "$value": "#5196FF",
+        "$description": "Silver 会员头像描边，沿用原始会员图标的蓝色；明暗主题保持一致。"
+      },
+      "gold": {
+        "$value": "#FDA700",
+        "$description": "Gold 会员头像描边，沿用原始会员图标的金色；明暗主题保持一致。"
+      }
+    },
+    "background": {
+      "$type": "color",
+      "ruby-0": {
+        "$value": "{color.neutral.100}",
+        "$description": "ruby-0 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+      },
+      "ruby": {
+        "$value": "{color.red.50}",
+        "$description": "ruby 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+      },
+      "silver": {
+        "$value": "{color.blue.50}",
+        "$description": "silver 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+      },
+      "gold": {
+        "$value": "{color.amber.50}",
+        "$description": "gold 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+      }
+    }
+  }
+}

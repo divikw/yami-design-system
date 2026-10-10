@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "03d79d6eafbb43e9a04d56f9388dafd4c78f5478db8725054b6f258dff107afb"
+      "digest": "c4d6c333d0f535905ea94a486469ac77dfff65af63df54c621cc5cd76ec89602"
     },
     {
       "name": "activity-page-header",
@@ -39,13 +39,22 @@
       "digest": "adb60cddec99a79aadead121b523e3c2cc840d0801b285b95db32fc0c7a93d8f"
     },
     {
+      "name": "avatar",
+      "title": "Avatar",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/avatar.json",
+      "digest": "dd0028c19c83b90df4a6c13ecb11eb0831a345c040739935de8c98c7b35a1575"
+    },
+    {
       "name": "badge",
       "title": "Badge",
       "type": "component",
       "status": "stable",
       "version": "0.5.0",
       "path": "registry-items/badge.json",
-      "digest": "acdce2a68a4317725995cb4a813221bef9fb4b68853148002f7ad35ec4041184"
+      "digest": "857325f9dacf9c5d0b8e81011b995db216575e121f9fe369f03756a589727976"
     },
     {
       "name": "billboard",
@@ -174,6 +183,24 @@
       "digest": "a55bd2e16bb72022b38df10af2cf32e7e46dd2166cc792d12b739fd073bf11bc"
     },
     {
+      "name": "membership-badge",
+      "title": "MembershipBadge",
+      "type": "component",
+      "status": "beta",
+      "version": "0.1.0",
+      "path": "registry-items/membership-badge.json",
+      "digest": "1e73a4c7a24fe70f43478e8721bc681eea495bc20cb85fc84f514c9bbe47c6fd"
+    },
+    {
+      "name": "membership-icon",
+      "title": "MembershipIcon",
+      "type": "component",
+      "status": "beta",
+      "version": "0.1.0",
+      "path": "registry-items/membership-icon.json",
+      "digest": "a56ddf83aca9c4a4b208e9fc26f6425d70ae372265499de1415de17e4fdd7f56"
+    },
+    {
       "name": "product-card",
       "title": "ProductCard",
       "type": "component",
@@ -279,7 +306,7 @@
       "status": "experimental",
       "version": "0.4.0",
       "path": "registry-items/tag.json",
-      "digest": "42c9860f6415419e5a48dacb0ebc1d0aeb84ffe98d9f472688657dc8b81a67fe"
+      "digest": "a2b78b97cb51823c32adb3116496aadc9b8c9a5f96a789f1979e39ae677ae835"
     },
     {
       "name": "theme-hero",

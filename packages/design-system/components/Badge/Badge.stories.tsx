@@ -17,9 +17,9 @@ const meta = {
   argTypes: {
     color: {
       control: "select",
-      options: ["red", "blue", "green", "purple", "yellow", "neutral"],
+      options: [undefined, "red", "blue", "green", "purple", "yellow", "neutral"],
     },
-    emphasis: { control: "select", options: ["primary", "secondary"] },
+    emphasis: { control: "select", options: [undefined, "primary", "secondary"], if: { arg: "color", neq: "yellow" } },
     size: { control: "select", options: ["sm", "md"] },
     tone: {
       control: "select",
@@ -43,8 +43,6 @@ const meta = {
   },
   args: {
     children: "New",
-    color: "neutral",
-    emphasis: "primary",
     size: "sm",
   },
 } satisfies Meta<typeof Badge>
@@ -123,7 +121,7 @@ export const Showcase: Story = {
       </Row>
 
       <Row label="Color (emphasis=primary)">
-        {COLORS.map((c) => (
+        {COLORS.filter((c) => c !== "yellow").map((c) => (
           <Badge key={c} color={c}>
             {toTitleCase(c)}
           </Badge>
@@ -132,7 +130,7 @@ export const Showcase: Story = {
 
       <Row label="Color (emphasis=secondary)">
         {COLORS.map((c) => (
-          <Badge key={c} color={c} emphasis="secondary" style={{ color: "var(--text-primary)" }}>
+          <Badge key={c} color={c} emphasis="secondary">
             {toTitleCase(c)}
           </Badge>
         ))}
@@ -151,7 +149,7 @@ export const Showcase: Story = {
           <div
             style={{
               ...tonePanelStyle,
-              background: "var(--surface-secondary)",
+              background: "var(--color-white-1000)",
             }}
           >
             <Badge tone="dark">Dark translucent</Badge>
@@ -167,7 +165,7 @@ export const Showcase: Story = {
           <div
             style={{
               ...tonePanelStyle,
-              background: "var(--surface-primary)",
+              background: "var(--color-white-1000)",
             }}
           >
             <Badge tone="dark-outline">Dark outline</Badge>
@@ -230,10 +228,10 @@ export const Showcase: Story = {
     if (
       toneBadges.some((badge) => {
         const style = getComputedStyle(badge)
-        return style.paddingLeft !== "8px" || style.paddingRight !== "8px"
+        return style.paddingLeft !== "4px" || style.paddingRight !== "4px"
       })
     ) {
-      throw new Error("Tone Badge variants must retain 8px inline padding")
+      throw new Error("Tone Badge variants must retain 4px inline padding")
     }
 
     const darkTone = toneBadges.find((badge) => badge.dataset.tone === "dark")
@@ -241,7 +239,7 @@ export const Showcase: Story = {
     if (
       !darkTone ||
       !lightTone ||
-      getComputedStyle(darkTone).backgroundColor !== "rgba(0, 0, 0, 0.08)" ||
+      getComputedStyle(darkTone).backgroundColor !== "rgba(0, 0, 0, 0.68)" ||
       getComputedStyle(lightTone).backgroundColor !==
         "rgba(255, 255, 255, 0.68)"
     ) {
