@@ -62,7 +62,6 @@
       "--badge-bg-primary-neutral",
       "--badge-bg-primary-purple",
       "--badge-bg-primary-red",
-      "--badge-bg-primary-yellow",
       "--badge-bg-secondary-blue",
       "--badge-bg-secondary-green",
       "--badge-bg-secondary-purple",
@@ -78,14 +77,14 @@
       "--badge-fg-secondary-red",
       "--badge-fg-secondary-yellow",
       "--color-black-1000",
-      "--color-black-200",
+      "--color-black-700",
       "--color-white-1000",
       "--color-white-700",
       "--font-family-ios",
       "--font-weight-normal",
       "--radius-tag-primary",
       "--space-025",
-      "--space-100",
+      "--space-050",
       "--stroke-default",
       "--text-primary"
     ],
@@ -117,17 +116,13 @@
         "property": "background-color",
         "selector": ".badge[data-emphasis='primary'][data-color='purple']"
       },
-      "--badge-bg-primary-yellow": {
-        "property": "background-color",
-        "selector": ".badge[data-emphasis='primary'][data-color='yellow']"
-      },
       "--badge-bg-primary-neutral": {
         "property": "background-color",
         "selector": ".badge[data-emphasis='primary'][data-color='neutral']"
       },
       "--badge-fg-default-inverse": {
         "property": "color",
-        "selector": ".badge[data-emphasis='primary']:not([data-color='red'])"
+        "selector": ".badge[data-emphasis='primary']:not([data-color='red']):not([data-color='yellow'])"
       },
       "--badge-bg-secondary-red": {
         "property": "background-color",
@@ -197,11 +192,11 @@
         "property": "gap",
         "selector": ".badge"
       },
-      "--space-100": {
+      "--space-050": {
         "property": "padding-inline",
         "selector": ".badge"
       },
-      "--color-black-200": {
+      "--color-black-700": {
         "property": "background-color",
         "selector": ".badge[data-tone='dark']"
       },
@@ -234,5 +229,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "acdce2a68a4317725995cb4a813221bef9fb4b68853148002f7ad35ec4041184"
+  "contentDigest": "857325f9dacf9c5d0b8e81011b995db216575e121f9fe369f03756a589727976"
 }

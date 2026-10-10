@@ -177,6 +177,225 @@
       }
     },
     {
+      "id": "Avatar",
+      "source": "components/Avatar",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Avatar",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Code-defined component; no Figma component has been verified."
+        },
+        "exports": [
+          "Avatar",
+          "AvatarProps",
+          "AvatarSize"
+        ],
+        "variants": {
+          "size": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "membershipTier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "lang": {
+            "type": "string",
+            "required": false,
+            "default": "en",
+            "description": "Language for the accessible membership name. Use zh or zh-CN for Chinese; otherwise the tier suffix is English."
+          },
+          "src": {
+            "type": "string",
+            "required": false,
+            "description": "Optional image URL. Omit to use the built-in YAMI avatar; it also appears during loading and on failure."
+          },
+          "alt": {
+            "type": "string",
+            "required": true,
+            "description": "Accessible name; use an empty string beside an existing visible name."
+          },
+          "size": {
+            "type": "enum",
+            "values": [
+              "sm",
+              "md",
+              "lg"
+            ],
+            "required": false,
+            "default": "md",
+            "description": "Fixed diameter: sm 32px, md 40px, lg 48px on mobile and desktop."
+          },
+          "membershipTier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "description": "Optional membership ring and bottom-right original tier icon. Omit for an ordinary image avatar."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Neutral avatar surface plus membership-specific ring, white separator, and tinted icon backing tokens. Membership identity colors stay consistent in both themes."
+          },
+          "radius": {
+            "ruleId": "no-custom-radii",
+            "note": "Circular image crop uses the shared --radius-full token."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Compose with a shared Button or link for interaction; the Avatar itself is not focusable."
+          }
+        },
+        "tokens": [
+          "--space-400",
+          "--space-500",
+          "--space-600",
+          "--radius-full",
+          "--surface-secondary",
+          "--space-025",
+          "--space-150",
+          "--space-200",
+          "--space-250",
+          "--membership-ring-ruby-0",
+          "--membership-ring-ruby",
+          "--membership-ring-silver",
+          "--membership-ring-gold",
+          "--space-050",
+          "--membership-background-ruby-0",
+          "--membership-background-ruby",
+          "--membership-background-silver",
+          "--membership-background-gold",
+          "--membership-separator"
+        ],
+        "tokenBindings": {
+          "--space-400": {
+            "property": "width / height",
+            "selector": ".avatar[data-size=\"sm\"]"
+          },
+          "--space-500": {
+            "property": "width / height",
+            "selector": ".avatar"
+          },
+          "--space-600": {
+            "property": "width / height",
+            "selector": ".avatar[data-size=\"lg\"]"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".avatar / .membership"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".avatar"
+          },
+          "--space-025": {
+            "property": "border-width / padding",
+            "selector": ".avatar[data-membership-tier]"
+          },
+          "--space-150": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar[data-size=\"sm\"]"
+          },
+          "--space-200": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar"
+          },
+          "--space-250": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar[data-size=\"lg\"]"
+          },
+          "--membership-ring-ruby-0": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"ruby-0\"]"
+          },
+          "--membership-ring-ruby": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"ruby\"]"
+          },
+          "--membership-ring-silver": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"silver\"]"
+          },
+          "--membership-ring-gold": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"gold\"]"
+          },
+          "--space-050": {
+            "property": "right / bottom",
+            "selector": ".membership"
+          },
+          "--membership-background-ruby-0": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar"
+          },
+          "--membership-background-ruby": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"ruby\"]"
+          },
+          "--membership-background-silver": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"silver\"]"
+          },
+          "--membership-separator": {
+            "property": "background",
+            "selector": ".avatar[data-membership-tier]"
+          },
+          "--membership-background-gold": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"gold\"]"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
+          "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#AvatarImageExample",
+          "./examples.tsx#AvatarSizesExample",
+          "./examples.tsx#AvatarMembershipExample"
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, and membership ring/icon geometry in both themes and mobile/desktop widths."
+        },
+        "composes": [
+          "MembershipIcon"
+        ]
+      }
+    },
+    {
       "id": "Badge",
       "source": "components/Badge",
       "meta": {
@@ -260,7 +479,7 @@
             ],
             "required": false,
             "default": "neutral",
-            "description": "Semantic color. 'red' only for promotion/sale (rule: red-usage)."
+            "description": "Semantic color. Yellow only supports the secondary treatment. 'red' only for promotion/sale (rule: red-usage)."
           },
           "emphasis": {
             "type": "enum",
@@ -270,7 +489,7 @@
             ],
             "required": false,
             "default": "primary",
-            "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer."
+            "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer. Yellow always resolves to secondary, even when primary is requested."
           },
           "size": {
             "type": "enum",
@@ -280,7 +499,7 @@
             ],
             "required": false,
             "default": "sm",
-            "description": "Breakpoint-independent geometry with 8px horizontal padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
+            "description": "Breakpoint-independent geometry with 4px horizontal padding. Flag-prefixed types retain flush-left artwork and 4px right padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
           },
           "tone": {
             "type": "enum",
@@ -347,7 +566,6 @@
           "--badge-bg-primary-blue",
           "--badge-bg-primary-green",
           "--badge-bg-primary-purple",
-          "--badge-bg-primary-yellow",
           "--badge-bg-primary-neutral",
           "--badge-bg-secondary-red",
           "--badge-fg-secondary-red",
@@ -362,7 +580,7 @@
           "--badge-bg-tertiary-neutral",
           "--badge-fg-default",
           "--badge-fg-default-inverse",
-          "--color-black-200",
+          "--color-black-700",
           "--color-black-1000",
           "--color-white-700",
           "--color-white-1000",
@@ -371,7 +589,7 @@
           "--font-weight-normal",
           "--radius-tag-primary",
           "--space-025",
-          "--space-100",
+          "--space-050",
           "--stroke-default"
         ],
         "tokenBindings": {
@@ -395,17 +613,13 @@
             "property": "background-color",
             "selector": ".badge[data-emphasis='primary'][data-color='purple']"
           },
-          "--badge-bg-primary-yellow": {
-            "property": "background-color",
-            "selector": ".badge[data-emphasis='primary'][data-color='yellow']"
-          },
           "--badge-bg-primary-neutral": {
             "property": "background-color",
             "selector": ".badge[data-emphasis='primary'][data-color='neutral']"
           },
           "--badge-fg-default-inverse": {
             "property": "color",
-            "selector": ".badge[data-emphasis='primary']:not([data-color='red'])"
+            "selector": ".badge[data-emphasis='primary']:not([data-color='red']):not([data-color='yellow'])"
           },
           "--badge-bg-secondary-red": {
             "property": "background-color",
@@ -475,11 +689,11 @@
             "property": "gap",
             "selector": ".badge"
           },
-          "--space-100": {
+          "--space-050": {
             "property": "padding-inline",
             "selector": ".badge"
           },
-          "--color-black-200": {
+          "--color-black-700": {
             "property": "background-color",
             "selector": ".badge[data-tone='dark']"
           },
@@ -3396,6 +3610,209 @@
       }
     },
     {
+      "id": "MembershipBadge",
+      "source": "components/MembershipBadge",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "MembershipBadge",
+        "category": "display",
+        "status": "beta",
+        "version": "0.1.0",
+        "description": "56×20px membership badge with original Figma artwork.",
+        "figma": {
+          "fileKey": "6oOAy72DBff4P6NzJYc2hi",
+          "nodeId": "1632:21283",
+          "componentKey": null,
+          "notes": "Verified from Figma design context and original SVG assets; Code Connect is not configured."
+        },
+        "exports": [
+          "MembershipBadge",
+          "MembershipBadgeProps",
+          "MembershipBadgeTier"
+        ],
+        "variants": {
+          "tier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "tier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "default": "ruby-0",
+            "description": "Membership tier matching the Figma variant."
+          },
+          "alt": {
+            "type": "string",
+            "required": false,
+            "description": "Accessible name override. Defaults to the tier name followed by 会员; an empty string makes the artwork decorative."
+          }
+        },
+        "rules": {
+          "artwork": {
+            "contractId": "original-figma-artwork",
+            "note": "Keep the four original SVG assets, their intrinsic dimensions, colors, and gradients. No CSS recoloring."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Non-interactive membership indicator."
+          }
+        },
+        "tokens": [
+          "--space-600",
+          "--space-100",
+          "--space-200",
+          "--space-050"
+        ],
+        "tokenBindings": {
+          "--space-600": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-100": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-200": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-050": {
+            "property": "width / height",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root; internal SVG images are hidden from assistive technology.",
+          "notes": "Use alt=\"\" when an adjacent label repeats the tier. Original artwork text contrast follows Figma and is not an AA text-contrast claim."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#MembershipBadgeExample"
+        ],
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Static original artwork. Storybook verifies all four assets load; browser tests verify geometry and accessible naming."
+        }
+      }
+    },
+    {
+      "id": "MembershipIcon",
+      "source": "components/MembershipIcon",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "MembershipIcon",
+        "category": "display",
+        "status": "beta",
+        "version": "0.1.0",
+        "description": "24px membership icon with original Figma artwork.",
+        "figma": {
+          "fileKey": "6oOAy72DBff4P6NzJYc2hi",
+          "nodeId": "5960:91035",
+          "componentKey": null,
+          "notes": "Verified from Figma design context and original SVG assets; Code Connect is not configured."
+        },
+        "exports": [
+          "MembershipIcon",
+          "MembershipIconProps",
+          "MembershipIconTier"
+        ],
+        "variants": {
+          "tier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "tier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "default": "ruby-0",
+            "description": "Membership tier matching the Figma variant."
+          },
+          "alt": {
+            "type": "string",
+            "required": false,
+            "description": "Accessible name override. Defaults to the tier name followed by 会员; an empty string makes the artwork decorative."
+          }
+        },
+        "rules": {
+          "artwork": {
+            "contractId": "original-figma-artwork",
+            "note": "Keep the four original SVG assets, their intrinsic dimensions, colors, and gradients. No CSS recoloring."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Non-interactive membership indicator."
+          }
+        },
+        "tokens": [
+          "--space-300"
+        ],
+        "tokenBindings": {
+          "--space-300": {
+            "property": "width / height",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root; internal SVG images are hidden from assistive technology.",
+          "notes": "Use alt=\"\" when an adjacent label repeats the tier. Original artwork text contrast follows Figma and is not an AA text-contrast claim."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#MembershipIconExample"
+        ],
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Static original artwork. Storybook verifies all four assets load; browser tests verify geometry and accessible naming."
+        }
+      }
+    },
+    {
       "id": "ProductCard",
       "source": "components/ProductCard",
       "meta": {
@@ -5900,7 +6317,7 @@
             ],
             "required": false,
             "default": "filled",
-            "description": "Filled container or transparent container with a 1px current-color stroke."
+            "description": "Filled container or transparent container with a 1px black or white stroke at 8% opacity, according to the surface mode."
           },
           "image": {
             "type": "TagImage",
@@ -5959,7 +6376,7 @@
             "selector": ".tag[data-variant='filled'][data-mode='light']"
           },
           "--color-white-1000": {
-            "property": "color / border-color",
+            "property": "color",
             "selector": ".tag[data-mode='dark']"
           },
           "--color-white-200": {
@@ -5975,7 +6392,7 @@
             "selector": ".tag[data-variant='filled'][data-mode='light']"
           },
           "--color-black-1000": {
-            "property": "color / border-color",
+            "property": "color",
             "selector": ".tag[data-mode='light']"
           },
           "--radius-button-primary": {

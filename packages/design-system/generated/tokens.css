@@ -3,11 +3,10 @@
   --background-primary: var(--color-white-1000);
   --background-secondary: var(--color-neutral-100);
   --badge-bg-primary-blue: var(--color-blue-600);
-  --badge-bg-primary-green: var(--color-emerald-600);
+  --badge-bg-primary-green: var(--color-emerald-700);
   --badge-bg-primary-neutral: var(--color-black-900);
   --badge-bg-primary-purple: var(--color-purple-600);
   --badge-bg-primary-red: var(--color-red-500);
-  --badge-bg-primary-yellow: var(--color-amber-600);
   --badge-bg-secondary-blue: var(--color-blue-50);
   --badge-bg-secondary-green: var(--color-emerald-50);
   --badge-bg-secondary-neutral: var(--color-white-1000);
@@ -339,6 +338,15 @@
   --line-height-link-sm: 16px;
   --font-size-link-xl: 16px;
   --line-height-link-xl: 20px;
+  --membership-background-gold: var(--color-amber-50);
+  --membership-background-ruby: var(--color-red-50);
+  --membership-background-ruby-0: var(--color-neutral-100);
+  --membership-background-silver: var(--color-blue-50);
+  --membership-ring-gold: #FDA700;
+  --membership-ring-ruby: #FF6155;
+  --membership-ring-ruby-0: #999999;
+  --membership-ring-silver: #5196FF;
+  --membership-separator: var(--color-white-1000);
   --overlay-default: var(--color-black-300);
   --overlay-scrim: var(--color-black-700);
   --font-size-price-md: 24px;
@@ -410,7 +418,6 @@
   --badge-bg-primary-neutral: var(--color-white-1000);
   --badge-bg-primary-purple: var(--color-purple-400);
   --badge-bg-primary-red: var(--color-red-400);
-  --badge-bg-primary-yellow: var(--color-amber-400);
   --badge-bg-secondary-blue: var(--color-blue-950);
   --badge-bg-secondary-green: var(--color-emerald-950);
   --badge-bg-secondary-neutral: var(--color-neutral-800);

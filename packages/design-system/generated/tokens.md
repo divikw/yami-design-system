@@ -10,7 +10,7 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `background.secondary` | dark | color | `var(--color-neutral-900)` |
 | `badge.bg-primary-blue` | root | color | `var(--color-blue-600)` |
 | `badge.bg-primary-blue` | dark | color | `var(--color-blue-400)` |
-| `badge.bg-primary-green` | root | color | `var(--color-emerald-600)` |
+| `badge.bg-primary-green` | root | color | `var(--color-emerald-700)` |
 | `badge.bg-primary-green` | dark | color | `var(--color-emerald-400)` |
 | `badge.bg-primary-neutral` | root | color | `var(--color-black-900)` |
 | `badge.bg-primary-neutral` | dark | color | `var(--color-white-1000)` |
@@ -18,8 +18,6 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `badge.bg-primary-purple` | dark | color | `var(--color-purple-400)` |
 | `badge.bg-primary-red` | root | color | `var(--color-red-500)` |
 | `badge.bg-primary-red` | dark | color | `var(--color-red-400)` |
-| `badge.bg-primary-yellow` | root | color | `var(--color-amber-600)` |
-| `badge.bg-primary-yellow` | dark | color | `var(--color-amber-400)` |
 | `badge.bg-secondary-blue` | root | color | `var(--color-blue-50)` |
 | `badge.bg-secondary-blue` | dark | color | `var(--color-blue-950)` |
 | `badge.bg-secondary-green` | root | color | `var(--color-emerald-50)` |
@@ -422,6 +420,15 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `link-sm.line-height` | root | dimension | `16px` |
 | `link-xl.font-size` | root | dimension | `16px` |
 | `link-xl.line-height` | root | dimension | `20px` |
+| `membership.background.gold` | root | color | `var(--color-amber-50)` |
+| `membership.background.ruby` | root | color | `var(--color-red-50)` |
+| `membership.background.ruby-0` | root | color | `var(--color-neutral-100)` |
+| `membership.background.silver` | root | color | `var(--color-blue-50)` |
+| `membership.ring.gold` | root | color | `#FDA700` |
+| `membership.ring.ruby` | root | color | `#FF6155` |
+| `membership.ring.ruby-0` | root | color | `#999999` |
+| `membership.ring.silver` | root | color | `#5196FF` |
+| `membership.separator` | root | color | `var(--color-white-1000)` |
 | `overlay.default` | root | color | `var(--color-black-300)` |
 | `overlay.default` | dark | color | `var(--color-black-300)` |
 | `overlay.scrim` | root | color | `var(--color-black-700)` |

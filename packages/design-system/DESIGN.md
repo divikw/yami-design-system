@@ -111,8 +111,8 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 
 | Concept     | Token                                               | Value                             | Where used                                                                                    |
 | ----------- | --------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------- |
-| Success     | `--color-emerald-500` / `-600` / `-700`             | `#3DC24F` / `#33A33D` / `#27812B` | `--fill-success-primary` (.500) / `--badge-bg-primary-green` (.600) / `--text-success` (.700) |
-| Warning     | `--color-yellow-500` / `--color-amber-600` / `-700` | `#FABD05` / `#D26204` / `#9E4303` | `--fill-warning-primary` / `--badge-bg-primary-yellow` (.600) / secondary foreground (.700)   |
+| Success     | `--color-emerald-500` / `-600` / `-700`             | `#3DC24F` / `#33A33D` / `#27812B` | `--fill-success-primary` (.500) / `--badge-bg-primary-green` (.700) / `--text-success` (.700) |
+| Warning     | `--color-yellow-500` / `--color-amber-600` / `-700` | `#FABD05` / `#D26204` / `#9E4303` | `--fill-warning-primary` / secondary foreground (.700)   |
 | Info        | `--color-blue-500` / `-600`                         | `#3383FF` / `#0066EB`             | `--text-info`, `--fill-info-primary` / `--badge-bg-primary-blue`                              |
 | Highlight   | `--color-yellow-500`                                | `#FABD05`                         | `--fill-highlight` — marketing recommendation banner                                          |
 | Rating star | `--text-emphasis`                                   | `#E00000`                         | ProductCard rating star follows the current Figma desktop component.                          |
@@ -123,9 +123,9 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 | ------- | ------------------------------------------------- | ----------------------------------------- | ----------------------------------------- |
 | Red     | `--badge-bg-primary-red` (`#E00000`)              | `--badge-bg-secondary-red` (`#FBF1EF`)    | `--badge-fg-secondary-red` (`#9B000D`)    |
 | Blue    | `--badge-bg-primary-blue` (`#0066EB`)             | `--badge-bg-secondary-blue` (`#F0F3FA`)   | `--badge-fg-secondary-blue` (`#005CC2`)   |
-| Green   | `--badge-bg-primary-green` (`#33A33D`)            | `--badge-bg-secondary-green` (`#ECF9F0`)  | `--badge-fg-secondary-green` (`#27812B`)  |
+| Green   | `--badge-bg-primary-green` (`#27812B`)            | `--badge-bg-secondary-green` (`#ECF9F0`)  | `--badge-fg-secondary-green` (`#27812B`)  |
 | Purple  | `--badge-bg-primary-purple` (`#6C30F7`)           | `--badge-bg-secondary-purple` (`#F7F0FF`) | `--badge-fg-secondary-purple` (`#531EE3`) |
-| Yellow  | `--badge-bg-primary-yellow` (`#D26204`)           | `--badge-bg-secondary-yellow` (`#FEF7E6`) | `--badge-fg-secondary-yellow` (`#9E4303`) |
+| Yellow  | Not supported; resolves to secondary           | `--badge-bg-secondary-yellow` (`#FEF7E6`) | `--badge-fg-secondary-yellow` (`#9E4303`) |
 | Neutral | `--badge-bg-primary-neutral` (`rgba(0,0,0,0.87)`) | `--badge-bg-tertiary-neutral` (`#F5F5F5`) | `--badge-fg-default` (`rgba(0,0,0,0.87)`) |
 
 ---
@@ -225,8 +225,8 @@ container instead of the global viewport.
 | -------------- | ------ | ---------------------------------------------------------------------- |
 | `--space-0`    | `0`    | Edge-aligned layouts                                                   |
 | `--space-025`  | `2px`  | Icon-to-text micro gap                                                 |
-| `--space-050`  | `4px`  | Tight inline gap, sm badge padding-inline                              |
-| `--space-100`  | `8px`  | Default tight padding, button label↔icon gap, md badge padding         |
+| `--space-050`  | `4px`  | Tight inline gap, badge padding-inline in both sizes                    |
+| `--space-100`  | `8px`  | Default tight padding, button label↔icon gap                           |
 | `--space-150`  | `12px` | Form item gap, sm button padding-inline                                |
 | `--space-200`  | `16px` | **Default content padding**, md button padding-inline, Card padding md |
 | `--space-250`  | `20px` | Comfortable section gap, lg button padding-inline                      |
@@ -421,15 +421,32 @@ Related actions composed from Button. The group provides an accessible name and 
 | -------------- | ------------------------------------------------------------------------------------------------ |
 | **Colors**     | `red` · `blue` · `green` · `purple` · `yellow` · `neutral` (6 only — rule `semantic-color-only`) |
 | **Emphasis**   | `primary` (solid) · `secondary` (tinted)                                                         |
-| **Size**       | One responsive size: Mobile/Tablet 20px height; PC 24px height (`min-width: 1024px`)             |
+| **Yellow**     | Always resolves to `secondary`, even when `primary` is requested; no solid style or primary token |
+| **Size**       | Explicit `sm` (default, 20px) / `md` (24px); both are breakpoint-independent                    |
+| **Padding**    | 4px inline at every size and breakpoint; flag artwork stays flush-left with 4px right padding    |
 | **Red usage**  | `color="red"` is **promotion / urgency / sale only** (rule `red-usage`). Never decorative.       |
 | **Radius**     | `--radius-tag-primary` (4px)                                                                     |
-| **Typography** | `--font-family-ios` + weight 400; Mobile/Tablet `12/16`, PC `14/20`                              |
+| **Typography** | `--font-family-ios` + weight 400; `sm` uses `12/16`, `md` uses `14/20`                           |
+| **Foreground** | Primary uses theme-aware foregrounds (white in Light; green uses emerald.700 for AA contrast); `tone="dark"` uses white on 68% black   |
 | **Constraint** | ProductCard renders **max 2** badges; extras truncate silently.                                  |
 
 ### Tag — `components/Tag/`
 
 Static full-pill label for short descriptive keywords. Its three independent color axes are placement `context` (`content` or `overlay`), surface `mode` (`light` or `dark`), and container `variant` (`filled` or `outline`). M remains 28px on mobile and PC; L is 32px on mobile and 36px on PC, switching at 1024px. Optional leading artwork follows Search geometry: a 2px leading inset, 4px label gap, an image slot 4px smaller than the Tag, and artwork 8px smaller. Filled uses transparent black at 4% with dark text in light mode and transparent white at 8% with light text in dark mode. Outline remains transparent with an 8% black stroke in light mode or 8% white stroke in dark mode. Tag is display-only and never substitutes for an interactive FilterChip.
+
+### Avatar — `components/Avatar/`
+
+Non-interactive circular image-only avatar, built on Base UI Avatar. Sizes are `sm` 32px, `md` 40px (default), and `lg` 48px on both mobile and desktop. Supply `alt` and an optional `src`; images use cover cropping. Omitting `src`, loading, or failed custom images display the built-in YAMI mascot avatar. The component only renders images, with `--surface-secondary` behind them. The root exposes one accessible name; use `alt=""` beside a visible name. This code-defined component has no verified Figma binding yet.
+
+Optional `membershipTier="ruby-0" | "ruby" | "silver" | "gold"` adds a 2px membership ring and an original MembershipIcon at the bottom-right. A 2px white separator sits between the ring and portrait in both themes; outer diameters stay unchanged and portrait diameters become 24/32/40px. The image clips separately so the icon remains visible; its backing content area is 12/16/20px for sm/md/lg and extends 2px beyond the avatar border edge using -4px right/bottom offsets. The icon has an opaque circular membership-colored pale backing (gray/red/blue/gold) that stays consistent in both themes, plus a 1px tier-colored border (outer diameter 14/18/22px); its artwork canvas is centered at 10/14/18px. The accessible name includes the tier once; the native `lang` prop selects an English suffix by default or Chinese for `zh` / `zh-CN`. Storybook follows the language toolbar unless overridden. Membership ring tokens `--membership-ring-ruby-0`, `--membership-ring-ruby`, `--membership-ring-silver`, and `--membership-ring-gold` preserve identity colors in both themes. Ruby's ring comes from the live YAMI account avatar; the other rings use original icon colors, pending verification of those live account states.
+
+### MembershipIcon — `components/MembershipIcon/`
+
+Static membership artwork verified against Figma node `5960:91035`. Exposes `tier="ruby-0" | "ruby" | "silver" | "gold"`, defaulting to `ruby-0`, plus an accessible `alt` override. Preserves a 24px canvas and each SVG's intrinsic dimensions and placement. Keep the original colors and gradients in both themes; these are membership identity assets. Use `alt=""` beside an equivalent tier label.
+
+### MembershipBadge — `components/MembershipBadge/`
+
+Static membership artwork verified against Figma node `1632:21283`. Exposes the same tiers and accessible `alt` contract as MembershipIcon. Preserves the original 56×20px SVG, including colors, gradients, and lettering in both themes. It does not alter generic Badge variants.
 
 ### Input — `components/Input/`
 

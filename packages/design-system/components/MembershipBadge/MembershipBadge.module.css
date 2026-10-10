@@ -1,0 +1,11 @@
+.root {
+  display: inline-flex;
+  width: calc(var(--space-600) + var(--space-100));
+  height: calc(var(--space-200) + var(--space-050));
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.artwork {
+  display: block;
+}

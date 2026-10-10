@@ -389,8 +389,8 @@
     },
     "bg-primary-green": {
       "$type": "color",
-      "$value": "{color.emerald.600}",
-      "$description": "用于成功、完成与可用状态的主标签背景。"
+      "$value": "{color.emerald.700}",
+      "$description": "用于成功、完成与可用状态的主标签背景，确保浅色主题上的白字满足 AA 对比度。"
     },
     "bg-secondary-green": {
       "$type": "color",
@@ -406,11 +406,6 @@
       "$type": "color",
       "$value": "{color.purple.50}",
       "$description": "用于营销或权益类次级标签背景，适合辅助说明。"
-    },
-    "bg-primary-yellow": {
-      "$type": "color",
-      "$value": "{color.amber.600}",
-      "$description": "用于警示、提醒或高亮类主标签背景。"
     },
     "bg-secondary-yellow": {
       "$type": "color",

@@ -19,7 +19,7 @@ export function VVIPPrice({
   return (
     <div {...rest} className={cx(styles.vvipPrice, className)} data-slot="product-pricing-vvip">
       <div className={styles.vvipPriceValue}>
-        <Badge color="yellow" emphasis="primary" size="md">VVIP</Badge>
+        <Badge color="yellow" emphasis="secondary" size="md">VVIP</Badge>
         <span>{label}</span>
         <strong>{price}</strong>
       </div>
