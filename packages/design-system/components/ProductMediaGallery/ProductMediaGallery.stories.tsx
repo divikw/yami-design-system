@@ -410,6 +410,8 @@ export const Mobile: Story = {
     ) {
       throw new Error("Mobile images must form horizontal pages capped at 440px without blocking vertical gestures");
     }
+    // Let the initial resize alignment settle before simulating user scrolling.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     rail.scrollTo({ left: slides[0].getBoundingClientRect().width + gap, behavior: "instant" });
     await waitFor(() => {
       if (gallery.dataset.activeIndex !== "1" || image()?.alt !== images[1].alt) {
