@@ -9,32 +9,49 @@
 ## When NOT to use
 
 - **Between cards** — spacing alone (e.g. `gap: var(--space-300)`) reads cleaner
-- **Decorative** — dividers are semantic (`<hr>` = separator). Don't use for visual texture.
-- **Thick separation** — reach for a new Card or section, not a thicker line. Thickness is fixed at 1px.
+- **Visual texture** — use dividers to separate related content, not to decorate a page.
+- **Arbitrary thickness** — use the two supported strengths. Do not add custom line widths.
 
 ## Strength selection (rule: `border-strength`)
 
-Only 3 tiers; pick by contrast need, not by personal taste.
+Two strengths control both thickness and color. Colors follow the active theme's semantic tokens.
 
-| Strength | Opacity | Use when |
-|---|---|---|
-| `default` | 8% | **Default.** Between list items, form field groups |
-| `subtle` | 29% | Heavier context — dividing subsections inside a Card |
-| `emphasis` | 87% | Rare. Headers of dense data tables, strong section breaks |
+| Strength | Thickness | Color token | Use when |
+|---|---|---|---|
+| `default` | 1px (`--stroke-default`) | `--divider-default` | Between list items and form field groups |
+| `emphasis` | 2px (`--stroke-thick`) | `--divider-emphasis` | Major section boundaries and dense table headers |
 
 ### Inverse variants
 
-On the active theme's opposite-polarity surface (`surface="inverse"` Card), use the `-inverse` suffix. This surface is dark in Light and light in Dark:
-`default-inverse`, `subtle-inverse`, `emphasis-inverse`. Same opacity, flipped base color.
+On the active theme's opposite-polarity surface (`surface="inverse"` Card), set `inverse`. This surface is dark in Light and light in Dark. Thickness stays the same; colors use `--divider-default-inverse` or `--divider-emphasis-inverse`.
+
+```tsx
+<Card surface="inverse">
+  <Divider inverse />
+  <Divider strength="emphasis" inverse />
+</Card>
+```
+
+`strength="subtle"` and strength values with an `-inverse` suffix are unsupported. Use `strength="default"` or `strength="emphasis"` with the separate `inverse` boolean.
 
 ## Orientation
 
 ```tsx
 <Divider orientation="horizontal" />    {/* renders <hr> */}
-<Divider orientation="vertical" />      {/* renders <span role="separator"> */}
+<Divider orientation="vertical" />      {/* renders <span aria-hidden="true"> */}
 ```
 
-Vertical dividers need a flex / grid parent with explicit height (they `align-self: stretch` to container).
+Horizontal dividers expose the native separator semantics of `<hr>`; use `aria-label` when the boundary needs a name. Vertical dividers are decorative and hidden from assistive technology. The parent content must provide its own list or group semantics.
+
+Vertical dividers stretch in a flex / grid row and keep a minimum height of `1em`. To fill a taller area, give the parent a height or minimum height and use a row layout:
+
+```tsx
+<div style={{ display: 'flex', height: 48 }}>
+  <span>Left</span>
+  <Divider orientation="vertical" strength="emphasis" />
+  <span>Right</span>
+</div>
+```
 
 ## Common patterns
 
@@ -70,7 +87,7 @@ Vertical dividers need a flex / grid parent with explicit height (they `align-se
   <h2>Profile</h2>
   {/* fields */}
 </section>
-<Divider strength="subtle" />
+<Divider strength="emphasis" />
 <section>
   <h2>Notifications</h2>
   {/* fields */}
@@ -85,12 +102,12 @@ Vertical dividers need a flex / grid parent with explicit height (they `align-se
 <div style={{ borderTop: '1px solid rgba(0,0,0,0.15)' }} />   {/* breaks border-strength */}
 ```
 
-Use `<Divider strength="default" />` (8%) or `<Divider strength="subtle" />` (29%). If neither fits, the UI density is off.
+Use `<Divider />` for ordinary structure or `<Divider strength="emphasis" />` for stronger separation. Let semantic tokens supply the color.
 
-### ✗ Thick dividers
+### ✗ Custom thickness
 
 ```css
-.my-divider { border-top: 2px solid ...; }   /* don't — bump to section/Card if heavier */
+.my-divider { height: 3px; }   /* unsupported thickness */
 ```
 
 ### ✗ Decorative dashed / dotted lines
@@ -99,5 +116,5 @@ No dashed / dotted divider styling. Use solid only — matches elsewhere in the 
 
 ## Related
 
-- Rule `border-strength` — `../../design.md`
+- Rule `border-strength` — `../../DESIGN.md`
 - Token reference — `--divider-*` family in `../../tokens/semantic/colors.tokens.json`

@@ -712,12 +712,12 @@ export const Pc: Story = {
           style.borderRadius !== "4px" ||
           style.fontSize !== expectedFontSize ||
           style.lineHeight !== expectedLineHeight ||
-          style.paddingLeft !== "8px" ||
-          style.paddingRight !== "8px" ||
+          style.paddingLeft !== "4px" ||
+          style.paddingRight !== "4px" ||
           style.backgroundColor !==
             (usesLightBadge
               ? "rgba(255, 255, 255, 0.68)"
-              : "rgba(0, 0, 0, 0.08)") ||
+              : "rgba(0, 0, 0, 0.68)") ||
           style.color !==
             (usesLightBadge ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)") ||
           style.boxShadow !== "none"
@@ -725,7 +725,7 @@ export const Pc: Story = {
       })
     ) {
       throw new Error(
-        "Topic landing page keywords must use responsive adaptive filled Badges with 8px inline padding",
+        "Topic landing page keywords must use responsive adaptive filled Badges with 4px inline padding",
       );
     }
 

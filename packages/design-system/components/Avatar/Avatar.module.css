@@ -1,0 +1,90 @@
+.avatar {
+  --avatar-membership-background: var(--membership-background-ruby-0);
+  --avatar-membership-size: var(--space-200);
+  --avatar-membership-scale: 0.5833333333;
+  display: inline-flex;
+  width: var(--space-500);
+  height: var(--space-500);
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--surface-secondary);
+  vertical-align: middle;
+}
+
+.avatar[data-size="sm"] {
+  --avatar-membership-size: var(--space-150);
+  --avatar-membership-scale: 0.4166666667;
+  width: var(--space-400);
+  height: var(--space-400);
+}
+
+.avatar[data-size="lg"] {
+  --avatar-membership-size: var(--space-250);
+  --avatar-membership-scale: 0.75;
+  width: var(--space-600);
+  height: var(--space-600);
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  object-position: inherit;
+}
+
+.avatar[data-membership-tier] {
+  position: relative;
+  box-sizing: border-box;
+  overflow: visible;
+  border: var(--space-025) solid var(--membership-ring-ruby-0);
+  padding: var(--space-025);
+  background: var(--membership-separator);
+}
+
+.avatar[data-membership-tier="ruby"] {
+  --avatar-membership-background: var(--membership-background-ruby);
+  border-color: var(--membership-ring-ruby);
+}
+
+.avatar[data-membership-tier="silver"] {
+  --avatar-membership-background: var(--membership-background-silver);
+  border-color: var(--membership-ring-silver);
+}
+
+.avatar[data-membership-tier="gold"] {
+  --avatar-membership-background: var(--membership-background-gold);
+  border-color: var(--membership-ring-gold);
+}
+
+.membership {
+  position: absolute;
+  box-sizing: content-box;
+  right: calc(-1 * var(--space-050));
+  bottom: calc(-1 * var(--space-050));
+  width: var(--avatar-membership-size);
+  height: var(--avatar-membership-size);
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: var(--radius-full);
+  background: var(--avatar-membership-background);
+  pointer-events: none;
+}
+
+.membershipIcon {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--avatar-membership-scale));
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: inherit;
+}

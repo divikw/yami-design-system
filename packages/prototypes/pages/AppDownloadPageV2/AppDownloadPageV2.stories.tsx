@@ -21,6 +21,31 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function contrastRatio(foreground: string, background: string) {
+  const parseColor = (color: string) => {
+    const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
+    if (!channels || channels.length !== 3) throw new Error(`Unable to parse computed color: ${color}`);
+    const normalized = color.startsWith("color(srgb") ? channels : channels.map((channel) => channel / 255);
+    const alpha = Number(color.match(/[\d.]+/g)?.[3] ?? 1);
+    return { channels: normalized, alpha };
+  };
+  const backgroundColor = parseColor(background);
+  const foregroundColor = parseColor(foreground);
+  const compositedForeground = foregroundColor.channels.map((channel, index) =>
+    channel * foregroundColor.alpha + backgroundColor.channels[index] * (1 - foregroundColor.alpha),
+  );
+  const luminance = (channels: number[]) => {
+    const [red, green, blue] = channels.map((channel) =>
+      channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
+    );
+    return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+  };
+  const foregroundLuminance = luminance(compositedForeground);
+  const backgroundLuminance = luminance(backgroundColor.channels);
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+    (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+}
+
 export const PC: Story = { args: { initialLocale: "ko" } };
 export const Mobile: Story = {
   parameters: { viewport: { defaultViewport: "yamiMobileLg" } },
@@ -43,6 +68,11 @@ export const StoryBanner: Story = {
       await expect(card.getAttribute("data-hero-banner-content")).toBe("image-text-products");
       await expect(card.getAttribute("href")).toContain("/en/story/");
     }
+    const cardRects = Array.from(cards, (card) => card.getBoundingClientRect());
+    const widths = cardRects.map(({ width }) => width);
+    const heights = cardRects.map(({ height }) => height);
+    await expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
+    await expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(1);
     await userEvent.click(canvas.getByRole("button", { name: "Switch to English" }));
     await expect(banner.querySelector('[data-slot="hero-banner-item"]')?.getAttribute("href")).toContain("/en/story/");
     await expect(within(banner).getByRole("heading", { level: 2 })).toHaveTextContent("Best Stories & Products");
@@ -120,6 +150,18 @@ export const ContentWidth: Story = {
     await expect(header.getBoundingClientRect().width).toBe(1440);
     await expect(products.getBoundingClientRect().width).toBe(1440);
     await expect(getComputedStyle(products).padding).toBe("64px 48px");
+    const firstProduct = products.querySelector<HTMLElement>('[data-slot="product-card"]')!;
+    const brandLink = firstProduct.querySelector<HTMLAnchorElement>('[data-slot="product-card-brand"]')!;
+    const productLink = firstProduct.querySelector<HTMLAnchorElement>('[data-slot="product-card-title-link"]')!;
+    await expect(brandLink).toHaveAttribute("href", "https://www.yami.com/us/en/b/sk-ii/377");
+    await expect(brandLink.href).not.toBe(productLink.href);
+    for (const badge of page.querySelectorAll<HTMLElement>("span[class*=offerBadge]")) {
+      const style = getComputedStyle(badge);
+      await expect(contrastRatio(style.color, style.backgroundColor)).toBeGreaterThanOrEqual(4.5);
+    }
+    const guideSection = page.querySelector<HTMLElement>("#coupon-guide")!;
+    const guideDescription = guideSection.querySelector<HTMLElement>('[data-slot="coupon-guide-description"]')!;
+    await expect(contrastRatio(getComputedStyle(guideDescription).color, getComputedStyle(guideSection).backgroundColor)).toBeGreaterThanOrEqual(4.5);
     for (const section of page.querySelectorAll<HTMLElement>("main > section:not(#discount-products):not(#sns-trend):not(#reviews)")) {
       await expect(getComputedStyle(section).paddingTop).toBe("64px");
       await expect(getComputedStyle(section).paddingBottom).toBe("64px");

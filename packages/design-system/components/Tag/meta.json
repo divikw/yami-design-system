@@ -44,7 +44,7 @@
       "values": ["filled", "outline"],
       "required": false,
       "default": "filled",
-      "description": "Filled container or transparent container with a 1px current-color stroke."
+      "description": "Filled container or transparent container with a 1px black or white stroke at 8% opacity, according to the surface mode."
     },
     "image": {
       "type": "TagImage",
@@ -103,7 +103,7 @@
       "selector": ".tag[data-variant='filled'][data-mode='light']"
     },
     "--color-white-1000": {
-      "property": "color / border-color",
+      "property": "color",
       "selector": ".tag[data-mode='dark']"
     },
     "--color-white-200": {
@@ -119,7 +119,7 @@
       "selector": ".tag[data-variant='filled'][data-mode='light']"
     },
     "--color-black-1000": {
-      "property": "color / border-color",
+      "property": "color",
       "selector": ".tag[data-mode='light']"
     },
     "--radius-button-primary": {

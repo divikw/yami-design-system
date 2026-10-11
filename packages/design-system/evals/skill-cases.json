@@ -181,6 +181,57 @@
         "expectedPass": true,
         "expectedViolationRuleIds": []
       }
+    },
+    {
+      "id": "mixed-navigation-action",
+      "prompts": {
+        "zh": "保留查看订单链接和生成收据按钮，修正卡片布局，不改变业务行为。",
+        "en": "Preserve order navigation and receipt generation while fixing card layout."
+      },
+      "expectedStartingPoints": ["component:Button", "registry:button", "component:ButtonGroup", "registry:button-group"],
+      "requiredRuleIds": [],
+      "forbiddenRuleIds": [],
+      "expectedOutcome": "pass",
+      "fixture": {
+        "path": "packages/design-system/evals/fixtures/mixed-navigation-action.tsx",
+        "validator": "button-usage",
+        "expectedPass": true,
+        "expectedViolationRuleIds": []
+      }
+    },
+    {
+      "id": "button-navigation-reject",
+      "prompts": {
+        "zh": "检查使用 Button 点击重定向到订单详情的误用。",
+        "en": "Reject a Button click redirect to order details."
+      },
+      "expectedStartingPoints": ["component:Button", "registry:button", "component:ButtonGroup", "registry:button-group"],
+      "requiredRuleIds": [],
+      "forbiddenRuleIds": [],
+      "expectedOutcome": "reject",
+      "fixture": {
+        "path": "packages/design-system/evals/fixtures/button-navigation-reject.tsx",
+        "validator": "button-usage",
+        "expectedPass": false,
+        "expectedViolationRuleIds": ["button-usage"]
+      }
+    },
+    {
+      "id": "button-group-contract-reject",
+      "prompts": {
+        "zh": "检查缺少名称且按钮尺寸不一致的按钮组。",
+        "en": "Reject an unnamed button group with inconsistent button sizes."
+      },
+      "expectedStartingPoints": ["component:Button", "registry:button", "component:ButtonGroup", "registry:button-group"],
+      "requiredRuleIds": [],
+      "forbiddenRuleIds": [],
+      "expectedOutcome": "reject",
+      "fixture": {
+        "path": "packages/design-system/evals/fixtures/button-group-contract-reject.tsx",
+        "validator": "button-usage",
+        "expectedPass": false,
+        "expectedViolationRuleIds": ["button-usage"]
+      }
     }
   ]
 }

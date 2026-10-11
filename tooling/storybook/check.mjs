@@ -20,16 +20,19 @@ const componentDocs = await Promise.all(componentDirectories.map(async (director
   const usagePath = path.join(componentRoot, "usage.md");
   const storyPath = path.join(componentRoot, `${directory}.stories.tsx`);
   const usage = await fs.readFile(usagePath, "utf8");
+  const usageSections = usage.split(/<!-- locale:(?:zh|en) -->\s*/)
+    .filter((section) => section.trim())
+    .map((section) => section.trimStart());
 
   await fs.access(storyPath);
   if (meta.usageRef !== "./usage.md") {
     throw new Error(`${directory} must declare usageRef as ./usage.md`);
   }
-  if (!usage.startsWith("# ")) {
-    throw new Error(`${directory}/usage.md must start with a level-one heading`);
+  if (usageSections.length === 0 || usageSections.some((section) => !section.startsWith("# "))) {
+    throw new Error(`${directory}/usage.md must start each language section with a level-one heading`);
   }
 
-  return { directory, name: meta.name, storyPath, usage };
+  return { directory, name: meta.name, storyPath, headings: usageSections.map((section) => section.split(/\r?\n/, 1)[0]) };
 }));
 
 const stories = [
@@ -83,9 +86,10 @@ if (!bundledDocs.includes("data-yami-docs")) {
 }
 for (const component of componentDocs) {
   if (draftStoryPaths.has(component.storyPath)) continue;
-  const heading = component.usage.split(/\r?\n/, 1)[0];
-  if (!bundledDocs.includes(heading)) {
-    throw new Error(`${component.name} usage content was not bundled into Storybook`);
+  for (const heading of component.headings) {
+    if (!bundledDocs.includes(heading)) {
+      throw new Error(`${component.name} usage content was not bundled into Storybook: ${heading}`);
+    }
   }
 }
 

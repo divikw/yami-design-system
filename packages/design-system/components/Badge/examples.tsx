@@ -38,7 +38,7 @@ export const OutOfStockBadge = () => (
 
 export const LimitedBadge = () => (
   <section data-example="LimitedBadge">
-    <Badge color="yellow">限时 Limited</Badge>
+    <Badge color="yellow" emphasis="secondary">限时 Limited</Badge>
   </section>
 )
 
@@ -55,7 +55,7 @@ export const AllColorsRow = () => (
       <Badge color="blue">NEW</Badge>
       <Badge color="green">IN STOCK</Badge>
       <Badge color="purple">PREMIUM</Badge>
-      <Badge color="yellow">LIMITED</Badge>
+      <Badge color="yellow" emphasis="secondary">LIMITED</Badge>
       <Badge color="neutral">Tag</Badge>
     </div>
   </section>

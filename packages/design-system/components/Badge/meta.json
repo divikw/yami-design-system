@@ -59,21 +59,21 @@
       "values": ["red", "blue", "green", "purple", "yellow", "neutral"],
       "required": false,
       "default": "neutral",
-      "description": "Semantic color. 'red' only for promotion/sale (rule: red-usage)."
+      "description": "Semantic color. Yellow only supports the secondary treatment. 'red' only for promotion/sale (rule: red-usage)."
     },
     "emphasis": {
       "type": "enum",
       "values": ["primary", "secondary"],
       "required": false,
       "default": "primary",
-      "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer."
+      "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer. Yellow always resolves to secondary, even when primary is requested."
     },
     "size": {
       "type": "enum",
       "values": ["sm", "md"],
       "required": false,
       "default": "sm",
-      "description": "Breakpoint-independent geometry with 8px horizontal padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
+      "description": "Breakpoint-independent geometry with 4px horizontal padding. Flag-prefixed types retain flush-left artwork and 4px right padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
     },
     "tone": {
       "type": "enum",
@@ -137,7 +137,6 @@
     "--badge-bg-primary-blue",
     "--badge-bg-primary-green",
     "--badge-bg-primary-purple",
-    "--badge-bg-primary-yellow",
     "--badge-bg-primary-neutral",
     "--badge-bg-secondary-red",
     "--badge-fg-secondary-red",
@@ -152,7 +151,7 @@
     "--badge-bg-tertiary-neutral",
     "--badge-fg-default",
     "--badge-fg-default-inverse",
-    "--color-black-200",
+    "--color-black-700",
     "--color-black-1000",
     "--color-white-700",
     "--color-white-1000",
@@ -161,7 +160,7 @@
     "--font-weight-normal",
     "--radius-tag-primary",
     "--space-025",
-    "--space-100",
+    "--space-050",
     "--stroke-default"
   ],
 
@@ -186,17 +185,13 @@
       "property": "background-color",
       "selector": ".badge[data-emphasis='primary'][data-color='purple']"
     },
-    "--badge-bg-primary-yellow": {
-      "property": "background-color",
-      "selector": ".badge[data-emphasis='primary'][data-color='yellow']"
-    },
     "--badge-bg-primary-neutral": {
       "property": "background-color",
       "selector": ".badge[data-emphasis='primary'][data-color='neutral']"
     },
     "--badge-fg-default-inverse": {
       "property": "color",
-      "selector": ".badge[data-emphasis='primary']:not([data-color='red'])"
+      "selector": ".badge[data-emphasis='primary']:not([data-color='red']):not([data-color='yellow'])"
     },
     "--badge-bg-secondary-red": {
       "property": "background-color",
@@ -257,11 +252,11 @@
       "selector": ".badge"
     },
     "--space-025": { "property": "gap", "selector": ".badge" },
-    "--space-100": {
+    "--space-050": {
       "property": "padding-inline",
       "selector": ".badge"
     },
-    "--color-black-200": {
+    "--color-black-700": {
       "property": "background-color",
       "selector": ".badge[data-tone='dark']"
     },

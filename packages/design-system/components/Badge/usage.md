@@ -4,12 +4,13 @@
 
 - **Product status** — NEW, BESTSELLER, OUT OF STOCK
 - **Promotion/sale** — SALE, –30%, FLASH DEAL, 限时 Limited
-- **Tags** — categories, filters, cuisine labels (softer use → `emphasis="secondary"`)
 - **Counts** — notification counts on icons, cart quantity
 
 ## When NOT to use
 
 - **Interactive elements** → use `<Button size="sm">` instead. Badge is a display primitive with no click affordance.
+- **Descriptive keywords** — campaigns, brands, ingredients, or content themes → use `Tag`.
+- **Selectable filters** → use `FilterChip`; navigation → use a link or `Tabs`.
 - **Long sentences** → if content is > 15 chars, it's probably not a badge. Use `<Alert>` or inline text.
 - **Emoji-only content** → breaks `no-emoji` rule.
 
@@ -23,7 +24,7 @@ Map to semantic meaning, not decoration. **Red is reserved for promotion/urgency
 | `blue` | Information, neutral tag | `NEW`, `BESTSELLER`, `Official` |
 | `green` | Success, positive state | `IN STOCK`, `AUTHENTIC`, `FAST SHIP` |
 | `purple` | Premium, featured | `PREMIUM`, `EDITOR'S PICK` |
-| `yellow` | Warning, attention | `LOW STOCK`, `ENDING SOON` |
+| `yellow` | Warning, attention; use `emphasis="secondary"` | `LOW STOCK`, `ENDING SOON` |
 | `neutral` | Default tag, category | `Snacks`, `Beauty`, category pills |
 
 ### ⚠️ `red-usage` rule
@@ -40,8 +41,18 @@ Red is a scarce visual resource. Using it for non-promotional state dilutes its 
 
 | Emphasis | When to use |
 |---|---|
-| `primary` | Attention-grabbing, sparse use (1-2 per product card), solid background |
-| `secondary` | Denser contexts (filter lists, tag clouds), softer tinted look |
+| `primary` | Attention-grabbing, sparse use, solid background |
+| `secondary` | Supporting product status and promotion, softer tinted look |
+
+Primary badges use theme-aware foreground tokens. Green uses white text on
+`--color-emerald-700` in the light theme to meet 4.5:1 text contrast.
+Secondary colors retain their own foregrounds; the plain semantic shortcuts
+listed below use neutral ink.
+
+Yellow only supports the tinted secondary treatment, including
+`type="best-sellers"`. Passing `color="yellow"` always resolves to
+`emphasis="secondary"`, even if primary is requested. There is no solid Yellow
+style or primary Yellow token.
 
 ## Size
 
@@ -50,8 +61,9 @@ Red is a scarce visual resource. Using it for non-promotional state dilutes its 
 | `sm` (default) | 20px | 12px / 16px | Product metadata and dense layouts |
 | `md` | 24px | 14px / 20px | More prominent labels with additional space |
 
-Both sizes use 8px horizontal padding. Flag-prefixed `exclusive` and `choice`
-retain their intentional flush-left artwork while keeping 8px right padding.
+Both sizes use 4px horizontal padding (`--space-050`) at every breakpoint.
+Flag-prefixed `exclusive` and `choice` retain their intentional flush-left
+artwork while keeping 4px right padding.
 
 ```tsx
 <Badge size="sm">Compact</Badge>
@@ -66,7 +78,7 @@ keeps the selected Badge size and 4px radius unchanged.
 
 | `tone` | Treatment | Recommended background |
 |---|---|---|
-| `dark` | `--color-black-200` fill with white text | Light or mixed |
+| `dark` | `--color-black-700` (68% black) fill with white text | Light or mixed |
 | `light` | Translucent white fill with black text | Dark |
 | `dark-outline` | Transparent fill with 1px black inset stroke | Light |
 | `light-outline` | Transparent fill with 1px white inset stroke | Dark |
@@ -101,7 +113,10 @@ The plain tinted shortcuts `sale`, `low-price`, `discount`, `new`, and `hot` use
 <Badge type="low-price">Low Price</Badge>
 ```
 
-Explicit `color` / `emphasis` win over `type` — pass both when you need a one-off override without changing your type vocabulary.
+Explicit `color` / `emphasis` override the `type` preset, except Yellow always uses secondary. Pass both for a one-off override without changing your type vocabulary.
+This overrides the preset axes; type-specific neutral ink, the price outline,
+and the `exclusive` / `choice` flag remain. `tone` overrides the text and
+container colors, but does not recolor the flag artwork.
 
 ## Common patterns
 
@@ -125,20 +140,18 @@ Max 2 badges per card. If there are more signals, rotate — don't stack all at 
 </div>
 ```
 
-### Filter pill row (secondary emphasis)
+### Supporting product status
 
 ```tsx
-{categories.map(c => (
-  <Badge key={c} color="neutral" emphasis="secondary">{c}</Badge>
-))}
+<Badge color="green" emphasis="secondary">IN STOCK</Badge>
 ```
 
 ### Cart quantity on icon
 
 ```tsx
-<button aria-label="Cart">
+<button aria-label={`Cart, ${count} items`}>
   <CartIcon />
-  {count > 0 && <Badge color="red">{count}</Badge>}
+  {count > 0 && <Badge color="neutral" aria-hidden="true">{count}</Badge>}
 </button>
 ```
 
@@ -176,8 +189,20 @@ Maximum 2 badges per card. Every badge claims visual attention; overuse flattens
 <Badge onClick={...}>Remove</Badge>   {/* not interactive — use Button */}
 ```
 
+## Accessibility
+
+Badge renders a static `span`. It has no keyboard or focus behavior and does not
+announce count changes automatically. Include essential status or counts in the
+parent control's accessible name. Hide a visual count from assistive technology
+when that name already includes the same information.
+
+Outline tones rely on the actual background for text contrast. Use dark outlines
+on light surfaces and light outlines on dark surfaces. Check image overlays on
+the final artwork rather than assuming every background is readable.
+
 ## Related
 
-- Rule `red-usage` / `semantic-color-only` / `no-emoji` / `numerals-font` — `../../design.md`
+- `Tag` — descriptive keywords; `FilterChip` — interactive filters.
+- Rule `red-usage` / `semantic-color-only` / `no-emoji` / `numerals-font` — `../../DESIGN.md`
 - Token reference — `meta.json` → `tokens[]`
 - Copy reference — `labels.meta` / `labels.sale` in `../../../copy-library/ui/labels.i18n.json`

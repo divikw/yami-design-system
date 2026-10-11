@@ -1,7 +1,7 @@
 ---
 name: yami-design-system
 version: 0.6.0-alpha.1
-updated: 2026-09-04
+updated: 2026-10-11
 audience: ai-agent
 purpose: Entry point for AI agents producing UI under the YAMI brand.
 ---
@@ -31,7 +31,7 @@ Open [`DESIGN.compact.md`](./DESIGN.compact.md) (~120 lines).
 
 It tells you in one screen:
 - The two reds (`#FF0000` brand vs `#E00000` operational), what each is allowed on.
-- The 5 radius slots, the 8px spacing grid.
+- The 6 semantic radius slots (including 16px mobile Sheet top corners), the 8px spacing grid.
 - The font story (GT Walsheim for numerals, PingFang SC for CN body).
 - The maintained component families and what they do.
 - The 15 hard rules as one-liners.
@@ -55,16 +55,16 @@ Open [`DESIGN.md`](./DESIGN.md) (~860 lines). It is the **comprehensive spec + r
 
 ---
 
-## Hard rules (the 15 that fail CI)
+## Hard rules and automated coverage
 
-Rule markers live inline in `DESIGN.md` topic sections; full bilingual prose is in the Hard Rules summary table. Each `<!-- rule-id: X -->` marker is wired to [`principles/principles.ts`](./principles/principles.ts) and an AST validator at `principles/validators/X.ts`. The rule names alone:
+Rule markers live inline in `DESIGN.md` topic sections; full bilingual prose is in the Hard Rules summary table. Each `<!-- rule-id: X -->` marker is wired to [`principles/principles.ts`](./principles/principles.ts) and a static validator at `principles/validators/X.ts`. The rule names alone:
 
 `red-usage`, `semantic-color-only`, `numerals-font`, `type-hierarchy`, `no-custom-radii`, `elevation-on-press`, `no-opacity-disabled`, `focus-style`, `border-strength`, `emphasis-limit`, `card-no-border`, `tap-target`, `no-emoji`, `no-decorative-media`, `token-exists`.
 
 **Three rules cause most AI failures**:
 - `emphasis-limit` — 1 emphasis Button per screen. Output 2 → instant fail.
 - `no-opacity-disabled` — disabled buttons use `--button-disabled` + `--text-disabled`. Never CSS `opacity`.
-- `token-exists` — fabricating size tokens (e.g. a `heading-lg` size that doesn't exist — only `-md` / `-xl` / `-2xl` do). CI's `check:tokens-in-docs` catches docs; `check:design` (Phase 6.5) catches code.
+- `token-exists` — fabricating size tokens (e.g. a `heading-lg` size that doesn't exist — only `-md` / `-xl` / `-2xl` do). CI checks docs with `check:tokens-in-docs`; `validateDesign` checks supported code patterns, not every runtime outcome.
 
 ---
 
@@ -74,13 +74,14 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 
 | Name | Category | When to use |
 |---|---|---|
-| [`Button`](./components/Button/meta.json) | action | Any CTA. **Emphasis variant = 1 per screen.** |
+| [`Button`](./components/Button/meta.json) | action | Perform actions; use ButtonLink for button-shaped navigation. **At most 1 emphasis per screen.** |
+| [`ButtonGroup`](./components/ButtonGroup/meta.json) | action | Related Button / ButtonLink entries; named group, consistent sizes, 8px gap. |
 | [`Card`](./components/Card/meta.json) | layout | Surface primitive. No border by default. |
 | [`Badge`](./components/Badge/meta.json) | display | Status / promo labels. Sole place blue / green / purple / yellow are allowed. |
 | [`Input`](./components/Input/meta.json) | form | Text input. 2px black focus ring, never blue. |
 | [`Checkbox`](./components/Checkbox/meta.json) | form | Independent or multi-select choice. Neutral selected state. |
 | [`RadioGroup`](./components/RadioGroup/meta.json) | form | Exclusive selection with arrow-key navigation. |
-| [`Divider`](./components/Divider/meta.json) | layout | 3 strengths only (default / subtle / emphasis). |
+| [`Divider`](./components/Divider/meta.json) | layout | default (1px) / emphasis (2px); separate inverse boolean; horizontal or vertical. |
 | [`AspectRatio`](./components/AspectRatio/meta.json) | layout | Style-neutral ratio constraint for responsive media. |
 | [`ProductCard`](./components/ProductCard/meta.json) | composite | Canonical product tile. Composes Card + AspectRatio + Badge + ProductCardAddButton. |
 | [`ProductList`](./components/ProductList/meta.json) | composite | Responsive product collection with rail and waterfall layouts. |
@@ -88,6 +89,13 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 | [`Tabs`](./components/Tabs/meta.json) | navigation | Compound tab navigation. Triggers must sit inside `TabsList`. |
 
 Each `meta.json` declares props, variants, `tokenBindings` (which property of which selector reads which token), rules consumed, and a11y profile.
+
+## Choose actions by behavior
+
+- Use Button for actions such as saving, submitting, opening a dialog, or generating a receipt. Use ButtonLink with a real `href` for navigation or a direct file download with button appearance; use a plain anchor for text navigation. Button has no `href`, `as`, or `asChild` API; do not redirect from its click handler to imitate a link.
+- Links and buttons may share a layout. Keep their semantics, align them deliberately, preserve focus order, and allow wrapping. Matching filled appearance is optional. Prefer ButtonGroup for related Button and ButtonLink entries with consistent sizes and an accessible name. Use a normal layout container for plain text links mixed with buttons.
+- Preserve the user's labels, destinations, and actions when repairing visuals. Do not turn “View order” into “Print order” to make an example easier to style. Choose visual priority from the business task; not every card needs a primary or emphasis button.
+- ButtonLink shares Button styles and renders a native anchor. Preserve native link activation and browser actions. It supports inline/full forms and has no loading/disabled API; render static content when navigation is unavailable. Do not copy private Button CSS into pages. Detailed examples belong in the usage documents above.
 
 ## Storybook + registry consumption contract
 
@@ -124,7 +132,9 @@ pnpm validate
 ```
 
 This command verifies lint, types, design principles, documentation/token/catalog
-consistency, generated artifacts, package boundaries, and tests. Principle validators remain available from
+consistency, generated artifacts, package boundaries, Button usage checks, and tests. The 15 principle checks have different coverage; a pass is not a complete design review. `check:button-usage` checks explicit misuse and statically known group contracts. Dynamic callbacks, computed props, visual hierarchy, and hit-area clipping still need review. Run the affected Storybook/browser tests and inspect relevant layouts when UI changes. Skill evaluation verifies references and fixtures; it does not run an AI against the prompts.
+
+Principle validators remain available from
 [`principles/index.ts`](./principles/index.ts) without a Design Labs runtime.
 
 ---
@@ -148,7 +158,7 @@ own page composition and serializable direction resolution.
 When the user asks for a YAMI page or component:
 
 1. **Match the request to an existing page.** For PLP, PDP, search, home, or campaign work, inspect [`../prototypes/pages/`](../prototypes/pages/) and reuse the closest maintained page composition before adding a new one.
-2. **Match component-level requests to the catalog.** "Add a button / badge / card" → wrap [`components/<Name>/meta.json`](./components/) `props`. Never re-declare `tokenBindings`; the component already encodes them.
+2. **Read the used component contracts.** Inspect `meta.json`, `usage.md`, the relevant Story, and public exports before editing or composing components; metadata alone does not define usage boundaries. For actions, follow [Button usage](./components/Button/usage.md) and [ButtonGroup usage](./components/ButtonGroup/usage.md). Never re-declare `tokenBindings`.
 3. **Reach for semantic aliases, not raw tokens.** Use `--text-emphasis` (not `--color-red-500`), `--button-primary` (not `--color-black-900`). Component-side aliasing is in `generated/tokens.css` under `/* Semantic Aliases */`.
 4. **Copy the Quick Start CSS / Tailwind v4 block** from [`DESIGN.md → Quick Start`](./DESIGN.md) into a fresh project if you need a standalone consumption surface.
 5. **Refuse the Anti-patterns** in [`DESIGN.md → Anti-patterns AI agents repeatedly produce`](./DESIGN.md). When in doubt: refuse and explain.

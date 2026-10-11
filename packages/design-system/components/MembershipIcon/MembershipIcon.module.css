@@ -1,0 +1,22 @@
+.root {
+  display: inline-block;
+  position: relative;
+  width: var(--space-300);
+  height: var(--space-300);
+  flex: 0 0 auto;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.artwork {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.root[data-tier="gold"] .artwork {
+  top: 12.5%;
+  transform: translateX(-50%);
+}

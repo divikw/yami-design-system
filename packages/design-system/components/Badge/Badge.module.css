@@ -37,7 +37,7 @@
      overflow:hidden, those square corners poke past the badge's rounding. */
   overflow: hidden;
 
-  padding: 0 var(--space-100);
+  padding: 0 var(--space-050);
 }
 
 .badge[data-size="sm"] {
@@ -90,10 +90,6 @@
 }
 .badge[data-emphasis="primary"][data-color="purple"] {
   background-color: var(--badge-bg-primary-purple);
-  color: var(--badge-fg-default-inverse);
-}
-.badge[data-emphasis="primary"][data-color="yellow"] {
-  background-color: var(--badge-bg-primary-yellow);
   color: var(--badge-fg-default-inverse);
 }
 .badge[data-emphasis="primary"][data-color="neutral"] {
@@ -152,7 +148,7 @@
  * so the selected size, 4px radius, and inline padding remain unchanged. */
 .badge[data-tone="dark"][data-color][data-emphasis] {
   color: var(--color-white-1000);
-  background-color: var(--color-black-200);
+  background-color: var(--color-black-700);
   box-shadow: none;
 }
 

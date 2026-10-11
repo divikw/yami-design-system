@@ -15,7 +15,7 @@
   padding: 0;
   overflow: hidden;
   border: 0;
-  border-radius: var(--radius-surface-default) var(--radius-surface-default) 0 0;
+  border-radius: var(--radius-surface-sheet) var(--radius-surface-sheet) 0 0;
   background: var(--surface-primary);
   color: var(--text-primary);
   font-family: var(--font-family-ios);

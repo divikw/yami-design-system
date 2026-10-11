@@ -177,6 +177,225 @@
       }
     },
     {
+      "id": "Avatar",
+      "source": "components/Avatar",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Avatar",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Code-defined component; no Figma component has been verified."
+        },
+        "exports": [
+          "Avatar",
+          "AvatarProps",
+          "AvatarSize"
+        ],
+        "variants": {
+          "size": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "membershipTier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "lang": {
+            "type": "string",
+            "required": false,
+            "default": "en",
+            "description": "Language for the accessible membership name. Use zh or zh-CN for Chinese; otherwise the tier suffix is English."
+          },
+          "src": {
+            "type": "string",
+            "required": false,
+            "description": "Optional image URL. Omit to use the built-in YAMI avatar; it also appears during loading and on failure."
+          },
+          "alt": {
+            "type": "string",
+            "required": true,
+            "description": "Accessible name; use an empty string beside an existing visible name."
+          },
+          "size": {
+            "type": "enum",
+            "values": [
+              "sm",
+              "md",
+              "lg"
+            ],
+            "required": false,
+            "default": "md",
+            "description": "Fixed diameter: sm 32px, md 40px, lg 48px on mobile and desktop."
+          },
+          "membershipTier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "description": "Optional membership ring and bottom-right original tier icon. Omit for an ordinary image avatar."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Neutral avatar surface plus membership-specific ring, white separator, and tinted icon backing tokens. Membership identity colors stay consistent in both themes."
+          },
+          "radius": {
+            "ruleId": "no-custom-radii",
+            "note": "Circular image crop uses the shared --radius-full token."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Compose with a shared Button or link for interaction; the Avatar itself is not focusable."
+          }
+        },
+        "tokens": [
+          "--space-400",
+          "--space-500",
+          "--space-600",
+          "--radius-full",
+          "--surface-secondary",
+          "--space-025",
+          "--space-150",
+          "--space-200",
+          "--space-250",
+          "--membership-ring-ruby-0",
+          "--membership-ring-ruby",
+          "--membership-ring-silver",
+          "--membership-ring-gold",
+          "--space-050",
+          "--membership-background-ruby-0",
+          "--membership-background-ruby",
+          "--membership-background-silver",
+          "--membership-background-gold",
+          "--membership-separator"
+        ],
+        "tokenBindings": {
+          "--space-400": {
+            "property": "width / height",
+            "selector": ".avatar[data-size=\"sm\"]"
+          },
+          "--space-500": {
+            "property": "width / height",
+            "selector": ".avatar"
+          },
+          "--space-600": {
+            "property": "width / height",
+            "selector": ".avatar[data-size=\"lg\"]"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".avatar / .membership"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".avatar"
+          },
+          "--space-025": {
+            "property": "border-width / padding",
+            "selector": ".avatar[data-membership-tier]"
+          },
+          "--space-150": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar[data-size=\"sm\"]"
+          },
+          "--space-200": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar"
+          },
+          "--space-250": {
+            "property": "--avatar-membership-size",
+            "selector": ".avatar[data-size=\"lg\"]"
+          },
+          "--membership-ring-ruby-0": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"ruby-0\"]"
+          },
+          "--membership-ring-ruby": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"ruby\"]"
+          },
+          "--membership-ring-silver": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"silver\"]"
+          },
+          "--membership-ring-gold": {
+            "property": "border-color",
+            "selector": ".avatar[data-membership-tier=\"gold\"]"
+          },
+          "--space-050": {
+            "property": "right / bottom",
+            "selector": ".membership"
+          },
+          "--membership-background-ruby-0": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar"
+          },
+          "--membership-background-ruby": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"ruby\"]"
+          },
+          "--membership-background-silver": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"silver\"]"
+          },
+          "--membership-separator": {
+            "property": "background",
+            "selector": ".avatar[data-membership-tier]"
+          },
+          "--membership-background-gold": {
+            "property": "--avatar-membership-background",
+            "selector": ".avatar[data-membership-tier=\"gold\"]"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
+          "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#AvatarImageExample",
+          "./examples.tsx#AvatarSizesExample",
+          "./examples.tsx#AvatarMembershipExample"
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, and membership ring/icon geometry in both themes and mobile/desktop widths."
+        },
+        "composes": [
+          "MembershipIcon"
+        ]
+      }
+    },
+    {
       "id": "Badge",
       "source": "components/Badge",
       "meta": {
@@ -260,7 +479,7 @@
             ],
             "required": false,
             "default": "neutral",
-            "description": "Semantic color. 'red' only for promotion/sale (rule: red-usage)."
+            "description": "Semantic color. Yellow only supports the secondary treatment. 'red' only for promotion/sale (rule: red-usage)."
           },
           "emphasis": {
             "type": "enum",
@@ -270,7 +489,7 @@
             ],
             "required": false,
             "default": "primary",
-            "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer."
+            "description": "'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer. Yellow always resolves to secondary, even when primary is requested."
           },
           "size": {
             "type": "enum",
@@ -280,7 +499,7 @@
             ],
             "required": false,
             "default": "sm",
-            "description": "Breakpoint-independent geometry with 8px horizontal padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
+            "description": "Breakpoint-independent geometry with 4px horizontal padding. Flag-prefixed types retain flush-left artwork and 4px right padding. 'sm' = 20px height with 12/16 type; 'md' = 24px height with 14/20 type."
           },
           "tone": {
             "type": "enum",
@@ -347,7 +566,6 @@
           "--badge-bg-primary-blue",
           "--badge-bg-primary-green",
           "--badge-bg-primary-purple",
-          "--badge-bg-primary-yellow",
           "--badge-bg-primary-neutral",
           "--badge-bg-secondary-red",
           "--badge-fg-secondary-red",
@@ -362,7 +580,7 @@
           "--badge-bg-tertiary-neutral",
           "--badge-fg-default",
           "--badge-fg-default-inverse",
-          "--color-black-200",
+          "--color-black-700",
           "--color-black-1000",
           "--color-white-700",
           "--color-white-1000",
@@ -371,7 +589,7 @@
           "--font-weight-normal",
           "--radius-tag-primary",
           "--space-025",
-          "--space-100",
+          "--space-050",
           "--stroke-default"
         ],
         "tokenBindings": {
@@ -395,17 +613,13 @@
             "property": "background-color",
             "selector": ".badge[data-emphasis='primary'][data-color='purple']"
           },
-          "--badge-bg-primary-yellow": {
-            "property": "background-color",
-            "selector": ".badge[data-emphasis='primary'][data-color='yellow']"
-          },
           "--badge-bg-primary-neutral": {
             "property": "background-color",
             "selector": ".badge[data-emphasis='primary'][data-color='neutral']"
           },
           "--badge-fg-default-inverse": {
             "property": "color",
-            "selector": ".badge[data-emphasis='primary']:not([data-color='red'])"
+            "selector": ".badge[data-emphasis='primary']:not([data-color='red']):not([data-color='yellow'])"
           },
           "--badge-bg-secondary-red": {
             "property": "background-color",
@@ -475,11 +689,11 @@
             "property": "gap",
             "selector": ".badge"
           },
-          "--space-100": {
+          "--space-050": {
             "property": "padding-inline",
             "selector": ".badge"
           },
-          "--color-black-200": {
+          "--color-black-700": {
             "property": "background-color",
             "selector": ".badge[data-tone='dark']"
           },
@@ -883,7 +1097,7 @@
         "category": "action",
         "status": "stable",
         "version": "0.3.0",
-        "description": "YAMI primary interactive element. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
+        "description": "YAMI action button, not page navigation. Use ButtonLink for navigation or direct file downloads with button appearance; it renders a native anchor and shares Button styles. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
           "nodeId": "5587:127256",
@@ -912,6 +1126,8 @@
         },
         "exports": [
           "Button",
+          "ButtonLink",
+          "ButtonLinkProps",
           "ButtonForm",
           "ButtonProps",
           "ButtonSize",
@@ -1070,7 +1286,7 @@
             "ruleId": "tap-target",
             "minIosPt": 44,
             "minAndroidDp": 48,
-            "note": "All sizes (sm=32, md=40, lg=48) include padding that expands the touch region to ≥44pt even when visible height is smaller."
+            "note": "Web SM/MD use pseudo-elements to extend targets to at least 44px, without reserving layout space. Avoid clipping or overlapping targets. LG text is 48px mobile / 56px desktop; LG icon stays 48px. Native iOS 44pt / Android 48dp are separate requirements."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -1270,6 +1486,7 @@
         "examples": [
           "./examples.tsx#EmphasisExample",
           "./examples.tsx#PrimaryExample",
+          "./examples.tsx#NavigationExample",
           "./examples.tsx#SecondaryExample",
           "./examples.tsx#TertiaryExample",
           "./examples.tsx#WithLeftIconExample",
@@ -1291,7 +1508,7 @@
         "category": "action",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Groups related Buttons with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
+        "description": "Groups related Button and ButtonLink entries with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -1318,7 +1535,7 @@
           "children": {
             "type": "ReactNode",
             "required": false,
-            "description": "Direct Button children, normally two or three."
+            "description": "Direct Button or ButtonLink children with matching sizes, normally two or three."
           }
         },
         "rules": {},
@@ -1341,7 +1558,7 @@
             "space"
           ],
           "ariaPattern": "group",
-          "notes": "Named group; focus and activation are owned by Button children."
+          "notes": "Named group; focus and activation are owned by children. ButtonLink uses native link behavior (Enter); Button supports Enter and Space."
         },
         "dependencies": {
           "runtime": [
@@ -1366,7 +1583,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Surface primitive for grouping related content. No border by default (rule card-no-border), 12px radius, no shadow. Polymorphic via `as` prop (div / a / button) for link and button cards.",
+        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -1378,8 +1595,8 @@
           "CardSurface"
         ],
         "testing": {
-          "interaction": "not-applicable",
-          "rationale": "The primitive owns surface geometry; interactive semantics and behavior belong to the selected host element."
+          "interaction": "covered",
+          "rationale": "Storybook verifies button activation, independent actions with progress/completion feedback and repeated-activation prevention inside static cards, and narrow two-column geometry. Browser tests cover surface feedback, disabled states including interactive=false, native keyboard behavior, empty-href link inference, form submission, theme-aware focus, responsive link geometry, unclipped SM/MD text/link/icon hit areas at all padding levels, media cropping, margin/float containment, keyboard scrolling of wide content, coarse pointers, and reduced motion."
         },
         "variants": {
           "padding": [
@@ -1411,7 +1628,7 @@
             ],
             "required": false,
             "default": "md",
-            "description": "Inner padding tier. 'none' for image-only cards where the img is edge-to-edge."
+            "description": "Inner padding: none=0, sm=12px, md=16px (default), lg=24px. Use none for edge-to-edge media with composite-owned content spacing; keep peer cards consistent. No automatic breakpoint changes."
           },
           "surface": {
             "type": "enum",
@@ -1432,7 +1649,29 @@
           "interactive": {
             "type": "boolean",
             "required": false,
-            "description": "Adds hover + focus-visible styling. Auto-inferred when as='button' or as='a' + href."
+            "description": "Adds hover/press styling and a 44px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
+          },
+          "href": {
+            "type": "string",
+            "required": false,
+            "description": "Native link destination; requires as='a'. Does not automatically select an anchor host."
+          },
+          "type": {
+            "type": "enum",
+            "values": [
+              "button",
+              "submit",
+              "reset"
+            ],
+            "required": false,
+            "default": "button",
+            "description": "Native type for as='button'. Defaults to button to avoid implicit form submission."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Native disabled state for as='button'. Stops activation and hover/press feedback while preserving the selected surface."
           }
         },
         "rules": {
@@ -1442,23 +1681,27 @@
           },
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "Uses --radius-surface-default (12px)."
+            "note": "Base Card uses --radius-surface-default (12px). ProductCard owns its geometry via --radius-component-default (8px); do not use arbitrary numeric overrides."
           },
           "elevationOnPress": {
             "ruleId": "elevation-on-press",
-            "note": "interactive cards change background-color on hover; Card has no elevation API because Figma provides no elevation token source."
+            "note": "Enabled interactive cards mix the surface's reading color into the background on hover (8%) and press (16%), preserving polarity and geometry without shadow."
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Interactive cards show 2px --border-focus outline + 2px offset."
+            "note": "Focusable cards show a 2px --border-focus outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
           }
         },
         "tokens": [
           "--surface-primary",
           "--surface-secondary",
           "--surface-inverse",
+          "--text-primary",
           "--text-primary-inverse",
+          "--text-disabled",
+          "--text-disabled-inverse",
           "--border-default",
+          "--border-default-inverse",
           "--border-focus",
           "--radius-surface-default",
           "--space-150",
@@ -1472,23 +1715,39 @@
           },
           "--surface-secondary": {
             "property": "background-color",
-            "selector": ".surface-secondary, .interactive:hover"
+            "selector": ".surface-secondary"
           },
           "--surface-inverse": {
             "property": "background-color",
             "selector": ".surface-inverse"
           },
+          "--text-primary": {
+            "property": "color / background-color",
+            "selector": ".card, .interactive:hover, .interactive:active"
+          },
           "--text-primary-inverse": {
             "property": "color",
             "selector": ".surface-inverse"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".card:is(:disabled, [aria-disabled='true'])"
+          },
+          "--text-disabled-inverse": {
+            "property": "color",
+            "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])"
           },
           "--border-default": {
             "property": "border-color",
             "selector": ".bordered"
           },
+          "--border-default-inverse": {
+            "property": "border-color",
+            "selector": ".bordered.surface-inverse"
+          },
           "--border-focus": {
             "property": "outline-color",
-            "selector": ".interactive:focus-visible"
+            "selector": ".card:focus-visible"
           },
           "--radius-surface-default": {
             "property": "border-radius",
@@ -1508,7 +1767,7 @@
           }
         },
         "accessibility": {
-          "role": "implicit (div, or button/link when as= overridden)",
+          "role": "none (div); native button or link when as selects those hosts",
           "wcagLevel": "AA",
           "tapTargetMin": 44,
           "keyboardNav": [
@@ -1516,8 +1775,8 @@
             "enter",
             "space"
           ],
-          "ariaPattern": "group (default) | button (as='button') | link (as='a' with href)",
-          "notes": "tapTargetMin/keyboardNav apply only when interactive=true (auto-inferred via as='button' or as='a'+href). Non-interactive cards effectively have tapTargetMin=0 and keyboardNav=[]. interactive=true adds focus-visible outline."
+          "ariaPattern": "none (default) | native button | native link",
+          "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
         },
         "dependencies": {
           "runtime": [
@@ -1532,6 +1791,9 @@
           "./examples.tsx#NoPaddingCard",
           "./examples.tsx#BorderedCard",
           "./examples.tsx#LinkCard",
+          "./examples.tsx#ButtonCard",
+          "./examples.tsx#DisabledButtonCard",
+          "./examples.tsx#InverseLinkCard",
           "./examples.tsx#SurfaceSecondaryCard",
           "./examples.tsx#SurfaceInverseCard"
         ]
@@ -1875,7 +2137,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Hairline separator (1px). 3 strengths per design.md border-strength rule, plus inverse variants for opposite-polarity surfaces. Horizontal renders as <hr>, vertical as <span role=\"separator\">.",
+        "description": "Content separator with default (1px) and emphasis (2px) strengths. A separate inverse boolean selects opposite-polarity surface colors in either theme. Horizontal renders as semantic <hr>; vertical renders as decorative <span aria-hidden=\"true\">.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -1893,11 +2155,11 @@
         "variants": {
           "strength": [
             "default",
-            "subtle",
-            "emphasis",
-            "default-inverse",
-            "subtle-inverse",
-            "emphasis-inverse"
+            "emphasis"
+          ],
+          "inverse": [
+            false,
+            true
           ],
           "orientation": [
             "horizontal",
@@ -1909,15 +2171,17 @@
             "type": "enum",
             "values": [
               "default",
-              "subtle",
-              "emphasis",
-              "default-inverse",
-              "subtle-inverse",
-              "emphasis-inverse"
+              "emphasis"
             ],
             "required": false,
             "default": "default",
-            "description": "Border-strength tier. default=8% / subtle=29% / emphasis=87% (+ inverse variants for opposite-polarity surfaces)."
+            "description": "Visual weight. default uses a 1px stroke; emphasis uses a 2px stroke. Colors follow semantic divider tokens."
+          },
+          "inverse": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Use opposite-polarity surface colors within the active theme without changing thickness."
           },
           "orientation": {
             "type": "enum",
@@ -1932,50 +2196,50 @@
         "rules": {
           "borderStrength": {
             "ruleId": "border-strength",
-            "note": "Only 3 strengths exist — no arbitrary opacities. Pick default for most cases."
+            "note": "Use semantic divider colors and the two supported stroke weights. Pick default for ordinary structure; emphasis for major section boundaries."
           }
         },
         "tokens": [
           "--divider-default",
           "--divider-default-inverse",
-          "--divider-subtle",
-          "--divider-subtle-inverse",
           "--divider-emphasis",
-          "--divider-emphasis-inverse"
+          "--divider-emphasis-inverse",
+          "--stroke-default",
+          "--stroke-thick"
         ],
         "tokenBindings": {
           "--divider-default": {
-            "property": "border-color",
-            "selector": ".horizontal.default, .vertical.default"
+            "property": "background-color",
+            "selector": ".default"
           },
           "--divider-default-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.default-inverse, .vertical.default-inverse"
-          },
-          "--divider-subtle": {
-            "property": "border-color",
-            "selector": ".horizontal.subtle, .vertical.subtle"
-          },
-          "--divider-subtle-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.subtle-inverse, .vertical.subtle-inverse"
+            "property": "background-color",
+            "selector": ".default.inverse"
           },
           "--divider-emphasis": {
-            "property": "border-color",
-            "selector": ".horizontal.emphasis, .vertical.emphasis"
+            "property": "background-color",
+            "selector": ".emphasis"
           },
           "--divider-emphasis-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.emphasis-inverse, .vertical.emphasis-inverse"
+            "property": "background-color",
+            "selector": ".emphasis.inverse"
+          },
+          "--stroke-default": {
+            "property": "height / width",
+            "selector": ".horizontal, .vertical"
+          },
+          "--stroke-thick": {
+            "property": "height / width",
+            "selector": ".horizontal.emphasis, .vertical.emphasis"
           }
         },
         "accessibility": {
-          "role": "separator",
+          "role": "separator (horizontal); none (vertical)",
           "wcagLevel": "AA",
           "tapTargetMin": 0,
           "keyboardNav": [],
-          "ariaPattern": "separator",
-          "notes": "Non-interactive — tapTargetMin=0, keyboardNav=[]. <hr> is inherently role=separator. Vertical variant sets role+aria-orientation manually."
+          "ariaPattern": "native separator (horizontal); aria-hidden=true (vertical)",
+          "notes": "Non-interactive. Horizontal <hr> exposes native separator semantics and accepts aria-label. Vertical <span> is decorative and hidden from assistive technology; the parent provides content grouping semantics."
         },
         "dependencies": {
           "runtime": [
@@ -1987,7 +2251,6 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#DefaultDivider",
-          "./examples.tsx#SubtleDivider",
           "./examples.tsx#EmphasisDivider",
           "./examples.tsx#VerticalDivider",
           "./examples.tsx#InverseDivider",
@@ -3393,6 +3656,209 @@
           "./examples.tsx#WithHelperTextInput",
           "./examples.tsx#ResettableInput"
         ]
+      }
+    },
+    {
+      "id": "MembershipBadge",
+      "source": "components/MembershipBadge",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "MembershipBadge",
+        "category": "display",
+        "status": "beta",
+        "version": "0.1.0",
+        "description": "56×20px membership badge with original Figma artwork.",
+        "figma": {
+          "fileKey": "6oOAy72DBff4P6NzJYc2hi",
+          "nodeId": "1632:21283",
+          "componentKey": null,
+          "notes": "Verified from Figma design context and original SVG assets; Code Connect is not configured."
+        },
+        "exports": [
+          "MembershipBadge",
+          "MembershipBadgeProps",
+          "MembershipBadgeTier"
+        ],
+        "variants": {
+          "tier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "tier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "default": "ruby-0",
+            "description": "Membership tier matching the Figma variant."
+          },
+          "alt": {
+            "type": "string",
+            "required": false,
+            "description": "Accessible name override. Defaults to the tier name followed by 会员; an empty string makes the artwork decorative."
+          }
+        },
+        "rules": {
+          "artwork": {
+            "contractId": "original-figma-artwork",
+            "note": "Keep the four original SVG assets, their intrinsic dimensions, colors, and gradients. No CSS recoloring."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Non-interactive membership indicator."
+          }
+        },
+        "tokens": [
+          "--space-600",
+          "--space-100",
+          "--space-200",
+          "--space-050"
+        ],
+        "tokenBindings": {
+          "--space-600": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-100": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-200": {
+            "property": "width / height",
+            "selector": ".root"
+          },
+          "--space-050": {
+            "property": "width / height",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root; internal SVG images are hidden from assistive technology.",
+          "notes": "Use alt=\"\" when an adjacent label repeats the tier. Original artwork text contrast follows Figma and is not an AA text-contrast claim."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#MembershipBadgeExample"
+        ],
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Static original artwork. Storybook verifies all four assets load; browser tests verify geometry and accessible naming."
+        }
+      }
+    },
+    {
+      "id": "MembershipIcon",
+      "source": "components/MembershipIcon",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "MembershipIcon",
+        "category": "display",
+        "status": "beta",
+        "version": "0.1.0",
+        "description": "24px membership icon with original Figma artwork.",
+        "figma": {
+          "fileKey": "6oOAy72DBff4P6NzJYc2hi",
+          "nodeId": "5960:91035",
+          "componentKey": null,
+          "notes": "Verified from Figma design context and original SVG assets; Code Connect is not configured."
+        },
+        "exports": [
+          "MembershipIcon",
+          "MembershipIconProps",
+          "MembershipIconTier"
+        ],
+        "variants": {
+          "tier": [
+            "ruby-0",
+            "ruby",
+            "silver",
+            "gold"
+          ]
+        },
+        "props": {
+          "tier": {
+            "type": "enum",
+            "values": [
+              "ruby-0",
+              "ruby",
+              "silver",
+              "gold"
+            ],
+            "required": false,
+            "default": "ruby-0",
+            "description": "Membership tier matching the Figma variant."
+          },
+          "alt": {
+            "type": "string",
+            "required": false,
+            "description": "Accessible name override. Defaults to the tier name followed by 会员; an empty string makes the artwork decorative."
+          }
+        },
+        "rules": {
+          "artwork": {
+            "contractId": "original-figma-artwork",
+            "note": "Keep the four original SVG assets, their intrinsic dimensions, colors, and gradients. No CSS recoloring."
+          },
+          "interaction": {
+            "contractId": "display-only",
+            "note": "Non-interactive membership indicator."
+          }
+        },
+        "tokens": [
+          "--space-300"
+        ],
+        "tokenBindings": {
+          "--space-300": {
+            "property": "width / height",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "img (decorative when alt is empty)",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [],
+          "ariaPattern": "One accessible name on the root; internal SVG images are hidden from assistive technology.",
+          "notes": "Use alt=\"\" when an adjacent label repeats the tier. Original artwork text contrast follows Figma and is not an AA text-contrast claim."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#MembershipIconExample"
+        ],
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Static original artwork. Storybook verifies all four assets load; browser tests verify geometry and accessible naming."
+        }
       }
     },
     {
@@ -4896,7 +5362,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Shared modal shell: a mobile bottom sheet and centered desktop dialog, with a fixed header, scrolling content, optional footer, and child-view back navigation.",
+        "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -4981,7 +5447,7 @@
         "rules": {
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "Uses the shared surface radius; bottom corners are flush on mobile."
+            "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -4997,6 +5463,7 @@
           "--text-primary",
           "--overlay-scrim",
           "--divider-default",
+          "--radius-surface-sheet",
           "--radius-surface-default",
           "--font-size-heading-2xl",
           "--font-weight-emphasize",
@@ -5014,6 +5481,10 @@
             "selector": ".sheet::backdrop"
           },
           "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".sheet"
+          },
+          "--radius-surface-sheet": {
             "property": "border-radius",
             "selector": ".sheet"
           },
@@ -5900,7 +6371,7 @@
             ],
             "required": false,
             "default": "filled",
-            "description": "Filled container or transparent container with a 1px current-color stroke."
+            "description": "Filled container or transparent container with a 1px black or white stroke at 8% opacity, according to the surface mode."
           },
           "image": {
             "type": "TagImage",
@@ -5959,7 +6430,7 @@
             "selector": ".tag[data-variant='filled'][data-mode='light']"
           },
           "--color-white-1000": {
-            "property": "color / border-color",
+            "property": "color",
             "selector": ".tag[data-mode='dark']"
           },
           "--color-white-200": {
@@ -5975,7 +6446,7 @@
             "selector": ".tag[data-variant='filled'][data-mode='light']"
           },
           "--color-black-1000": {
-            "property": "color / border-color",
+            "property": "color",
             "selector": ".tag[data-mode='light']"
           },
           "--radius-button-primary": {

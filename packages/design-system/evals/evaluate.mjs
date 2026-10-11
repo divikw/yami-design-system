@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import Ajv2020 from "ajv/dist/2020.js";
 import { ruleIds, validateDesign } from "../principles/index.ts";
+import { checkButtonUsage } from "../../../tooling/design-system/check-button-usage.mjs";
 import { collectNamedExports } from "../../../tooling/design-system/typescript-exports.mjs";
 
 const root = process.cwd();
@@ -99,7 +100,9 @@ for (const testCase of casesDocument.cases) {
   if (testCase.fixture) {
     const fixturePath = path.resolve(root, testCase.fixture.path);
     const code = await fs.readFile(fixturePath, "utf8");
-    validation = validateDesign(code, { filename: testCase.fixture.path, projectRoot: root, platform: "web" });
+    validation = testCase.fixture.validator === "button-usage"
+      ? checkButtonUsage(code, testCase.fixture.path)
+      : validateDesign(code, { filename: testCase.fixture.path, projectRoot: root, platform: "web" });
     if (validation.pass !== testCase.fixture.expectedPass) {
       checks.push(`fixture pass expected ${testCase.fixture.expectedPass}, received ${validation.pass}`);
     }

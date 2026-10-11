@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Shared modal shell: a mobile bottom sheet and centered desktop dialog, with a fixed header, scrolling content, optional footer, and child-view back navigation.",
+  "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
   "figma": { "nodeId": null, "componentKey": null, "notes": "Extracted from maintained PDP and search filter implementations. No standalone Figma binding is assigned yet." },
   "exports": ["Sheet", "SheetProps"],
   "composes": ["Button"],
@@ -21,15 +21,16 @@
     "children": { "type": "ReactNode", "required": true, "description": "Business content. Sheet does not own selection or draft state." }
   },
   "rules": {
-    "radii": { "ruleId": "no-custom-radii", "note": "Uses the shared surface radius; bottom corners are flush on mobile." },
+    "radii": { "ruleId": "no-custom-radii", "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes." },
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
     "tapTarget": { "ruleId": "tap-target", "note": "Close/back controls are visually 32px with centered 20px icons and Button's 44px hit-area extender." }
   },
-  "tokens": ["--surface-primary", "--text-primary", "--overlay-scrim", "--divider-default", "--radius-surface-default", "--font-size-heading-2xl", "--font-weight-emphasize", "--space-100", "--space-200", "--space-600"],
+  "tokens": ["--surface-primary", "--text-primary", "--overlay-scrim", "--divider-default", "--radius-surface-sheet", "--radius-surface-default", "--font-size-heading-2xl", "--font-weight-emphasize", "--space-100", "--space-200", "--space-600"],
   "tokenBindings": {
     "--surface-primary": { "property": "background", "selector": ".sheet" },
     "--overlay-scrim": { "property": "background", "selector": ".sheet::backdrop" },
     "--radius-surface-default": { "property": "border-radius", "selector": ".sheet" },
+    "--radius-surface-sheet": { "property": "border-radius", "selector": ".sheet" },
     "--font-size-heading-2xl": { "property": "font-size", "selector": ".title" }
   },
   "accessibility": {
