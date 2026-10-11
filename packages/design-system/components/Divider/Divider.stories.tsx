@@ -176,6 +176,7 @@ export const Playground: Story = {
   render: (args) => (
     <div
       style={{
+        display: args.orientation === "vertical" ? "flex" : undefined,
         width: args.orientation === "vertical" ? 120 : 320,
         height: args.orientation === "vertical" ? 80 : undefined,
         background: args.inverse ? "var(--surface-inverse)" : undefined,
@@ -183,6 +184,23 @@ export const Playground: Story = {
       }}
     >
       <Divider {...args} />
+    </div>
+  ),
+}
+
+export const Vertical: Story = {
+  render: () => (
+    <div style={{ ...surfaceGridStyle, width: "min(720px, 100%)" }}>
+      {[false, true].map((inverse) => (
+        <SpecimenSurface key={String(inverse)} title={inverse ? "Inverse surface" : "Default surface"} inverse={inverse}>
+          <div style={{ ...usageRowStyle, minHeight: "var(--space-600)", color: inverse ? "var(--text-primary-inverse)" : "var(--text-primary)" }}>
+            <span>Default</span>
+            <Divider orientation="vertical" inverse={inverse} />
+            <span>Emphasis</span>
+            <Divider orientation="vertical" strength="emphasis" inverse={inverse} />
+          </div>
+        </SpecimenSurface>
+      ))}
     </div>
   ),
 }

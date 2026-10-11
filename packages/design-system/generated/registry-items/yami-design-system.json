@@ -505,6 +505,7 @@
       "--radius-sm",
       "--radius-surface-default",
       "--radius-surface-none",
+      "--radius-surface-sheet",
       "--radius-tag-primary",
       "--radius-xl",
       "--space-0",
@@ -565,5 +566,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "c4d6c333d0f535905ea94a486469ac77dfff65af63df54c621cc5cd76ec89602"
+  "contentDigest": "e1b8dd9dfe45e3835c2ec9ea56504e7b023cd823f8fb4405b93d630c123412c6"
 }

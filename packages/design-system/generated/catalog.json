@@ -1097,7 +1097,7 @@
         "category": "action",
         "status": "stable",
         "version": "0.3.0",
-        "description": "YAMI primary interactive element. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
+        "description": "YAMI action button, not page navigation. Use ButtonLink for navigation or direct file downloads with button appearance; it renders a native anchor and shares Button styles. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
           "nodeId": "5587:127256",
@@ -1126,6 +1126,8 @@
         },
         "exports": [
           "Button",
+          "ButtonLink",
+          "ButtonLinkProps",
           "ButtonForm",
           "ButtonProps",
           "ButtonSize",
@@ -1284,7 +1286,7 @@
             "ruleId": "tap-target",
             "minIosPt": 44,
             "minAndroidDp": 48,
-            "note": "All sizes (sm=32, md=40, lg=48) include padding that expands the touch region to ≥44pt even when visible height is smaller."
+            "note": "Web SM/MD use pseudo-elements to extend targets to at least 44px, without reserving layout space. Avoid clipping or overlapping targets. LG text is 48px mobile / 56px desktop; LG icon stays 48px. Native iOS 44pt / Android 48dp are separate requirements."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -1484,6 +1486,7 @@
         "examples": [
           "./examples.tsx#EmphasisExample",
           "./examples.tsx#PrimaryExample",
+          "./examples.tsx#NavigationExample",
           "./examples.tsx#SecondaryExample",
           "./examples.tsx#TertiaryExample",
           "./examples.tsx#WithLeftIconExample",
@@ -1505,7 +1508,7 @@
         "category": "action",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Groups related Buttons with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
+        "description": "Groups related Button and ButtonLink entries with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -1532,7 +1535,7 @@
           "children": {
             "type": "ReactNode",
             "required": false,
-            "description": "Direct Button children, normally two or three."
+            "description": "Direct Button or ButtonLink children with matching sizes, normally two or three."
           }
         },
         "rules": {},
@@ -1555,7 +1558,7 @@
             "space"
           ],
           "ariaPattern": "group",
-          "notes": "Named group; focus and activation are owned by Button children."
+          "notes": "Named group; focus and activation are owned by children. ButtonLink uses native link behavior (Enter); Button supports Enter and Space."
         },
         "dependencies": {
           "runtime": [
@@ -1580,7 +1583,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Surface primitive for grouping related content. No border by default (rule card-no-border), 12px radius, no shadow. Polymorphic via `as` prop (div / a / button) for link and button cards.",
+        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -1592,8 +1595,8 @@
           "CardSurface"
         ],
         "testing": {
-          "interaction": "not-applicable",
-          "rationale": "The primitive owns surface geometry; interactive semantics and behavior belong to the selected host element."
+          "interaction": "covered",
+          "rationale": "Storybook verifies button activation, independent actions with progress/completion feedback and repeated-activation prevention inside static cards, and narrow two-column geometry. Browser tests cover surface feedback, disabled states including interactive=false, native keyboard behavior, empty-href link inference, form submission, theme-aware focus, responsive link geometry, unclipped SM/MD text/link/icon hit areas at all padding levels, media cropping, margin/float containment, keyboard scrolling of wide content, coarse pointers, and reduced motion."
         },
         "variants": {
           "padding": [
@@ -1625,7 +1628,7 @@
             ],
             "required": false,
             "default": "md",
-            "description": "Inner padding tier. 'none' for image-only cards where the img is edge-to-edge."
+            "description": "Inner padding: none=0, sm=12px, md=16px (default), lg=24px. Use none for edge-to-edge media with composite-owned content spacing; keep peer cards consistent. No automatic breakpoint changes."
           },
           "surface": {
             "type": "enum",
@@ -1646,7 +1649,29 @@
           "interactive": {
             "type": "boolean",
             "required": false,
-            "description": "Adds hover + focus-visible styling. Auto-inferred when as='button' or as='a' + href."
+            "description": "Adds hover/press styling and a 44px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
+          },
+          "href": {
+            "type": "string",
+            "required": false,
+            "description": "Native link destination; requires as='a'. Does not automatically select an anchor host."
+          },
+          "type": {
+            "type": "enum",
+            "values": [
+              "button",
+              "submit",
+              "reset"
+            ],
+            "required": false,
+            "default": "button",
+            "description": "Native type for as='button'. Defaults to button to avoid implicit form submission."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Native disabled state for as='button'. Stops activation and hover/press feedback while preserving the selected surface."
           }
         },
         "rules": {
@@ -1656,23 +1681,27 @@
           },
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "Uses --radius-surface-default (12px)."
+            "note": "Base Card uses --radius-surface-default (12px). ProductCard owns its geometry via --radius-component-default (8px); do not use arbitrary numeric overrides."
           },
           "elevationOnPress": {
             "ruleId": "elevation-on-press",
-            "note": "interactive cards change background-color on hover; Card has no elevation API because Figma provides no elevation token source."
+            "note": "Enabled interactive cards mix the surface's reading color into the background on hover (8%) and press (16%), preserving polarity and geometry without shadow."
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Interactive cards show 2px --border-focus outline + 2px offset."
+            "note": "Focusable cards show a 2px --border-focus outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
           }
         },
         "tokens": [
           "--surface-primary",
           "--surface-secondary",
           "--surface-inverse",
+          "--text-primary",
           "--text-primary-inverse",
+          "--text-disabled",
+          "--text-disabled-inverse",
           "--border-default",
+          "--border-default-inverse",
           "--border-focus",
           "--radius-surface-default",
           "--space-150",
@@ -1686,23 +1715,39 @@
           },
           "--surface-secondary": {
             "property": "background-color",
-            "selector": ".surface-secondary, .interactive:hover"
+            "selector": ".surface-secondary"
           },
           "--surface-inverse": {
             "property": "background-color",
             "selector": ".surface-inverse"
           },
+          "--text-primary": {
+            "property": "color / background-color",
+            "selector": ".card, .interactive:hover, .interactive:active"
+          },
           "--text-primary-inverse": {
             "property": "color",
             "selector": ".surface-inverse"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".card:is(:disabled, [aria-disabled='true'])"
+          },
+          "--text-disabled-inverse": {
+            "property": "color",
+            "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])"
           },
           "--border-default": {
             "property": "border-color",
             "selector": ".bordered"
           },
+          "--border-default-inverse": {
+            "property": "border-color",
+            "selector": ".bordered.surface-inverse"
+          },
           "--border-focus": {
             "property": "outline-color",
-            "selector": ".interactive:focus-visible"
+            "selector": ".card:focus-visible"
           },
           "--radius-surface-default": {
             "property": "border-radius",
@@ -1722,7 +1767,7 @@
           }
         },
         "accessibility": {
-          "role": "implicit (div, or button/link when as= overridden)",
+          "role": "none (div); native button or link when as selects those hosts",
           "wcagLevel": "AA",
           "tapTargetMin": 44,
           "keyboardNav": [
@@ -1730,8 +1775,8 @@
             "enter",
             "space"
           ],
-          "ariaPattern": "group (default) | button (as='button') | link (as='a' with href)",
-          "notes": "tapTargetMin/keyboardNav apply only when interactive=true (auto-inferred via as='button' or as='a'+href). Non-interactive cards effectively have tapTargetMin=0 and keyboardNav=[]. interactive=true adds focus-visible outline."
+          "ariaPattern": "none (default) | native button | native link",
+          "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
         },
         "dependencies": {
           "runtime": [
@@ -1746,6 +1791,9 @@
           "./examples.tsx#NoPaddingCard",
           "./examples.tsx#BorderedCard",
           "./examples.tsx#LinkCard",
+          "./examples.tsx#ButtonCard",
+          "./examples.tsx#DisabledButtonCard",
+          "./examples.tsx#InverseLinkCard",
           "./examples.tsx#SurfaceSecondaryCard",
           "./examples.tsx#SurfaceInverseCard"
         ]
@@ -2089,7 +2137,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Hairline separator (1px). 3 strengths per design.md border-strength rule, plus inverse variants for opposite-polarity surfaces. Horizontal renders as <hr>, vertical as <span role=\"separator\">.",
+        "description": "Content separator with default (1px) and emphasis (2px) strengths. A separate inverse boolean selects opposite-polarity surface colors in either theme. Horizontal renders as semantic <hr>; vertical renders as decorative <span aria-hidden=\"true\">.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -2107,11 +2155,11 @@
         "variants": {
           "strength": [
             "default",
-            "subtle",
-            "emphasis",
-            "default-inverse",
-            "subtle-inverse",
-            "emphasis-inverse"
+            "emphasis"
+          ],
+          "inverse": [
+            false,
+            true
           ],
           "orientation": [
             "horizontal",
@@ -2123,15 +2171,17 @@
             "type": "enum",
             "values": [
               "default",
-              "subtle",
-              "emphasis",
-              "default-inverse",
-              "subtle-inverse",
-              "emphasis-inverse"
+              "emphasis"
             ],
             "required": false,
             "default": "default",
-            "description": "Border-strength tier. default=8% / subtle=29% / emphasis=87% (+ inverse variants for opposite-polarity surfaces)."
+            "description": "Visual weight. default uses a 1px stroke; emphasis uses a 2px stroke. Colors follow semantic divider tokens."
+          },
+          "inverse": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Use opposite-polarity surface colors within the active theme without changing thickness."
           },
           "orientation": {
             "type": "enum",
@@ -2146,50 +2196,50 @@
         "rules": {
           "borderStrength": {
             "ruleId": "border-strength",
-            "note": "Only 3 strengths exist — no arbitrary opacities. Pick default for most cases."
+            "note": "Use semantic divider colors and the two supported stroke weights. Pick default for ordinary structure; emphasis for major section boundaries."
           }
         },
         "tokens": [
           "--divider-default",
           "--divider-default-inverse",
-          "--divider-subtle",
-          "--divider-subtle-inverse",
           "--divider-emphasis",
-          "--divider-emphasis-inverse"
+          "--divider-emphasis-inverse",
+          "--stroke-default",
+          "--stroke-thick"
         ],
         "tokenBindings": {
           "--divider-default": {
-            "property": "border-color",
-            "selector": ".horizontal.default, .vertical.default"
+            "property": "background-color",
+            "selector": ".default"
           },
           "--divider-default-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.default-inverse, .vertical.default-inverse"
-          },
-          "--divider-subtle": {
-            "property": "border-color",
-            "selector": ".horizontal.subtle, .vertical.subtle"
-          },
-          "--divider-subtle-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.subtle-inverse, .vertical.subtle-inverse"
+            "property": "background-color",
+            "selector": ".default.inverse"
           },
           "--divider-emphasis": {
-            "property": "border-color",
-            "selector": ".horizontal.emphasis, .vertical.emphasis"
+            "property": "background-color",
+            "selector": ".emphasis"
           },
           "--divider-emphasis-inverse": {
-            "property": "border-color",
-            "selector": ".horizontal.emphasis-inverse, .vertical.emphasis-inverse"
+            "property": "background-color",
+            "selector": ".emphasis.inverse"
+          },
+          "--stroke-default": {
+            "property": "height / width",
+            "selector": ".horizontal, .vertical"
+          },
+          "--stroke-thick": {
+            "property": "height / width",
+            "selector": ".horizontal.emphasis, .vertical.emphasis"
           }
         },
         "accessibility": {
-          "role": "separator",
+          "role": "separator (horizontal); none (vertical)",
           "wcagLevel": "AA",
           "tapTargetMin": 0,
           "keyboardNav": [],
-          "ariaPattern": "separator",
-          "notes": "Non-interactive — tapTargetMin=0, keyboardNav=[]. <hr> is inherently role=separator. Vertical variant sets role+aria-orientation manually."
+          "ariaPattern": "native separator (horizontal); aria-hidden=true (vertical)",
+          "notes": "Non-interactive. Horizontal <hr> exposes native separator semantics and accepts aria-label. Vertical <span> is decorative and hidden from assistive technology; the parent provides content grouping semantics."
         },
         "dependencies": {
           "runtime": [
@@ -2201,7 +2251,6 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#DefaultDivider",
-          "./examples.tsx#SubtleDivider",
           "./examples.tsx#EmphasisDivider",
           "./examples.tsx#VerticalDivider",
           "./examples.tsx#InverseDivider",
@@ -5313,7 +5362,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Shared modal shell: a mobile bottom sheet and centered desktop dialog, with a fixed header, scrolling content, optional footer, and child-view back navigation.",
+        "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -5398,7 +5447,7 @@
         "rules": {
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "Uses the shared surface radius; bottom corners are flush on mobile."
+            "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -5414,6 +5463,7 @@
           "--text-primary",
           "--overlay-scrim",
           "--divider-default",
+          "--radius-surface-sheet",
           "--radius-surface-default",
           "--font-size-heading-2xl",
           "--font-weight-emphasize",
@@ -5431,6 +5481,10 @@
             "selector": ".sheet::backdrop"
           },
           "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".sheet"
+          },
+          "--radius-surface-sheet": {
             "property": "border-radius",
             "selector": ".sheet"
           },

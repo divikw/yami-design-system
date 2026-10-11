@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for grouping related content. No border by default (rule card-no-border), 12px radius, no shadow. Polymorphic via `as` prop (div / a / button) for link and button cards.",
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "source": "components/Card",
   "files": [
     {
@@ -46,6 +46,9 @@
       "components/Card/examples.tsx#NoPaddingCard",
       "components/Card/examples.tsx#BorderedCard",
       "components/Card/examples.tsx#LinkCard",
+      "components/Card/examples.tsx#ButtonCard",
+      "components/Card/examples.tsx#DisabledButtonCard",
+      "components/Card/examples.tsx#InverseLinkCard",
       "components/Card/examples.tsx#SurfaceSecondaryCard",
       "components/Card/examples.tsx#SurfaceInverseCard"
     ]
@@ -53,6 +56,7 @@
   "design": {
     "tokens": [
       "--border-default",
+      "--border-default-inverse",
       "--border-focus",
       "--radius-surface-default",
       "--space-150",
@@ -61,6 +65,9 @@
       "--surface-inverse",
       "--surface-primary",
       "--surface-secondary",
+      "--text-disabled",
+      "--text-disabled-inverse",
+      "--text-primary",
       "--text-primary-inverse"
     ],
     "rules": [
@@ -76,23 +83,39 @@
       },
       "--surface-secondary": {
         "property": "background-color",
-        "selector": ".surface-secondary, .interactive:hover"
+        "selector": ".surface-secondary"
       },
       "--surface-inverse": {
         "property": "background-color",
         "selector": ".surface-inverse"
       },
+      "--text-primary": {
+        "property": "color / background-color",
+        "selector": ".card, .interactive:hover, .interactive:active"
+      },
       "--text-primary-inverse": {
         "property": "color",
         "selector": ".surface-inverse"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".card:is(:disabled, [aria-disabled='true'])"
+      },
+      "--text-disabled-inverse": {
+        "property": "color",
+        "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])"
       },
       "--border-default": {
         "property": "border-color",
         "selector": ".bordered"
       },
+      "--border-default-inverse": {
+        "property": "border-color",
+        "selector": ".bordered.surface-inverse"
+      },
       "--border-focus": {
         "property": "outline-color",
-        "selector": ".interactive:focus-visible"
+        "selector": ".card:focus-visible"
       },
       "--radius-surface-default": {
         "property": "border-radius",
@@ -114,7 +137,7 @@
   },
   "quality": {
     "accessibility": {
-      "role": "implicit (div, or button/link when as= overridden)",
+      "role": "none (div); native button or link when as selects those hosts",
       "wcagLevel": "AA",
       "tapTargetMin": 44,
       "keyboardNav": [
@@ -122,10 +145,10 @@
         "enter",
         "space"
       ],
-      "ariaPattern": "group (default) | button (as='button') | link (as='a' with href)",
-      "notes": "tapTargetMin/keyboardNav apply only when interactive=true (auto-inferred via as='button' or as='a'+href). Non-interactive cards effectively have tapTargetMin=0 and keyboardNav=[]. interactive=true adds focus-visible outline."
+      "ariaPattern": "none (default) | native button | native link",
+      "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
     },
-    "interactionCoverage": "not-applicable"
+    "interactionCoverage": "covered"
   },
-  "contentDigest": "2223a94fb1bf5a5b6d046ac09ea1e4868e5b6fe1b2db06abf526ac2108952629"
+  "contentDigest": "7459df1df012c5b5b72df85e2d52a2f8c11be245dbc5fc9e838fa968b7796791"
 }

@@ -462,6 +462,7 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `radius.sm` | root | dimension | `4px` |
 | `radius.surface.default` | root | dimension | `var(--radius-lg)` |
 | `radius.surface.none` | root | dimension | `var(--radius-none)` |
+| `radius.surface.sheet` | root | dimension | `var(--radius-xl)` |
 | `radius.tag.primary` | root | dimension | `var(--radius-sm)` |
 | `radius.xl` | root | dimension | `16px` |
 | `space.0` | root | dimension | `0` |

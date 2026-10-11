@@ -83,6 +83,24 @@ const meta = {
       playground: "Playground",
       interactionStory: "yami-components-actions-button-group--interaction",
       showStories: false,
+      translations: {
+        zh: {
+          description: "ButtonGroup 组织相关的 Button / ButtonLink 入口。提供分组名称，统一尺寸、8px 间距及内容宽度 / 等宽布局，保留各入口自身的交互语义。",
+          argDescriptions: {
+            full: "等宽单行布局，填满父容器，最大 480px。子项都使用 form=full，默认 false。",
+            "aria-label": "必填，描述整组入口的用途。",
+            children: "通常为 2–3 个相同尺寸的直接子 Button / ButtonLink，不添加额外包装。",
+          },
+        },
+        en: {
+          description: "ButtonGroup organizes related Button / ButtonLink entries with an accessible name, matching sizes, an 8px gap, and content-width or equal-width layout. Each entry retains its own semantics.",
+          argDescriptions: {
+            full: "Equal-width single row filling the parent up to 480px. Set form=full on each child. Default false.",
+            "aria-label": "Required accessible name describing the group's purpose.",
+            children: "Usually two or three direct Button / ButtonLink children with matching sizes and no extra wrappers.",
+          },
+        },
+      },
       description: { component: "按钮组用于组织相关操作。支持内容宽度与等宽布局，统一 8px 间距，沿用 Button 的层级、尺寸与状态。" },
     },
   },

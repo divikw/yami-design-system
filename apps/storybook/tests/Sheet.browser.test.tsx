@@ -25,6 +25,33 @@ function Demo() {
 
 const brands = ["SKIN1004", "COSRX", "Anua"];
 
+test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobile and 12px all around on desktop", async (size) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    for (const theme of ["light", "dark"]) {
+      container.className = theme === "dark" ? "dark" : "";
+      flushSync(() => root.render(<Sheet open title="Details" closeLabel="Close details" onClose={() => {}} size={size}>Details</Sheet>));
+      for (const width of [375, 1023, 1024, 1440]) {
+        await page.viewport(width, 812);
+        const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+        const style = getComputedStyle(dialog);
+        expect(style.getPropertyValue("--radius-surface-sheet").trim()).toBe("16px");
+        expect(style.borderTopLeftRadius).toBe(width < 1024 ? "16px" : "12px");
+        expect(style.borderTopRightRadius).toBe(width < 1024 ? "16px" : "12px");
+        expect(style.borderBottomLeftRadius).toBe(width < 1024 ? "0px" : "12px");
+        expect(style.borderBottomRightRadius).toBe(width < 1024 ? "0px" : "12px");
+      }
+    }
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 function ChildDemo() {
   const [open, setOpen] = useState(false);
   const [child, setChild] = useState(false);

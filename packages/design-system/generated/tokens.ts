@@ -1626,7 +1626,7 @@ export const tokens = {
   "radius.component.default": {
     "$type": "dimension",
     "$value": "{radius.md}",
-    "$description": "通用 UI 组件的默认圆角，适用于卡片、弹窗、信息块等基础组件。"
+    "$description": "紧凑 UI 组件的默认圆角，包括 ProductCard 的外容器与图片区域；基础 Card、居中 Dialog 和浮层面板使用 surface.default，移动端底部 Sheet 使用 surface.sheet。"
   },
   "radius.component.none": {
     "$type": "dimension",
@@ -1661,12 +1661,17 @@ export const tokens = {
   "radius.surface.default": {
     "$type": "dimension",
     "$value": "{radius.lg}",
-    "$description": "页面级主要内容区域的默认圆角，用于大块内容容器，确保整体视觉柔和但不过度装饰。"
+    "$description": "内容表面的默认圆角，用于基础 Card、居中 Dialog 和浮层面板；移动端底部 Sheet 使用 surface.sheet，页面最外层或全宽背景使用 surface.none。"
   },
   "radius.surface.none": {
     "$type": "dimension",
     "$value": "{radius.none}",
     "$description": "页面级或全宽背景使用的直角圆角设置，适用于需要与屏幕边缘对齐的布局区域"
+  },
+  "radius.surface.sheet": {
+    "$type": "dimension",
+    "$value": "{radius.xl}",
+    "$description": "移动端底部 Sheet 的顶部圆角（16px），仅用于左上和右上角，底部两角保持直角；桌面端居中形态使用 surface.default。"
   },
   "radius.tag.primary": {
     "$type": "dimension",

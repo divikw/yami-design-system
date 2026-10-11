@@ -226,6 +226,7 @@ export const ALLOWED_RADIUS_TOKENS = new Set([
   '--radius-full',
   // Semantic aliases
   '--radius-surface-default',
+  '--radius-surface-sheet',
   '--radius-surface-none',
   '--radius-component-default',
   '--radius-component-none',

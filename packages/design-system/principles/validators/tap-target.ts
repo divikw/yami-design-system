@@ -11,10 +11,9 @@
  * That's effectively partial runtime layout. Phase 8.5 visual scorer runs
  * this via Playwright + getBoundingClientRect.
  *
- * What we DO check statically: Button size='sm' (32px visible). Size=sm +
- * no padding override is flagged as needing review. All other <Button>
- * sizes (md=40 / lg=48) include internal padding that expands to ≥44pt;
- * the component itself enforces this.
+ * What we DO check statically: compact icon Buttons need context review.
+ * Web SM/MD targets extend to 44px through pseudo-elements, not internal
+ * padding. This does not reserve layout space or prevent ancestor clipping.
  */
 
 import type { Validator, Violation } from '../schema'
@@ -26,20 +25,17 @@ export const tapTarget: Validator = {
   severity: 'warning',
   check(code) {
     const violations: Violation[] = []
-    // Sanity warn on size='sm' iconOnly patterns — smallest-possible hit
-    // area. The component's 32px size + 12px padding = 32+24 = 56px hit
-    // target, which IS above 44pt, but we surface a warning so reviewers
-    // can confirm the context.
+    // Both the current form prop and legacy shorthand need context review.
     for (const hit of findJsxElements(code, /Button/)) {
-      if (hit.props.size === 'sm' && hit.props.iconOnly === true) {
+      if (hit.props.size === 'sm' && (hit.props.form === 'icon' || hit.props.iconOnly === true)) {
         violations.push({
           ruleId: 'tap-target',
           message:
-            "<Button size='sm' iconOnly> — verify this sits within a container that doesn't clip its tap region. Component padding provides adequate hit area (~56×32 visible → ≥44pt), but nested scroll containers can shrink it.",
+            "Compact icon Button: verify its 44×44px pseudo-element target is not clipped by ancestors or overlapped by adjacent targets.",
           severity: 'warning',
           locations: [hit.location],
           suggestion:
-            "No action needed if the button is in normal flow. In a tight grid (e.g. density <8px between elements), consider size='md' instead. Phase 8.5 visual scorer validates exact rendered dimensions.",
+            "Inspect the rendered layout and pointer hit area. Reserve enough spacing and avoid clipping; changing size alone does not resolve ancestor overflow.",
         })
       }
     }

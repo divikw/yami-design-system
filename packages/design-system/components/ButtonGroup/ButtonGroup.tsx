@@ -8,7 +8,7 @@ export interface ButtonGroupProps extends ComponentPropsWithRef<"div"> {
   "aria-label": string;
 }
 
-/** Groups related Buttons without changing their appearance or behavior. */
+/** Groups related Button and ButtonLink entries without changing their behavior. */
 export function ButtonGroup({ full = false, className, ...props }: ButtonGroupProps) {
   return <div {...props} role="group" data-slot="button-group" data-full={full}
     className={[styles.group, className].filter(Boolean).join(" ")} />;

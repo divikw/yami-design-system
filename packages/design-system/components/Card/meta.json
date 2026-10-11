@@ -5,15 +5,15 @@
   "status": "stable",
   "version": "0.1.0",
 
-  "description": "Surface primitive for grouping related content. No border by default (rule card-no-border), 12px radius, no shadow. Polymorphic via `as` prop (div / a / button) for link and button cards.",
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
 
   "figma": { "nodeId": null, "componentKey": null },
 
   "exports": ["Card", "CardPadding", "CardProps", "CardSurface"],
 
   "testing": {
-    "interaction": "not-applicable",
-    "rationale": "The primitive owns surface geometry; interactive semantics and behavior belong to the selected host element."
+    "interaction": "covered",
+    "rationale": "Storybook verifies button activation, independent actions with progress/completion feedback and repeated-activation prevention inside static cards, and narrow two-column geometry. Browser tests cover surface feedback, disabled states including interactive=false, native keyboard behavior, empty-href link inference, form submission, theme-aware focus, responsive link geometry, unclipped SM/MD text/link/icon hit areas at all padding levels, media cropping, margin/float containment, keyboard scrolling of wide content, coarse pointers, and reduced motion."
   },
 
   "variants": {
@@ -33,7 +33,7 @@
       "values": ["none", "sm", "md", "lg"],
       "required": false,
       "default": "md",
-      "description": "Inner padding tier. 'none' for image-only cards where the img is edge-to-edge."
+      "description": "Inner padding: none=0, sm=12px, md=16px (default), lg=24px. Use none for edge-to-edge media with composite-owned content spacing; keep peer cards consistent. No automatic breakpoint changes."
     },
     "surface": {
       "type": "enum",
@@ -50,7 +50,25 @@
     "interactive": {
       "type": "boolean",
       "required": false,
-      "description": "Adds hover + focus-visible styling. Auto-inferred when as='button' or as='a' + href."
+      "description": "Adds hover/press styling and a 44px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
+    },
+    "href": {
+      "type": "string",
+      "required": false,
+      "description": "Native link destination; requires as='a'. Does not automatically select an anchor host."
+    },
+    "type": {
+      "type": "enum",
+      "values": ["button", "submit", "reset"],
+      "required": false,
+      "default": "button",
+      "description": "Native type for as='button'. Defaults to button to avoid implicit form submission."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Native disabled state for as='button'. Stops activation and hover/press feedback while preserving the selected surface."
     }
   },
 
@@ -59,14 +77,14 @@
       "ruleId": "card-no-border",
       "note": "Default border: none. `bordered` only in dense grids."
     },
-    "radii": { "ruleId": "no-custom-radii", "note": "Uses --radius-surface-default (12px)." },
+    "radii": { "ruleId": "no-custom-radii", "note": "Base Card uses --radius-surface-default (12px). ProductCard owns its geometry via --radius-component-default (8px); do not use arbitrary numeric overrides." },
     "elevationOnPress": {
       "ruleId": "elevation-on-press",
-      "note": "interactive cards change background-color on hover; Card has no elevation API because Figma provides no elevation token source."
+      "note": "Enabled interactive cards mix the surface's reading color into the background on hover (8%) and press (16%), preserving polarity and geometry without shadow."
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Interactive cards show 2px --border-focus outline + 2px offset."
+      "note": "Focusable cards show a 2px --border-focus outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
     }
   },
 
@@ -74,8 +92,12 @@
     "--surface-primary",
     "--surface-secondary",
     "--surface-inverse",
+    "--text-primary",
     "--text-primary-inverse",
+    "--text-disabled",
+    "--text-disabled-inverse",
     "--border-default",
+    "--border-default-inverse",
     "--border-focus",
     "--radius-surface-default",
     "--space-150",
@@ -87,12 +109,16 @@
     "--surface-primary": { "property": "background-color", "selector": ".card, .surface-primary" },
     "--surface-secondary": {
       "property": "background-color",
-      "selector": ".surface-secondary, .interactive:hover"
+      "selector": ".surface-secondary"
     },
     "--surface-inverse": { "property": "background-color", "selector": ".surface-inverse" },
+    "--text-primary": { "property": "color / background-color", "selector": ".card, .interactive:hover, .interactive:active" },
     "--text-primary-inverse": { "property": "color", "selector": ".surface-inverse" },
+    "--text-disabled": { "property": "color", "selector": ".card:is(:disabled, [aria-disabled='true'])" },
+    "--text-disabled-inverse": { "property": "color", "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])" },
     "--border-default": { "property": "border-color", "selector": ".bordered" },
-    "--border-focus": { "property": "outline-color", "selector": ".interactive:focus-visible" },
+    "--border-default-inverse": { "property": "border-color", "selector": ".bordered.surface-inverse" },
+    "--border-focus": { "property": "outline-color", "selector": ".card:focus-visible" },
     "--radius-surface-default": { "property": "border-radius", "selector": ".card" },
     "--space-150": { "property": "padding", "selector": ".pad-sm" },
     "--space-200": { "property": "padding", "selector": ".pad-md" },
@@ -100,12 +126,12 @@
   },
 
   "accessibility": {
-    "role": "implicit (div, or button/link when as= overridden)",
+    "role": "none (div); native button or link when as selects those hosts",
     "wcagLevel": "AA",
     "tapTargetMin": 44,
     "keyboardNav": ["tab", "enter", "space"],
-    "ariaPattern": "group (default) | button (as='button') | link (as='a' with href)",
-    "notes": "tapTargetMin/keyboardNav apply only when interactive=true (auto-inferred via as='button' or as='a'+href). Non-interactive cards effectively have tapTargetMin=0 and keyboardNav=[]. interactive=true adds focus-visible outline."
+    "ariaPattern": "none (default) | native button | native link",
+    "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
   },
 
   "dependencies": {
@@ -120,6 +146,9 @@
     "./examples.tsx#NoPaddingCard",
     "./examples.tsx#BorderedCard",
     "./examples.tsx#LinkCard",
+    "./examples.tsx#ButtonCard",
+    "./examples.tsx#DisabledButtonCard",
+    "./examples.tsx#InverseLinkCard",
     "./examples.tsx#SurfaceSecondaryCard",
     "./examples.tsx#SurfaceInverseCard"
   ]

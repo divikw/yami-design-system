@@ -65,7 +65,10 @@ function SheetDemo({ childView = false, ...args }: SheetProps & { childView?: bo
 const meta = {
   title: "YAMI/Components/Layout/Sheet",
   component: Sheet,
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: { description: { component: "移动端（小于 1024px）顶部两角使用 16px 的 --radius-surface-sheet，底部保持直角；桌面端居中形态四角使用 12px 的 --radius-surface-default。内容高度、全高和子页面共用此规则。" } },
+  },
   globals: { locale: "zh", viewport: { value: "yamiMobile", isRotated: false } },
   args: { open: false, title: "底部弹窗", closeLabel: "关闭底部弹窗", onClose: () => {} },
   argTypes: {

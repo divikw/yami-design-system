@@ -22,28 +22,28 @@
       "sourceSha256": "d14edd3fb4629f901752258ecf38cbdb51f66c0b63edbb62b66a68156217bba8",
       "disposition": "migrated",
       "destination": "packages/design-system/DESIGN.compact.md",
-      "destinationSha256": "e3e3e68084738df9969cbadea4c0a4fc8654df6a77072d235b69a910998d68db"
+      "destinationSha256": "3a48326d12738168810ceb227daa76a7568b221259580fb59296013c10a27258"
     },
     {
       "source": "DESIGN.md",
       "sourceSha256": "b22825ef7217aba54be40e86fe5e508a65296784df42659c8fd27901cd71049b",
       "disposition": "migrated",
       "destination": "packages/design-system/DESIGN.md",
-      "destinationSha256": "1d7d9d537f4cd9919bf61fd9943fe5f9d5257b65157adb3e6ff37c4f541c46d1"
+      "destinationSha256": "cea3a3915222e423110faa1ac2700a92b388c19681c6284fc5497bac72ad1d2c"
     },
     {
       "source": "README.md",
       "sourceSha256": "6074d0ccec64623cdcc4c07f5cf46d4574348760e78f8d60e13a3b620a8f0dad",
       "disposition": "migrated",
       "destination": "packages/design-system/README.md",
-      "destinationSha256": "3732736edbda975839e2e297cc1060714ba44b3550d3998a25165adafd061dbd"
+      "destinationSha256": "854da46edc4a52cc8777722b660df5ccfe95d5d5087ad574b1ce80e456c15b44"
     },
     {
       "source": "SKILL.md",
       "sourceSha256": "70065aaed60d4d21bf35b41e1aa60ce64c2fd4cc7b5f178c7d41b12c9672e4f4",
       "disposition": "migrated",
       "destination": "packages/design-system/SKILL.md",
-      "destinationSha256": "2a8bc5a6e00ef2faa3a0ef3efa5956530a025fa25c3c07f21f9ff82e9c4b1065"
+      "destinationSha256": "8c90cf86f3fb91776c2d2bf03ebbf8178d7c43ea6bf0563dbf06ef39560a7535"
     },
     {
       "source": "assets/badges/README.md",
@@ -1044,14 +1044,14 @@
       "sourceSha256": "9b6806fc353b6b3da5f56a233c56ef4d871fb9cafe30870237f51a2c0e51860d",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/catalog.json",
-      "destinationSha256": "c0ec0c60f661fef9934d10ffab3f408ae73a20d20e3b9be59c97fbd97ec53bed"
+      "destinationSha256": "f04c5197ad00e46733b9edd565ad794e1c443663e364dbcc408533972a40f11e"
     },
     {
       "source": "catalog.json",
       "sourceSha256": "3333682325d00194fb646874f8453e3545a46813986fbac22e9e0bf18f87b5fa",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/catalog.json",
-      "destinationSha256": "c0ec0c60f661fef9934d10ffab3f408ae73a20d20e3b9be59c97fbd97ec53bed"
+      "destinationSha256": "f04c5197ad00e46733b9edd565ad794e1c443663e364dbcc408533972a40f11e"
     },
     {
       "source": "color-primitives.stories.tsx",
@@ -1513,7 +1513,7 @@
       "sourceSha256": "004b9990fc758076faa2247d41a8ed2232e6fa1182a1c64848b6a3a2da89da18",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Button/Button.stories.tsx",
-      "destinationSha256": "930ff6143665778c8c677d9d4a197bc8b92470a00a4b07699df09ffc65041f4f"
+      "destinationSha256": "0b355fa170bb2f8b0512cfb5190fdb32e80f25b3cf8feb8e8ff3634a17dc1dff"
     },
     {
       "source": "components/Button/Button.tsx",
@@ -1541,28 +1541,28 @@
       "sourceSha256": "4c008327fee0894e5609a45b8288cbbfd2d9f30b4df35bf4d28f146ad4eee9b8",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Button/examples.tsx",
-      "destinationSha256": "4c008327fee0894e5609a45b8288cbbfd2d9f30b4df35bf4d28f146ad4eee9b8"
+      "destinationSha256": "2746de8a0d750e7b9048e760adb716f9992034f29bd8ed85ba21cab9d7737ec8"
     },
     {
       "source": "components/Button/index.ts",
       "sourceSha256": "af02260ddbac246d9fdeb34d7863638605abc8b0c69a18d197401a390a8e2848",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Button/index.ts",
-      "destinationSha256": "af02260ddbac246d9fdeb34d7863638605abc8b0c69a18d197401a390a8e2848"
+      "destinationSha256": "edce3413091f0ccaf058c6c9fae0be6d5b6b18a0f8bfb6946e59980266bd4b77"
     },
     {
       "source": "components/Button/meta.json",
       "sourceSha256": "92674a57afb1edf359a045b858d6e7d066f1ed4d6e7e8154741ce7ea5f8d538c",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Button/meta.json",
-      "destinationSha256": "e0647731af2a0cfefd899fd07b5f49f710272c28e96283ca32a15e553f872bef"
+      "destinationSha256": "326de5de81745fa97ffbe5fefa36ec78e47b5ff15617110108dc8a2059a7b0d1"
     },
     {
       "source": "components/Button/usage.md",
       "sourceSha256": "780af2578f6f7118e3dd54b7a6b164d32c132811fa4aeba0a67c111306a688d1",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Button/usage.md",
-      "destinationSha256": "b90830c0173f710a931447ecf7c5d9718460e815c8cf49aa7733fb7b9568a245"
+      "destinationSha256": "bd8604a4701ea3f5462330b0a8b29f43638fc7068fb1b32b3cbb1c0248bd4004"
     },
     {
       "source": "components/Card/Card.figma.tsx",
@@ -1576,21 +1576,21 @@
       "sourceSha256": "98a12f50d57ac5be8e60f41b5cb84ecbcba4f54d81746b296f43c0bf761152b7",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Card/Card.module.css",
-      "destinationSha256": "842d99b782c69ca4bd0401f88cd0895efed3dab47ac93cc3ab95183d168df0d1"
+      "destinationSha256": "6ed9d7f0c8eff5b9478bf14af9b1acc93835c4a8872af4b7de324f038ec0717f"
     },
     {
       "source": "components/Card/Card.tsx",
       "sourceSha256": "99940588c3834b89058eaae3e4f5f1a28f5948c9de8a89f52530ab4a2508adc5",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Card/Card.tsx",
-      "destinationSha256": "99940588c3834b89058eaae3e4f5f1a28f5948c9de8a89f52530ab4a2508adc5"
+      "destinationSha256": "a913d984d1604c7b908639a9d268a88ab600def3a0a41943f6b5e10417e4ec09"
     },
     {
       "source": "components/Card/examples.tsx",
       "sourceSha256": "f1827ddd086d48f8b34cc6cabd17cf4c4bc03f2fb733d9abbcb663a7a41eb859",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Card/examples.tsx",
-      "destinationSha256": "f1827ddd086d48f8b34cc6cabd17cf4c4bc03f2fb733d9abbcb663a7a41eb859"
+      "destinationSha256": "018c3bc210df80965bec41934124c7349433720c3cf81eb8d7faebf2bf48e651"
     },
     {
       "source": "components/Card/index.ts",
@@ -1604,14 +1604,14 @@
       "sourceSha256": "7aafa659705c047ac0cb0863a5fd73c3332e6e792c96e65eadf667f55497b26f",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Card/meta.json",
-      "destinationSha256": "d382f4885dfd2b227e7a30a8235c85e05a003070d0af5340f08a4586fc05de0b"
+      "destinationSha256": "4d108708875503e851c6fe8cc9d84785cd950e52c79ede7a80df35fe86590e5b"
     },
     {
       "source": "components/Card/usage.md",
       "sourceSha256": "7314952d3b5d94fc8a04e4956d76ebc3a37fb9d44fcfac982a230c47eb711bde",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Card/usage.md",
-      "destinationSha256": "f3531dd7e4444162afc762470b9b80afb82cb0d851138f12f7980300470a75d3"
+      "destinationSha256": "600ee7ca74d718d583c5c2d364f0de2b919b8f1f06caf71cb15c1a646a0d4d73"
     },
     {
       "source": "components/Checkbox/Checkbox.figma.tsx",
@@ -1681,14 +1681,14 @@
       "sourceSha256": "b39be40727503d9e480b818743eb832d02e22a85dadfea50366d80481ee2cffd",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Divider/Divider.module.css",
-      "destinationSha256": "b39be40727503d9e480b818743eb832d02e22a85dadfea50366d80481ee2cffd"
+      "destinationSha256": "ac4b832332396047ae0bfe6880dfa964c015eceb19dbb9760b70583c52add735"
     },
     {
       "source": "components/Divider/Divider.stories.tsx",
       "sourceSha256": "eeaa8a143fdc4031c4d987611cef6f63804a03df7f2a94a4d6b3d4ff338fde29",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Divider/Divider.stories.tsx",
-      "destinationSha256": "8bb45536b12be3ded4b7c429d56627768927a8dad8a34628e8b4204ac907728b"
+      "destinationSha256": "dbfffd0246ac6f721847e65b5098f3b9b1c71a4626439e83775dbf04684759c1"
     },
     {
       "source": "components/Divider/Divider.tsx",
@@ -1702,7 +1702,7 @@
       "sourceSha256": "3a3fb133d67e49e939b1d2141df7560c67cf45a6a30eb3f63c30141ada8f94ed",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Divider/examples.tsx",
-      "destinationSha256": "faaa87066d8ff68d74c6c6d2ff64b3e5f6f9aaf15556cca0c72ca3d0fadf173b"
+      "destinationSha256": "3a3fb133d67e49e939b1d2141df7560c67cf45a6a30eb3f63c30141ada8f94ed"
     },
     {
       "source": "components/Divider/index.ts",
@@ -1716,14 +1716,14 @@
       "sourceSha256": "283f767350b9281d3d35688b4ac88c7ec86bf31b8dee79edfc36a69d1d1d7129",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Divider/meta.json",
-      "destinationSha256": "617824f7439199a588a425a06acaeafc19cefd08672035716c53e379e68aac84"
+      "destinationSha256": "018ce2b3f01be81f50d9835fc93d3137725091ffc1e8f55874af1acfc6f06325"
     },
     {
       "source": "components/Divider/usage.md",
       "sourceSha256": "5897d1aa0cf69eb5d8a96c86ebbd13a35126e2ee84d5e56971b903c0665b934c",
       "disposition": "migrated",
       "destination": "packages/design-system/components/Divider/usage.md",
-      "destinationSha256": "5897d1aa0cf69eb5d8a96c86ebbd13a35126e2ee84d5e56971b903c0665b934c"
+      "destinationSha256": "55a4da52bb670cfc3e02c0ffa23b6e3ca19a0e28cd5625e4cf2fb790a7cb32b8"
     },
     {
       "source": "components/Footer/Footer.figma.tsx",
@@ -4012,14 +4012,14 @@
       "sourceSha256": "ddbe509412ec0ed5754961588d7f0ab95cda2c8e95e8105a94254d50ece340d4",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/principles.ts",
-      "destinationSha256": "8bc34036814c092c3b854c7a068c52f2c7db9db0352e66a0135143ed32336ad4"
+      "destinationSha256": "e49e51f974726c4d3d57c9c205d665f3d50c418fbacf53ceef591fb7903f12b4"
     },
     {
       "source": "principles/runtime/__tests__/emphasis-limit.test.ts",
       "sourceSha256": "1fcaf52896ae5a4b311e38423688963878f0c5f64cba8fe3d4a6b684cf34b665",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/runtime/__tests__/emphasis-limit.test.ts",
-      "destinationSha256": "1fcaf52896ae5a4b311e38423688963878f0c5f64cba8fe3d4a6b684cf34b665"
+      "destinationSha256": "96b046cd3efe809bcf510a7c407c9405d19150eeea164266e41a001f1ce3d311"
     },
     {
       "source": "principles/runtime/__tests__/focus-style.test.ts",
@@ -4116,7 +4116,7 @@
       "sourceSha256": "3ef6e73af56f97cee2ccdafc71994707a926c8d8a20142f60a4071acec7b9154",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/runtime/validators/emphasis-limit.ts",
-      "destinationSha256": "3ef6e73af56f97cee2ccdafc71994707a926c8d8a20142f60a4071acec7b9154"
+      "destinationSha256": "b8425492676eec48ceb365d413935a92466186f098f840613d808e0031afa365"
     },
     {
       "source": "principles/runtime/validators/focus-style.ts",
@@ -4130,7 +4130,7 @@
       "sourceSha256": "0d41de48dcda65d54bd26b83ba8b822d77722e484352dfc3fa2cd3227227c1f2",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/runtime/validators/no-custom-radii.ts",
-      "destinationSha256": "0d41de48dcda65d54bd26b83ba8b822d77722e484352dfc3fa2cd3227227c1f2"
+      "destinationSha256": "553a2904c121204af8106a692f31c4bed8ad316690ab936a83a1b9f5d7e5f7fb"
     },
     {
       "source": "principles/runtime/validators/no-gradient.ts",
@@ -4192,7 +4192,7 @@
       "sourceSha256": "2f04104eccb0ab978a60e11ac2286d8d0abedf1fcf7e291f598e693f580d05d8",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/validators/_shared.ts",
-      "destinationSha256": "2f04104eccb0ab978a60e11ac2286d8d0abedf1fcf7e291f598e693f580d05d8"
+      "destinationSha256": "96efd8c24e80e785e929e96c56eae4c806a2f0da7f10bc333157b58545c7b306"
     },
     {
       "source": "principles/validators/border-strength.ts",
@@ -4220,7 +4220,7 @@
       "sourceSha256": "c52fe2b39b1d9a36cadd0fd106022527fef334d296e4f5d06104d31e9fc7ba25",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/validators/emphasis-limit.ts",
-      "destinationSha256": "c52fe2b39b1d9a36cadd0fd106022527fef334d296e4f5d06104d31e9fc7ba25"
+      "destinationSha256": "644f51a29c3451858940eb60d1ff84592b143cee006298251c25d4959b7371c7"
     },
     {
       "source": "principles/validators/focus-style.ts",
@@ -4234,7 +4234,7 @@
       "sourceSha256": "8e67d5bb5a1fba513ef7018ffab7ef4f640afa15c6ce8681ab1c1ad06728b7ba",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/validators/no-custom-radii.ts",
-      "destinationSha256": "8e67d5bb5a1fba513ef7018ffab7ef4f640afa15c6ce8681ab1c1ad06728b7ba"
+      "destinationSha256": "e294319dc0a70b9fda14e45c67d0388e311fd443ef3c924a4bafc75ce4cbab38"
     },
     {
       "source": "principles/validators/no-decorative-media.ts",
@@ -4289,7 +4289,7 @@
       "sourceSha256": "9e8057a882384531073fde8ad63dae3dae4e1cb73a69fa3c123c20ca139ac4f2",
       "disposition": "migrated",
       "destination": "packages/design-system/principles/validators/tap-target.ts",
-      "destinationSha256": "9e8057a882384531073fde8ad63dae3dae4e1cb73a69fa3c123c20ca139ac4f2"
+      "destinationSha256": "8e87cf38d7e3a79c80b1dc40e6a5cb1fff45a2eecafbcc5a8119473ec93b0a37"
     },
     {
       "source": "principles/validators/token-exists.ts",
@@ -4316,154 +4316,154 @@
       "sourceSha256": "c2395f46ed7da64bc07be13ba47c580e682dda4639e3df6aea771a7e1f3d0b44",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/badge.json",
       "sourceSha256": "898c58e75d90ad3c759f497edfd457b0e2b7b8aacbdd7f1d5e3a21129a09d9e7",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/billboard.json",
       "sourceSha256": "f1299130e2047a85201506e06ec1a0718c21f26bca07a8fdb6b69b04b5fb076c",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/brand-product-rail.json",
       "sourceSha256": "5ccb3de658438102d0803bbd7e2deffa05cdb6422bb9afe3a7a2887d93a844ab",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/button.json",
       "sourceSha256": "f1c9ca56a6d9ce2699721c33b39ed435e3d862666d66aaeca054acdce5ebe384",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/checkbox.json",
       "sourceSha256": "9f9ee7833e210d75dd321d38123fc5b590b70dc9289f3b15c414ad94f74f43c7",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/divider.json",
       "sourceSha256": "b881f7c8cd458ec2c2cfd02e623a7267ea645a3e2e9b71832407220fca50b566",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/footer.json",
       "sourceSha256": "1cc85e1ef36f02101f21cd50a74912138c3a5157f145c220b76e8b481b45d5ec",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/header.json",
       "sourceSha256": "391cfc8ed45dd3a22beb2ec7693dcf6d83d23240de8831d5e40ae5f22a05c1d7",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/hero-banner.json",
       "sourceSha256": "cd58ff68c9fb272b481859d24d5f2677a1cc88a19ca1525c5ab50fea856f7fce",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/icons.json",
       "sourceSha256": "0a7fdf02a47b61e65467b8d6e466a46423168bfe0e854bd690e50cec3c19b490",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/input.json",
       "sourceSha256": "e8690800f6e42fa82aeddd337e5c0026fb6da59c42e3d38fa621a0fef997ab0d",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/product-card.json",
       "sourceSha256": "3a5124f20ecf628ae20e0765da264661944a4271295f3547fe9d98ff46bce3cc",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/product-list.json",
       "sourceSha256": "b20f9593901bced162535db759fc3b4d1a97e2da8ce040a6d0fbca5deedc79fa",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/radio-group.json",
       "sourceSha256": "1770b5d1dcd0e3b320d28c432c4fab81732c6a35ba22e10ff221f63f7ecee6d6",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/shortcut-rail.json",
       "sourceSha256": "ed9b54c8028f376389a2aad5fc5ed8327f201a9cba6890d34a66007af7f476a6",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/social-media-gallery.json",
       "sourceSha256": "cc13f6e73a4ad3d4c56c2a061e018126602dd135b15248f4b68e1924124978e2",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/tabs.json",
       "sourceSha256": "2d714cf7f3e3f46621b47cfab7d90d1ae25ffc43fb45d1b61c9970a39b103905",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/trending-searches.json",
       "sourceSha256": "2aa2df89baffb826cd6dd8606bf69098b387fe6c5c78544b261a7317b3b45d97",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry-items/yami-design-system.json",
       "sourceSha256": "d3b87b40652da5930226e76577cd45fb4e05b90063d37c3780e74578816f05f8",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry.json",
       "sourceSha256": "c184b5011ad74547fb4bfdc7e1ecfd4265e74c7c71bb5947073bef57c80eb461",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "registry.source.json",
       "sourceSha256": "c184b5011ad74547fb4bfdc7e1ecfd4265e74c7c71bb5947073bef57c80eb461",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/registry.json",
-      "destinationSha256": "7b4a6d4d79707d32938c6b8ed0c2e005612fd0e5e7d4fc5f7c5a1f29f73c4a50"
+      "destinationSha256": "6b6f45d3772f83129a78e0164d5f2bb51962cfe38cc71594cd532641ed1356c3"
     },
     {
       "source": "responsive.stories.tsx",
@@ -4512,35 +4512,35 @@
       "sourceSha256": "1e1030503608d7c47b4e6edb029a29a97ffbb167c8533ccf32bf3a0fe1b9dc34",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/tokens.css",
-      "destinationSha256": "db82b527e720254be5b68a97832de6353e7188cba27f444ca92153fcd80f38af"
+      "destinationSha256": "22048cca63d9133de86d2533cd1105e924d09154df8e065369a009e20fbb456d"
     },
     {
       "source": "tokens.flat.json",
       "sourceSha256": "4c836302814c3c77c0d0c34276a0649a89cf662f9de2f079e409ac1bc3524652",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/tokens.flat.json",
-      "destinationSha256": "acac41fd1978848eda0d77d83a8421e79087adc913f2780843663b178d67c5f2"
+      "destinationSha256": "01f1147127b6a809015da7cf3bfdc2579c1be6a674e01b0f3c63087e1487d830"
     },
     {
       "source": "tokens.json",
       "sourceSha256": "698f28a1c76c0a7feda6e5a3a7f168c068309b73fa5d61dea98b4d1e2eeb3010",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/tokens.json",
-      "destinationSha256": "ba8a5ee3315c2d232063b056f28d773573fbe11003222dd6c1ae020ba7dba16f"
+      "destinationSha256": "ba432155161ee78a376ef34fbf27f15e70d765b26a5677a0974983deb3487105"
     },
     {
       "source": "tokens.md",
       "sourceSha256": "ce6f00f7b5fe84128570b4787d85dc072cb188b708e596a5e3a50c7a1986aea8",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/tokens.md",
-      "destinationSha256": "5956d6ffa78c95079f6da235aa2ed4c6ef5f806ef3be3056ba0568fce10d19d0"
+      "destinationSha256": "f998c60b62deff20d8e601f456b3e861352d271ac9209fd7ae084f819f5d409f"
     },
     {
       "source": "tokens.ts",
       "sourceSha256": "2029a9ddf284555fa53997ae5abbd7c7a3900beceb5f7c777fde0ade4d3bbb79",
       "disposition": "regenerated",
       "destination": "packages/design-system/generated/tokens.ts",
-      "destinationSha256": "f3c043a5cb0a1bf5ae60f1ecde5c9a36e383343594ff553e8818f7fad188e92f"
+      "destinationSha256": "6dbd988af6e7c152e2fee202ccdb6fefdf0455769956138dcc9fe586cfc535ac"
     },
     {
       "source": "tokens/primitives/breakpoints.tokens.json",
@@ -4603,7 +4603,7 @@
       "sourceSha256": "e03b04acc6ec3bbebdd11b19240d2ea0cff41ae4d17ecae95a72bbbe56a5fe17",
       "disposition": "migrated",
       "destination": "packages/design-system/tokens/semantic/radius.tokens.json",
-      "destinationSha256": "e03b04acc6ec3bbebdd11b19240d2ea0cff41ae4d17ecae95a72bbbe56a5fe17"
+      "destinationSha256": "8171be2f172a1da97e41079aa745dabb2a80eddd592c6e5b80dc51e05cbfeb26"
     },
     {
       "source": "tokens/themes/README.md",
