@@ -90,7 +90,9 @@ scroll. Set `mobilePreview` to also enable tap-to-preview below 1024px: a white
 primary surface, centered contained image, top-right close button, and one
 horizontal thumbnail row at the bottom. Swipe the large image horizontally to
 move between images with native page snapping; the first and last images do not
-wrap. Thumbnail selection and keyboard navigation keep the large image aligned,
+wrap. The mobile preview image rail suppresses edge rebound so a subsequent
+gesture can immediately scroll the thumbnail row, including on macOS.
+Thumbnail selection and keyboard navigation keep the large image aligned,
 and the active thumbnail follows swipes. The row scrolls with touch or trackpad
 gestures and keeps the selected thumbnail in view. Safe-area insets protect
 the close button and bottom rail. Native gallery swiping does not open a preview.
