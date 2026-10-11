@@ -218,6 +218,7 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     };
     const selectedImage = () => dialog.querySelector('[data-slot="product-media-preview-image"]');
     const imageRail = dialog.querySelector<HTMLElement>('[data-slot="product-media-preview-rail"]')!;
+    expect(getComputedStyle(imageRail).overscrollBehaviorX).toBe("none");
     await swipeImage(-1);
     await expect.poll(() => thumbnails[3].getAttribute("aria-pressed")).toBe("true");
     await expect.poll(() => imageRail.scrollLeft).toBe(imageRail.clientWidth * 3);

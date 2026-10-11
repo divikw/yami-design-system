@@ -431,7 +431,8 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
+    /* Keep edge rebound from holding the next gesture on the thumbnail rail. */
+    overscroll-behavior-x: none;
     touch-action: pan-x pinch-zoom;
     scrollbar-width: none;
   }
