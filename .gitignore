@@ -4,6 +4,7 @@ storybook-static
 test-results
 playwright-report
 coverage
+.vitest
 .lighthouseci
 dist
 .env*

@@ -25,6 +25,7 @@ export default defineConfig({
   test: {
     projects: [
       {
+        extends: false,
         plugins: [
           storybookTest({
             configDir: path.join(directory, ".storybook"),
@@ -42,6 +43,7 @@ export default defineConfig({
         },
       },
       {
+        extends: false,
         plugins: [react()],
         optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@storybook/react-vite", "@storybook/addon-docs/blocks", "storybook/theming", "storybook/test"] },
         test: {
