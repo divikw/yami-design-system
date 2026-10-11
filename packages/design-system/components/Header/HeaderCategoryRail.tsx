@@ -185,9 +185,10 @@ export function HeaderCategoryRail({
                     data-menu-active={menuActive || undefined}
                     aria-expanded={menuActive}
                     aria-controls={menuTrigger.panelId}
-                    onClick={(event) =>
+                    onClick={(event) => {
+                      cancelMenuOpen()
                       menuTrigger.onToggle(event.currentTarget, event.detail === 0)
-                    }
+                    }}
                     onPointerEnter={(event) => {
                       if (event.pointerType === 'mouse') {
                         scheduleMenuOpen(category.id, undefined, event.currentTarget, false, event)
