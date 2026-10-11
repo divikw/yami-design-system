@@ -1,5 +1,6 @@
 /**
- * Card — surface primitive for content grouping.
+ * Card — surface primitive for a discrete, self-contained content item.
+ * Use headings and spacing for ordinary page sections.
  *
  * Default: no border (rule card-no-border), 12px radius
  * (rule no-custom-radii → --radius-surface-default), no shadow.
@@ -7,8 +8,7 @@
  * If a card is clickable, hover/press changes background color. Depth tokens
  * are not part of the current Figma source, so Card does not expose elevation.
  *
- * When rendering as <a> (href provided) or a custom element (as=button),
- * the component picks the right element type while keeping a11y right.
+ * Use as="a" with href for navigation or as="button" for an action.
  */
 
 import type {
@@ -26,24 +26,25 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg'
 export type CardSurface = 'primary' | 'secondary' | 'inverse'
 
 export interface CardBaseProps {
-  /** Inner padding tier. Default: 'md' (16px). */
+  /** 内边距档位：none=0、sm=12px、md=16px、lg=24px。默认 md；贴边媒体使用 none，同组卡片保持一致。 */
   padding?: CardPadding
-  /** Background surface token. Default: 'primary' (--surface-primary). */
+  /** 背景表面令牌。默认为 'primary'（--surface-primary）。 */
   surface?: CardSurface
-  /** Opt-in hairline border. Only use in dense listing grids per design.md. */
+  /** 是否显示细边框。默认不显示，按设计规范仅用于密集列表或网格。 */
   bordered?: boolean
   /**
-   * Renders with hover + focus-visible styling. Implicitly when `as="button"` or
-   * when `href` is provided (rendered as <a>). Can be set manually for custom
-   * interactive wrappers.
+   * 启用悬浮和按下反馈，并提供至少 44×44px 的点击区域。
+   * as="button" 或 as="a" 且提供 href 时自动启用。
+   * 自定义元素需自行提供语义和键盘行为。键盘焦点及禁用样式始终可用。
    */
   interactive?: boolean
+  /** 卡片内容。 */
   children?: ReactNode
 }
 
 export type CardProps<T extends ElementType = 'div'> = CardBaseProps &
   Omit<ComponentPropsWithoutRef<T>, keyof CardBaseProps | 'as'> & {
-    /** Element type to render. Defaults to 'div'. Use 'a' with href for link cards, 'button' for button cards. */
+    /** 渲染的元素类型，默认为 'div'。链接卡片使用 'a' 并提供 href；操作卡片使用 'button'。 */
     as?: T
   }
 
@@ -63,9 +64,11 @@ function CardImpl<T extends ElementType = 'div'>(
   const Element = (as ?? 'div') as ElementType
 
   // Auto-infer interactive when rendering as button or anchor-with-href.
-  const restProps = rest as { href?: string }
+  const restProps = rest as { href?: string; type?: string }
   const isInteractive =
-    interactive ?? (Element === 'button' || (Element === 'a' && !!restProps.href))
+    interactive ?? (Element === 'button' || (Element === 'a' && typeof restProps.href === 'string'))
+  const elementProps = Element === 'button' ? { ...rest, type: restProps.type ?? 'button' } : rest
+  const Content = Element === 'button' ? 'span' : 'div'
 
   const classes = [
     styles.card,
@@ -79,16 +82,15 @@ function CardImpl<T extends ElementType = 'div'>(
     .join(' ')
 
   return (
-    <Element {...rest} ref={ref} className={classes} data-slot="card">
-      <div data-slot="card-content">{children}</div>
+    <Element {...elementProps} ref={ref} className={classes} data-slot="card">
+      <Content className={styles.content} data-slot="card-content">{children}</Content>
     </Element>
   )
 }
 
 // Polymorphic + forwardRef: cast preserves the generic API for consumers
 // while letting React.forwardRef accept the impl. Ref type is widened to
-// HTMLElement since `as` can render any element. Concrete tags are still
-// type-checked at the JSX site via CardProps<T>['ref'].
+// HTMLElement since `as` can render different host elements.
 export const Card = forwardRef(CardImpl) as <T extends ElementType = 'div'>(
   props: CardProps<T> & { ref?: ForwardedRef<HTMLElement> },
 ) => ReactElement

@@ -60,4 +60,24 @@ describe('emphasis-limit (runtime)', () => {
     const violations = emphasisLimit.check(document.body)
     expect(violations).toEqual([])
   })
+
+  it('counts ButtonLink alongside Button without counting decorative wrappers', () => {
+    const button = createElement('button', {
+      className: 'button_emphasis_abc123',
+      styles: { display: 'block', width: '100px', height: '40px' },
+    })
+    const link = createElement('a', {
+      attributes: { href: '/checkout', 'data-slot': 'button-link' },
+      className: 'button_emphasis_def456',
+      styles: { display: 'block', width: '100px', height: '40px' },
+    })
+    const wrapper = createElement('div', {
+      className: 'emphasis-section',
+      styles: { display: 'block', width: '100px', height: '40px' },
+    })
+    cleanup = mountFixture(button, link, wrapper)
+    const violations = emphasisLimit.check(document.body)
+    expect(violations).toHaveLength(1)
+    expect(violations[0]?.measured?.totalEmphasisCount).toBe(2)
+  })
 })

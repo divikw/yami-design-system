@@ -70,6 +70,47 @@ test('opens categories after the pointer settles on a rail item', async () => {
   }
 });
 
+test.each(['text', 'images'] as const)('%s does not replay pending hover after clicking Categories and pressing Escape', async presentation => {
+  const viewport = { width: window.innerWidth, height: window.innerHeight };
+  const container = document.createElement('div');
+  document.body.append(container);
+  const root = createRoot(container);
+  const tick = (time: number) => flushSync(() => vi.advanceTimersByTime(time));
+  const menu = () => container.querySelector<HTMLElement>('[data-slot="header-category-menu"]');
+  try {
+    await page.viewport(1280, 900);
+    const props = createStorefrontHeader('en');
+    props.categoryMenu!.presentation = presentation;
+    flushSync(() => root.render(<Header {...props} />));
+    const trigger = container.querySelector<HTMLButtonElement>('[data-category-trigger]')!;
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const enter = () => flushSync(() => trigger.dispatchEvent(new PointerEvent('pointerover', {
+      bubbles: true, pointerType: 'mouse',
+    })));
+    enter();
+    tick(240);
+    expect(menu()).not.toBeNull();
+    flushSync(() => trigger.dispatchEvent(new PointerEvent('pointerout', {
+      bubbles: true, pointerType: 'mouse', relatedTarget: document.body,
+    })));
+    enter();
+    flushSync(() => trigger.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
+    expect(document.activeElement).toBe(menu()!.querySelector('button'));
+    flushSync(() => document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', {
+      bubbles: true, key: 'Escape',
+    })));
+    expect(menu()).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+    tick(1000);
+    expect(menu()).toBeNull();
+  } finally {
+    vi.useRealTimers();
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test.each(['text', 'images'] as const)('%s keeps the selected root category visible when the menu opens from the rail', async presentation => {
   const viewport = { width: window.innerWidth, height: window.innerHeight };
   const container = document.createElement('div');

@@ -158,7 +158,10 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     const sheet = canvas.getByRole("dialog", { name: fixture.nutrition!.title });
     await expect(sheet).toBeVisible();
     await expect(getComputedStyle(sheet).backgroundColor).toBe("rgb(255, 255, 255)");
-    await expect(getComputedStyle(sheet).borderTopLeftRadius).toBe("12px");
+    await expect(getComputedStyle(sheet).borderTopLeftRadius).toBe("16px");
+    await expect(getComputedStyle(sheet).borderTopRightRadius).toBe("16px");
+    await expect(getComputedStyle(sheet).borderBottomLeftRadius).toBe("0px");
+    await expect(getComputedStyle(sheet).borderBottomRightRadius).toBe("0px");
     await expect(getComputedStyle(root).overflow).toBe("hidden");
     await expect(sheet.getBoundingClientRect().bottom).toBeCloseTo(root.clientHeight, 0);
     const sheetCanvas = within(sheet);

@@ -1,0 +1,215 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Avatar",
+  "category": "display",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Code-defined component; no Figma component has been verified."
+  },
+  "exports": [
+    "Avatar",
+    "AvatarProps",
+    "AvatarSize"
+  ],
+  "variants": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "membershipTier": [
+      "ruby-0",
+      "ruby",
+      "silver",
+      "gold"
+    ]
+  },
+  "props": {
+    "lang": {
+      "type": "string",
+      "required": false,
+      "default": "en",
+      "description": "Language for the accessible membership name. Use zh or zh-CN for Chinese; otherwise the tier suffix is English."
+    },
+    "src": {
+      "type": "string",
+      "required": false,
+      "description": "Optional image URL. Omit to use the built-in YAMI avatar; it also appears during loading and on failure."
+    },
+    "alt": {
+      "type": "string",
+      "required": true,
+      "description": "Accessible name; use an empty string beside an existing visible name."
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "required": false,
+      "default": "md",
+      "description": "Fixed diameter: sm 32px, md 40px, lg 48px on mobile and desktop."
+    },
+    "membershipTier": {
+      "type": "enum",
+      "values": [
+        "ruby-0",
+        "ruby",
+        "silver",
+        "gold"
+      ],
+      "required": false,
+      "description": "Optional membership ring and bottom-right original tier icon. Omit for an ordinary image avatar."
+    }
+  },
+  "rules": {
+    "color": {
+      "ruleId": "semantic-color-only",
+      "note": "Neutral avatar surface plus membership-specific ring, white separator, and tinted icon backing tokens. Membership identity colors stay consistent in both themes."
+    },
+    "radius": {
+      "ruleId": "no-custom-radii",
+      "note": "Circular image crop uses the shared --radius-full token."
+    },
+    "interaction": {
+      "contractId": "display-only",
+      "note": "Compose with a shared Button or link for interaction; the Avatar itself is not focusable."
+    }
+  },
+  "tokens": [
+    "--space-400",
+    "--space-500",
+    "--space-600",
+    "--radius-full",
+    "--surface-secondary",
+    "--space-025",
+    "--space-150",
+    "--space-200",
+    "--space-250",
+    "--membership-ring-ruby-0",
+    "--membership-ring-ruby",
+    "--membership-ring-silver",
+    "--membership-ring-gold",
+    "--space-050",
+    "--membership-background-ruby-0",
+    "--membership-background-ruby",
+    "--membership-background-silver",
+    "--membership-background-gold",
+    "--membership-separator"
+  ],
+  "tokenBindings": {
+    "--space-400": {
+      "property": "width / height",
+      "selector": ".avatar[data-size=\"sm\"]"
+    },
+    "--space-500": {
+      "property": "width / height",
+      "selector": ".avatar"
+    },
+    "--space-600": {
+      "property": "width / height",
+      "selector": ".avatar[data-size=\"lg\"]"
+    },
+    "--radius-full": {
+      "property": "border-radius",
+      "selector": ".avatar / .membership"
+    },
+    "--surface-secondary": {
+      "property": "background",
+      "selector": ".avatar"
+    },
+    "--space-025": {
+      "property": "border-width / padding",
+      "selector": ".avatar[data-membership-tier]"
+    },
+    "--space-150": {
+      "property": "--avatar-membership-size",
+      "selector": ".avatar[data-size=\"sm\"]"
+    },
+    "--space-200": {
+      "property": "--avatar-membership-size",
+      "selector": ".avatar"
+    },
+    "--space-250": {
+      "property": "--avatar-membership-size",
+      "selector": ".avatar[data-size=\"lg\"]"
+    },
+    "--membership-ring-ruby-0": {
+      "property": "border-color",
+      "selector": ".avatar[data-membership-tier=\"ruby-0\"]"
+    },
+    "--membership-ring-ruby": {
+      "property": "border-color",
+      "selector": ".avatar[data-membership-tier=\"ruby\"]"
+    },
+    "--membership-ring-silver": {
+      "property": "border-color",
+      "selector": ".avatar[data-membership-tier=\"silver\"]"
+    },
+    "--membership-ring-gold": {
+      "property": "border-color",
+      "selector": ".avatar[data-membership-tier=\"gold\"]"
+    },
+    "--space-050": {
+      "property": "right / bottom",
+      "selector": ".membership"
+    },
+    "--membership-background-ruby-0": {
+      "property": "--avatar-membership-background",
+      "selector": ".avatar"
+    },
+    "--membership-background-ruby": {
+      "property": "--avatar-membership-background",
+      "selector": ".avatar[data-membership-tier=\"ruby\"]"
+    },
+    "--membership-background-silver": {
+      "property": "--avatar-membership-background",
+      "selector": ".avatar[data-membership-tier=\"silver\"]"
+    },
+    "--membership-separator": {
+      "property": "background",
+      "selector": ".avatar[data-membership-tier]"
+    },
+    "--membership-background-gold": {
+      "property": "--avatar-membership-background",
+      "selector": ".avatar[data-membership-tier=\"gold\"]"
+    }
+  },
+  "accessibility": {
+    "role": "img (decorative when alt is empty)",
+    "wcagLevel": "AA",
+    "tapTargetMin": 0,
+    "keyboardNav": [],
+    "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
+    "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#AvatarImageExample",
+    "./examples.tsx#AvatarSizesExample",
+    "./examples.tsx#AvatarMembershipExample"
+  ],
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, and membership ring/icon geometry in both themes and mobile/desktop widths."
+  },
+  "composes": [
+    "MembershipIcon"
+  ]
+}

@@ -3,6 +3,8 @@ import { expect, userEvent, within } from "storybook/test"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
 import { Button } from "./Button"
+import { ButtonLink } from "./ButtonLink"
+import { ButtonGroup } from "../ButtonGroup"
 import showcaseStyles from "./Button.stories.module.css"
 
 // Heart icon from packages/design-system/assets/icons/action/heart.svg.
@@ -39,6 +41,46 @@ const meta = {
       playground: "Playground",
       interactionStory: "yami-components-actions-button--interaction",
       showStories: false,
+      translations: {
+        zh: {
+          description: "Button 执行操作；ButtonLink 提供同样的按钮外观并保留原生链接导航。按任务优先级选择层级，按布局选择形态；同屏最多一个红色强调入口。",
+          argDescriptions: {
+            variant: "视觉层级：强调、主要、次要或低强调。默认 primary，同屏最多一个 emphasis 入口。",
+            form: "形态：inline 内容宽度、full 填满父容器、icon 仅图标。默认 inline，icon 必须提供 aria-label。",
+            size: "尺寸：sm=32px、md=40px；lg 移动端 48px，桌面文字按钮 56px、图标按钮 48px。默认 md。",
+            inverse: "使用当前主题内相反明暗表面的令牌，默认 false。",
+            children: "按钮标签；icon 形态下为图标。",
+            leftIcon: "标签前的图标，优先使用继承 currentColor 的规范 SVG。",
+            rightIcon: "标签后的图标。",
+            loading: "加载时显示图标并拦截激活，保留焦点和可访问名称。",
+            loadingDelay: "延迟显示加载图标的毫秒数，默认 0；忙碌状态和点击拦截立即生效。",
+            disabled: "不可用时使用 aria-disabled 并拦截点击，仍可通过键盘聚焦。",
+            htmlType: "原生按钮类型，默认 button。提交或重置需显式设置 submit / reset。",
+            htmlForm: "外部原生表单的 id，透传为 HTML form 属性。",
+            iconOnly: "已废弃，新代码使用 form=icon。",
+            fullWidth: "已废弃，新代码使用 form=full。",
+          },
+        },
+        en: {
+          description: "Button performs actions; ButtonLink shares its appearance and preserves native link navigation. Choose hierarchy by task priority and form by layout. Use at most one red emphasis entry per screen.",
+          argDescriptions: {
+            variant: "Visual hierarchy: emphasis, primary, secondary, or tertiary. Default primary; at most one emphasis entry per screen.",
+            form: "Layout: inline content width, full parent width, or icon-only. Default inline; icon requires aria-label.",
+            size: "sm=32px, md=40px; lg=48px on mobile, 56px for desktop text and 48px for desktop icons. Default md.",
+            inverse: "Use opposite-polarity tokens within the current theme. Default false.",
+            children: "Button label, or an icon for icon form.",
+            leftIcon: "Icon before the label; prefer canonical currentColor SVGs.",
+            rightIcon: "Icon after the label.",
+            loading: "Show a spinner and block activation while retaining focus and accessible name.",
+            loadingDelay: "Spinner delay in milliseconds, default 0. Busy state and click blocking remain immediate.",
+            disabled: "Set aria-disabled and block clicks while retaining keyboard focusability.",
+            htmlType: "Native button type, default button. Set submit or reset explicitly.",
+            htmlForm: "External native form id, forwarded as the HTML form attribute.",
+            iconOnly: "Deprecated; use form=icon.",
+            fullWidth: "Deprecated; use form=full.",
+          },
+        },
+      },
       description: {
         component:
           "按钮用于触发操作。按操作优先级选择层级，按布局选择形态；反色按钮用于相反明暗的背景。下方为规格对照，业务页面只保留一个红色强调操作。",
@@ -338,4 +380,18 @@ function SizePreview({ desktop, size }: { desktop: boolean; size: typeof SIZES[n
       </p>
     </div>
   )
+}
+
+/** Button appearance with native navigation semantics. */
+export const Navigation: Story = {
+  render: ({ variant, size, inverse }, { globals }) => (
+    <ButtonGroup aria-label={globals.locale === "en" ? "Order actions" : "订单操作"}>
+      <ButtonLink href="/orders/Y20261011-1234" variant={variant} size={size} inverse={inverse}>
+        {globals.locale === "en" ? "View order" : "查看订单"}
+      </ButtonLink>
+      <Button variant="secondary" size={size} inverse={inverse}>
+        {globals.locale === "en" ? "Download receipt" : "下载收据"}
+      </Button>
+    </ButtonGroup>
+  ),
 }

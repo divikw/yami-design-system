@@ -74,7 +74,7 @@ const principlesData = [
     ruleId: 'no-custom-radii',
     title: '圆角限制',
     severity: 'error',
-    description: '不得自定义 radii，只用 semantic slots（12 / 8 / 9999 / 4）',
+    description: '不得自定义 radii，只用 semantic slots（4 / 8 / 12 / 16 / 9999）；16px 专用于移动端 Sheet 顶部圆角',
     validator: noCustomRadii,
   },
   {

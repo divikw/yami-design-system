@@ -56,6 +56,11 @@
   max-width: 100%;
   flex: 0 1 auto;
   gap: var(--space-100);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.thumbnails[data-thumbnail-overflow="true"] .thumbnailScroller {
   overflow: hidden;
 }
 
@@ -216,7 +221,9 @@
     top: 0;
     left: calc(100% + var(--space-400));
     z-index: 4;
-    display: none;
+    display: block;
+    /* Keep CSS lengths measurable before the first pointer movement. */
+    visibility: hidden;
     width: var(--product-media-zoom-pane-size, 100%);
     height: var(--product-media-zoom-pane-height, var(--product-media-zoom-pane-size, 100%));
     overflow: hidden;
@@ -232,7 +239,7 @@
   }
 
   .stage[data-zoom-active="true"] .zoomPane {
-    display: block;
+    visibility: visible;
   }
 
   .zoomLens {
@@ -428,7 +435,8 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
+    /* Keep edge rebound from holding the next gesture on the thumbnail rail. */
+    overscroll-behavior-x: none;
     touch-action: pan-x pinch-zoom;
     scrollbar-width: none;
   }

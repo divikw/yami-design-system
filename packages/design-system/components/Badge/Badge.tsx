@@ -94,7 +94,7 @@ const TYPE_PRESETS: Record<BadgeType, { color: BadgeColor; emphasis: BadgeEmphas
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Color maps to semantic badge tokens. Default: 'neutral'. Use 'red' only for promotion/urgency. */
   color?: BadgeColor
-  /** 'primary' = solid bg, high contrast. 'secondary' = tinted bg, softer. Default: 'primary'. */
+  /** 'primary' = solid bg. 'secondary' = tinted bg. Yellow always uses secondary. Default: 'primary'. */
   emphasis?: BadgeEmphasis
   /** Geometry tier. Default: 'sm' (20px / 12px). 'md' = 24px / 14px. */
   size?: BadgeSize
@@ -123,7 +123,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
 ) {
   const preset = type ? TYPE_PRESETS[type] : undefined
   const resolvedColor = color ?? preset?.color ?? 'neutral'
-  const resolvedEmphasis = emphasis ?? preset?.emphasis ?? 'primary'
+  const resolvedEmphasis = resolvedColor === 'yellow' ? 'secondary' : emphasis ?? preset?.emphasis ?? 'primary'
   const flag = type ? TYPE_FLAGS[type] : undefined
 
   const classes = [styles.badge, className].filter(Boolean).join(' ')

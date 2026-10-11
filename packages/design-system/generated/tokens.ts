@@ -17,8 +17,8 @@ export const tokens = {
   },
   "badge.bg-primary-green": {
     "$type": "color",
-    "$value": "{color.emerald.600}",
-    "$description": "用于成功、完成与可用状态的主标签背景。"
+    "$value": "{color.emerald.700}",
+    "$description": "用于成功、完成与可用状态的主标签背景，确保浅色主题上的白字满足 AA 对比度。"
   },
   "badge.bg-primary-neutral": {
     "$type": "color",
@@ -34,11 +34,6 @@ export const tokens = {
     "$type": "color",
     "$value": "{color.red.500}",
     "$description": "用于错误、失败或高风险提示的主标签背景。"
-  },
-  "badge.bg-primary-yellow": {
-    "$type": "color",
-    "$value": "{color.amber.600}",
-    "$description": "用于警示、提醒或高亮类主标签背景。"
   },
   "badge.bg-secondary-blue": {
     "$type": "color",
@@ -1508,6 +1503,51 @@ export const tokens = {
     "$value": "20px",
     "$description": "用于正文中的主要跳转入口、可点击文案与 Link 按钮。适用于 body-xl 层级的阅读流链接及 Link 类型按钮，不用于标题或价格信息。"
   },
+  "membership.background.gold": {
+    "$type": "color",
+    "$value": "{color.amber.50}",
+    "$description": "gold 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.ruby": {
+    "$type": "color",
+    "$value": "{color.red.50}",
+    "$description": "ruby 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.ruby-0": {
+    "$type": "color",
+    "$value": "{color.neutral.100}",
+    "$description": "ruby-0 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.background.silver": {
+    "$type": "color",
+    "$value": "{color.blue.50}",
+    "$description": "silver 会员角标浅色底，明暗主题保持一致。Ruby 浅红底参考官网原始角标，其余沿用等级对应的浅色阶。"
+  },
+  "membership.ring.gold": {
+    "$type": "color",
+    "$value": "#FDA700",
+    "$description": "Gold 会员头像描边，沿用原始会员图标的金色；明暗主题保持一致。"
+  },
+  "membership.ring.ruby": {
+    "$type": "color",
+    "$value": "#FF6155",
+    "$description": "Ruby 会员头像描边，取自官网账户头像实际样式；明暗主题保持一致。"
+  },
+  "membership.ring.ruby-0": {
+    "$type": "color",
+    "$value": "#999999",
+    "$description": "Ruby-0 会员头像描边，沿用原始会员图标的灰色；明暗主题保持一致。"
+  },
+  "membership.ring.silver": {
+    "$type": "color",
+    "$value": "#5196FF",
+    "$description": "Silver 会员头像描边，沿用原始会员图标的蓝色；明暗主题保持一致。"
+  },
+  "membership.separator": {
+    "$type": "color",
+    "$value": "{color.white.1000}",
+    "$description": "会员头像图片与等级描边之间的白色分隔环，明暗主题保持白色。"
+  },
   "overlay.default": {
     "$type": "color",
     "$value": "{color.black.300}",
@@ -1586,7 +1626,7 @@ export const tokens = {
   "radius.component.default": {
     "$type": "dimension",
     "$value": "{radius.md}",
-    "$description": "通用 UI 组件的默认圆角，适用于卡片、弹窗、信息块等基础组件。"
+    "$description": "紧凑 UI 组件的默认圆角，包括 ProductCard 的外容器与图片区域；基础 Card、居中 Dialog 和浮层面板使用 surface.default，移动端底部 Sheet 使用 surface.sheet。"
   },
   "radius.component.none": {
     "$type": "dimension",
@@ -1621,12 +1661,17 @@ export const tokens = {
   "radius.surface.default": {
     "$type": "dimension",
     "$value": "{radius.lg}",
-    "$description": "页面级主要内容区域的默认圆角，用于大块内容容器，确保整体视觉柔和但不过度装饰。"
+    "$description": "内容表面的默认圆角，用于基础 Card、居中 Dialog 和浮层面板；移动端底部 Sheet 使用 surface.sheet，页面最外层或全宽背景使用 surface.none。"
   },
   "radius.surface.none": {
     "$type": "dimension",
     "$value": "{radius.none}",
     "$description": "页面级或全宽背景使用的直角圆角设置，适用于需要与屏幕边缘对齐的布局区域"
+  },
+  "radius.surface.sheet": {
+    "$type": "dimension",
+    "$value": "{radius.xl}",
+    "$description": "移动端底部 Sheet 的顶部圆角（16px），仅用于左上和右上角，底部两角保持直角；桌面端居中形态使用 surface.default。"
   },
   "radius.tag.primary": {
     "$type": "dimension",

@@ -24,7 +24,7 @@ export const BasicCard = () => (
 export const NoPaddingCard = () => (
   <section data-example="NoPaddingCard">
     <Card padding="none" style={{ width: 200 }}>
-      <div style={{ height: 120, background: 'var(--brand-tertiary)' }} />
+      <div style={{ height: 120, background: 'var(--brand-tertiary)', borderRadius: 'var(--radius-surface-default) var(--radius-surface-default) 0 0', overflow: 'hidden' }} />
       <div style={{ padding: 'var(--space-200)' }}>Image-first card</div>
     </Card>
   </section>
@@ -38,9 +38,27 @@ export const BorderedCard = () => (
 
 export const LinkCard = () => (
   <section data-example="LinkCard">
-    <Card as="a" href="/product/example" padding="md" style={{ textDecoration: 'none' }}>
-      <div style={{ color: 'var(--text-primary)' }}>Click the whole card</div>
+    <Card as="a" href="/product/example" padding="md">
+      View product details
     </Card>
+  </section>
+)
+
+export const ButtonCard = () => (
+  <section data-example="ButtonCard">
+    <Card as="button">Open delivery settings</Card>
+  </section>
+)
+
+export const DisabledButtonCard = () => (
+  <section data-example="DisabledButtonCard">
+    <Card as="button" disabled>Delivery settings unavailable</Card>
+  </section>
+)
+
+export const InverseLinkCard = () => (
+  <section data-example="InverseLinkCard">
+    <Card as="a" href="/orders" surface="inverse">View orders</Card>
   </section>
 )
 

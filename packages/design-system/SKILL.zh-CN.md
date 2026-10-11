@@ -1,7 +1,7 @@
 ---
 name: yami-design-system
 version: 0.6.0-alpha.1
-updated: 2026-09-04
+updated: 2026-10-11
 audience: ai-agent
 purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 ---
@@ -32,7 +32,7 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 其中简要说明：
 
 - 两种红色：品牌红 `#FF0000` 与操作红 `#E00000`，以及各自的使用范围。
-- 5 个圆角档位和 8px 间距网格。
+- 6 个语义圆角槽位（含移动端 Sheet 的 16px 顶部圆角）和 8px 间距网格。
 - 字体规则：数字使用 GT Walsheim，中文正文使用 PingFang SC。
 - 当前维护的组件类别及其用途。
 - 15 条必须遵守的规则。
@@ -56,9 +56,9 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 
 ---
 
-## 必须遵守的 15 条规则
+## 必须遵守的规则与自动检查范围
 
-规则标记位于 `DESIGN.md` 的对应章节，中英文完整说明见规则汇总表。每个 `<!-- rule-id: X -->` 标记关联 [`principles/principles.ts`](./principles/principles.ts) 及 `principles/validators/X.ts` 中的 AST 校验器。规则标识如下：
+规则标记位于 `DESIGN.md` 的对应章节，中英文完整说明见规则汇总表。每个 `<!-- rule-id: X -->` 标记关联 [`principles/principles.ts`](./principles/principles.ts) 及 `principles/validators/X.ts` 中的静态校验器。规则标识如下：
 
 `red-usage`、`semantic-color-only`、`numerals-font`、`type-hierarchy`、`no-custom-radii`、`elevation-on-press`、`no-opacity-disabled`、`focus-style`、`border-strength`、`emphasis-limit`、`card-no-border`、`tap-target`、`no-emoji`、`no-decorative-media`、`token-exists`。
 
@@ -66,7 +66,7 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 
 - `emphasis-limit`：每屏只允许 1 个强调型 Button，出现 2 个即不符合要求。
 - `no-opacity-disabled`：禁用按钮使用 `--button-disabled` 和 `--text-disabled`，不得使用 CSS `opacity`。
-- `token-exists`：不得编造尺寸 Token，例如使用不存在的 `heading-lg`，而规范列出的是 `-md`、`-xl`、`-2xl`。文档由 CI 中的 `check:tokens-in-docs` 检查，代码由 `check:design`（阶段 6.5）检查。
+- `token-exists`：不得编造尺寸 Token，例如使用不存在的 `heading-lg`，而规范列出的是 `-md`、`-xl`、`-2xl`。文档由 `check:tokens-in-docs` 检查；`validateDesign` 检查已支持的代码模式，不能覆盖所有运行时结果。
 
 ---
 
@@ -76,13 +76,14 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 
 | 名称 | 类别 | 使用场景 |
 | --- | --- | --- |
-| [`Button`](./components/Button/meta.json) | 操作 | 各类行动按钮。**每屏只允许 1 个强调型按钮。** |
+| [`Button`](./components/Button/meta.json) | 操作 | 执行操作；按钮外观的导航使用 ButtonLink。**每屏最多 1 个强调型按钮。** |
+| [`ButtonGroup`](./components/ButtonGroup/meta.json) | 操作 | 相关 Button / ButtonLink 入口，提供分组名称、统一尺寸和 8px 间距。 |
 | [`Card`](./components/Card/meta.json) | 布局 | 基础容器，默认不显示边框。 |
 | [`Badge`](./components/Badge/meta.json) | 展示 | 状态或促销标签，是允许使用蓝、绿、紫、黄的组件。 |
 | [`Input`](./components/Input/meta.json) | 表单 | 文本输入，使用 2px 黑色焦点环，不使用蓝色。 |
 | [`Checkbox`](./components/Checkbox/meta.json) | 表单 | 独立选择或多选，选中状态使用中性色。 |
 | [`RadioGroup`](./components/RadioGroup/meta.json) | 表单 | 支持方向键导航的单选。 |
-| [`Divider`](./components/Divider/meta.json) | 布局 | 仅有 default、subtle、emphasis 三种强度。 |
+| [`Divider`](./components/Divider/meta.json) | 布局 | default（1px）/ emphasis（2px）；独立 inverse 布尔属性；支持横向、纵向。 |
 | [`AspectRatio`](./components/AspectRatio/meta.json) | 布局 | 为响应式媒体限制比例，不附加视觉样式。 |
 | [`ProductCard`](./components/ProductCard/meta.json) | 组合 | 标准商品卡片，由 Card、AspectRatio、Badge 和 ProductCardAddButton 组成。 |
 | [`ProductList`](./components/ProductList/meta.json) | 组合 | 响应式商品集合，支持横向列表和瀑布流布局。 |
@@ -90,6 +91,13 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 | [`Tabs`](./components/Tabs/meta.json) | 导航 | 组合式标签导航，触发项必须放在 `TabsList` 内。 |
 
 每个 `meta.json` 声明属性、变体、`tokenBindings`（哪个选择器的哪个属性读取哪个 Token）、使用的规则和无障碍要求。
+
+## 按行为选择操作入口
+
+- 保存、提交、打开弹窗或生成收据使用 Button；导航和已有文件的直接下载需要按钮外观时，使用带真实 `href` 的 ButtonLink；文字导航使用普通链接。Button 没有 `href`、`as` 或 `asChild` API，不使用点击回调重定向来模拟链接。
+- 链接和按钮允许并列，明确对齐、间距、焦点顺序与换行，不要求相同填充。相关 Button 和 ButtonLink 优先使用 ButtonGroup，保持同一尺寸并提供分组名称；普通文字链接与按钮并列时使用普通布局容器。
+- 修正视觉时保留用户的标签、目标地址和操作含义，不能为统一外观把“查看订单”替换成“打印订单”。视觉层级按业务优先级选择，并非每张卡片都需要主按钮或红色强调按钮。
+- ButtonLink 共享 Button 样式并渲染原生链接，保留链接的激活方式和浏览器操作。支持 inline/full 形态，没有 loading/disabled API；导航不可用时显示静态说明。不在页面中复制 Button 的私有 CSS。具体示例见上述组件用法文档。
 
 ## Storybook 与 Registry 使用约定
 
@@ -111,7 +119,9 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 pnpm validate
 ```
 
-此命令检查代码风格、类型、设计原则、文档与 Token 及目录的一致性、生成文件、包边界和测试。无需 Design Labs 运行环境，也可通过 [`principles/index.ts`](./principles/index.ts) 使用设计原则校验器。
+此命令检查代码风格、类型、设计原则、文档与 Token 及目录的一致性、生成文件、包边界、按钮使用检查和测试。15 条原则的自动覆盖程度不同，通过检查不代表完整设计审查。`check:button-usage` 检查明确误用与静态可确定的分组契约；动态回调、计算属性、视觉层级和命中区裁切仍需检查。界面变更还需运行相关 Storybook／浏览器测试并检查布局。Skill 评估验证引用和预写样例，不会让 AI 执行提示词。
+
+无需 Design Labs 运行环境，也可通过 [`principles/index.ts`](./principles/index.ts) 使用设计原则校验器。
 
 ---
 
@@ -132,7 +142,7 @@ Canvas 和 Storybook 通过公开导出使用该包；页面原型负责页面�
 用户要求制作 YAMI 页面或组件时：
 
 1. **先匹配现有页面。** 对于商品列表、详情、搜索、首页或活动页，先查看 [`../prototypes/pages/`](../prototypes/pages/)，优先复用最接近的维护页面组合。
-2. **组件需求先匹配目录。** 添加按钮、标签或卡片时，使用 [`components/<Name>/meta.json`](./components/) 中声明的属性。不要重新定义 `tokenBindings`，组件已经包含相应绑定。
+2. **先读取使用组件的契约。** 修改或组合组件前，阅读 `meta.json`、`usage.md`、相关 Story 和公开导出，不能只看属性表。操作类组件须阅读 [Button 用法](./components/Button/usage.md) 和 [ButtonGroup 用法](./components/ButtonGroup/usage.md)。不要重新定义 `tokenBindings`。
 3. **使用语义别名。** 使用 `--text-emphasis`，而不是 `--color-red-500`；使用 `--button-primary`，而不是 `--color-black-900`。组件侧别名位于 `generated/tokens.css` 的 `/* Semantic Aliases */` 部分。
 4. **需要独立使用时，复制快速开始代码。** 从 [`DESIGN.md → 快速开始`](./DESIGN.md) 将 CSS 或 Tailwind v4 代码复制到新项目中。
 5. **拒绝错误做法。** 对照 [`DESIGN.md → AI 常见错误做法`](./DESIGN.md)；有疑问时，拒绝该做法并说明原因。

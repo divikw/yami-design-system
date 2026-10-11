@@ -88,11 +88,85 @@ test("desktop thumbnail overflow uses a +N preview control instead of horizontal
     expect(more.textContent).toBe("+3");
     await page.elementLocator(more).hover();
     await expect.poll(() => gallery.dataset.activeIndex).toBe("4");
-    await page.elementLocator(more).click();
+    more.focus();
+    await userEvent.keyboard("{Enter}");
     const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
     expect(dialog.open).toBe(true);
     expect(dialog.querySelector('[data-slot="product-media-preview-image"]')?.getAttribute("alt"))
       .toBe(galleryImages[4]!.alt);
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("desktop overflow keeps every thumbnail reachable when preview is disabled", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  container.style.width = "480px";
+  document.body.append(container);
+  const root = createRoot(container);
+  const galleryImages = Array.from({ length: 8 }, (_, index) => ({
+    ...images[index % images.length]!, id: `fallback-${index}`, thumbnailPinned: index === 7,
+  }));
+  try {
+    await page.viewport(1440, 900);
+    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} />));
+    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
+    const scroller = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail-scroller"]')!;
+    await expect.poll(() => scroller.querySelectorAll("button").length).toBe(7);
+    expect(container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();
+    expect(getComputedStyle(scroller).overflowX).toBe("auto");
+    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
+    const lastRegular = scroller.querySelectorAll<HTMLButtonElement>("button")[6]!;
+    lastRegular.focus();
+    await userEvent.keyboard("{Enter}");
+    await expect.poll(() => gallery.dataset.activeIndex).toBe("6");
+    expect(lastRegular.getBoundingClientRect().right).toBeLessThanOrEqual(scroller.getBoundingClientRect().right + 1);
+    expect(container.querySelector("dialog[open]")).toBeNull();
+    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview />));
+    await expect.poll(() => container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).not.toBeNull();
+    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} />));
+    await expect.poll(() => scroller.querySelectorAll("button").length).toBe(7);
+    expect(container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test.each([
+  { label: "numeric", width: 900, height: 600 },
+  { label: "px", width: "900px", height: "600px" },
+  { label: "responsive", width: "calc(100vw - 900px)", height: "60vh" },
+])("$label zoom dimensions cover the pane at both image edges", async ({ width, height }) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  container.style.width = "480px";
+  document.body.append(container);
+  const root = createRoot(container);
+  const source = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="black"/></svg>')}`;
+  try {
+    await page.viewport(1800, 1000);
+    flushSync(() => root.render(<ProductMediaGallery images={[{ id: "wide", src: source, alt: "Wide product image" }]} desktopZoom desktopZoomPaneWidth={width} desktopZoomPaneHeight={height} />));
+    const stage = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-stage"]')!;
+    const image = stage.querySelector<HTMLImageElement>("img")!;
+    const pane = stage.querySelector<HTMLElement>('[data-slot="product-media-gallery-zoom-pane"]')!;
+    await expect.poll(() => image.naturalWidth).toBe(200);
+    for (const position of [{ x: 12, y: 12 }, { x: 468, y: 468 }]) {
+      await page.elementLocator(stage).hover({ position });
+      await expect.poll(() => getComputedStyle(pane).visibility).toBe("visible");
+      const style = getComputedStyle(pane);
+      const [backgroundWidth, backgroundHeight] = style.backgroundSize.split(" ").map(parseFloat);
+      const x = parseFloat(style.backgroundPositionX);
+      const y = parseFloat(style.backgroundPositionY);
+      expect(x).toBeLessThanOrEqual(0);
+      expect(y).toBeLessThanOrEqual(0);
+      expect(x + backgroundWidth!).toBeGreaterThanOrEqual(pane.clientWidth - 1);
+      expect(y + backgroundHeight!).toBeGreaterThanOrEqual(pane.clientHeight - 1);
+    }
   } finally {
     root.unmount();
     container.remove();
@@ -259,6 +333,7 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     };
     const selectedImage = () => dialog.querySelector('[data-slot="product-media-preview-image"]');
     const imageRail = dialog.querySelector<HTMLElement>('[data-slot="product-media-preview-rail"]')!;
+    expect(getComputedStyle(imageRail).overscrollBehaviorX).toBe("none");
     await swipeImage(-1);
     await expect.poll(() => thumbnails[3].getAttribute("aria-pressed")).toBe("true");
     await expect.poll(() => imageRail.scrollLeft).toBe(imageRail.clientWidth * 3);
@@ -321,6 +396,44 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     await expect.poll(() => container.querySelector("dialog")).toBeNull();
   } finally {
     await session.send("Emulation.setTouchEmulationEnabled", { enabled: false });
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("preserves the selected image when a breakpoint scroll reset precedes resize alignment", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const changed = vi.fn();
+  const NativeResizeObserver = window.ResizeObserver;
+  const pending: (() => void)[] = [];
+  let deferAlignment = false;
+  const observer = vi.spyOn(window, "ResizeObserver").mockImplementation(function (callback) {
+    return new NativeResizeObserver((entries, instance) => {
+      if (deferAlignment && entries.some(({ target }) => target.getAttribute("data-slot") === "product-media-gallery-rail")) {
+        pending.push(() => callback(entries, instance));
+      } else callback(entries, instance);
+    });
+  });
+  try {
+    await page.viewport(1440, 900);
+    flushSync(() => root.render(<ProductMediaGallery images={images} defaultIndex={3} onIndexChange={changed} />));
+    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
+    const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-rail"]')!;
+    deferAlignment = true;
+    await page.viewport(375, 900);
+    await expect.poll(() => pending.length).toBeGreaterThan(0);
+    flushSync(() => rail.dispatchEvent(new Event("scroll", { bubbles: true })));
+    expect(changed).not.toHaveBeenCalled();
+    expect(gallery.dataset.activeIndex).toBe("3");
+    deferAlignment = false;
+    for (const align of pending) align();
+    await expect.poll(() => rail.scrollLeft).toBeCloseTo(rail.clientWidth * 3, 0);
+  } finally {
+    observer.mockRestore();
     root.unmount();
     container.remove();
     await page.viewport(viewport.width, viewport.height);

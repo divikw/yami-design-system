@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Hairline separator (1px). 3 strengths per design.md border-strength rule, plus inverse variants for opposite-polarity surfaces. Horizontal renders as <hr>, vertical as <span role=\"separator\">.",
+  "description": "Content separator with default (1px) and emphasis (2px) strengths. A separate inverse boolean selects opposite-polarity surface colors in either theme. Horizontal renders as semantic <hr>; vertical renders as decorative <span aria-hidden=\"true\">.",
   "source": "components/Divider",
   "files": [
     {
@@ -43,7 +43,6 @@
     ],
     "examples": [
       "components/Divider/examples.tsx#DefaultDivider",
-      "components/Divider/examples.tsx#SubtleDivider",
       "components/Divider/examples.tsx#EmphasisDivider",
       "components/Divider/examples.tsx#VerticalDivider",
       "components/Divider/examples.tsx#InverseDivider",
@@ -57,49 +56,49 @@
       "--divider-default-inverse",
       "--divider-emphasis",
       "--divider-emphasis-inverse",
-      "--divider-subtle",
-      "--divider-subtle-inverse"
+      "--stroke-default",
+      "--stroke-thick"
     ],
     "rules": [
       "border-strength"
     ],
     "tokenBindings": {
       "--divider-default": {
-        "property": "border-color",
-        "selector": ".horizontal.default, .vertical.default"
+        "property": "background-color",
+        "selector": ".default"
       },
       "--divider-default-inverse": {
-        "property": "border-color",
-        "selector": ".horizontal.default-inverse, .vertical.default-inverse"
-      },
-      "--divider-subtle": {
-        "property": "border-color",
-        "selector": ".horizontal.subtle, .vertical.subtle"
-      },
-      "--divider-subtle-inverse": {
-        "property": "border-color",
-        "selector": ".horizontal.subtle-inverse, .vertical.subtle-inverse"
+        "property": "background-color",
+        "selector": ".default.inverse"
       },
       "--divider-emphasis": {
-        "property": "border-color",
-        "selector": ".horizontal.emphasis, .vertical.emphasis"
+        "property": "background-color",
+        "selector": ".emphasis"
       },
       "--divider-emphasis-inverse": {
-        "property": "border-color",
-        "selector": ".horizontal.emphasis-inverse, .vertical.emphasis-inverse"
+        "property": "background-color",
+        "selector": ".emphasis.inverse"
+      },
+      "--stroke-default": {
+        "property": "height / width",
+        "selector": ".horizontal, .vertical"
+      },
+      "--stroke-thick": {
+        "property": "height / width",
+        "selector": ".horizontal.emphasis, .vertical.emphasis"
       }
     }
   },
   "quality": {
     "accessibility": {
-      "role": "separator",
+      "role": "separator (horizontal); none (vertical)",
       "wcagLevel": "AA",
       "tapTargetMin": 0,
       "keyboardNav": [],
-      "ariaPattern": "separator",
-      "notes": "Non-interactive — tapTargetMin=0, keyboardNav=[]. <hr> is inherently role=separator. Vertical variant sets role+aria-orientation manually."
+      "ariaPattern": "native separator (horizontal); aria-hidden=true (vertical)",
+      "notes": "Non-interactive. Horizontal <hr> exposes native separator semantics and accepts aria-label. Vertical <span> is decorative and hidden from assistive technology; the parent provides content grouping semantics."
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "080101861f55caa701699162b2f2624025be413a4e270226d4a5295a324fa90f"
+  "contentDigest": "75c55436c7de8623013278f414621fd1c3ce33cb231e37d39e91db8657dce148"
 }

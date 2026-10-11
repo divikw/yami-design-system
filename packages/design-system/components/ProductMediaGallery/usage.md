@@ -16,8 +16,9 @@ full image position and alt text.
 For a labeled reference image such as a nutrition panel, set
 `thumbnailOverlayLabel` on that image. Keep this reference image at
 the end of the ordered image list and set `thumbnailPinned` when it must remain
-visible in the final position of the first thumbnail viewport. On desktop, the
-main-gallery thumbnail rail does not scroll. When regular images overflow, the
+visible in the final position of the first thumbnail viewport. With
+`desktopPreview` enabled, the desktop main-gallery thumbnail rail does not
+scroll. When regular images overflow, the
 last available regular slot becomes a dark `+N` control: `N` counts only hidden
 regular images, never the pinned reference. Activating it opens the full image
 preview at the first hidden image. On hover-capable desktop devices, hovering
@@ -26,6 +27,9 @@ regular images fit, the `+N` control is omitted and the labeled reference stays 
 images instead of leaving an empty gap at the edge. When it overflows, the
 reference pins to the final visible slot. Desktop thumbnails stay within the
 64–88px range; narrower containers reduce the number of complete slots.
+When `desktopPreview` is disabled (the default), every thumbnail remains in a
+horizontally scrollable rail; keyboard users can focus and activate each image.
+No `+N` control is shown without an enabled preview.
 Preview-dialog thumbnails retain their existing sizing.
 
 The component's 560px maximum applies only from the 1024px desktop breakpoint.
@@ -34,9 +38,10 @@ at a 1920px viewport. Tablet and mobile layouts remain full-width so their
 horizontal image rail can use the complete viewport without clipping the active
 slide.
 
-The thumbnail rail sits under the square stage at every viewport. Only the
-mobile gallery rail and preview-dialog thumbnail row can scroll horizontally;
-the desktop main-gallery thumbnail rail uses the `+N` affordance above. The component consumes
+The thumbnail rail sits under the square stage at every viewport. The mobile
+gallery rail, preview-dialog thumbnail row, and desktop thumbnails without
+preview support native horizontal scrolling. Desktop thumbnails with preview
+enabled use the `+N` affordance above. The component consumes
 YAMI surface, border, focus, radius, typography, and spacing tokens; callers
 control only the image data and localized labels.
 
@@ -81,6 +86,10 @@ a fine pointer moves over the main image. A bounded translucent lens identifies
 the sampled region. Use `desktopZoomPaneWidth` and `desktopZoomPaneHeight` when
 the pane must match adjacent responsive content. The zoom source remains aligned
 to the actual contained image, rather than any letterboxing in the main stage.
+Dimensions accept pixel numbers or CSS lengths such as `"900px"`, `"60vh"`, and
+`"calc(100vw - 900px)"`. Sampling uses the rendered pane dimensions so the image
+covers the pane at both edges. Without an explicit height, the pane remains
+square, following its configured width or the main-stage size.
 Zoom is disabled below 1024px and for coarse pointers; the main image remains
 the preview trigger at every enabled breakpoint.
 The preview uses the primary surface, a contained image centered in the available
@@ -92,7 +101,9 @@ scroll. Set `mobilePreview` to also enable tap-to-preview below 1024px: a white
 primary surface, centered contained image, top-right close button, and one
 horizontal thumbnail row at the bottom. Swipe the large image horizontally to
 move between images with native page snapping; the first and last images do not
-wrap. Thumbnail selection and keyboard navigation keep the large image aligned,
+wrap. The mobile preview image rail suppresses edge rebound so a subsequent
+gesture can immediately scroll the thumbnail row, including on macOS.
+Thumbnail selection and keyboard navigation keep the large image aligned,
 and the active thumbnail follows swipes. The row scrolls with touch or trackpad
 gestures and keeps the selected thumbnail in view. Safe-area insets protect
 the close button and bottom rail. Native gallery swiping does not open a preview.

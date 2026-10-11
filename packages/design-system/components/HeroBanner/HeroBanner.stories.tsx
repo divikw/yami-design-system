@@ -764,24 +764,22 @@ export const CounterTracksLeftmostCard: Story = {
     const [first, second] = Array.from(rail.children) as HTMLElement[];
     const itemStep = second.offsetLeft - first.offsetLeft;
     const total = rail.children.length;
-    const settle = () =>
-      new Promise((resolve) => setTimeout(resolve, 120));
-
     for (const index of [0, 1, 2, 4]) {
       rail.scrollTo({ left: index * itemStep, behavior: "instant" });
-      await settle();
       const expected = `${index + 1} / ${total}`;
-      if (counter.textContent?.trim() !== expected) {
-        throw new Error(
-          `Card ${index + 1} at the left edge must read "${expected}", read "${counter.textContent?.trim()}"`,
-        );
-      }
       const expectedFill = `${(((index + 1) / total) * 100).toFixed(4)}%`;
-      if (fill.style.width !== expectedFill) {
-        throw new Error(
-          `Progress fill must track the counter at ${expectedFill}, was ${fill.style.width}`,
-        );
-      }
+      await waitFor(() => {
+        if (counter.textContent?.trim() !== expected) {
+          throw new Error(
+            `Card ${index + 1} at the left edge must read "${expected}", read "${counter.textContent?.trim()}"`,
+          );
+        }
+        if (fill.style.width !== expectedFill) {
+          throw new Error(
+            `Progress fill must track the counter at ${expectedFill}, was ${fill.style.width}`,
+          );
+        }
+      });
     }
   },
 };

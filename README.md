@@ -12,6 +12,11 @@ pnpm dev:storybook
 pnpm dev:docsite
 ```
 
+TypeScript 7 provides `tsc` through the `@typescript/native` alias. The root
+`typescript` alias uses `@typescript/typescript6` for ESLint and the design-system
+validators that require the compiler API. Keep both aliases when updating dependencies
+([TypeScript migration guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0)).
+
 ## AI workflow
 
 Yami Design System does not call a model at runtime. Generate a `DirectionManifestV1`

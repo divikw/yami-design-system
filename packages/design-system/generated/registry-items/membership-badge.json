@@ -1,0 +1,104 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "membership-badge",
+  "title": "MembershipBadge",
+  "type": "component",
+  "status": "beta",
+  "version": "0.1.0",
+  "description": "56×20px membership badge with original Figma artwork.",
+  "source": "components/MembershipBadge",
+  "files": [
+    {
+      "source": "components/MembershipBadge/assets/gold.svg",
+      "target": "components/MembershipBadge/assets/gold.svg"
+    },
+    {
+      "source": "components/MembershipBadge/assets/ruby-0.svg",
+      "target": "components/MembershipBadge/assets/ruby-0.svg"
+    },
+    {
+      "source": "components/MembershipBadge/assets/ruby.svg",
+      "target": "components/MembershipBadge/assets/ruby.svg"
+    },
+    {
+      "source": "components/MembershipBadge/assets/silver.svg",
+      "target": "components/MembershipBadge/assets/silver.svg"
+    },
+    {
+      "source": "components/MembershipBadge/index.ts",
+      "target": "components/MembershipBadge/index.ts"
+    },
+    {
+      "source": "components/MembershipBadge/MembershipBadge.module.css",
+      "target": "components/MembershipBadge/MembershipBadge.module.css"
+    },
+    {
+      "source": "components/MembershipBadge/MembershipBadge.tsx",
+      "target": "components/MembershipBadge/MembershipBadge.tsx"
+    }
+  ],
+  "exports": [
+    "MembershipBadge",
+    "MembershipBadgeProps",
+    "MembershipBadgeTier"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite"
+    ]
+  },
+  "documentation": {
+    "usage": "components/MembershipBadge/usage.md",
+    "stories": [
+      "components/MembershipBadge/MembershipBadge.stories.tsx"
+    ],
+    "examples": [
+      "components/MembershipBadge/examples.tsx#MembershipBadgeExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--space-050",
+      "--space-100",
+      "--space-200",
+      "--space-600"
+    ],
+    "rules": [],
+    "tokenBindings": {
+      "--space-600": {
+        "property": "width / height",
+        "selector": ".root"
+      },
+      "--space-100": {
+        "property": "width / height",
+        "selector": ".root"
+      },
+      "--space-200": {
+        "property": "width / height",
+        "selector": ".root"
+      },
+      "--space-050": {
+        "property": "width / height",
+        "selector": ".root"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "img (decorative when alt is empty)",
+      "wcagLevel": "AA",
+      "tapTargetMin": 0,
+      "keyboardNav": [],
+      "ariaPattern": "One accessible name on the root; internal SVG images are hidden from assistive technology.",
+      "notes": "Use alt=\"\" when an adjacent label repeats the tier. Original artwork text contrast follows Figma and is not an AA text-contrast claim."
+    },
+    "interactionCoverage": "not-applicable"
+  },
+  "contentDigest": "1e73a4c7a24fe70f43478e8721bc681eea495bc20cb85fc84f514c9bbe47c6fd"
+}

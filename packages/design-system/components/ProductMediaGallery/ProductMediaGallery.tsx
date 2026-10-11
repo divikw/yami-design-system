@@ -93,6 +93,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   const [hasThumbnailOverflow, setHasThumbnailOverflow] = useState(false);
   const activeIndex = clampIndex(selectedIndex, images.length);
   const railRef = useRef<HTMLDivElement>(null);
+  const railWidthRef = useRef(0);
   const thumbnailRailRef = useRef<HTMLDivElement>(null);
   const previewPointer = useRef<{ x: number; y: number } | null>(null);
   const activeIndexRef = useRef(activeIndex);
@@ -114,6 +115,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     const rail = railRef.current;
     if (!rail) return;
     const alignImage = () => {
+      railWidthRef.current = rail.clientWidth;
       rail.scrollTo({
         left: getComputedStyle(rail).overflowX === "auto"
           ? pageStep(rail) * activeIndexRef.current : 0,
@@ -123,7 +125,13 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     alignImage();
     const observer = new ResizeObserver(alignImage);
     observer.observe(rail);
-    return () => observer.disconnect();
+    // A rapid round trip across the breakpoint can end at the same rail size,
+    // so ResizeObserver alone may never report the intervening scroll reset.
+    window.addEventListener("resize", alignImage);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", alignImage);
+    };
   }, [images.length, previewOpen]);
 
   useLayoutEffect(() => {
@@ -145,11 +153,12 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
         Math.floor((availableWidth + gap + 0.5) / (thumbnailSize + gap)),
       );
       const nextHasOverflow = regularThumbnails.length > visibleCapacity;
-      const nextVisibleCount = nextHasOverflow
+      const useOverflowPreview = nextHasOverflow && desktopPreview;
+      const nextVisibleCount = useOverflowPreview
         ? Math.max(0, visibleCapacity - 1)
         : regularThumbnails.length;
 
-      setHasThumbnailOverflow((current) => current === nextHasOverflow ? current : nextHasOverflow);
+      setHasThumbnailOverflow((current) => current === useOverflowPreview ? current : useOverflowPreview);
       setVisibleRegularThumbnailCount((current) => current === nextVisibleCount ? current : nextVisibleCount);
       if (pinnedThumbnailIndex >= 0) {
         const nextLayout = nextHasOverflow ? "edge" : "inline";
@@ -168,7 +177,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [pinnedThumbnailIndex, regularThumbnails.length]);
+  }, [desktopPreview, pinnedThumbnailIndex, regularThumbnails.length]);
   const activeImage = images[activeIndex];
 
   if (!activeImage) return null;
@@ -224,8 +233,9 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     const lensX = Math.max(0.2, Math.min(0.8, x));
     const lensY = Math.max(0.2, Math.min(0.8, y));
     const zoom = 2.5;
-    const paneWidth = typeof desktopZoomPaneWidth === "number" ? desktopZoomPaneWidth : rect.width;
-    const paneHeight = typeof desktopZoomPaneHeight === "number" ? desktopZoomPaneHeight : rect.height;
+    const pane = stage.querySelector<HTMLElement>('[data-slot="product-media-gallery-zoom-pane"]')!;
+    const paneWidth = pane.clientWidth;
+    const paneHeight = pane.clientHeight;
     const initialZoomedWidth = contentWidth * zoom;
     const initialZoomedHeight = contentHeight * zoom;
     const coverScale = Math.max(
@@ -333,7 +343,6 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
       data-active-index={activeIndex}
       data-zoom-active={zoomActive || undefined}
       data-pointer-focus={pointerFocus || undefined}
-      data-thumbnail-overflow={hasThumbnailOverflow || undefined}
       tabIndex={rest.tabIndex ?? 0}
       onPointerDown={(event) => {
         rest.onPointerDown?.(event);
@@ -363,6 +372,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
         role="group"
         aria-label={thumbnailsLabel}
         data-slot="product-media-gallery-thumbnails"
+        data-thumbnail-overflow={hasThumbnailOverflow || undefined}
         data-has-pinned-thumbnail={pinnedThumbnailIndex >= 0 || undefined}
         data-pinned-layout={pinnedThumbnailIndex >= 0 ? pinnedLayout : undefined}
       >
@@ -395,7 +405,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
           onScroll={(event) => {
             if (previewOpen) return;
             const rail = event.currentTarget;
-            if (!rail.clientWidth || getComputedStyle(rail).overflowX !== "auto") return;
+            if (!rail.clientWidth || rail.clientWidth !== railWidthRef.current || getComputedStyle(rail).overflowX !== "auto") return;
             const maxScroll = rail.scrollWidth - rail.clientWidth;
             const atEnd = maxScroll > 0 && rail.scrollLeft >= maxScroll - 1;
             const index = atEnd ? images.length - 1

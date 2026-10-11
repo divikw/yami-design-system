@@ -87,7 +87,7 @@
         "selector": ".tag[data-variant='filled'][data-mode='light']"
       },
       "--color-white-1000": {
-        "property": "color / border-color",
+        "property": "color",
         "selector": ".tag[data-mode='dark']"
       },
       "--color-white-200": {
@@ -103,7 +103,7 @@
         "selector": ".tag[data-variant='filled'][data-mode='light']"
       },
       "--color-black-1000": {
-        "property": "color / border-color",
+        "property": "color",
         "selector": ".tag[data-mode='light']"
       },
       "--radius-button-primary": {
@@ -135,5 +135,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "42c9860f6415419e5a48dacb0ebc1d0aeb84ffe98d9f472688657dc8b81a67fe"
+  "contentDigest": "a2b78b97cb51823c32adb3116496aadc9b8c9a5f96a789f1979e39ae677ae835"
 }

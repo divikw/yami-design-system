@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "avatar",
+  "title": "Avatar",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+  "source": "components/Avatar",
+  "files": [
+    {
+      "source": "components/Avatar/assets/default-avatar.png",
+      "target": "components/Avatar/assets/default-avatar.png"
+    },
+    {
+      "source": "components/Avatar/Avatar.module.css",
+      "target": "components/Avatar/Avatar.module.css"
+    },
+    {
+      "source": "components/Avatar/Avatar.tsx",
+      "target": "components/Avatar/Avatar.tsx"
+    },
+    {
+      "source": "components/Avatar/index.ts",
+      "target": "components/Avatar/index.ts"
+    }
+  ],
+  "exports": [
+    "Avatar",
+    "AvatarProps",
+    "AvatarSize"
+  ],
+  "composes": [
+    "MembershipIcon"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Avatar/usage.md",
+    "stories": [
+      "components/Avatar/Avatar.stories.tsx"
+    ],
+    "examples": [
+      "components/Avatar/examples.tsx#AvatarImageExample",
+      "components/Avatar/examples.tsx#AvatarSizesExample",
+      "components/Avatar/examples.tsx#AvatarMembershipExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--membership-background-gold",
+      "--membership-background-ruby",
+      "--membership-background-ruby-0",
+      "--membership-background-silver",
+      "--membership-ring-gold",
+      "--membership-ring-ruby",
+      "--membership-ring-ruby-0",
+      "--membership-ring-silver",
+      "--membership-separator",
+      "--radius-full",
+      "--space-025",
+      "--space-050",
+      "--space-150",
+      "--space-200",
+      "--space-250",
+      "--space-400",
+      "--space-500",
+      "--space-600",
+      "--surface-secondary"
+    ],
+    "rules": [
+      "no-custom-radii",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--space-400": {
+        "property": "width / height",
+        "selector": ".avatar[data-size=\"sm\"]"
+      },
+      "--space-500": {
+        "property": "width / height",
+        "selector": ".avatar"
+      },
+      "--space-600": {
+        "property": "width / height",
+        "selector": ".avatar[data-size=\"lg\"]"
+      },
+      "--radius-full": {
+        "property": "border-radius",
+        "selector": ".avatar / .membership"
+      },
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".avatar"
+      },
+      "--space-025": {
+        "property": "border-width / padding",
+        "selector": ".avatar[data-membership-tier]"
+      },
+      "--space-150": {
+        "property": "--avatar-membership-size",
+        "selector": ".avatar[data-size=\"sm\"]"
+      },
+      "--space-200": {
+        "property": "--avatar-membership-size",
+        "selector": ".avatar"
+      },
+      "--space-250": {
+        "property": "--avatar-membership-size",
+        "selector": ".avatar[data-size=\"lg\"]"
+      },
+      "--membership-ring-ruby-0": {
+        "property": "border-color",
+        "selector": ".avatar[data-membership-tier=\"ruby-0\"]"
+      },
+      "--membership-ring-ruby": {
+        "property": "border-color",
+        "selector": ".avatar[data-membership-tier=\"ruby\"]"
+      },
+      "--membership-ring-silver": {
+        "property": "border-color",
+        "selector": ".avatar[data-membership-tier=\"silver\"]"
+      },
+      "--membership-ring-gold": {
+        "property": "border-color",
+        "selector": ".avatar[data-membership-tier=\"gold\"]"
+      },
+      "--space-050": {
+        "property": "right / bottom",
+        "selector": ".membership"
+      },
+      "--membership-background-ruby-0": {
+        "property": "--avatar-membership-background",
+        "selector": ".avatar"
+      },
+      "--membership-background-ruby": {
+        "property": "--avatar-membership-background",
+        "selector": ".avatar[data-membership-tier=\"ruby\"]"
+      },
+      "--membership-background-silver": {
+        "property": "--avatar-membership-background",
+        "selector": ".avatar[data-membership-tier=\"silver\"]"
+      },
+      "--membership-separator": {
+        "property": "background",
+        "selector": ".avatar[data-membership-tier]"
+      },
+      "--membership-background-gold": {
+        "property": "--avatar-membership-background",
+        "selector": ".avatar[data-membership-tier=\"gold\"]"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "img (decorative when alt is empty)",
+      "wcagLevel": "AA",
+      "tapTargetMin": 0,
+      "keyboardNav": [],
+      "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
+      "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "dd0028c19c83b90df4a6c13ecb11eb0831a345c040739935de8c98c7b35a1575"
+}

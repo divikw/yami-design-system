@@ -30,7 +30,7 @@ export const emphasisLimit: Validator = {
     if (context?.filename && EXEMPT_FILENAME_MARKERS.some((m) => context.filename?.includes(m))) {
       return { pass: true, violations: [] }
     }
-    const hits = findJsxElements(code, /Button/).filter((h) => h.props.variant === 'emphasis')
+    const hits = findJsxElements(code, /Button(?:Link)?/).filter((h) => h.props.variant === 'emphasis')
     if (hits.length <= 1) return { pass: true, violations: [] }
 
     // Flag every occurrence after the first; first remains the canonical CTA.

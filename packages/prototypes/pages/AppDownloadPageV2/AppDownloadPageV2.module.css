@@ -31,7 +31,7 @@
 .root .shopLink { height: var(--space-500); min-height: var(--space-500); padding-block: 0; background: var(--button-primary); color: var(--text-primary-inverse); border-radius: var(--radius-button-primary); }
 .hero { background: var(--brand-tertiary); }
 .downloadContainer { box-sizing: border-box; width: 100%; max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; gap: var(--space-400); text-align: center; }
-.offerBadge { display: inline-block; background: color-mix(in srgb, var(--fill-promotion-primary) 8%, var(--brand-tertiary)); color: var(--text-emphasis); font-weight: var(--font-weight-emphasize); border-radius: var(--radius-button-primary); padding: var(--space-100) var(--space-200); }
+.offerBadge { display: inline-block; background: var(--badge-bg-secondary-red); color: var(--badge-fg-secondary-red); font-weight: var(--font-weight-emphasize); border-radius: var(--radius-button-primary); padding: var(--space-100) var(--space-200); }
 .heroCopy { display: flex; flex-direction: column; align-items: center; gap: var(--space-200); }
 .heroHeading { display: flex; flex-direction: column; align-items: center; gap: 0; row-gap: var(--space-200); }
 .heroTitleGroup { display: flex; flex-direction: column; align-items: center; gap: var(--space-050); }
@@ -76,6 +76,7 @@
 .dealsLink img { width: 16px; height: 16px; filter: brightness(0) invert(1); }
 .guideSection { background: color-mix(in srgb, var(--brand-tertiary) 90%, var(--fill-promotion-primary) 10%); }
 .guideContainer { box-sizing: border-box; width: 100%; max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; align-items: center; gap: var(--space-400); text-align: center; }
+.guideDescription { color: var(--text-primary); }
 .video { display: block; width: min(100%, 400px); aspect-ratio: 9 / 16; margin: 0; border: 6px solid var(--border-focus); border-radius: 32px; background: var(--surface-inverse); object-fit: cover; }
 .calculatorSection { padding-inline: var(--space-200); background: var(--brand-tertiary); }
 .calculator { box-sizing: border-box; width: 100%; max-width: 480px; margin: auto; display: flex; flex-direction: column; gap: var(--space-200); }
