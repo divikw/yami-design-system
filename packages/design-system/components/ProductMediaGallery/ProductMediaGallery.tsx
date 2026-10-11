@@ -89,6 +89,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   );
   const activeIndex = clampIndex(selectedIndex, images.length);
   const railRef = useRef<HTMLDivElement>(null);
+  const railWidthRef = useRef(0);
   const thumbnailRailRef = useRef<HTMLDivElement>(null);
   const thumbnailScrollerRef = useRef<HTMLDivElement>(null);
   const previewPointer = useRef<{ x: number; y: number } | null>(null);
@@ -108,6 +109,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     const rail = railRef.current;
     if (!rail) return;
     const alignImage = () => {
+      railWidthRef.current = rail.clientWidth;
       rail.scrollTo({
         left: getComputedStyle(rail).overflowX === "auto"
           ? pageStep(rail) * activeIndexRef.current : 0,
@@ -117,7 +119,13 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
     alignImage();
     const observer = new ResizeObserver(alignImage);
     observer.observe(rail);
-    return () => observer.disconnect();
+    // A rapid round trip across the breakpoint can end at the same rail size,
+    // so ResizeObserver alone may never report the intervening scroll reset.
+    window.addEventListener("resize", alignImage);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", alignImage);
+    };
   }, [images.length, previewOpen]);
 
   useLayoutEffect(() => {
@@ -314,7 +322,7 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
           onScroll={(event) => {
             if (previewOpen) return;
             const rail = event.currentTarget;
-            if (!rail.clientWidth || getComputedStyle(rail).overflowX !== "auto") return;
+            if (!rail.clientWidth || rail.clientWidth !== railWidthRef.current || getComputedStyle(rail).overflowX !== "auto") return;
             const maxScroll = rail.scrollWidth - rail.clientWidth;
             const atEnd = maxScroll > 0 && rail.scrollLeft >= maxScroll - 1;
             const index = atEnd ? images.length - 1

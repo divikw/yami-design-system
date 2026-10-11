@@ -162,7 +162,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "54b599a258ad10d2a7c0f22c816ddf85dba4323ab15962a1e7fa23b203dfedb0"
+      "digest": "4d2ebcd153bad23e3c91679ff0fe6ba2c454f6d0e347e34999a55a9013aa806b"
     },
     {
       "name": "horizontal-scroll-list",
@@ -225,7 +225,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "6c5a0ec1dc9c361580b51139f7e4f94341019405969a440156b4a08cae82a09f"
+      "digest": "1e5e0cd2aef01c7aec9ba18e99ad7310cd4f4ba059f76f245cc60558e45d4d38"
     },
     {
       "name": "product-review-section",

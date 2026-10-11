@@ -286,6 +286,44 @@ test("mobile preview opens the selected image and supports a single touch-scroll
   }
 });
 
+test("preserves the selected image when a breakpoint scroll reset precedes resize alignment", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const changed = vi.fn();
+  const NativeResizeObserver = window.ResizeObserver;
+  const pending: (() => void)[] = [];
+  let deferAlignment = false;
+  const observer = vi.spyOn(window, "ResizeObserver").mockImplementation(function (callback) {
+    return new NativeResizeObserver((entries, instance) => {
+      if (deferAlignment && entries.some(({ target }) => target.getAttribute("data-slot") === "product-media-gallery-rail")) {
+        pending.push(() => callback(entries, instance));
+      } else callback(entries, instance);
+    });
+  });
+  try {
+    await page.viewport(1440, 900);
+    flushSync(() => root.render(<ProductMediaGallery images={images} defaultIndex={3} onIndexChange={changed} />));
+    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
+    const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-rail"]')!;
+    deferAlignment = true;
+    await page.viewport(375, 900);
+    await expect.poll(() => pending.length).toBeGreaterThan(0);
+    flushSync(() => rail.dispatchEvent(new Event("scroll", { bubbles: true })));
+    expect(changed).not.toHaveBeenCalled();
+    expect(gallery.dataset.activeIndex).toBe("3");
+    deferAlignment = false;
+    for (const align of pending) align();
+    await expect.poll(() => rail.scrollLeft).toBeCloseTo(rail.clientWidth * 3, 0);
+  } finally {
+    observer.mockRestore();
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test("preserves selection across resizing and handles single or empty galleries", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
