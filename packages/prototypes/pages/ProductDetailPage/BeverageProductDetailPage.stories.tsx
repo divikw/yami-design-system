@@ -60,7 +60,13 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await expect(getComputedStyle(bestBefore).borderTopStyle).toBe(mobile ? "solid" : "none");
   await expect(bestBefore.getBoundingClientRect().top).toBeGreaterThanOrEqual(bestBefore.previousElementSibling!.getBoundingClientRect().bottom);
   await expect(canvasElement.querySelector('[data-pdp-add-to-cart]')).toBeEnabled();
-  await expect(canvasElement.querySelectorAll('[data-slot="product-media-gallery-thumbnail"]')).toHaveLength(11);
+  const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
+  if (mobile) {
+    await expect(thumbnails).toHaveLength(fixture.images.length);
+  } else {
+    await expect(thumbnails).toHaveLength(4);
+    await expect(canvasElement.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeVisible();
+  }
   await expect(canvasElement.querySelector('[data-pdp-module="brand-products"]')).toBeNull();
   await expect(canvasElement.querySelector('[data-pdp-module="recently-viewed"]')).toBeNull();
   if (!mobile) {
@@ -73,7 +79,6 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await userEvent.click(canvas.getByRole("button", { name: fixture.copy.decreaseQuantity, exact: true }));
   await expect(canvasElement.querySelector("output")).toHaveTextContent("1");
 
-  const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
   if (!mobile) {
     await userEvent.click(thumbnails[1]!);
     await expect(thumbnails[1]).toHaveAttribute("aria-pressed", "true");
