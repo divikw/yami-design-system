@@ -16,6 +16,8 @@ export default defineConfig({
       "@base-ui/react/radio",
       "@base-ui/react/radio-group",
       "@storybook/react-vite",
+      "@storybook/addon-docs/blocks",
+      "storybook/theming",
       "react/jsx-dev-runtime",
       "storybook/test",
     ],
@@ -41,7 +43,7 @@ export default defineConfig({
       },
       {
         plugins: [react()],
-        optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@storybook/react-vite", "storybook/test"] },
+        optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@storybook/react-vite", "@storybook/addon-docs/blocks", "storybook/theming", "storybook/test"] },
         test: {
           name: "browser",
           include: ["tests/**/*.browser.test.tsx"],

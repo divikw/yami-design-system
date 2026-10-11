@@ -5,7 +5,6 @@ import { type CSSProperties, type MouseEvent, type ReactNode, useLayoutEffect, u
 import {
   Badge,
   Button,
-  Card,
   Divider,
   FilterChip,
   FilterChipGroup,
@@ -756,10 +755,9 @@ export function ProductDetailPage({
               aria-label={copy.addToCart}
               data-slot="product-detail-purchase"
             >
-              <Card
-                className={styles.purchaseCard}
-                surface="secondary"
-                padding="none"
+              <div
+                className={styles.purchaseLayout}
+                data-slot="product-detail-purchase-layout"
               >
                 <div
                   className={styles.purchaseGroup}
@@ -1036,7 +1034,7 @@ export function ProductDetailPage({
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
             </aside>
           </article>
         </div>

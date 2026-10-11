@@ -33,7 +33,7 @@ function isEmphasisColor(bgColor: string): boolean {
 }
 
 function isEmphasisButton(el: Element): boolean {
-  const isButtonElement = el.tagName === 'BUTTON' || el.getAttribute('role') === 'button'
+  const isButtonElement = el.tagName === 'BUTTON' || el.getAttribute('role') === 'button' || el.getAttribute('data-slot') === 'button-link'
 
   // Check data-yami-id pattern (Button: prefix + emphasis background color)
   const yamiId = el.getAttribute('data-yami-id')
@@ -68,7 +68,7 @@ export const emphasisLimit: RuntimeValidator = {
 
     // Collect all potential button-like elements
     const candidates = root.querySelectorAll(
-      'button, [role="button"], [data-yami-id^="Button:"], [class*="emphasis"]',
+      'button, [role="button"], [data-slot="button-link"], [data-yami-id^="Button:"], [class*="emphasis"]',
     )
 
     const visibleEmphasis: Element[] = []

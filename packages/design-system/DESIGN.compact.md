@@ -53,7 +53,7 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 ## Spacing, radii, depth
 
 - **Base unit** 8px. Scale `4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 · 80`.
-- **5 semantic radii — nothing else**: tag `4px`, component `8px`, emphasis-button `8px`, surface (card / modal) `12px`, pill button `9999px`. Never raw values, never primitive `--radius-sm/md/lg/xl` (they exist but are not consumed by components).
+- **6 semantic radii — nothing else**: tag `4px`, component `8px`, emphasis-button `8px`, surface (Card / centered Dialog / desktop Sheet) `12px`, mobile Sheet top corners `16px` (`--radius-surface-sheet`, bottom corners square), pill button `9999px`. Never raw values, never primitive `--radius-sm/md/lg/xl` (they exist but are not consumed by components).
 - **No local elevation scale.** Figma provides no YAMI elevation tokens; hover / press never changes `box-shadow`, only `background-color`.
 
 ---
@@ -62,14 +62,14 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 
 | Component | Variants | Note |
 |---|---|---|
-| **Button** | emphasis / primary / secondary / tertiary × full/inline/icon × sm/md/lg | Emphasis is **rate-limited to 1 per screen**. Full form uses 8px; inline form is pill-shaped. |
+| **Button** | emphasis / primary / secondary / tertiary × full/inline/icon × sm/md/lg | Actions only; navigation uses anchors. Emphasis is **rate-limited to 1 per screen**. Full form uses 8px; inline form is pill-shaped. |
 | **Tabs** | primary / secondary / tertiary | Responsive tab navigation; Theme and inverse surface polarity remain independent. |
-| **Card** | padding × surface primary/secondary/inverse | **No border and no shadow by default.** Interactive cards change `background-color`, not shadow. |
+| **Card** | padding × surface primary/secondary/inverse | Independent content items, not ordinary page sections. Default padding 16px, surface radius 12px; ProductCard owns its 8px geometry. **No border or shadow by default.** Native link/button interactions; 44px interactive target. |
 | **Badge** | 6 colors × primary (solid) / secondary (tinted) × sm/md | Sole place blue/green/purple/yellow is allowed. Max 2 badges per ProductCard. |
 | **Input** | default / focus / error / disabled | 2px black focus ring at 2px offset. Never blue. |
 | **Checkbox** | default / hover / selected / disabled / mixed | Neutral multi-select control. Selected state is ink, never red. |
 | **RadioGroup** | default / hover / selected / disabled | Exclusive selection with arrow-key navigation. Selected state is ink, never red. |
-| **Divider** | default / subtle / emphasis | 3 strengths only: `8% / 29% / 87%` black. |
+| **Divider** | default / emphasis × inverse | 1px / 2px strokes; theme-aware semantic colors; horizontal or vertical. |
 | **AspectRatio** | required numeric ratio | Style-neutral geometry primitive for responsive media. |
 | **ProductCard** *(composite)* | internal Media + Summary + Offer; composes Card + AspectRatio + Badge + ProductCardAddButton | image overlays · identity · behavioral signals · price/campaign/countdown. Exactly 4 type levels. |
 | **ProductList** *(composite)* | standard / themed / atmospheric × rail / waterfall | Data-driven responsive collection; layout forces a consistent ProductCard presentation and owns tabs, rail controls, load more, and layout-specific skeletons. |
@@ -84,7 +84,7 @@ These have validators; error-level violations fail `validateDesign`. Full reason
 2. **semantic-color-only** — non-red hues live in badge palette only.
 3. **numerals-font** — every digit in GT Walsheim.
 4. **type-hierarchy** — max 4 levels per page.
-5. **no-custom-radii** — use the 5 semantic slots, no raw values like `8.5px` / `16px` / `50%`, no primitive `--radius-sm/md/lg/xl`.
+5. **no-custom-radii** — use the 6 semantic slots, no raw values like `8.5px` / `16px` / `50%`, no primitive `--radius-sm/md/lg/xl`.
 6. **elevation-on-press** — color shift, not shadow.
 7. **no-opacity-disabled** — use `--button-disabled` + `--text-disabled`, never CSS `opacity`.
 8. **focus-style** — 2px black outline, 2px offset.

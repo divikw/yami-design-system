@@ -4,7 +4,7 @@
   "category": "action",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Groups related Buttons with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
+  "description": "Groups related Button and ButtonLink entries with an 8px gap, content-width wrapping or equal-width layout capped at 480px.",
   "figma": {
     "nodeId": null,
     "componentKey": null
@@ -31,7 +31,7 @@
     "children": {
       "type": "ReactNode",
       "required": false,
-      "description": "Direct Button children, normally two or three."
+      "description": "Direct Button or ButtonLink children with matching sizes, normally two or three."
     }
   },
   "rules": {},
@@ -54,7 +54,7 @@
       "space"
     ],
     "ariaPattern": "group",
-    "notes": "Named group; focus and activation are owned by Button children."
+    "notes": "Named group; focus and activation are owned by children. ButtonLink uses native link behavior (Enter); Button supports Enter and Space."
   },
   "dependencies": {
     "runtime": [

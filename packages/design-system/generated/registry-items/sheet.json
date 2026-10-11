@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Shared modal shell: a mobile bottom sheet and centered desktop dialog, with a fixed header, scrolling content, optional footer, and child-view back navigation.",
+  "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
   "source": "components/Sheet",
   "files": [
     {
@@ -56,6 +56,7 @@
       "--font-weight-emphasize",
       "--overlay-scrim",
       "--radius-surface-default",
+      "--radius-surface-sheet",
       "--space-100",
       "--space-200",
       "--space-600",
@@ -77,6 +78,10 @@
         "selector": ".sheet::backdrop"
       },
       "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".sheet"
+      },
+      "--radius-surface-sheet": {
         "property": "border-radius",
         "selector": ".sheet"
       },
@@ -103,5 +108,5 @@
     },
     "interactionCoverage": "missing"
   },
-  "contentDigest": "834107ef8c47e774e1b32818c1ab801604521a5ddbe79d8ea1a715a8219618ad"
+  "contentDigest": "6147a5ba77d4447a8b8f4a87a0f591e33f67a48b81eb8f390dfc3fef299afc71"
 }

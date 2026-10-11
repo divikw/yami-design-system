@@ -10,10 +10,26 @@
  */
 
 .card {
-  background-color: var(--surface-primary);
+  --card-surface: var(--surface-primary);
+  --card-ink: var(--text-primary);
+  /* Keep margin/float containment without clipping child focus or hit areas. */
+  display: flow-root;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  color: var(--card-ink);
+  background-color: var(--card-surface);
   border-radius: var(--radius-surface-default);
   border: 0;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.content {
+  display: block;
 }
 
 /* ─── Padding variants ──────────────────────────────────────────── */
@@ -34,14 +50,14 @@
 /* ─── Surfaces ──────────────────────────────────────────────────── */
 
 .surface-primary {
-  background-color: var(--surface-primary);
+  --card-surface: var(--surface-primary);
 }
 .surface-secondary {
-  background-color: var(--surface-secondary);
+  --card-surface: var(--surface-secondary);
 }
 .surface-inverse {
-  background-color: var(--surface-inverse);
-  color: var(--text-primary-inverse);
+  --card-surface: var(--surface-inverse);
+  --card-ink: var(--text-primary-inverse);
 }
 
 /* ─── Bordered (explicit opt-in; overrides card-no-border default)
@@ -50,20 +66,42 @@
 .bordered {
   border: 1px solid var(--border-default);
 }
+.bordered.surface-inverse {
+  border-color: var(--border-default-inverse);
+}
 
 /* ─── Interactive ───────────────────────────────────────────────── */
 /* Interaction changes background color only. */
 
 .interactive {
+  min-width: 44px;
+  min-height: 44px;
   cursor: pointer;
   transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 @media (hover: hover) and (pointer: fine) {
-  .interactive:hover {
-    background-color: var(--surface-secondary);
+  .interactive:not(:disabled):not([aria-disabled='true']):hover {
+    background-color: color-mix(in srgb, var(--card-surface) 92%, var(--card-ink));
   }
 }
-.interactive:focus-visible {
+.interactive:not(:disabled):not([aria-disabled='true']):active {
+  background-color: color-mix(in srgb, var(--card-surface) 84%, var(--card-ink));
+}
+.card:focus-visible {
   outline: 2px solid var(--border-focus);
   outline-offset: 2px;
+}
+
+.card:is(:disabled, [aria-disabled='true']) {
+  cursor: not-allowed;
+  color: var(--text-disabled);
+}
+.card.surface-inverse:is(:disabled, [aria-disabled='true']) {
+  color: var(--text-disabled-inverse);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition-duration: 0ms;
+  }
 }

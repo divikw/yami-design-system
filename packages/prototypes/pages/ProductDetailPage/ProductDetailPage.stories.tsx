@@ -404,11 +404,8 @@ export const DesktopRegression: Story = {
     const addToCart = canvasElement.querySelector<HTMLButtonElement>(
       '[data-pdp-add-to-cart="true"]'
     );
-    const purchaseCard = canvasElement.querySelector<HTMLElement>(
-      'aside[aria-label="Add to Cart"] [data-slot="card"]'
-    );
-    const purchaseCardContent = purchaseCard?.querySelector<HTMLElement>(
-      '[data-slot="card-content"]'
+    const purchaseLayout = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-detail-purchase-layout"]'
     );
     const purchaseFavorite = canvasElement.querySelector<HTMLButtonElement>(
       '[data-pdp-purchase-action="favorite"]'
@@ -701,12 +698,9 @@ export const DesktopRegression: Story = {
       !increaseIcon ||
       !decreaseIcon ||
       !addToCart ||
-      !purchaseCard ||
-      !purchaseCardContent ||
-      getComputedStyle(purchaseCard).overflow !== "visible" ||
-      Math.round(purchaseCard.getBoundingClientRect().height) !==
-        Math.round(purchasePanel.getBoundingClientRect().height) ||
-      Math.round(purchaseCardContent.getBoundingClientRect().height) !==
+      !purchaseLayout ||
+      getComputedStyle(purchaseLayout).overflow !== "visible" ||
+      Math.round(purchaseLayout.getBoundingClientRect().height) !==
         Math.round(purchasePanel.getBoundingClientRect().height) ||
       !purchaseFavorite ||
       getComputedStyle(purchaseFavorite).columnGap !== "8px" ||
@@ -878,17 +872,17 @@ export const DesktopRegression: Story = {
       Math.round(purchaseTagToggle.getBoundingClientRect().height) !== 20 ||
       canvasElement.textContent?.includes("Clip coupon") ||
       canvasElement.textContent?.includes("20% off") ||
-      !purchaseCard.contains(purchaseFavorite) ||
+      !purchaseLayout.contains(purchaseFavorite) ||
       Array.from(purchaseShareButtons).some(
         (button) =>
-          !shareGroup.contains(button) || purchaseCard.contains(button)
+          !shareGroup.contains(button) || purchaseLayout.contains(button)
       ) ||
       breadcrumb.parentElement !== utilityRow ||
       shareGroup.parentElement !== utilityRow ||
       getComputedStyle(utilityRow).display !== "flex" ||
       breadcrumb.getBoundingClientRect().right >
       shareGroup.getBoundingClientRect().left ||
-      purchasePrimary.parentElement !== purchaseCardContent ||
+      purchasePrimary.parentElement !== purchaseLayout ||
       getComputedStyle(purchasePrimary).display !== "contents" ||
       !purchasePrimary.contains(purchaseFavorite) ||
       purchaseSticky.parentElement !== purchasePrimary ||
@@ -1260,16 +1254,16 @@ export const DesktopRegression: Story = {
         "PDP must retain one operational-red Add to Cart emphasis CTA"
       );
     }
-    const purchaseCardStyle = getComputedStyle(purchaseCard);
+    const purchaseLayoutStyle = getComputedStyle(purchaseLayout);
     const purchaseSecondaryStyle = getComputedStyle(purchaseSecondary);
     if (
-      purchaseCardStyle.paddingTop !== "0px" ||
-      purchaseCardStyle.paddingRight !== "0px" ||
-      purchaseCardStyle.paddingBottom !== "0px" ||
-      purchaseCardStyle.paddingLeft !== "0px" ||
-      purchaseCardStyle.borderRadius !== "0px" ||
-      purchaseCardStyle.backgroundColor !== "rgba(0, 0, 0, 0)" ||
-      purchaseCardStyle.borderTopWidth !== "0px" ||
+      purchaseLayoutStyle.paddingTop !== "0px" ||
+      purchaseLayoutStyle.paddingRight !== "0px" ||
+      purchaseLayoutStyle.paddingBottom !== "0px" ||
+      purchaseLayoutStyle.paddingLeft !== "0px" ||
+      purchaseLayoutStyle.borderRadius !== "0px" ||
+      purchaseLayoutStyle.backgroundColor !== "rgba(0, 0, 0, 0)" ||
+      purchaseLayoutStyle.borderTopWidth !== "0px" ||
       purchaseSecondaryStyle.paddingTop !== "0px" ||
       purchaseSecondaryStyle.paddingRight !== "0px" ||
       purchaseSecondaryStyle.paddingBottom !== "0px" ||

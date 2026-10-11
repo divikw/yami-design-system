@@ -46,7 +46,7 @@ export const noCustomRadii: Validator = {
           severity: 'error',
           locations: [hit.location],
           suggestion:
-            'Use a --radius-* token: primitive (--radius-none|sm|md|lg|xl|full) or semantic alias (--radius-surface-default|none, --radius-component-default|none, --radius-button-emphasis|primary, --radius-tag-primary).',
+            'Use a semantic radius alias: --radius-surface-default|sheet|none, --radius-component-default|none, --radius-button-emphasis|primary, or --radius-tag-primary.',
         })
         continue
       }
@@ -58,7 +58,7 @@ export const noCustomRadii: Validator = {
         severity: 'error',
         locations: [hit.location],
         suggestion:
-          'Replace with var(--radius-sm|md|lg|xl|full) or a semantic alias. Common mappings: 4px→--radius-sm, 8px→--radius-md, 12px→--radius-lg, 16px→--radius-xl, 9999px/50%→--radius-full.',
+          'Replace with a semantic alias: 4px→--radius-tag-primary, 8px→--radius-component-default, 12px→--radius-surface-default, 16px mobile Sheet top corners→--radius-surface-sheet, pill→--radius-button-primary.',
       })
     }
     return result(violations)

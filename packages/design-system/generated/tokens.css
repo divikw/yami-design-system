@@ -371,6 +371,7 @@
   --radius-sm: 4px;
   --radius-surface-default: var(--radius-lg);
   --radius-surface-none: var(--radius-none);
+  --radius-surface-sheet: var(--radius-xl);
   --radius-tag-primary: var(--radius-sm);
   --radius-xl: 16px;
   --space-0: 0;

@@ -371,6 +371,7 @@ export const registeredTokenReferenceTypes = {
   "radius.sm": "dimension",
   "radius.surface.default": "dimension",
   "radius.surface.none": "dimension",
+  "radius.surface.sheet": "dimension",
   "radius.tag.primary": "dimension",
   "radius.xl": "dimension",
   "space.0": "dimension",

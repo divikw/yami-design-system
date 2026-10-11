@@ -46,7 +46,7 @@ tokens_source: ./tokens.css
 
 **Surface:** web · **Category:** E-Commerce — Chinese-American Asian grocery, U.S. market · **Voice:** bilingual CN + EN, CN-primary · **Mode:** Light + Dark
 
-In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with near-black ink. In Dark, page and component surfaces use neutral-950/900 with light reading colors. The operational red ramp carries action, promotion, and error semantics in both themes; brand red (`#FF0000`) remains Logo-only. **No box-shadow growth on hover.** **No emoji in product UI.** Numerals — every price, every count, every SKU — always render in **GT Walsheim**; CJK body text is native system fonts: **PingFang SC** on Apple platforms, **Microsoft YaHei** on Windows, and the system sans-serif fallback on Android, with embedded digits and Latin characters staying in GT Walsheim. The rhythm is dense but never noisy: an 8px base grid, five semantic radius slots (`4 / 8 / 8 / 12 / 9999`) covering every container, and a hard cap of **one emphasis button per screen** keeping conversion priority unambiguous.
+In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with near-black ink. In Dark, page and component surfaces use neutral-950/900 with light reading colors. The operational red ramp carries action, promotion, and error semantics in both themes; brand red (`#FF0000`) remains Logo-only. **No box-shadow growth on hover.** **No emoji in product UI.** Numerals — every price, every count, every SKU — always render in **GT Walsheim**; CJK body text is native system fonts: **PingFang SC** on Apple platforms, **Microsoft YaHei** on Windows, and the system sans-serif fallback on Android, with embedded digits and Latin characters staying in GT Walsheim. The rhythm is dense but never noisy: an 8px base grid, six semantic radius slots (`4 / 8 / 8 / 12 / 16 / 9999`) covering every container, and a hard cap of **one emphasis button per screen** keeping conversion priority unambiguous.
 
 > **Two-file projection model**: this file (`DESIGN.md`) is the comprehensive spec + rules SSOT. For a 30-second brand entry (designers / PMs / stakeholders), read [`DESIGN.compact.md`](./DESIGN.compact.md) instead. Repository CI validates the migrated sources with `pnpm test`, `pnpm check:generated`, and `pnpm check:boundaries`.
 
@@ -217,7 +217,7 @@ container instead of the global viewport.
 <!-- rule-id: elevation-on-press -->
 <!-- rule-id: no-opacity-disabled -->
 
-> **Rules governing this section** — `no-custom-radii` (only the 5 semantic radius tokens; never raw `16px` or primitives like `--radius-xl`), `elevation-on-press` (hover/press changes color, never shadow), `no-opacity-disabled` (use `--button-disabled` + `--text-disabled`, never CSS `opacity`). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
+> **Rules governing this section** — `no-custom-radii` (only the 6 semantic radius tokens; never raw `16px` or primitives like `--radius-xl`), `elevation-on-press` (hover/press changes color, never shadow), `no-opacity-disabled` (use `--button-disabled` + `--text-disabled`, never CSS `opacity`). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
 
 ### Spacing scale (base 8px)
 
@@ -237,17 +237,18 @@ container instead of the global viewport.
 | `--space-800`  | `64px` | Page-level major rhythm                                                |
 | `--space-1000` | `80px` | First-screen / hero anchor                                             |
 
-### Radii — **only these 5 slots**
+### Radii — **only these 6 slots**
 
 | Token                        | Value    | Use                                                           |
 | ---------------------------- | -------- | ------------------------------------------------------------- |
 | `--radius-tag-primary`       | `4px`    | Badges, tags, status chips                                    |
 | `--radius-component-default` | `8px`    | Inputs, selects, search bar                                   |
 | `--radius-button-emphasis`   | `8px`    | Emphasis CTA (Buy Now / Submit) — square-ish for high gravity |
-| `--radius-surface-default`   | `12px`   | Cards, modals, floating panels                                |
+| `--radius-surface-default`   | `12px`   | Cards, centered Dialogs, desktop Sheets, floating panels      |
+| `--radius-surface-sheet`     | `16px`   | Mobile bottom Sheet: top corners only, bottom corners square |
 | `--radius-button-primary`    | `9999px` | Primary / secondary / tertiary pill buttons                   |
 
-> **Hard rule:** the 5 semantic slots above are the **only** sanctioned consumption surface. Never raw values like `8.5px` / `16px` / `50%`, and **never** primitive tokens like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl` (they exist in tokens.css as building blocks for the semantic slots but components must reach for the semantic name).
+> **Hard rule:** the 6 semantic slots above are the **only** sanctioned consumption surface. Never raw values like `8.5px` / `16px` / `50%`, and **never** primitive tokens like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl` (they exist in tokens.css as building blocks for the semantic slots but components must reach for the semantic name).
 
 ### Depth — no local elevation scale
 
@@ -321,15 +322,20 @@ The aliases below are the **only** identifiers a component should reference. If 
 | `--fill-error-primary` / `--fill-promotion-primary` | `--color-red-500`     | Error state / promo banner (note: **two semantic roles share one color** — context disambiguates) |
 | `--fill-highlight`                                  | `--color-yellow-500`  | Marketing recommendation banner                                                                   |
 
-### Borders & dividers — **3 strengths only**
+### Borders & dividers — semantic colors
 
 | Role      | Token                                    | Value              | Use                                          |
 | --------- | ---------------------------------------- | ------------------ | -------------------------------------------- |
-| Default   | `--border-default` / `--divider-default` | `rgba(0,0,0,0.08)` | Hairline structure                           |
+| Default border | `--border-default`                 | `rgba(0,0,0,0.08)` | Border structure                             |
+| Default divider | `--divider-default`               | Theme-dependent | 1px ordinary content separator               |
 | Subtle    | `--divider-subtle`                       | `rgba(0,0,0,0.29)` | Decorative low-weight separation             |
 | Focus     | `--border-focus`                         | `rgba(0,0,0,0.87)` | **2px focus ring, 2px offset — never blue.** |
 | Attention | `--border-attention`                     | `--color-red-500`  | Error / risk border                          |
 | Emphasis  | `--divider-emphasis`                     | `rgba(0,0,0,0.87)` | Major module separator                       |
+
+The `Divider` component exposes only `default` and `emphasis`; `--divider-subtle`
+remains available to existing compositions such as Header and Footer. Divider's
+`inverse` boolean selects the opposite-polarity color token within either theme.
 
 ### Buttons
 
@@ -367,14 +373,16 @@ YAMI's current inventory is generated in [`generated/catalog.json`](./generated/
 
 ### Button — `components/Button/`
 
+Choose by behavior: actions use Button; navigation and direct file downloads use anchors with real `href`. Button has no `href`, `as`, or `asChild` API. Links and buttons may share a layout; preserve labels, destinations, and actions when repairing presentation. See [Button usage](./components/Button/usage.md) for mixed actions, grouping, and the current button-styled-link limitation. / 先判断行为：操作使用 Button，导航和文件直接下载使用链接；修正外观时保留业务含义，链接与按钮允许并列。
+
 |                |                                                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------ |
 | **Variants**   | `emphasis` · `primary` · `secondary` · `tertiary`                                                |
-| **Sizes**      | `sm` (32) · `md` (40) · `lg` (48)                                                                |
+| **Sizes**      | `sm` (32) · `md` (40) · `lg` (48 mobile; 56 desktop text at ≥1024px; icon stays 48)                                                                |
 | **States**     | default · hover · active · disabled · loading · focus-visible                                    |
 | **Radius**     | `form=full` → `--radius-component-default` (8px) · `form=inline` → `--radius-button-primary` (pill) · `form=icon` keeps hierarchy-specific radius |
 | **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
-| **Tap target** | All sizes pad to ≥ 44pt internal hit area (rule `tap-target`)                                    |
+| **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. Native iOS 44pt / Android 48dp are separate requirements.                                    |
 | **Rate limit** | **`emphasis` = 1 per screen.** No exceptions. (rule `emphasis-limit`)                            |
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
 | **Focus**      | 2px `--border-focus` outline, 2px offset. (rule `focus-style`)                                   |
@@ -406,14 +414,19 @@ Related actions composed from Button. The group provides an accessible name and 
 
 ### Card — `components/Card/`
 
+Use Card for a discrete, self-contained content item (an order, product summary, or saved address), not ordinary page sections. Use headings, spacing, and layout containers for settings groups and page structure. Mixed actions belong inside a static Card; do not nest controls inside an anchor or button Card. / Card 用于订单、商品摘要、已保存地址等独立内容项；普通设置分组和页面结构使用标题、间距与布局容器。多个操作放在静态 Card 内，不嵌套在链接或按钮卡片中。
+
 |                 |                                                                                                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Padding**     | `none` · `sm` (12) · `md` (16) · `lg` (24)                                                                                                                         |
+| **Padding**     | `none` (0) · `sm` (12) · `md` (16, default) · `lg` (24). Use `none` for edge-to-edge media and let the composite own inner spacing; keep sibling cards consistent. |
 | **Surface**     | `primary` · `secondary` · `inverse`                                                                                                                                |
 | **Border**      | **none by default** (rule `card-no-border`). `bordered={true}` only for dense listing grids.                                                                       |
-| **Radius**      | `--radius-surface-default` (12px)                                                                                                                                  |
-| **Interactive** | Auto-inferred when `as="button"` or `as="a" + href`. Hover changes `--surface-primary` → `--surface-secondary`. **Never adds shadow.** (rule `elevation-on-press`) |
-| **Focus**       | Same 2px black ring at 2px offset                                                                                                                                  |
+| **Radius**      | `--radius-surface-default` (12px). ProductCard owns its compact geometry via `--radius-component-default` (8px); no arbitrary numeric overrides. |
+| **Interactive** | Inferred for `as="button"` or `as="a"` with `href`; minimum 44×44px target. Hover mixes 8% reading color into the selected surface; press mixes 16%. Preserves polarity and geometry; no shadow. Hover requires a fine pointer; reduced motion disables transitions. |
+| **Focus**       | 2px `--border-focus` outline with 2px offset, following the surrounding canvas theme rather than the card's own surface polarity. Focus remains available when `interactive={false}`. |
+| **Overflow**    | Visible: preserve child focus outlines and extended hit areas. Crop media separately; give wide code/tables their own scroll region. / 保留子控件焦点框与扩展点击区域，媒体单独裁切，宽内容独立滚动。 |
+| **Disabled**    | Native button `disabled` prevents activation and hover/press changes; preserve surface, use disabled text tokens, no opacity. |
+| **Semantics**   | Static `div` has no group role or tab stop. Explicit `as="a"` + `href` for navigation; `as="button"` defaults to `type="button"` and supports native Enter/Space activation. Custom hosts own semantics. |
 
 ### Badge — `components/Badge/`
 
@@ -464,7 +477,7 @@ Interactive filter-pill family with filled and outlined treatments, selected sta
 
 ### Sheet — `components/Sheet/`
 
-Shared modal shell for PDP details and search filters. Mobile uses a bottom sheet with content or full-height sizing; desktop uses a centered 560px dialog. The token-backed header, close/back action, modal focus behavior, scroll lock, independent content scrolling, and optional fixed footer are shared. Child views reuse one shell and backdrop; callers retain business state and restore the parent entry on return. Desktop quick-filter menus remain anchored Popovers.
+Shared modal shell for PDP details and search filters. Below 1024px, mobile uses a bottom sheet with content or full-height sizing, 16px top corners (`--radius-surface-sheet`), and square bottom corners. From 1024px, desktop uses a centered 560px dialog with 12px corners (`--radius-surface-default`). Both sizes and child views share this rule in Light and Dark. The token-backed header, close/back action, modal focus behavior, scroll lock, independent content scrolling, and optional fixed footer are shared. Child views reuse one shell and backdrop; callers retain business state and restore the parent entry on return. Desktop quick-filter menus remain anchored Popovers.
 
 ### Dialog — `components/Dialog/`
 
@@ -496,8 +509,11 @@ Centered modal for confirmation, alerts, and short tasks on mobile and desktop. 
 
 |               |                                                                      |
 | ------------- | -------------------------------------------------------------------- |
-| **Strengths** | `default` (8% black) · `subtle` (29% black) · `emphasis` (87% black) |
-| **Stroke**    | `--stroke-default` (1px) or `--stroke-thick` (2px)                   |
+| **Strengths** | `default` · `emphasis`; colors use semantic divider tokens          |
+| **Stroke**    | `default`: `--stroke-default` (1px); `emphasis`: `--stroke-thick` (2px) |
+| **Polarity**  | Separate `inverse` boolean; opposite-polarity colors within Light or Dark |
+| **Orientation** | Horizontal fills available width; vertical stretches in a flex / grid row with a 1em minimum height |
+| **Semantics** | Horizontal: native `<hr>` separator; vertical: decorative `<span aria-hidden="true">` |
 
 ### AspectRatio — `components/AspectRatio/`
 
@@ -762,7 +778,7 @@ For the **why** behind each rule (trade-offs, history, edge cases), see [`decisi
 | **`semantic-color-only`** | Blue / green / purple / yellow live in (1) semantic status (info / success / warning / promotion), (2) the 6-color Badge palette. Nowhere else.                                           | 蓝/绿/紫/黄只能用于 (1) 语义状态（信息/成功/警示/促销），(2) 6 色徽章调色板。其他场景一律禁用。                                            |
 | **`numerals-font`**       | Every digit renders in GT Walsheim, including inside mixed CN strings.                                                                                                                    | 所有数字一律 GT Walsheim——包括中文字符串中嵌入的数字与拉丁字符。                                                                           |
 | **`type-hierarchy`**      | Max 4 type levels per page. If you need a 5th, the page has a hierarchy problem.                                                                                                          | 每页最多 4 个字号层级。若需要第 5 级，是页面层级有问题，不是字号问题。                                                                     |
-| **`no-custom-radii`**     | Only the 5 semantic radius tokens. Never raw `8.5px` / `16px` / `50%`, never primitives like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl`.                               | 仅 5 个语义圆角槽位。不得用 `8.5px` / `16px` / `50%` 等裸值，也不得用 `--radius-sm` / `-md` / `-lg` / `-xl` 这类原子 token。               |
+| **`no-custom-radii`**     | Only the 6 semantic radius tokens, including mobile Sheet top corners at 16px. Never raw `8.5px` / `16px` / `50%`, never primitives like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl`.                               | 仅 6 个语义圆角槽位，含移动端 Sheet 的 16px 顶部圆角。不得用 `8.5px` / `16px` / `50%` 等裸值，也不得用 `--radius-sm` / `-md` / `-lg` / `-xl` 这类原子 token。               |
 | **`elevation-on-press`**  | Hover / press changes `background-color` (the `-active` token). **Never `box-shadow`.**                                                                                                   | 悬浮/按压用 `background-color`（`-active` token）变化反馈，**绝不**修改 `box-shadow`。                                                     |
 | **`no-opacity-disabled`** | Disabled states use `--button-disabled` + `--text-disabled`. Never CSS `opacity`.                                                                                                         | 禁用态用 `--button-disabled` + `--text-disabled` 一对 token，不得用 CSS `opacity` 降透明度。                                               |
 | **`focus-style`**         | 2px `--border-focus` outline, 2px offset. **Never blue.**                                                                                                                                 | 2px `--border-focus` 外描边、2px 偏移。**绝不**用蓝色 focus ring。                                                                         |
@@ -1041,6 +1057,7 @@ Rating star:        #FA8005                (--color-amber-500)
   --radius-component-default: 8px;
   --radius-button-emphasis: 8px;
   --radius-surface-default: 12px;
+  --radius-surface-sheet: 16px;
   --radius-button-primary: 9999px;
 
   /* === Layout === */
@@ -1103,6 +1120,7 @@ Rating star:        #FA8005                (--color-amber-500)
   --radius-component-default: 8px;
   --radius-button-emphasis: 8px;
   --radius-surface-default: 12px;
+  --radius-surface-sheet: 16px;
   --radius-button-primary: 9999px;
 }
 ```

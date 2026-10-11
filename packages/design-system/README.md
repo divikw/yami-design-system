@@ -52,7 +52,7 @@ YAMI's design spec ships in **two physical files** — one comprehensive spec fo
 
 | If you are… | Read | Why |
 |---|---|---|
-| **Designer / PM / stakeholder** | [`DESIGN.compact.md`](./DESIGN.compact.md) (~110 lines) | Brand essence in 30 seconds: 5-color anchor, type hierarchy, 5 radii, component list, hard rules one-liner. CN+EN bilingual intro. |
+| **Designer / PM / stakeholder** | [`DESIGN.compact.md`](./DESIGN.compact.md) (~110 lines) | Brand essence in 30 seconds: 5-color anchor, type hierarchy, 6 semantic radius slots, component list, hard rules one-liner. CN+EN bilingual intro. |
 | **AI agent, engineer implementing UI, or CI validator** | [`DESIGN.md`](./DESIGN.md) (~860 lines) | Full token tables, semantic alias map, component anatomy, **rule markers inline by topic** (validator-linked), Agent Prompt Guide, Known AI Failure Gallery, Quick Start CSS + Tailwind blocks. |
 
 Four CI checks run on every change (via husky pre-commit; remote CI deferred — see [ADR-010](../../docs/decisions/ADR-010-dtcg-only-token-consumption.md)):

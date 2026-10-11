@@ -9,6 +9,8 @@
  */
 
 import { Button } from './Button'
+import { ButtonLink } from './ButtonLink'
+import { ButtonGroup } from '../ButtonGroup'
 
 export const EmphasisExample = () => (
   <section data-example="EmphasisExample">
@@ -19,6 +21,12 @@ export const EmphasisExample = () => (
 export const PrimaryExample = () => (
   <section data-example="PrimaryExample">
     <Button variant="primary">Continue</Button>
+  </section>
+)
+
+export const NavigationExample = () => (
+  <section data-example="NavigationExample">
+    <ButtonLink href="/orders/Y20261011-1234">View order</ButtonLink>
   </section>
 )
 
@@ -97,14 +105,15 @@ export const AllSizesExample = () => (
  */
 export const CheckoutCTARowExample = () => (
   <section data-example="CheckoutCTARowExample">
-    <div style={{ display: 'flex', gap: 'var(--space-200)', maxWidth: 480 }}>
+    <ButtonGroup full aria-label="Checkout actions">
+      {/* Continue Shopping closes the current sheet; use an anchor if it navigates. */}
       <Button variant="secondary" size="lg" form="full">
         Continue Shopping
       </Button>
       <Button variant="emphasis" size="lg" form="full">
         Place Order
       </Button>
-    </div>
+    </ButtonGroup>
   </section>
 )
 
