@@ -425,7 +425,7 @@ export const Mobile: Story = {
     await userEvent.click(controls.getByRole("button", { name: `4 / 4: ${images[3].alt}` }));
     await expect(controls.getByRole("img")).toHaveAttribute("alt", images[3].alt);
     await userEvent.click(controls.getByRole("button", { name: "Close image preview" }));
-    await waitFor(() => expect(canvas.queryByRole("dialog")).toBeNull());
+    await waitFor(() => expect(canvasElement.querySelector('[data-slot="product-media-preview"]')).toBeNull());
     await expect(gallery).toHaveAttribute("data-active-index", "3");
     await expect(canvasElement.ownerDocument.documentElement.style.overflow).toBe(originalOverflow);
     rail.scrollTo({ left: 0, behavior: "instant" });
