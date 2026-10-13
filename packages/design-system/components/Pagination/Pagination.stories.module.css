@@ -1,0 +1,30 @@
+/* Docs show the PC specimen even when Storybook's sidebar narrows its canvas. */
+.docsPreview [data-slot="pagination"] {
+  display: block;
+}
+
+.states {
+  display: grid;
+  gap: var(--space-400);
+  max-width: 900px;
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.state {
+  display: grid;
+  gap: var(--space-100);
+}
+
+.state h2 {
+  margin: 0;
+  font: inherit;
+  font-weight: var(--font-weight-emphasize);
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-secondary);
+}

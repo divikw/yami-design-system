@@ -77,6 +77,8 @@
       "--color-white-0",
       "--color-white-100",
       "--color-white-1000",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-ios",
       "--font-size-body-xl",
       "--font-size-display-xl",
@@ -166,5 +168,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "d39f8169ff5c9e2b1e72e4dda4be9c49b1415263919b6096f7a2774cbc8a93db"
+  "contentDigest": "0d2ffb9474efd67c28dea9b6700f066ff10baa09995c6ba05f01bc4f5cdf4f15"
 }

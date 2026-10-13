@@ -77,8 +77,8 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 | [`Button`](./components/Button/meta.json) | action | Perform actions; use ButtonLink for button-shaped navigation. **At most 1 emphasis per screen.** |
 | [`ButtonGroup`](./components/ButtonGroup/meta.json) | action | Related Button / ButtonLink entries; named group, consistent sizes, 8px gap. |
 | [`Card`](./components/Card/meta.json) | layout | Surface primitive. No border by default. |
-| [`Badge`](./components/Badge/meta.json) | display | Status / promo labels. Sole place blue / green / purple / yellow are allowed. |
-| [`Input`](./components/Input/meta.json) | form | Text input. 2px black focus ring, never blue. |
+| [`Badge`](./components/Badge/meta.json) | display | Status / promo labels. Uses the semantic badge palette; keyboard focus has separate blue aliases. |
+| [`Input`](./components/Input/meta.json) | form | Text input. Keep state borders; use a separate 2px blue --focus-ring keyboard outline. |
 | [`Checkbox`](./components/Checkbox/meta.json) | form | Independent or multi-select choice. Neutral selected state. |
 | [`RadioGroup`](./components/RadioGroup/meta.json) | form | Exclusive selection with arrow-key navigation. |
 | [`Divider`](./components/Divider/meta.json) | layout | default (1px) / emphasis (2px); separate inverse boolean; horizontal or vertical. |
@@ -87,6 +87,7 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 | [`ProductList`](./components/ProductList/meta.json) | composite | Responsive product collection with rail and waterfall layouts. |
 | [`HeroBanner`](./components/HeroBanner/meta.json) | composite | Responsive homepage campaign rail shared by PC and Mobile. |
 | [`Tabs`](./components/Tabs/meta.json) | navigation | Compound tab navigation. Triggers must sit inside `TabsList`. |
+| [`Pagination`](./components/Pagination/meta.json) | navigation | PC-only numbered pagination from 1024px. Controlled result updates or native links; hidden on mobile. |
 
 Each `meta.json` declares props, variants, `tokenBindings` (which property of which selector reads which token), rules consumed, and a11y profile.
 

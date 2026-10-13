@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs"
 export const PrimaryTabsExample = () => (
   <section data-example="PrimaryTabsExample">
     <Tabs defaultValue="snacks">
-      <TabsList variant="primary" styleVariant="a">
+      <TabsList variant="primary" styleVariant="a" aria-label="Product categories">
         <TabsTrigger value="snacks">Snacks</TabsTrigger>
         <TabsTrigger value="beauty">Beauty</TabsTrigger>
         <TabsTrigger value="grocery">Grocery</TabsTrigger>
@@ -24,7 +24,7 @@ export const PrimaryTabsExample = () => (
 export const SegmentedTabsExample = () => (
   <section data-example="SegmentedTabsExample">
     <Tabs defaultValue="featured">
-      <TabsList variant="primary" styleVariant="b">
+      <TabsList variant="primary" styleVariant="b" aria-label="Product categories">
         <TabsTrigger value="featured">Featured</TabsTrigger>
         <TabsTrigger value="new">New</TabsTrigger>
         <TabsTrigger value="sale">Sale</TabsTrigger>
@@ -39,7 +39,7 @@ export const SegmentedTabsExample = () => (
 export const SecondaryTabsExample = () => (
   <section data-example="SecondaryTabsExample">
     <Tabs defaultValue="orders">
-      <TabsList variant="secondary">
+      <TabsList variant="secondary" aria-label="Account sections">
         <TabsTrigger value="orders">Orders</TabsTrigger>
         <TabsTrigger value="returns">Returns</TabsTrigger>
         <TabsTrigger value="coupons">Coupons</TabsTrigger>
@@ -54,7 +54,7 @@ export const SecondaryTabsExample = () => (
 export const TertiaryTabsExample = () => (
   <section data-example="TertiaryTabsExample">
     <Tabs defaultValue="all">
-      <TabsList variant="tertiary">
+      <TabsList variant="tertiary" aria-label="Product categories">
         <TabsTrigger value="all">All</TabsTrigger>
         <TabsTrigger value="popular">Popular</TabsTrigger>
         <TabsTrigger value="local">Local</TabsTrigger>
@@ -77,7 +77,7 @@ export const InverseTabsExample = () => (
     }}
   >
     <Tabs defaultValue="snacks">
-      <TabsList variant="tertiary" inverse>
+      <TabsList variant="tertiary" inverse aria-label="Product categories">
         <TabsTrigger value="snacks">Snacks</TabsTrigger>
         <TabsTrigger value="beauty">Beauty</TabsTrigger>
         <TabsTrigger value="grocery">Grocery</TabsTrigger>
@@ -92,7 +92,7 @@ export const InverseTabsExample = () => (
 export const DisabledTabsExample = () => (
   <section data-example="DisabledTabsExample">
     <Tabs defaultValue="available">
-      <TabsList variant="primary" styleVariant="b">
+      <TabsList variant="primary" styleVariant="b" aria-label="Product categories">
         <TabsTrigger value="available">Available</TabsTrigger>
         <TabsTrigger value="coming-soon" disabled>
           Coming Soon

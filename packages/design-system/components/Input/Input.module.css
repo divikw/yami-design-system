@@ -42,6 +42,12 @@
   box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-focus);
 }
 
+/* Keep the existing inset state border and add a separate keyboard indicator. */
+.field:has(.control:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .root[data-state="error"] .field {
   box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-attention);
 }
@@ -187,7 +193,7 @@
 }
 
 .clearButton:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: -2px;
   border-radius: var(--radius-component-default);
 }

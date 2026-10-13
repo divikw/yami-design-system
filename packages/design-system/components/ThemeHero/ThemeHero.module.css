@@ -122,22 +122,22 @@
 .descriptionToggle {
   position: relative;
   display: inline;
-  margin-inline-start: var(--space-050);
+  margin-inline-start: var(--space-0);
   border: 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
   font: inherit;
   font-weight: var(--font-weight-normal);
-  padding: 0;
+  padding: 0 var(--space-050);
   text-decoration: underline;
   text-underline-offset: var(--space-025);
 }
 
 .descriptionToggle:focus-visible,
 .tags:focus-visible {
-  outline: 2px solid var(--border-focus-inverse);
-  outline-offset: 2px;
+  outline: 2px solid var(--focus-ring-inverse);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .tags {

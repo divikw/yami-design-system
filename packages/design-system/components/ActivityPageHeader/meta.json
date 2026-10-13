@@ -67,7 +67,8 @@
     "--font-weight-emphasize",
     "--line-height-heading-md",
     "--space-050",
-    "--space-100"
+    "--space-100",
+    "--focus-ring"
   ],
   "tokenBindings": {
     "--layout-page-margin-card": {

@@ -15,7 +15,7 @@
 .root h3 { font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); }
 .root a { color: inherit; text-decoration: none; }
 .root button { font-family: inherit; cursor: pointer; }
-.root a:focus-visible, .root button:focus-visible, .root input:focus-visible, .root video:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.root a:focus-visible, .root button:focus-visible, .root input:focus-visible, .root video:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 .root section[id] { scroll-margin-top: 128px; }
 .header { position: sticky; top: 0; z-index: 30; background: var(--surface-primary); border-bottom: 1px solid var(--border-default); }
 .header > div { max-width: var(--campaign-content-max-width); height: var(--campaign-header-height); margin: auto; padding: 0 var(--space-400); display: flex; align-items: center; justify-content: space-between; }
@@ -65,7 +65,8 @@
 .couponCopy { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-100); }
 .couponCopy > span { font-weight: var(--font-weight-emphasize); user-select: all; }
 .couponCode button { padding: var(--space-050) 0; background: none; border: 0; color: inherit; font-size: inherit; text-decoration: underline; min-height: 36px; cursor: pointer; }
-.couponCode button:focus-visible { outline-color: var(--border-focus-inverse); }
+.couponCode button:focus-visible { outline-color: var(--focus-ring); box-shadow: 0 0 0 2px var(--text-on-emphasis); }
+:global(.dark) .couponCode button { --focus-ring: var(--focus-ring-inverse); }
 .terms { display: flex; flex-direction: column; gap: var(--space-200); width: 100%; max-width: 512px; text-align: left; color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); }
 .termsCopy { display: flex; flex-direction: column; gap: var(--space-050); }
 .terms strong { color: var(--text-emphasis); }
@@ -84,7 +85,7 @@
 .calculatorTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-100); width: 100%; }
 .calculatorTab { min-width: 0; min-height: 76px; padding: var(--space-100); border: 2px solid transparent; border-radius: var(--radius-component-default); background: var(--surface-primary); color: var(--text-secondary); font: inherit; cursor: pointer; }
 .calculatorTab[aria-selected="true"] { border-color: var(--border-focus); color: var(--text-primary); }
-.calculatorTab:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.calculatorTab:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 .couponTab { display: flex; flex-direction: column; gap: var(--space-050); padding: var(--space-100) 0; white-space: normal; }
 .couponTabLabel { text-transform: uppercase; font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
 .couponTabTitle { color: var(--text-primary); font-weight: var(--font-weight-emphasize); }

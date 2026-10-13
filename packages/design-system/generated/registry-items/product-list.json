@@ -92,13 +92,14 @@
   "design": {
     "tokens": [
       "--border-default",
-      "--border-focus",
       "--button-secondary",
       "--button-secondary-active",
       "--divider-default",
       "--divider-emphasis",
       "--fill-skeleton",
       "--fill-skeleton-inverse",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-ios",
       "--font-size-display-sm",
       "--font-size-heading-3xl",
@@ -169,5 +170,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "e5563c5454887a6e4892b988bcce1cda171a5f49edc6d4af11fa8e1306c04ec4"
+  "contentDigest": "0bdf5551902554f5a3fc1cdbfb8bd25b356be897a3a5d4df83ca9d51fc57c448"
 }

@@ -31,6 +31,7 @@ test.each([1024, 1920])('V2 fills image height for API 2:1 artwork at %i px', as
   }
   try {
     await page.viewport(width, 800);
+    expect(matchMedia('(hover: hover) and (pointer: fine)').matches).toBe(true);
     flushSync(() => root.render(<Header {...props} />));
     await page.getByRole('button', { name: 'Categories', exact: true }).click();
     await page.getByRole('button', { name: 'By Brand', exact: true }).click();

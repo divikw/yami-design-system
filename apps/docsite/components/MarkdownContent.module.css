@@ -111,7 +111,7 @@
 .tableScroll table { min-width: calc(var(--space-1000) * 4 + var(--space-500)); margin: 0; }
 
 .tableScroll:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 

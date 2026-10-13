@@ -76,7 +76,7 @@
 }
 
 .summaryPhotoList:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 
@@ -425,7 +425,7 @@
 }
 
 .photos:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 
@@ -489,7 +489,7 @@
 }
 
 .originalLink:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 

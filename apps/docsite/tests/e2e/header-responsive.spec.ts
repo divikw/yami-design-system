@@ -57,7 +57,7 @@ for (const locale of ["zh", "en"]) {
       const toolsBox = await header.getByRole("button", { name: locale === "zh" ? "搜索" : "Search", exact: true }).boundingBox();
       expect(brandBox!.x + brandBox!.width).toBeLessThanOrEqual(toolsBox!.x);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+      const breadcrumb = page.getByRole("navigation", { name: locale === "zh" ? "面包屑导航" : "Breadcrumb" });
       if (width <= 1024) {
         await expect(breadcrumb).toBeHidden();
         expect((await page.locator("h1").boundingBox())!.y).toBe(120);

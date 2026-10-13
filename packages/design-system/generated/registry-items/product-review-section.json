@@ -65,9 +65,9 @@
     "tokens": [
       "--background-secondary",
       "--border-default",
-      "--border-focus",
       "--fill-disabled",
       "--fill-tertiary",
+      "--focus-ring",
       "--font-family-ios",
       "--radius-component-default",
       "--radius-full",
@@ -112,5 +112,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "de2f300fd7084ca375c9d3750cf2e5bf0e91b4ce797a4ac3c440813861e6a594"
+  "contentDigest": "d7cab4b46fbaebd5691b31b398e8de418f97a8ea4474f5f7cb7f8b20e79cd971"
 }

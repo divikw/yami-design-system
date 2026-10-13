@@ -394,7 +394,7 @@ export function ProductDetailPage({
             className={styles.utilityRow}
             data-slot="product-detail-utility-row"
           >
-            <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+            <nav className={styles.breadcrumb} aria-label={rest.lang?.startsWith("zh") ? "面包屑导航" : "Breadcrumb"} data-slot="product-detail-breadcrumb">
               <ol>
                 {breadcrumb.map((item, index) => (
                   <li key={`${item.label}-${index}`}>

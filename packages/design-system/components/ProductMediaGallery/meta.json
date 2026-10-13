@@ -103,7 +103,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Thumbnail and navigation controls use the YAMI focus ring."
+      "note": "Thumbnail and navigation controls use the YAMI focus ring. Thumbnail outlines sit inside the scroll clip with a 2px gap from the existing default or selected border. Preview outlines inherit the visible stage radius."
     },
     "tapTarget": {
       "ruleId": "tap-target",
@@ -129,6 +129,7 @@
     "--fill-tertiary",
     "--border-default",
     "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--radius-component-default",
@@ -149,13 +150,14 @@
     "--space-1000"
   ],
   "tokenBindings": {
+    "--focus-ring": { "property": "outline-color", "selector": ".thumbnailButton:focus-visible, .stageMedia:focus-visible" },
     "--fill-tertiary": {
       "property": "background-color",
       "selector": ".stage, .thumbnailButton, .slide"
     },
     "--border-focus": {
-      "property": "border-color and outline-color",
-      "selector": ".thumbnailButton[data-selected='true'], .thumbnailButton:focus-visible"
+      "property": "border-color",
+      "selector": ".thumbnailButton[data-selected='true']"
     },
     "--stroke-thick": {
       "property": "border-width",

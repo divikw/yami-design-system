@@ -201,7 +201,7 @@
 .utilityIconLink:focus-visible,
 .mobileNavLink:focus-visible,
 .brand:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 

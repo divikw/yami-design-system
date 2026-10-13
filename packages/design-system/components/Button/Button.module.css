@@ -5,7 +5,7 @@
  *   - emphasis-limit (usage.md enforces max 1 emphasis per screen)
  *   - tap-target   (min 44pt; padding-based, not visible size)
  *   - no-opacity-disabled (uses token color, not opacity)
- *   - focus-style (2px var(--border-focus) ring, not browser default)
+ *   - focus-style (2px var(--focus-ring) ring, not browser default)
  *   - no-custom-radii (uses --radius-button-* tokens)
  *
  * Sizes (mobile baseline / ≥1024px desktop, per Figma Mobile v2 + PC v2):
@@ -43,7 +43,7 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -249,7 +249,7 @@
  * Layered after the base variants so it wins on specificity without !important.
  */
 .inverse:focus-visible {
-  outline-color: var(--border-focus-inverse);
+  outline-color: var(--focus-ring-inverse);
 }
 
 .emphasis.inverse {

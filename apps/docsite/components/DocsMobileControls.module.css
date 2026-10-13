@@ -55,7 +55,7 @@
 }
 
 .tocSelect:has(.trigger:focus-visible)::before {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 
@@ -140,7 +140,7 @@
 }
 
 .item:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: calc(-1 * var(--stroke-thick));
 }
 

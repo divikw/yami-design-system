@@ -25,7 +25,9 @@
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
     "tapTarget": { "ruleId": "tap-target", "note": "Close/back controls are visually 32px with centered 20px icons and Button's 44px hit-area extender." }
   },
-  "tokens": ["--surface-primary", "--text-primary", "--overlay-scrim", "--divider-default", "--radius-surface-sheet", "--radius-surface-default", "--font-size-heading-2xl", "--font-weight-emphasize", "--space-100", "--space-200", "--space-600"],
+  "tokens": ["--surface-primary", "--text-primary", "--overlay-scrim", "--divider-default", "--radius-surface-sheet", "--radius-surface-default", "--font-size-heading-2xl", "--font-weight-emphasize", "--space-100", "--space-200", "--space-600",
+    "--focus-ring"
+  ],
   "tokenBindings": {
     "--surface-primary": { "property": "background", "selector": ".sheet" },
     "--overlay-scrim": { "property": "background", "selector": ".sheet::backdrop" },

@@ -1,5 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
+import { expect, userEvent, within } from "storybook/test"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger, type TabsVariant } from "./Tabs"
 
@@ -9,6 +10,26 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
+      playground: "Playground",
+      showStories: false,
+      translations: {
+        zh: {
+          description:
+            "基于 YAMI UI UX Guidelines 的 Tabs 设计规范，支持一级标签页 A/B 样式、二级和三级标签页、独立于主题的反色背景、骨架加载、ARIA 标签页语义及键盘导航。",
+          argDescriptions: {
+            orientation: "排列方向：horizontal 横向，vertical 纵向；方向键随排列方向切换。",
+            activationMode: "激活方式：automatic 随焦点切换；manual 需按 Enter/空格或点击才切换内容。",
+          },
+        },
+        en: {
+          description:
+            "YAMI Tabs from the YAMI UI UX Guidelines Figma Tabs node. Supports Primary Style A/B, Secondary, Tertiary, theme-independent inverse surfaces, skeleton lists, ARIA tab semantics, and keyboard navigation.",
+          argDescriptions: {
+            orientation: "Layout direction: horizontal or vertical. Arrow-key navigation follows the direction.",
+            activationMode: "Activation: automatic follows focus; manual requires Enter, Space, or a click to switch content.",
+          },
+        },
+      },
       description: {
         component:
           "YAMI Tabs from the YAMI UI UX Guidelines Figma Tabs node. Supports Primary Style A/B, Secondary, Tertiary, theme-independent inverse surfaces, skeleton lists, ARIA tab semantics, and keyboard navigation.",
@@ -152,6 +173,7 @@ function SampleTabs({
         styleVariant={styleVariant}
         inverse={inverse}
         fullWidth={fullWidth}
+        aria-label="Content categories"
       >
         {sampleItems.map((item) => (
           <TabsTrigger key={item.value} value={item.value}>
@@ -198,7 +220,7 @@ function contrastRatio(foreground: string, background: string) {
 }
 
 export const AllVariantsContract: Story = {
-  tags: ["!dev", "!autodocs"],
+  name: "Overview",
   render: () => (
     <div data-tabs-showcase-stack style={storyStackStyle}>
       <Section title="Primary - Style A">
@@ -227,7 +249,7 @@ export const AllVariantsContract: Story = {
       </div>
     </div>
   ),
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const primaryStyleALists = canvasElement.querySelectorAll<HTMLElement>(
       '[role="tablist"][data-variant="primary"][data-style="a"]',
     )
@@ -378,11 +400,12 @@ export const AllVariantsContract: Story = {
     canvasElement.dataset.tabsContrastContract = "passed"
     canvasElement.dataset.tabsResponsiveContract = "passed"
     canvasElement.dataset.tabsHoverContract = "passed"
-  },
+  } : undefined,
 }
 
 export const Showcase: Story = {
   name: "PC — Primary",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiDesktopMd", isRotated: false },
   },
@@ -413,6 +436,7 @@ export const Showcase: Story = {
 
 export const DesktopSecondary: Story = {
   name: "PC — Secondary",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiDesktopMd", isRotated: false },
   },
@@ -420,10 +444,13 @@ export const DesktopSecondary: Story = {
 }
 
 export const Playground: Story = {
-  tags: ["!dev", "!autodocs"],
+  tags: ["!autodocs"],
+  parameters: {
+    controls: { include: ["orientation", "activationMode"] },
+  },
   render: (args) => (
     <Tabs {...args}>
-      <TabsList variant="primary">
+      <TabsList variant="primary" aria-label="Content categories">
         {items.map((item) => (
           <TabsTrigger key={item.value} value={item.value}>
             {item.label}
@@ -459,7 +486,7 @@ export const ScrollableSelection: Story = {
       </Tabs>
     </div>
   ),
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const list = canvasElement.querySelector<HTMLElement>('[role="tablist"]')
     const middleTab = canvasElement.querySelector<HTMLButtonElement>(
       '[role="tab"][aria-controls$="-panel-brighten"]',
@@ -550,11 +577,12 @@ export const ScrollableSelection: Story = {
         `Selecting the last Tab must clamp it to the end without moving the page: selected=${lastTab.getAttribute("aria-selected")}, tab=${selectedRect.left.toFixed(1)}..${selectedRect.right.toFixed(1)}, list=${listRect.left.toFixed(1)}..${listRect.right.toFixed(1)}, scrollLeft=${list.scrollLeft}/${maxScrollLeft}, pageY=${initialPageScrollY}->${window.scrollY}`,
       )
     }
-  },
+  } : undefined,
 }
 
 export const PrimaryStyleA: Story = {
   name: "Mobile — Primary A",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -569,6 +597,7 @@ export const PrimaryStyleA: Story = {
 
 export const PrimaryStyleB: Story = {
   name: "Mobile — Primary B",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -577,6 +606,7 @@ export const PrimaryStyleB: Story = {
 
 export const Secondary: Story = {
   name: "Mobile — Secondary",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -610,6 +640,7 @@ export const Secondary: Story = {
 
 export const Tertiary: Story = {
   name: "Mobile — Tertiary",
+  tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -617,26 +648,32 @@ export const Tertiary: Story = {
 }
 
 export const States: Story = {
-  tags: ["!dev"],
-  render: () => (
-    <Tabs defaultValue="active">
-      <TabsList variant="primary" styleVariant="b">
-        <TabsTrigger value="active">Active</TabsTrigger>
-        <TabsTrigger value="default">Default</TabsTrigger>
-        <TabsTrigger value="disabled" disabled>
-          Disabled
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="active">Active tab content</TabsContent>
-      <TabsContent value="default">Default tab content</TabsContent>
-      <TabsContent value="disabled">Disabled tab content</TabsContent>
-    </Tabs>
+  name: "States — Disabled & loading",
+  render: (_args, { globals }) => (
+    <div style={storyStackStyle}>
+      <Section title={globals.locale === "en" ? "Selected, default, and disabled" : "选中、默认与禁用"}>
+        <Tabs defaultValue="active">
+          <TabsList variant="primary" styleVariant="b" aria-label="Content categories">
+            <TabsTrigger value="active">Active</TabsTrigger>
+            <TabsTrigger value="default">Default</TabsTrigger>
+            <TabsTrigger value="disabled" disabled>
+              Disabled
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="active">Active tab content</TabsContent>
+          <TabsContent value="default">Default tab content</TabsContent>
+          <TabsContent value="disabled">Disabled tab content</TabsContent>
+        </Tabs>
+      </Section>
+      <Section title={globals.locale === "en" ? "Loading skeletons" : "骨架加载"}>
+        <SkeletonExample />
+      </Section>
+    </div>
   ),
 }
 
-export const Skeleton: Story = {
-  tags: ["!dev"],
-  render: () => (
+function SkeletonExample() {
+  return (
     <div style={storyStackStyle}>
       <Tabs defaultValue="loading">
         <TabsList variant="primary" styleVariant="a" skeleton aria-label="Loading primary tabs" />
@@ -650,14 +687,19 @@ export const Skeleton: Story = {
         </Tabs>
       </div>
     </div>
-  ),
+  )
+}
+
+export const Skeleton: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: () => <SkeletonExample />,
 }
 
 export const WithIcons: Story = {
-  tags: ["!dev"],
+  name: "Composition — Icons",
   render: () => (
     <Tabs defaultValue="search">
-      <TabsList variant="secondary">
+      <TabsList variant="secondary" aria-label="Content categories">
         <TabsTrigger value="search" leftIcon={<SearchIcon />}>
           Search
         </TabsTrigger>
@@ -672,10 +714,11 @@ export const WithIcons: Story = {
 }
 
 export const Vertical: Story = {
-  tags: ["!dev"],
-  render: () => (
-    <Tabs defaultValue="snacks" orientation="vertical" style={{ minHeight: 160 }}>
-      <TabsList variant="primary" styleVariant="a">
+  name: "Composition — Vertical",
+  args: { orientation: "vertical" },
+  render: (args) => (
+    <Tabs {...args} style={{ minHeight: 160 }}>
+      <TabsList variant="primary" styleVariant="a" aria-label="Content categories">
         {items.map((item) => (
           <TabsTrigger key={item.value} value={item.value}>
             {item.label}
@@ -689,6 +732,57 @@ export const Vertical: Story = {
       ))}
     </Tabs>
   ),
+}
+
+function ControlledExample() {
+  const [value, setValue] = useState("snacks")
+  return (
+    <Tabs value={value} onValueChange={setValue}>
+      <TabsList variant="primary" styleVariant="b" fullWidth aria-label="商品分类">
+        <TabsTrigger value="snacks">零食</TabsTrigger>
+        <TabsTrigger value="beauty">美妆</TabsTrigger>
+        <TabsTrigger value="grocery" disabled>食品（即将开放）</TabsTrigger>
+      </TabsList>
+      <TabsContent value="snacks">零食商品内容</TabsContent>
+      <TabsContent value="beauty">美妆商品内容</TabsContent>
+      <TabsContent value="grocery">食品商品内容</TabsContent>
+    </Tabs>
+  )
+}
+
+export const Controlled: Story = {
+  name: "Behavior — Controlled",
+  render: () => <ControlledExample />,
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole("tab", { name: "美妆" }))
+    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("美妆商品内容")
+    await expect(canvas.getByRole("tab", { name: "食品（即将开放）" })).toHaveAttribute("aria-disabled", "true")
+  } : undefined,
+}
+
+export const ManualActivation: Story = {
+  name: "Behavior — Manual activation",
+  args: { defaultValue: "details", activationMode: "manual" },
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList variant="secondary" aria-label="商品信息">
+        <TabsTrigger value="details">商品详情</TabsTrigger>
+        <TabsTrigger value="reviews">用户评价</TabsTrigger>
+      </TabsList>
+      <TabsContent value="details">商品详情内容</TabsContent>
+      <TabsContent value="reviews">用户评价内容</TabsContent>
+    </Tabs>
+  ),
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    canvas.getByRole("tab", { name: "商品详情" }).focus()
+    await userEvent.keyboard("{ArrowRight}")
+    await expect(canvas.getByRole("tab", { name: "用户评价" })).toHaveFocus()
+    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("商品详情内容")
+    await userEvent.keyboard("{Enter}")
+    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("用户评价内容")
+  } : undefined,
 }
 
 function SearchIcon() {
@@ -718,7 +812,7 @@ function CenteredScrollExample() {
   return <div style={{ width: 280 }}>
     <button onClick={() => setValue("4")}>Select middle externally</button>
     <Tabs value={value} onValueChange={setValue}>
-      <TabsList fullWidth centerActiveTab align="center" edgePadding>
+      <TabsList fullWidth centerActiveTab align="center" edgePadding aria-label="Page sections">
         {Array.from({ length: 9 }, (_, index) => <TabsTrigger key={index} value={String(index)}>Section {index + 1}</TabsTrigger>)}
       </TabsList>
     </Tabs>
@@ -726,8 +820,9 @@ function CenteredScrollExample() {
 }
 
 export const CenteredScrolling: Story = {
+  name: "Behavior — Scrolling",
   render: () => <CenteredScrollExample />,
-  play: async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const list = canvasElement.querySelector<HTMLElement>('[role="tablist"]')!
     const first = list.querySelector<HTMLElement>('[role="tab"]')!
     if (Math.abs(first.getBoundingClientRect().left - list.getBoundingClientRect().left - 16) > 1) throw new Error("Overflow must begin at the leading gutter")
@@ -737,5 +832,5 @@ export const CenteredScrolling: Story = {
     const bounds = list.getBoundingClientRect()
     if (Math.abs(active.left + active.width / 2 - bounds.left - bounds.width / 2) > 1) throw new Error("Controlled selection must center inside the list")
     if (getComputedStyle(list).paddingInlineStart !== "16px") throw new Error("List must retain edge padding")
-  },
+  } : undefined,
 }

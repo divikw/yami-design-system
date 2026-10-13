@@ -79,7 +79,7 @@
 }
 
 .toggle:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: -2px;
 }
 
@@ -283,7 +283,7 @@
 }
 
 .explore:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -429,7 +429,7 @@
   }
 
   .seeAll:focus-visible {
-    outline: var(--stroke-thick) solid var(--border-focus);
+    outline: var(--stroke-thick) solid var(--focus-ring);
     outline-offset: 2px;
   }
 

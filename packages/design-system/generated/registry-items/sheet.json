@@ -52,6 +52,7 @@
   "design": {
     "tokens": [
       "--divider-default",
+      "--focus-ring",
       "--font-size-heading-2xl",
       "--font-weight-emphasize",
       "--overlay-scrim",
@@ -108,5 +109,5 @@
     },
     "interactionCoverage": "missing"
   },
-  "contentDigest": "6147a5ba77d4447a8b8f4a87a0f591e33f67a48b81eb8f390dfc3fef299afc71"
+  "contentDigest": "956da616689acc79fab12f1dd4de1fa7cc2547a844a746a909be89e810e09fce"
 }

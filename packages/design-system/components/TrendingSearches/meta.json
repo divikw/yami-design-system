@@ -99,7 +99,7 @@
     "--text-primary",
     "--text-secondary",
     "--divider-default",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--badge-bg-primary-purple",

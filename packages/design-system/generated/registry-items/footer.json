@@ -116,9 +116,10 @@
     "tokens": [
       "--border-default",
       "--border-focus",
-      "--border-focus-inverse",
       "--divider-default",
       "--divider-emphasis",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-caption-md",
@@ -164,6 +165,10 @@
       "type-hierarchy"
     ],
     "tokenBindings": {
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".groupLink:focus-visible, .socialLink:focus-visible, .subscribeSubmit:focus-visible, .subscribeInput:focus-visible"
+      },
       "--surface-secondary": {
         "property": "background",
         "selector": ".root, .linkPanel, .keepInTouch, .appBand"
@@ -251,5 +256,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "2aa3a5aae7f7a63ed7152cdbb7b9fe10136f81b2945857d35f05758d551432aa"
+  "contentDigest": "3a9b80ef756848799e589327cff470f39be7dcec3275b1e62e92558d474e1519"
 }

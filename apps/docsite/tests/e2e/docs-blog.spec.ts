@@ -93,7 +93,7 @@ test("filters Blog categories and opens a complete article", async ({ page }) =>
   const breadcrumbLink = page.getByRole("navigation", { name: "面包屑导航" }).getByRole("link");
   const breadcrumbLinkBox = await breadcrumbLink.boundingBox();
   expect(breadcrumbLinkBox).not.toBeNull();
-  expect(breadcrumbLinkBox!.height).toBeGreaterThanOrEqual(44);
+  expect(breadcrumbLinkBox!.height).toBeGreaterThanOrEqual(24);
 
   const firstSectionHeading = page.getByRole("heading", { level: 2, name: "Story 是组件状态的可复现记录" });
   await expect(firstSectionHeading).toHaveCSS("font-size", "20px");

@@ -10,6 +10,18 @@ import {
 } from "../.storybook/component-docs";
 
 describe("component docs usage content", () => {
+  test("loads Pagination guidance in Chinese and English", async () => {
+    const title = "YAMI/Components/Navigation/Pagination";
+    const chinese = await loadUsageForTitle(title, "zh");
+    const english = await loadUsageForTitle(title, "en");
+    expect(chinese).toContain("# Pagination — 使用说明");
+    expect(chinese).toContain("1024px");
+    expect(chinese).not.toContain("## When to use");
+    expect(english).toContain("# Pagination — Usage");
+    expect(english).toContain("getPageHref");
+    expect(english).not.toMatch(/[\u4e00-\u9fff]/u);
+  });
+
   test("resolves a spaced Storybook title to its component usage guide", async () => {
     const usage = await loadUsageForTitle(
       "YAMI/Components/Commerce/Product Card",
@@ -34,6 +46,24 @@ describe("component docs usage content", () => {
     expect(english).toContain("### Radius ownership");
     expect(english).toContain("## Narrow layouts and overflow");
     expect(english).not.toContain("## 使用场景");
+  });
+
+  test("loads Tabs guidance in the selected language without mixing sections", async () => {
+    const chinese = await loadUsageForTitle("YAMI/Components/Navigation/Tabs");
+    const english = await loadUsageForTitle("YAMI/Components/Navigation/Tabs", "en");
+    expect(chinese).toContain("# Tabs — 使用说明");
+    expect(chinese).toContain("## 键盘与 ARIA");
+    expect(chinese).toContain("## 可滚动分区导航");
+    expect(chinese).not.toContain("## When to use");
+    expect(english).toContain("# Tabs — Usage");
+    expect(english).toContain("## Keyboard and ARIA");
+    expect(english).toContain("## Scrollable section navigation");
+    expect(english).not.toMatch(/[\u4e00-\u9fff]/u);
+    for (const usage of [chinese, english]) {
+      expect(usage).toContain('activationMode="manual"');
+      expect(usage).toContain("onValueChange={setValue}");
+      expect(usage).toContain("centerActiveTab");
+    }
   });
 
   test("keeps existing single-language guides available in either locale", async () => {

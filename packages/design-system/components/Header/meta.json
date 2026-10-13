@@ -211,7 +211,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Brand, halls, deliver-to, account, locale, cart, category links, rail paging, and the submit button expose a 2px --border-focus outline at 2px offset."
+      "note": "Brand, halls, deliver-to, account, locale, cart, category links, rail paging, and the submit button expose a 2px --focus-ring outline at 2px offset."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -249,6 +249,7 @@
     "--text-emphasis",
     "--border-default",
     "--border-focus",
+    "--focus-ring",
     "--divider-subtle",
     "--divider-emphasis",
     "--button-primary",
@@ -285,6 +286,7 @@
     "--space-600"
   ],
   "tokenBindings": {
+    "--focus-ring": { "property": "outline-color", "selector": ".brand:focus-visible, .search:has(.searchField:focus-visible), other focusable slots" },
     "--surface-primary": {
       "property": "background",
       "selector": ".root fallback, .search, .railControl"
@@ -303,7 +305,7 @@
     },
     "--border-focus": {
       "property": "border-color",
-      "selector": ".search ring at --stroke-thick; outline-color on every focusable slot"
+      "selector": ".search border at --stroke-thick; .searchSuggestion[data-selected]"
     },
     "--divider-subtle": {
       "property": "background",

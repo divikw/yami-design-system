@@ -1310,6 +1310,16 @@ export const tokens = {
     "$value": "{color.amber.50}",
     "$description": "用于警示状态的弱填充背景，适合提示性或非阻断场景。"
   },
+  "focus.ring": {
+    "$type": "color",
+    "$value": "{color.blue.600}",
+    "$description": "键盘可见焦点外框，浅色默认背景使用深蓝；独立于组件边框、聚焦边框和选中状态。"
+  },
+  "focus.ring-inverse": {
+    "$type": "color",
+    "$value": "{color.blue.400}",
+    "$description": "反向极性背景上的键盘可见焦点外框；浅色主题深背景使用亮蓝，深色主题浅背景使用深蓝。"
+  },
   "font-family.android": {
     "$type": "fontFamily",
     "$value": {

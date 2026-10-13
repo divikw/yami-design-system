@@ -59,6 +59,7 @@
       "--border-default",
       "--border-focus",
       "--fill-tertiary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-caption-md",
       "--line-height-caption-md",
@@ -92,13 +93,17 @@
       "tap-target"
     ],
     "tokenBindings": {
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".thumbnailButton:focus-visible, .stageMedia:focus-visible"
+      },
       "--fill-tertiary": {
         "property": "background-color",
         "selector": ".stage, .thumbnailButton, .slide"
       },
       "--border-focus": {
-        "property": "border-color and outline-color",
-        "selector": ".thumbnailButton[data-selected='true'], .thumbnailButton:focus-visible"
+        "property": "border-color",
+        "selector": ".thumbnailButton[data-selected='true']"
       },
       "--stroke-thick": {
         "property": "border-width",
@@ -170,5 +175,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "944aa91bb365bc942bc8d0aa34c720e67b61b248f14069eb3bd6111805c8a249"
+  "contentDigest": "4085c32e6c185b8d4c781aad0f7a4eb306299b8cba4cf060e753d78abab6fd6c"
 }

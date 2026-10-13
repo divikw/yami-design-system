@@ -77,8 +77,6 @@
   },
   "design": {
     "tokens": [
-      "--border-focus",
-      "--border-focus-inverse",
       "--button-disabled",
       "--button-disabled-inverse",
       "--button-emphasis",
@@ -97,6 +95,8 @@
       "--button-tertiary-active",
       "--button-tertiary-active-inverse",
       "--button-tertiary-inverse",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-body-xl",
@@ -177,7 +177,7 @@
         "property": "color",
         "selector": ".button[aria-disabled='true']"
       },
-      "--border-focus": {
+      "--focus-ring": {
         "property": "outline-color",
         "selector": ".button:focus-visible"
       },
@@ -256,10 +256,10 @@
         "android": 48
       },
       "requiresAriaLabel": "when iconOnly=true",
-      "focusVisible": "2px solid var(--border-focus), 2px offset",
+      "focusVisible": "2px solid var(--focus-ring), 2px offset",
       "loadingAnnounces": "aria-busy=true"
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "5b2049c056bb682511aeddad3af95ebdeffee7d0b1736596bf206db225c8dd63"
+  "contentDigest": "4fc48190b01885dfaf36b2a9927c22c47f21c571b051805011235f1a6fd4ec40"
 }

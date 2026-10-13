@@ -88,8 +88,8 @@
 }
 
 .card:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
-  outline-offset: 2px;
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .image {

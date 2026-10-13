@@ -1,10 +1,10 @@
 /**
- * focus-style (runtime) — focus must use 2px outline in --border-focus (black).
+ * focus-style (runtime) — focus must use 2px outline in --focus-ring / --focus-ring-inverse.
  *
  * P1: Real implementation using programmatic focus + getComputedStyle.
  *
  * For each interactive element: focus it, read computed outline properties,
- * verify it's a 2px solid outline in a dark color (--border-focus = black 87%),
+ * verify it's a 2px solid outline in the resolved theme's focus token,
  * then blur.
  */
 
@@ -17,7 +17,6 @@ import {
 } from '../_shared'
 import type { RuntimeValidator, RuntimeViolation } from '../schema'
 
-// --border-focus is rgba(0,0,0,0.87) — near-black
 const EXPECTED_WIDTH = 2 // px
 
 export const focusStyle: RuntimeValidator = {
@@ -63,13 +62,13 @@ export const focusStyle: RuntimeValidator = {
         violations.push({
           ruleId: 'focus-style',
           message:
-            'Interactive element has no visible outline on focus. Verify it uses an alternative focus indicator, or add 2px outline in --border-focus.',
+            'Interactive element has no visible outline on focus. Verify it uses an alternative focus indicator, or add 2px outline in --focus-ring.',
           severity: 'warning',
           yamiId: getYamiId(el),
           selector: getSelectorPath(el),
           element: el,
           suggestion:
-            'Add outline: 2px solid var(--border-focus) with outline-offset: 2px on :focus-visible. Do not use blue focus rings.',
+            'Add outline: 2px solid var(--focus-ring) with outline-offset: 2px on :focus-visible. Keep component state borders separate.',
           measured: { outlineStyle, outlineWidth, outlineColor },
         })
         continue
@@ -89,20 +88,22 @@ export const focusStyle: RuntimeValidator = {
         })
       }
 
-      // Verify outline color is dark (--border-focus = black 87%)
+      // Compare against the resolved semantic tokens in this element's theme.
       const parsed = resolveColor(outlineColor)
       if (parsed) {
-        const isBlue = parsed.b > 150 && parsed.r < 100 && parsed.g < 100
-        if (isBlue) {
+        const allowedColors = ['--focus-ring', '--focus-ring-inverse']
+          .map((token) => resolveColor(style.getPropertyValue(token).trim()))
+        if (!allowedColors.some((color) => color &&
+          color.r === parsed.r && color.g === parsed.g && color.b === parsed.b && color.a === parsed.a)) {
           violations.push({
             ruleId: 'focus-style',
-            message: `Focus outline uses blue color "${outlineColor}". Must use --border-focus (black).`,
+            message: `Focus outline color "${outlineColor}" does not match --focus-ring or --focus-ring-inverse.`,
             severity: 'error',
             yamiId: getYamiId(el),
             selector: getSelectorPath(el),
             element: el,
             suggestion:
-              'Replace blue focus ring with outline-color: var(--border-focus) (rgba(0,0,0,0.87)).',
+              'Use outline-color: var(--focus-ring) or var(--focus-ring-inverse); keep borders and selected states separate.',
             measured: { outlineColor, parsedColor: parsed },
           })
         }

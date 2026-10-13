@@ -175,7 +175,7 @@
 }
 
 .topicFieldActions > button:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -297,7 +297,7 @@
 }
 
 .managedRunDialogClose:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -389,7 +389,7 @@
 
 .managedRunOption > input:focus-visible,
 .importCandidates > label > input:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -517,7 +517,7 @@
 }
 
 .topicPackageDownload:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 

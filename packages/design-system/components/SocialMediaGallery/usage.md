@@ -25,3 +25,8 @@ PC 的 `dividerPosition` 支持 `top`、`bottom`、`none`，`dividerVariant` 支
 ## 视频与无障碍
 
 提供有意义的 `posterAlt`、稳定的 ID、真实跳转地址及本地化标签。默认展示视频封面，设置 `videoSrc` 后在媒体区域静音循环自动播放；`href` 可链接到完整视频。来源未提供作者时传入 `username={null}`，隐藏账号叠加层。
+
+
+## Keyboard focus geometry
+
+The video media link matches the visible card top corners so its inset focus outline is not cut off. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

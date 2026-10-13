@@ -76,7 +76,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "The optional content link and composed ProductList controls keep the shared focus treatment."
+      "note": "The optional content link and composed ProductList controls keep the shared focus treatment. The content link inherits its panel radius and uses a 2px inset focus outline."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -91,7 +91,7 @@
     "--surface-primary",
     "--surface-secondary",
     "--color-white-1000",
-    "--border-focus",
+    "--focus-ring",
     "--font-size-heading-md",
     "--font-size-body-md",
     "--line-height-heading-md",

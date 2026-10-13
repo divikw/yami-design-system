@@ -70,6 +70,10 @@
     "disabled": { "$type": "color", "$value": "{color.white.400}" },
     "disabled-inverse": { "$type": "color", "$value": "{color.neutral.200}" }
   },
+  "focus": {
+    "ring": { "$type": "color", "$value": "{color.blue.400}" },
+    "ring-inverse": { "$type": "color", "$value": "{color.blue.600}" }
+  },
   "border": {
     "default": { "$type": "color", "$value": "{color.white.200}" },
     "default-inverse": { "$type": "color", "$value": "{color.black.200}" },

@@ -55,7 +55,7 @@ export function DocPage({
 
         <article className={styles.article}>
           <header className={styles.articleHeader}>
-            <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+            <nav className={styles.breadcrumbs} aria-label={locale === "zh" ? "面包屑导航" : "Breadcrumb"}>
               <Link href={localizedPath(locale, "/docs/getting-started")}>{copy.nav.docs}</Link>
               <span aria-hidden="true">/</span>
               <span aria-current="page">{document.frontmatter.title}</span>

@@ -2,8 +2,8 @@
   "$schema": "../../schema/component.json",
   "name": "Tabs",
   "category": "navigation",
-  "status": "beta",
-  "version": "0.1.0",
+  "status": "stable",
+  "version": "0.1.1",
 
   "description": "Navigation tabs for switching between related content panes. Implements YAMI Primary Style A/B, Secondary, and Tertiary variants from the YAMI UI UX Guidelines Tabs node, with default and inverse surfaces plus ARIA tab behavior.",
 
@@ -31,7 +31,7 @@
         "secondaryButton": "3112:22838"
       }
     },
-    "sizeDelta": "Mobile Primary Style A uses 56px list height and 18/24 text; WEB Primary uses 48px and 16/20. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 44px on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
+    "sizeDelta": "Maintained web horizontal Primary Style A uses 56px triggers and 16/20 text on both mobile and PC. Code-side vertical Primary A uses 44px rows with the same text size; vertical Primary A and Secondary use 4px item gaps. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 40px with 14/20 text on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
     "stateMapping": "Figma State=Default/Skeleton maps to TabsList skeleton=false/true. Selected/default tab states map to data-state='active'/'inactive'. Hover/focus are code-only interaction states; disabled is a code-side accessibility state for product use."
   },
 
@@ -66,7 +66,7 @@
     "defaultValue": {
       "type": "string",
       "required": false,
-      "description": "Initial selected tab value for uncontrolled use."
+      "description": "Initial selected tab value for uncontrolled use. Without it, panels stay hidden until activation and only the first enabled trigger is tabbable."
     },
     "onValueChange": {
       "type": "(value: string) => void",
@@ -111,6 +111,31 @@
       "default": false,
       "description": "Stretch the list and distribute triggers evenly."
     },
+    "TabsList.centerActiveTab": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Reveal controlled selection updates inside the list, respecting reduced motion and scroll boundaries."
+    },
+    "TabsList.align": {
+      "type": "enum",
+      "values": ["start", "center"],
+      "required": false,
+      "default": "start",
+      "description": "Center items when they fit; overflow retains start alignment."
+    },
+    "TabsList.edgePadding": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Add 16px leading and trailing gutters."
+    },
+    "TabsList.skeletonCount": {
+      "type": "number",
+      "required": false,
+      "default": 4,
+      "description": "Number of non-interactive placeholders while skeleton is true."
+    },
     "TabsList.skeleton": {
       "type": "boolean",
       "required": false,
@@ -120,7 +145,12 @@
     "TabsTrigger.value": {
       "type": "string",
       "required": true,
-      "description": "Unique value that links the trigger to its panel."
+      "description": "Unique, case-sensitive value that links the trigger to its panel; localized values and punctuation retain distinct IDs."
+    },
+    "TabsTrigger.controls": {
+      "type": "string",
+      "required": false,
+      "description": "Existing external content ID; defaults to the matching TabsContent panel ID. The consumer owns external content semantics."
     },
     "TabsTrigger.disabled": {
       "type": "boolean",
@@ -151,12 +181,11 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "2px solid --border-focus ring with --border-focus-inverse on opposite-polarity surfaces."
+      "note": "2px solid --focus-ring ring with --focus-ring-inverse on opposite-polarity surfaces. Use a 2px inset in scrolling lists without gutters; Primary B outlines the visible capsule pseudo-element at a 2px outer offset, independently of the 44px hit area."
     },
     "tapTarget": {
       "ruleId": "tap-target",
-      "minIosPt": 44,
-      "note": "Compact pill visuals keep Figma 32px fill while the button hit target is at least 44px on mobile variants."
+      "note": "Web targets preserve geometry: Primary A 56px, Primary B 44px, Secondary 40px, Tertiary 32px below 1024px and 36px on desktop. Compact variants have no invisible extensions and do not claim the native iOS 44pt / Android 48dp minimum."
     },
     "disabled": {
       "ruleId": "no-opacity-disabled",
@@ -180,8 +209,8 @@
     "--surface-inverse",
     "--fill-skeleton",
     "--fill-skeleton-inverse",
-    "--border-focus",
-    "--border-focus-inverse",
+    "--focus-ring",
+    "--focus-ring-inverse",
     "--border-default-inverse",
     "--divider-default",
     "--button-secondary",
@@ -231,11 +260,11 @@
     },
     "--text-disabled": {
       "property": "color",
-      "selector": ".trigger[aria-disabled='true']"
+      "selector": ".list[data-variant] .trigger[aria-disabled='true'][data-state]"
     },
     "--surface-secondary": {
       "property": "background",
-      "selector": ".list[data-variant='primary'][data-style='b']"
+      "selector": ".list[data-variant='primary'][data-style='b'] .track::before"
     },
     "--surface-primary": {
       "property": "background",
@@ -257,9 +286,9 @@
       "property": "background",
       "selector": ".skeletonItem"
     },
-    "--border-focus": {
+    "--focus-ring": {
       "property": "outline-color",
-      "selector": ".trigger:focus-visible, .content:focus-visible"
+      "selector": ".trigger:focus-visible, .trigger:focus-visible::before (Primary B), .content:focus-visible"
     },
     "--radius-full": {
       "property": "border-radius",
@@ -274,12 +303,14 @@
   "accessibility": {
     "role": "tablist / tab / tabpanel",
     "wcagLevel": "AA",
-    "tapTargetMin": 44,
+    "tapTargetMin": 32,
     "keyboardNav": ["tab", "shift+tab", "arrow-left", "arrow-right", "arrow-up", "arrow-down", "home", "end", "enter", "space"],
     "ariaPattern": "WAI-ARIA Tabs pattern",
-    "focusVisible": "2px solid var(--border-focus), inverse uses --border-focus-inverse",
+    "focusVisible": "2px solid var(--focus-ring), inverse uses --focus-ring-inverse",
     "disabled": "Disabled triggers set aria-disabled=true, tabIndex=-1, and are skipped by arrow navigation.",
-    "labelling": "TabsTrigger id and TabsContent aria-labelledby/aria-controls are generated from useId + value."
+    "labelling": "Require aria-label or aria-labelledby on each TabsList. Trigger and panel IDs use useId + losslessly encoded value; controls may reference an existing external content region.",
+    "focusManagement": "One enabled roving Tab stop; manual activation moves focus without selection until Enter/Space or click.",
+    "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 44px, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
   },
 
   "dependencies": {

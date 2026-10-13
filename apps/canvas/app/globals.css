@@ -12,7 +12,7 @@ html, body { min-height: 100%; }
 body { margin: 0; background: var(--canvas-paper); color: var(--canvas-ink); font-family: var(--font-yami), Arial, sans-serif; }
 button, select { font: inherit; }
 button, a, select { -webkit-tap-highlight-color: transparent; }
-button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 .app-loading { display: grid; min-height: 100vh; place-items: center; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
 .canvas-shell {

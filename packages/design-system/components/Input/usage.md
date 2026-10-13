@@ -126,6 +126,7 @@ state rather than walking the DOM from inside the slot.
 - Error message uses `role="alert"`.
 - Disabled uses native `disabled`.
 - Keyboard behavior is native input behavior.
+- The field keeps its neutral `--border-focus` state border (or red error border). A separate blue `--focus-ring` outline surrounds it when the native control matches `:focus-visible`; the clear action uses the same focus token.
 - A visible clear action remains mounted and keyboard-focusable while focus is inside the field.
 
 ## Baseline Boundary

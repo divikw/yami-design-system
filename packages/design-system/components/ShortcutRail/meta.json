@@ -85,7 +85,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Every shortcut link and paging control remains keyboard reachable with a token-backed focus ring."
+      "note": "Every shortcut link and paging control remains keyboard reachable with a token-backed focus ring. Shortcut links use a 2px inset focus outline inside the scroll clip."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -102,7 +102,7 @@
     "--text-primary",
     "--border-default",
     "--divider-emphasis",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--radius-full",

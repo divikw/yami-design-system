@@ -23,3 +23,8 @@ Storybook 提供 PC 和 Mobile 预览。通过 `showProduct` 预览带商品或�
 ## 内容与无障碍
 
 按展示顺序传入 `reviews`，由调用方提供对应语言的评论。无关联商品时省略 `product`；辅助说明使用 `description`。评分提供五星制无障碍标签，图片需要有意义的替代文本，商品 `href` 使用可通过键盘访问的原生链接。
+
+
+## Keyboard focus geometry
+
+Scrollable lists and product links use a 2px inset focus outline inside the clipped section. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

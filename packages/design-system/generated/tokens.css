@@ -305,6 +305,8 @@
   --fill-tertiary: var(--color-neutral-50);
   --fill-warning-primary: var(--color-yellow-500);
   --fill-warning-secondary: var(--color-amber-50);
+  --focus-ring: var(--color-blue-600);
+  --focus-ring-inverse: var(--color-blue-400);
   --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-family-serif: 'Source Serif 4 Variable', 'Noto Serif SC', serif;
@@ -486,6 +488,8 @@
   --fill-tertiary: var(--color-neutral-950);
   --fill-warning-primary: var(--color-yellow-400);
   --fill-warning-secondary: var(--color-amber-950);
+  --focus-ring: var(--color-blue-400);
+  --focus-ring-inverse: var(--color-blue-600);
   --overlay-default: var(--color-black-300);
   --overlay-scrim: var(--color-black-700);
   --product-card-add-border: var(--color-black-200);

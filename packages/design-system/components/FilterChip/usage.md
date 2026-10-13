@@ -37,3 +37,8 @@ lock and safe-area footer come from Sheet. Selection and draft behavior are
 unchanged; desktop keeps the anchored popup and its existing dimensions.
 
 Do not use the static `Tag` component for filtering.
+
+
+## Keyboard focus geometry
+
+Scrollable chip groups reserve 4px focus gutters on every edge; selected strokes remain unchanged. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

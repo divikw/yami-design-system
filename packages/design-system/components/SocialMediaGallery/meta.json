@@ -100,7 +100,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Video, product, view-all, and paging actions use token-backed focus indicators."
+      "note": "Video, product, view-all, and paging actions use token-backed focus indicators. The video media link matches the visible card top corners so its inset focus outline is not cut off."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -119,8 +119,8 @@
     "--text-primary-inverse",
     "--color-white-1000",
     "--divider-default",
-    "--border-focus",
-    "--border-focus-inverse",
+    "--focus-ring",
+    "--focus-ring-inverse",
     "--stroke-default",
     "--stroke-thick",
     "--radius-full",

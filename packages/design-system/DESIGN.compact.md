@@ -30,11 +30,11 @@ projection: compact
 |---|---|---|
 | Brand red | `#FF0000` | **Logo only.** Brand mark, primary brand signals. |
 | Operational red (red.500) | `#E00000` | Emphasis CTA (Buy Now / Add to Cart), promotion / urgency, error. |
-| Ink | `rgba(0,0,0,0.87)` | All text, primary buttons, focus ring. |
+| Ink | `rgba(0,0,0,0.87)` | All text, primary buttons, component state borders. |
 | Canvas | `#FFFFFF` | Page + card surface (no separation needed). |
 | Cream wash | `#FBF1EF` (`--brand-tertiary`) | Branded promotional backgrounds; not product-image placeholders. |
 
-Beyond these five anchors: a 50→950 neutral ramp (`#FAFAFA → #0A0A0A`) for chrome, and a 6-color **badge-only** palette (red / blue / green / purple / yellow / neutral) for status and promo tags. Decorative blue / green / purple / yellow is **not allowed** outside that palette.
+Beyond these five anchors: a 50→950 neutral ramp (`#FAFAFA → #0A0A0A`) for chrome, and a 6-color **badge-only** palette (red / blue / green / purple / yellow / neutral) for status and promo tags. Blue also identifies keyboard focus through `--focus-ring` / `--focus-ring-inverse`; decorative color remains forbidden.
 
 ---
 
@@ -64,9 +64,10 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 |---|---|---|
 | **Button** | emphasis / primary / secondary / tertiary × full/inline/icon × sm/md/lg | Actions only; navigation uses anchors. Emphasis is **rate-limited to 1 per screen**. Full form uses 8px; inline form is pill-shaped. |
 | **Tabs** | primary / secondary / tertiary | Responsive tab navigation; Theme and inverse surface polarity remain independent. |
+| **Pagination** | controlled updates / native links × default / inverse | PC numbered pagination from 1024px; 32px controls, bilingual labels, blue keyboard focus. Hidden on mobile. |
 | **Card** | padding × surface primary/secondary/inverse | Independent content items, not ordinary page sections. Default padding 16px, surface radius 12px; ProductCard owns its 8px geometry. **No border or shadow by default.** Native link/button interactions; 44px interactive target. |
-| **Badge** | 6 colors × primary (solid) / secondary (tinted) × sm/md | Sole place blue/green/purple/yellow is allowed. Max 2 badges per ProductCard. |
-| **Input** | default / focus / error / disabled | 2px black focus ring at 2px offset. Never blue. |
+| **Badge** | 6 colors × primary (solid) / secondary (tinted) × sm/md | Uses semantic badge colors; keyboard focus has separate blue aliases. Max 2 badges per ProductCard. |
+| **Input** | default / focus / error / disabled | Keep state borders; separate 2px blue `--focus-ring` keyboard outline at 2px offset. |
 | **Checkbox** | default / hover / selected / disabled / mixed | Neutral multi-select control. Selected state is ink, never red. |
 | **RadioGroup** | default / hover / selected / disabled | Exclusive selection with arrow-key navigation. Selected state is ink, never red. |
 | **Divider** | default / emphasis × inverse | 1px / 2px strokes; theme-aware semantic colors; horizontal or vertical. |
@@ -81,13 +82,13 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 These have validators; error-level violations fail `validateDesign`. Full reasoning lives in [DESIGN.md](./DESIGN.md):
 
 1. **red-usage** — two reds, never interchanged.
-2. **semantic-color-only** — non-red hues live in badge palette only.
+2. **semantic-color-only** — non-red hues serve status and badges; blue also serves semantic keyboard focus.
 3. **numerals-font** — every digit in GT Walsheim.
 4. **type-hierarchy** — max 4 levels per page.
 5. **no-custom-radii** — use the 6 semantic slots, no raw values like `8.5px` / `16px` / `50%`, no primitive `--radius-sm/md/lg/xl`.
 6. **elevation-on-press** — color shift, not shadow.
 7. **no-opacity-disabled** — use `--button-disabled` + `--text-disabled`, never CSS `opacity`.
-8. **focus-style** — 2px black outline, 2px offset.
+8. **focus-style** — 2px blue `--focus-ring` / `--focus-ring-inverse` keyboard outline, 2px offset; separate from state borders.
 9. **border-strength** — 3 strengths only (default 8% / focus 87% / attention red).
 10. **emphasis-limit** — 1 emphasis button per screen.
 11. **card-no-border** — opt-in border only for dense grids.

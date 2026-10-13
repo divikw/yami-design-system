@@ -140,6 +140,10 @@
   },
 
   "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Media links use a 2px inset focus outline; title text owns the two-line clamp so it cannot clip the link outline. Compact linked titles reserve a 4px trailing gutter for the external outline."
+    },
     "redUsage": {
       "ruleId": "red-usage",
       "note": "priceCurrent uses --text-emphasis (red) per the 'promotion / urgency' allowed category."
@@ -187,7 +191,7 @@
     "--product-card-add-icon-active",
     "--product-card-add-border",
     "--product-card-add-shadow",
-    "--border-focus",
+    "--focus-ring",
     "--button-disabled",
     "--font-family-ios",
     "--font-weight-emphasize",
@@ -251,7 +255,7 @@
       "property": "box-shadow",
       "selector": ".root"
     },
-    "--border-focus": {
+    "--focus-ring": {
       "property": "outline-color",
       "selector": ".brand:focus-visible, .mediaLink:focus-visible, .cardLink:focus-visible, .root:focus-visible"
     },

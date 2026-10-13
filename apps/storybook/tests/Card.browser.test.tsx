@@ -109,7 +109,7 @@ test.each(states)("$theme / $surface keyboard focus and button activation work w
   expect(getComputedStyle(card).outlineWidth).toBe("2px");
   expect(getComputedStyle(card).outlineOffset).toBe("2px");
   const probe = document.createElement("span");
-  probe.style.color = "var(--border-focus)";
+  probe.style.color = "var(--focus-ring)";
   container.append(probe);
   expect(getComputedStyle(card).outlineColor).toBe(getComputedStyle(probe).color);
   await userEvent.keyboard("{Enter}");

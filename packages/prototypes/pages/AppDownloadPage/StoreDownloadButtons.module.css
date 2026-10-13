@@ -10,4 +10,4 @@
 @media (hover: hover) and (pointer: fine) {
   .buttons .button:hover { background: var(--color-black-800); }
 }
-.buttons .button:focus-visible { outline: var(--stroke-thick) solid var(--border-focus); outline-offset: var(--space-025); }
+.buttons .button:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }

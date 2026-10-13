@@ -4,8 +4,8 @@
   "name": "tabs",
   "title": "Tabs",
   "type": "component",
-  "status": "beta",
-  "version": "0.1.0",
+  "status": "stable",
+  "version": "0.1.1",
   "description": "Navigation tabs for switching between related content panes. Implements YAMI Primary Style A/B, Secondary, and Tertiary variants from the YAMI UI UX Guidelines Tabs node, with default and inverse surfaces plus ARIA tab behavior.",
   "source": "components/Tabs",
   "files": [
@@ -53,14 +53,14 @@
   "design": {
     "tokens": [
       "--border-default-inverse",
-      "--border-focus",
-      "--border-focus-inverse",
       "--button-secondary",
       "--button-secondary-inverse",
       "--button-tertiary-active-inverse",
       "--divider-default",
       "--fill-skeleton",
       "--fill-skeleton-inverse",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-body-xl",
@@ -118,11 +118,11 @@
       },
       "--text-disabled": {
         "property": "color",
-        "selector": ".trigger[aria-disabled='true']"
+        "selector": ".list[data-variant] .trigger[aria-disabled='true'][data-state]"
       },
       "--surface-secondary": {
         "property": "background",
-        "selector": ".list[data-variant='primary'][data-style='b']"
+        "selector": ".list[data-variant='primary'][data-style='b'] .track::before"
       },
       "--surface-primary": {
         "property": "background",
@@ -144,9 +144,9 @@
         "property": "background",
         "selector": ".skeletonItem"
       },
-      "--border-focus": {
+      "--focus-ring": {
         "property": "outline-color",
-        "selector": ".trigger:focus-visible, .content:focus-visible"
+        "selector": ".trigger:focus-visible, .trigger:focus-visible::before (Primary B), .content:focus-visible"
       },
       "--radius-full": {
         "property": "border-radius",
@@ -162,7 +162,7 @@
     "accessibility": {
       "role": "tablist / tab / tabpanel",
       "wcagLevel": "AA",
-      "tapTargetMin": 44,
+      "tapTargetMin": 32,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -176,11 +176,13 @@
         "space"
       ],
       "ariaPattern": "WAI-ARIA Tabs pattern",
-      "focusVisible": "2px solid var(--border-focus), inverse uses --border-focus-inverse",
+      "focusVisible": "2px solid var(--focus-ring), inverse uses --focus-ring-inverse",
       "disabled": "Disabled triggers set aria-disabled=true, tabIndex=-1, and are skipped by arrow navigation.",
-      "labelling": "TabsTrigger id and TabsContent aria-labelledby/aria-controls are generated from useId + value."
+      "labelling": "Require aria-label or aria-labelledby on each TabsList. Trigger and panel IDs use useId + losslessly encoded value; controls may reference an existing external content region.",
+      "focusManagement": "One enabled roving Tab stop; manual activation moves focus without selection until Enter/Space or click.",
+      "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 44px, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f1ea53326b666228ecd8780d7cab68d9a9678287fbe4b1d7737820b244e34d47"
+  "contentDigest": "3df540c523015db8047f2d29c91dfeade1a48e205ffa2735d7889ef44ce4c246"
 }

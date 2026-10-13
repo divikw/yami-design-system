@@ -383,6 +383,10 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `fill.warning-primary` | dark | color | `var(--color-yellow-400)` |
 | `fill.warning-secondary` | root | color | `var(--color-amber-50)` |
 | `fill.warning-secondary` | dark | color | `var(--color-amber-950)` |
+| `focus.ring` | root | color | `var(--color-blue-600)` |
+| `focus.ring` | dark | color | `var(--color-blue-400)` |
+| `focus.ring-inverse` | root | color | `var(--color-blue-400)` |
+| `focus.ring-inverse` | dark | color | `var(--color-blue-600)` |
 | `font-family.android` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
 | `font-family.ios` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
 | `font-family.serif` | root | fontFamily | `'Source Serif 4 Variable', 'Noto Serif SC', serif` |

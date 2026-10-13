@@ -57,8 +57,8 @@
 /* The view-all pair comes from SectionHeading. */
 .brandTitle:focus-visible,
 .bannerLink:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
-  outline-offset: var(--space-025);
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .railActions {
@@ -227,6 +227,7 @@
 .brandTitle {
   display: inline-flex;
   align-items: center;
+  padding-inline: var(--space-050);
   color: inherit;
   pointer-events: auto;
   text-decoration: none;

@@ -73,3 +73,8 @@ priceCurrent、priceOriginal 接收 ReactNode，货币与数字格式由调用�
 - 组合组件：Card、AspectRatio、Badge、ProductCardAddButton。
 - 规则：red-usage、numerals-font、card-no-border、type-hierarchy。
 - 文案规范：`../../content/copy-patterns.md#product-card-pattern`。
+
+
+## Keyboard focus geometry
+
+Media links use a 2px inset focus outline; title text owns the two-line clamp so it cannot clip the link outline. Compact linked titles reserve a 4px trailing gutter for the external outline. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

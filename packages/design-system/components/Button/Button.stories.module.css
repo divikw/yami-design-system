@@ -29,7 +29,7 @@
 .formRow p { margin-top: var(--space-025); }
 .formRow .api { font-size: inherit; }
 .scroll { overflow-x: auto; }
-.scroll:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.scroll:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 .table { width: 100%; min-width: 540px; table-layout: fixed; border-collapse: collapse; text-align: left; }
 .table th { padding: var(--space-200); }
 .table thead th:not(:first-child) { text-align: center; }

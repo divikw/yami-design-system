@@ -52,8 +52,8 @@
       "--background-primary",
       "--background-secondary",
       "--border-default",
-      "--border-focus",
       "--fill-disabled",
+      "--focus-ring",
       "--radius-button-primary",
       "--space-025",
       "--space-100",
@@ -91,7 +91,7 @@
         "property": "border-color/background",
         "selector": ".item[data-disabled]::before, .item[data-disabled] .dot"
       },
-      "--border-focus": {
+      "--focus-ring": {
         "property": "outline-color",
         "selector": ".item:focus-visible"
       },
@@ -119,5 +119,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "9c67defc6a1de7d43a78ab44bba4970a0a8bbb262b748b16f51963fb04fb9af0"
+  "contentDigest": "f54b4b3ffe122ffb897dcfb11113ffebccb95d062558770857beddc751ef7f46"
 }

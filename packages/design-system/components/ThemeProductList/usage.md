@@ -21,3 +21,8 @@ PC 内容最大宽度 1440px，商品位数量根据实际内容容器宽度调�
 ## 无障碍
 
 主题图片需要替代文本，叠加文案保留为可选择的 DOM 文本。提供 `content.href` 后主题面板使用原生链接和共用焦点样式，商品链接仍可独立访问。
+
+
+## Keyboard focus geometry
+
+The content link inherits its panel radius and uses a 2px inset focus outline. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

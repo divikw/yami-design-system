@@ -51,6 +51,7 @@
   "design": {
     "tokens": [
       "--brand-secondary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-heading-md",
       "--font-weight-emphasize",
@@ -95,5 +96,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "1adc5811025e84763ec5bb0d5938268c987ef61fdaf6a99aaa11e87155ab5a61"
+  "contentDigest": "6ed6114e4d58bbdce3647443bb4c4750b079e44d341746adf8b88b5cdaf41eb3"
 }

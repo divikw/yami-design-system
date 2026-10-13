@@ -121,3 +121,8 @@ modified clicks and the original source URL. Closing restores focus to that link
 Do not use this component for editorial carousels, campaign banners, video
 playlists, or ProductCard media. ProductCard retains its own fixed media
 contract.
+
+
+## Keyboard focus geometry
+
+Thumbnail outlines sit inside the scroll clip with a 2px gap from the existing default or selected border. Preview outlines inherit the visible stage radius. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

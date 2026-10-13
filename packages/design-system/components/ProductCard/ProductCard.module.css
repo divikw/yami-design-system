@@ -104,8 +104,8 @@
 }
 
 .mediaLink:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .mediaLinkLabel {
@@ -231,7 +231,7 @@
 }
 
 .brand:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -256,6 +256,21 @@
   line-clamp: 2;
 }
 
+.title:has(.cardLink) {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+
+.titleLinkText {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .cardLink {
   display: block;
   color: inherit;
@@ -269,7 +284,7 @@
 }
 
 .cardLink:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -470,4 +485,9 @@
 .countdown {
   width: 100%;
   padding-block: var(--space-025);
+}
+
+/* Leave the external title outline room before the compact card's right clip. */
+.root[data-presentation="compact"] .title:has(.cardLink) {
+  width: calc(100% - var(--space-050));
 }

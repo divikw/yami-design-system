@@ -94,7 +94,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Product review links and shared rail controls keep token-backed focus treatments."
+      "note": "Product review links and shared rail controls keep token-backed focus treatments. Scrollable lists and product links use a 2px inset focus outline inside the clipped section."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -113,7 +113,7 @@
     "--text-emphasis",
     "--fill-disabled",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--divider-emphasis",
     "--stroke-default",
     "--stroke-thick",

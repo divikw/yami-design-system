@@ -169,13 +169,13 @@
   "design": {
     "tokens": [
       "--border-default",
-      "--border-focus",
       "--button-secondary",
       "--color-black-0",
       "--color-black-400",
       "--color-white-1000",
       "--divider-default",
       "--divider-emphasis",
+      "--focus-ring",
       "--font-family-ios",
       "--font-family-serif",
       "--font-size-display-sm",
@@ -259,5 +259,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "d97342e4d8f90de92b80aeb42188df9e739a96bdad0c50880875980cdb810cdd"
+  "contentDigest": "8ab04561c803c828907d7464a194d5185706974f4c210f3151f29f3e3c1cc21b"
 }

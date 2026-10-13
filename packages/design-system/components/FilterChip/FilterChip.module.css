@@ -84,7 +84,7 @@
 }
 
 .chip:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -94,7 +94,9 @@
   align-items: center;
   gap: var(--space-100);
   margin-block: calc(var(--space-050) * -1);
+  margin-inline: calc(var(--space-050) * -1);
   padding-block: var(--space-050);
+  padding-inline: var(--space-050);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -281,7 +283,7 @@
 }
 
 .categoryToggle:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 

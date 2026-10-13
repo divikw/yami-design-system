@@ -57,7 +57,7 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 <!-- rule-id: red-usage -->
 <!-- rule-id: semantic-color-only -->
 
-> **Rules governing this section** — `red-usage` (two reds, never mixed), `semantic-color-only` (non-red hues only in status + badge palette). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
+> **Rules governing this section** — `red-usage` (two reds, never mixed), `semantic-color-only` (non-red hues in status + badge palette; blue also in semantic keyboard focus). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
 
 ### Theme and surface polarity
 
@@ -72,7 +72,7 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 | -------------------------------- | ------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | Brand Red 品牌红                 | `#FF0000`          | `--color-brand-red`                                | **Logo only.** Brand mark, primary brand signals — never a button, never a badge, never decorative.                     | **仅用于 Logo**。品牌标识与品牌信号——不得用作按钮、徽章或装饰。        |
 | Operational Red 操作红 (red.500) | `#E00000`          | `--color-red-500`                                  | The page's one permission-to-act color: emphasis CTA fill, promotion / urgency surfaces, error state, attention border. | 全站唯一的"允许操作"色：强调 CTA 填充、促销/限时、错误状态、警示边框。 |
-| Ink 墨色 (black.900)             | `rgba(0,0,0,0.87)` | `--color-black-900`                                | All primary text, primary button fill, focus ring color.                                                                | 所有主要文字、主按钮填充、focus 描边色。                               |
+| Ink 墨色 (black.900)             | `rgba(0,0,0,0.87)` | `--color-black-900`                                | All primary text, primary button fill, component state borders.                                                                | 所有主要文字、主按钮填充、组件状态边框。                               |
 | Canvas 画布                      | `#FFFFFF`          | `--color-white-1000`                               | Page background **and** card surface — separation comes from radius + spacing, not from a different fill.               | 页面背景**与**卡片表面——靠圆角和间距分层，不靠另一种填充。             |
 | Cream Wash 奶油粉                | `#FBF1EF`          | `--color-red-50` _(aliased to `--brand-tertiary`)_ | Branded promotional background blocks.                                                                                  | 品牌促销背景块。                                                       |
 
@@ -117,7 +117,7 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 | Highlight   | `--color-yellow-500`                                | `#FABD05`                         | `--fill-highlight` — marketing recommendation banner                                          |
 | Rating star | `--text-emphasis`                                   | `#E00000`                         | ProductCard rating star follows the current Figma desktop component.                          |
 
-### Badge palette (6 colors — the only place non-red hues are allowed outside neutrals)
+### Badge palette (6 colors — separate from status and keyboard focus semantics)
 
 | Color   | Primary BG token                                  | Secondary BG token                        | Foreground (on secondary)                 |
 | ------- | ------------------------------------------------- | ----------------------------------------- | ----------------------------------------- |
@@ -283,7 +283,7 @@ viewports, not CSS `min-width` constraints.
 <!-- rule-id: border-strength -->
 <!-- rule-id: focus-style -->
 
-> **Rules governing this section** — `border-strength` (3 strengths only: default 8% / focus 87% / attention red), `focus-style` (2px `--border-focus` outline at 2px offset; never blue). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
+> **Rules governing this section** — `border-strength` (3 strengths only: default 8% / focus 87% / attention red), `focus-style` (2px blue `--focus-ring` outline at 2px offset, independent of state borders). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
 
 The aliases below are the **only** identifiers a component should reference. If you find yourself reaching for a raw `--color-*-500` outside an alias definition, you're probably outside the system.
 
@@ -329,13 +329,31 @@ The aliases below are the **only** identifiers a component should reference. If 
 | Default border | `--border-default`                 | `rgba(0,0,0,0.08)` | Border structure                             |
 | Default divider | `--divider-default`               | Theme-dependent | 1px ordinary content separator               |
 | Subtle    | `--divider-subtle`                       | `rgba(0,0,0,0.29)` | Decorative low-weight separation             |
-| Focus     | `--border-focus`                         | `rgba(0,0,0,0.87)` | **2px focus ring, 2px offset — never blue.** |
+| State border | `--border-focus` | `rgba(0,0,0,0.87)` in Light; white in Dark | Existing component focus / selection borders; not the keyboard outline |
+| Keyboard focus | `--focus-ring` / `--focus-ring-inverse` | Theme and surface dependent blue | 2px keyboard outline, normally at 2px offset |
 | Attention | `--border-attention`                     | `--color-red-500`  | Error / risk border                          |
 | Emphasis  | `--divider-emphasis`                     | `rgba(0,0,0,0.87)` | Major module separator                       |
 
 The `Divider` component exposes only `default` and `emphasis`; `--divider-subtle`
 remains available to existing compositions such as Header and Footer. Divider's
 `inverse` boolean selects the opposite-polarity color token within either theme.
+
+### Keyboard focus — separate from state borders
+
+| Theme / background | Token | Color |
+| --- | --- | --- |
+| Light / default light | `--focus-ring` | `--color-blue-600` (`#0066EB`) |
+| Light / inverse dark | `--focus-ring-inverse` | `--color-blue-400` (`#66A1FF`) |
+| Dark / default dark | `--focus-ring` | `--color-blue-400` (`#66A1FF`) |
+| Dark / inverse light | `--focus-ring-inverse` | `--color-blue-600` (`#0066EB`) |
+
+Use these aliases for `:focus-visible` indicators, not permanent borders or selected states. Keep the existing `--border-focus` / `--border-focus-inverse` colors for component borders and selection. Inputs retain their existing state border and add a separate keyboard outline around the field. Normally use a 2px outline with 2px offset; Primary B Tabs outline their visible capsule with a 2px outer offset rather than the larger hit area; scrolling Tabs without segmented-track gutters use a 2px inset to avoid clipping, and existing inset indicators and composite panel offsets remain supported. Check at least 3:1 contrast against the adjacent background and avoid clipping the indicator. A fixed light/dark band must use the alias for its actual background polarity.
+
+Focus geometry follows the visible control boundary and its corner radius, not an invisible hit-area extension. Reserve 4px gutters for an external 2px outline plus 2px gap; inside a scroll or crop boundary, use a 2px inset instead. Thumbnail focus stays 2px away from the existing state border using a border-aware inset. Keep text truncation on a label layer so it does not clip the interactive link's outline.
+
+焦点框跟随可见控件的边界和圆角，不跟随透明扩展点击区域。外描边需要为 2px 描边加 2px 间距预留 4px 留白；滚动或裁切容器内可使用 2px 内偏移。图片缩略图按现有边框粗细计算内偏移，保持与状态边框 2px 间距。文字截断应放在标签层，避免一起裁掉链接的焦点框。
+
+键盘焦点使用独立的蓝色 `--focus-ring` / `--focus-ring-inverse`，不替代常驻边框或选中状态。保留现有 `--border-focus` / `--border-focus-inverse`；输入框在原状态边框外另加键盘焦点轮廓。通常为 2px 描边、2px 偏移，既有内描边和组合面板偏移可保留。与相邻背景至少达到 3:1 对比度，并检查是否被容器裁切。固定明暗背景按实际极性选择颜色。
 
 ### Buttons
 
@@ -385,7 +403,7 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 | **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. Native iOS 44pt / Android 48dp are separate requirements.                                    |
 | **Rate limit** | **`emphasis` = 1 per screen.** No exceptions. (rule `emphasis-limit`)                            |
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
-| **Focus**      | 2px `--border-focus` outline, 2px offset. (rule `focus-style`)                                   |
+| **Focus**      | 2px `--focus-ring` outline, 2px offset. (rule `focus-style`)                                   |
 | **Icon-only**  | Requires `aria-label`; dev-time console warning if missing.                                      |
 
 ### ButtonGroup — `components/ButtonGroup/`
@@ -398,6 +416,16 @@ Related actions composed from Button. The group provides an accessible name and 
 - Require `aria-label`; Tab visits the buttons in DOM order. Loading and related disabled states remain caller-owned.
 - Public contract: `ButtonGroup`, `ButtonGroupProps`; see `usage.md` and the Showcase, Playground, and Interaction stories.
 
+### Pagination — `components/Pagination/`
+
+PC-only numbered pagination, shown from 1024px and hidden below it. / 仅 PC 使用的数字分页，1024px 起显示，移动端隐藏。
+
+- Controlled `page` / `pageCount`; use `onPageChange` for result updates or `getPageHref` for native links. The host owns data, routing, and result focus.
+- Fixed first nine pages, one ellipsis and last page; up to ten pages render in full. No middle expansion. A collapsed current page has no visible current marker. / 固定前 9 页、省略号和末页，不展开中间段。
+- 32px controls with 4px gaps; neutral current-page fill, `aria-current="page"` when visible, and a static ellipsis. Only numbered pages are interactive. Compact PC geometry does not claim native touch minimums.
+- Default / inverse surfaces use the existing 2px blue focus aliases at 2px offset; a 4px gutter prevents clipping. Labels and usage guidance support Chinese and English.
+- Extracted from SearchResultsPage; no independently verified Figma component mapping. See [usage](./components/Pagination/usage.md).
+
 ### Tabs — `components/Tabs/`
 
 |                         |                                                                                                         |
@@ -407,10 +435,11 @@ Related actions composed from Button. The group provides an accessible name and 
 | **Surfaces**            | default · inverse                                                                                       |
 | **States**              | active · inactive · disabled · focus-visible · skeleton                                                 |
 | **Responsive behavior** | Filled Primary Style B and Tertiary selection surfaces are 32px below `1024px` and 36px from the shared Desktop breakpoint. Secondary keeps its underline treatment. |
-| **Typography**          | Primary Style A uses `heading-md` on mobile and `body-xl` on WEB; compact tabs use `body-md`.           |
+| **Typography**          | Primary Style A uses `body-xl` (16/20) on Mobile and WEB; compact tabs use `body-md` (14/20).           |
+| **Geometry**            | Primary A: 56px horizontal / 44px vertical trigger; Primary B: 44px trigger inside a 52px track; Secondary: 40px trigger at every breakpoint. Vertical Primary A and Secondary use 4px item gaps. |
 | **Tap target**          | Tertiary visual, layout, and hit-target heights match: 32px on Mobile/Tablet and 36px on Desktop. No invisible extension overlaps adjacent controls. |
-| **Focus**               | 2px `--border-focus` outline; inverse uses `--border-focus-inverse`.                                    |
-| **ARIA**                | Compound `tablist` / `tab` / `tabpanel`; arrow keys, Home/End, controlled and uncontrolled state.       |
+| **Focus**               | 2px `--focus-ring` outline; inverse uses `--focus-ring-inverse`.                                    |
+| **ARIA**                | Named `tablist` / `tab` / `tabpanel`; one roving Tab stop, arrow keys, Home/End, automatic/manual activation, controlled and uncontrolled state. Values preserve distinct IDs across languages. |
 
 ### Card — `components/Card/`
 
@@ -423,7 +452,7 @@ Use Card for a discrete, self-contained content item (an order, product summary,
 | **Border**      | **none by default** (rule `card-no-border`). `bordered={true}` only for dense listing grids.                                                                       |
 | **Radius**      | `--radius-surface-default` (12px). ProductCard owns its compact geometry via `--radius-component-default` (8px); no arbitrary numeric overrides. |
 | **Interactive** | Inferred for `as="button"` or `as="a"` with `href`; minimum 44×44px target. Hover mixes 8% reading color into the selected surface; press mixes 16%. Preserves polarity and geometry; no shadow. Hover requires a fine pointer; reduced motion disables transitions. |
-| **Focus**       | 2px `--border-focus` outline with 2px offset, following the surrounding canvas theme rather than the card's own surface polarity. Focus remains available when `interactive={false}`. |
+| **Focus**       | 2px `--focus-ring` outline with 2px offset, following the surrounding canvas theme rather than the card's own surface polarity. Focus remains available when `interactive={false}`. |
 | **Overflow**    | Visible: preserve child focus outlines and extended hit areas. Crop media separately; give wide code/tables their own scroll region. / 保留子控件焦点框与扩展点击区域，媒体单独裁切，宽内容独立滚动。 |
 | **Disabled**    | Native button `disabled` prevents activation and hover/press changes; preserve surface, use disabled text tokens, no opacity. |
 | **Semantics**   | Static `div` has no group role or tab stop. Explicit `as="a"` + `href` for navigation; `as="button"` defaults to `type="button"` and supports native Enter/Space activation. Custom hosts own semantics. |
@@ -468,7 +497,7 @@ Static membership artwork verified against Figma node `1632:21283`. Exposes the 
 | **States**   | default · hover · focus · error · disabled                                   |
 | **Radius**   | `--radius-component-default` (8px)                                           |
 | **Border**   | `--border-default` → `--border-focus` (focus) → `--border-attention` (error) |
-| **Focus**    | 2px black, 2px offset. **Never blue.**                                       |
+| **Focus**    | Separate 2px blue `--focus-ring` keyboard outline, 2px offset; keep the existing state border.                                       |
 | **Disabled** | `--button-disabled` bg, `--text-disabled` fg                                 |
 
 ### FilterChip — `components/FilterChip/`
@@ -775,13 +804,13 @@ For the **why** behind each rule (trade-offs, history, edge cases), see [`decisi
 | Rule                      | EN                                                                                                                                                                                        | 中文                                                                                                                                       |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`red-usage`**           | Two reds, never mixed. `--color-brand-red` is **Logo only**. `--color-red-500` is the **only** red allowed on buttons, badges, promo, and error.                                          | 双红互斥。`--color-brand-red` 只用于 Logo；`--color-red-500` 是唯一可出现在按钮、徽章、促销、错误状态上的红。                              |
-| **`semantic-color-only`** | Blue / green / purple / yellow live in (1) semantic status (info / success / warning / promotion), (2) the 6-color Badge palette. Nowhere else.                                           | 蓝/绿/紫/黄只能用于 (1) 语义状态（信息/成功/警示/促销），(2) 6 色徽章调色板。其他场景一律禁用。                                            |
+| **`semantic-color-only`** | Blue / green / purple / yellow serve semantic status and the Badge palette; blue also identifies keyboard focus through `--focus-ring` / `--focus-ring-inverse`. No decorative use.                                           | 蓝/绿/紫/黄用于语义状态和徽章；蓝色还可通过 `--focus-ring` / `--focus-ring-inverse` 表达键盘焦点。禁止装饰用途。                                            |
 | **`numerals-font`**       | Every digit renders in GT Walsheim, including inside mixed CN strings.                                                                                                                    | 所有数字一律 GT Walsheim——包括中文字符串中嵌入的数字与拉丁字符。                                                                           |
 | **`type-hierarchy`**      | Max 4 type levels per page. If you need a 5th, the page has a hierarchy problem.                                                                                                          | 每页最多 4 个字号层级。若需要第 5 级，是页面层级有问题，不是字号问题。                                                                     |
 | **`no-custom-radii`**     | Only the 6 semantic radius tokens, including mobile Sheet top corners at 16px. Never raw `8.5px` / `16px` / `50%`, never primitives like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl`.                               | 仅 6 个语义圆角槽位，含移动端 Sheet 的 16px 顶部圆角。不得用 `8.5px` / `16px` / `50%` 等裸值，也不得用 `--radius-sm` / `-md` / `-lg` / `-xl` 这类原子 token。               |
 | **`elevation-on-press`**  | Hover / press changes `background-color` (the `-active` token). **Never `box-shadow`.**                                                                                                   | 悬浮/按压用 `background-color`（`-active` token）变化反馈，**绝不**修改 `box-shadow`。                                                     |
 | **`no-opacity-disabled`** | Disabled states use `--button-disabled` + `--text-disabled`. Never CSS `opacity`.                                                                                                         | 禁用态用 `--button-disabled` + `--text-disabled` 一对 token，不得用 CSS `opacity` 降透明度。                                               |
-| **`focus-style`**         | 2px `--border-focus` outline, 2px offset. **Never blue.**                                                                                                                                 | 2px `--border-focus` 外描边、2px 偏移。**绝不**用蓝色 focus ring。                                                                         |
+| **`focus-style`**         | 2px blue `--focus-ring` outline, normally 2px offset. Use `--focus-ring-inverse` on opposite-polarity backgrounds; keep component borders and selection separate.                                                                                                                                 | 2px 蓝色 `--focus-ring` 键盘外描边，通常偏移 2px；反色背景使用 `--focus-ring-inverse`。与组件边框和选中状态分开。                                                                         |
 | **`border-strength`**     | Borders use 3 strengths only: default 8% black, focus 87% black, attention red.                                                                                                           | 边框只允许 3 档强度：默认 8% 黑、focus 87% 黑、attention 操作红。                                                                          |
 | **`emphasis-limit`**      | 1 emphasis Button per screen. No exceptions.                                                                                                                                              | 每屏最多 1 个强调按钮。无例外。                                                                                                            |
 | **`card-no-border`**      | Cards default to no border. Opt-in `bordered` only for dense listing grids.                                                                                                               | 卡片默认无边框。仅在密集列表网格中可显式 `bordered`。                                                                                      |
@@ -876,16 +905,16 @@ Observed failures from real `validateDesign` runs + audit findings in [`decision
 **Why it's wrong**: Figma currently provides no YAMI elevation token source. Hover changes `background-color`, never shadow (rule `elevation-on-press`).
 **Fix**: `background: var(--surface-secondary);` on hover. Keep Card shadow-free.
 
-### F4. Blue focus ring
+### F4. Hardcoded focus ring
 
 <!-- anti-pattern -->
 
 **What AI wrote**: `outline: 2px solid #0066ff;` for focus.
 <!-- /anti-pattern -->
 
-**Why**: Web platform default; Chrome's user-agent stylesheet does exactly this.
-**Why it's wrong**: Blue ≠ YAMI. YAMI's focus indicator is **2px black at 2px offset** (rule `focus-style`). Blue conflicts with the `semantic-color-only` constraint (blue lives in badges, not chrome).
-**Fix**: `outline: 2px solid var(--border-focus); outline-offset: 2px;`
+**Why**: Copied browser defaults or an isolated component color without semantic tokens.
+**Why it's wrong**: Hardcoding bypasses theme and surface adaptation. Keyboard focus uses a dedicated blue `--focus-ring` or `--focus-ring-inverse` outline; `--border-focus` remains a separate component state border.
+**Fix**: `outline: 2px solid var(--focus-ring); outline-offset: 2px;`
 
 ### F5. Emoji in commerce UI
 
@@ -914,7 +943,7 @@ Secondary text:     rgba(0,0,0,0.55)       (--text-secondary)
 Disabled text:      rgba(0,0,0,0.29)       (--text-disabled)
 Emphasis text:      #E00000                (--text-emphasis)         ← prices, urgency
 Hairline border:    rgba(0,0,0,0.08)       (--border-default)
-Focus ring:         rgba(0,0,0,0.87)       (--border-focus)          ← 2px, 2px offset
+Focus ring:         #0066EB / #66A1FF      (--focus-ring)            ← theme-dependent blue, 2px, 2px offset
 Brand cream wash:   #FBF1EF                (--brand-tertiary)
 Logo red:           #FF0000                (--color-brand-red)        ← Logo ONLY
 CTA / promo red:    #E00000                (--button-emphasis)        ← Buy Now / sale
@@ -937,7 +966,7 @@ Rating star:        #FA8005                (--color-amber-500)
 
 **Form field (with error)**
 
-> Input height `--space-500` (40px), radius `--radius-component-default` (8px), border `--border-default`. Focus: outline 2px `--border-focus`, offset 2px. Error: border `--border-attention` (`#E00000`), helper text in `--text-error`. **Never use placeholder text in lieu of a label.** Tap target padding-expanded to 44pt min.
+> Input height `--space-500` (40px), radius `--radius-component-default` (8px), border `--border-default`. Focus: outline 2px `--focus-ring`, offset 2px. Error: border `--border-attention` (`#E00000`), helper text in `--text-error`. **Never use placeholder text in lieu of a label.** Tap target padding-expanded to 44pt min.
 
 **Modal**
 
@@ -952,7 +981,7 @@ Rating star:        #FA8005                (--color-amber-500)
 | `opacity: 0.5` on a disabled button                      | 用 `opacity` 让禁用按钮变透明 | `no-opacity-disabled` |
 | A second emphasis button on the same screen              | 同一屏 2 个强调按钮           | `emphasis-limit`      |
 | `box-shadow: 0 8px 24px rgba(0,0,0,0.2)` on `:hover`     | 悬浮时放大 `box-shadow`       | `elevation-on-press`  |
-| `outline: 2px solid #0066ff` for focus                   | 蓝色 focus ring               | `focus-style`         |
+| `outline: 2px solid #0066ff` for focus                   | 硬编码颜色，未使用焦点 token     | `focus-style`         |
 | 🛒 emoji on Add-to-Cart                                  | 按钮里加 emoji（🛒/❤️）       | `no-emoji`            |
 | `var(--font-size-heading-lg)` (doesn't exist; use `-xl`) | 捏造形似真但不存在的 token    | `token-exists`        |
 
@@ -995,7 +1024,9 @@ Rating star:        #FA8005                (--color-amber-500)
   --color-amber-500: #fa8005;
   --color-emerald-500: #3dc24f;
   --color-yellow-500: #fabd05;
+  --color-blue-400: #66a1ff;
   --color-blue-500: #3383ff;
+  --color-blue-600: #0066eb;
 
   /* === Semantic aliases === */
   --brand-primary: var(--color-brand-red);
@@ -1013,6 +1044,8 @@ Rating star:        #FA8005                (--color-amber-500)
   --button-disabled: var(--color-neutral-200);
   --border-default: var(--color-black-200);
   --border-focus: var(--color-black-900);
+  --focus-ring: var(--color-blue-600);
+  --focus-ring-inverse: var(--color-blue-400);
   --border-attention: var(--color-red-500);
   --overlay-scrim: var(--color-black-700);
 
@@ -1091,7 +1124,9 @@ Rating star:        #FA8005                (--color-amber-500)
   --color-neutral-900: #222222;
   --color-amber-500: #fa8005;
   --color-emerald-500: #3dc24f;
+  --color-blue-400: #66a1ff;
   --color-blue-500: #3383ff;
+  --color-blue-600: #0066eb;
 
   /* Font families — full token names */
   --font-family-ios:
