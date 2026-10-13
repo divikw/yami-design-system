@@ -5,6 +5,7 @@ import styles from "./SocialMediaGallery.stories.module.css";
 import { SocialVideoCard } from "./SocialVideoCard";
 import {
   createSocialMediaGalleryFixture,
+  createSocialImageCards,
   createSocialVideoCards,
   type SocialMediaGalleryLocale,
 } from "./fixtures";
@@ -28,7 +29,7 @@ const meta = {
       control: { type: "radio" },
       description: "标题对齐方式。移动端卡片固定左对齐；PC 居中时翻页按钮位于列表两侧。",
     },
-    cards: { description: "按展示顺序排列的社交视频卡片，支持纯文案、单商品和多商品底部样式。" },
+    cards: { description: "按展示顺序排列的图片帖或视频帖，可混排，支持纯文案、单商品和多商品底部样式。" },
     viewAllHref: { description: "查看全部的可选跳转地址。" },
     viewAllLabel: { description: "查看全部的本地化文案。" },
     previousLabel: { description: "上一页按钮的本地化标签。" },
@@ -47,7 +48,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "响应式社交视频列表，支持纯文案、单商品和多商品三种底部样式。PC 根据实际容器宽度调整列数并提供翻页按钮；Mobile 使用横向滑动。",
+          "响应式社交内容列表，支持图片帖与视频帖混排，以及纯文案、单商品和多商品三种底部样式。单图静态展示，多图可见时每 5 秒循环切换；列表不内置详情查看器。PC 根据实际容器宽度调整列数并提供翻页按钮；Mobile 使用横向滑动。",
       },
     },
   },
@@ -75,7 +76,7 @@ export const Showcase: Story = {
       root.querySelectorAll<HTMLElement>('[data-slot="social-video-card"]'),
     );
     if (cards.length !== 8) {
-      throw new Error(`Expected 8 social video cards, got ${cards.length}`);
+      throw new Error(`Expected 8 social cards, got ${cards.length}`);
     }
     const footerModes = new Set(
       cards.map(
@@ -92,12 +93,12 @@ export const Showcase: Story = {
     }
 
     const multipleFooter = root.querySelector<HTMLElement>(
-      '[data-footer-mode="multiple"]',
+      '[data-footer-mode="multiple"]:has([data-product-overflow])',
     );
     if (!multipleFooter) throw new Error("Multiple-product footer did not render");
     const multipleProductImages = multipleFooter.querySelectorAll("img");
-    if (multipleProductImages.length < 3) {
-      throw new Error("Multiple-product footer must show at least three images");
+    if (multipleProductImages.length < 2) {
+      throw new Error("Multiple-product footer must show at least two images");
     }
     // A multi-product footer renders both a three- and a two-thumbnail row and
     // a container query shows one, so the hidden row's images measure 0 and
@@ -235,6 +236,99 @@ export const Showcase: Story = {
   },
 };
 
+export const Images: Story = {
+  name: "Image Posts",
+  render: (_args, { globals }) => {
+    const locale = localeFromGlobals(globals.locale);
+    return (
+      <SocialMediaGallery
+        {...createSocialMediaGalleryFixture(locale)}
+        cards={createSocialImageCards(locale)}
+        viewAllHref={undefined}
+      />
+    );
+  },
+};
+
+const verifyImageListCard: Story["play"] = async ({ canvasElement }) => {
+  const media = canvasElement.querySelector<HTMLElement>(
+    '[data-slot="social-video-card-media"]',
+  );
+  const footer = canvasElement.querySelector<HTMLElement>(
+    '[data-slot="social-video-card-products"]',
+  );
+  if (!media || !footer) throw new Error("Image card is incomplete");
+  if (media.querySelectorAll("img").length !== 1 || media.querySelector("video, a, button")) {
+    throw new Error("Image list cards must show one image at a time without a detail action");
+  }
+  const rect = media.getBoundingClientRect();
+  if (Math.abs(rect.width / rect.height - 3 / 4) > 0.01 || footer.offsetHeight !== 72) {
+    throw new Error("Image list cards must retain 3:4 media and a 72px footer");
+  }
+};
+
+export const SingleImage: Story = {
+  name: "Single Image",
+  parameters: {
+    docs: { description: { story: "单图帖子列表展示示例：一张静态封面、账号和关联商品，不打开详情。使用官网封面素材构造单图场景。 / A single-image list example using a public cover asset, with creator and associated products. No detail action." } },
+  },
+  render: (_args, { globals }) => (
+    <div className={styles.cardCanvas}>
+      <SocialVideoCard {...createSocialImageCards(localeFromGlobals(globals.locale))[0]} />
+    </div>
+  ),
+  play: verifyImageListCard,
+};
+
+export const MultipleImages: Story = {
+  name: "Multiple Images",
+  parameters: {
+    docs: { description: { story: "多图帖子列表展示示例：使用官网星星人餐具帖中观察到的三张图片，可见时每 5 秒循环切换，离开可见范围时回到第一张；减少动态效果时保持静态。不显示图片张数、不打开详情。底栏 +2 表示其余商品。 / Three observed images from the Starman post cycle every five seconds while visible and reset to the first image offscreen. Reduced motion keeps the first image still. There is no image count or detail action; +2 counts additional products." } },
+  },
+  render: (_args, { globals }) => (
+    <div className={styles.cardCanvas}>
+      <SocialVideoCard {...createSocialImageCards(localeFromGlobals(globals.locale))[1]} />
+    </div>
+  ),
+  play: verifyImageListCard,
+};
+
+export const Videos: Story = {
+  name: "Concurrent Videos",
+  parameters: {
+    docs: { description: { story: "可见视频同时静音循环播放；移出可见范围后停止并释放视频资源，返回时从头播放，与官网列表规则一致。没有单个播放限制，也不打开详情。 / Visible videos play concurrently, muted and looped. Offscreen videos stop and release their sources; returning videos restart. No exclusive playback or detail action." } },
+  },
+  render: (_args, { globals }) => {
+    const locale = localeFromGlobals(globals.locale);
+    const gallery = createSocialMediaGalleryFixture(locale);
+    return (
+      <SocialMediaGallery
+        {...gallery}
+        viewAllHref={undefined}
+        cards={[
+          {
+            id: "social-video-lashes",
+            posterSrc: "https://cdn.yamibuy.net/vod/2022/scraper_video_transcode/17870168286504skt/scraper_1521.0000000.jpg",
+            videoSrc: "https://cdn.yamibuy.net/vod/2022/scraper_video_transcode/17870168286504skt/scraper_1521_480.mp4",
+            posterAlt: locale === "zh" ? "免胶假睫毛日常分享" : "Glue-free lash routine",
+            username: "@yami.official",
+            caption: locale === "zh" ? "轻松上手的免胶假睫毛。" : "An easy glue-free lash routine.",
+          },
+          {
+            id: "social-video-noodles",
+            posterSrc: "https://cdn.yamibuy.net/vod/2022/scraper_video_transcode/1778058035287nhyi/scraper_690.0000000.jpg",
+            videoSrc: "https://cdn.yamibuy.net/vod/2022/scraper_video_transcode/1778058035287nhyi/scraper_690_480.mp4",
+            posterAlt: locale === "zh" ? "牛肝菌米线分享" : "Porcini rice noodle review",
+            username: locale === "zh" ? "@Yami亚米" : "@Yami",
+            caption: locale === "zh" ? "一碗热米线，日常好物分享。" : "Discover comforting rice noodles.",
+          },
+          gallery.cards[2],
+        ]}
+      />
+    );
+  },
+};
+
 export const SingleProduct: Story = {
   tags: ["!dev", "!autodocs"],
   name: "Single Product",
@@ -296,26 +390,44 @@ export const MultipleProducts: Story = {
 };
 
 export const WithoutProducts: Story = {
-  tags: ["!dev", "!autodocs"],
+  name: "Without Products",
+  parameters: {
+    docs: { description: { story: "无商品列表展示示例：图片封面与账号保留，72px 灰色底栏显示帖子文案，最多两行。该示例移除关联商品用于展示空商品状态，不打开详情。 / An illustrative post without associated products retains its cover and creator, with a two-line caption in the 72px footer and no detail action." } },
+  },
   render: (_args, { globals }) => {
     const locale = localeFromGlobals(globals.locale);
-    const card = createSocialVideoCards(locale).find(
-      (item) => (item.products?.length ?? 0) === 0,
-    );
-    if (!card) return null;
+    const card = createSocialImageCards(locale)[2];
     return (
       <div className={styles.cardCanvas}>
-        <SocialVideoCard {...card} />
+        <SocialVideoCard
+          {...card}
+          products={[]}
+          additionalProductCount={0}
+          caption={locale === "zh"
+            ? "这个月入手的新品，从零食到家居，都是日常生活里的小惊喜。一起交换好物清单，分享最近发现的心头好。"
+            : "New finds this month, from snacks to home favorites. Small everyday discoveries worth sharing. Tell us which finds you have been enjoying lately."}
+        />
       </div>
     );
   },
-  play: async ({ canvasElement }) => {
+  play: async (context) => {
+    await verifyImageListCard(context);
+    const { canvasElement } = context;
     const handle = canvasElement.querySelector<HTMLElement>(
       '[data-slot="social-video-card-media"] span',
     );
     const footerText = canvasElement.querySelector<HTMLElement>(
       '[data-footer-mode="text"] p',
     );
+    if (!footerText || getComputedStyle(footerText).getPropertyValue("-webkit-line-clamp") !== "2") {
+      throw new Error("A post without products must show a two-line caption");
+    }
+    if (footerText.getBoundingClientRect().height > 2 * Number.parseFloat(getComputedStyle(footerText).lineHeight) + 1) {
+      throw new Error("The two-line caption must not expose any part of a third line");
+    }
+    if (canvasElement.querySelector('[data-slot="social-video-card-products"] img, [data-product-overflow]')) {
+      throw new Error("A post without products must not show product thumbnails or counts");
+    }
     if (!handle || getComputedStyle(handle).color !== "rgb(255, 255, 255)") {
       throw new Error("Social account text must remain white over video media");
     }
@@ -328,6 +440,18 @@ export const WithoutProducts: Story = {
       throw new Error("Text-only card footer must use white text in dark mode");
     }
   },
+};
+
+export const MobileSingleImage: Story = {
+  ...SingleImage,
+  tags: ["!dev", "!autodocs"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+};
+
+export const MobileMultipleImages: Story = {
+  ...MultipleImages,
+  tags: ["!dev", "!autodocs"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
 };
 
 export const MobileSingleProduct: Story = {

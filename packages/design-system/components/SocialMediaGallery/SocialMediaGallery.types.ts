@@ -19,21 +19,23 @@ export interface SocialVideoCardProps
   extends Omit<HTMLAttributes<HTMLElement>, "children" | "id"> {
   /** 用于 React 和埋点的稳定标识。 */
   id: string;
-  /** 社交视频的封面图片。 */
+  /** 图片帖的封面，或视频帖的预览封面。 */
   posterSrc: ImageSource;
-  /** 视频封面的替代文本。 */
+  /** 图片帖的有序图片列表，超过一张时在可见区域每 5 秒循环切换；视频帖忽略此字段。 */
+  images?: ImageSource[];
+  /** 媒体封面的替代文本。 */
   posterAlt: string;
   /** 可选的视频地址，在媒体区域静音循环自动播放。 */
   videoSrc?: string;
   /** 社交账号名称，传入 null 时隐藏账号信息。 */
   username: ReactNode;
-  /** 账号名称旁的装饰性平台图标。 */
-  platformIconSrc: ImageSource;
+  /** 账号名称旁的可选装饰性平台图标，未提供时仅显示账号。 */
+  platformIconSrc?: ImageSource;
   /** 未提供商品时显示的底部文案。 */
   caption: ReactNode;
-  /** 视频的可选跳转地址。 */
+  /** 媒体的可选跳转地址；不提供时仅展示，不打开详情。 */
   href?: string;
-  /** 视频下方显示的可选商品数据。 */
+  /** 媒体下方显示的可选商品数据。 */
   products?: SocialVideoProduct[];
   /** 未包含在 products 中的额外商品数量，与当前未展示的商品合并计数。 */
   additionalProductCount?: number;
@@ -49,7 +51,7 @@ export interface SocialMediaGalleryProps
   description?: ReactNode;
   /** 标题对齐方式。移动端卡片固定左对齐；PC 居中时翻页按钮位于列表两侧。 */
   headingAlign?: "start" | "center";
-  /** 按展示顺序排列的社交视频卡片。 */
+  /** 按展示顺序排列的图片帖或视频帖，可混排。 */
   cards: SocialVideoCardProps[];
   /** 查看全部的可选跳转地址。 */
   viewAllHref?: string;

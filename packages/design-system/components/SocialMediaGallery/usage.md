@@ -1,10 +1,24 @@
 # SocialMediaGallery
 
-响应式社交视频列表，每项使用 SocialVideoCard 展示封面、账号信息和关联内容。Storybook 提供 PC、Mobile 两个预览。
+响应式社交内容列表，支持图片帖和视频帖混排。每项复用 SocialVideoCard 展示媒体、账号信息和关联内容。Storybook 提供 PC、Mobile 混排预览及 Image Posts 图片列表示例。
+
+`Single Image`、`Multiple Images`、`Without Products` 分别演示单图、多图帖子封面与无商品状态，均只做列表展示，不提供详情入口。单图和无商品是基于官网素材构造的场景示例；多图示例使用已核实的星星人餐具帖子封面。多图示例使用帖子中观察到的三张图片，可见时循环切换，底部 `+N` 统计商品。
+
+Storybook's `Single Image`, `Multiple Images`, and `Without Products` demonstrate list-only states without detail actions. Single-image and no-product examples are illustrative scenarios using public assets; the multi-image example uses the verified Starman post cover. The multi-image example cycles through three observed post images while visible; `+N` counts products.
+
+## 图片帖与视频帖 / Image and video posts
+
+不传 `videoSrc` 时展示图片帖，`images` 提供有序图片数组，未提供或为空时使用 `posterSrc`。单图保持静态，多图在可见范围内每 5 秒循环切换，离开可见范围时停止并回到第一张；开启减少动态效果时保持静态。传入 `videoSrc` 时显示视频并忽略 `images`。两种媒体共用 3:4 裁切、账号叠加层和商品底栏；`platformIconSrc` 可省略，此时只显示账号。
+
+Image posts use the ordered `images` array, falling back to `posterSrc` when omitted or empty. One image stays still; multiple images cycle every five seconds while visible, stop and reset to the first image offscreen, and stay still under reduced motion. Providing `videoSrc` displays a video and ignores `images`. Both share the same 3:4 crop, creator overlay, and product footer. The platform icon is optional.
+
+本组件不内置帖子查看器。不传 `href` 时媒体仅展示，不生成详情按钮或链接。`+N` 只表示当前未展示的关联商品数量，不是图片张数，也不是详情入口。保留 `SocialVideoCard` 名称与现有接口以兼容既有页面。
+
+There is no built-in post viewer. Without `href`, media has no detail action or link. `+N` counts undisplayed associated products, not images, and has no action. The existing `SocialVideoCard` name and API remain compatible.
 
 ## 底部内容
 
-- 无商品：显示视频文案。
+- 无商品：显示帖子文案。
 - 单商品：显示 56px 正方形商品图片和标题。
 - 多商品：卡片宽度小于 228px 时显示两张缩略图，否则显示三张；其余商品合并为数量提示。商品图片为白底，底部区域使用灰底。
 
@@ -22,9 +36,13 @@
 
 PC 的 `dividerPosition` 支持 `top`、`bottom`、`none`，`dividerVariant` 支持 `gray`（1px）与 `black`（2px），默认 top/gray。移动端圆角面板不显示分割线。
 
-## 视频与无障碍
+## 媒体与无障碍
 
-提供有意义的 `posterAlt`、稳定的 ID、真实跳转地址及本地化标签。默认展示视频封面，设置 `videoSrc` 后在媒体区域静音循环自动播放；`href` 可链接到完整视频。来源未提供作者时传入 `username={null}`，隐藏账号叠加层。
+提供有意义的 `posterAlt`、稳定的 ID 及本地化标签。设置 `videoSrc` 后在媒体区域静音循环自动播放；仅在存在真实媒体目的地时设置 `href`。来源未提供作者时传入 `username={null}`，隐藏账号叠加层。
+
+所有可见视频同时播放，没有单个播放限制。视频地址仅在进入可见范围后挂载，使用 `preload="none"`；移出可见范围或卸载时暂停、移除地址并重置，返回后从头播放。Storybook 的 `Concurrent Videos` 可核对多个视频同时播放及横向滚动后的停止／重播行为。
+
+All visible videos play concurrently without an exclusive active player. Sources attach only on visibility, with `preload="none"`. Offscreen or unmounted videos pause, detach their source, and reset; returning videos restart. `Concurrent Videos` demonstrates simultaneous playback and horizontal-scroll stop/restart behavior.
 
 
 ## Keyboard focus geometry

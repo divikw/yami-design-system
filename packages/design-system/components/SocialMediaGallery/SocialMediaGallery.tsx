@@ -45,8 +45,8 @@ export function SocialMediaGallery({
   cards,
   viewAllHref,
   viewAllLabel = "See all",
-  previousLabel = "Previous social videos",
-  nextLabel = "Next social videos",
+  previousLabel = "Previous social posts",
+  nextLabel = "Next social posts",
   imageLoadingStrategy = "native",
   className,
   ...rest
