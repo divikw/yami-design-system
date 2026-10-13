@@ -324,7 +324,7 @@
   box-sizing: border-box;
   flex: 1 1 auto;
   margin: 0;
-  padding: 0 var(--space-050) var(--space-050);
+  padding: 0 var(--space-050);
   overflow: hidden;
   color: var(--color-black-900);
   font-size: var(--font-size-body-md);

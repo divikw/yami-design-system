@@ -181,9 +181,12 @@ export const SocialTrends: Story = {
     await expect(gallery.querySelectorAll('[data-slot="social-video-card-media"] a')).toHaveLength(9);
     await expect(gallery.querySelectorAll("video")).toHaveLength(9);
     for (const video of gallery.querySelectorAll("video")) {
-      await expect(video.autoplay && video.muted && video.loop && video.playsInline).toBe(true);
+      await expect(video.muted && video.loop && video.playsInline).toBe(true);
+      await expect(video.preload).toBe("none");
       await expect(video.controls).toBe(false);
     }
+    gallery.scrollIntoView({ block: "center" });
+    await waitFor(() => expect(gallery.querySelector("video")!.paused).toBe(false), { timeout: 10000 });
     await expect(gallery.querySelectorAll('[data-slot="social-video-card-products"] a')).toHaveLength(11);
     await expect(within(gallery).getByRole("heading")).toHaveTextContent("Social Trends");
     for (const link of gallery.querySelectorAll('[data-slot="social-video-card-media"] a')) {
@@ -241,8 +244,8 @@ export const SocialVideoOverflow: Story = {
     const videos = rail.querySelectorAll<HTMLVideoElement>("video");
     await expect(videos).toHaveLength(8);
     await expect(rail.scrollWidth).toBeGreaterThan(rail.clientWidth);
-    const next = canvas.getByRole("button", { name: "Next social videos" });
-    const previous = canvas.getByRole("button", { name: "Previous social videos" });
+    const next = canvas.getByRole("button", { name: "Next social posts" });
+    const previous = canvas.getByRole("button", { name: "Previous social posts" });
     await expect(previous).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(next);
     await waitFor(() => expect(next).toHaveAttribute("aria-disabled", "true"));
@@ -263,7 +266,7 @@ export const MobileSocialVideoOverflow: Story = {
     const rail = canvasElement.querySelector<HTMLElement>('[data-slot="social-media-gallery-list"]')!;
     const videos = rail.querySelectorAll<HTMLVideoElement>("video");
     await expect(videos).toHaveLength(8);
-    await expect(within(canvasElement).queryByRole("button", { name: "Next social videos" })).toBeNull();
+    await expect(within(canvasElement).queryByRole("button", { name: "Next social posts" })).toBeNull();
     await expect(getComputedStyle(rail).overflowX).toBe("auto");
     rail.scrollTo({ left: rail.scrollWidth, behavior: "instant" });
     await waitFor(() => expect(rail.scrollLeft).toBeGreaterThan(0));

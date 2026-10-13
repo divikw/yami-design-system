@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "./SocialMediaGallery.module.css";
 import { ResponsiveImage } from "../ResponsiveImage";
@@ -52,40 +52,43 @@ function CardMedia({
   posterSrc,
   posterAlt,
   videoSrc,
-}: Pick<SocialVideoCardProps, "href" | "posterSrc" | "posterAlt" | "videoSrc">) {
+  images,
+}: Pick<SocialVideoCardProps, "href" | "posterSrc" | "posterAlt" | "videoSrc" | "images">) {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !videoSrc) return;
+    const stop = () => {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    };
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
+        video.src = videoSrc;
         video.muted = true;
         void video.play().catch(() => {});
       } else {
-        video.pause();
+        stop();
       }
-    }, { threshold: 0.1 });
+    });
     observer.observe(video);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      stop();
+    };
   }, [videoSrc]);
 
   const media = videoSrc ? (
     <video
       ref={videoRef}
       className={styles.poster}
-      src={videoSrc}
       poster={typeof posterSrc === "string" ? posterSrc : undefined}
       aria-label={posterAlt}
-      autoPlay muted loop playsInline preload="metadata"
+      muted loop playsInline preload="none"
     />
   ) : (
-    <ResponsiveImage
-      className={styles.poster}
-      source={posterSrc}
-      alt={posterAlt}
-      loading="lazy"
-      decoding="async"
-    />
+    <CardImages posterSrc={posterSrc} posterAlt={posterAlt} images={images} />
   );
 
   if (!href) return media;
@@ -97,12 +100,52 @@ function CardMedia({
   );
 }
 
+function CardImages({
+  posterSrc,
+  posterAlt,
+  images,
+}: Pick<SocialVideoCardProps, "posterSrc" | "posterAlt" | "images">) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [imageIndex, setImageIndex] = useState(0);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image || !images || images.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      clearInterval(timer);
+      if (entry.isIntersecting) {
+        timer = setInterval(() => setImageIndex((index) => (index + 1) % images.length), 5000);
+      } else {
+        setImageIndex(0);
+      }
+    });
+    observer.observe(image);
+    return () => {
+      observer.disconnect();
+      clearInterval(timer);
+    };
+  }, [images]);
+
+  return (
+    <ResponsiveImage
+      ref={imageRef}
+      className={styles.poster}
+      source={images?.[imageIndex] ?? posterSrc}
+      alt={posterAlt}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+}
+
 export function SocialVideoCard({
   id,
   posterSrc,
   posterAlt,
   username,
   videoSrc,
+  images,
   platformIconSrc,
   caption,
   href,
@@ -141,17 +184,17 @@ export function SocialVideoCard({
       data-has-products={visibleProducts.length > 0 ? "true" : "false"}
     >
       <div className={styles.media} data-slot="social-video-card-media">
-        <CardMedia href={href} posterSrc={posterSrc} posterAlt={posterAlt} videoSrc={videoSrc} />
+        <CardMedia href={href} posterSrc={posterSrc} posterAlt={posterAlt} videoSrc={videoSrc} images={images} />
 
         {username && <div className={styles.identity}>
-          <ResponsiveImage
+          {platformIconSrc && <ResponsiveImage
             className={styles.platform}
             source={platformIconSrc}
             alt=""
             aria-hidden="true"
             width="24"
             height="24"
-          />
+          />}
           <span className={styles.handle}>{username}</span>
         </div>}
       </div>

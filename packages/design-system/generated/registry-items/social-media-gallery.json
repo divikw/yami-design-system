@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "响应式社交视频列表，支持纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
+  "description": "响应式社交内容列表，支持图片帖与视频帖混排、纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
   "source": "components/SocialMediaGallery",
   "files": [
     {
@@ -190,5 +190,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f849c7793e34040e3d0e3c67c0eaafc78a90f5f57b27e3e939e70641c06a9986"
+  "contentDigest": "ba2e2be6ad32f64d4d7305f23d494168888c96ccff500c770f23d3907ed11796"
 }
