@@ -155,7 +155,8 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                     </label></h2>
                     <div className={styles.shipping} data-slot="cart-shipping">
                       <p>{remaining === 0 ? t.free : `${t.shipping} ${money(merchant.shippingCents)} · ${locale === "zh" ? "再加" : "Add"} ${money(remaining)} ${locale === "zh" ? "可享免运费" : "for free shipping"}`}</p>
-                      {remaining > 0 ? <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`} /> : null}
+                      <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`}
+                        aria-valuetext={remaining === 0 ? t.free : locale === "zh" ? `还差 ${money(remaining)} 可享免运费` : `${money(remaining)} away from free shipping`} />
                     </div>
                     <ButtonLink variant="tertiary" size="sm" href={merchant.href}>{t.more}</ButtonLink>
                   </header>

@@ -9,6 +9,7 @@ This delivery targets light mode only. The new component and cart stories fix th
 - Product imagery/identities, visible price examples, payment/guarantee artwork and shipping examples reference the observed cart. Titles are shortened and English copy is authored for the prototype.
 - Collections are a small curated set, not a copy of the customer's 191-unit cart. Quantities, purchase limits, selection and coupon DEMO10 are synthetic. No data is persisted or sent to the cart service.
 - Only selected, available merchandise contributes to the total. Price values are integer cents and displayed row prices are quantity-adjusted line totals.
+- Shipping progress remains visible at zero, partial and full completion, and follows selected item quantities.
 - Each merchant qualifies free shipping from its own selected current-price subtotal before coupon deductions. No selection incurs no shipping. DEMO10 takes $10 off a merchandise subtotal of at least $100, excluding shipping; it becomes inapplicable when the subtotal drops. These are fixture rules, not verified production business logic.
 - Tax is not estimated. Checkout opens a local order summary and does not submit an order or collect payment. Delete supports Undo, saved items can move back to the cart, recommendations add locally, and stock notifications are local demo state.
 - Coupon and unavailable-item drawers follow the observed desktop layout. Mobile stacking and the fixed checkout bar are a proposed responsive composition requiring design review. The existing PC-only Footer is hidden below 1024px.

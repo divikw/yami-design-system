@@ -129,3 +129,42 @@ test("CartPage aligns checkbox glyphs and targets, compacts discovery gutters an
     await page.viewport(viewport.width, viewport.height);
   }
 });
+
+test("CartPage keeps shipping progress visible at zero, partial and qualified amounts", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const fixture = createCartPageFixture("en");
+  const product = fixture.initialItems[1];
+  try {
+    for (const width of [375, 1440]) {
+      await page.viewport(width, 812);
+      flushSync(() => root.render(<CartPage key={width} {...fixture} />));
+      const progress = container.querySelector<HTMLProgressElement>('[aria-labelledby="merchant-yami"] progress')!;
+      const progressWidth = progress.getBoundingClientRect().width;
+      expect(container.querySelectorAll("progress")).toHaveLength(4);
+      expect(progress.value).toBe(0);
+      expect(progress.max).toBe(4900);
+      await expect.element(page.elementLocator(progress)).toBeVisible();
+      await page.getByRole("checkbox", { name: `Select ${product.title}`, exact: true }).click();
+      expect(progress.value).toBe(1833);
+      expect(progress.getAttribute("aria-valuetext")).toContain("$30.67");
+      const select = container.querySelector<HTMLSelectElement>(`select[aria-label="${product.title} quantity"]`)!;
+      for (const [quantity, value, hint] of [[2, 3666, "$12.34"], [3, 4900, "Free shipping"]] as const) {
+        select.value = String(quantity);
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        await expect.poll(() => progress.value).toBe(value);
+        expect(progress.getAttribute("aria-valuetext")).toContain(hint);
+        expect(progress.getBoundingClientRect().width).toBe(progressWidth);
+        await expect.element(page.elementLocator(progress)).toBeVisible();
+      }
+      await page.getByRole("checkbox", { name: `Select ${product.title}`, exact: true }).click();
+      expect(progress.value).toBe(0);
+      await expect.element(page.elementLocator(progress)).toBeVisible();
+    }
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
