@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "828fd808d0806989561aa5f93f132a35ad4dc9258df4211636e158e10268fe18"
+      "digest": "2863daeb5893d0c5d5bf161f8ccc5dc906c48414d940cb4173c74d05783ae8f3"
     },
     {
       "name": "activity-page-header",
@@ -138,6 +138,15 @@
       "digest": "75c55436c7de8623013278f414621fd1c3ce33cb231e37d39e91db8657dce148"
     },
     {
+      "name": "drawer",
+      "title": "Drawer",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/drawer.json",
+      "digest": "99f12bf5a41a7aa1d142958d827eed9011b009a4306b9ebedd35bb47fdee14b1"
+    },
+    {
       "name": "filter-chip",
       "title": "FilterChip",
       "type": "component",
@@ -255,6 +264,15 @@
       "digest": "d7cab4b46fbaebd5691b31b398e8de418f97a8ea4474f5f7cb7f8b20e79cd971"
     },
     {
+      "name": "quantity-select",
+      "title": "QuantitySelect",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/quantity-select.json",
+      "digest": "aad5713d2bd626bbadf64c2e3dbebbabf8ee9d00002d8f2e083012451a7bafe7"
+    },
+    {
       "name": "radio-group",
       "title": "RadioGroup",
       "type": "component",
@@ -288,7 +306,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "956da616689acc79fab12f1dd4de1fa7cc2547a844a746a909be89e810e09fce"
+      "digest": "eaa2186b3d1667cd285549774ad963394983869c4784aa0c5842985dfc2e5513"
     },
     {
       "name": "shortcut-rail",

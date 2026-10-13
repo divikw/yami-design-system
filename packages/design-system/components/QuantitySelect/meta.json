@@ -1,0 +1,149 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "QuantitySelect",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Controlled cart quantity select with native options, validated 10+ editing, stock limits and async feedback.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Based on the cart observed on 2026-10-13. No independent Figma binding assigned."
+  },
+  "exports": [
+    "QuantitySelect",
+    "QuantitySelectProps"
+  ],
+  "composes": [
+    "Button",
+    "Input"
+  ],
+  "props": {
+    "value": {
+      "type": "number",
+      "required": true
+    },
+    "max": {
+      "type": "number",
+      "required": true
+    },
+    "onValueChange": {
+      "type": "(value: number) => void",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "\"zh\" | \"en\"",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "required": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Uses shared focus aliases and native keyboard behavior."
+    },
+    "radius": {
+      "ruleId": "no-custom-radii",
+      "note": "Semantic radii; a desktop edge-attached Drawer has square corners."
+    }
+  },
+  "tokens": [
+    "--surface-primary",
+    "--surface-secondary",
+    "--text-primary",
+    "--text-secondary",
+    "--text-emphasis",
+    "--button-disabled",
+    "--text-disabled",
+    "--border-default",
+    "--border-attention",
+    "--focus-ring",
+    "--radius-component-default",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--font-size-caption-sm",
+    "--line-height-caption-md",
+    "--space-025",
+    "--space-100",
+    "--space-150",
+    "--space-800",
+    "--stroke-default",
+    "--stroke-thick"
+  ],
+  "accessibility": {
+    "wcagLevel": "AA",
+    "tapTargetMin": 44,
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "escape",
+      "enter"
+    ],
+    "ariaPattern": "Named native select and validated input; errors and busy state announced."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#QuantitySelectExample"
+  ],
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
+  },
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".select"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".select"
+    },
+    "--border-attention": {
+      "property": "border-color",
+      "selector": ".select[aria-invalid=true]"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".select:focus-visible"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".select"
+    },
+    "--button-disabled": {
+      "property": "background",
+      "selector": ".select:disabled"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".select:disabled"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".root"
+    }
+  }
+}

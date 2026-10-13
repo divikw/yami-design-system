@@ -1,0 +1,67 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "drawer",
+  "title": "Drawer",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Right-side desktop drawer with a responsive mobile bottom sheet, sharing Sheet modal and focus behavior.",
+  "source": "components/Drawer",
+  "files": [
+    {
+      "source": "components/Drawer/Drawer.tsx",
+      "target": "components/Drawer/Drawer.tsx"
+    },
+    {
+      "source": "components/Drawer/index.ts",
+      "target": "components/Drawer/index.ts"
+    }
+  ],
+  "exports": [
+    "Drawer",
+    "DrawerProps"
+  ],
+  "composes": [
+    "Sheet"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/Drawer/usage.md",
+    "stories": [
+      "components/Drawer/Drawer.stories.tsx"
+    ],
+    "examples": [
+      "components/Drawer/examples.tsx#DrawerExample"
+    ]
+  },
+  "design": {
+    "tokens": [],
+    "rules": [
+      "focus-style",
+      "no-custom-radii"
+    ],
+    "tokenBindings": {}
+  },
+  "quality": {
+    "accessibility": {
+      "wcagLevel": "AA",
+      "tapTargetMin": 44,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "escape",
+        "enter"
+      ],
+      "ariaPattern": "Named native modal dialog"
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "99f12bf5a41a7aa1d142958d827eed9011b009a4306b9ebedd35bb47fdee14b1"
+}

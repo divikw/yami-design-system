@@ -3,6 +3,62 @@
   "schemaVersion": 1,
   "pages": [
     {
+      "id": "CartPage",
+      "tier": "core",
+      "source": "packages/prototypes/pages/CartPage",
+      "stories": [
+        "packages/prototypes/pages/CartPage/CartPage.stories.tsx"
+      ],
+      "fixture": {
+        "mode": "file",
+        "path": "packages/prototypes/pages/CartPage/fixtures.ts",
+        "exportName": "createCartPageFixture"
+      },
+      "route": null,
+      "routeReason": "Cart is a Storybook-owned draft; checkout is a local order summary.",
+      "support": {
+        "locales": [
+          "en",
+          "zh"
+        ],
+        "themes": [
+          "light"
+        ],
+        "viewports": [
+          "mobile-375",
+          "desktop-1440"
+        ],
+        "states": [
+          "default",
+          "selected",
+          "empty",
+          "loading",
+          "error",
+          "long",
+          "no-coupons",
+          "quantity",
+          "coupon",
+          "unavailable",
+          "saved"
+        ]
+      },
+      "evidence": {
+        "storyPlay": "covered",
+        "storybookA11y": true,
+        "tests": [
+          "packages/prototypes/pages/CartPage/cart-totals.test.ts",
+          "apps/storybook/tests/CartPage.browser.test.tsx"
+        ],
+        "visual": [],
+        "manual": true
+      },
+      "excluded": [],
+      "knownLimits": [
+        "Curated demo data and shipping/coupon rules, not production API or checkout integration.",
+        "Mobile is proposed from the PC reference and requires review."
+      ]
+    },
+    {
       "id": "AppDownloadPage",
       "tier": "smoke",
       "source": "packages/prototypes/pages/AppDownloadPage",

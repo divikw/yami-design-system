@@ -1,0 +1,128 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "quantity-select",
+  "title": "QuantitySelect",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Controlled cart quantity select with native options, validated 10+ editing, stock limits and async feedback.",
+  "source": "components/QuantitySelect",
+  "files": [
+    {
+      "source": "components/QuantitySelect/index.ts",
+      "target": "components/QuantitySelect/index.ts"
+    },
+    {
+      "source": "components/QuantitySelect/QuantitySelect.module.css",
+      "target": "components/QuantitySelect/QuantitySelect.module.css"
+    },
+    {
+      "source": "components/QuantitySelect/QuantitySelect.tsx",
+      "target": "components/QuantitySelect/QuantitySelect.tsx"
+    }
+  ],
+  "exports": [
+    "QuantitySelect",
+    "QuantitySelectProps"
+  ],
+  "composes": [
+    "Button",
+    "Input"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/QuantitySelect/usage.md",
+    "stories": [
+      "components/QuantitySelect/QuantitySelect.stories.tsx"
+    ],
+    "examples": [
+      "components/QuantitySelect/examples.tsx#QuantitySelectExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-attention",
+      "--border-default",
+      "--button-disabled",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-caption-sm",
+      "--line-height-body-md",
+      "--line-height-caption-md",
+      "--radius-component-default",
+      "--space-025",
+      "--space-100",
+      "--space-150",
+      "--space-800",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-disabled",
+      "--text-emphasis",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "focus-style",
+      "no-custom-radii"
+    ],
+    "tokenBindings": {
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".select"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".select"
+      },
+      "--border-attention": {
+        "property": "border-color",
+        "selector": ".select[aria-invalid=true]"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".select:focus-visible"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".select"
+      },
+      "--button-disabled": {
+        "property": "background",
+        "selector": ".select:disabled"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".select:disabled"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "wcagLevel": "AA",
+      "tapTargetMin": 44,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "escape",
+        "enter"
+      ],
+      "ariaPattern": "Named native select and validated input; errors and busy state announced."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "aad5713d2bd626bbadf64c2e3dbebbabf8ee9d00002d8f2e083012451a7bafe7"
+}

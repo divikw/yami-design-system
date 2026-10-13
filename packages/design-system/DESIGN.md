@@ -518,6 +518,14 @@ Interactive filter-pill family with filled and outlined treatments, selected sta
 
 Shared modal shell for PDP details and search filters. Below 1024px, mobile uses a bottom sheet with content or full-height sizing, 16px top corners (`--radius-surface-sheet`), and square bottom corners. From 1024px, desktop uses a centered 560px dialog with 12px corners (`--radius-surface-default`). Both sizes and child views share this rule in Light and Dark. The token-backed header, close/back action, modal focus behavior, scroll lock, independent content scrolling, and optional fixed footer are shared. Child views reuse one shell and backdrop; callers retain business state and restore the parent entry on return. Desktop quick-filter menus remain anchored Popovers.
 
+### QuantitySelect — `components/QuantitySelect/`
+
+Controlled cart quantity input: native options 1–9 and a validated 10+ editor. The host supplies a positive stock/purchase limit and owns asynchronous updates. Cancel or Escape preserves the last committed quantity and restores select focus. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
+
+### Drawer — `components/Drawer/`
+
+Contextual modal for coupons and unavailable items. Composes Sheet's native dialog, keyboard, focus restoration and scroll locking. PC is flush right, 480px wide and full viewport height with square edge-attached corners; Mobile uses Sheet's full bottom presentation and existing semantic top radii. Header and optional footer stay outside the scrolling body. See [usage](./components/Drawer/usage.md).
+
 ### Dialog — `components/Dialog/`
 
 Centered modal for confirmation, alerts, and short tasks on mobile and desktop. The confirmation variant centers its title and uses explicit footer actions without a close button; the default variant keeps a close action. Irreversible destructive confirmations use `alertdialog` and one red `emphasis` action, while ordinary confirmations keep the black `primary` action. Mobile keeps 16px side margins, content height is intrinsic up to the safe viewport limit, and overflowing body content scrolls between a fixed header and optional footer. Use `Sheet` for filters, details, child views, and long mobile content.
