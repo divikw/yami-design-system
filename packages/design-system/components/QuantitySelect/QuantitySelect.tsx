@@ -6,6 +6,8 @@ import { Button } from "../Button";
 import { Input } from "../Input";
 import styles from "./QuantitySelect.module.css";
 
+const arrowIcon = new URL("../../assets/icons/action/arrow-down.svg", import.meta.url).href;
+
 export interface QuantitySelectProps {
   value: number;
   /** Positive stock/purchase limit supplied by the host. */
@@ -45,6 +47,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
   }
 
   return <div className={styles.root} lang={locale} data-slot="quantity-select" aria-busy={loading || undefined}>
+    <span className={styles.control} data-slot="quantity-select-control">
     <select ref={selectRef} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
       aria-invalid={!editing && Boolean(message) || undefined} value={value >= 10 ? "custom" : String(value)} disabled={unavailable}
       onChange={(event) => {
@@ -60,6 +63,10 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
       {Array.from({ length: Math.min(9, max) }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}
       {max >= 10 && <option value="custom">{value >= 10 ? value : "10+"}</option>}
     </select>
+    <span className={styles.display} data-slot="quantity-select-display" aria-hidden="true">
+      <span>{value}</span><span className={styles.arrow} style={{ maskImage: `url("${arrowIcon}")` }} />
+    </span>
+    </span>
     {value >= 10 && !editing && <Button size="sm" variant="tertiary" disabled={unavailable} aria-label={zh ? `修改${label}` : `Edit ${label}`} onClick={() => { setDraft(String(value)); setEditing(true); }}>{zh ? "修改" : "Edit"}</Button>}
     {editing && <form className={styles.editor} noValidate onKeyDown={(event) => {
       if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(); }

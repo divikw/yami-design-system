@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Controlled cart quantity select with native options, validated 10+ editing, stock limits and async feedback.",
+  "description": "Compact controlled cart quantity select with a 60×24px visible pill, a 44px native target, validated 10+ editing and async feedback.",
   "source": "components/QuantitySelect",
   "files": [
     {
@@ -58,11 +58,11 @@
       "--font-size-caption-sm",
       "--line-height-body-md",
       "--line-height-caption-md",
-      "--radius-component-default",
+      "--radius-button-primary",
       "--space-025",
       "--space-100",
-      "--space-150",
-      "--space-800",
+      "--space-200",
+      "--space-300",
       "--stroke-default",
       "--stroke-thick",
       "--surface-primary",
@@ -79,35 +79,35 @@
     "tokenBindings": {
       "--surface-primary": {
         "property": "background",
-        "selector": ".select"
+        "selector": ".display"
       },
       "--border-default": {
         "property": "border-color",
-        "selector": ".select"
+        "selector": ".display"
       },
       "--border-attention": {
         "property": "border-color",
-        "selector": ".select[aria-invalid=true]"
+        "selector": ".control:has(.select[aria-invalid=\"true\"]) .display"
       },
       "--focus-ring": {
         "property": "outline-color",
-        "selector": ".select:focus-visible"
-      },
-      "--radius-component-default": {
-        "property": "border-radius",
-        "selector": ".select"
+        "selector": ".control:has(.select:focus-visible) .display"
       },
       "--button-disabled": {
         "property": "background",
-        "selector": ".select:disabled"
+        "selector": ".control:has(.select:disabled) .display"
       },
       "--text-disabled": {
         "property": "color",
-        "selector": ".select:disabled"
+        "selector": ".control:has(.select:disabled) .display"
       },
       "--font-family-ios": {
         "property": "font-family",
         "selector": ".root"
+      },
+      "--radius-button-primary": {
+        "property": "border-radius",
+        "selector": ".display"
       }
     }
   },
@@ -125,5 +125,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4c9cb7cf546973766f0c6403d43ea7342b3ee91139879792a948fec3dd8ca1a5"
+  "contentDigest": "f8f9a3fa9c89a3d913f8872ba0f9c7d91d2c29939e94d36bfb956e8889530b2a"
 }

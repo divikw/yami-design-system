@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/quantity-select.json",
-      "digest": "4c9cb7cf546973766f0c6403d43ea7342b3ee91139879792a948fec3dd8ca1a5"
+      "digest": "f8f9a3fa9c89a3d913f8872ba0f9c7d91d2c29939e94d36bfb956e8889530b2a"
     },
     {
       "name": "radio-group",

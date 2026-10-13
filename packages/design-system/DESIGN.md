@@ -520,7 +520,7 @@ Shared modal shell for PDP details and search filters. Below 1024px, mobile uses
 
 ### QuantitySelect — `components/QuantitySelect/`
 
-Controlled cart quantity input: native options 1–9 and a validated 10+ editor. The host supplies a positive stock/purchase limit and owns asynchronous updates. Cancel or Escape preserves the last committed quantity and restores select focus. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
+Controlled cart quantity input with a 60×24px visible pill and a minimum 44px native-select target: native options 1–9 and a validated 10+ editor. The host supplies a positive stock/purchase limit and owns asynchronous updates. Cancel or Escape preserves the last committed quantity and restores select focus. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
 
 ### Drawer — `components/Drawer/`
 

@@ -5397,7 +5397,7 @@
         "category": "form",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Controlled cart quantity select with native options, validated 10+ editing, stock limits and async feedback.",
+        "description": "Compact controlled cart quantity select with a 60×24px visible pill, a 44px native target, validated 10+ editing and async feedback.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -5453,7 +5453,7 @@
           },
           "radius": {
             "ruleId": "no-custom-radii",
-            "note": "Semantic radii; a desktop edge-attached Drawer has square corners."
+            "note": "The source cart uses a pill-shaped quantity control; consume the semantic pill radius."
           }
         },
         "tokens": [
@@ -5467,7 +5467,7 @@
           "--border-default",
           "--border-attention",
           "--focus-ring",
-          "--radius-component-default",
+          "--radius-button-primary",
           "--font-family-ios",
           "--font-size-body-md",
           "--line-height-body-md",
@@ -5475,10 +5475,10 @@
           "--line-height-caption-md",
           "--space-025",
           "--space-100",
-          "--space-150",
-          "--space-800",
           "--stroke-default",
-          "--stroke-thick"
+          "--stroke-thick",
+          "--space-200",
+          "--space-300"
         ],
         "accessibility": {
           "wcagLevel": "AA",
@@ -5509,35 +5509,35 @@
         "tokenBindings": {
           "--surface-primary": {
             "property": "background",
-            "selector": ".select"
+            "selector": ".display"
           },
           "--border-default": {
             "property": "border-color",
-            "selector": ".select"
+            "selector": ".display"
           },
           "--border-attention": {
             "property": "border-color",
-            "selector": ".select[aria-invalid=true]"
+            "selector": ".control:has(.select[aria-invalid=\"true\"]) .display"
           },
           "--focus-ring": {
             "property": "outline-color",
-            "selector": ".select:focus-visible"
-          },
-          "--radius-component-default": {
-            "property": "border-radius",
-            "selector": ".select"
+            "selector": ".control:has(.select:focus-visible) .display"
           },
           "--button-disabled": {
             "property": "background",
-            "selector": ".select:disabled"
+            "selector": ".control:has(.select:disabled) .display"
           },
           "--text-disabled": {
             "property": "color",
-            "selector": ".select:disabled"
+            "selector": ".control:has(.select:disabled) .display"
           },
           "--font-family-ios": {
             "property": "font-family",
             "selector": ".root"
+          },
+          "--radius-button-primary": {
+            "property": "border-radius",
+            "selector": ".display"
           }
         }
       }
