@@ -23,7 +23,14 @@ test.each([1024, 1920])('V2 fills image height for API 2:1 artwork at %i px', as
     const scale = () => new DOMMatrixReadOnly(getComputedStyle(image).transform).a;
     await page.elementLocator(frame).hover();
     await expect.poll(() => frame.matches(':hover')).toBe(true);
-    await expect.poll(scale).toBeCloseTo(1.03, 3);
+    await expect.poll(scale, { message: JSON.stringify({
+      connected: image.isConnected,
+      hover: matchMedia('(hover: hover)').matches,
+      pointer: matchMedia('(pointer: fine)').matches,
+      transform: getComputedStyle(image).transform,
+      inlineStyle: image.getAttribute('style'),
+      imageHover: image.matches(':hover'),
+    }) }).toBeCloseTo(1.03, 3);
     expect(frame.getBoundingClientRect().toJSON()).toEqual(bounds.toJSON());
     expect(getComputedStyle(frame).overflow).toBe('hidden');
     await page.elementLocator(label).hover();
