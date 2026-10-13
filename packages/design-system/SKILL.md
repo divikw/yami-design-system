@@ -88,6 +88,7 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 | [`HeroBanner`](./components/HeroBanner/meta.json) | composite | Responsive homepage campaign rail shared by PC and Mobile. |
 | [`Tabs`](./components/Tabs/meta.json) | navigation | Compound tab navigation. Triggers must sit inside `TabsList`. |
 | [`Pagination`](./components/Pagination/meta.json) | navigation | PC-only numbered pagination from 1024px. Controlled result updates or native links; hidden on mobile. |
+| [`Breadcrumb`](./components/Breadcrumb/meta.json) | navigation | Hierarchical links with explicit current-page semantics; preserves PDP and docsite styles. Pages own visibility. |
 
 Each `meta.json` declares props, variants, `tokenBindings` (which property of which selector reads which token), rules consumed, and a11y profile.
 

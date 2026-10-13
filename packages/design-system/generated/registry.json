@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "58f86fb1e8302815f021c5be386b845c88f718b159998810c7f0450da9e4232a"
+      "digest": "828fd808d0806989561aa5f93f132a35ad4dc9258df4211636e158e10268fe18"
     },
     {
       "name": "activity-page-header",
@@ -73,6 +73,15 @@
       "version": "0.3.0",
       "path": "registry-items/brand-product-rail.json",
       "digest": "8ab04561c803c828907d7464a194d5185706974f4c210f3151f29f3e3c1cc21b"
+    },
+    {
+      "name": "breadcrumb",
+      "title": "Breadcrumb",
+      "type": "component",
+      "status": "stable",
+      "version": "0.1.0",
+      "path": "registry-items/breadcrumb.json",
+      "digest": "553bae6284092ad020adf211ca01923b81436c541ba72d0f43ea266329618a33"
     },
     {
       "name": "button",

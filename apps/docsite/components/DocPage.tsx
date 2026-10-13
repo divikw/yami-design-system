@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Breadcrumb } from "@yami/design-system";
 
 import type { SiteCopy } from "../content/site";
 import type { DocDocument } from "../lib/content";
@@ -55,11 +56,11 @@ export function DocPage({
 
         <article className={styles.article}>
           <header className={styles.articleHeader}>
-            <nav className={styles.breadcrumbs} aria-label={locale === "zh" ? "面包屑导航" : "Breadcrumb"}>
-              <Link href={localizedPath(locale, "/docs/getting-started")}>{copy.nav.docs}</Link>
-              <span aria-hidden="true">/</span>
-              <span aria-current="page">{document.frontmatter.title}</span>
-            </nav>
+            <Breadcrumb className={styles.breadcrumbs} locale={locale} size="md" underline={false}
+              items={[
+                { label: copy.nav.docs, href: localizedPath(locale, "/docs/getting-started") },
+                { label: document.frontmatter.title, current: true },
+              ]} renderLink={(props) => <Link {...props} />} />
             <h1>{document.frontmatter.title}</h1>
             <p>{document.frontmatter.description}</p>
           </header>

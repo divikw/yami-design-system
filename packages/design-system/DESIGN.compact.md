@@ -65,6 +65,7 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 | **Button** | emphasis / primary / secondary / tertiary × full/inline/icon × sm/md/lg | Actions only; navigation uses anchors. Emphasis is **rate-limited to 1 per screen**. Full form uses 8px; inline form is pill-shaped. |
 | **Tabs** | primary / secondary / tertiary | Responsive tab navigation; Theme and inverse surface polarity remain independent. |
 | **Pagination** | controlled updates / native links × default / inverse | PC numbered pagination from 1024px; 32px controls, bilingual labels, blue keyboard focus. Hidden on mobile. |
+| **Breadcrumb** | sm / md × default / inverse | Hierarchical native links, explicit current page, wrapping labels and blue focus. Pages own visibility. |
 | **Card** | padding × surface primary/secondary/inverse | Independent content items, not ordinary page sections. Default padding 16px, surface radius 12px; ProductCard owns its 8px geometry. **No border or shadow by default.** Native link/button interactions; 44px interactive target. |
 | **Badge** | 6 colors × primary (solid) / secondary (tinted) × sm/md | Uses semantic badge colors; keyboard focus has separate blue aliases. Max 2 badges per ProductCard. |
 | **Input** | default / focus / error / disabled | Keep state borders; separate 2px blue `--focus-ring` keyboard outline at 2px offset. |

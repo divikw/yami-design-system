@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const pages = [
   { name: "home", path: "" },
   { name: "docs", path: "/docs/getting-started" },
-  { name: "blog-detail", path: "/blog/introducing-yami-design-system" },
+  { name: "blog-detail", path: "/blog/build-test-document-components-with-storybook" },
 ];
 
 const scenarios = [
@@ -23,6 +23,10 @@ for (const target of pages) {
       }, scenario.theme);
       await page.goto(`/${scenario.locale}${target.path}`);
       await page.evaluate(() => document.fonts.ready);
+
+      if (target.name === "blog-detail") {
+        await expect(page.locator('article header [data-slot="breadcrumb"]')).toBeVisible();
+      }
 
       const footer = page.getByRole("contentinfo");
       const resources = footer.getByRole("navigation");

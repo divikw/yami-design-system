@@ -90,6 +90,7 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 | [`HeroBanner`](./components/HeroBanner/meta.json) | 组合 | PC 与移动端共用的响应式首页活动横幅。 |
 | [`Tabs`](./components/Tabs/meta.json) | 导航 | 组合式标签导航，触发项必须放在 `TabsList` 内。 |
 | [`Pagination`](./components/Pagination/meta.json) | 导航 | 仅 PC 使用的数字分页，1024px 起显示；受控结果更新或原生链接，移动端隐藏。 |
+| [`Breadcrumb`](./components/Breadcrumb/meta.json) | 导航 | 层级链接与显式当前页语义；复用 PDP 和文档站样式，由页面控制显示。 |
 
 每个 `meta.json` 声明属性、变体、`tokenBindings`（哪个选择器的哪个属性读取哪个 Token）、使用的规则和无障碍要求。
 

@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "breadcrumb",
+  "title": "Breadcrumb",
+  "type": "component",
+  "status": "stable",
+  "version": "0.1.0",
+  "description": "Hierarchical navigation extracted from existing product and documentation pages, with native or framework links, explicit current-page semantics, bilingual names and blue keyboard focus.",
+  "source": "components/Breadcrumb",
+  "files": [
+    {
+      "source": "components/Breadcrumb/Breadcrumb.module.css",
+      "target": "components/Breadcrumb/Breadcrumb.module.css"
+    },
+    {
+      "source": "components/Breadcrumb/Breadcrumb.tsx",
+      "target": "components/Breadcrumb/Breadcrumb.tsx"
+    },
+    {
+      "source": "components/Breadcrumb/index.ts",
+      "target": "components/Breadcrumb/index.ts"
+    }
+  ],
+  "exports": [
+    "Breadcrumb",
+    "BreadcrumbItem",
+    "BreadcrumbLinkProps",
+    "BreadcrumbProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/Breadcrumb/usage.md",
+    "stories": [
+      "components/Breadcrumb/Breadcrumb.stories.tsx"
+    ],
+    "examples": [
+      "components/Breadcrumb/examples.tsx#ProductBreadcrumb",
+      "components/Breadcrumb/examples.tsx#CurrentPageBreadcrumb"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--focus-ring",
+      "--focus-ring-inverse",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-caption-md",
+      "--line-height-body-md",
+      "--line-height-caption-md",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-300",
+      "--space-500",
+      "--stroke-thick",
+      "--text-secondary",
+      "--text-secondary-inverse"
+    ],
+    "rules": [
+      "focus-style",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--text-secondary-inverse": {
+        "property": "color",
+        "selector": ".root[data-inverse=\"true\"]"
+      },
+      "--space-100": {
+        "property": "gap",
+        "selector": ".list, .item"
+      },
+      "--space-050": {
+        "property": "padding",
+        "selector": ".root, .link"
+      },
+      "--space-300": {
+        "property": "min-width / min-height",
+        "selector": ".link"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".link:focus-visible"
+      },
+      "--focus-ring-inverse": {
+        "property": "outline-color",
+        "selector": ".root[data-inverse=\"true\"] .link:focus-visible"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "navigation / ordered list / link",
+      "wcagLevel": "AA",
+      "tapTargetMin": 24,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "enter"
+      ],
+      "ariaPattern": "Named breadcrumb navigation; explicit aria-current=page; decorative separators hidden.",
+      "notes": "No automatic focus or inferred current page. Static parent categories do not receive aria-current. Empty paths render nothing. Long labels wrap; focus gutters remain visible. Mobile links are 44px; hosts retain existing visibility rules."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "553bae6284092ad020adf211ca01923b81436c541ba72d0f43ea266329618a33"
+}

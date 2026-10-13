@@ -1090,6 +1090,174 @@
       }
     },
     {
+      "id": "Breadcrumb",
+      "source": "components/Breadcrumb",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Breadcrumb",
+        "category": "navigation",
+        "status": "stable",
+        "version": "0.1.0",
+        "description": "Hierarchical navigation extracted from existing product and documentation pages, with native or framework links, explicit current-page semantics, bilingual names and blue keyboard focus.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Extracted from the maintained PDP, DocPage and BlogArticle implementations; no independently verified Figma component mapping."
+        },
+        "exports": [
+          "Breadcrumb",
+          "BreadcrumbProps",
+          "BreadcrumbItem",
+          "BreadcrumbLinkProps"
+        ],
+        "variants": {
+          "size": [
+            "sm",
+            "md"
+          ],
+          "surface": [
+            "default",
+            "inverse"
+          ],
+          "state": [
+            "link",
+            "static",
+            "current",
+            "focus-visible",
+            "empty"
+          ]
+        },
+        "props": {
+          "items": {
+            "type": "readonly BreadcrumbItem[]",
+            "required": true,
+            "description": "Ordered labels with optional href and explicit current flag. Empty arrays render nothing."
+          },
+          "locale": {
+            "type": "enum",
+            "values": [
+              "zh",
+              "en"
+            ],
+            "required": false,
+            "default": "en",
+            "description": "Accessible navigation name and lang. The host supplies translated labels and URLs."
+          },
+          "size": {
+            "type": "enum",
+            "values": [
+              "sm",
+              "md"
+            ],
+            "required": false,
+            "default": "sm",
+            "description": "PDP caption-md or docsite body-md typography."
+          },
+          "inverse": {
+            "type": "boolean",
+            "required": false,
+            "default": false
+          },
+          "underline": {
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "description": "Preserve PDP link underlines; false matches the docsite."
+          },
+          "renderLink": {
+            "type": "(props: BreadcrumbLinkProps) => ReactNode",
+            "required": false,
+            "description": "Optional framework link adapter. Preserve native anchor props and semantics."
+          }
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "2px blue outline with 2px offset; 4px root gutter. Default and inverse aliases remain separate from current-page semantics."
+          },
+          "tapTarget": {
+            "ruleId": "tap-target",
+            "note": "Preserve compact 24px desktop links and 44px mobile links. Pages own visibility; compact PC targets do not claim native touch minimums."
+          }
+        },
+        "tokens": [
+          "--text-secondary",
+          "--text-secondary-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
+          "--font-family-ios",
+          "--font-size-caption-md",
+          "--line-height-caption-md",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--space-025",
+          "--space-050",
+          "--space-100",
+          "--space-300",
+          "--space-500",
+          "--stroke-thick"
+        ],
+        "tokenBindings": {
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--text-secondary-inverse": {
+            "property": "color",
+            "selector": ".root[data-inverse=\"true\"]"
+          },
+          "--space-100": {
+            "property": "gap",
+            "selector": ".list, .item"
+          },
+          "--space-050": {
+            "property": "padding",
+            "selector": ".root, .link"
+          },
+          "--space-300": {
+            "property": "min-width / min-height",
+            "selector": ".link"
+          },
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".link:focus-visible"
+          },
+          "--focus-ring-inverse": {
+            "property": "outline-color",
+            "selector": ".root[data-inverse=\"true\"] .link:focus-visible"
+          }
+        },
+        "accessibility": {
+          "role": "navigation / ordered list / link",
+          "wcagLevel": "AA",
+          "tapTargetMin": 24,
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "enter"
+          ],
+          "ariaPattern": "Named breadcrumb navigation; explicit aria-current=page; decorative separators hidden.",
+          "notes": "No automatic focus or inferred current page. Static parent categories do not receive aria-current. Empty paths render nothing. Long labels wrap; focus gutters remain visible. Mobile links are 44px; hosts retain existing visibility rules."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ProductBreadcrumb",
+          "./examples.tsx#CurrentPageBreadcrumb"
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Storybook checks native keyboard activation; browser coverage verifies locale, current semantics, long paths, focus geometry and existing PDP/docsite integrations."
+        }
+      }
+    },
+    {
       "id": "Button",
       "source": "components/Button",
       "meta": {

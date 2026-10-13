@@ -1,6 +1,6 @@
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Divider, Tag } from "@yami/design-system";
+import { Breadcrumb, Divider, Tag } from "@yami/design-system";
 import Link from "next/link";
 
 import type { SiteCopy } from "../content/site";
@@ -29,11 +29,11 @@ export function BlogArticle({
     <main id="main-content" className={styles.main}>
       <article>
         <header className={styles.header}>
-          <nav className={styles.breadcrumbs} aria-label={locale === "zh" ? "面包屑导航" : "Breadcrumb"}>
-            <Link href={localizedPath(locale, "/blog")}>{copy.blog.title}</Link>
-            <span aria-hidden="true">/</span>
-            <span className={styles.currentCategory}>{category}</span>
-          </nav>
+          <Breadcrumb locale={locale} size="md" underline={false}
+            items={[
+              { label: copy.blog.title, href: localizedPath(locale, "/blog") },
+              { label: <span className={styles.currentCategory}>{category}</span> },
+            ]} renderLink={(props) => <Link {...props} />} />
           <h1>{post.frontmatter.title}</h1>
           <p className={styles.description}>{post.frontmatter.description}</p>
           <div className={styles.byline}>
