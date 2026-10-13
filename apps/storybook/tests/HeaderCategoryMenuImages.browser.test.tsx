@@ -22,6 +22,7 @@ test.each([1024, 1920])('V2 fills image height for API 2:1 artwork at %i px', as
     const bounds = frame.getBoundingClientRect();
     const scale = () => new DOMMatrixReadOnly(getComputedStyle(image).transform).a;
     await page.elementLocator(frame).hover();
+    await expect.poll(() => frame.matches(':hover')).toBe(true);
     await expect.poll(scale).toBeCloseTo(1.03, 3);
     expect(frame.getBoundingClientRect().toJSON()).toEqual(bounds.toJSON());
     expect(getComputedStyle(frame).overflow).toBe('hidden');
@@ -32,8 +33,10 @@ test.each([1024, 1920])('V2 fills image height for API 2:1 artwork at %i px', as
   try {
     await page.viewport(width, 800);
     flushSync(() => root.render(<Header {...props} />));
+    await document.fonts.ready;
     await page.getByRole('button', { name: 'Categories', exact: true }).click();
     await page.getByRole('button', { name: 'By Brand', exact: true }).click();
+    await document.fonts.ready;
     const images = container.querySelectorAll<HTMLImageElement>('[data-level="2"] img');
     expect(images).toHaveLength(5);
     images.forEach(image => {

@@ -27,6 +27,11 @@ for (const locale of ["zh", "en"] as const) for (const width of [375, 1023, 1024
       await page.viewport(width, 900);
       flushSync(() => root.render(<SearchResultsPage {...fixture} />));
       await document.fonts.ready;
+      // A reused pointer can enter the sticky category rail while resizing.
+      if (width >= 1024) {
+        await page.elementLocator(container.querySelector<HTMLElement>('[data-slot="header-brand"]')!).hover();
+        await expect.poll(() => container.querySelector('[data-slot="header-category-menu"]')).toBeNull();
+      }
       const screen = container.querySelector<HTMLElement>('[data-slot="search-results-page"]')!;
       const toolbar = screen.querySelector<HTMLElement>('[data-slot="search-results-toolbar"]')!;
       const grid = screen.querySelector<HTMLElement>('[data-slot="product-list-container"]')!;
@@ -94,6 +99,12 @@ test("controlled page updates retain query, sort and category and accept the hos
     await page.viewport(1280, 900);
     flushSync(() => root.render(<SearchResultsPage {...fixture} products={fixture.products.slice(0, 3)}
       interaction={{ request, pageCount: 2, onRequestChange: change }} />));
+    await document.fonts.ready;
+    // Exercise the stale-hover state seen in CI, then leave the menu naturally.
+    await page.getByRole("button", { name: "Categories", exact: true }).hover();
+    await expect.poll(() => container.querySelector('[data-slot="header-category-menu"]')).not.toBeNull();
+    await page.elementLocator(container.querySelector<HTMLElement>('[data-slot="header-brand"]')!).hover();
+    await expect.poll(() => container.querySelector('[data-slot="header-category-menu"]')).toBeNull();
     const nav = container.querySelector<HTMLElement>('[data-slot="search-results-pagination"]')!;
     const initialProducts = [...container.querySelectorAll('[data-slot="product-list-item"]')].map(el => el.textContent);
     await userEvent.click(nav.querySelector<HTMLButtonElement>('[aria-label="Page 2"]')!);
