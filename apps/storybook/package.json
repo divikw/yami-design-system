@@ -7,7 +7,7 @@
     "storybook": "storybook dev -p 6006",
     "build": "node scripts/build-proxy.mjs && node --test scripts/proxy-bundle.test.mjs && storybook build",
     "preview:protected": "NODE_ENV=production tsx scripts/preview-protected.ts",
-    "test-storybook": "vitest run --project=storybook --project=browser --exclude tests/ProductMediaGallery.browser.test.tsx && vitest run --project=browser tests/ProductMediaGallery.browser.test.tsx",
+    "test-storybook": "vitest run --project=storybook --project=browser --exclude tests/Card.browser.test.tsx --exclude tests/ProductMediaGallery.browser.test.tsx && vitest run --project=browser tests/Card.browser.test.tsx && vitest run --project=browser tests/ProductMediaGallery.browser.test.tsx",
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
