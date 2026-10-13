@@ -1,4 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
+import { join } from "node:path";
+
+import searchImages from "./fixtures/search-images/manifest.json";
 
 test.skip(!process.env.CI, "Visual baselines are generated and compared only in the locked Linux CI image.");
 
@@ -114,8 +117,28 @@ test.describe("pairwise-page-contracts", () => {
   for (const visualCase of pairwisePageCases) {
     test(visualCase.id, async ({ page }) => {
       await page.setViewportSize({ width: visualCase.width, height: 1100 });
+      if (visualCase.capture === "full-page") {
+        // Snapshot data fixes labels and prices; pin its CDN images as well.
+        for (const image of searchImages) {
+          await page.route(image.url, (route) => route.fulfill({
+            path: join(__dirname, "fixtures/search-images", image.file),
+            contentType: image.contentType,
+          }));
+        }
+      }
       await page.goto(visualCase.url);
       await waitForDirectPreview(page, visualCase.selector);
+      if (visualCase.capture === "full-page") {
+        // A full-page capture includes images below the initial viewport.
+        const images = page.locator("img:visible");
+        await images.evaluateAll((elements: HTMLImageElement[]) => {
+          for (const image of elements) image.loading = "eager";
+        });
+        await expect.poll(() => images.evaluateAll((elements: HTMLImageElement[]) =>
+          elements.every((image) => image.complete && image.naturalWidth > 0),
+        ), { timeout: 10_000, message: "Full-page images must load successfully before capture" }).toBe(true);
+        await images.evaluateAll((elements: HTMLImageElement[]) => Promise.all(elements.map((image) => image.decode())));
+      }
       // Topic sections intentionally virtualize offscreen content, so its pairwise
       // contract covers the stable entry viewport instead of forcing a synthetic page.
       await expect(page).toHaveScreenshot(`${visualCase.id}.png`, {

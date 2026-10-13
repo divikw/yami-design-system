@@ -416,6 +416,16 @@ Related actions composed from Button. The group provides an accessible name and 
 - Require `aria-label`; Tab visits the buttons in DOM order. Loading and related disabled states remain caller-owned.
 - Public contract: `ButtonGroup`, `ButtonGroupProps`; see `usage.md` and the Showcase, Playground, and Interaction stories.
 
+### Breadcrumb — `components/Breadcrumb/`
+
+Hierarchical navigation extracted from PDP, documentation and blog pages. / 从商品详情页、文档页和博客页面抽取的层级导航。
+
+- A named `nav` contains an ordered list with slash separators hidden from assistive technology. Native links retain browser behavior; `renderLink` lets applications retain framework navigation without a framework dependency in the component.
+- `items` provide labels, optional URLs and an explicit `current` flag. Only the actual page receives `aria-current="page"`; a static parent category is not automatically current. Empty paths render nothing.
+- `sm` preserves PDP caption-md typography; `md` preserves docsite body-md typography. `underline` defaults to true; the docsite disables it. Long labels wrap without collapsing the hierarchy.
+- Preserve 24px PC links and 44px links below 1024px. A 4px root gutter with compensating outer margins keeps the existing page alignment and protects the 2px blue focus outline at a 2px offset. Use default/inverse semantic aliases.
+- Pages own visibility: PDP and documentation hide mobile breadcrumbs; blog articles keep them visible. Labels, navigation names and usage guidance support Chinese and English. No independently verified Figma component mapping. See [usage](./components/Breadcrumb/usage.md).
+
 ### Pagination — `components/Pagination/`
 
 PC-only numbered pagination, shown from 1024px and hidden below it. / 仅 PC 使用的数字分页，1024px 起显示，移动端隐藏。

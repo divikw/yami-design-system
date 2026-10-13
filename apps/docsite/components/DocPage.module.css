@@ -39,9 +39,7 @@
   line-height: var(--line-height-heading-xl);
 }
 
-.updatedAt,
-.breadcrumbs,
-.breadcrumbs a {
+.updatedAt {
   color: var(--text-secondary);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
@@ -59,21 +57,6 @@
 
 .breadcrumbs {
   display: none;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-100);
-  padding: var(--space-050);
-  margin: calc(var(--space-050) * -1);
-}
-
-.breadcrumbs a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: var(--space-300);
-  min-height: var(--space-300);
-  padding-inline: var(--space-050);
-  text-decoration: none;
 }
 
 .sources {

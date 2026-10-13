@@ -38,47 +38,6 @@
   margin-bottom: var(--space-150);
 }
 
-.breadcrumb {
-  min-width: 0;
-  padding: var(--space-050);
-  margin: calc(var(--space-050) * -1);
-  color: var(--text-secondary);
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
-}
-
-.breadcrumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-100);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.breadcrumb li {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-100);
-}
-
-.breadcrumb a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: var(--space-300);
-  min-height: var(--space-300);
-  padding-inline: var(--space-050);
-  box-sizing: border-box;
-  color: inherit;
-  text-underline-offset: var(--space-050);
-}
-
-.breadcrumb a:focus-visible {
-  outline: var(--stroke-thick) solid var(--focus-ring);
-  outline-offset: var(--space-025);
-}
-
 .brand:focus-visible,
 .purchaseDetailsLink:focus-visible,
 .textButton:focus-visible,

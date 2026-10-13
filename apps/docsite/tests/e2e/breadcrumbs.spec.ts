@@ -42,5 +42,9 @@ for (const kind of ["docs", "blog"] as const) for (const locale of ["zh", "en"] 
     await page.getByRole("link", { name: locale === "zh" ? "English" : "中文", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/${locale === "zh" ? "en" : "zh"}/${kind}/${slug}$`));
     await expect(nav).toHaveAccessibleName(locale === "zh" ? "Breadcrumb" : "面包屑导航");
+    const nextLocale = locale === "zh" ? "en" : "zh";
+    await nav.getByRole("link").press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/${nextLocale}/${kind === "docs" ? "docs/getting-started" : "blog"}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 }

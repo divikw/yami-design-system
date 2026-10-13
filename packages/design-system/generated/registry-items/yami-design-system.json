@@ -72,6 +72,7 @@
     "badge",
     "billboard",
     "brand-product-rail",
+    "breadcrumb",
     "button",
     "button-group",
     "card",
@@ -569,5 +570,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "58f86fb1e8302815f021c5be386b845c88f718b159998810c7f0450da9e4232a"
+  "contentDigest": "828fd808d0806989561aa5f93f132a35ad4dc9258df4211636e158e10268fe18"
 }

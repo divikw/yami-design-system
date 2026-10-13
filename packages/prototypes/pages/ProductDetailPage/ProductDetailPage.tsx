@@ -4,6 +4,7 @@ import { type CSSProperties, type MouseEvent, type ReactNode, useLayoutEffect, u
 
 import {
   Badge,
+  Breadcrumb,
   Button,
   Divider,
   FilterChip,
@@ -394,20 +395,8 @@ export function ProductDetailPage({
             className={styles.utilityRow}
             data-slot="product-detail-utility-row"
           >
-            <nav className={styles.breadcrumb} aria-label={rest.lang?.startsWith("zh") ? "面包屑导航" : "Breadcrumb"} data-slot="product-detail-breadcrumb">
-              <ol>
-                {breadcrumb.map((item, index) => (
-                  <li key={`${item.label}-${index}`}>
-                    {index > 0 ? <span aria-hidden="true">/</span> : null}
-                    {item.href ? (
-                      <a href={item.href}>{item.label}</a>
-                    ) : (
-                      <span>{item.label}</span>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <Breadcrumb items={breadcrumb} locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
+              data-slot="product-detail-breadcrumb" />
 
             <div
               className={styles.shareActions}
