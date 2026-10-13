@@ -47,6 +47,8 @@ export function createCartPageFixture(locale: CartLocale = "zh"): CartPageProps 
     },
     footer: { columns: createFooterColumns(locale), appTitle: footerCopy[locale].appTitle, appLinks: createFooterAppLinks(),
       socialLinks: createFooterSocialLinks(locale), legalLinks: createFooterLegalLinks(locale), paymentMarks: createFooterPaymentMarks(),
+      subscribe: { title: footerCopy[locale].subscribeTitle, label: footerCopy[locale].subscribeLabel,
+        placeholder: footerCopy[locale].subscribePlaceholder, submitLabel: footerCopy[locale].subscribeSubmit },
       copyright: "© Copyright 2012–2026 Transocean Resources Management, Inc.", ariaLabel: zh ? "亚米页脚" : "Yami footer",
     },
     merchants: [
