@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button, ButtonGroup, ButtonLink, Checkbox, Drawer, Footer, Header, Input, ProductList,
   QuantitySelect, Tabs, TabsContent, TabsList, TabsTrigger,
@@ -14,13 +14,13 @@ const text = {
   zh: {
     cart: "购物车", all: "全选", items: "件商品", merchants: "个商家", select: "选择", quantity: "数量", remove: "删除", save: "稍后购买", move: "移入购物车", undo: "撤销",
     shipping: "运费", free: "免运费", more: "添加更多", shortage: "库存紧张", unavailable: "以下商品已失效", viewAll: "查看全部", unavailableHint: "已售完或已下架的商品不会计入结算金额。",
-    soldOut: "已售完", delisted: "已下架", notify: "设置到货通知", notified: "已设置到货通知", coupons: "优惠券", code: "折扣码", redeem: "兑换", edit: "编辑", noCoupons: "暂无可用优惠券", couponHint: "这里仅显示可用于当前购物车中商品的优惠券", use: "使用", unused: "取消使用", condition: "尚未满足使用条件", couponInvalid: "折扣码无效，请检查后重试", couponApplied: "优惠券已使用", noCoupon: "不使用优惠券", codeRequired: "请输入折扣码",
+    soldOut: "已售完", delisted: "已下架", notify: "设置到货通知", notified: "已设置到货通知", coupons: "优惠券", code: "折扣码", redeem: "兑换", edit: "编辑", noCoupons: "暂无可用优惠券", couponHint: "这里仅显示可用于当前购物车中商品的优惠券", use: "使用", unused: "取消使用", condition: "尚未满足使用条件", couponInvalid: "折扣码无效，请检查后重试", couponApplied: "优惠券已使用", couponRemoved: "已取消使用优惠券", unavailableEmpty: "暂无失效商品", noCoupon: "不使用优惠券", codeRequired: "请输入折扣码",
     subtotal: "商品小计", discount: "优惠", total: "合计", tax: "税费在结算时计算", checkout: "去结算", summary: "订单摘要", selected: "已选", choose: "请选择需要结算的商品", protection: "服务保障", learn: "了解更多", close: "关闭", done: "完成", back: "返回购物车", recommendations: "为你推荐", history: "历史浏览", favorites: "收藏商品", emptyTab: "暂无商品", empty: "购物车还是空的", emptyHint: "去逛逛，把喜欢的商品加入购物车吧。", shop: "继续购物", added: "已加入购物车", removed: "商品已删除", saved: "已移入稍后购买", limit: "已达到商品限购数量", loading: "正在加载购物车…", retry: "重试", couponSelected: "使用条件未满足，优惠暂未计入", noSelectedShipping: "选择商品后计算运费",
   },
   en: {
     cart: "Shopping cart", all: "Select all", items: "items", merchants: "sellers", select: "Select", quantity: "quantity", remove: "Delete", save: "Save for later", move: "Move to cart", undo: "Undo",
     shipping: "Shipping", free: "Free shipping", more: "Add more", shortage: "Low stock", unavailable: "Unavailable items", viewAll: "View all", unavailableHint: "Sold-out and delisted items are excluded from checkout.",
-    soldOut: "Sold out", delisted: "No longer available", notify: "Notify me", notified: "Notification set", coupons: "Coupons", code: "Promo code", redeem: "Redeem", edit: "Edit", noCoupons: "No available coupons", couponHint: "Only coupons applicable to items in your cart are shown here.", use: "Apply", unused: "Remove coupon", condition: "Requirements not met", couponInvalid: "Invalid promo code. Check it and try again.", couponApplied: "Coupon applied", noCoupon: "Use no coupon", codeRequired: "Enter a promo code",
+    soldOut: "Sold out", delisted: "No longer available", notify: "Notify me", notified: "Notification set", coupons: "Coupons", code: "Promo code", redeem: "Redeem", edit: "Edit", noCoupons: "No available coupons", couponHint: "Only coupons applicable to items in your cart are shown here.", use: "Apply", unused: "Remove coupon", condition: "Requirements not met", couponInvalid: "Invalid promo code. Check it and try again.", couponApplied: "Coupon applied", couponRemoved: "Coupon removed", unavailableEmpty: "No unavailable items", noCoupon: "Use no coupon", codeRequired: "Enter a promo code",
     subtotal: "Subtotal", discount: "Discount", total: "Total", tax: "Tax calculated at checkout", checkout: "Checkout", summary: "Order summary", selected: "Selected", choose: "Select items to check out", protection: "Shopping protection", learn: "Learn more", close: "Close", done: "Done", back: "Back to cart", recommendations: "Recommended for you", history: "Recently viewed", favorites: "Favorites", emptyTab: "No items here yet", empty: "Your cart is empty", emptyHint: "Explore something new and add your favorites to your cart.", shop: "Continue shopping", added: "Added to cart", removed: "Item deleted", saved: "Saved for later", limit: "Purchase limit reached", loading: "Loading your cart…", retry: "Retry", couponSelected: "Requirements not met; this coupon is not included in the total", noSelectedShipping: "Select items to calculate shipping",
   },
 };
@@ -66,13 +66,14 @@ function CartRow({ item, locale, onSelect, onQuantity, onRemove, onSave, onNotif
 
 export function CartPage({ locale, header, footer, merchants, initialItems, initialSavedItems, recommendations, history, favorites, coupons, loading = false, error, onRetry }: CartPageProps) {
   const t = text[locale];
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const [items, setItems] = useState(initialItems);
   const [saved, setSaved] = useState(initialSavedItems);
   const [tab, setTab] = useState("recommended");
   const [drawer, setDrawer] = useState<"coupons" | "unavailable" | "protection" | "summary" | null>(null);
   const [couponId, setCouponId] = useState<string | null>(null);
-  const [notice, setNotice] = useState("");
-  const [removed, setRemoved] = useState<{ item: CartItemData; saved: boolean } | null>(null);
+  const [notice, setNotice] = useState<{ message: string; drawer: typeof drawer }>({ message: "", drawer: null });
+  const [removed, setRemoved] = useState<{ item: CartItemData; saved: boolean; index: number } | null>(null);
   const [notifications, setNotifications] = useState<string[]>([]);
   const available = items.filter((item) => item.availability === "available");
   const unavailable = items.filter((item) => item.availability !== "available");
@@ -85,37 +86,54 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
   const selectedCount = available.filter((item) => item.selected).length;
   const allSelected = available.length > 0 && selectedCount === available.length;
 
+  function showNotice(message: string) {
+    setNotice({ message, drawer });
+  }
+  function closeDrawer() {
+    const returnToTitle = drawer === "unavailable" && unavailable.length === 0;
+    setDrawer(null);
+    if (returnToTitle) queueMicrotask(() => titleRef.current?.focus({ preventScroll: true }));
+  }
   function patchItem(id: string, patch: Partial<CartItemData>) {
     setItems((current) => current.map((item) => item.id === id ? { ...item, ...patch } : item));
   }
   function removeItem(item: CartItemData, fromSaved = false) {
     (fromSaved ? setSaved : setItems)((current) => current.filter((entry) => entry.id !== item.id));
-    setRemoved({ item, saved: fromSaved });
-    setNotice(t.removed);
+    setRemoved({ item, saved: fromSaved, index: (fromSaved ? saved : items).findIndex((entry) => entry.id === item.id) });
+    showNotice(t.removed);
+  }
+  function undoRemove() {
+    if (!removed) return;
+    (removed.saved ? setSaved : setItems)((current) => current.some((item) => item.id === removed.item.id) ? current
+      : [...current.slice(0, removed.index), removed.item, ...current.slice(removed.index)]);
+    setRemoved(null); showNotice("");
+  }
+  function applyCoupon(id: string | null) {
+    setCouponId(id);
+    showNotice(id ? t.couponApplied : t.couponRemoved);
   }
   function saveItem(item: CartItemData) {
     setItems((current) => current.filter((entry) => entry.id !== item.id));
     setSaved((current) => current.some((entry) => entry.id === item.id) ? current : [...current, { ...item, selected: false }]);
     setRemoved(null);
-    setNotice(t.saved);
+    showNotice(t.saved);
   }
   function addItem(item: CartItemData) {
     const existing = items.find((entry) => entry.id === item.id);
-    if (existing && (existing.quantity >= existing.maxQuantity || existing.availability !== "available")) { setNotice(t.limit); return; }
+    if (existing && (existing.quantity >= existing.maxQuantity || existing.availability !== "available")) { showNotice(t.limit); return; }
     if (item.availability !== "available") return;
     setItems((current) => current.some((entry) => entry.id === item.id)
       ? current.map((entry) => entry.id === item.id ? { ...entry, quantity: Math.min(entry.quantity + 1, entry.maxQuantity) } : entry)
       : [...current, { ...item, selected: false }]);
     setSaved((current) => current.filter((entry) => entry.id !== item.id));
     setRemoved(null);
-    setNotice(t.added);
+    showNotice(t.added);
   }
   function redeem(code: string) {
     const found = coupons.find((entry) => entry.code.toUpperCase() === code.toUpperCase());
     if (!found) return t.couponInvalid;
     if (totals.quantity === 0 || totals.subtotalCents < found.minSubtotalCents) return `${t.condition} · ${money(found.minSubtotalCents)}`;
-    setCouponId(found.id);
-    setNotice(t.couponApplied);
+    applyCoupon(found.id);
     return "";
   }
   const drawerTitles = { coupons: t.coupons, unavailable: t.unavailable, protection: t.protection, summary: t.summary };
@@ -126,7 +144,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
     <main className={styles.layout} id="cart-main">
       <div className={styles.mainColumn}>
         <section className={styles.overview} aria-labelledby="cart-title">
-          <h1 id="cart-title">{t.cart}</h1>
+          <h1 ref={titleRef} tabIndex={-1} id="cart-title">{t.cart}</h1>
           {!loading && !error && available.length > 0 ? <label className={styles.selectAll}>
             <span className={styles.selectionControl}><Checkbox checked={allSelected} indeterminate={selectedCount > 0 && !allSelected}
               onCheckedChange={(checked) => setItems((current) => current.map((item) => item.availability === "available" ? { ...item, selected: checked } : item))} /></span>
@@ -136,10 +154,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
         {loading ? <section className={styles.state} aria-busy="true"><p role="status">{t.loading}</p>{Array.from({ length: 4 }, (_, index) => <div key={index} className={styles.skeleton} aria-hidden="true" />)}</section>
           : error ? <section className={styles.state}><p role="alert">{error}</p>{onRetry ? <Button onClick={onRetry}>{t.retry}</Button> : null}</section>
             : <>
-              {notice ? <div className={styles.notice}><span role="status">{notice}</span>{removed ? <Button size="sm" variant="tertiary" onClick={() => {
-                (removed.saved ? setSaved : setItems)((current) => current.some((item) => item.id === removed.item.id) ? current : [...current, removed.item]);
-                setRemoved(null); setNotice("");
-              }}>{t.undo}</Button> : null}</div> : null}
+              {notice.message && !drawer ? <div className={styles.notice}><span role="status">{notice.message}</span>{removed ? <Button size="sm" variant="tertiary" onClick={undoRemove}>{t.undo}</Button> : null}</div> : null}
               {available.length === 0 ? <section className={styles.state}><h2>{t.empty}</h2><p>{t.emptyHint}</p><ButtonLink href={`https://www.yami.com/us/${locale}`}>{t.shop}</ButtonLink></section> : null}
               {merchants.map((merchant) => {
                 const group = available.filter((item) => item.merchantId === merchant.id);
@@ -154,11 +169,11 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                       <span className={styles.merchantCopy}><strong id={`merchant-${merchant.id}`}>{merchant.title}</strong><small>{merchant.origin}</small></span>
                     </label></h2>
                     <div className={styles.shipping} data-slot="cart-shipping">
-                      <p>{remaining === 0 ? t.free : `${t.shipping} ${money(merchant.shippingCents)} · ${locale === "zh" ? "再加" : "Add"} ${money(remaining)} ${locale === "zh" ? "可享免运费" : "for free shipping"}`}</p>
+                      <p>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={styles.attention}>{money(remaining)}</span> {locale === "zh" ? "可享免运费" : "for free shipping"}</>}</p>
                       <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`}
                         aria-valuetext={remaining === 0 ? t.free : locale === "zh" ? `还差 ${money(remaining)} 可享免运费` : `${money(remaining)} away from free shipping`} />
                     </div>
-                    <ButtonLink variant="tertiary" size="sm" href={merchant.href}>{t.more}</ButtonLink>
+                    <ButtonLink size="sm" href={merchant.href} rightIcon={<span className={styles.chevron} aria-hidden="true" />}>{t.more}</ButtonLink>
                   </header>
                   <ul className={styles.itemList}>{group.map((item) => <CartRow key={item.id} item={item} locale={locale}
                     onSelect={(selected) => patchItem(item.id, { selected })} onQuantity={(quantity) => patchItem(item.id, { quantity })}
@@ -166,7 +181,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                 </section>;
               })}
               {unavailable.length > 0 ? <section className={styles.unavailable}>
-                <div className={styles.sectionHeader}><h2>{t.unavailable}</h2><Button size="sm" variant="tertiary" aria-label={`${t.viewAll} ${t.unavailable}`} onClick={() => setDrawer("unavailable")}>{t.viewAll}</Button></div>
+                <div className={styles.sectionHeader}><h2>{t.unavailable}</h2><Button size="sm" variant="tertiary" aria-label={`${t.viewAll} ${t.unavailable}`} aria-haspopup="dialog" onClick={() => setDrawer("unavailable")}>{t.viewAll}</Button></div>
                 <p className={styles.muted}>{t.unavailableHint}</p>
                 <div className={styles.thumbnails}>{unavailable.map((item) => <img key={item.id} src={item.image} alt={item.title} width={48} height={48} loading="lazy" />)}</div>
               </section> : null}
@@ -193,7 +208,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
       </div>
       {!loading && !error ? <aside className={styles.sidebar} aria-label={t.summary}>
         <section><h2>{t.coupons}</h2><CouponCodeForm locale={locale} onRedeem={redeem} />
-          <div className={styles.sectionHeader}><span>{coupon ? coupon.title : eligibleCoupons.length > 0 ? locale === "zh" ? `${eligibleCoupons.length} 张可用优惠券` : `${eligibleCoupons.length} available ${eligibleCoupons.length === 1 ? "coupon" : "coupons"}` : t.noCoupons}</span><Button size="sm" variant="tertiary" aria-label={`${t.edit} ${t.coupons}`} onClick={() => setDrawer("coupons")}>{t.edit}</Button></div>
+          <div className={styles.sectionHeader}><span>{coupon ? coupon.title : eligibleCoupons.length > 0 ? locale === "zh" ? `${eligibleCoupons.length} 张可用优惠券` : `${eligibleCoupons.length} available ${eligibleCoupons.length === 1 ? "coupon" : "coupons"}` : t.noCoupons}</span><Button size="sm" variant="tertiary" aria-label={`${t.edit} ${t.coupons}`} aria-haspopup="dialog" onClick={() => setDrawer("coupons")}>{t.edit}</Button></div>
           {coupon && totals.discountCents === 0 ? <p className={styles.attention}>{t.couponSelected}</p> : null}
         </section>
         <section className={styles.summary} aria-live="polite" aria-atomic="true" data-slot="cart-totals">
@@ -214,17 +229,18 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
       </aside> : null}
     </main>
     <div className={styles.footer}><Footer {...footer} /></div>
-    <Drawer className={styles.cartDrawer} open={drawer !== null} title={drawer ? drawerTitles[drawer] : ""} closeLabel={t.close} onClose={() => setDrawer(null)}
-      footer={<div className={styles.drawerFooter}><Button size="lg" form="full" onClick={() => setDrawer(null)}>{drawer === "summary" ? t.back : t.done}</Button></div>}>
+    <Drawer className={styles.cartDrawer} open={drawer !== null} title={drawer ? drawerTitles[drawer] : ""} closeLabel={t.close} onClose={closeDrawer}
+      footer={<div className={styles.drawerFooter}><Button size="lg" form="full" onClick={closeDrawer}>{drawer === "summary" ? t.back : t.done}</Button></div>}>
+      {notice.message && drawer && notice.drawer === drawer ? <div className={styles.drawerNotice}><p role="status">{notice.message}</p>{removed && drawer === "unavailable" ? <Button size="sm" variant="tertiary" onClick={undoRemove}>{t.undo}</Button> : null}</div> : null}
       {drawer === "coupons" ? <><p>{t.couponHint}</p><CouponCodeForm locale={locale} onRedeem={redeem} />
-        {coupons.length === 0 ? <p>{t.noCoupons}</p> : <ul className={styles.couponList}>{coupons.map((entry) => <li key={entry.id}>
+        {coupons.length === 0 ? <p className={styles.drawerEmpty}>{t.noCoupons}</p> : <ul className={styles.couponList}>{coupons.map((entry) => <li key={entry.id}>
           <h3 className={styles.couponTitle}>{entry.title}</h3><p>{entry.description}</p><p className={styles.muted}>{entry.code}</p>
           {totals.subtotalCents < entry.minSubtotalCents ? <p className={styles.attention}>{t.condition}</p> : null}
-          <Button size="sm" disabled={couponId !== entry.id && (totals.quantity === 0 || totals.subtotalCents < entry.minSubtotalCents)} onClick={() => { setCouponId(couponId === entry.id ? null : entry.id); setNotice(t.couponApplied); }}>{couponId === entry.id ? t.unused : t.use}</Button>
-        </li>)}</ul>}<Button variant="tertiary" onClick={() => setCouponId(null)}>{t.noCoupon}</Button>
+          <Button size="sm" aria-pressed={couponId === entry.id} disabled={couponId !== entry.id && (totals.quantity === 0 || totals.subtotalCents < entry.minSubtotalCents)} onClick={() => applyCoupon(couponId === entry.id ? null : entry.id)}>{couponId === entry.id ? t.unused : t.use}</Button>
+        </li>)}</ul>}{couponId ? <Button variant="tertiary" onClick={() => applyCoupon(null)}>{t.noCoupon}</Button> : null}
       </> : null}
-      {drawer === "unavailable" ? <ul className={styles.itemList}>{unavailable.map((item) => <CartRow key={item.id} item={item} locale={locale} onRemove={() => removeItem(item)} onSave={() => saveItem(item)}
-        notified={notifications.includes(item.id)} onNotify={item.notifyAvailable ? () => { setNotifications((current) => [...current, item.id]); setNotice(t.notified); } : undefined} />)}</ul> : null}
+      {drawer === "unavailable" ? unavailable.length === 0 ? <p className={styles.drawerEmpty}>{t.unavailableEmpty}</p> : <ul className={styles.itemList}>{unavailable.map((item) => <CartRow key={item.id} item={item} locale={locale} onRemove={() => removeItem(item)} onSave={() => saveItem(item)}
+        notified={notifications.includes(item.id)} onNotify={item.notifyAvailable ? () => { setNotifications((current) => [...current, item.id]); showNotice(t.notified); } : undefined} />)}</ul> : null}
       {drawer === "protection" ? <div className={styles.guaranteeDetails}>{cartGuarantees.map((guarantee) => <section key={guarantee.en}><h3>{guarantee[locale]}</h3><p>{locale === "zh" ? guarantee.zhBody : guarantee.enBody}</p></section>)}</div> : null}
       {drawer === "summary" ? <><p>{t.selected} {itemCountLabel(totals.quantity)}</p><ul className={styles.orderItems}>{available.filter((item) => item.selected).map((item) => <li key={item.id}><span>{item.title}<small>× {item.quantity}</small></span><strong>{money(item.priceCents * item.quantity)}</strong></li>)}</ul>
         <div className={styles.summary}><dl>

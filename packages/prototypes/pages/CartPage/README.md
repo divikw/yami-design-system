@@ -17,4 +17,12 @@ This delivery targets light mode only. The new component and cart stories fix th
 
 ## Verification
 
-Stories: PC, Mobile, Selected, Empty, Loading, Failure with Retry, LongCart, NoCoupons, and a hidden Interaction story. The calculator tests shipping boundaries, selected/ineligible items, quantity changes, coupon thresholds, integer cents and nonnegative merchandise totals. Browser tests cover 360/375/402/768/1024/1440px viewport geometry, merchant-header wrapping, price/action order, compact drawer rows, drawer behavior and cart interactions.
+Stories: PC, Mobile, Selected, Empty, Loading, Failure with Retry, LongCart, NoCoupons, CouponDrawer, EmptyCouponDrawer, UnavailableDrawer, SavedForLater, and a hidden Interaction story. The calculator tests shipping boundaries, selected/ineligible items, quantity changes, coupon thresholds, integer cents and nonnegative merchandise totals. Browser tests cover 360/375/402/768/1024/1440px viewport geometry, merchant-header wrapping, price/action order, compact drawer rows, drawer behavior and cart interactions.
+
+## Comparison review — 2026-10-13
+
+Observed the live PC cart without changing selections, quantities or customer data. The source uses a 480px right drawer, 60×24px quantity pills, 16px product titles, 12px underlined row actions, a 4px rounded shipping track, a dark add-more action with a right arrow, and an email/social footer band. The local page now follows these details through maintained components and semantic tokens; button radii and heading sizes follow the design-system contract.
+
+This review also fixes local behavior: Undo restores the deleted item's position, coupon application/removal reports the correct result inside the active drawer, and clearing unavailable items shows an empty state with Undo. Closing that empty drawer returns focus to the cart title when its original opener has disappeared. Browser regression covers these paths and the existing six viewport widths.
+
+Remaining intentional prototype boundaries: fixture quantities/stock/coupons and shipping rules are examples; checkout is a local summary; notifications, newsletter submission and production payment widgets have no service integration. The source's account-specific cart size, rotating security message and personalized recommendations are not reproduced. Mobile is a proposed responsive layout, not a verified clone of the live mobile page.

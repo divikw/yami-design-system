@@ -73,6 +73,7 @@ test("CartPage fits mobile and desktop, supports quantities, coupon invalidation
     expect(container.querySelector(`select[aria-label="${first.title} quantity"]`)).toBeNull();
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     expect(container.querySelector(`select[aria-label="${first.title} quantity"]`)).not.toBeNull();
+    expect(container.querySelector('[aria-labelledby="merchant-yami"] [data-slot="cart-item"] h3')!.textContent).toBe(first.title);
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
@@ -117,7 +118,7 @@ test("CartPage aligns checkbox glyphs and targets, compacts discovery gutters an
       expect(Math.abs(tabs.getBoundingClientRect().left - heading.getBoundingClientRect().left)).toBeLessThan(1);
       expect(Math.abs(tabs.getBoundingClientRect().left - products.getBoundingClientRect().left)).toBeLessThan(1);
       const learn = page.getByRole("button", { name: "Learn more", exact: true });
-      const learnElement = container.querySelector<HTMLElement>('aside[aria-label="Order summary"] button[aria-haspopup="dialog"]')!;
+      const learnElement = Array.from(container.querySelectorAll<HTMLButtonElement>('aside[aria-label="Order summary"] button')).find((button) => button.textContent === "Learn more")!;
       expect(getComputedStyle(learnElement).textDecorationLine).toContain("underline");
       await learn.click();
       await expect.element(page.getByRole("dialog", { name: "Shopping protection", exact: true })).toBeVisible();
@@ -166,5 +167,40 @@ test("CartPage keeps shipping progress visible at zero, partial and qualified am
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+
+test("CartPage reports coupon changes inside the drawer and supports undo after clearing unavailable items", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const fixture = createCartPageFixture("en");
+  fixture.initialItems = fixture.initialItems.map((item) => ({ ...item, selected: item.availability === "available" }));
+  try {
+    flushSync(() => root.render(<CartPage {...fixture} />));
+    await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
+    let dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
+    await dialog.getByRole("button", { name: "Apply", exact: true }).click();
+    await expect.element(dialog.getByRole("status")).toHaveTextContent("Coupon applied");
+    await expect.element(dialog.getByRole("button", { name: "Remove coupon", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await dialog.getByRole("button", { name: "Remove coupon", exact: true }).click();
+    await expect.element(dialog.getByRole("status")).toHaveTextContent("Coupon removed");
+    await expect.element(dialog.getByRole("button", { name: "Apply", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await userEvent.keyboard("{Escape}");
+    expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).not.toContain("Discount");
+    await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
+    dialog = page.getByRole("dialog", { name: "Unavailable items", exact: true });
+    const unavailable = fixture.initialItems.filter((item) => item.availability !== "available");
+    for (const item of unavailable) await dialog.getByRole("button", { name: `Delete ${item.title}`, exact: true }).click();
+    await expect.element(dialog.getByText("No unavailable items", { exact: true })).toBeVisible();
+    await expect.element(dialog.getByRole("status")).toHaveTextContent("Item deleted");
+    await dialog.getByRole("button", { name: "Undo", exact: true }).click();
+    await expect.element(dialog.getByText(unavailable.at(-1)!.title, { exact: true })).toBeVisible();
+    await dialog.getByRole("button", { name: `Delete ${unavailable.at(-1)!.title}`, exact: true }).click();
+    await userEvent.keyboard("{Escape}");
+    await expect.element(page.getByRole("heading", { name: "Shopping cart", exact: true })).toHaveFocus();
+  } finally {
+    root.unmount(); container.remove();
   }
 });

@@ -43,9 +43,10 @@
 .merchantIdentity { display: flex; align-items: center; gap: var(--space-150); min-height: 44px; }
 .merchantCopy { min-width: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--space-050) var(--space-100); }
 .merchantIdentity strong { font-size: var(--font-size-heading-md); }
+.chevron { display: block; width: var(--space-200); height: var(--space-200); background: currentColor; mask: url("../../../design-system/assets/icons/system/arrow-right.svg") center / contain no-repeat; }
 .shipping { min-width: 0; }
-.shipping p { font-size: var(--font-size-caption-sm); }
-.shipping progress { appearance: none; display: block; width: 100%; height: var(--space-050); margin-top: var(--space-050); accent-color: var(--text-primary); border: 0; background: var(--fill-skeleton); }
+.shipping p { font-size: var(--font-size-body-md); }
+.shipping progress { appearance: none; display: block; width: 100%; height: var(--space-050); margin-top: var(--space-050); accent-color: var(--text-primary); border: 0; border-radius: var(--radius-button-primary); overflow: hidden; background: var(--fill-skeleton); }
 .shipping progress::-webkit-progress-bar { background: var(--fill-skeleton); }
 .shipping progress::-webkit-progress-value { background: var(--text-primary); }
 .shipping progress::-moz-progress-bar { background: var(--text-primary); }
@@ -62,7 +63,7 @@
 .item:not(:has(.itemCheck)) .itemInfo { grid-column: 2; }
 .item:not(:has(.itemCheck)) .rowActions { grid-column: 2; grid-row: 3; }
 .rowActions { grid-column: 3; grid-row: 2; display: flex; flex-wrap: wrap; column-gap: var(--space-100); row-gap: var(--space-150); margin-inline-start: calc(var(--space-150) * -1); }
-.rowActions .actionLink { font-weight: var(--font-weight-normal); text-decoration: underline; text-underline-offset: var(--space-025); }
+.rowActions .actionLink { font-size: var(--font-size-link-sm); line-height: var(--line-height-link-sm); font-weight: var(--font-weight-normal); text-decoration: underline; text-underline-offset: var(--space-025); }
 .quantity { grid-column: 4; grid-row: 1 / 3; min-width: 0; }
 .item:has(.quantity form) .quantity { grid-column: 3 / -1; grid-row: 3; }
 .price { grid-column: 5; grid-row: 1 / 3; display: grid; justify-items: end; gap: var(--space-025); }
@@ -100,6 +101,12 @@
 .notice { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-200); padding: var(--space-100) var(--space-300); background: var(--surface-primary); }
 .skeleton { width: 100%; height: 120px; background: var(--fill-skeleton); border-radius: var(--radius-component-default); }
 .cartDrawer p { margin: 0; }
+.drawerNotice { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-100); padding: var(--space-150); margin-bottom: var(--space-200); background: var(--surface-secondary); border-radius: var(--radius-component-default); }
+.cartDrawer .drawerEmpty { padding-block: var(--space-400); color: var(--text-secondary); text-align: center; }
+
+@media (min-width: 1024px) {
+  .itemInfo h3 { font-size: var(--font-size-body-xl); line-height: var(--line-height-body-xl); }
+}
 .drawerFooter { padding: var(--space-200) var(--space-400); border-top: var(--stroke-default) solid var(--divider-default); }
 .couponList { display: grid; gap: var(--space-200); }
 .couponList .couponTitle { font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); font-weight: var(--font-weight-emphasize); }

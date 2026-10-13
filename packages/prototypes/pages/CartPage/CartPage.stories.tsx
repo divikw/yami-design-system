@@ -40,6 +40,22 @@ export const Loading: Story = { render: renderScenario("loading") };
 export const Failure: Story = { render: renderScenario("error") };
 export const LongCart: Story = { render: renderScenario("long") };
 export const NoCoupons: Story = { render: renderScenario("no-coupons") };
+export const CouponDrawer: Story = {
+  render: renderScenario("selected"),
+  play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(编辑 优惠券|Edit Coupons)$/ })); },
+};
+export const EmptyCouponDrawer: Story = {
+  render: renderScenario("no-coupons"),
+  play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(编辑 优惠券|Edit Coupons)$/ })); },
+};
+export const UnavailableDrawer: Story = {
+  render: renderScenario("selected"),
+  play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(查看全部 以下商品已失效|View all Unavailable items)$/ })); },
+};
+export const SavedForLater: Story = {
+  render: renderScenario("selected"),
+  play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("tab", { name: /^(稍后购买|Save for later) \(1\)$/ })); },
+};
 export const Interaction: Story = {
   tags: ["!dev"], render: () => <Demo locale="en" />,
   play: async ({ canvasElement }) => {
