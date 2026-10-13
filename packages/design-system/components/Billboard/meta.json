@@ -56,7 +56,7 @@
   },
   "tokens": [
     "--surface-primary",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-thick",
     "--radius-surface-default",
     "--font-family-ios",

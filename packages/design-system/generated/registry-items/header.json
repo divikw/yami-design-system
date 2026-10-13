@@ -459,6 +459,7 @@
       "--divider-emphasis",
       "--divider-subtle",
       "--fill-secondary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-caption-sm",
@@ -505,6 +506,10 @@
       "type-hierarchy"
     ],
     "tokenBindings": {
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".brand:focus-visible, .search:has(.searchField:focus-visible), other focusable slots"
+      },
       "--surface-primary": {
         "property": "background",
         "selector": ".root fallback, .search, .railControl"
@@ -523,7 +528,7 @@
       },
       "--border-focus": {
         "property": "border-color",
-        "selector": ".search ring at --stroke-thick; outline-color on every focusable slot"
+        "selector": ".search border at --stroke-thick; .searchSuggestion[data-selected]"
       },
       "--divider-subtle": {
         "property": "background",
@@ -578,5 +583,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "15ce548f1ccc9fb6a92b47c07ae1ce0321e12d28ef773014409a18d9dacb04d7"
+  "contentDigest": "f7834a9293c9d7d2cfa37c3077eb4a97c2d68e75ff4632ff9b942d5c70645035"
 }

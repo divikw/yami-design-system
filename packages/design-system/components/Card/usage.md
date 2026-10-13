@@ -53,7 +53,7 @@ Card 默认使用：
 | 默认 | 使用所选的 `primary`、`secondary` 或 `inverse` 表面 |
 | 悬浮 | 在背景中混入 8% 的表面文字颜色；仅适用于支持悬浮的精细指针设备 |
 | 按下 | 在背景中混入 16% 的表面文字颜色；粗指针设备也可获得反馈 |
-| 键盘焦点 | 2px 的 `--border-focus` 轮廓，偏移 2px；跟随周围页面的主题，与卡片自身的明暗极性无关 |
+| 键盘焦点 | 2px 的 `--focus-ring` 轮廓，偏移 2px；跟随周围页面的主题，与卡片自身的明暗极性无关 |
 | 禁用按钮 | 原生 `disabled` 阻止激活；保留表面，使用禁用文字颜色和 `not-allowed` 光标，不显示悬浮或按下反馈 |
 
 交互卡片至少提供 44×44px 的点击区域，不向相邻内容扩展。开启减少动态效果偏好时，关闭背景过渡。`interactive={false}` 会关闭悬浮、按下反馈和最小点击尺寸；可聚焦元素仍会显示焦点轮廓，禁用状态的文字颜色和光标也会保留。
@@ -278,7 +278,7 @@ Interaction is inferred for `as="button"` and `as="a"` with `href`. An empty `hr
 | Rest | Selected `primary`, `secondary`, or `inverse` surface |
 | Hover | Mix 8% of the surface's reading color into its background; fine pointers with hover support only |
 | Press | Mix 16% of the reading color into the background; also available with coarse pointers |
-| Keyboard focus | 2px `--border-focus` outline with 2px offset, following the surrounding theme's canvas rather than the card's own surface polarity |
+| Keyboard focus | 2px `--focus-ring` outline with 2px offset, following the surrounding theme's canvas rather than the card's own surface polarity |
 | Disabled button | Native `disabled` prevents activation; preserve surface, use disabled text color and `not-allowed` cursor, suppress hover/press |
 
 Interactive cards reserve at least 44×44px without extending the hit area over adjacent content. Reduced motion disables the background transition. `interactive={false}` suppresses hover/press styling and the minimum target; a focusable host still receives a focus outline, and disabled text color and cursor remain available.

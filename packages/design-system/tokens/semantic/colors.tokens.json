@@ -302,6 +302,18 @@
       "$description": "用于反向极性表面上不可点击或不可用状态的按钮。"
     }
   },
+  "focus": {
+    "ring": {
+      "$type": "color",
+      "$value": "{color.blue.600}",
+      "$description": "键盘可见焦点外框，浅色默认背景使用深蓝；独立于组件边框、聚焦边框和选中状态。"
+    },
+    "ring-inverse": {
+      "$type": "color",
+      "$value": "{color.blue.400}",
+      "$description": "反向极性背景上的键盘可见焦点外框；浅色主题深背景使用亮蓝，深色主题浅背景使用深蓝。"
+    }
+  },
   "border": {
     "default": {
       "$type": "color",

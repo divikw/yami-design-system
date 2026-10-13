@@ -128,9 +128,8 @@
   }
 }
 
-.clear:focus-visible,
-.pagination button:focus-visible {
-  outline: 2px solid var(--border-focus);
+.clear:focus-visible {
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -199,40 +198,9 @@
 }
 
 .pagination {
-  display: flex;
   max-width: var(--search-results-content-max-width);
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-050);
   margin-inline: auto;
   padding: var(--space-300) var(--space-600) var(--space-800);
-  overflow-x: auto;
-}
-
-.pagination button,
-.pagination span {
-  display: inline-grid;
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-  place-items: center;
-  color: var(--text-primary);
-  background: var(--fill-primary);
-  border: 0;
-  border-radius: var(--radius-full);
-  font-family: inherit;
-  font-size: var(--font-size-body-md);
-  line-height: var(--line-height-body-md);
-}
-
-.pagination button {
-  cursor: pointer;
-}
-
-.pagination button[aria-current="page"] {
-  color: var(--text-primary-inverse);
-  background: var(--fill-inverse);
-  font-weight: var(--font-weight-emphasize);
 }
 
 .srOnly,
@@ -316,7 +284,7 @@
   }
 
   .mobileHeaderAction:focus-visible {
-    outline: 2px solid var(--border-focus);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
   }
 
@@ -500,9 +468,5 @@
 
   .skeletonChip {
     height: 32px;
-  }
-
-  .pagination {
-    display: none;
   }
 }

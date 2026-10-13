@@ -109,7 +109,7 @@
 .mobileBrand:focus-visible,
 .mobileAction:focus-visible,
 .searchScan:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -252,6 +252,11 @@
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
   outline: none;
+}
+
+.search:has(.searchField:focus-visible) {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .searchField::placeholder {
@@ -447,7 +452,7 @@
 }
 
 .searchSuggestion:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
 

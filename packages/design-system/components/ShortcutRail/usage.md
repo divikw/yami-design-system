@@ -99,3 +99,8 @@ background without a border or shadow.
   ariaLabel="Featured shortcuts"
 />
 ```
+
+
+## Keyboard focus geometry
+
+Shortcut links use a 2px inset focus outline inside the scroll clip. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

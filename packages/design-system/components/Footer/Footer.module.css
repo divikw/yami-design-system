@@ -371,18 +371,19 @@
 .subscribeSubmit:focus-visible,
 .appButton:focus-visible,
 .legalLink:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 .subscribeInput:focus-visible {
   border-color: var(--border-focus);
-  outline: none;
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .legalLink:focus-visible,
 .appButton:focus-visible {
-  outline-color: var(--border-focus-inverse);
+  outline-color: var(--focus-ring-inverse);
 }
 
 /* Figma's 1440px variant groups the four visual columns into two rows and
@@ -454,4 +455,8 @@
   .closingBar {
     padding-inline: var(--space-800);
   }
+}
+
+:global(.dark) .closingBar {
+  --focus-ring-inverse: var(--focus-ring);
 }

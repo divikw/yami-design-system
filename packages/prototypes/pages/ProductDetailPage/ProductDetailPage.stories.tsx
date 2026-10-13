@@ -418,7 +418,7 @@ export const DesktopRegression: Story = {
       '[data-slot="product-detail-utility-row"]'
     );
     const breadcrumb = canvasElement.querySelector<HTMLElement>(
-      'nav[aria-label="Breadcrumb"]'
+      '[data-slot="product-detail-breadcrumb"]'
     );
     const shareGroup = canvasElement.querySelector<HTMLElement>(
       '[role="group"][aria-label="Share product"]'
@@ -1654,7 +1654,7 @@ export const MobileRegression: Story = {
       '[data-slot="product-detail-utility-row"]'
     );
     const breadcrumb = canvasElement.querySelector<HTMLElement>(
-      'nav[aria-label="Breadcrumb"]'
+      '[data-slot="product-detail-breadcrumb"]'
     );
     const shareGroup = canvasElement.querySelector<HTMLElement>(
       '[role="group"][aria-label="Share product"]'

@@ -44,7 +44,7 @@
 .header button { background: transparent; }
 
 .root pre:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: calc(var(--stroke-thick) * -1);
 }
 

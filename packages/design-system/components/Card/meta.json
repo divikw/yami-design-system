@@ -84,7 +84,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Focusable cards show a 2px --border-focus outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
+      "note": "Focusable cards show a 2px --focus-ring outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
     }
   },
 
@@ -98,7 +98,7 @@
     "--text-disabled-inverse",
     "--border-default",
     "--border-default-inverse",
-    "--border-focus",
+    "--focus-ring",
     "--radius-surface-default",
     "--space-150",
     "--space-200",
@@ -118,7 +118,7 @@
     "--text-disabled-inverse": { "property": "color", "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])" },
     "--border-default": { "property": "border-color", "selector": ".bordered" },
     "--border-default-inverse": { "property": "border-color", "selector": ".bordered.surface-inverse" },
-    "--border-focus": { "property": "outline-color", "selector": ".card:focus-visible" },
+    "--focus-ring": { "property": "outline-color", "selector": ".card:focus-visible" },
     "--radius-surface-default": { "property": "border-radius", "selector": ".card" },
     "--space-150": { "property": "padding", "selector": ".pad-sm" },
     "--space-200": { "property": "padding", "selector": ".pad-md" },

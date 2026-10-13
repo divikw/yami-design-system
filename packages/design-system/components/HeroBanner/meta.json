@@ -84,7 +84,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Campaign links and paging buttons remain keyboard reachable with visible focus."
+      "note": "Campaign links and paging buttons remain keyboard reachable with visible focus. Campaign links use a 2px inset focus outline so scrolling cannot clip its edges."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -102,7 +102,7 @@
     "--color-white-1000",
     "--text-primary",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--divider-default",
     "--divider-emphasis",
     "--stroke-default",

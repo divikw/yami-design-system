@@ -155,7 +155,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "2px solid var(--border-focus) ring with 2px outline-offset. Never browser default."
+      "note": "2px solid var(--focus-ring) ring with 2px outline-offset. Never browser default."
     },
     "disabledState": {
       "ruleId": "no-opacity-disabled",
@@ -191,8 +191,8 @@
     "--text-primary-inverse",
     "--text-disabled",
     "--text-disabled-inverse",
-    "--border-focus",
-    "--border-focus-inverse",
+    "--focus-ring",
+    "--focus-ring-inverse",
     "--radius-button-emphasis",
     "--radius-button-primary",
     "--radius-component-default",
@@ -238,7 +238,7 @@
     "--text-on-emphasis": { "property": "color", "selector": ".emphasis" },
     "--text-primary-inverse": { "property": "color", "selector": ".primary" },
     "--text-disabled": { "property": "color", "selector": ".button[aria-disabled='true']" },
-    "--border-focus": { "property": "outline-color", "selector": ".button:focus-visible" },
+    "--focus-ring": { "property": "outline-color", "selector": ".button:focus-visible" },
     "--radius-button-emphasis": {
       "property": "border-radius",
       "selector": ".emphasis.iconOnly"
@@ -269,7 +269,7 @@
     "ariaPattern": "button",
     "tapTarget": { "ios": 44, "android": 48 },
     "requiresAriaLabel": "when iconOnly=true",
-    "focusVisible": "2px solid var(--border-focus), 2px offset",
+    "focusVisible": "2px solid var(--focus-ring), 2px offset",
     "loadingAnnounces": "aria-busy=true"
   },
 

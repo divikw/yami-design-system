@@ -61,7 +61,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Uses a 2px --border-focus outline with 2px offset."
+      "note": "Uses a 2px --focus-ring outline with 2px offset. Scrollable chip groups reserve 4px focus gutters on every edge; selected strokes remain unchanged."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -75,6 +75,7 @@
   "tokens": [
     "--border-default",
     "--border-focus",
+    "--focus-ring",
     "--color-black-200",
     "--fill-primary",
     "--fill-secondary",
@@ -93,6 +94,7 @@
     "--text-secondary"
   ],
   "tokenBindings": {
+    "--focus-ring": { "property": "outline-color", "selector": ".chip:focus-visible, .categoryToggle:focus-visible" },
     "--fill-secondary": {
       "property": "background-color",
       "selector": ".filled"
@@ -106,8 +108,8 @@
       "selector": ".outlined"
     },
     "--border-focus": {
-      "property": "inset box-shadow / outline-color",
-      "selector": ".filled[aria-pressed='true'], :focus-visible"
+      "property": "inset box-shadow",
+      "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
     },
     "--color-black-200": {
       "property": "background-color",

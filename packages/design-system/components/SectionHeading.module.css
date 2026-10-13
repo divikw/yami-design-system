@@ -142,7 +142,7 @@
 
 .viewAll:focus-visible,
 .viewAllMobile:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 
@@ -249,7 +249,7 @@
 }
 
 .titleLink:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: -2px;
 }
 

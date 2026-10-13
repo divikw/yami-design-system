@@ -207,7 +207,7 @@
     "--divider-default",
     "--divider-emphasis",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--radius-component-default",
@@ -228,7 +228,8 @@
     "--space-200",
     "--space-250",
     "--space-300",
-    "--space-400"
+    "--space-400",
+    "--focus-ring-inverse"
   ],
   "tokenBindings": {
     "--surface-primary": {

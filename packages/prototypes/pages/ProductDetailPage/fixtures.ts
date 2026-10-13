@@ -239,8 +239,8 @@ export function createProductDetailPageFixture(
     header: createProductDetailHeader(locale),
     footer: createFooter(locale),
     breadcrumb: [
-      { label: "Beauty", href: "#beauty" },
-      { label: "Masks", href: "#masks" },
+      { label: "Beauty", href: `https://www.yami.com/us/${locale}/c/beauty/2` },
+      { label: "Masks", href: `https://www.yami.com/us/${locale}/c/masks/59` },
       { label: "Sheet Masks" },
     ],
     images: productImages.map(([id, hash, alt], index) => ({
@@ -604,8 +604,8 @@ export function createProductDetailPageFixture(
   return {
     ...fixture,
     breadcrumb: [
-      { label: "美妆护肤", href: "#beauty" },
-      { label: "面膜", href: "#masks" },
+      { label: "美妆护肤", href: "https://www.yami.com/us/zh/c/beauty/2" },
+      { label: "面膜", href: "https://www.yami.com/us/zh/c/masks/59" },
       { label: "贴片面膜" },
     ],
     images: fixture.images.map((item, index) => ({

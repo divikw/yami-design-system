@@ -89,3 +89,8 @@ label is hidden. Without a destination, the title remains plain text.
 Mobile card sections keep their title left-aligned, including when
 `headingAlign="center"` is selected. Desktop still uses the selected alignment.
 Mobile `mobileSurface="plain"` sections may still center their title.
+
+
+## Keyboard focus geometry
+
+Campaign and brand heading links use a 2px inset focus outline inside their clipped containers. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

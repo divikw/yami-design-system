@@ -44,11 +44,21 @@
   width: 100%;
 }
 
+.list[data-full-width="true"] .track {
+  box-sizing: border-box;
+  min-width: 100%;
+}
+
 .root[data-orientation="vertical"] .list {
   flex-direction: column;
   align-items: stretch;
   overflow-x: visible;
   overflow-y: auto;
+}
+
+.root[data-orientation="vertical"] .track {
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .trigger {
@@ -92,21 +102,26 @@
 }
 
 .trigger:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
+  /* Scrolling lists clip external outlines; keep the full indicator visible. */
+  outline-offset: -2px;
+}
+
+.list[data-variant="primary"][data-style="b"] .trigger:focus-visible {
+  outline: none;
+}
+
+.list[data-variant="primary"][data-style="b"] .trigger:focus-visible::before {
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 .list[data-inverse="true"] .trigger:focus-visible {
-  outline-color: var(--border-focus-inverse);
+  outline-color: var(--focus-ring-inverse);
 }
 
-.trigger[aria-disabled="true"] {
-  color: var(--text-disabled);
-  cursor: not-allowed;
-}
-
-.list[data-inverse="true"] .trigger[aria-disabled="true"] {
-  color: var(--text-disabled-inverse);
+.list[data-inverse="true"][data-variant="primary"][data-style="b"] .trigger:focus-visible::before {
+  outline-color: var(--focus-ring-inverse);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -195,6 +210,7 @@
 
 .list[data-variant="primary"][data-style="b"] .track {
   position: relative;
+  box-sizing: border-box;
   min-height: 52px;
   gap: 0;
   padding: var(--space-050) calc(var(--space-100) + var(--space-025));
@@ -269,7 +285,7 @@
 .list[data-variant="secondary"] .trigger::after {
   left: 0;
   right: 0;
-  bottom: -1px;
+  bottom: 0;
   height: var(--stroke-thick);
   background: currentColor;
 }
@@ -351,9 +367,34 @@
   flex: 1 1 0;
 }
 
+.list[data-variant] .trigger[aria-disabled="true"][data-state] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.list[data-inverse="true"][data-variant] .trigger[aria-disabled="true"][data-state] {
+  color: var(--text-disabled-inverse);
+}
+
 .root[data-orientation="vertical"] .trigger {
   width: 100%;
   justify-content: flex-start;
+}
+
+.root[data-orientation="vertical"] .list[data-variant="primary"][data-style="a"],
+.root[data-orientation="vertical"] .list[data-variant="secondary"] {
+  gap: var(--space-050);
+}
+
+.root[data-orientation="vertical"] .list[data-variant="primary"][data-style="a"] .trigger {
+  height: 44px;
+}
+
+.root[data-orientation="vertical"] .list[data-variant="primary"][data-style="a"] .trigger::after {
+  bottom: calc(
+    (44px - var(--line-height-body-xl)) / 2 - var(--space-050) -
+      var(--stroke-thick)
+  );
 }
 
 .root[data-orientation="vertical"] .list[data-variant="secondary"] .trigger::after {
@@ -373,7 +414,7 @@
 }
 
 .content:focus-visible {
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: var(--space-050);
 }
 
@@ -407,6 +448,12 @@
 }
 
 @media (min-width: 1024px) {
+  .root[data-orientation="horizontal"]
+    .list[data-variant="primary"][data-style="b"]
+    .track::before {
+    inset-block: calc(var(--space-100) - var(--space-025));
+  }
+
   .root[data-orientation="horizontal"]
     .list[data-variant="tertiary"]
     .trigger {

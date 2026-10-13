@@ -85,8 +85,8 @@
   },
   "design": {
     "tokens": [
-      "--border-focus",
       "--color-white-1000",
+      "--focus-ring",
       "--font-size-body-md",
       "--font-size-heading-md",
       "--font-weight-emphasize",
@@ -127,5 +127,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "84a57c75c7ae0c0d351887df254cfd3025d13d1a5b923a3f8cf5c84e89018684"
+  "contentDigest": "4f7e92d7a4b259cda21a17d849880134548b5511c4fb1276856befe7319293c3"
 }

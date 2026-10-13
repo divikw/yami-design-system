@@ -13,8 +13,8 @@
  *     keeping the element keyboard-focusable so SR can still announce it.
  *     Clicks are blocked via the onClick guard.
  *   - Loading additionally sets aria-busy="true".
- *   - Focus-visible outline is 2px solid var(--border-focus) with 2px offset
- *     (var(--border-focus-inverse) when inverse=true).
+ *   - Focus-visible outline is 2px solid var(--focus-ring) with 2px offset
+ *     (var(--focus-ring-inverse) when inverse=true).
  *
  * Backward compat: legacy props `iconOnly` and `fullWidth` are deprecated
  * but still honored — they map to `form="icon"` / `form="full"` when set.

@@ -72,6 +72,7 @@
       "--color-black-200",
       "--fill-primary",
       "--fill-secondary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-weight-normal",
@@ -92,6 +93,10 @@
       "semantic-color-only"
     ],
     "tokenBindings": {
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".chip:focus-visible, .categoryToggle:focus-visible"
+      },
       "--fill-secondary": {
         "property": "background-color",
         "selector": ".filled"
@@ -105,8 +110,8 @@
         "selector": ".outlined"
       },
       "--border-focus": {
-        "property": "inset box-shadow / outline-color",
-        "selector": ".filled[aria-pressed='true'], :focus-visible"
+        "property": "inset box-shadow",
+        "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
       },
       "--color-black-200": {
         "property": "background-color",
@@ -135,5 +140,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f429d34ccc5cdb6cf76cc1bddfd933e8cc4b2a7bf9b4747ec6d726aa7fd01e3d"
+  "contentDigest": "cc7a2db7686272e74f4a95747c4b06f015be50dd6f8a0de424c065394d71c7fd"
 }

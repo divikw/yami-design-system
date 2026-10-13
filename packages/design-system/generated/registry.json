@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "6f794444466320f794391ca85fde21298680d11d1c36c414a49376a83f80c7c4"
+      "digest": "58f86fb1e8302815f021c5be386b845c88f718b159998810c7f0450da9e4232a"
     },
     {
       "name": "activity-page-header",
@@ -27,7 +27,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/activity-page-header.json",
-      "digest": "1adc5811025e84763ec5bb0d5938268c987ef61fdaf6a99aaa11e87155ab5a61"
+      "digest": "6ed6114e4d58bbdce3647443bb4c4750b079e44d341746adf8b88b5cdaf41eb3"
     },
     {
       "name": "aspect-ratio",
@@ -63,7 +63,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/billboard.json",
-      "digest": "2cd9e3e4793d3cc11498b77c1b2a0c49b37065278607ec05bc56c8bf4b4b4d1d"
+      "digest": "3bbaf92f3185f9886946624617bffcbb4a1336a25b48bf6b168f8164a7061077"
     },
     {
       "name": "brand-product-rail",
@@ -72,7 +72,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/brand-product-rail.json",
-      "digest": "d97342e4d8f90de92b80aeb42188df9e739a96bdad0c50880875980cdb810cdd"
+      "digest": "8ab04561c803c828907d7464a194d5185706974f4c210f3151f29f3e3c1cc21b"
     },
     {
       "name": "button",
@@ -81,7 +81,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "5b2049c056bb682511aeddad3af95ebdeffee7d0b1736596bf206db225c8dd63"
+      "digest": "4fc48190b01885dfaf36b2a9927c22c47f21c571b051805011235f1a6fd4ec40"
     },
     {
       "name": "button-group",
@@ -99,7 +99,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/card.json",
-      "digest": "7459df1df012c5b5b72df85e2d52a2f8c11be245dbc5fc9e838fa968b7796791"
+      "digest": "476460b7b9d727cd504fbe586dc22dbd1f364774f34991da8787d472738508c4"
     },
     {
       "name": "checkbox",
@@ -108,7 +108,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
-      "digest": "9aabcfec0724d38bb80128bd5aa5985e7ff056d058e5e8ba50253c15d8727305"
+      "digest": "1957da4ab907571e6a9b00b46dce1de58e79c3d6f92e80b554499f9a877ca383"
     },
     {
       "name": "dialog",
@@ -135,7 +135,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/filter-chip.json",
-      "digest": "f429d34ccc5cdb6cf76cc1bddfd933e8cc4b2a7bf9b4747ec6d726aa7fd01e3d"
+      "digest": "cc7a2db7686272e74f4a95747c4b06f015be50dd6f8a0de424c065394d71c7fd"
     },
     {
       "name": "footer",
@@ -144,7 +144,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/footer.json",
-      "digest": "2aa3a5aae7f7a63ed7152cdbb7b9fe10136f81b2945857d35f05758d551432aa"
+      "digest": "3a9b80ef756848799e589327cff470f39be7dcec3275b1e62e92558d474e1519"
     },
     {
       "name": "header",
@@ -153,7 +153,7 @@
       "status": "beta",
       "version": "0.2.0",
       "path": "registry-items/header.json",
-      "digest": "15ce548f1ccc9fb6a92b47c07ae1ce0321e12d28ef773014409a18d9dacb04d7"
+      "digest": "f7834a9293c9d7d2cfa37c3077eb4a97c2d68e75ff4632ff9b942d5c70645035"
     },
     {
       "name": "hero-banner",
@@ -162,7 +162,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "4d2ebcd153bad23e3c91679ff0fe6ba2c454f6d0e347e34999a55a9013aa806b"
+      "digest": "8336c8f1d737e1b497637d67f638c2b016b43fbd253e12c9c53ac6dd0b97b980"
     },
     {
       "name": "horizontal-scroll-list",
@@ -180,7 +180,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "a55bd2e16bb72022b38df10af2cf32e7e46dd2166cc792d12b739fd073bf11bc"
+      "digest": "0ac2092d1ab677d435f2ac4d2cb51d3bce8b9e3583acae321b327e42b12629d9"
     },
     {
       "name": "membership-badge",
@@ -201,13 +201,22 @@
       "digest": "a56ddf83aca9c4a4b208e9fc26f6425d70ae372265499de1415de17e4fdd7f56"
     },
     {
+      "name": "pagination",
+      "title": "Pagination",
+      "type": "component",
+      "status": "stable",
+      "version": "0.1.0",
+      "path": "registry-items/pagination.json",
+      "digest": "6d1c628504f55545047a127bafbb4a86e1da4e10cc0307fa461eacdc3ffa3a12"
+    },
+    {
       "name": "product-card",
       "title": "ProductCard",
       "type": "component",
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/product-card.json",
-      "digest": "39dfdd77c50345eafc9177b0f919bec951e627ed9ced1013dc36a9299ac43656"
+      "digest": "b16c1dfe1bbf722455d69ad3cd0c33434dcd39b403fe1a29db8b1ae4dd698a54"
     },
     {
       "name": "product-list",
@@ -216,7 +225,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "e5563c5454887a6e4892b988bcce1cda171a5f49edc6d4af11fa8e1306c04ec4"
+      "digest": "0bdf5551902554f5a3fc1cdbfb8bd25b356be897a3a5d4df83ca9d51fc57c448"
     },
     {
       "name": "product-media-gallery",
@@ -225,7 +234,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "944aa91bb365bc942bc8d0aa34c720e67b61b248f14069eb3bd6111805c8a249"
+      "digest": "4085c32e6c185b8d4c781aad0f7a4eb306299b8cba4cf060e753d78abab6fd6c"
     },
     {
       "name": "product-review-section",
@@ -234,7 +243,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
-      "digest": "de2f300fd7084ca375c9d3750cf2e5bf0e91b4ce797a4ac3c440813861e6a594"
+      "digest": "d7cab4b46fbaebd5691b31b398e8de418f97a8ea4474f5f7cb7f8b20e79cd971"
     },
     {
       "name": "radio-group",
@@ -243,7 +252,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/radio-group.json",
-      "digest": "9c67defc6a1de7d43a78ab44bba4970a0a8bbb262b748b16f51963fb04fb9af0"
+      "digest": "f54b4b3ffe122ffb897dcfb11113ffebccb95d062558770857beddc751ef7f46"
     },
     {
       "name": "review-list",
@@ -252,7 +261,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "a1a0a9f97f9593e404e107e70d387cd7c8e57295f6b283b0456c9dfe4b4d8f0d"
+      "digest": "09b436ada6020dca611d87d9edf37a23b5b99afcf6a3f303e603e35b860db95f"
     },
     {
       "name": "section-banner",
@@ -270,7 +279,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "6147a5ba77d4447a8b8f4a87a0f591e33f67a48b81eb8f390dfc3fef299afc71"
+      "digest": "956da616689acc79fab12f1dd4de1fa7cc2547a844a746a909be89e810e09fce"
     },
     {
       "name": "shortcut-rail",
@@ -279,7 +288,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/shortcut-rail.json",
-      "digest": "dd2282a40e0d0dac5384da023b1205a04e71541092668e89af4127d5bfd63fb9"
+      "digest": "b3b62f7d3065a7506d8587a61485c9679a4a4eb00fb9e031523a1550301c05cd"
     },
     {
       "name": "social-media-gallery",
@@ -288,16 +297,16 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/social-media-gallery.json",
-      "digest": "83ecfc97120c8524b14d68f83081857b2e20353a555f273be1a24b3b505ab914"
+      "digest": "f849c7793e34040e3d0e3c67c0eaafc78a90f5f57b27e3e939e70641c06a9986"
     },
     {
       "name": "tabs",
       "title": "Tabs",
       "type": "component",
-      "status": "beta",
-      "version": "0.1.0",
+      "status": "stable",
+      "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "f1ea53326b666228ecd8780d7cab68d9a9678287fbe4b1d7737820b244e34d47"
+      "digest": "3df540c523015db8047f2d29c91dfeade1a48e205ffa2735d7889ef44ce4c246"
     },
     {
       "name": "tag",
@@ -315,7 +324,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "d39f8169ff5c9e2b1e72e4dda4be9c49b1415263919b6096f7a2774cbc8a93db"
+      "digest": "0d2ffb9474efd67c28dea9b6700f066ff10baa09995c6ba05f01bc4f5cdf4f15"
     },
     {
       "name": "theme-product-list",
@@ -324,7 +333,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/theme-product-list.json",
-      "digest": "84a57c75c7ae0c0d351887df254cfd3025d13d1a5b923a3f8cf5c84e89018684"
+      "digest": "4f7e92d7a4b259cda21a17d849880134548b5511c4fb1276856befe7319293c3"
     },
     {
       "name": "trending-searches",
@@ -333,7 +342,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/trending-searches.json",
-      "digest": "2320292eda5097f5957f40479b2c15360c567b46e4a407b0db19076dada36c33"
+      "digest": "ec673e58e9da4c15396cde4a3c289b66d2128e54d8093a3ab18870580d1a12f5"
     }
   ]
 }

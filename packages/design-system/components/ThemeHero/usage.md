@@ -19,3 +19,8 @@
 ## 无障碍
 
 标题使用 h2，应放在页面 h1 下方。主题图片提供替代文本，装饰性模糊背景对辅助技术隐藏。说明展开控件使用原生按钮及 aria-expanded、aria-controls；溢出的关键词列表可通过键盘访问。
+
+
+## Keyboard focus geometry
+
+Description disclosures and scrollable tags use a 2px inset focus outline to avoid copy-container clipping. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

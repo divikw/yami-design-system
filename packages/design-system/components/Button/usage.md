@@ -279,7 +279,7 @@ The legacy booleans `fullWidth` and `iconOnly` are `@deprecated` but still work 
 
 ## Inverse
 
-`inverse={true}` swaps every variant to its `*-inverse` token alias for placement on the active theme's opposite-polarity surface (`--surface-inverse`). In Light this surface is dark; in Dark it is light. The focus ring follows `--border-focus-inverse`.
+`inverse={true}` swaps every variant to its `*-inverse` token alias for placement on the active theme's opposite-polarity surface (`--surface-inverse`). In Light this surface is dark; in Dark it is light. The focus ring follows `--focus-ring-inverse`.
 
 ```tsx
 <div style={{ background: 'var(--surface-inverse)', padding: 'var(--space-300)' }}>

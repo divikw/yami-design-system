@@ -32,7 +32,7 @@ export function BlogArticle({
           <nav className={styles.breadcrumbs} aria-label={locale === "zh" ? "面包屑导航" : "Breadcrumb"}>
             <Link href={localizedPath(locale, "/blog")}>{copy.blog.title}</Link>
             <span aria-hidden="true">/</span>
-            <span className={styles.currentCategory} aria-current="page">{category}</span>
+            <span className={styles.currentCategory}>{category}</span>
           </nav>
           <h1>{post.frontmatter.title}</h1>
           <p className={styles.description}>{post.frontmatter.description}</p>

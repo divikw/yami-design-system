@@ -57,7 +57,7 @@
     "tokens": [
       "--border-default",
       "--border-default-inverse",
-      "--border-focus",
+      "--focus-ring",
       "--radius-surface-default",
       "--space-150",
       "--space-200",
@@ -113,7 +113,7 @@
         "property": "border-color",
         "selector": ".bordered.surface-inverse"
       },
-      "--border-focus": {
+      "--focus-ring": {
         "property": "outline-color",
         "selector": ".card:focus-visible"
       },
@@ -150,5 +150,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "7459df1df012c5b5b72df85e2d52a2f8c11be245dbc5fc9e838fa968b7796791"
+  "contentDigest": "476460b7b9d727cd504fbe586dc22dbd1f364774f34991da8787d472738508c4"
 }

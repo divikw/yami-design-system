@@ -86,6 +86,7 @@
     "input",
     "membership-badge",
     "membership-icon",
+    "pagination",
     "product-card",
     "product-list",
     "product-media-gallery",
@@ -420,6 +421,8 @@
       "--fill-tertiary",
       "--fill-warning-primary",
       "--fill-warning-secondary",
+      "--focus-ring",
+      "--focus-ring-inverse",
       "--font-family-android",
       "--font-family-ios",
       "--font-family-serif",
@@ -566,5 +569,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "6f794444466320f794391ca85fde21298680d11d1c36c414a49376a83f80c7c4"
+  "contentDigest": "58f86fb1e8302815f021c5be386b845c88f718b159998810c7f0450da9e4232a"
 }

@@ -1,0 +1,123 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "pagination",
+  "title": "Pagination",
+  "type": "component",
+  "status": "stable",
+  "version": "0.1.0",
+  "description": "Desktop-only numbered pagination extracted from SearchResultsPage. Controlled callbacks or native links, localized page names, neutral selection and separate blue keyboard focus.",
+  "source": "components/Pagination",
+  "files": [
+    {
+      "source": "components/Pagination/index.ts",
+      "target": "components/Pagination/index.ts"
+    },
+    {
+      "source": "components/Pagination/Pagination.module.css",
+      "target": "components/Pagination/Pagination.module.css"
+    },
+    {
+      "source": "components/Pagination/Pagination.stories.module.css",
+      "target": "components/Pagination/Pagination.stories.module.css"
+    },
+    {
+      "source": "components/Pagination/Pagination.tsx",
+      "target": "components/Pagination/Pagination.tsx"
+    }
+  ],
+  "exports": [
+    "Pagination",
+    "PaginationProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/Pagination/usage.md",
+    "stories": [
+      "components/Pagination/Pagination.stories.tsx"
+    ],
+    "examples": [
+      "components/Pagination/examples.tsx#ControlledPagination",
+      "components/Pagination/examples.tsx#LinkedPagination"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--button-secondary",
+      "--button-secondary-inverse",
+      "--fill-inverse",
+      "--fill-primary",
+      "--focus-ring",
+      "--focus-ring-inverse",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--radius-button-primary",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-400",
+      "--stroke-thick",
+      "--text-disabled",
+      "--text-disabled-inverse",
+      "--text-primary",
+      "--text-primary-inverse"
+    ],
+    "rules": [
+      "focus-style",
+      "no-opacity-disabled",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--space-400": {
+        "property": "height / min-width",
+        "selector": ".control, .ellipsis"
+      },
+      "--space-050": {
+        "property": "gap / padding",
+        "selector": ".list"
+      },
+      "--radius-button-primary": {
+        "property": "border-radius",
+        "selector": ".control, .ellipsis"
+      },
+      "--focus-ring": {
+        "property": "--pagination-focus",
+        "selector": ".root"
+      },
+      "--focus-ring-inverse": {
+        "property": "--pagination-focus",
+        "selector": ".root[data-inverse=\"true\"]"
+      },
+      "--fill-inverse": {
+        "property": "--pagination-selected-fill",
+        "selector": ".root"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "navigation / list / link or button",
+      "wcagLevel": "AA",
+      "tapTargetMin": 32,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "enter",
+        "space (buttons)"
+      ],
+      "ariaPattern": "Native navigation, aria-current=page when the current page is visible; ellipsis hidden.",
+      "notes": "Fixed first nine pages, one ellipsis and last page; no middle expansion or previous/next controls. Up to ten pages render in full. A collapsed current page has no visible current marker. Disabled link controls render static spans with aria-disabled. No initial focus or arrow-key tab behavior."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "6d1c628504f55545047a127bafbb4a86e1da4e10cc0307fa461eacdc3ffa3a12"
+}

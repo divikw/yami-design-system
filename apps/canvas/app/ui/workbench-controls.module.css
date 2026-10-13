@@ -41,7 +41,7 @@
   position: relative;
   z-index: 1;
   border-color: var(--text-secondary);
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -112,7 +112,7 @@
 .segmentedOptions:has(.segmentedInput:focus-visible) {
   position: relative;
   z-index: 1;
-  outline: 2px solid var(--border-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 

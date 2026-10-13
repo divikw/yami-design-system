@@ -870,3 +870,8 @@
     }
   }
 }
+
+:global(.dark) .root[data-appearance="themed"] .railButton,
+:global(.dark) .root[data-appearance="atmospheric"] .railButton {
+  --focus-ring: var(--focus-ring-inverse);
+}

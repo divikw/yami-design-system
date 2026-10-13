@@ -68,7 +68,7 @@
 .drawer[data-state="closing"] .panel { animation-name: slide-out; }
 
 .brand:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: calc(var(--space-025) * -1);
 }
 

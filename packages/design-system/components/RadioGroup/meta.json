@@ -37,7 +37,7 @@
     "RadioGroupItem.disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables one option." }
   },
   "rules": {
-    "focus": { "ruleId": "focus-style", "note": "Uses a 2px --border-focus ring with 2px offset." },
+    "focus": { "ruleId": "focus-style", "note": "Uses a 2px --focus-ring ring with 2px offset." },
     "disabled": { "ruleId": "no-opacity-disabled", "note": "Disabled states use --fill-disabled and semantic background colors." },
     "radii": { "ruleId": "no-custom-radii", "note": "Circular geometry uses --radius-button-primary rather than a raw radius." },
     "tapTarget": { "ruleId": "tap-target", "note": "20px component with an invisible 2px extension on every side, producing a 24px pointer target. Parent labels may provide a larger target." },
@@ -50,7 +50,7 @@
     "--fill-disabled",
     "--text-primary",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--radius-button-primary",
     "--space-025",
     "--space-100",
@@ -64,7 +64,7 @@
     "--text-primary": { "property": "border-color/background", "selector": ".item[data-checked]::before, .dot" },
     "--border-default": { "property": "border-color", "selector": ".item::before" },
     "--fill-disabled": { "property": "border-color/background", "selector": ".item[data-disabled]::before, .item[data-disabled] .dot" },
-    "--border-focus": { "property": "outline-color", "selector": ".item:focus-visible" },
+    "--focus-ring": { "property": "outline-color", "selector": ".item:focus-visible" },
     "--radius-button-primary": { "property": "border-radius", "selector": ".item::before, .dot" }
   },
   "accessibility": {

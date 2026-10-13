@@ -1,13 +1,12 @@
 /**
  * focus-style — flags focus styling that deviates from "2px solid
- * var(--border-focus)" (or the component-appropriate --border-attention
- * in error states).
+ * var(--focus-ring)" (or --focus-ring-inverse on opposite-polarity surfaces).
  *
  * Checks:
  *   1. `:focus-visible` blocks WITH `outline: none` and no custom outline
  *      restoration → fails (removes the visible focus indicator).
  *   2. `:focus*` blocks using `outline-color` with a hardcoded color
- *      (not via --border-focus or --border-attention) → fails.
+ *      (not via --focus-ring or --focus-ring-inverse) → fails.
  *
  * Allowed / ignored:
  *   - Components that delegate focus to a child (e.g. Input wraps the
@@ -19,16 +18,14 @@
 import type { Validator, Violation } from '../schema'
 import { findCssBlocks, offsetToLocation, result } from './_shared'
 
-const FOCUS_SELECTOR = /[^,{}]*:focus(?:-visible)?[^,{}]*/g
+const FOCUS_SELECTOR = /[^,{}]*:focus(?:-visible)?(?![-\w])[^,{}]*/g
 
-// Hardcoded outline-color that isn't our --border-focus / --border-attention.
+// Keyboard outlines must use the dedicated semantic focus aliases.
 const OUTLINE_COLOR = /\boutline(?:-color)?\s*:\s*([^;}\n]+)/gi
 
 const ALLOWED_FOCUS_COLORS = [
-  '--border-focus',
-  '--border-focus-inverse',
-  '--border-attention',
-  '--border-attention-inverse',
+  '--focus-ring',
+  '--focus-ring-inverse',
 ]
 
 export const focusStyle: Validator = {
@@ -46,11 +43,11 @@ export const focusStyle: Validator = {
         if (varNames.some((name) => name && ALLOWED_FOCUS_COLORS.includes(name))) continue
         violations.push({
           ruleId: 'focus-style',
-          message: `Focus outline uses '${rawValue}' — must use var(--border-focus) (or --border-attention for error states).`,
+          message: `Focus outline uses '${rawValue}' — must use var(--focus-ring) or var(--focus-ring-inverse), separate from state borders.`,
           severity: 'error',
           locations: [offsetToLocation(code, block.bodyStart + m.index, (m[0] ?? '').length)],
           suggestion:
-            'Use `outline: 2px solid var(--border-focus); outline-offset: 2px;` for focus-visible. For input error states pair with var(--border-attention).',
+            'Use `outline: 2px solid var(--focus-ring); outline-offset: 2px;` for focus-visible; preserve error and selection borders separately.',
         })
       }
     }

@@ -127,7 +127,7 @@
 .recentTags .more img { display: block; }
 .recentTags .more[aria-expanded="true"] img { transform: rotate(180deg); }
 .recentTags .more::before { position: absolute; inset: -6px; content: ""; }
-.recentTag:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.recentTag:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 .popular {
   display: grid;

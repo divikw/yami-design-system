@@ -261,3 +261,16 @@ New decisions are appended below. Each gets a unique `decision-id` and timestamp
   - ⚠️ MCP protocol diagnostics are weak — `claude mcp list` only returns `✓ Connected` / `✗ Failed to connect` without stderr pass-through. Always cross-verify with a manual `node <path>` spawn to isolate "Claude Code config problem" vs "MCP server itself broken."
 - **Related ADR(s)**: ADR-0005 (figcraft external integration — this is the operational footnote to that decision).
 - **Related CHANGELOG**: root `CHANGELOG.md` v0.2.1 (figcraft integration).
+
+
+---
+
+<!-- decision-id: 2026-10-keyboard-focus-tokens -->
+## Separate blue keyboard focus indicators from component state borders
+
+- **Date**: 2026-10-13
+- **Decision**: Introduce `--focus-ring` and `--focus-ring-inverse` exclusively for visible keyboard focus. Light/default and Dark/inverse use blue.600 (`#0066EB`); Dark/default and Light/inverse use blue.400 (`#66A1FF`). Preserve `--border-focus` and `--border-focus-inverse` for existing component borders and selected states.
+- **Context**: Neutral outlines were difficult to distinguish from selected styling in a predominantly black/white UI. Recoloring `--border-focus` would also recolor permanent Header borders, FilterChip selection strokes, and media selection. Dedicated aliases prevent that coupling. This supersedes the previous “never blue” focus guidance while retaining the existing border-strength rule.
+- **Trade-offs**: Adds two semantic aliases and requires migration of keyboard outlines. Inputs gain a separate blue outline while retaining their original neutral/error inset border. Fixed-polarity bands select the token for their actual background. Keep 2px indicators and existing offsets; verify at least 3:1 contrast and clipping in real browsers.
+- **Related rule-id(s)**: `focus-style`, `semantic-color-only`, `border-strength`
+- **Related ADR(s)**: ADR-010 (DTCG-only token consumption)

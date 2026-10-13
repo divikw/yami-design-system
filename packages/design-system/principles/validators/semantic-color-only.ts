@@ -1,9 +1,10 @@
 /**
  * semantic-color-only — flags uses of blue / green / purple / yellow
  * primitive color tokens OUTSIDE the sanctioned contexts (semantic status
- * + badge palette).
+ * + badge palette + dedicated keyboard focus aliases).
  *
  * Sanctioned:
+ *   --focus-ring / --focus-ring-inverse
  *   --text-{success,warning,info}, --text-error
  *   --fill-{success,warning,info,error,promotion}-{primary,secondary}
  *   --badge-{bg,fg}-*-{red,blue,green,purple,yellow,neutral}
@@ -45,7 +46,7 @@ export const semanticColorOnly: Validator = {
       severity: 'error' as const,
       locations: [hit.location],
       suggestion:
-        'Decorative use of blue/green/purple/yellow/etc is forbidden. Use semantic tokens: status → --text-{success,warning,info,error}; filled callouts → --fill-*-primary/secondary; colored tags → --badge-bg-*/--badge-fg-*. If the UI really needs a primitive color, it probably needs a new semantic token (ADR required).',
+        'Decorative use of blue/green/purple/yellow/etc is forbidden. Use semantic tokens: keyboard focus → --focus-ring / --focus-ring-inverse; status → --text-{success,warning,info,error}; filled callouts → --fill-*-primary/secondary; colored tags → --badge-bg-*/--badge-fg-*. If the UI really needs a primitive color, it probably needs a new semantic token (ADR required).',
     }))
     return result(violations)
   },

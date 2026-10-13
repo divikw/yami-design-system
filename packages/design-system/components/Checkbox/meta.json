@@ -27,7 +27,7 @@
     "required": { "type": "boolean", "required": false, "default": false }
   },
   "rules": {
-    "focus": { "ruleId": "focus-style", "note": "Uses a 2px --border-focus ring with 2px offset." },
+    "focus": { "ruleId": "focus-style", "note": "Uses a 2px --focus-ring ring with 2px offset." },
     "disabled": { "ruleId": "no-opacity-disabled", "note": "Disabled states use --fill-disabled and semantic background colors." },
     "radii": { "ruleId": "no-custom-radii", "note": "Visible square uses --radius-tag-primary for a 4px radius." },
     "tapTarget": { "ruleId": "tap-target", "note": "20px component with an invisible 2px extension on every side, producing a 24px pointer target. Parent labels may provide a larger target." },
@@ -41,7 +41,7 @@
     "--text-primary",
     "--text-primary-inverse",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--radius-tag-primary",
     "--space-025",
     "--space-100",
@@ -54,7 +54,7 @@
     "--text-primary": { "property": "background/border-color", "selector": ".root[data-checked]::before, .root[data-indeterminate]::before" },
     "--border-default": { "property": "border-color", "selector": ".root::before" },
     "--fill-disabled": { "property": "background/border-color", "selector": ".root[data-disabled]::before" },
-    "--border-focus": { "property": "outline-color", "selector": ".root:focus-visible" },
+    "--focus-ring": { "property": "outline-color", "selector": ".root:focus-visible" },
     "--radius-tag-primary": { "property": "border-radius", "selector": ".root::before" }
   },
   "accessibility": {

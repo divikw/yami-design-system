@@ -83,13 +83,7 @@ function useTabsContext(component: string) {
 }
 
 function toIdPart(value: TabsValue) {
-  const normalized = value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-
-  return normalized || "tab"
+  return encodeURIComponent(value)
 }
 
 function getTabId(baseId: string, value: TabsValue) {
@@ -102,6 +96,17 @@ function getPanelId(baseId: string, value: TabsValue) {
 
 function getEnabledTabs(list: HTMLElement) {
   return Array.from(list.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([aria-disabled="true"])'))
+}
+
+function syncTabStops(list: HTMLElement, focusedTab?: HTMLElement | null) {
+  const enabledTabs = getEnabledTabs(list)
+  const entryTab = enabledTabs.find((tab) => tab === focusedTab)
+    ?? enabledTabs.find((tab) => tab.getAttribute("aria-selected") === "true")
+    ?? enabledTabs[0]
+
+  for (const tab of list.querySelectorAll<HTMLButtonElement>('[role="tab"]')) {
+    tab.tabIndex = tab === entryTab ? 0 : -1
+  }
 }
 
 function getNextIndex(currentIndex: number, tabCount: number, direction: 1 | -1) {
@@ -204,6 +209,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
     className,
     children,
     onKeyDown,
+    onFocusCapture,
     ...rest
   },
   ref,
@@ -211,6 +217,13 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
   const context = useTabsContext("TabsList")
   const isSegmented = variant === "primary" && styleVariant === "b"
   const listRef = useRef<HTMLDivElement | null>(null)
+  useLayoutEffect(() => {
+    const list = listRef.current
+    if (!list || skeleton) return
+    const focused = list.ownerDocument.activeElement
+    syncTabStops(list, focused instanceof HTMLElement ? focused : null)
+  }, [context.value, children, skeleton])
+
   useLayoutEffect(() => {
     if (!centerActiveTab || skeleton) return
     const frame = requestAnimationFrame(() => {
@@ -314,6 +327,11 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
       data-inverse={inverse || undefined}
       data-full-width={fullWidth || undefined}
       onKeyDown={handleKeyDown}
+      onFocusCapture={(event) => {
+        onFocusCapture?.(event)
+        if (event.defaultPrevented) return
+        syncTabStops(event.currentTarget, event.target as HTMLElement)
+      }}
     >
       {isSegmented ? <div className={styles.track}>{children}</div> : children}
     </div>
@@ -336,7 +354,6 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
 ) {
   const context = useTabsContext("TabsTrigger")
   const selected = context.value === value
-  const noSelectionYet = context.value === undefined
   const tabId = getTabId(context.baseId, value)
   const panelId = getPanelId(context.baseId, value)
 
@@ -352,7 +369,7 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
       aria-selected={selected}
       aria-controls={controls ?? panelId}
       aria-disabled={disabled || undefined}
-      tabIndex={disabled ? -1 : selected || noSelectionYet ? 0 : -1}
+      tabIndex={!disabled && selected ? 0 : -1}
       data-state={selected ? "active" : "inactive"}
       data-disabled={disabled || undefined}
       onClick={(event) => {

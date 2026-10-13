@@ -64,9 +64,9 @@
     "tokens": [
       "--badge-bg-primary-purple",
       "--badge-bg-secondary-purple",
-      "--border-focus",
       "--divider-default",
       "--fill-tertiary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-caption-md",
@@ -147,5 +147,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "2320292eda5097f5957f40479b2c15360c567b46e4a407b0db19076dada36c33"
+  "contentDigest": "ec673e58e9da4c15396cde4a3c289b66d2128e54d8093a3ab18870580d1a12f5"
 }

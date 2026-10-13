@@ -185,10 +185,10 @@
     "tokens": [
       "--background-primary",
       "--border-default",
-      "--border-focus",
       "--color-white-1000",
       "--divider-default",
       "--divider-emphasis",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-heading-xl",
@@ -262,5 +262,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4d2ebcd153bad23e3c91679ff0fe6ba2c454f6d0e347e34999a55a9013aa806b"
+  "contentDigest": "8336c8f1d737e1b497637d67f638c2b016b43fbd253e12c9c53ac6dd0b97b980"
 }

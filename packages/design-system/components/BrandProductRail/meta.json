@@ -114,7 +114,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Campaign, product, view-all, and paging controls retain token-backed focus rings."
+      "note": "Campaign, product, view-all, and paging controls retain token-backed focus rings. Campaign and brand heading links use a 2px inset focus outline inside their clipped containers."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -138,7 +138,7 @@
     "--divider-default",
     "--divider-emphasis",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--radius-component-default",

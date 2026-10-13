@@ -95,7 +95,7 @@
 
 .brand:focus-visible,
 .action:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
 

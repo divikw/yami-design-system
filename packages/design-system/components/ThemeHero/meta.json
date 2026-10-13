@@ -90,7 +90,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "The description disclosure, scrollable tag list and composed Buttons supply visible token-backed focus rings."
+      "note": "The description disclosure, scrollable tag list and composed Buttons supply visible token-backed focus rings. Description disclosures and scrollable tags use a 2px inset focus outline to avoid copy-container clipping."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -126,7 +126,9 @@
     "--space-300",
     "--space-600",
     "--stroke-default",
-    "--surface-secondary"
+    "--surface-secondary",
+    "--focus-ring-inverse",
+    "--focus-ring"
   ],
   "tokenBindings": {
     "--space-600": {

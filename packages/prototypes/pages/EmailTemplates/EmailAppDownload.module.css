@@ -62,8 +62,13 @@
 }
 
 .appButton:focus-visible {
-  outline: 2px solid var(--color-white-1000);
-  outline-offset: 2px;
+  outline: 2px solid var(--focus-ring-inverse);
+  /* The fixed red banner cannot provide contrast for a blue outer ring. */
+  outline-offset: -2px;
+}
+
+:global(.dark) .root {
+  --focus-ring-inverse: var(--focus-ring);
 }
 
 .appIcon {

@@ -98,3 +98,8 @@
 - PC Figma：`3053:7724`
 - Mobile Figma：`3056:37111`
 - 移动端页面位置：`6962:102970`
+
+
+## Keyboard focus geometry
+
+Campaign links use a 2px inset focus outline so scrolling cannot clip its edges. Focus uses the dedicated blue `--focus-ring` aliases; existing borders and selected states keep their original styling.

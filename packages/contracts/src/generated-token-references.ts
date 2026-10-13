@@ -305,6 +305,8 @@ export const registeredTokenReferenceTypes = {
   "fill.tertiary": "color",
   "fill.warning-primary": "color",
   "fill.warning-secondary": "color",
+  "focus.ring": "color",
+  "focus.ring-inverse": "color",
   "font-family.android": "fontFamily",
   "font-family.ios": "fontFamily",
   "font-family.serif": "fontFamily",

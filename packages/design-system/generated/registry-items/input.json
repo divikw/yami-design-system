@@ -62,6 +62,7 @@
       "--border-default",
       "--border-focus",
       "--fill-tertiary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-body-xl",
@@ -93,6 +94,10 @@
       "tap-target"
     ],
     "tokenBindings": {
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".field:has(.control:focus-visible), .clearButton:focus-visible"
+      },
       "--background-primary": {
         "property": "background",
         "selector": ".field"
@@ -179,5 +184,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "a55bd2e16bb72022b38df10af2cf32e7e46dd2166cc792d12b739fd073bf11bc"
+  "contentDigest": "0ac2092d1ab677d435f2ac4d2cb51d3bce8b9e3583acae321b327e42b12629d9"
 }

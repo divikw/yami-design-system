@@ -99,7 +99,7 @@
     "--fill-disabled",
     "--fill-tertiary",
     "--border-default",
-    "--border-focus",
+    "--focus-ring",
     "--stroke-default",
     "--stroke-thick",
     "--radius-full",

@@ -88,12 +88,12 @@
     "tokens": [
       "--badge-bg-primary-red",
       "--border-default",
-      "--border-focus",
       "--border-focus-inverse",
       "--button-disabled",
       "--color-amber-100",
       "--color-neutral-900",
       "--fill-tertiary",
+      "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-caption-md",
@@ -125,6 +125,7 @@
     ],
     "rules": [
       "card-no-border",
+      "focus-style",
       "no-emoji",
       "numerals-font",
       "red-usage",
@@ -180,7 +181,7 @@
         "property": "box-shadow",
         "selector": ".root"
       },
-      "--border-focus": {
+      "--focus-ring": {
         "property": "outline-color",
         "selector": ".brand:focus-visible, .mediaLink:focus-visible, .cardLink:focus-visible, .root:focus-visible"
       },
@@ -261,5 +262,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "39dfdd77c50345eafc9177b0f919bec951e627ed9ced1013dc36a9299ac43656"
+  "contentDigest": "b16c1dfe1bbf722455d69ad3cd0c33434dcd39b403fe1a29db8b1ae4dd698a54"
 }

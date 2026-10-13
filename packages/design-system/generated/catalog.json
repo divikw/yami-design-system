@@ -74,7 +74,8 @@
           "--font-weight-emphasize",
           "--line-height-heading-md",
           "--space-050",
-          "--space-100"
+          "--space-100",
+          "--focus-ring"
         ],
         "tokenBindings": {
           "--layout-page-margin-card": {
@@ -803,7 +804,7 @@
         },
         "tokens": [
           "--surface-primary",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-thick",
           "--radius-surface-default",
           "--font-family-ios",
@@ -978,7 +979,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Campaign, product, view-all, and paging controls retain token-backed focus rings."
+            "note": "Campaign, product, view-all, and paging controls retain token-backed focus rings. Campaign and brand heading links use a 2px inset focus outline inside their clipped containers."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -1002,7 +1003,7 @@
           "--divider-default",
           "--divider-emphasis",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--radius-component-default",
@@ -1290,7 +1291,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "2px solid var(--border-focus) ring with 2px outline-offset. Never browser default."
+            "note": "2px solid var(--focus-ring) ring with 2px outline-offset. Never browser default."
           },
           "disabledState": {
             "ruleId": "no-opacity-disabled",
@@ -1325,8 +1326,8 @@
           "--text-primary-inverse",
           "--text-disabled",
           "--text-disabled-inverse",
-          "--border-focus",
-          "--border-focus-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
           "--radius-button-emphasis",
           "--radius-button-primary",
           "--radius-component-default",
@@ -1395,7 +1396,7 @@
             "property": "color",
             "selector": ".button[aria-disabled='true']"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
             "selector": ".button:focus-visible"
           },
@@ -1472,7 +1473,7 @@
             "android": 48
           },
           "requiresAriaLabel": "when iconOnly=true",
-          "focusVisible": "2px solid var(--border-focus), 2px offset",
+          "focusVisible": "2px solid var(--focus-ring), 2px offset",
           "loadingAnnounces": "aria-busy=true"
         },
         "dependencies": {
@@ -1689,7 +1690,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Focusable cards show a 2px --border-focus outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
+            "note": "Focusable cards show a 2px --focus-ring outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
           }
         },
         "tokens": [
@@ -1702,7 +1703,7 @@
           "--text-disabled-inverse",
           "--border-default",
           "--border-default-inverse",
-          "--border-focus",
+          "--focus-ring",
           "--radius-surface-default",
           "--space-150",
           "--space-200",
@@ -1745,7 +1746,7 @@
             "property": "border-color",
             "selector": ".bordered.surface-inverse"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
             "selector": ".card:focus-visible"
           },
@@ -1875,7 +1876,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Uses a 2px --border-focus ring with 2px offset."
+            "note": "Uses a 2px --focus-ring ring with 2px offset."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -1902,7 +1903,7 @@
           "--text-primary",
           "--text-primary-inverse",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--radius-tag-primary",
           "--space-025",
           "--space-100",
@@ -1930,7 +1931,7 @@
             "property": "background/border-color",
             "selector": ".root[data-disabled]::before"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
             "selector": ".root:focus-visible"
           },
@@ -2339,7 +2340,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Uses a 2px --border-focus outline with 2px offset."
+            "note": "Uses a 2px --focus-ring outline with 2px offset. Scrollable chip groups reserve 4px focus gutters on every edge; selected strokes remain unchanged."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -2353,6 +2354,7 @@
         "tokens": [
           "--border-default",
           "--border-focus",
+          "--focus-ring",
           "--color-black-200",
           "--fill-primary",
           "--fill-secondary",
@@ -2371,6 +2373,10 @@
           "--text-secondary"
         ],
         "tokenBindings": {
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".chip:focus-visible, .categoryToggle:focus-visible"
+          },
           "--fill-secondary": {
             "property": "background-color",
             "selector": ".filled"
@@ -2384,8 +2390,8 @@
             "selector": ".outlined"
           },
           "--border-focus": {
-            "property": "inset box-shadow / outline-color",
-            "selector": ".filled[aria-pressed='true'], :focus-visible"
+            "property": "inset box-shadow",
+            "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
           },
           "--color-black-200": {
             "property": "background-color",
@@ -2563,7 +2569,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Column links, the social links, newsletter submit, app buttons, and legal links expose a 2px outline at 2px offset. The newsletter field reuses its border with --border-focus while focused instead of adding a second ring. Slots on the inverse surface switch to --border-focus-inverse."
+            "note": "Column links, the social links, newsletter submit, app buttons, and legal links expose a 2px outline at 2px offset. The newsletter retains its --border-focus border and adds a separate --focus-ring keyboard outline. Slots on the inverse surface switch to --focus-ring-inverse."
           },
           "redUsage": {
             "ruleId": "red-usage",
@@ -2590,7 +2596,8 @@
           "--text-error",
           "--border-default",
           "--border-focus",
-          "--border-focus-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
           "--divider-default",
           "--divider-emphasis",
           "--radius-component-default",
@@ -2618,6 +2625,10 @@
           "--space-800"
         ],
         "tokenBindings": {
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".groupLink:focus-visible, .socialLink:focus-visible, .subscribeSubmit:focus-visible, .subscribeInput:focus-visible"
+          },
           "--surface-secondary": {
             "property": "background",
             "selector": ".root, .linkPanel, .keepInTouch, .appBand"
@@ -2932,7 +2943,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Brand, halls, deliver-to, account, locale, cart, category links, rail paging, and the submit button expose a 2px --border-focus outline at 2px offset."
+            "note": "Brand, halls, deliver-to, account, locale, cart, category links, rail paging, and the submit button expose a 2px --focus-ring outline at 2px offset."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -2970,6 +2981,7 @@
           "--text-emphasis",
           "--border-default",
           "--border-focus",
+          "--focus-ring",
           "--divider-subtle",
           "--divider-emphasis",
           "--button-primary",
@@ -3006,6 +3018,10 @@
           "--space-600"
         ],
         "tokenBindings": {
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".brand:focus-visible, .search:has(.searchField:focus-visible), other focusable slots"
+          },
           "--surface-primary": {
             "property": "background",
             "selector": ".root fallback, .search, .railControl"
@@ -3024,7 +3040,7 @@
           },
           "--border-focus": {
             "property": "border-color",
-            "selector": ".search ring at --stroke-thick; outline-color on every focusable slot"
+            "selector": ".search border at --stroke-thick; .searchSuggestion[data-selected]"
           },
           "--divider-subtle": {
             "property": "background",
@@ -3179,7 +3195,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Campaign links and paging buttons remain keyboard reachable with visible focus."
+            "note": "Campaign links and paging buttons remain keyboard reachable with visible focus. Campaign links use a 2px inset focus outline so scrolling cannot clip its edges."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -3197,7 +3213,7 @@
           "--color-white-1000",
           "--text-primary",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--divider-default",
           "--divider-emphasis",
           "--stroke-default",
@@ -3496,7 +3512,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Focused/typing states use a 2px --border-focus border. Focus-within keeps the clear action mounted while keyboard focus moves inside the field."
+            "note": "Focused/typing states use a 2px --border-focus border. A separate --focus-ring outline appears around the field for keyboard focus. Focus-within keeps the clear action mounted while keyboard focus moves inside the field."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -3528,6 +3544,7 @@
           "--fill-tertiary",
           "--border-default",
           "--border-focus",
+          "--focus-ring",
           "--border-attention",
           "--text-primary",
           "--text-secondary",
@@ -3553,6 +3570,10 @@
           "--stroke-thick"
         ],
         "tokenBindings": {
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".field:has(.control:focus-visible), .clearButton:focus-visible"
+          },
           "--background-primary": {
             "property": "background",
             "selector": ".field"
@@ -3862,6 +3883,175 @@
       }
     },
     {
+      "id": "Pagination",
+      "source": "components/Pagination",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Pagination",
+        "category": "navigation",
+        "status": "stable",
+        "version": "0.1.0",
+        "description": "Desktop-only numbered pagination extracted from SearchResultsPage. Controlled callbacks or native links, localized page names, neutral selection and separate blue keyboard focus.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Derived from the maintained SearchResultsPage desktop pagination; no independently verified Figma component mapping."
+        },
+        "exports": [
+          "Pagination",
+          "PaginationProps"
+        ],
+        "variants": {
+          "mode": [
+            "callback",
+            "link"
+          ],
+          "surface": [
+            "default",
+            "inverse"
+          ],
+          "state": [
+            "default",
+            "current",
+            "disabled",
+            "focus-visible"
+          ]
+        },
+        "props": {
+          "page": {
+            "type": "number",
+            "required": true,
+            "description": "Current page, 1-based. Clamped to the available range."
+          },
+          "pageCount": {
+            "type": "number",
+            "required": true,
+            "description": "Non-negative integer total page count. Zero renders nothing."
+          },
+          "onPageChange": {
+            "type": "(page: number) => void",
+            "required": "callback mode",
+            "description": "Host updates results and the controlled page. Mutually exclusive with getPageHref."
+          },
+          "getPageHref": {
+            "type": "(page: number) => string",
+            "required": "link mode",
+            "description": "Return a real destination for native navigation. Mutually exclusive with onPageChange."
+          },
+          "locale": {
+            "type": "enum",
+            "values": [
+              "zh",
+              "en"
+            ],
+            "required": false,
+            "default": "en"
+          },
+          "inverse": {
+            "type": "boolean",
+            "required": false,
+            "default": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false
+          }
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "2px blue outline, 2px offset, 4px list gutter; default and inverse focus aliases."
+          },
+          "disabled": {
+            "ruleId": "no-opacity-disabled",
+            "note": "Disabled non-current controls use semantic disabled text tokens; the current page retains its selected fill and contrasting text. All disabled controls remain non-interactive; no opacity."
+          },
+          "tapTarget": {
+            "ruleId": "tap-target",
+            "note": "PC-only 32px controls match the existing search page. Hidden below 1024px; no native touch minimum claim."
+          }
+        },
+        "tokens": [
+          "--text-primary",
+          "--text-primary-inverse",
+          "--text-disabled",
+          "--text-disabled-inverse",
+          "--fill-primary",
+          "--fill-inverse",
+          "--button-secondary",
+          "--button-secondary-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--font-weight-emphasize",
+          "--space-025",
+          "--space-050",
+          "--space-100",
+          "--space-400",
+          "--radius-button-primary",
+          "--stroke-thick"
+        ],
+        "tokenBindings": {
+          "--space-400": {
+            "property": "height / min-width",
+            "selector": ".control, .ellipsis"
+          },
+          "--space-050": {
+            "property": "gap / padding",
+            "selector": ".list"
+          },
+          "--radius-button-primary": {
+            "property": "border-radius",
+            "selector": ".control, .ellipsis"
+          },
+          "--focus-ring": {
+            "property": "--pagination-focus",
+            "selector": ".root"
+          },
+          "--focus-ring-inverse": {
+            "property": "--pagination-focus",
+            "selector": ".root[data-inverse=\"true\"]"
+          },
+          "--fill-inverse": {
+            "property": "--pagination-selected-fill",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "navigation / list / link or button",
+          "wcagLevel": "AA",
+          "tapTargetMin": 32,
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "enter",
+            "space (buttons)"
+          ],
+          "ariaPattern": "Native navigation, aria-current=page when the current page is visible; ellipsis hidden.",
+          "notes": "Fixed first nine pages, one ellipsis and last page; no middle expansion or previous/next controls. Up to ten pages render in full. A collapsed current page has no visible current marker. Disabled link controls render static spans with aria-disabled. No initial focus or arrow-key tab behavior."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ControlledPagination",
+          "./examples.tsx#LinkedPagination"
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Storybook verifies controlled page changes; browser coverage checks numbered-only controls, link semantics, keyboard focus, themes and mobile hiding."
+        }
+      }
+    },
+    {
       "id": "ProductCard",
       "source": "components/ProductCard",
       "meta": {
@@ -4005,6 +4195,10 @@
           }
         },
         "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Media links use a 2px inset focus outline; title text owns the two-line clamp so it cannot clip the link outline. Compact linked titles reserve a 4px trailing gutter for the external outline."
+          },
           "redUsage": {
             "ruleId": "red-usage",
             "note": "priceCurrent uses --text-emphasis (red) per the 'promotion / urgency' allowed category."
@@ -4051,7 +4245,7 @@
           "--product-card-add-icon-active",
           "--product-card-add-border",
           "--product-card-add-shadow",
-          "--border-focus",
+          "--focus-ring",
           "--button-disabled",
           "--font-family-ios",
           "--font-weight-emphasize",
@@ -4117,7 +4311,7 @@
             "property": "box-shadow",
             "selector": ".root"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
             "selector": ".brand:focus-visible, .mediaLink:focus-visible, .cardLink:focus-visible, .root:focus-visible"
           },
@@ -4433,7 +4627,7 @@
           "--divider-default",
           "--divider-emphasis",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--radius-component-default",
@@ -4454,7 +4648,8 @@
           "--space-200",
           "--space-250",
           "--space-300",
-          "--space-400"
+          "--space-400",
+          "--focus-ring-inverse"
         ],
         "tokenBindings": {
           "--surface-primary": {
@@ -4623,7 +4818,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Thumbnail and navigation controls use the YAMI focus ring."
+            "note": "Thumbnail and navigation controls use the YAMI focus ring. Thumbnail outlines sit inside the scroll clip with a 2px gap from the existing default or selected border. Preview outlines inherit the visible stage radius."
           },
           "tapTarget": {
             "ruleId": "tap-target",
@@ -4649,6 +4844,7 @@
           "--fill-tertiary",
           "--border-default",
           "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--radius-component-default",
@@ -4669,13 +4865,17 @@
           "--space-1000"
         ],
         "tokenBindings": {
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".thumbnailButton:focus-visible, .stageMedia:focus-visible"
+          },
           "--fill-tertiary": {
             "property": "background-color",
             "selector": ".stage, .thumbnailButton, .slide"
           },
           "--border-focus": {
-            "property": "border-color and outline-color",
-            "selector": ".thumbnailButton[data-selected='true'], .thumbnailButton:focus-visible"
+            "property": "border-color",
+            "selector": ".thumbnailButton[data-selected='true']"
           },
           "--stroke-thick": {
             "property": "border-width",
@@ -4870,7 +5070,7 @@
           "--fill-disabled",
           "--fill-tertiary",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--radius-full",
@@ -5009,7 +5209,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Uses a 2px --border-focus ring with 2px offset."
+            "note": "Uses a 2px --focus-ring ring with 2px offset."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -5035,7 +5235,7 @@
           "--fill-disabled",
           "--text-primary",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--radius-button-primary",
           "--space-025",
           "--space-100",
@@ -5064,7 +5264,7 @@
             "property": "border-color/background",
             "selector": ".item[data-disabled]::before, .item[data-disabled] .dot"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
             "selector": ".item:focus-visible"
           },
@@ -5205,7 +5405,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Product review links and shared rail controls keep token-backed focus treatments."
+            "note": "Product review links and shared rail controls keep token-backed focus treatments. Scrollable lists and product links use a 2px inset focus outline inside the clipped section."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -5224,7 +5424,7 @@
           "--text-emphasis",
           "--fill-disabled",
           "--border-default",
-          "--border-focus",
+          "--focus-ring",
           "--divider-emphasis",
           "--stroke-default",
           "--stroke-thick",
@@ -5474,7 +5674,8 @@
           "--font-weight-emphasize",
           "--space-100",
           "--space-200",
-          "--space-600"
+          "--space-600",
+          "--focus-ring"
         ],
         "tokenBindings": {
           "--surface-primary": {
@@ -5617,7 +5818,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Every shortcut link and paging control remains keyboard reachable with a token-backed focus ring."
+            "note": "Every shortcut link and paging control remains keyboard reachable with a token-backed focus ring. Shortcut links use a 2px inset focus outline inside the scroll clip."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -5634,7 +5835,7 @@
           "--text-primary",
           "--border-default",
           "--divider-emphasis",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--radius-full",
@@ -5844,7 +6045,7 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "Video, product, view-all, and paging actions use token-backed focus indicators."
+            "note": "Video, product, view-all, and paging actions use token-backed focus indicators. The video media link matches the visible card top corners so its inset focus outline is not cut off."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -5863,8 +6064,8 @@
           "--text-primary-inverse",
           "--color-white-1000",
           "--divider-default",
-          "--border-focus",
-          "--border-focus-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
           "--stroke-default",
           "--stroke-thick",
           "--radius-full",
@@ -5946,8 +6147,8 @@
         "$schema": "../../schema/component.json",
         "name": "Tabs",
         "category": "navigation",
-        "status": "beta",
-        "version": "0.1.0",
+        "status": "stable",
+        "version": "0.1.1",
         "description": "Navigation tabs for switching between related content panes. Implements YAMI Primary Style A/B, Secondary, and Tertiary variants from the YAMI UI UX Guidelines Tabs node, with default and inverse surfaces plus ARIA tab behavior.",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
@@ -5973,7 +6174,7 @@
               "secondaryButton": "3112:22838"
             }
           },
-          "sizeDelta": "Mobile Primary Style A uses 56px list height and 18/24 text; WEB Primary uses 48px and 16/20. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 44px on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
+          "sizeDelta": "Maintained web horizontal Primary Style A uses 56px triggers and 16/20 text on both mobile and PC. Code-side vertical Primary A uses 44px rows with the same text size; vertical Primary A and Secondary use 4px item gaps. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 40px with 14/20 text on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
           "stateMapping": "Figma State=Default/Skeleton maps to TabsList skeleton=false/true. Selected/default tab states map to data-state='active'/'inactive'. Hover/focus are code-only interaction states; disabled is a code-side accessibility state for product use."
         },
         "variants": {
@@ -6041,7 +6242,7 @@
           "defaultValue": {
             "type": "string",
             "required": false,
-            "description": "Initial selected tab value for uncontrolled use."
+            "description": "Initial selected tab value for uncontrolled use. Without it, panels stay hidden until activation and only the first enabled trigger is tabbable."
           },
           "onValueChange": {
             "type": "(value: string) => void",
@@ -6099,6 +6300,34 @@
             "default": false,
             "description": "Stretch the list and distribute triggers evenly."
           },
+          "TabsList.centerActiveTab": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Reveal controlled selection updates inside the list, respecting reduced motion and scroll boundaries."
+          },
+          "TabsList.align": {
+            "type": "enum",
+            "values": [
+              "start",
+              "center"
+            ],
+            "required": false,
+            "default": "start",
+            "description": "Center items when they fit; overflow retains start alignment."
+          },
+          "TabsList.edgePadding": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Add 16px leading and trailing gutters."
+          },
+          "TabsList.skeletonCount": {
+            "type": "number",
+            "required": false,
+            "default": 4,
+            "description": "Number of non-interactive placeholders while skeleton is true."
+          },
           "TabsList.skeleton": {
             "type": "boolean",
             "required": false,
@@ -6108,7 +6337,12 @@
           "TabsTrigger.value": {
             "type": "string",
             "required": true,
-            "description": "Unique value that links the trigger to its panel."
+            "description": "Unique, case-sensitive value that links the trigger to its panel; localized values and punctuation retain distinct IDs."
+          },
+          "TabsTrigger.controls": {
+            "type": "string",
+            "required": false,
+            "description": "Existing external content ID; defaults to the matching TabsContent panel ID. The consumer owns external content semantics."
           },
           "TabsTrigger.disabled": {
             "type": "boolean",
@@ -6138,12 +6372,11 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "2px solid --border-focus ring with --border-focus-inverse on opposite-polarity surfaces."
+            "note": "2px solid --focus-ring ring with --focus-ring-inverse on opposite-polarity surfaces. Use a 2px inset in scrolling lists without gutters; Primary B outlines the visible capsule pseudo-element at a 2px outer offset, independently of the 44px hit area."
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "minIosPt": 44,
-            "note": "Compact pill visuals keep Figma 32px fill while the button hit target is at least 44px on mobile variants."
+            "note": "Web targets preserve geometry: Primary A 56px, Primary B 44px, Secondary 40px, Tertiary 32px below 1024px and 36px on desktop. Compact variants have no invisible extensions and do not claim the native iOS 44pt / Android 48dp minimum."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -6166,8 +6399,8 @@
           "--surface-inverse",
           "--fill-skeleton",
           "--fill-skeleton-inverse",
-          "--border-focus",
-          "--border-focus-inverse",
+          "--focus-ring",
+          "--focus-ring-inverse",
           "--border-default-inverse",
           "--divider-default",
           "--button-secondary",
@@ -6216,11 +6449,11 @@
           },
           "--text-disabled": {
             "property": "color",
-            "selector": ".trigger[aria-disabled='true']"
+            "selector": ".list[data-variant] .trigger[aria-disabled='true'][data-state]"
           },
           "--surface-secondary": {
             "property": "background",
-            "selector": ".list[data-variant='primary'][data-style='b']"
+            "selector": ".list[data-variant='primary'][data-style='b'] .track::before"
           },
           "--surface-primary": {
             "property": "background",
@@ -6242,9 +6475,9 @@
             "property": "background",
             "selector": ".skeletonItem"
           },
-          "--border-focus": {
+          "--focus-ring": {
             "property": "outline-color",
-            "selector": ".trigger:focus-visible, .content:focus-visible"
+            "selector": ".trigger:focus-visible, .trigger:focus-visible::before (Primary B), .content:focus-visible"
           },
           "--radius-full": {
             "property": "border-radius",
@@ -6258,7 +6491,7 @@
         "accessibility": {
           "role": "tablist / tab / tabpanel",
           "wcagLevel": "AA",
-          "tapTargetMin": 44,
+          "tapTargetMin": 32,
           "keyboardNav": [
             "tab",
             "shift+tab",
@@ -6272,9 +6505,11 @@
             "space"
           ],
           "ariaPattern": "WAI-ARIA Tabs pattern",
-          "focusVisible": "2px solid var(--border-focus), inverse uses --border-focus-inverse",
+          "focusVisible": "2px solid var(--focus-ring), inverse uses --focus-ring-inverse",
           "disabled": "Disabled triggers set aria-disabled=true, tabIndex=-1, and are skipped by arrow navigation.",
-          "labelling": "TabsTrigger id and TabsContent aria-labelledby/aria-controls are generated from useId + value."
+          "labelling": "Require aria-label or aria-labelledby on each TabsList. Trigger and panel IDs use useId + losslessly encoded value; controls may reference an existing external content region.",
+          "focusManagement": "One enabled roving Tab stop; manual activation moves focus without selection until Enter/Space or click.",
+          "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 44px, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
         },
         "dependencies": {
           "runtime": [
@@ -6593,7 +6828,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "The description disclosure, scrollable tag list and composed Buttons supply visible token-backed focus rings."
+            "note": "The description disclosure, scrollable tag list and composed Buttons supply visible token-backed focus rings. Description disclosures and scrollable tags use a 2px inset focus outline to avoid copy-container clipping."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -6629,7 +6864,9 @@
           "--space-300",
           "--space-600",
           "--stroke-default",
-          "--surface-secondary"
+          "--surface-secondary",
+          "--focus-ring-inverse",
+          "--focus-ring"
         ],
         "tokenBindings": {
           "--space-600": {
@@ -6790,7 +7027,7 @@
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "The optional content link and composed ProductList controls keep the shared focus treatment."
+            "note": "The optional content link and composed ProductList controls keep the shared focus treatment. The content link inherits its panel radius and uses a 2px inset focus outline."
           },
           "radius": {
             "ruleId": "no-custom-radii",
@@ -6805,7 +7042,7 @@
           "--surface-primary",
           "--surface-secondary",
           "--color-white-1000",
-          "--border-focus",
+          "--focus-ring",
           "--font-size-heading-md",
           "--font-size-body-md",
           "--line-height-heading-md",
@@ -6958,7 +7195,7 @@
           "--text-primary",
           "--text-secondary",
           "--divider-default",
-          "--border-focus",
+          "--focus-ring",
           "--stroke-default",
           "--stroke-thick",
           "--badge-bg-primary-purple",

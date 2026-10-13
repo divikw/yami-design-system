@@ -127,7 +127,7 @@
     },
     "focus": {
       "ruleId": "focus-style",
-      "note": "Column links, the social links, newsletter submit, app buttons, and legal links expose a 2px outline at 2px offset. The newsletter field reuses its border with --border-focus while focused instead of adding a second ring. Slots on the inverse surface switch to --border-focus-inverse."
+      "note": "Column links, the social links, newsletter submit, app buttons, and legal links expose a 2px outline at 2px offset. The newsletter retains its --border-focus border and adds a separate --focus-ring keyboard outline. Slots on the inverse surface switch to --focus-ring-inverse."
     },
     "redUsage": {
       "ruleId": "red-usage",
@@ -154,7 +154,8 @@
     "--text-error",
     "--border-default",
     "--border-focus",
-    "--border-focus-inverse",
+    "--focus-ring",
+    "--focus-ring-inverse",
     "--divider-default",
     "--divider-emphasis",
     "--radius-component-default",
@@ -182,6 +183,7 @@
     "--space-800"
   ],
   "tokenBindings": {
+    "--focus-ring": { "property": "outline-color", "selector": ".groupLink:focus-visible, .socialLink:focus-visible, .subscribeSubmit:focus-visible, .subscribeInput:focus-visible" },
     "--surface-secondary": {
       "property": "background",
       "selector": ".root, .linkPanel, .keepInTouch, .appBand"

@@ -55,7 +55,7 @@
 
 .root:focus-visible {
   border-radius: var(--radius-tag-primary);
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 

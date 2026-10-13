@@ -48,7 +48,7 @@ const principlesData = [
     ruleId: 'semantic-color-only',
     title: '语义色限制',
     severity: 'error',
-    description: 'Blue / green / purple / yellow 只用于 semantic status 或 badge palette，不得装饰',
+    description: 'Blue / green / purple / yellow 用于 semantic status 或 badge palette；蓝色 --focus-ring 用于键盘焦点，不得装饰',
     validator: semanticColorOnly,
   },
 
@@ -97,7 +97,7 @@ const principlesData = [
     ruleId: 'focus-style',
     title: '焦点样式',
     severity: 'error',
-    description: 'Focus 必须 2px 外描边 --border-focus (black)，禁止蓝色 ring',
+    description: '键盘焦点使用独立的 2px 蓝色 --focus-ring / --focus-ring-inverse 外描边；组件状态边框保持 --border-focus',
     validator: focusStyle,
   },
   {

@@ -118,7 +118,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Focused/typing states use a 2px --border-focus border. Focus-within keeps the clear action mounted while keyboard focus moves inside the field."
+      "note": "Focused/typing states use a 2px --border-focus border. A separate --focus-ring outline appears around the field for keyboard focus. Focus-within keeps the clear action mounted while keyboard focus moves inside the field."
     },
     "disabled": {
       "ruleId": "no-opacity-disabled",
@@ -151,6 +151,7 @@
     "--fill-tertiary",
     "--border-default",
     "--border-focus",
+    "--focus-ring",
     "--border-attention",
     "--text-primary",
     "--text-secondary",
@@ -177,6 +178,7 @@
   ],
 
   "tokenBindings": {
+    "--focus-ring": { "property": "outline-color", "selector": ".field:has(.control:focus-visible), .clearButton:focus-visible" },
     "--background-primary": { "property": "background", "selector": ".field" },
     "--fill-tertiary": {
       "property": "background",

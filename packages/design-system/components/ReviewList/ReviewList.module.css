@@ -34,8 +34,8 @@
 }
 
 .list:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
-  outline-offset: var(--space-025);
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .item {
@@ -275,8 +275,8 @@
 }
 
 .product:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
-  outline-offset: var(--space-025);
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
 .productImage {

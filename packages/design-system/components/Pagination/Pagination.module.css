@@ -1,0 +1,87 @@
+.root {
+  display: none;
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  --pagination-ink: var(--text-primary);
+  --pagination-selected-ink: var(--text-primary-inverse);
+  --pagination-selected-fill: var(--fill-inverse);
+  --pagination-hover: var(--button-secondary);
+  --pagination-disabled: var(--text-disabled);
+  --pagination-focus: var(--focus-ring);
+}
+
+.root[data-inverse="true"] {
+  --pagination-ink: var(--text-primary-inverse);
+  --pagination-selected-ink: var(--text-primary);
+  --pagination-selected-fill: var(--fill-primary);
+  --pagination-hover: var(--button-secondary-inverse);
+  --pagination-disabled: var(--text-disabled-inverse);
+  --pagination-focus: var(--focus-ring-inverse);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-050);
+  margin: 0;
+  padding: var(--space-050);
+  list-style: none;
+}
+
+.control,
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: var(--space-400);
+  height: var(--space-400);
+  padding: 0 var(--space-100);
+  border: 0;
+  border-radius: var(--radius-button-primary);
+  background: transparent;
+  color: var(--pagination-ink);
+  font: inherit;
+  text-decoration: none;
+}
+
+.control {
+  cursor: pointer;
+}
+
+.control[aria-current="page"] {
+  background: var(--pagination-selected-fill);
+  color: var(--pagination-selected-ink);
+  font-weight: var(--font-weight-emphasize);
+}
+
+.control:disabled,
+.control[aria-disabled="true"] {
+  cursor: default;
+}
+
+.control:disabled:not([aria-current="page"]),
+.control[aria-disabled="true"]:not([aria-current="page"]) {
+  color: var(--pagination-disabled);
+}
+
+.control:focus-visible {
+  outline: var(--stroke-thick) solid var(--pagination-focus);
+  outline-offset: var(--space-025);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:not(:disabled):not([aria-disabled="true"]):not([aria-current="page"]):hover {
+    background: var(--pagination-hover);
+  }
+}
+
+@media (min-width: 1024px) {
+  .root {
+    display: block;
+  }
+}

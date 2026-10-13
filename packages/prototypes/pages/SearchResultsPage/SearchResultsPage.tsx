@@ -17,6 +17,7 @@ import {
   FilterChipMenu,
   Footer,
   Header,
+  Pagination,
   ProductList,
 } from "@yami/design-system";
 
@@ -83,19 +84,6 @@ function priceValue(value: ReactNode) {
 function countValue(value: ReactNode) {
   if (typeof value !== "string" && typeof value !== "number") return 0;
   return Number.parseFloat(String(value).replace(/[^0-9.]/g, "")) || 0;
-}
-
-function paginationItems(page: number, pageCount: number): Array<number | string> {
-  if (pageCount <= 9) return Array.from({ length: pageCount }, (_, index) => index + 1);
-  const pages = Array.from(new Set([1, 2, page - 1, page, page + 1, pageCount - 1, pageCount]))
-    .filter((value) => value >= 1 && value <= pageCount)
-    .sort((a, b) => a - b);
-  return pages.flatMap((value, index) => {
-    const previous = pages[index - 1];
-    return previous !== undefined && value - previous > 1
-      ? [`ellipsis-${previous}`, value]
-      : [value];
-  });
 }
 
 function FilterSkeleton({ widths }: { widths: readonly number[] }) {
@@ -607,29 +595,16 @@ export function SearchResultsPage({
         )}
 
         {visibleProducts.length > 0 && (
-          <nav
+          <Pagination
             className={styles.pagination}
             data-slot="search-results-pagination"
-            aria-label="Pagination"
-          >
-            {(interaction
-              ? paginationItems(page, interaction.pageCount)
-              : [1, 2, 3, 4, 5, 6, 7, 8, "ellipsis-local", 25]
-            ).map((item) => typeof item === "number" ? (
-              <button
-                key={item}
-                type="button"
-                aria-current={page === item ? "page" : undefined}
-                onClick={() => {
-                  if (!updateRequest({ page: item })) setLocalPage(item);
-                }}
-              >
-                {item}
-              </button>
-            ) : (
-              <span key={item} aria-hidden="true">…</span>
-            ))}
-          </nav>
+            page={page}
+            pageCount={interaction?.pageCount ?? 25}
+            locale={locale}
+            onPageChange={(nextPage) => {
+              if (!updateRequest({ page: nextPage })) setLocalPage(nextPage);
+            }}
+          />
         )}
       </main>
 

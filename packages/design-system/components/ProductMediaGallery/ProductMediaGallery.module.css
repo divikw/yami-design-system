@@ -141,8 +141,12 @@
 }
 
 .thumbnailButton:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: calc(-1 * (var(--stroke-default) + var(--space-025) + var(--stroke-thick)));
+}
+
+.thumbnailButton[data-selected="true"]:focus-visible {
+  outline-offset: calc(-1 * (var(--stroke-thick) + var(--space-025) + var(--stroke-thick)));
 }
 
 .thumbnailImage,
@@ -311,12 +315,13 @@
   inset: 0;
   padding: 0;
   border: 0;
+  border-radius: inherit;
   background: transparent;
   cursor: zoom-in;
 }
 
 .previewTrigger:focus-visible {
-  outline: var(--stroke-thick) solid var(--border-focus);
+  outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: calc(-1 * var(--stroke-thick));
 }
 
