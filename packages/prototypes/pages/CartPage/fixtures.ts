@@ -36,11 +36,14 @@ export function createCartPageFixture(locale: CartLocale = "zh"): CartPageProps 
     availability: product.id === "moon-mold" ? "sold-out" : product.id === "mooncake-box" ? "delisted" : "available",
     lowStock: "lowStock" in product, notifyAvailable: product.id === "moon-mold",
   }));
+  const header = createStorefrontHeader(locale);
   return {
     locale,
-    header: { ...createStorefrontHeader(locale), account: { label: zh ? "我的账户" : "My account", href: `https://customer.yami.com/us/${locale}` },
+    header: { ...header,
+      categories: header.categories.map((category) => ({ ...category, image: category.image ? { ...category.image, alt: "" } : undefined })),
+      account: { label: zh ? "我的账户" : "My account", href: `https://customer.yami.com/us/${locale}` },
       homeHref: `https://www.yami.com/us/${locale}`, halls: undefined, onSearchSubmit: undefined,
-      cart: { ...createStorefrontHeader(locale).cart, href: "#cart-main" },
+      cart: { ...header.cart, href: "#cart-main" },
     },
     footer: { columns: createFooterColumns(locale), appTitle: footerCopy[locale].appTitle, appLinks: createFooterAppLinks(),
       socialLinks: createFooterSocialLinks(locale), legalLinks: createFooterLegalLinks(locale), paymentMarks: createFooterPaymentMarks(),

@@ -149,10 +149,10 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                 const remaining = Math.max(0, merchant.freeShippingCents - subtotal);
                 return <section className={styles.merchant} key={merchant.id} aria-labelledby={`merchant-${merchant.id}`}>
                   <header className={styles.merchantHeader}>
-                    <label className={styles.merchantIdentity}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
+                    <h2 className={styles.merchantHeading}><label className={styles.merchantIdentity}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
                       onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} />
                       <span><strong id={`merchant-${merchant.id}`}>{merchant.title}</strong><small>{merchant.origin}</small></span>
-                    </label>
+                    </label></h2>
                     <div className={styles.shipping}>
                       <p>{remaining === 0 ? t.free : `${t.shipping} ${money(merchant.shippingCents)} · ${locale === "zh" ? "再加" : "Add"} ${money(remaining)} ${locale === "zh" ? "可享免运费" : "for free shipping"}`}</p>
                       <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`} />
@@ -169,7 +169,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                 <p className={styles.muted}>{t.unavailableHint}</p>
                 <div className={styles.thumbnails}>{unavailable.map((item) => <img key={item.id} src={item.image} alt={item.title} width={48} height={48} loading="lazy" />)}</div>
               </section> : null}
-              <section className={styles.discovery} aria-label={t.recommendations}>
+              <div className={styles.discovery}>
                 <Tabs value={tab} onValueChange={setTab}>
                   <TabsList variant="tertiary" aria-label={locale === "zh" ? "商品分类" : "Product collections"}>
                     <TabsTrigger value="recommended">{t.recommendations}</TabsTrigger><TabsTrigger value="saved">{t.save} ({saved.length})</TabsTrigger>
@@ -187,7 +187,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                     </li>)}</ul> : <p className={styles.state}>{t.emptyTab}</p>}
                   </TabsContent>
                 </Tabs>
-              </section>
+              </div>
             </>}
       </div>
       {!loading && !error ? <aside className={styles.sidebar} aria-label={t.summary}>

@@ -39,6 +39,7 @@
 .selectAll small, .muted, .merchantIdentity small { color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); }
 .merchant { padding: var(--space-150); }
 .merchantHeader { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-150); background: var(--surface-secondary); padding: var(--space-150); border-radius: var(--radius-component-default); }
+.merchantHeading { margin: 0; font: inherit; }
 .merchantIdentity { display: flex; align-items: center; gap: var(--space-150); min-height: 44px; }
 .merchantIdentity span { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--space-050) var(--space-100); }
 .merchantIdentity strong { font-size: var(--font-size-heading-md); }
