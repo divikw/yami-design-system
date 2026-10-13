@@ -128,8 +128,8 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
         <section className={styles.overview} aria-labelledby="cart-title">
           <h1 id="cart-title">{t.cart}</h1>
           {!loading && !error && available.length > 0 ? <label className={styles.selectAll}>
-            <Checkbox checked={allSelected} indeterminate={selectedCount > 0 && !allSelected}
-              onCheckedChange={(checked) => setItems((current) => current.map((item) => item.availability === "available" ? { ...item, selected: checked } : item))} />
+            <span className={styles.selectionControl}><Checkbox checked={allSelected} indeterminate={selectedCount > 0 && !allSelected}
+              onCheckedChange={(checked) => setItems((current) => current.map((item) => item.availability === "available" ? { ...item, selected: checked } : item))} /></span>
             <span>{t.all} <small>({merchantCount} {locale === "en" && merchantCount === 1 ? "seller" : t.merchants}, {itemCountLabel(cartQuantity)})</small></span>
           </label> : null}
         </section>
@@ -149,9 +149,9 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                 const remaining = Math.max(0, merchant.freeShippingCents - subtotal);
                 return <section className={styles.merchant} key={merchant.id} aria-labelledby={`merchant-${merchant.id}`}>
                   <header className={styles.merchantHeader}>
-                    <h2 className={styles.merchantHeading}><label className={styles.merchantIdentity}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
-                      onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} />
-                      <span><strong id={`merchant-${merchant.id}`}>{merchant.title}</strong><small>{merchant.origin}</small></span>
+                    <h2 className={styles.merchantHeading}><label className={styles.merchantIdentity}><span className={styles.selectionControl}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
+                      onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} /></span>
+                      <span className={styles.merchantCopy}><strong id={`merchant-${merchant.id}`}>{merchant.title}</strong><small>{merchant.origin}</small></span>
                     </label></h2>
                     <div className={styles.shipping} data-slot="cart-shipping">
                       <p>{remaining === 0 ? t.free : `${t.shipping} ${money(merchant.shippingCents)} · ${locale === "zh" ? "再加" : "Add"} ${money(remaining)} ${locale === "zh" ? "可享免运费" : "for free shipping"}`}</p>
@@ -208,7 +208,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
           <h2>{t.protection}</h2><p className={styles.muted}>{locale === "zh" ? cartGuarantees[0].zhBody : cartGuarantees[0].enBody}</p>
           <ul className={styles.paymentMarks} aria-label={locale === "zh" ? "支付方式" : "Payment methods"}>{cartPaymentMarks.map((mark) => <li key={mark.name}><img src={mark.src} alt={mark.name} width={52} height={36} loading="lazy" /></li>)}</ul>
           <ul className={styles.guarantees}>{cartGuarantees.map((guarantee) => <li key={guarantee.en}><img src={`https://cdn.yamibuy.net/mkt/${guarantee.image}_0x0.png`} alt="" width={20} height={20} /><span>{guarantee[locale]}</span></li>)}</ul>
-          <Button variant="tertiary" size="sm" onClick={() => setDrawer("protection")}>{t.learn}</Button>
+          <Button className={styles.learnLink} variant="tertiary" size="sm" aria-haspopup="dialog" onClick={() => setDrawer("protection")}>{t.learn}</Button>
         </section>
       </aside> : null}
     </main>
