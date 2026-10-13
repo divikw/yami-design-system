@@ -57,8 +57,8 @@ function CartRow({ item, locale, onSelect, onQuantity, onRemove, onSave, onNotif
       <strong data-discounted={Boolean(item.originalPriceCents && item.originalPriceCents > item.priceCents)}>{money(item.priceCents * item.quantity)}</strong>
     </div>
     <ButtonGroup className={styles.rowActions} aria-label={`${item.title} · ${locale === "zh" ? "商品操作" : "Item actions"}`}>
-      <Button variant="tertiary" size="sm" aria-label={`${t.remove} ${item.title}`} onClick={onRemove}>{t.remove}</Button>
-      {onSave ? <Button variant="tertiary" size="sm" aria-label={`${t.save} ${item.title}`} onClick={onSave}>{t.save}</Button> : null}
+      <Button className={styles.actionLink} variant="tertiary" size="sm" aria-label={`${t.remove} ${item.title}`} onClick={onRemove}>{t.remove}</Button>
+      {onSave ? <Button className={styles.actionLink} variant="tertiary" size="sm" aria-label={`${t.save} ${item.title}`} onClick={onSave}>{t.save}</Button> : null}
       {onNotify ? <Button variant="tertiary" size="sm" aria-label={`${notified ? t.notified : t.notify} ${item.title}`} disabled={notified} onClick={onNotify}>{notified ? t.notified : t.notify}</Button> : null}
     </ButtonGroup>
   </li>;
