@@ -28,6 +28,7 @@
   ],
   "composes": [
     "Button",
+    "ButtonGroup",
     "Input"
   ],
   "dependencies": {
@@ -124,5 +125,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "aad5713d2bd626bbadf64c2e3dbebbabf8ee9d00002d8f2e083012451a7bafe7"
+  "contentDigest": "4c9cb7cf546973766f0c6403d43ea7342b3ee91139879792a948fec3dd8ca1a5"
 }

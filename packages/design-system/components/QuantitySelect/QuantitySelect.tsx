@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { ButtonGroup } from "../ButtonGroup";
 import { Button } from "../Button";
 import { Input } from "../Input";
 import styles from "./QuantitySelect.module.css";
@@ -45,7 +46,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
 
   return <div className={styles.root} lang={locale} data-slot="quantity-select" aria-busy={loading || undefined}>
     <select ref={selectRef} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
-      aria-invalid={Boolean(message) || undefined} value={value >= 10 ? "custom" : String(value)} disabled={unavailable}
+      aria-invalid={!editing && Boolean(message) || undefined} value={value >= 10 ? "custom" : String(value)} disabled={unavailable}
       onChange={(event) => {
         setValidation("");
         if (event.target.value === "custom") {
@@ -77,13 +78,14 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
       <Input ref={inputRef} fullWidth value={draft} label={zh ? "数量" : "Quantity"} aria-label={zh ? `${label}：输入数量` : `${label}: enter quantity`} inputMode="numeric" disabled={unavailable}
         state={message ? "error" : undefined} aria-describedby={validation ? `${id}-error` : `${id}-hint${error ? ` ${id}-error` : ""}`}
         onChange={(event) => { setDraft(event.target.value); setValidation(""); }} />
-      <div className={styles.actions}>
+      {!validation && <p id={`${id}-hint`} className={styles.hint}>{range}</p>}
+      {message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
+      <ButtonGroup className={styles.actions} aria-label={zh ? `修改${label}` : `Edit ${label}`}>
         <Button size="sm" htmlType="submit" loading={loading} disabled={disabled}>{zh ? "确认" : "Apply"}</Button>
         <Button size="sm" variant="tertiary" onClick={finish}>{zh ? "取消" : "Cancel"}</Button>
-      </div>
-      {!validation && <p id={`${id}-hint`} className={styles.hint}>{range}</p>}
+      </ButtonGroup>
     </form>}
-    {message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
+    {!editing && message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
     {loading && <span id={`${id}-status`} className={styles.hint} role="status">{zh ? "正在更新数量…" : "Updating quantity…"}</span>}
   </div>;
 }

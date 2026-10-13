@@ -144,7 +144,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "99f12bf5a41a7aa1d142958d827eed9011b009a4306b9ebedd35bb47fdee14b1"
+      "digest": "b0302533af25ac1cfeec7466812c544ca58138c9d9334abfc9fce853b23d8a16"
     },
     {
       "name": "filter-chip",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/quantity-select.json",
-      "digest": "aad5713d2bd626bbadf64c2e3dbebbabf8ee9d00002d8f2e083012451a7bafe7"
+      "digest": "4c9cb7cf546973766f0c6403d43ea7342b3ee91139879792a948fec3dd8ca1a5"
     },
     {
       "name": "radio-group",

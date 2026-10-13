@@ -5409,6 +5409,7 @@
         ],
         "composes": [
           "Button",
+          "ButtonGroup",
           "Input"
         ],
         "props": {

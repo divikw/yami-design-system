@@ -11,9 +11,9 @@ This delivery targets light mode only. The new component and cart stories fix th
 - Only selected, available merchandise contributes to the total. Price values are integer cents and displayed row prices are quantity-adjusted line totals.
 - Each merchant qualifies free shipping from its own selected current-price subtotal before coupon deductions. No selection incurs no shipping. DEMO10 takes $10 off a merchandise subtotal of at least $100, excluding shipping; it becomes inapplicable when the subtotal drops. These are fixture rules, not verified production business logic.
 - Tax is not estimated. Checkout opens a local order summary and does not submit an order or collect payment. Delete supports Undo, saved items can move back to the cart, recommendations add locally, and stock notifications are local demo state.
-- Coupon and unavailable-item drawers follow the observed desktop layout. Mobile stacking and the fixed checkout button are a proposed responsive composition requiring design review. The existing PC-only Footer is hidden below 1024px.
+- Coupon and unavailable-item drawers follow the observed desktop layout. Mobile stacking and the fixed checkout bar are a proposed responsive composition requiring design review. The existing PC-only Footer is hidden below 1024px.
 - Cart data is initialized from props; the Storybook host remounts on locale/scenario changes. Production API integration, real inventory, payment provider widgets and policy/legal copy review are outside this prototype.
 
 ## Verification
 
-Stories: PC, Mobile, Selected, Empty, Loading, Failure with Retry, LongCart, NoCoupons, and a hidden Interaction story. The calculator tests shipping boundaries, selected/ineligible items, quantity changes, coupon thresholds, integer cents and nonnegative merchandise totals. Browser tests cover viewport geometry, drawer behavior and cart interactions.
+Stories: PC, Mobile, Selected, Empty, Loading, Failure with Retry, LongCart, NoCoupons, and a hidden Interaction story. The calculator tests shipping boundaries, selected/ineligible items, quantity changes, coupon thresholds, integer cents and nonnegative merchandise totals. Browser tests cover 360/375/402/768/1024/1440px viewport geometry, merchant-header wrapping, price/action order, compact drawer rows, drawer behavior and cart interactions.

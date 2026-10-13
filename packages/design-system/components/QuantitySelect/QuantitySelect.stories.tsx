@@ -70,6 +70,7 @@ export const Interaction: Story = {
       await userEvent.click(canvas.getByRole("button", { name: "Apply" }));
       await expect(canvas.getByRole("alert")).toHaveTextContent("Enter a whole number from 1 to 25");
       await expect(input).toHaveAttribute("aria-invalid", "true");
+      await expect(select).not.toHaveAttribute("aria-invalid", "true");
       await expect(select).toHaveValue("3");
     }
     await userEvent.clear(input);

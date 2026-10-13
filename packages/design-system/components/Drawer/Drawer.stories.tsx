@@ -24,7 +24,7 @@ function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?
     </div>
     <Drawer open={mode !== null} title={child ? zh ? "使用条件" : "Conditions" : zh ? "优惠券" : "Coupons"} closeLabel={zh ? "关闭优惠券" : "Close coupons"} onClose={() => setMode(null)}
       back={child ? { label: zh ? "返回优惠券" : "Back to coupons", onClick: back } : undefined}
-      footer={<div style={{ padding: "var(--space-200)" }}><Button form="full" onClick={() => setMode(null)}>{zh ? "完成" : "Done"}</Button></div>}>
+      footer={<div style={{ padding: "var(--space-200)" }}><Button size="lg" form="full" onClick={() => setMode(null)}>{zh ? "完成" : "Done"}</Button></div>}>
       <div hidden={child}>
         {mode === "empty" ? <p>{zh ? "暂无可用优惠券" : "No available coupons"}</p>
           : mode === "loading" ? <p role="status">{zh ? "正在加载优惠券…" : "Loading coupons…"}</p>

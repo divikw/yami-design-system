@@ -17,10 +17,20 @@ test("CartPage fits mobile and desktop, supports quantities, coupon invalidation
   const first = fixture.initialItems[0];
   const second = fixture.initialItems[1];
   try {
-    for (const width of [375, 768, 1024, 1440]) {
+    for (const width of [360, 375, 402, 768, 1024, 1440]) {
       await page.viewport(width, 812);
       flushSync(() => root.render(<CartPage key={width} {...fixture} />));
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+      if (width < 768) {
+        const merchant = container.querySelector('[aria-labelledby="merchant-yami"]')!;
+        const heading = merchant.querySelector("h2")!.getBoundingClientRect();
+        const shipping = merchant.querySelector('[data-slot="cart-shipping"] p')!;
+        expect(shipping.getBoundingClientRect().top).toBeGreaterThanOrEqual(heading.bottom);
+        expect(shipping.getBoundingClientRect().width).toBeGreaterThan(100);
+        expect(shipping.getBoundingClientRect().height).toBeLessThanOrEqual(3 * parseFloat(getComputedStyle(shipping).lineHeight));
+        const row = container.querySelector('[data-slot="cart-item"]')!;
+        expect(row.querySelector('[role="group"]')!.getBoundingClientRect().top).toBeGreaterThanOrEqual(row.querySelector("strong")!.getBoundingClientRect().bottom);
+      }
       await page.getByRole("checkbox", { name: `Select ${second.title}`, exact: true }).click();
       const select = container.querySelector<HTMLSelectElement>(`select[aria-label="${second.title} quantity"]`)!;
       select.value = "custom";
@@ -37,11 +47,19 @@ test("CartPage fits mobile and desktop, supports quantities, coupon invalidation
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
       await expect.element(page.getByText("$219.96", { exact: true }).first()).toBeVisible();
       if (width < 1024) {
-        const button = container.querySelector<HTMLButtonElement>('[data-slot="cart-page"] button[data-slot="button"][class*="checkout"]')!;
-        expect(getComputedStyle(button).position).toBe("fixed");
+        const button = container.querySelector<HTMLButtonElement>('[data-slot="cart-checkout-bar"] button')!;
+        expect(getComputedStyle(button.parentElement!).position).toBe("fixed");
+        expect(button.parentElement!.getBoundingClientRect().bottom).toBe(812);
         expect(button.getBoundingClientRect().bottom).toBeLessThanOrEqual(812);
       }
     }
+    await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
+    const unavailableDialog = container.querySelector('dialog[open]')!;
+    expect(unavailableDialog.scrollWidth).toBeLessThanOrEqual(unavailableDialog.clientWidth);
+    const itemDescription = unavailableDialog.querySelector('[data-slot="cart-item"] p')!;
+    expect(getComputedStyle(itemDescription).marginTop).toBe("0px");
+    expect(getComputedStyle(itemDescription).marginBottom).toBe("0px");
+    await userEvent.keyboard("{Escape}");
     await page.getByRole("checkbox", { name: /^Select all/ }).click();
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     await expect.element(page.getByRole("dialog", { name: "Coupons", exact: true })).toBeVisible();
