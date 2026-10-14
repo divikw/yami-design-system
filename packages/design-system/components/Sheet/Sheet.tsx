@@ -16,13 +16,15 @@ export interface SheetProps extends Omit<ComponentPropsWithoutRef<"dialog">, "op
   back?: { label: string; onClick: () => void };
   size?: "content" | "full";
   contentPadding?: "default" | "compact" | "none";
+  /** Drawer uses the same modal behavior with a desktop edge presentation. */
+  desktopPlacement?: "center" | "right";
   /** Remains outside the scrolling content. The caller owns its actions. */
   footer?: ReactNode;
   "data-slot"?: string;
 }
 
 export function Sheet({
-  open, title, closeLabel, onClose, back, size = "content", contentPadding = "default",
+  open, title, closeLabel, onClose, back, size = "content", contentPadding = "default", desktopPlacement = "center",
   footer, id: providedId, className, children, onClick, onKeyDown, "data-slot": slot = "sheet", ...rest
 }: SheetProps) {
   const generatedId = useId();
@@ -65,6 +67,7 @@ export function Sheet({
       data-slot={slot}
       data-sheet=""
       data-size={size}
+      data-desktop-placement={desktopPlacement}
       onClose={(event) => {
         event.stopPropagation();
         if (event.target === event.currentTarget && !dialogRef.current?.open) onClose();

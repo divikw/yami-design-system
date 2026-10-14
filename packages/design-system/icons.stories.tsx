@@ -10,6 +10,12 @@ const iconModules = import.meta.glob("./assets/icons/**/*.svg", {
   query: "?raw",
 }) as Record<string, IconModule>
 
+const rasterIconModules = import.meta.glob("./assets/icons/**/*.png", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>
+
 const meta = {
   title: "YAMI/Assets/Icons",
   parameters: {
@@ -50,7 +56,7 @@ function toImportKey(path: string) {
 }
 
 function iconSvg(icon: IconMeta) {
-  return resolveIconModuleValue(iconModules[toImportKey(icon.path)])
+  return resolveIconModuleValue(iconModules[toImportKey(icon.path)] ?? rasterIconModules[toImportKey(icon.path)])
 }
 
 function resolveIconModuleValue(value: unknown): string | undefined {
@@ -184,7 +190,7 @@ function IconCard({ icon }: { icon: IconMeta }) {
             }}
           />
         ) : (
-          <span style={tokenStoryStyles.caption}>Missing SVG</span>
+          <span style={tokenStoryStyles.caption}>Missing asset</span>
         )}
       </div>
       <div style={tokenStoryStyles.cardBody}>
@@ -202,7 +208,7 @@ export const Overview: Story = {
   render: () => (
     <TokenStoryFrame
       title="Icons"
-      intro="The YAMI icon set is indexed from the local SVG assets and metadata."
+      intro="The YAMI icon set is indexed from the local SVG and source PNG assets and metadata."
     >
       <IconsSummary />
       {categoryNames.map((category) => (

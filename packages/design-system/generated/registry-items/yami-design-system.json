@@ -79,6 +79,7 @@
     "checkbox",
     "dialog",
     "divider",
+    "drawer",
     "filter-chip",
     "footer",
     "header",
@@ -92,6 +93,7 @@
     "product-list",
     "product-media-gallery",
     "product-review-section",
+    "quantity-select",
     "radio-group",
     "review-list",
     "section-banner",
@@ -570,5 +572,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "828fd808d0806989561aa5f93f132a35ad4dc9258df4211636e158e10268fe18"
+  "contentDigest": "2863daeb5893d0c5d5bf161f8ccc5dc906c48414d940cb4173c74d05783ae8f3"
 }

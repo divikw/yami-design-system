@@ -11,6 +11,7 @@
 - `contentPadding="compact"`：正文四周使用 8px 内边距，适合内部行也保留 8px 的紧凑列表。
 - `contentPadding="none"`：正文由列表自行提供内边距；默认正文有 16px 水平内边距。
 - 桌面端统一为最大 560px 的居中弹窗。PDP 由业务适配层在进入桌面断点时关闭弹窗，恢复页内说明。
+- `desktopPlacement="right"` 由公共 Drawer 使用，将 PC 形态改为贴右侧的 480px 满高面板。移动端形态保持一致；居中默认值不变。
 
 ## 圆角与断点
 

@@ -129,4 +129,22 @@
     margin: auto;
     border-radius: var(--radius-surface-default);
   }
+
+  .sheet[data-desktop-placement="right"] {
+    inset: 0 0 0 auto;
+    width: min(480px, 100vw);
+    height: 100dvh;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .sheet[data-desktop-placement="right"] .header {
+    padding-inline: var(--space-400);
+  }
+
+  .sheet[data-desktop-placement="right"] .content[data-padding="default"] {
+    padding: var(--space-400);
+  }
 }

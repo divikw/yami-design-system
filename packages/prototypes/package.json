@@ -8,6 +8,7 @@
     "./ecommerce-home": "./pages/EcommerceHome/index.ts",
     "./ecommerce-home/popular-search-products": "./pages/EcommerceHome/popular-search-products.fixture.ts",
     "./product-detail-page": "./pages/ProductDetailPage/index.ts",
+    "./cart-page": "./pages/CartPage/index.ts",
     "./search-results-page": "./pages/SearchResultsPage/index.ts",
     "./topic-landing-page": "./pages/TopicLandingPage/index.ts"
   },

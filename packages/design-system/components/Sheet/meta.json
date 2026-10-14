@@ -17,6 +17,7 @@
     "back": { "type": "{ label: string; onClick: () => void }", "required": false, "description": "Replaces Close with Back in a child view. Escape also goes back; the backdrop closes the whole sheet." },
     "size": { "type": "enum", "values": ["content", "full"], "default": "content", "required": false, "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop is centered at 560px." },
     "contentPadding": { "type": "enum", "values": ["default", "compact", "none"], "default": "default", "required": false, "description": "Use compact for 8px content insets or none for lists that own their row padding." },
+    "desktopPlacement": { "type": "enum", "values": ["center", "right"], "default": "center", "required": false, "description": "Desktop presentation; right is consumed by Drawer. Mobile geometry is unchanged." },
     "footer": { "type": "ReactNode", "required": false, "description": "Caller-owned actions outside the scrolling content, with bottom safe-area protection." },
     "children": { "type": "ReactNode", "required": true, "description": "Business content. Sheet does not own selection or draft state." }
   },

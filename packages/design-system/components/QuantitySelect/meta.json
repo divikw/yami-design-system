@@ -1,0 +1,150 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "QuantitySelect",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Compact controlled cart quantity select with a 60×24px visible pill, a 44px native target, validated 10+ editing and async feedback.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Based on the cart observed on 2026-10-13. No independent Figma binding assigned."
+  },
+  "exports": [
+    "QuantitySelect",
+    "QuantitySelectProps"
+  ],
+  "composes": [
+    "Button",
+    "ButtonGroup",
+    "Input"
+  ],
+  "props": {
+    "value": {
+      "type": "number",
+      "required": true
+    },
+    "max": {
+      "type": "number",
+      "required": true
+    },
+    "onValueChange": {
+      "type": "(value: number) => void",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "\"zh\" | \"en\"",
+      "required": false
+    },
+    "loading": {
+      "type": "boolean",
+      "required": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false
+    },
+    "error": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Uses shared focus aliases and native keyboard behavior."
+    },
+    "radius": {
+      "ruleId": "no-custom-radii",
+      "note": "The source cart uses a pill-shaped quantity control; consume the semantic pill radius."
+    }
+  },
+  "tokens": [
+    "--surface-primary",
+    "--surface-secondary",
+    "--text-primary",
+    "--text-secondary",
+    "--text-emphasis",
+    "--button-disabled",
+    "--text-disabled",
+    "--border-default",
+    "--border-attention",
+    "--focus-ring",
+    "--radius-button-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--font-size-caption-sm",
+    "--line-height-caption-md",
+    "--space-025",
+    "--space-100",
+    "--stroke-default",
+    "--stroke-thick",
+    "--space-200",
+    "--space-300"
+  ],
+  "accessibility": {
+    "wcagLevel": "AA",
+    "tapTargetMin": 44,
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "escape",
+      "enter"
+    ],
+    "ariaPattern": "Named native select and validated input; errors and busy state announced."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#QuantitySelectExample"
+  ],
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
+  },
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".display"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".display"
+    },
+    "--border-attention": {
+      "property": "border-color",
+      "selector": ".control:has(.select[aria-invalid=\"true\"]) .display"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".control:has(.select:focus-visible) .display"
+    },
+    "--button-disabled": {
+      "property": "background",
+      "selector": ".control:has(.select:disabled) .display"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".control:has(.select:disabled) .display"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".root"
+    },
+    "--radius-button-primary": {
+      "property": "border-radius",
+      "selector": ".display"
+    }
+  }
+}
