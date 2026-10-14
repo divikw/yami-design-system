@@ -21,6 +21,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+async function expectVideoPlaying(video: HTMLVideoElement) {
+  await waitFor(() => {
+    expect(video.error).toBeNull();
+    expect(video.readyState).toBeGreaterThanOrEqual(2);
+    expect(video.paused).toBe(false);
+    expect(video.currentTime).toBeGreaterThan(0);
+  }, { timeout: 10000 });
+  const time = video.currentTime;
+  await waitFor(() => expect(video.currentTime).not.toBe(time));
+}
+
 function contrastRatio(foreground: string, background: string) {
   const parseColor = (color: string) => {
     const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
@@ -68,6 +79,14 @@ export const StoryBanner: Story = {
       await expect(card.getAttribute("data-hero-banner-content")).toBe("image-text-products");
       await expect(card.getAttribute("href")).toContain("/en/story/");
     }
+    for (const image of banner.querySelectorAll<HTMLImageElement>("img")) {
+      await expect(image.src).not.toMatch(/\/undefined(?:[?#]|$)/);
+    }
+    await waitFor(() => {
+      for (const image of banner.querySelectorAll<HTMLImageElement>('img[loading="eager"]')) {
+        expect(image.complete && image.naturalWidth > 0).toBe(true);
+      }
+    });
     const cardRects = Array.from(cards, (card) => card.getBoundingClientRect());
     const widths = cardRects.map(({ width }) => width);
     const heights = cardRects.map(({ height }) => height);
@@ -186,14 +205,32 @@ export const SocialTrends: Story = {
       await expect(video.controls).toBe(false);
     }
     gallery.scrollIntoView({ block: "center" });
-    await waitFor(() => expect(gallery.querySelector("video")!.paused).toBe(false), { timeout: 10000 });
-    await expect(gallery.querySelectorAll('[data-slot="social-video-card-products"] a')).toHaveLength(11);
+    const rail = gallery.querySelector<HTMLElement>('[data-slot="social-media-gallery-list"]')!;
+    const railBounds = rail.getBoundingClientRect();
+    const visibleVideos = Array.from(gallery.querySelectorAll("video")).filter((video) => {
+      const bounds = video.getBoundingClientRect();
+      return bounds.left < railBounds.right && bounds.right > railBounds.left;
+    });
+    await expect(visibleVideos.length).toBeGreaterThan(0);
+    await Promise.all(visibleVideos.map(expectVideoPlaying));
+    await expect(gallery.querySelectorAll('[data-slot="social-video-card-products"] a')).toHaveLength(10);
+    for (const source of socialTrends.cards) {
+      const card = gallery.querySelector<HTMLElement>(`#social-trend-${source.id}`)!;
+      await expect(within(card).getByText(source.username, { exact: true })).toBeInTheDocument();
+      const icon = card.querySelector<HTMLImageElement>('img[aria-hidden="true"]')!;
+      await expect(icon.getAttribute("src")).toContain(source.platformIcon);
+      await waitFor(() => expect(icon.complete && icon.naturalWidth > 0).toBe(true));
+    }
+    const lashPost = gallery.querySelector<HTMLElement>("#social-trend-1521")!;
+    await expect(lashPost).toHaveAttribute("data-has-products", "false");
+    await expect(lashPost.querySelector('[data-slot="social-video-card-products"]')).toHaveTextContent(socialTrends.cards[5].caption);
     await expect(within(gallery).getByRole("heading")).toHaveTextContent("Social Trends");
     for (const link of gallery.querySelectorAll('[data-slot="social-video-card-media"] a')) {
       await expect(link.getAttribute("href")).toMatch(/\.mp4(?:\?|$)/);
     }
     await userEvent.click(within(canvasElement).getByRole("button", { name: "한국어로 전환" }));
     await expect(within(gallery).getByRole("heading")).toHaveTextContent("화제의 트렌드");
+    await expect(within(lashPost).getByText("@yami.official", { exact: true })).toBeInTheDocument();
   },
 };
 
@@ -223,11 +260,11 @@ export const SectionDividers: Story = {
 const overflowCards = [...socialTrends.cards.slice(0, 6), ...socialTrends.cards.slice(0, 2)].map((card, index) => ({
   id: `overflow-video-${index}`,
   posterSrc: new URL(`./assets/social/${card.poster}`, import.meta.url).href,
-  posterAlt: card.products.map((product) => product.title).join(", "),
+  posterAlt: card.caption,
   videoSrc: new URL(`./assets/social/${card.video}`, import.meta.url).href,
-  username: null,
-  platformIconSrc: "",
-  caption: "",
+  username: card.username,
+  platformIconSrc: new URL(`./assets/social/${card.platformIcon}`, import.meta.url).href,
+  caption: card.caption,
   products: card.products.map((product) => ({
     id: product.id, title: product.title, imageAlt: product.title,
     imageSrc: new URL(`./assets/social/${product.image}`, import.meta.url).href,
@@ -250,7 +287,7 @@ export const SocialVideoOverflow: Story = {
     await userEvent.click(next);
     await waitFor(() => expect(next).toHaveAttribute("aria-disabled", "true"));
     await expect(previous).not.toHaveAttribute("aria-disabled", "true");
-    await waitFor(() => expect(videos[7].paused).toBe(false), { timeout: 10000 });
+    await expectVideoPlaying(videos[7]);
     await waitFor(() => expect(videos[0].paused).toBe(true));
     await userEvent.click(previous);
     await waitFor(() => expect(previous).toHaveAttribute("aria-disabled", "true"));
@@ -270,7 +307,7 @@ export const MobileSocialVideoOverflow: Story = {
     await expect(getComputedStyle(rail).overflowX).toBe("auto");
     rail.scrollTo({ left: rail.scrollWidth, behavior: "instant" });
     await waitFor(() => expect(rail.scrollLeft).toBeGreaterThan(0));
-    await waitFor(() => expect(videos[7].paused).toBe(false), { timeout: 10000 });
+    await expectVideoPlaying(videos[7]);
     await waitFor(() => expect(videos[0].paused).toBe(true));
   },
 };

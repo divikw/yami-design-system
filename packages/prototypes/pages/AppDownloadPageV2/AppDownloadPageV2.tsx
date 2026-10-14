@@ -352,10 +352,10 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         cards={socialTrends.cards.map((card) => ({
           id: `social-trend-${card.id}`,
           posterSrc: socialAsset(card.poster),
-          posterAlt: card.products.map((product) => product.title).join(", "),
-          username: null,
-          platformIconSrc: logo,
-          caption: card.products.map((product) => product.title).join(", "),
+          posterAlt: card.caption,
+          username: card.username,
+          platformIconSrc: socialAsset(card.platformIcon),
+          caption: card.caption,
           href: socialAsset(card.video),
           videoSrc: socialAsset(card.video),
           products: card.products.map((product) => ({

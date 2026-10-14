@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Children, useEffect, useRef, useState } from "react";
 
 import styles from "./SocialMediaGallery.module.css";
 import { ResponsiveImage } from "../ResponsiveImage";
@@ -155,6 +155,9 @@ export function SocialVideoCard({
   ...rest
 }: SocialVideoCardProps) {
   const visibleProducts = products.slice(0, 3);
+  const hasCaption = Children.toArray(caption).some((content) =>
+    typeof content !== "string" || content.trim().length > 0,
+  );
   const productMode =
     visibleProducts.length === 0
       ? "text"
@@ -205,7 +208,7 @@ export function SocialVideoCard({
         data-footer-mode={productMode}
       >
         {visibleProducts.length === 0 ? (
-          <p className={styles.footerText}>{caption}</p>
+          <p className={styles.footerText}>{hasCaption ? caption : "No products featured in this post～"}</p>
         ) : productMode === "single" ? (
           <>
             <ProductImage product={visibleProducts[0]} />

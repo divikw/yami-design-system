@@ -1,5 +1,11 @@
+/// <reference types="node" />
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { brandHref, calculateSavings, campaignProducts, featuredProducts, productHref } from "./fixtures";
+import { brandHref, calculateSavings, campaignProducts, createAppDownloadBanners, featuredProducts, productHref } from "./fixtures";
+import socialTrends from "./social-trends.json";
+import storyBanners from "./story-banners.json";
+import bannerManifest from "./assets/story-banners/manifest.json";
 
 describe("app-download campaign calculation", () => {
   it("includes the hidden 10% perk with the $10 welcome discount", () => {
@@ -31,5 +37,49 @@ describe("app-download campaign calculation", () => {
         expect(brandHref(product, locale)).not.toBe(productHref(product, locale));
       }
     }
+  });
+  it("bundles every story banner image so slow CDN requests cannot hold up video playback", () => {
+    const banners = createAppDownloadBanners();
+    const images = banners.flatMap((banner) => [banner.image!.src, ...banner.products.map((product) => product.src)]);
+    expect(images).toHaveLength(32);
+    const sourceImages = storyBanners.items.flatMap((item) => [item.image.src, ...item.products.map((product) => product.src)]);
+    expect(bannerManifest.map(({ url }) => url)).toEqual(sourceImages);
+    for (const [index, source] of images.entries()) {
+      const url = new URL(typeof source === "string" ? source : source.src);
+      expect(url.protocol).toBe("file:");
+      expect(url.pathname).toContain("/AppDownloadPageV2/assets/story-banners/");
+      expect(decodeURIComponent(url.pathname.split("/").pop()!)).toBe(bannerManifest[index].file);
+      const bytes = readFileSync(url);
+      expect(bytes.byteLength).toBe(bannerManifest[index].bytes);
+      expect(createHash("sha256").update(bytes).digest("hex")).toBe(bannerManifest[index].sha256);
+    }
+  });
+});
+
+describe("app-download social source identities", () => {
+  it("keeps the verified platform and account paired with each source video", () => {
+    expect(socialTrends.cards).toHaveLength(9);
+    expect(socialTrends.cards.slice(0, 6).map(({ id, username, platformIcon }) => [id, username, platformIcon])).toEqual([
+      ["117", "@yamibuy", "instagram.png"],
+      ["1271", "@yamibuy", "instagram.png"],
+      ["1283", "@yamibuy", "instagram.png"],
+      ["1318", "@winterabbyy", "instagram.png"],
+      ["672", "@yamibuy", "instagram.png"],
+      ["1521", "@yami.official", "tiktok.png"],
+    ]);
+    for (const card of socialTrends.cards) {
+      const sourceId = card.id.replace("-repeat", "");
+      expect(card.video).toBe(`scraper_${sourceId}_480.mp4`);
+      expect(card.sourcePoster).toContain(`/scraper_${sourceId}.0000000.jpg`);
+    }
+    for (const [index, card] of socialTrends.cards.slice(6).entries()) {
+      expect(card).toEqual({ ...socialTrends.cards[index], id: `${socialTrends.cards[index].id}-repeat` });
+    }
+  });
+
+  it("preserves the official lash post caption without inventing product associations", () => {
+    const lashPost = socialTrends.cards.find(({ id }) => id === "1521")!;
+    expect(lashPost.products).toEqual([]);
+    expect(lashPost.caption).toContain("The easiest lash routine yet");
   });
 });

@@ -442,6 +442,30 @@ export const WithoutProducts: Story = {
   },
 };
 
+export const WithoutContent: Story = {
+  name: "Without Content",
+  parameters: {
+    docs: { description: { story: "无商品、无文案时，72px 底栏显示 No products featured in this post～。 / Without products or caption, the 72px footer shows No products featured in this post～." } },
+  },
+  render: (_args, { globals }) => (
+    <div className={styles.cardCanvas}>
+      <SocialVideoCard
+        {...createSocialImageCards(localeFromGlobals(globals.locale))[2]}
+        products={[]}
+        additionalProductCount={0}
+        caption={undefined}
+      />
+    </div>
+  ),
+  play: async (context) => {
+    await verifyImageListCard(context);
+    const footer = context.canvasElement.querySelector<HTMLElement>('[data-footer-mode="text"]')!;
+    if (footer.textContent !== "No products featured in this post～" || footer.querySelector("img, a, button, [data-product-overflow]")) {
+      throw new Error("An empty footer must show the exact fallback without product controls");
+    }
+  },
+};
+
 export const MobileSingleImage: Story = {
   ...SingleImage,
   tags: ["!dev", "!autodocs"],
