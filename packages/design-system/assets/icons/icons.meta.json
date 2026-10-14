@@ -40,7 +40,7 @@
       "canvas": 24
     },
     "system": {
-      "count": 17,
+      "count": 18,
       "canvas": 16
     }
   },
@@ -1060,6 +1060,14 @@
       "width": 16,
       "height": 16,
       "sha1": "3af5069806"
+    },
+    {
+      "name": "delivery-line",
+      "category": "system",
+      "path": "assets/icons/system/delivery-line.png",
+      "width": 16,
+      "height": 16,
+      "sha1": "5c18b9629b"
     },
     {
       "name": "loading-black",

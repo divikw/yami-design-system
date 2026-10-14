@@ -40,3 +40,7 @@ Required for UI kits but not in source set. Use Lucide CDN as temporary fallback
 - eye → `eye`
 
 Usage in HTML: `<img src="https://unpkg.com/lucide-static@latest/icons/shopping-cart.svg" width="24" height="24" style="color:var(--text-primary)">`
+
+## Web-source icons
+
+`system/delivery-line.png` preserves the exact inline PNG from the live cart (`.shipping-progress-bar__text__img`, inspected 2026-10-14). Its native 32×33px alpha image is rendered at the source size of 16×16px, also recorded in metadata. It is a distinct outlined asset from `base/delivery-fill.svg`; the source pixels are retained without tracing. The Icons Storybook supports both SVG and source PNG assets, and CartPage references this library asset directly.

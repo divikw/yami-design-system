@@ -212,3 +212,44 @@ test("CartPage reports coupon changes inside the drawer and supports undo after 
     root.unmount(); container.remove();
   }
 });
+
+test("CartPage cycles the four title guarantees without shifting the cart layout", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    for (const locale of ["zh", "en"] as const) {
+      for (const width of [375, 1440]) {
+        await page.viewport(width, 812);
+        flushSync(() => root.render(<CartPage key={`${locale}-${width}`} {...createCartPageFixture(locale)} />));
+        const carousel = container.querySelector<HTMLElement>('[data-slot="cart-security-carousel"]')!;
+        const track = carousel.firstElementChild!;
+        const slides = [...track.children];
+        const animation = track.getAnimations()[0];
+        expect(animation).toBeDefined();
+        expect(carousel.getAttribute("aria-hidden")).toBe("true");
+        expect(slides).toHaveLength(5);
+        expect(slides[0].textContent).toBe(slides[4].textContent);
+        expect(new Set(slides.slice(0, 4).map((slide) => slide.textContent)).size).toBe(4);
+        animation.pause();
+        const top = container.querySelector('[aria-labelledby="merchant-yami"]')!;
+        const merchantTop = top.getBoundingClientRect().top;
+        for (const index of [0, 1, 2, 3, 4]) {
+          animation.currentTime = index === 4 ? 14000 : index * 3500;
+          const visibleSlide = slides[index === 4 ? 0 : index].getBoundingClientRect();
+          expect(Math.abs(visibleSlide.top - carousel.getBoundingClientRect().top)).toBeLessThan(1);
+          expect(top.getBoundingClientRect().top).toBe(merchantTop);
+          expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+        }
+        animation.play();
+        await userEvent.hover(page.elementLocator(carousel));
+        await expect.poll(() => getComputedStyle(track).animationPlayState).toBe("paused");
+        await userEvent.unhover(page.elementLocator(carousel));
+      }
+    }
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});

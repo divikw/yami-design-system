@@ -96,3 +96,16 @@ export const Interaction: Story = {
     await waitFor(() => expect(canvasElement.ownerDocument.querySelector("dialog[open]")).toBeNull());
   },
 };
+
+export const SecurityCarousel: Story = {
+  render: renderScenario("selected"),
+  play: async ({ canvasElement }) => {
+    const track = canvasElement.querySelector('[data-slot="cart-security-track"]')!;
+    await expect(track.children).toHaveLength(5);
+    await waitFor(() => {
+      const carouselTop = track.parentElement!.getBoundingClientRect().top;
+      const secondSlideTop = track.children[1].getBoundingClientRect().top;
+      expect(Math.abs(secondSlideTop - carouselTop)).toBeLessThan(1);
+    }, { timeout: 5000 });
+  },
+};

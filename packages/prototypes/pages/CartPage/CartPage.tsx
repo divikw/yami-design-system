@@ -10,6 +10,8 @@ import { calculateCartTotals, formatCartMoney as money } from "./cart-totals";
 import { cartGuarantees, cartPaymentMarks } from "./fixtures";
 import styles from "./CartPage.module.css";
 
+const deliveryIcon = new URL("../../../design-system/assets/icons/system/delivery-line.png", import.meta.url).href;
+
 const text = {
   zh: {
     cart: "购物车", all: "全选", items: "件商品", merchants: "个商家", select: "选择", quantity: "数量", remove: "删除", save: "稍后购买", move: "移入购物车", undo: "撤销",
@@ -144,7 +146,16 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
     <main className={styles.layout} id="cart-main">
       <div className={styles.mainColumn}>
         <section className={styles.overview} aria-labelledby="cart-title">
-          <h1 ref={titleRef} tabIndex={-1} id="cart-title">{t.cart}</h1>
+          <div className={styles.titleRow}>
+            <h1 ref={titleRef} tabIndex={-1} id="cart-title">{t.cart}</h1>
+            <div className={styles.securityCarousel} data-slot="cart-security-carousel" aria-hidden="true">
+              <div className={styles.securityTrack} data-slot="cart-security-track">
+                {[...cartGuarantees, cartGuarantees[0]].map((guarantee, index) => <div className={styles.securitySlide} key={index}>
+                  <img src={`https://cdn.yamibuy.net/mkt/${guarantee.image}_0x0.png`} alt="" width={20} height={20} /><span>{guarantee[locale]}</span>
+                </div>)}
+              </div>
+            </div>
+          </div>
           {!loading && !error && available.length > 0 ? <label className={styles.selectAll}>
             <span className={styles.selectionControl}><Checkbox checked={allSelected} indeterminate={selectedCount > 0 && !allSelected}
               onCheckedChange={(checked) => setItems((current) => current.map((item) => item.availability === "available" ? { ...item, selected: checked } : item))} /></span>
@@ -169,7 +180,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                       <h2 className={styles.merchantHeading}><a className={styles.merchantName} id={`merchant-${merchant.id}`} href={merchant.href}>{merchant.title}</a><small className={styles.merchantOrigin}>{merchant.origin}</small></h2>
                     </div>
                     <div className={styles.shippingActions}><div className={styles.shipping} data-slot="cart-shipping">
-                      <p><span className={styles.shippingIcon} aria-hidden="true" /><span>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={`${styles.attention} ${styles.shippingPhrase}`}>{money(remaining)}</span> <span className={styles.shippingPhrase}>{locale === "zh" ? "可享免运费" : "for free shipping"}</span></>}</span></p>
+                      <p><img className={styles.shippingIcon} src={deliveryIcon} alt="" width={16} height={16} /><span>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={`${styles.attention} ${styles.shippingPhrase}`}>{money(remaining)}</span> <span className={styles.shippingPhrase}>{locale === "zh" ? "可享免运费" : "for free shipping"}</span></>}</span></p>
                       <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`}
                         aria-valuetext={remaining === 0 ? t.free : locale === "zh" ? `还差 ${money(remaining)} 可享免运费` : `${money(remaining)} away from free shipping`} />
                     </div>
