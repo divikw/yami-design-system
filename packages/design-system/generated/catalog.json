@@ -6386,7 +6386,7 @@
         "category": "composite",
         "status": "stable",
         "version": "0.1.0",
-        "description": "响应式社交视频列表，支持纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
+        "description": "响应式社交内容列表，支持图片帖与视频帖混排、纯文案、单商品和多商品底部样式；PC 列数随实际容器宽度调整。",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
           "nodeId": "6993:63493",
@@ -6403,10 +6403,20 @@
           "Button"
         ],
         "props": {
+          "images": {
+            "type": "ImageSource[]",
+            "required": false,
+            "description": "图片帖的有序图片数组；多图可见时每 5 秒循环，离开时回到第一张，减少动态效果时保持静态。视频帖忽略此字段。"
+          },
           "videoSrc": {
             "type": "string",
             "required": false,
-            "description": "可选的静音循环自动播放视频，保留卡片媒体布局。"
+            "description": "可选的视频地址；所有可见视频同时静音循环，移出后停止、释放地址并重置，返回时从头播放。"
+          },
+          "platformIconSrc": {
+            "type": "ImageSource",
+            "required": false,
+            "description": "账号旁的可选装饰性平台图标，省略时仅显示账号。"
           },
           "headingAlign": {
             "type": "\"start\" | \"center\"",
@@ -6432,7 +6442,7 @@
           "cards": {
             "type": "SocialVideoCardProps[]",
             "required": true,
-            "description": "按顺序展示的视频卡片，需提供稳定 ID。"
+            "description": "按顺序展示的图片帖或视频帖，可混排，需提供稳定 ID；单图静态展示，多图可见时每 5 秒循环切换，不内置详情查看器。"
           },
           "viewAllHref": {
             "type": "string",
@@ -6448,13 +6458,13 @@
           "previousLabel": {
             "type": "string",
             "required": false,
-            "default": "Previous social videos",
+            "default": "Previous social posts",
             "description": "上一页按钮的本地化标签。"
           },
           "nextLabel": {
             "type": "string",
             "required": false,
-            "default": "Next social videos",
+            "default": "Next social posts",
             "description": "下一页按钮的本地化标签。"
           },
           "products": {

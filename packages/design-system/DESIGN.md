@@ -719,15 +719,15 @@ Responsive shortcut navigation for homepage and discovery surfaces.
 
 ### SocialMediaGallery — `components/SocialMediaGallery/` _(composite: composes Button)_
 
-Responsive social video discovery rail for homepage and editorial surfaces.
+Responsive image and video post discovery rail for homepage and editorial surfaces.
 
 | Axis | Contract |
 | --- | --- |
-| **Composition** | The gallery delegates every entry to the exported `SocialVideoCard` child component. Cards support pure-video, single-product, and multi-product variants on both PC and mobile. |
+| **Composition** | The gallery delegates every entry to the exported `SocialVideoCard` child component. Image posts use `images` (falling back to `posterSrc`): one stays still, multiple cycle every five seconds while visible and reset to the first image offscreen; reduced motion keeps images still. Video posts use `videoSrc`. Both support text-only, single-product, and multi-product footers on PC and mobile. There is no built-in post viewer. |
 | **PC geometry** | The section uses a 1px `--divider-default` top rule, 48px inline and 32px block padding, and one to six equal cards based on the available rail container width (2 at 376px, 3 at 572px, 4 at 768px, 5 at 1184px, 6 at 1344px). Each card crops a 9:16 source into a 3:4 media area and adds a 72px footer. |
 | **Mobile geometry** | The section becomes a rounded surface. Cards are fixed at 240px in a native horizontal rail; media is 240 × 320 and the footer is 68px. |
-| **Content** | Creator identity and captions are caller-provided. One product renders image plus copy, multiple products render image tiles and an optional more count, and omission renders the caption in a text-only footer. |
-| **Structure** | The visible heading labels a semantic list of article cards. Video, product, view-all, and paging destinations remain independent controls; desktop paging composes shared rail Buttons. |
+| **Content** | Creator identity, optional platform icon, and captions are caller-provided. One product renders image plus copy, multiple products render image tiles and an optional more count, and omission renders the caption in a text-only footer. The more count refers to products, not images. |
+| **Structure** | The visible heading labels a semantic list of article cards. All visible videos play concurrently, muted and looped; offscreen videos release their sources and restart when visible again. Video, product, view-all, and paging destinations remain independent controls; desktop paging composes shared rail Buttons. |
 
 ### TrendingSearches — `components/TrendingSearches/` _(composite: composes ProductCard + SectionHeading + RailNavigation)_
 
