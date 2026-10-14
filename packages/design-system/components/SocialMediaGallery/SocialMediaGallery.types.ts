@@ -31,8 +31,8 @@ export interface SocialVideoCardProps
   username: ReactNode;
   /** 账号名称旁的可选装饰性平台图标，未提供时仅显示账号。 */
   platformIconSrc?: ImageSource;
-  /** 未提供商品时显示的底部文案。 */
-  caption: ReactNode;
+  /** 未提供商品时显示的底部文案；没有文案时显示 No products featured in this post～。 */
+  caption?: ReactNode;
   /** 媒体的可选跳转地址；不提供时仅展示，不打开详情。 */
   href?: string;
   /** 媒体下方显示的可选商品数据。 */

@@ -29,15 +29,16 @@ export const money = (amount: number) => `$${amount.toFixed(2)}`;
 
 export const appDownloadBannerTitle = storyBanners.title;
 export const appDownloadBannerDescription = storyBanners.description;
+const bannerImage = (src: string) => new URL(`./assets/story-banners/${src.split("/").pop()}`, import.meta.url).href;
 
 export function createAppDownloadBanners(): SectionBannerItem[] {
   return storyBanners.items.map((item) => ({
     id: item.id,
     href: item.href,
-    image: { src: item.image.src, alt: item.title },
+    image: { src: bannerImage(item.image.src), alt: item.title },
     title: item.title,
     description: item.description,
-    products: item.products.map(({ src, alt }) => ({ src, alt })),
+    products: item.products.map(({ src, alt }) => ({ src: bannerImage(src), alt })),
   }));
 }
 

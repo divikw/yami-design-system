@@ -18,7 +18,8 @@ There is no built-in post viewer. Without `href`, media has no detail action or 
 
 ## 底部内容
 
-- 无商品：显示帖子文案。
+- 无商品、有文案：显示帖子文案。
+- 无商品、无文案（省略、空值或仅有空白）：显示 `No products featured in this post～`，保留 72px 底栏。
 - 单商品：显示 56px 正方形商品图片和标题。
 - 多商品：卡片宽度小于 228px 时显示两张缩略图，否则显示三张；其余商品合并为数量提示。商品图片为白底，底部区域使用灰底。
 

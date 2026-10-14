@@ -85,6 +85,11 @@
       "default": "Next social posts",
       "description": "下一页按钮的本地化标签。"
     },
+    "caption": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "无商品时显示的底部文案；未提供、为空或仅有空白时显示 No products featured in this post～。"
+    },
     "products": {
       "type": "SocialVideoProduct[]",
       "required": false,
