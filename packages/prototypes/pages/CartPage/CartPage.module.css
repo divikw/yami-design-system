@@ -65,12 +65,14 @@
 .shippingPhrase { white-space: nowrap; }
 .shippingIcon { display: block; align-self: flex-start; margin-top: var(--space-025); flex: 0 0 var(--space-200); width: var(--space-200); height: var(--space-200); }
 .chevron { display: block; width: var(--space-200); height: var(--space-200); background: currentColor; mask: url("../../../design-system/assets/icons/system/arrow-right.svg") center / contain no-repeat; }
-.shipping { min-width: 0; }
+.shipping { min-width: 0; --shipping-progress-color: var(--text-primary); }
+.shipping[data-qualified="true"] { --shipping-progress-color: var(--fill-success-primary); }
+.shipping[data-qualified="true"] .shippingIcon { flex-basis: calc(var(--space-200) - var(--space-025)); width: calc(var(--space-200) - var(--space-025)); height: auto; }
 .shipping p { display: flex; align-items: center; gap: var(--space-050); font-size: var(--font-size-body-md); }
-.shipping progress { appearance: none; display: block; width: 100%; height: var(--space-050); margin-top: var(--space-050); accent-color: var(--text-primary); border: 0; border-radius: var(--radius-button-primary); overflow: hidden; background: var(--fill-skeleton); }
+.shipping progress { appearance: none; display: block; width: 100%; height: var(--space-050); margin-top: var(--space-050); accent-color: var(--shipping-progress-color); border: 0; border-radius: var(--radius-button-primary); overflow: hidden; background: var(--fill-skeleton); }
 .shipping progress::-webkit-progress-bar { background: var(--fill-skeleton); }
-.shipping progress::-webkit-progress-value { background: var(--text-primary); }
-.shipping progress::-moz-progress-bar { background: var(--text-primary); }
+.shipping progress::-webkit-progress-value { background: var(--shipping-progress-color); }
+.shipping progress::-moz-progress-bar { background: var(--shipping-progress-color); }
 .itemList, .couponList, .paymentMarks, .guarantees { list-style: none; padding: 0; margin: 0; }
 .item { display: grid; grid-template-columns: 44px 100px minmax(0, 1fr) 88px 100px; align-items: center; column-gap: var(--space-200); row-gap: var(--space-100); padding: var(--space-300) var(--space-150); border-bottom: var(--stroke-default) solid var(--divider-default); }
 .item:last-child { border-bottom: 0; }

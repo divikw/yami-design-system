@@ -99,7 +99,7 @@
       "sourceSha256": "3b2f5b6f4971c5e6849952bc489d67f852ec61629a2cf3c5ae58edf9570e3458",
       "disposition": "migrated",
       "destination": "packages/design-system/assets/icons/README.md",
-      "destinationSha256": "10776490decac57d612cfe5aa2511ec5c4c8f556b194de7b8711a32779194e7c"
+      "destinationSha256": "6f0ca2c72067acb6a82ae82825026073f17c014fa59a9940b731ec49a3e92f9a"
     },
     {
       "source": "assets/icons/action/arrow-left.svg",
@@ -680,7 +680,7 @@
       "sourceSha256": "5b66c99a250c9e188e3b9f330ecb172c08db3a9dcc103f4eabbde14bebfed502",
       "disposition": "migrated",
       "destination": "packages/design-system/assets/icons/icons.meta.json",
-      "destinationSha256": "062b16e44ce61154131d0a705e3c904bd3179574042eba2d00cebddb22ddfce0"
+      "destinationSha256": "f0a6b6329707705c0cc89267671519b3dafce6a72b5c060a94c50fad6235c3ff"
     },
     {
       "source": "assets/icons/social-monochrome/facebook.svg",

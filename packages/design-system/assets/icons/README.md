@@ -44,3 +44,5 @@ Usage in HTML: `<img src="https://unpkg.com/lucide-static@latest/icons/shopping-
 ## Web-source icons
 
 `system/delivery-line.png` preserves the exact inline PNG from the live cart (`.shipping-progress-bar__text__img`, inspected 2026-10-14). Its native 32×33px alpha image is rendered at the source size of 16×16px, also recorded in metadata. It is a distinct outlined asset from `base/delivery-fill.svg`; the source pixels are retained without tracing. The Icons Storybook supports both SVG and source PNG assets, and CartPage references this library asset directly.
+
+`system/shipping-qualified.png` is the exact celebration PNG from the cart's qualified free-shipping state (inspected 2026-10-14). Native size is 28×29px; CartPage preserves its aspect ratio at 14×14.5px as in the source. The icon-library preview uses the standard 16px canvas. It replaces the outlined delivery truck only after the merchant qualifies for free shipping.

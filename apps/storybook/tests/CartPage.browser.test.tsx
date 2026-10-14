@@ -146,6 +146,8 @@ test("CartPage keeps shipping progress visible at zero, partial and qualified am
       const progress = container.querySelector<HTMLProgressElement>('[aria-labelledby="merchant-yami"] progress')!;
       const progressWidth = progress.getBoundingClientRect().width;
       expect(container.querySelectorAll("progress")).toHaveLength(4);
+      expect(progress.parentElement!.dataset.qualified).toBe("false");
+      expect(progress.parentElement!.querySelector("img")!.getAttribute("src")).toContain("delivery-line.png");
       expect(progress.value).toBe(0);
       expect(progress.max).toBe(4900);
       if (width === 1440) {
@@ -165,11 +167,27 @@ test("CartPage keeps shipping progress visible at zero, partial and qualified am
         select.dispatchEvent(new Event("change", { bubbles: true }));
         await expect.poll(() => progress.value).toBe(value);
         expect(progress.getAttribute("aria-valuetext")).toContain(hint);
+        const shipping = progress.parentElement!;
+        expect(shipping.dataset.qualified).toBe(String(quantity === 3));
+        expect(shipping.querySelector("img")!.getAttribute("src")).toContain(quantity === 3 ? "shipping-qualified.png" : "delivery-line.png");
+        const sample = document.createElement("span");
+        sample.style.color = quantity === 3 ? "var(--fill-success-primary)" : "var(--text-primary)";
+        shipping.append(sample);
+        expect(getComputedStyle(progress).accentColor).toBe(getComputedStyle(sample).color);
+        sample.remove();
+        if (quantity === 3) {
+          expect(shipping.querySelector("p")!.textContent).toBe("You have earned free shipping");
+          expect(shipping.querySelector("strong")!.textContent).toBe(" free shipping");
+          expect(shipping.querySelector("img")!.getBoundingClientRect().width).toBe(14);
+        }
         expect(progress.getBoundingClientRect().width).toBe(progressWidth);
         await expect.element(page.elementLocator(progress)).toBeVisible();
       }
       await page.getByRole("checkbox", { name: `Select ${product.title}`, exact: true }).click();
       expect(progress.value).toBe(0);
+      expect(progress.parentElement!.dataset.qualified).toBe("false");
+      expect(progress.parentElement!.querySelector("img")!.getAttribute("src")).toContain("delivery-line.png");
+      expect(progress.parentElement!.querySelector("p")!.textContent).not.toContain("You have earned");
       await expect.element(page.elementLocator(progress)).toBeVisible();
     }
   } finally {

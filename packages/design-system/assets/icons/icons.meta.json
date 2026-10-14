@@ -40,7 +40,7 @@
       "canvas": 24
     },
     "system": {
-      "count": 18,
+      "count": 19,
       "canvas": 16
     }
   },
@@ -1084,6 +1084,14 @@
       "width": 16,
       "height": 16,
       "sha1": "a3a9c158a8"
+    },
+    {
+      "name": "shipping-qualified",
+      "category": "system",
+      "path": "assets/icons/system/shipping-qualified.png",
+      "width": 16,
+      "height": 16,
+      "sha1": "71bbbe5b3c"
     },
     {
       "name": "star-fill",

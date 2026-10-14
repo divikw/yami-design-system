@@ -12,16 +12,18 @@ import styles from "./CartPage.module.css";
 
 const deliveryIcon = new URL("../../../design-system/assets/icons/system/delivery-line.png", import.meta.url).href;
 
+const qualifiedShippingIcon = new URL("../../../design-system/assets/icons/system/shipping-qualified.png", import.meta.url).href;
+
 const text = {
   zh: {
     cart: "购物车", all: "全选", items: "件商品", merchants: "个商家", select: "选择", quantity: "数量", remove: "删除", save: "稍后购买", move: "移入购物车", undo: "撤销",
-    shipping: "运费", free: "免运费", more: "添加更多", shortage: "库存紧张", unavailable: "以下商品已失效", viewAll: "查看全部", unavailableHint: "已售完或已下架的商品不会计入结算金额。",
+    shipping: "运费", free: "免运费", freeEarned: "你已获得", more: "添加更多", shortage: "库存紧张", unavailable: "以下商品已失效", viewAll: "查看全部", unavailableHint: "已售完或已下架的商品不会计入结算金额。",
     soldOut: "已售完", delisted: "已下架", notify: "设置到货通知", notified: "已设置到货通知", coupons: "优惠券", code: "折扣码", redeem: "兑换", edit: "编辑", noCoupons: "暂无可用优惠券", couponHint: "这里仅显示可用于当前购物车中商品的优惠券", use: "使用", unused: "取消使用", condition: "尚未满足使用条件", couponInvalid: "折扣码无效，请检查后重试", couponApplied: "优惠券已使用", couponRemoved: "已取消使用优惠券", unavailableEmpty: "暂无失效商品", noCoupon: "不使用优惠券", codeRequired: "请输入折扣码",
     subtotal: "商品小计", discount: "优惠", total: "合计", tax: "税费在结算时计算", checkout: "去结算", summary: "订单摘要", selected: "已选", choose: "请选择需要结算的商品", protection: "服务保障", learn: "了解更多", close: "关闭", done: "完成", back: "返回购物车", recommendations: "为你推荐", history: "历史浏览", favorites: "收藏商品", emptyTab: "暂无商品", empty: "购物车还是空的", emptyHint: "去逛逛，把喜欢的商品加入购物车吧。", shop: "继续购物", added: "已加入购物车", removed: "商品已删除", saved: "已移入稍后购买", limit: "已达到商品限购数量", loading: "正在加载购物车…", retry: "重试", couponSelected: "使用条件未满足，优惠暂未计入", noSelectedShipping: "选择商品后计算运费",
   },
   en: {
     cart: "Shopping cart", all: "Select all", items: "items", merchants: "sellers", select: "Select", quantity: "quantity", remove: "Delete", save: "Save for later", move: "Move to cart", undo: "Undo",
-    shipping: "Shipping", free: "Free shipping", more: "Add more", shortage: "Low stock", unavailable: "Unavailable items", viewAll: "View all", unavailableHint: "Sold-out and delisted items are excluded from checkout.",
+    shipping: "Shipping", free: "Free shipping", freeEarned: "You have earned", more: "Add more", shortage: "Low stock", unavailable: "Unavailable items", viewAll: "View all", unavailableHint: "Sold-out and delisted items are excluded from checkout.",
     soldOut: "Sold out", delisted: "No longer available", notify: "Notify me", notified: "Notification set", coupons: "Coupons", code: "Promo code", redeem: "Redeem", edit: "Edit", noCoupons: "No available coupons", couponHint: "Only coupons applicable to items in your cart are shown here.", use: "Apply", unused: "Remove coupon", condition: "Requirements not met", couponInvalid: "Invalid promo code. Check it and try again.", couponApplied: "Coupon applied", couponRemoved: "Coupon removed", unavailableEmpty: "No unavailable items", noCoupon: "Use no coupon", codeRequired: "Enter a promo code",
     subtotal: "Subtotal", discount: "Discount", total: "Total", tax: "Tax calculated at checkout", checkout: "Checkout", summary: "Order summary", selected: "Selected", choose: "Select items to check out", protection: "Shopping protection", learn: "Learn more", close: "Close", done: "Done", back: "Back to cart", recommendations: "Recommended for you", history: "Recently viewed", favorites: "Favorites", emptyTab: "No items here yet", empty: "Your cart is empty", emptyHint: "Explore something new and add your favorites to your cart.", shop: "Continue shopping", added: "Added to cart", removed: "Item deleted", saved: "Saved for later", limit: "Purchase limit reached", loading: "Loading your cart…", retry: "Retry", couponSelected: "Requirements not met; this coupon is not included in the total", noSelectedShipping: "Select items to calculate shipping",
   },
@@ -179,8 +181,8 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                       onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} /><span className={styles.srOnly}>{merchant.title} {merchant.origin}</span></label>
                       <h2 className={styles.merchantHeading}><a className={styles.merchantName} id={`merchant-${merchant.id}`} href={merchant.href}>{merchant.title}</a><small className={styles.merchantOrigin}>{merchant.origin}</small></h2>
                     </div>
-                    <div className={styles.shippingActions}><div className={styles.shipping} data-slot="cart-shipping">
-                      <p><img className={styles.shippingIcon} src={deliveryIcon} alt="" width={16} height={16} /><span>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={`${styles.attention} ${styles.shippingPhrase}`}>{money(remaining)}</span> <span className={styles.shippingPhrase}>{locale === "zh" ? "可享免运费" : "for free shipping"}</span></>}</span></p>
+                    <div className={styles.shippingActions}><div className={styles.shipping} data-slot="cart-shipping" data-qualified={remaining === 0}>
+                      <p><img className={styles.shippingIcon} src={remaining === 0 ? qualifiedShippingIcon : deliveryIcon} alt="" width={16} height={16} /><span>{remaining === 0 ? <>{t.freeEarned}<strong>{locale === "zh" ? t.free : ` ${t.free.toLowerCase()}`}</strong></> : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={`${styles.attention} ${styles.shippingPhrase}`}>{money(remaining)}</span> <span className={styles.shippingPhrase}>{locale === "zh" ? "可享免运费" : "for free shipping"}</span></>}</span></p>
                       <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`}
                         aria-valuetext={remaining === 0 ? t.free : locale === "zh" ? `还差 ${money(remaining)} 可享免运费` : `${money(remaining)} away from free shipping`} />
                     </div>

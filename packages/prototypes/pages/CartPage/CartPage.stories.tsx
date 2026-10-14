@@ -5,11 +5,12 @@ import { CartPage } from "./CartPage";
 import { createCartPageFixture } from "./fixtures";
 import type { CartLocale } from "./CartPage.types";
 
-type Scenario = "default" | "selected" | "empty" | "loading" | "error" | "long" | "no-coupons";
+type Scenario = "default" | "selected" | "empty" | "loading" | "error" | "long" | "no-coupons" | "shipping-partial" | "shipping-qualified";
 function Demo({ locale, scenario = "default" }: { locale: CartLocale; scenario?: Scenario }) {
   const [failed, setFailed] = useState(scenario === "error");
   const fixture = createCartPageFixture(locale);
   if (scenario === "selected") fixture.initialItems = fixture.initialItems.map((item) => ({ ...item, selected: item.availability === "available" }));
+  if (scenario === "shipping-partial" || scenario === "shipping-qualified") fixture.initialItems = fixture.initialItems.map((item, index) => ({ ...item, selected: index === (scenario === "shipping-qualified" ? 0 : 1) }));
   if (scenario === "empty") fixture.initialItems = [];
   if (scenario === "no-coupons") fixture.coupons = [];
   if (scenario === "long") fixture.initialItems = Array.from({ length: 8 }, (_, index) => fixture.initialItems.filter((item) => item.availability === "available").map((item) => ({ ...item, id: `${item.id}-${index}` }))).flat();
@@ -109,3 +110,6 @@ export const SecurityCarousel: Story = {
     }, { timeout: 5000 });
   },
 };
+
+export const ShippingPartial: Story = { render: renderScenario("shipping-partial") };
+export const ShippingQualified: Story = { render: renderScenario("shipping-qualified") };
