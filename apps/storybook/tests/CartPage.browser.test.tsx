@@ -108,7 +108,8 @@ test("CartPage aligns checkbox glyphs and targets, compacts discovery gutters an
       await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
       expect(merchant.getAttribute("aria-checked")).toBe("true");
       expect(all.getAttribute("aria-checked")).toBe("true");
-      await page.elementLocator(container.querySelector("#merchant-yami")!).click();
+      expect(container.querySelector("#merchant-yami")!.getAttribute("href")).toBe(fixture.merchants[0].href);
+      await page.elementLocator(merchant).click();
       expect(merchant.getAttribute("aria-checked")).toBe("false");
       await userEvent.keyboard("{Space}");
       expect(merchant.getAttribute("aria-checked")).toBe("true");
@@ -147,6 +148,13 @@ test("CartPage keeps shipping progress visible at zero, partial and qualified am
       expect(container.querySelectorAll("progress")).toHaveLength(4);
       expect(progress.value).toBe(0);
       expect(progress.max).toBe(4900);
+      if (width === 1440) {
+        const header = container.querySelector('[aria-labelledby="merchant-yami"] header')!;
+        const identity = header.querySelector("h2")!.parentElement!;
+        const shippingActions = progress.parentElement!.parentElement!;
+        expect(Math.abs(identity.getBoundingClientRect().width - shippingActions.getBoundingClientRect().width)).toBeLessThan(1);
+        expect(header.getBoundingClientRect().height).toBe(56);
+      }
       await expect.element(page.elementLocator(progress)).toBeVisible();
       await page.getByRole("checkbox", { name: `Select ${product.title}`, exact: true }).click();
       expect(progress.value).toBe(1833);

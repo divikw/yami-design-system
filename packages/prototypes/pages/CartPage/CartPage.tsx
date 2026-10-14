@@ -164,16 +164,16 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
                 const remaining = Math.max(0, merchant.freeShippingCents - subtotal);
                 return <section className={styles.merchant} key={merchant.id} aria-labelledby={`merchant-${merchant.id}`}>
                   <header className={styles.merchantHeader}>
-                    <h2 className={styles.merchantHeading}><label className={styles.merchantIdentity}><span className={styles.selectionControl}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
-                      onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} /></span>
-                      <span className={styles.merchantCopy}><strong id={`merchant-${merchant.id}`}>{merchant.title}</strong><small>{merchant.origin}</small></span>
-                    </label></h2>
-                    <div className={styles.shipping} data-slot="cart-shipping">
-                      <p>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={styles.attention}>{money(remaining)}</span> {locale === "zh" ? "可享免运费" : "for free shipping"}</>}</p>
+                    <div className={styles.merchantIdentity}><label className={styles.selectionControl}><Checkbox checked={selected === group.length} indeterminate={selected > 0 && selected < group.length}
+                      onCheckedChange={(checked) => setItems((current) => current.map((item) => item.merchantId === merchant.id && item.availability === "available" ? { ...item, selected: checked } : item))} /><span className={styles.srOnly}>{merchant.title} {merchant.origin}</span></label>
+                      <h2 className={styles.merchantHeading}><a className={styles.merchantName} id={`merchant-${merchant.id}`} href={merchant.href}>{merchant.title}</a><small className={styles.merchantOrigin}>{merchant.origin}</small></h2>
+                    </div>
+                    <div className={styles.shippingActions}><div className={styles.shipping} data-slot="cart-shipping">
+                      <p><span className={styles.shippingIcon} aria-hidden="true" /><span>{remaining === 0 ? t.free : <>{t.shipping} {money(merchant.shippingCents)} · {locale === "zh" ? "再加" : "Add"} <span className={`${styles.attention} ${styles.shippingPhrase}`}>{money(remaining)}</span> <span className={styles.shippingPhrase}>{locale === "zh" ? "可享免运费" : "for free shipping"}</span></>}</span></p>
                       <progress max={merchant.freeShippingCents} value={Math.min(subtotal, merchant.freeShippingCents)} aria-label={`${merchant.title} ${t.free}`}
                         aria-valuetext={remaining === 0 ? t.free : locale === "zh" ? `还差 ${money(remaining)} 可享免运费` : `${money(remaining)} away from free shipping`} />
                     </div>
-                    <ButtonLink size="sm" href={merchant.href} rightIcon={<span className={styles.chevron} aria-hidden="true" />}>{t.more}</ButtonLink>
+                    <ButtonLink className={styles.addMore} form="full" size="sm" href={merchant.href} rightIcon={<span className={styles.chevron} aria-hidden="true" />}>{t.more}</ButtonLink></div>
                   </header>
                   <ul className={styles.itemList}>{group.map((item) => <CartRow key={item.id} item={item} locale={locale}
                     onSelect={(selected) => patchItem(item.id, { selected })} onQuantity={(quantity) => patchItem(item.id, { quantity })}
