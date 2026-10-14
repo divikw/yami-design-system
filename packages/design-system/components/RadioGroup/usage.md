@@ -17,7 +17,7 @@ Use `RadioGroup` when a person must choose one value from two or more mutually e
 
 ## Anatomy and states
 
-The individual Radio Button is a 20px outer circle with a 12px selected dot and a transparent 24px pointer target. Code adds `RadioGroup` because exclusive selection and roving keyboard focus are group behavior.
+The individual Radio Button is a 20px outer circle with a 12px selected dot and a transparent 40×40px layout and pointer target. Code adds `RadioGroup` because exclusive selection and roving keyboard focus are group behavior.
 
 - Unselected uses the current theme's primary background and subtle `--border-default` outline (8% black in Light theme).
 - Hover uses `--surface-secondary`.
@@ -33,4 +33,4 @@ Dark theme is automatic through semantic aliases. RadioGroup has no `dark` prop 
 - Give the group an accessible name with a visible field legend or `aria-label`.
 - Wrap each default `RadioGroupItem` in a visible `<label>`, or pass `aria-label` when no visible label is rendered. Use Base UI's native-button pattern for sibling labels.
 - Put `name`, `required`, `value`, `defaultValue`, `onValueChange`, and group-level `disabled` on `RadioGroup`.
-- The rendered component is 20×20px. A transparent 2px extension on every side creates the 24×24px pointer target without changing layout. In option lists, the enclosing native `<label>` keeps the full row clickable.
+- Each item reserves a 40×40px layout and pointer target at every breakpoint, with a centered 20×20px visible circle. The keyboard focus outline follows the visible circle. Keep the full 40px layout space so adjacent targets cannot overlap. In option lists, the enclosing native `<label>` keeps the full row clickable.

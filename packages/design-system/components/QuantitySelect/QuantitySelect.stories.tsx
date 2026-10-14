@@ -14,8 +14,8 @@ const meta = {
   globals: { theme: "light" },
   parameters: { layout: "padded", docs: { playground: "Playground", showStories: false,
     translations: {
-      zh: { description: "购物车受控数量选择：原生 1–9 与 10+ 输入；业务提供库存／限购上限。支持取消、键盘、更新中、禁用和错误。" },
-      en: { description: "Controlled cart quantity select with native 1–9 options and a validated 10+ editor. The host supplies purchase limits and asynchronous state." },
+      zh: { description: "购物车受控数量选择：自定义下拉列表与 10+ 输入；业务提供库存／限购上限。失焦或 Enter 提交，支持键盘、更新中、禁用和错误。" },
+      en: { description: "Controlled cart quantity select with accessible 1–9 options and a validated 10+ editor. The host supplies purchase limits and asynchronous state." },
     },
   } },
   args: { value: 1, max: 25, label: "商品数量", disabled: false, loading: false, onValueChange: () => {} },
@@ -59,29 +59,36 @@ export const Interaction: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const select = canvas.getByRole("combobox", { name: "Mask quantity" });
-    await userEvent.selectOptions(select, "3");
-    await expect(select).toHaveValue("3");
-    await userEvent.selectOptions(select, "custom");
+    await userEvent.click(select);
+    await userEvent.click(await within(canvasElement.ownerDocument.body).findByRole("option", { name: "3", exact: true }));
+    await expect(select).toHaveTextContent("3");
+    await userEvent.click(select);
+    await userEvent.click(await within(canvasElement.ownerDocument.body).findByRole("option", { name: "10+", exact: true }));
     const input = canvas.getByRole("textbox", { name: "Mask quantity: enter quantity" });
     await expect(input).toHaveFocus();
-    for (const value of ["", "0", "-2", "1.5", "1e1", "26"]) {
-      await userEvent.clear(input);
-      if (value) await userEvent.type(input, value);
-      await userEvent.click(canvas.getByRole("button", { name: "Apply" }));
-      await expect(canvas.getByRole("alert")).toHaveTextContent("Enter a whole number from 1 to 25");
-      await expect(input).toHaveAttribute("aria-invalid", "true");
-      await expect(select).not.toHaveAttribute("aria-invalid", "true");
-      await expect(select).toHaveValue("3");
-    }
+    await expect(canvas.queryByRole("button", { name: "Apply" })).toBeNull();
+    await expect(canvas.queryByRole("button", { name: "Cancel" })).toBeNull();
     await userEvent.clear(input);
     await userEvent.type(input, "12");
     await userEvent.keyboard("{Enter}");
-    await expect(select).toHaveDisplayValue("12");
-    await userEvent.click(canvas.getByRole("button", { name: "Edit Mask quantity" }));
-    await userEvent.clear(canvas.getByRole("textbox"));
-    await userEvent.type(canvas.getByRole("textbox"), "24");
+    await expect(input).toHaveValue("12");
+    await expect(input).not.toHaveFocus();
+    await userEvent.click(input);
+    await userEvent.clear(input);
+    await userEvent.type(input, "26");
+    await userEvent.tab();
+    await expect(input).toHaveValue("25");
+    await expect(await within(canvasElement.ownerDocument.body).findByRole("alert")).toHaveTextContent("Maximum quantity is 25");
+    await userEvent.click(input);
+    await userEvent.clear(input);
+    await userEvent.type(input, "24");
     await userEvent.keyboard("{Escape}");
-    await expect(select).toHaveDisplayValue("12");
-    await expect(select).toHaveFocus();
+    await expect(input).toHaveValue("25");
+    await userEvent.click(input);
+    await userEvent.clear(input);
+    await userEvent.keyboard("{Enter}");
+    const restored = canvas.getByRole("combobox", { name: "Mask quantity" });
+    await expect(restored).toHaveTextContent("1");
+    await expect(restored).toHaveFocus();
   },
 };

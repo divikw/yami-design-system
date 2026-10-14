@@ -38,9 +38,10 @@ export type InputState =
   | 'disabled-empty'
 
 export type InputSize = 'responsive' | 'md' | 'lg'
+export type InputDensity = 'default' | 'compact'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
-  /** Embedded field label from the YAMI Figma component. */
+  /** Embedded label by default; external label in compact density. */
   label?: ReactNode
   /** Supporting text below the field. Hidden when error is present. */
   helperText?: ReactNode
@@ -53,6 +54,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   state?: InputState
   /** @deprecated Figma Input is responsive rather than size-tiered. Kept for backward compatibility. */
   size?: InputSize
+  /** Compact uses an external label and a single value row: Mobile 48px, PC 40px. */
+  density?: InputDensity
   /** Leading icon or text inside the field. Prefer currentColor SVGs from assets/icons. */
   leadingIcon?: ReactNode
   /** Trailing icon, text, or action inside the field. Prefer currentColor SVGs from assets/icons. */
@@ -124,6 +127,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     error,
     state,
     size = 'responsive',
+    density = 'default',
     leadingIcon,
     trailingIcon,
     prefix,
@@ -134,6 +138,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     optional = false,
     required,
     disabled,
+    readOnly,
     className,
     value,
     defaultValue,
@@ -142,6 +147,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     onBlur,
     'aria-describedby': ariaDescribedBy,
     'aria-label': ariaLabel,
+    'aria-invalid': ariaInvalid,
     placeholder,
     ...rest
   },
@@ -152,10 +158,36 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const helperId = `${inputId}-helper`
   const errorId = `${inputId}-error`
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const rootRef = useRef<HTMLDivElement | null>(null)
+  const pointerFocus = useRef(false)
 
   const isControlled = value !== undefined
   const [textValue, setTextValue] = useState(() => valueText(value ?? defaultValue))
   const [focused, setFocused] = useState(false)
+  const [keyboardFocus, setKeyboardFocus] = useState(false)
+
+  useEffect(() => {
+    const document = inputRef.current?.ownerDocument
+    if (!document) return
+
+    const handlePointerDown = () => {
+      pointerFocus.current = true
+      setKeyboardFocus(false)
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey) return
+      pointerFocus.current = false
+      if (rootRef.current?.contains(document.activeElement)) setKeyboardFocus(true)
+    }
+
+    // Capture also covers Tab from another control and clicks on an external label.
+    document.addEventListener('pointerdown', handlePointerDown, true)
+    document.addEventListener('keydown', handleKeyDown, true)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown, true)
+      document.removeEventListener('keydown', handleKeyDown, true)
+    }
+  }, [])
 
   const syncTextValueFromInput = useCallback(() => {
     const input = inputRef.current
@@ -186,20 +218,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     if (isControlled) return undefined
 
     const input = inputRef.current
-    const form = input?.form
-    if (!input || !form) return undefined
+    if (!input) return undefined
+    const document = input.ownerDocument
 
     let resetFrame = 0
-    const handleFormReset = () => {
+    const handleFormReset = (event: Event) => {
+      if (event.target !== input.form) return
       if (resetFrame) window.cancelAnimationFrame(resetFrame)
       resetFrame = window.requestAnimationFrame(syncTextValueFromInput)
     }
 
-    form.addEventListener('reset', handleFormReset)
+    // The native form owner can change without remounting the input.
+    document.addEventListener('reset', handleFormReset, true)
 
     return () => {
       if (resetFrame) window.cancelAnimationFrame(resetFrame)
-      form.removeEventListener('reset', handleFormReset)
+      document.removeEventListener('reset', handleFormReset, true)
     }
   }, [isControlled, syncTextValueFromInput])
 
@@ -238,6 +272,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   })()
 
   const isFloating =
+    density === 'compact' ||
     !hasLabel ||
     resolvedState === 'focused' ||
     resolvedState === 'typing' ||
@@ -254,9 +289,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const showClear =
     clearable &&
     !isDisabled &&
+    !readOnly &&
     !endSlot &&
     hasText &&
-    (resolvedState === 'typing' || state === 'typing')
+    (focused || state === 'typing')
 
   const rootClasses = [styles.root, fullWidth && styles.fullWidth, className]
     .filter(Boolean)
@@ -277,7 +313,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const handleClear = () => {
     const input = inputRef.current
-    if (!input) return
+    if (!input || input.disabled || input.readOnly) return
 
     const valueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
     if (valueSetter) {
@@ -293,41 +329,53 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const handleFieldMouseDown = (event: MouseEvent<HTMLDivElement>) => {
     if (isDisabled) return
-    if (event.target instanceof HTMLElement && event.target.closest('button,input,textarea,select,a')) return
+    if (event.target instanceof Element && event.target.closest('button,input,textarea,select,a')) return
     event.preventDefault()
     inputRef.current?.focus()
   }
 
+  const fieldLabel = hasLabel && (
+    <label className={density === 'compact' ? styles.externalLabel : styles.label} htmlFor={inputId}>
+      {label}
+      {required && (
+        <span className={styles.requiredMarker} aria-hidden="true">
+          *
+        </span>
+      )}
+      {optional && !required && <span className={styles.optionalHint}>Optional · 选填</span>}
+    </label>
+  )
+
   return (
     <div
+      ref={rootRef}
       className={rootClasses}
       data-slot="input"
       data-state={resolvedState}
       data-size={size}
+      data-density={density}
       data-filled={hasText || undefined}
       data-floating={isFloating || undefined}
       data-label={hasLabel || undefined}
       data-leading={Boolean(startSlot) || undefined}
       data-disabled={isDisabled || undefined}
-      onFocusCapture={() => setFocused(true)}
+      data-keyboard-focus={keyboardFocus || undefined}
+      onFocusCapture={() => {
+        setFocused(true)
+        setKeyboardFocus(!pointerFocus.current)
+      }}
       onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setFocused(false)
+          setKeyboardFocus(false)
+        }
       }}
     >
+      {density === 'compact' && fieldLabel}
       <div className={styles.field} onMouseDown={handleFieldMouseDown}>
         {startSlot && <span className={styles.leading}>{startSlot}</span>}
         <div className={styles.textStack}>
-          {hasLabel && (
-            <label className={styles.label} htmlFor={inputId}>
-              {label}
-              {required && (
-                <span className={styles.requiredMarker} aria-hidden="true">
-                  *
-                </span>
-              )}
-              {optional && !required && <span className={styles.optionalHint}>Optional · 选填</span>}
-            </label>
-          )}
+          {density !== 'compact' && fieldLabel}
           <div className={styles.valueRow}>
             <input
               {...rest}
@@ -339,9 +387,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               defaultValue={defaultValue}
               placeholder={placeholder}
               disabled={isDisabled}
+              readOnly={readOnly}
               required={required}
               aria-label={ariaLabel}
-              aria-invalid={isError || undefined}
+              aria-invalid={isError || ariaInvalid}
               aria-describedby={describedBy}
               onChange={handleChange}
               onFocus={handleFocus}

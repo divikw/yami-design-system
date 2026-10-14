@@ -5,8 +5,8 @@
   "title": "ProductCard",
   "type": "component",
   "status": "stable",
-  "version": "0.2.0",
-  "description": "Figma-backed YAMI product tile. Rich remains the default and preserves the existing DOM contract; minimal and compact presentations support image-first and horizontal list contexts.",
+  "version": "0.3.2",
+  "description": "Figma-backed YAMI product tile. Rich remains the default and preserves the existing DOM contract; minimal and compact presentations support image-first and horizontal list contexts. Unavailable products hide quick add and show a localized stock status with an optional restock notification action.",
   "source": "components/ProductCard",
   "files": [
     {
@@ -55,6 +55,7 @@
   "composes": [
     "AspectRatio",
     "Badge",
+    "Button",
     "Card",
     "ProductCardAddButton"
   ],
@@ -64,7 +65,8 @@
       "./Card",
       "./AspectRatio",
       "./Badge",
-      "./ProductCardAddButton"
+      "./ProductCardAddButton",
+      "./Button"
     ],
     "peer": [],
     "devOnly": []
@@ -151,7 +153,7 @@
       },
       "--text-secondary": {
         "property": "color",
-        "selector": ".priceOriginal, .ratingCount, .sold, .unitPrice, .countdown, .imagePlaceholder"
+        "selector": ".priceOriginal, .ratingCount, .sold, .unitPrice, .countdown, .imagePlaceholder, .availability p"
       },
       "--product-card-add-surface": {
         "property": "background-color",
@@ -207,7 +209,7 @@
       },
       "--font-size-body-md": {
         "property": "font-size",
-        "selector": ".title"
+        "selector": ".title, .availability p"
       },
       "--font-size-price-sm": {
         "property": "font-size",
@@ -227,7 +229,7 @@
       },
       "--line-height-body-md": {
         "property": "line-height",
-        "selector": ".title"
+        "selector": ".title, .availability p"
       },
       "--line-height-price-sm": {
         "property": "line-height",
@@ -258,9 +260,9 @@
       ],
       "ariaPattern": "article containing media and title links to one product destination plus an independent optional quick-add button",
       "structure": "Image with alt (required when src) or aria-hidden placeholder. Badges use semantic <span>. Rating has aria-label 'Rating X out of 5'.",
-      "interaction": "The media and title navigate to the same product destination. Brand and Add remain independent controls; Add has a required aria-label."
+      "interaction": "The media and title navigate to the same product destination. Brand and Add remain independent controls; Add has a required aria-label. Sold-out products keep product links, remove quick add, and expose a separately focusable optional restock action."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "b16c1dfe1bbf722455d69ad3cd0c33434dcd39b403fe1a29db8b1ae4dd698a54"
+  "contentDigest": "0d9e3a5d9d83a8e93e24372b3440a32fbc99939a647a4130d5d0159d4d500af9"
 }

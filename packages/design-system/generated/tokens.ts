@@ -1,5 +1,15 @@
 /* Generated from DTCG token sources. Do not edit. */
 export const tokens = {
+  "app-tabbar-label.font-size": {
+    "$type": "dimension",
+    "$value": "10px",
+    "$description": "App 底部 Tab 栏标签与数量角标字号；Figma Cart Tabbar 2002:30763。"
+  },
+  "app-tabbar-label.line-height": {
+    "$type": "dimension",
+    "$value": "14px",
+    "$description": "App 底部 Tab 栏标签与数量角标行高，搭配 24px 图标和 2px 图文间距。"
+  },
   "background.primary": {
     "$type": "color",
     "$value": "{color.white.1000}",

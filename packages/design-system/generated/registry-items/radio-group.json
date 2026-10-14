@@ -58,7 +58,9 @@
       "--space-025",
       "--space-100",
       "--space-150",
+      "--space-250",
       "--space-300",
+      "--space-500",
       "--stroke-thick",
       "--surface-secondary",
       "--text-primary"
@@ -93,7 +95,7 @@
       },
       "--focus-ring": {
         "property": "outline-color",
-        "selector": ".item:focus-visible"
+        "selector": ".item:focus-visible::before"
       },
       "--radius-button-primary": {
         "property": "border-radius",
@@ -105,7 +107,7 @@
     "accessibility": {
       "role": "radiogroup with radio children",
       "wcagLevel": "AA",
-      "tapTargetMin": 24,
+      "tapTargetMin": 40,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -119,5 +121,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f54b4b3ffe122ffb897dcfb11113ffebccb95d062558770857beddc751ef7f46"
+  "contentDigest": "6f8bae7e9c44f658d6a82a98e3021ececb1cc6d38927ca88e4efea724514c7c1"
 }

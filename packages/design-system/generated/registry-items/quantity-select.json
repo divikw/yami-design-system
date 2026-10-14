@@ -5,8 +5,8 @@
   "title": "QuantitySelect",
   "type": "component",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Compact controlled cart quantity select with a 60×24px visible pill, a 44px native target, validated 10+ editing and async feedback.",
+  "version": "0.3.1",
+  "description": "Controlled cart quantity select with a 60×24px pill, a 44px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
   "source": "components/QuantitySelect",
   "files": [
     {
@@ -26,14 +26,12 @@
     "QuantitySelect",
     "QuantitySelectProps"
   ],
-  "composes": [
-    "Button",
-    "ButtonGroup",
-    "Input"
-  ],
+  "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "react-dom",
+      "@base-ui/react/select"
     ],
     "peer": [],
     "devOnly": []
@@ -51,6 +49,7 @@
     "tokens": [
       "--border-attention",
       "--border-default",
+      "--border-focus",
       "--button-disabled",
       "--focus-ring",
       "--font-family-ios",
@@ -60,7 +59,9 @@
       "--line-height-caption-md",
       "--radius-button-primary",
       "--space-025",
+      "--space-050",
       "--space-100",
+      "--space-150",
       "--space-200",
       "--space-300",
       "--stroke-default",
@@ -121,9 +122,9 @@
         "escape",
         "enter"
       ],
-      "ariaPattern": "Named native select and validated input; errors and busy state announced."
+      "ariaPattern": "Named combobox/listbox and inline input; over-limit toast announces via alert without changing row layout. Host errors and busy state remain associated with the control."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f8f9a3fa9c89a3d913f8872ba0f9c7d91d2c29939e94d36bfb956e8889530b2a"
+  "contentDigest": "5eb84a853bf9e7bf179f4b9c86cd1cb60d6ab58a109dcc31f1e1fc7186738d74"
 }

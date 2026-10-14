@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Right-side desktop drawer with a responsive mobile bottom sheet, sharing Sheet modal and focus behavior.",
+  "description": "Right-side desktop drawer with a responsive mobile bottom sheet. Native 200ms slide and 150ms scrim animations retain Sheet modal/focus behavior through exit and respect reduced motion.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -33,6 +33,11 @@
     "onClose": {
       "type": "() => void",
       "required": true
+    },
+    "onAfterClose": {
+      "type": "() => void",
+      "required": false,
+      "description": "Runs after exit releases the modal, for focus fallback when the original opener no longer exists."
     },
     "children": {
       "type": "ReactNode",

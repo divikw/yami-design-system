@@ -56,7 +56,9 @@
       "--radius-tag-primary",
       "--space-025",
       "--space-100",
+      "--space-250",
       "--space-300",
+      "--space-500",
       "--stroke-thick",
       "--surface-secondary",
       "--text-primary",
@@ -92,7 +94,7 @@
       },
       "--focus-ring": {
         "property": "outline-color",
-        "selector": ".root:focus-visible"
+        "selector": ".root:focus-visible::before"
       },
       "--radius-tag-primary": {
         "property": "border-radius",
@@ -104,7 +106,7 @@
     "accessibility": {
       "role": "checkbox",
       "wcagLevel": "AA",
-      "tapTargetMin": 24,
+      "tapTargetMin": 40,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -115,5 +117,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "1957da4ab907571e6a9b00b46dce1de58e79c3d6f92e80b554499f9a877ca383"
+  "contentDigest": "6023d4f727e36184855d1e02389d4cf684d125281f009d5dd67a2b0eb78bed21"
 }

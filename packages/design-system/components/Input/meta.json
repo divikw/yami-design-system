@@ -5,7 +5,7 @@
   "status": "stable",
   "version": "0.2.0",
 
-  "description": "YAMI Input Field from Figma `↪ 表单输入 Forms`. Responsive single-line native input with embedded label, value row, clear action, helper/error supporting text, and accessible form semantics.",
+  "description": "YAMI Input Field from Figma `↪ 表单输入 Forms`. Native input with embedded label by default (48px Mobile / 56px PC) and code-defined compact density with external label (48px Mobile / 40px PC), clear action, helper/error text, and accessible form semantics.",
 
   "figma": {
     "fileKey": "6oOAy72DBff4P6NzJYc2hi",
@@ -16,10 +16,11 @@
     }
   },
 
-  "exports": ["Input", "InputProps", "InputSize", "InputState"],
+  "exports": ["Input", "InputProps", "InputSize", "InputState", "InputDensity"],
 
   "variants": {
     "platform": ["mobile", "pc"],
+    "density": ["default", "compact"],
     "state": [
       "default",
       "focused",
@@ -32,10 +33,17 @@
   },
 
   "props": {
+    "density": {
+      "type": "enum",
+      "values": ["default", "compact"],
+      "required": false,
+      "default": "default",
+      "description": "Default uses an embedded label at 48px Mobile / 56px PC. Compact uses an external label and one value row at 48px Mobile / 40px PC; compact is a code-defined extension."
+    },
     "label": {
       "type": "ReactNode",
       "required": false,
-      "description": "Embedded field label rendered inside the control."
+      "description": "Field label rendered inside the default control or above the compact control."
     },
     "helperText": {
       "type": "ReactNode",
@@ -66,7 +74,7 @@
       "type": "boolean",
       "required": false,
       "default": false,
-      "description": "Shows the clear-fill action while focus remains inside the field and the input has a value."
+      "description": "Shows the clear-fill action while focus remains inside an editable field with a value, including error states. Hidden when read-only or disabled."
     },
     "onClear": {
       "type": "function",
@@ -118,11 +126,11 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Focused/typing states use a 2px --border-focus border. A separate --focus-ring outline appears around the field for keyboard focus. Focus-within keeps the clear action mounted while keyboard focus moves inside the field."
+      "note": "Focused/typing states use a 2px --border-focus border. Tab/Shift+Tab adds a separate --focus-ring outline; pointer clicks suppress it, including external-label clicks and pointer clearing. Keyboard clearing preserves the ring on return focus. Focus-within keeps the clear action mounted."
     },
     "disabled": {
       "ruleId": "no-opacity-disabled",
-      "note": "Disabled uses --fill-tertiary and text tokens; never opacity."
+      "note": "Disabled uses --fill-tertiary, --text-secondary and a not-allowed cursor independently of error state; error borders/messages and aria-invalid remain available. Never opacity."
     },
     "radii": {
       "ruleId": "no-custom-radii",
@@ -134,7 +142,7 @@
     },
     "tapTarget": {
       "ruleId": "tap-target",
-      "note": "Visible control is 48px on mobile and 56px on PC."
+      "note": "Mobile is 48px; PC is 56px by default or 40px compact. By explicit product request, clear uses a 24×24px hit target and a 20px icon in both densities, without an invisible extension. This is a code-defined exception to the general touch-target guidance."
     },
     "assetSource": {
       "contractId": "asset-source",
@@ -142,7 +150,7 @@
     },
     "nativeSync": {
       "contractId": "native-input-sync",
-      "note": "Uncontrolled visual state resyncs from native input/change and form reset events."
+      "note": "Uncontrolled visual state resyncs from native input/change and resets of the current form owner, including reassociation and later form mounting. Canceled resets preserve the current value."
     }
   },
 
@@ -171,6 +179,7 @@
     "--space-050",
     "--space-100",
     "--space-150",
+    "--space-300",
     "--space-500",
     "--space-600",
     "--stroke-default",
@@ -178,11 +187,14 @@
   ],
 
   "tokenBindings": {
-    "--focus-ring": { "property": "outline-color", "selector": ".field:has(.control:focus-visible), .clearButton:focus-visible" },
+    "--space-100": { "property": "padding-inline-end", "selector": ".field" },
+    "--space-300": { "property": "width", "selector": ".clearButton" },
+    "--space-500": { "property": "height", "selector": "@media(min-width:1024px) .root[data-density='compact'] .field" },
+    "--focus-ring": { "property": "outline-color", "selector": ".root[data-keyboard-focus='true'] .field:has(.control:focus-visible), .root[data-keyboard-focus='true'] .clearButton:focus-visible" },
     "--background-primary": { "property": "background", "selector": ".field" },
     "--fill-tertiary": {
       "property": "background",
-      "selector": ".root[data-state='disabled-filled'] .field, .root[data-state='disabled-empty'] .field"
+      "selector": ".root[data-disabled='true'] .field"
     },
     "--border-default": { "property": "box-shadow", "selector": ".field" },
     "--border-focus": {
@@ -192,11 +204,11 @@
     "--border-attention": { "property": "box-shadow", "selector": ".root[data-state='error'] .field" },
     "--text-primary": {
       "property": "color",
-      "selector": ".control, .root[data-state='focused'] .label, .root[data-state='typing'] .label, .root[data-state='error'] .label"
+      "selector": ".control, .root[data-state='focused'] .label, .root[data-state='typing'] .label, .root[data-state='error']:not([data-disabled='true']) .label"
     },
     "--text-secondary": {
       "property": "color",
-      "selector": ".label, .control::placeholder, .leading, .trailing, .helperText"
+      "selector": ".label, .root[data-disabled='true'] .label, .control::placeholder, .leading, .trailing, .helperText, .clearButton"
     },
     "--text-emphasis": {
       "property": "color",
@@ -204,8 +216,8 @@
     },
     "--radius-component-default": { "property": "border-radius", "selector": ".field" },
     "--font-family-ios": { "property": "font-family", "selector": ".root" },
-    "--font-size-body-md": { "property": "font-size", "selector": ".label, .control" },
-    "--font-size-body-xl": { "property": "font-size", "selector": "@media(min-width:1024px) .control" },
+    "--font-size-body-md": { "property": "font-size", "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control" },
+    "--font-size-body-xl": { "property": "font-size", "selector": "@media(min-width:1024px) .root[data-density='default'] .control" },
     "--font-size-caption-md": {
       "property": "font-size",
       "selector": ".root[data-floating='true'] .label, .helperText"
@@ -221,7 +233,7 @@
   "accessibility": {
     "role": "implicit native input",
     "wcagLevel": "AA",
-    "tapTargetMin": 44,
+    "tapTargetMin": 24,
     "keyboardNav": ["tab", "shift+tab", "type", "delete", "escape when consumer wires it"],
     "ariaPattern": "textbox/searchbox depending on input type",
     "labelling": "Visible embedded label is <label htmlFor={id}>. If no visible label is provided, consumer must pass aria-label.",
@@ -235,6 +247,7 @@
   "usageRef": "./usage.md",
   "examples": [
     "./examples.tsx#BasicInput",
+    "./examples.tsx#CompactInput",
     "./examples.tsx#FocusedInput",
     "./examples.tsx#TypingInput",
     "./examples.tsx#CompleteInput",
@@ -243,7 +256,6 @@
     "./examples.tsx#DisabledEmptyInput",
     "./examples.tsx#SearchInput",
     "./examples.tsx#RequiredInput",
-    "./examples.tsx#WithHelperTextInput",
-    "./examples.tsx#ResettableInput"
+    "./examples.tsx#WithHelperTextInput"
   ]
 }

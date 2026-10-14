@@ -10,7 +10,7 @@
     "nodeId": "4795:90512",
     "componentKey": "f0a1bb4e8c7540460de93a68de180508560150a3",
     "pageNodeId": "2857:32277",
-    "notes": "The visible component is 20x20 with a 24x24 pointer target.",
+    "notes": "Figma defines the 20x20 visible control; code reserves a 40x40 layout and pointer target.",
     "stateMapping": "Status=Default/Hover/Selected/Disable_Selected/Disable_Unselected maps to unchecked hover, checked, checked+disabled, and unchecked+disabled. Indeterminate is code-only."
   },
   "variants": {
@@ -30,7 +30,7 @@
     "focus": { "ruleId": "focus-style", "note": "Uses a 2px --focus-ring ring with 2px offset." },
     "disabled": { "ruleId": "no-opacity-disabled", "note": "Disabled states use --fill-disabled and semantic background colors." },
     "radii": { "ruleId": "no-custom-radii", "note": "Visible square uses --radius-tag-primary for a 4px radius." },
-    "tapTarget": { "ruleId": "tap-target", "note": "20px component with an invisible 2px extension on every side, producing a 24px pointer target. Parent labels may provide a larger target." },
+    "tapTarget": { "ruleId": "tap-target", "note": "40x40px layout and pointer target at every breakpoint, with a centered 20px visible control. Parent labels may provide a larger target." },
     "color": { "ruleId": "semantic-color-only", "note": "Selected state is neutral --text-primary, not operational or brand red." }
   },
   "tokens": [
@@ -44,6 +44,8 @@
     "--focus-ring",
     "--radius-tag-primary",
     "--space-025",
+    "--space-250",
+    "--space-500",
     "--space-100",
     "--space-300",
     "--stroke-thick"
@@ -54,13 +56,13 @@
     "--text-primary": { "property": "background/border-color", "selector": ".root[data-checked]::before, .root[data-indeterminate]::before" },
     "--border-default": { "property": "border-color", "selector": ".root::before" },
     "--fill-disabled": { "property": "background/border-color", "selector": ".root[data-disabled]::before" },
-    "--focus-ring": { "property": "outline-color", "selector": ".root:focus-visible" },
+    "--focus-ring": { "property": "outline-color", "selector": ".root:focus-visible::before" },
     "--radius-tag-primary": { "property": "border-radius", "selector": ".root::before" }
   },
   "accessibility": {
     "role": "checkbox",
     "wcagLevel": "AA",
-    "tapTargetMin": 24,
+    "tapTargetMin": 40,
     "keyboardNav": ["tab", "shift+tab", "space"],
     "ariaPattern": "checkbox",
     "notes": "Base UI renders role=checkbox plus a hidden native form input. Provide a visible label or aria-label."

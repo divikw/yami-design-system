@@ -8,6 +8,18 @@ stateful borders, optional clear action, and supporting text.
 
 The default field width is 320px and shrinks with `max-width: 100%` in narrower containers.
 Use `fullWidth` when the field should fill its available layout column.
+The field's inline-end padding is 8px in both densities at every breakpoint, including fields
+with leading or trailing slots. In left-to-right layouts, the clear button's hit target ends
+8px from the field's right edge.
+
+## Storybook Examples
+
+- **Docs**: component description, API, and usage guidance.
+- **Showcase**: all visual states, icon slots, compact examples, and validation edges.
+- **Playground**: one input driven by Controls, with a localized operation hint. Enable `clearable` to try clearing on the same input.
+- **Compact**: focused inspection of compact density.
+
+The browser regression suite covers Input behavior independently of these navigation entries.
 
 ## Figma Contract
 
@@ -34,6 +46,24 @@ States:
 
 The label is embedded inside the field. It floats when the input is focused, has a value,
 or is in an explicit visual state such as `error`.
+
+## Compact Density
+
+Use `density="compact"` for promo codes and short inputs in dense layouts. It is a code-defined
+extension, not a verified Figma variant. The field is 48px below 1024px and 40px on PC, with
+body-md text and a single value/placeholder row. The default density stays unchanged.
+
+```tsx
+<Input density="compact" label="Promo code" placeholder="SAVE10" clearable />
+```
+
+The label stays above the field with a 4px gap and remains associated with the native input.
+It does not float or disappear when the value changes. A separately authored label may instead
+target the Input's `id`; in that case omit `label`. Keep any adjacent action aligned with the field,
+and render errors below it. Compact is independent of the deprecated `size` compatibility prop.
+
+Clear uses a 20px icon in a 24×24px hit target, centered vertically inside the field on Mobile
+and PC. Its hit area does not extend beyond the button. Keyboard focus outlines the button.
 
 ## Controlled
 
@@ -71,8 +101,17 @@ to the clear action without unmounting it. Activating it sets the native value t
 a bubbling `input` event so `onChange`/form observers can see the update, then calls `onClear`.
 Controlled callers may still use `onClear` for secondary cleanup.
 
+For `type="search"`, the native search cancel button is hidden while the YAMI clear action
+is rendered, so only one clear control appears. Otherwise the native cancel button is preserved.
+
+The clear action stays available when an error is present. Read-only and disabled fields never
+show it or accept clear mutations. Its hit target is 24×24px while the icon remains 20×20px.
+The active icon uses `--text-secondary` for at least 3:1 contrast against the field in both themes.
+
 Uncontrolled usage also listens to native `input`/`change` and form `reset` events so the floating
 label and visual state stay aligned with the actual DOM value.
+Reset follows the current native form owner even after changing `form` or mounting the associated
+form later. Resets of other forms are ignored, and canceled resets preserve the current value.
 
 ## Error
 
@@ -88,6 +127,10 @@ label and visual state stay aligned with the actual DOM value.
 - Links the message via `aria-describedby`
 - Overrides `helperText`
 
+An explicit `aria-invalid` value is preserved when no component error is present. A component
+error takes precedence and sets it to `true`.
+Helper and error text wrap long links and unbroken strings within the available width.
+
 ## Disabled
 
 ```tsx
@@ -97,6 +140,9 @@ label and visual state stay aligned with the actual DOM value.
 
 Disabled empty and disabled filled map to separate Figma states on mobile. Both use tokenized
 fill/text styles and never CSS opacity.
+When `disabled` and `error` coexist, the field keeps its disabled fill, text and not-allowed
+cursor while retaining the error border, message and `aria-invalid`. It remains non-editable,
+cannot receive focus, and does not show a clear action.
 
 ## Icon Slots
 
@@ -126,7 +172,7 @@ state rather than walking the DOM from inside the slot.
 - Error message uses `role="alert"`.
 - Disabled uses native `disabled`.
 - Keyboard behavior is native input behavior.
-- The field keeps its neutral `--border-focus` state border (or red error border). A separate blue `--focus-ring` outline surrounds it when the native control matches `:focus-visible`; the clear action uses the same focus token.
+- The field keeps its neutral `--border-focus` state border (or red error border). Tab/Shift+Tab focus adds a separate blue `--focus-ring` outline. Pointer clicks on the field, label, or clear action suppress the outline even if the text input matches `:focus-visible`. Typing after a pointer click does not enable it. Keyboard clearing returns focus with the ring; pointer clearing returns focus without it. The clear action uses the same modality rule and focus token.
 - A visible clear action remains mounted and keyboard-focusable while focus is inside the field.
 
 ## Baseline Boundary

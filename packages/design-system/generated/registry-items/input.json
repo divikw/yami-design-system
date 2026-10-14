@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.2.0",
-  "description": "YAMI Input Field from Figma `↪ 表单输入 Forms`. Responsive single-line native input with embedded label, value row, clear action, helper/error supporting text, and accessible form semantics.",
+  "description": "YAMI Input Field from Figma `↪ 表单输入 Forms`. Native input with embedded label by default (48px Mobile / 56px PC) and code-defined compact density with external label (48px Mobile / 40px PC), clear action, helper/error text, and accessible form semantics.",
   "source": "components/Input",
   "files": [
     {
@@ -24,6 +24,7 @@
   ],
   "exports": [
     "Input",
+    "InputDensity",
     "InputProps",
     "InputSize",
     "InputState"
@@ -43,6 +44,7 @@
     ],
     "examples": [
       "components/Input/examples.tsx#BasicInput",
+      "components/Input/examples.tsx#CompactInput",
       "components/Input/examples.tsx#FocusedInput",
       "components/Input/examples.tsx#TypingInput",
       "components/Input/examples.tsx#CompleteInput",
@@ -51,8 +53,7 @@
       "components/Input/examples.tsx#DisabledEmptyInput",
       "components/Input/examples.tsx#SearchInput",
       "components/Input/examples.tsx#RequiredInput",
-      "components/Input/examples.tsx#WithHelperTextInput",
-      "components/Input/examples.tsx#ResettableInput"
+      "components/Input/examples.tsx#WithHelperTextInput"
     ]
   },
   "design": {
@@ -78,6 +79,7 @@
       "--space-050",
       "--space-100",
       "--space-150",
+      "--space-300",
       "--space-500",
       "--space-600",
       "--stroke-default",
@@ -94,9 +96,21 @@
       "tap-target"
     ],
     "tokenBindings": {
+      "--space-100": {
+        "property": "padding-inline-end",
+        "selector": ".field"
+      },
+      "--space-300": {
+        "property": "width",
+        "selector": ".clearButton"
+      },
+      "--space-500": {
+        "property": "height",
+        "selector": "@media(min-width:1024px) .root[data-density='compact'] .field"
+      },
       "--focus-ring": {
         "property": "outline-color",
-        "selector": ".field:has(.control:focus-visible), .clearButton:focus-visible"
+        "selector": ".root[data-keyboard-focus='true'] .field:has(.control:focus-visible), .root[data-keyboard-focus='true'] .clearButton:focus-visible"
       },
       "--background-primary": {
         "property": "background",
@@ -104,7 +118,7 @@
       },
       "--fill-tertiary": {
         "property": "background",
-        "selector": ".root[data-state='disabled-filled'] .field, .root[data-state='disabled-empty'] .field"
+        "selector": ".root[data-disabled='true'] .field"
       },
       "--border-default": {
         "property": "box-shadow",
@@ -120,11 +134,11 @@
       },
       "--text-primary": {
         "property": "color",
-        "selector": ".control, .root[data-state='focused'] .label, .root[data-state='typing'] .label, .root[data-state='error'] .label"
+        "selector": ".control, .root[data-state='focused'] .label, .root[data-state='typing'] .label, .root[data-state='error']:not([data-disabled='true']) .label"
       },
       "--text-secondary": {
         "property": "color",
-        "selector": ".label, .control::placeholder, .leading, .trailing, .helperText"
+        "selector": ".label, .root[data-disabled='true'] .label, .control::placeholder, .leading, .trailing, .helperText, .clearButton"
       },
       "--text-emphasis": {
         "property": "color",
@@ -140,11 +154,11 @@
       },
       "--font-size-body-md": {
         "property": "font-size",
-        "selector": ".label, .control"
+        "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control"
       },
       "--font-size-body-xl": {
         "property": "font-size",
-        "selector": "@media(min-width:1024px) .control"
+        "selector": "@media(min-width:1024px) .root[data-density='default'] .control"
       },
       "--font-size-caption-md": {
         "property": "font-size",
@@ -168,7 +182,7 @@
     "accessibility": {
       "role": "implicit native input",
       "wcagLevel": "AA",
-      "tapTargetMin": 44,
+      "tapTargetMin": 24,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -184,5 +198,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "0ac2092d1ab677d435f2ac4d2cb51d3bce8b9e3583acae321b327e42b12629d9"
+  "contentDigest": "4faef0ecfeaf2870782d660b069011b6c3bf47a1e2aadb13428ac0f1becd0520"
 }

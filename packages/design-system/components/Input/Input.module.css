@@ -27,7 +27,8 @@
   width: 100%;
   height: var(--space-600);
   gap: var(--space-0);
-  padding-inline: var(--space-050);
+  padding-inline-start: var(--space-050);
+  padding-inline-end: var(--space-100);
 
   background: var(--background-primary);
   border: 0;
@@ -43,7 +44,7 @@
 }
 
 /* Keep the existing inset state border and add a separate keyboard indicator. */
-.field:has(.control:focus-visible) {
+.root[data-keyboard-focus="true"] .field:has(.control:focus-visible) {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -52,14 +53,13 @@
   box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-attention);
 }
 
-.root[data-state="disabled-filled"] .field,
-.root[data-state="disabled-empty"] .field {
+.root[data-disabled="true"] .field {
   background: var(--fill-tertiary);
   cursor: not-allowed;
 }
 
 .root[data-leading="true"] .field {
-  padding-inline: var(--space-150);
+  padding-inline-start: var(--space-150);
 }
 
 .textStack {
@@ -99,8 +99,7 @@
   color: var(--text-primary);
 }
 
-.root[data-state="disabled-filled"] .label,
-.root[data-state="disabled-empty"] .label {
+.root[data-disabled="true"] .label {
   color: var(--text-secondary);
 }
 
@@ -151,6 +150,10 @@
   color: var(--text-secondary);
 }
 
+.field:has(.clearButton) .control[type='search']::-webkit-search-cancel-button {
+  display: none;
+}
+
 .control:disabled {
   color: var(--text-secondary);
   cursor: not-allowed;
@@ -177,12 +180,12 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: var(--space-500);
-  height: var(--space-500);
+  width: var(--space-300);
+  height: var(--space-300);
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--text-disabled);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -192,7 +195,7 @@
   display: block;
 }
 
-.clearButton:focus-visible {
+.root[data-keyboard-focus="true"] .clearButton:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: -2px;
   border-radius: var(--radius-component-default);
@@ -204,6 +207,8 @@
   align-items: flex-start;
   gap: var(--space-050);
   width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: var(--font-size-caption-md);
   line-height: var(--line-height-caption-md);
   font-weight: var(--font-weight-normal);
@@ -239,7 +244,7 @@
   .field {
     height: 56px;
     gap: var(--space-100);
-    padding-inline: var(--space-150);
+    padding-inline-start: var(--space-150);
   }
 
   .textStack {
@@ -264,5 +269,36 @@
 
   .errorIcon {
     display: none;
+  }
+}
+
+.externalLabel {
+  margin-bottom: var(--space-050);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.root[data-density="compact"] .textStack {
+  padding-inline: 0;
+}
+
+.root[data-density="compact"] .control {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.root[data-density="compact"] .field {
+  padding-inline-start: var(--space-150);
+  gap: var(--space-100);
+}
+
+.root[data-density="compact"] .errorText {
+  margin-top: var(--space-050);
+}
+
+@media (min-width: 1024px) {
+  .root[data-density="compact"] .field {
+    height: var(--space-500);
   }
 }

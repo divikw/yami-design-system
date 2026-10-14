@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react"
-import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
 import { Input, type InputState } from "./Input"
@@ -10,6 +9,41 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
+      translations: {
+        zh: {
+          description: "YAMI 单行输入框。默认规格采用内嵌标签，移动端 48px、桌面端 56px；紧凑规格采用外置标签和单行内容，移动端 48px、桌面端 40px。支持受控与非受控输入、内容清空、辅助说明、错误提示、只读和禁用状态。",
+          argDescriptions: {
+            label: "字段标签：默认内嵌，紧凑规格放在框外。未提供标签时，需使用外部 label 或 aria-label。",
+            density: "规格密度：default 为内嵌标签，移动端 48px / 桌面端 56px；compact 为外置标签和单行内容，移动端 48px / 桌面端 40px。",
+            helperText: "输入框下方的辅助说明；存在错误提示时隐藏。",
+            error: "错误提示内容；设置 aria-invalid，并通过 aria-describedby 关联提示。",
+            state: "用于文档和视觉验收的状态覆盖。业务中通常根据值、焦点、错误和禁用状态自动推导。",
+            size: "已弃用。输入框按移动端与桌面端自适应；保留该属性以兼容旧代码。",
+            leadingIcon: "输入框前置图标或文字，优先使用 YAMI 的 currentColor SVG 图标。",
+            trailingIcon: "输入框尾部图标、文字或操作；交互操作从受控状态读取输入值。",
+            prefix: "leadingIcon 的兼容别名。",
+            suffix: "trailingIcon 的兼容别名。",
+            clearable: "有内容且焦点位于字段内部时显示清空按钮，点击区域 24×24px、图标 20px，错误状态下同样可用；只读或禁用时隐藏。",
+            onClear: "清空原生值并触发 input 事件后调用，可用于额外清理。",
+            fullWidth: "输入框宽度占满容器。",
+            optional: "在标签旁显示选填提示；required 为 true 时不显示。",
+            required: "启用原生必填校验，并显示必填标记。",
+            disabled: "禁用输入和聚焦，同时隐藏清空按钮；存在错误时保留错误边框与提示，并保持禁用外观。",
+            readOnly: "只读状态：允许聚焦和复制，不允许编辑或清空。",
+            placeholder: "输入提示文字；不能代替字段标签。",
+          },
+        },
+        en: {
+          description: "YAMI single-line input. Default density has an embedded label at 48px mobile / 56px desktop. Compact density has an external label and a single value row at 48px mobile / 40px desktop. Supports controlled and uncontrolled values, clearing, helper text, errors, read-only, and disabled states.",
+          argDescriptions: {
+            label: "Field label: embedded by default, external in compact density. Without it, use an external label or aria-label.",
+            density: "Default: embedded label, 48px mobile / 56px desktop. Compact: external label and a single value row, 48px mobile / 40px desktop.",
+            clearable: "Shows the clear action while the field has a value and contains focus, including error states. Uses a 24×24px hit target and a 20px icon. Hidden when read-only or disabled.",
+            readOnly: "Allows focus and copying while preventing edits and clearing.",
+            disabled: "Prevents editing and focus and hides clear. Errors retain their border and message alongside the disabled appearance.",
+          },
+        },
+      },
       description: {
         component:
           "YAMI Input Field from Figma `↪ 表单输入 Forms`: embedded label, responsive Mobile/PC sizing, clear action, disabled, focus, typing, complete, and error states.",
@@ -17,6 +51,7 @@ const meta = {
     },
   },
   argTypes: {
+    density: { control: "select", options: ["default", "compact"] },
     state: {
       control: "select",
       options: [
@@ -37,6 +72,7 @@ const meta = {
     disabled: { control: "boolean" },
   },
   args: {
+    density: "default",
     label: "Label",
     placeholder: "",
     state: undefined,
@@ -80,17 +116,6 @@ const labelStyle: CSSProperties = {
   fontSize: "var(--font-size-body-md)",
   lineHeight: "var(--line-height-body-md)",
   fontWeight: "var(--font-weight-normal)",
-}
-
-const resetButtonStyle: CSSProperties = {
-  alignSelf: "flex-start",
-  minHeight: 32,
-  paddingInline: "var(--space-150)",
-  border: "var(--stroke-default) solid var(--border-default)",
-  borderRadius: "var(--radius-component-default)",
-  background: "var(--background-primary)",
-  color: "var(--text-primary)",
-  font: "inherit",
 }
 
 // Search icon from packages/design-system/assets/icons/action/search.svg.
@@ -137,55 +162,58 @@ function StateExample({
   )
 }
 
-function ControlledClearableInput() {
-  const [value, setValue] = useState("Input")
-
-  return (
-    <Input
-      label="Label"
-      value={value}
-      clearable
-      onChange={(event) => setValue(event.currentTarget.value)}
-      onClear={() => setValue("")}
-    />
-  )
-}
-
-function ResettableInput() {
-  return (
-    <form style={groupStyle}>
-      <Input label="Label" />
-      <button type="reset" style={resetButtonStyle}>
-        Reset
-      </button>
-    </form>
-  )
-}
-
 export const Showcase: Story = {
-  render: () => (
-    <section data-input-showcase style={shellStyle}>
-      <div style={rowStyle}>
-        <StateExample title="Default" state="default" />
-        <StateExample title="Focused" state="focused" />
-        <StateExample title="Typing" state="typing" value="Input" clearable />
-        <StateExample title="Complete" state="complete" value="Input" />
-        <StateExample title="Disabled filled" state="disabled-filled" value="Input" disabled />
-        <StateExample title="Disabled empty" state="disabled-empty" disabled />
-        <StateExample title="Error" state="error" value="Input" error="Supporting text" />
-      </div>
+  render: (_args, { globals }) => {
+    const english = globals.locale === "en"
+    const message = `https://example.com/${"a".repeat(100)}`
+    return (
+      <section data-input-showcase style={shellStyle}>
+        <div style={groupStyle}>
+          <p style={labelStyle}>{english ? "States" : "状态"}</p>
+          <div style={rowStyle}>
+            <StateExample title="Default" state="default" />
+            <StateExample title="Focused" state="focused" />
+            <StateExample title="Typing" state="typing" value="Input" clearable />
+            <StateExample title="Complete" state="complete" value="Input" />
+            <StateExample title="Disabled filled" state="disabled-filled" value="Input" disabled />
+            <StateExample title="Disabled empty" state="disabled-empty" disabled />
+            <StateExample title="Error" state="error" value="Input" error="Supporting text" />
+          </div>
+        </div>
 
-      <div style={groupStyle}>
-        <p style={labelStyle}>Search with leading icon</p>
-        <Input
-          aria-label="Search"
-          placeholder="Search YAMI"
-          leadingIcon={<SearchIcon />}
-          fullWidth
-        />
-      </div>
-    </section>
-  ),
+        <div style={groupStyle}>
+          <p style={labelStyle}>Search with leading icon</p>
+          <Input
+            aria-label="Search"
+            placeholder="Search YAMI"
+            leadingIcon={<SearchIcon />}
+            fullWidth
+          />
+        </div>
+
+        <div style={groupStyle}>
+          <p style={labelStyle}>{globals.locale === "en" ? "Compact density" : "紧凑规格"}</p>
+          <div style={rowStyle}>
+            <Input density="compact" label={globals.locale === "en" ? "Promo code" : "折扣码"} placeholder="SAVE10" />
+            <Input density="compact" label={globals.locale === "en" ? "With error" : "错误状态"} defaultValue="BAD" error={globals.locale === "en" ? "Check your promo code." : "请检查折扣码后重试。"} clearable />
+          </div>
+        </div>
+
+        <div data-input-boundaries style={groupStyle}>
+          <p style={labelStyle}>{english ? "Validation edges" : "边界情况"}</p>
+          <Input label={english ? "Clearable input" : "可清空输入"} state="typing" defaultValue="SAVE10" clearable />
+          <div style={rowStyle}>
+            <Input label={english ? "Disabled with error" : "禁用与错误组合"} defaultValue="BAD" disabled error={english ? "Check your promo code." : "请检查折扣码后重试。"} />
+            <Input density="compact" label={english ? "Compact disabled with error" : "紧凑规格禁用与错误组合"} defaultValue="BAD" disabled error={english ? "Check your promo code." : "请检查折扣码后重试。"} />
+          </div>
+          <div style={rowStyle}>
+            <Input label={english ? "Long helper text" : "长辅助说明"} helperText={message} />
+            <Input density="compact" label={english ? "Long error text" : "长错误提示"} error={message} />
+          </div>
+        </div>
+      </section>
+    )
+  },
   play: async ({ canvasElement }) => {
     const showcase = canvasElement.querySelector<HTMLElement>("[data-input-showcase]")
     const fields = Array.from(canvasElement.querySelectorAll<HTMLElement>('[data-slot="input"]'))
@@ -212,28 +240,21 @@ export const Showcase: Story = {
   },
 }
 
-export const States: Story = {
-  render: () => (
-    <div style={rowStyle}>
-      <StateExample title="Default" state="default" />
-      <StateExample title="Focused" state="focused" />
-      <StateExample title="Typing" state="typing" value="Input" clearable />
-      <StateExample title="Complete" state="complete" value="Input" />
-      <StateExample title="Error" state="error" value="Input" error="Supporting text" />
-      <StateExample title="Disabled filled" state="disabled-filled" value="Input" disabled />
-      <StateExample title="Disabled empty" state="disabled-empty" disabled />
-    </div>
-  ),
-}
-
 export const Playground: Story = {
-  render: (args) => <Input {...args} />,
+  args: { label: undefined },
+  render: (args, { globals }) => {
+    const english = globals.locale === "en"
+    return <section style={shellStyle}>
+      <div data-input-controls style={groupStyle}>
+        <p style={labelStyle}>{english ? "Try the input" : "试用输入框"}</p>
+        <p style={labelStyle}>{english ? "Change properties in the Controls panel below to see how this input responds." : "在下方 Controls 中调整属性，查看这个输入框的变化。"}</p>
+        <Input {...args} label={args.label === undefined ? (english ? "Name" : "姓名") : args.label} />
+      </div>
+    </section>
+  },
 }
 
-export const Clearable: Story = {
-  render: () => <ControlledClearableInput />,
-}
-
-export const FormReset: Story = {
-  render: () => <ResettableInput />,
+export const Compact: Story = {
+  args: { density: "compact", label: undefined, clearable: true, defaultValue: "SAVE10" },
+  render: (args, { globals }) => <Input {...args} label={args.label ?? (globals.locale === "en" ? "Promo code" : "折扣码")} helperText={globals.locale === "en" ? "40px on desktop; 48px on mobile." : "桌面端 40px，移动端 48px。"} />,
 }

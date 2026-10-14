@@ -4,7 +4,7 @@ Use `Checkbox` when people may select zero, one, or several independent options.
 
 ## Anatomy
 
-The component supplies a 20px visible square with a transparent 24px pointer target. Compose its accessible label with a native `<label htmlFor>` or an equivalent field primitive.
+The component supplies a 20px visible square with a transparent 40×40px layout and pointer target. Compose its accessible label with a native `<label htmlFor>` or an equivalent field primitive.
 
 ```tsx
 <label htmlFor="save-payment">
@@ -28,4 +28,4 @@ Dark theme is automatic through semantic aliases. Checkbox has no `dark` prop an
 - Base UI supplies the checkbox role, `aria-checked`, hidden native form input, and Space-key behavior.
 - A visible `<label>` is preferred. If no visible label is rendered, pass `aria-label`.
 - Use native `disabled`, `required`, `name`, `value`, and `form` props.
-- The rendered component is 20×20px with a 4px radius. A transparent 2px extension on every side creates the 24×24px pointer target without changing layout. In option lists, wrap it with a native `<label>` so the full row can remain clickable.
+- The component reserves a 40×40px layout and pointer target at every breakpoint, with a centered 20×20px visible square and a 4px radius. The keyboard focus outline follows the visible square. Keep the full 40px layout space so adjacent targets cannot overlap. In option lists, wrap it with a native `<label>` so the full row can remain clickable.

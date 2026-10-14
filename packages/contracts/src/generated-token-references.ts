@@ -1,5 +1,7 @@
 /* Generated from YAMI DTCG token sources. Do not edit. */
 export const registeredTokenReferenceTypes = {
+  "app-tabbar-label.font-size": "dimension",
+  "app-tabbar-label.line-height": "dimension",
   "background.primary": "color",
   "background.secondary": "color",
   "badge.bg-primary-blue": "color",

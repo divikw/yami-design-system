@@ -4,6 +4,8 @@ Generated from DTCG sources. Contextual values are listed separately.
 
 | Token | Context | Type | Value |
 | --- | --- | --- | --- |
+| `app-tabbar-label.font-size` | root | dimension | `10px` |
+| `app-tabbar-label.line-height` | root | dimension | `14px` |
 | `background.primary` | root | color | `var(--color-white-1000)` |
 | `background.primary` | dark | color | `var(--color-neutral-950)` |
 | `background.secondary` | root | color | `var(--color-neutral-100)` |

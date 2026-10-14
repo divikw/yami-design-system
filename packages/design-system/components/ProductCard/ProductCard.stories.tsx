@@ -56,6 +56,7 @@ const meta = {
   argTypes: {
     presentation: { options: ["rich", "minimal", "compact"], control: "radio", description: "展示形态：完整卡片、图片为主或横向商品行。" },
     addButtonDisabled: { control: "boolean", description: "是否禁用卡片内的加购按钮。" },
+    availability: { options: ["available", "sold-out", "delisted"], control: "radio", description: "库存状态；售完或下架时隐藏加购入口。" },
     surface: {
       options: ["card", "plain"],
       control: { type: "inline-radio" },
@@ -92,6 +93,10 @@ function getProduct(locale: unknown) {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const SoldOut: Story = {
+  render: (args, { globals }) => <div style={{ width: "min(220px, 100%)" }}><ProductCard {...args} {...getProduct(globals.locale)} presentation={args.presentation} surface={args.surface} availability="sold-out" availabilityLabel={globals.locale === "en" ? "Sold out" : "已售完"} notifyLabel={globals.locale === "en" ? "Notify me" : "到货通知"} onAddToCart={() => {}} onNotify={() => {}} /></div>,
+};
 
 const gridStyle: CSSProperties = {
   display: "grid",

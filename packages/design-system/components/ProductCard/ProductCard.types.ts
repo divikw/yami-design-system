@@ -55,6 +55,16 @@ interface ProductCardBaseProps {
   addButtonAriaLabel?: string;
   /** 是否禁用加购按钮。 */
   addButtonDisabled?: boolean;
+  /** 库存状态；不可购买时隐藏加购按钮并显示状态文案。 */
+  availability?: "available" | "sold-out" | "delisted";
+  /** 本地化库存状态文案。 */
+  availabilityLabel?: string;
+  /** 售完商品的到货通知操作；不提供时隐藏入口。 */
+  onNotify?: MouseEventHandler<HTMLButtonElement>;
+  /** 本地化到货通知按钮名称。 */
+  notifyLabel?: string;
+  /** 已订阅或暂不可操作时禁用到货通知。 */
+  notifyDisabled?: boolean;
   /** 商品图片与标题共用的跳转地址。 */
   href: string;
 }

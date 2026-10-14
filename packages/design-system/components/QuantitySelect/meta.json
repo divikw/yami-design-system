@@ -3,8 +3,8 @@
   "name": "QuantitySelect",
   "category": "form",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Compact controlled cart quantity select with a 60×24px visible pill, a 44px native target, validated 10+ editing and async feedback.",
+  "version": "0.3.1",
+  "description": "Controlled cart quantity select with a 60×24px pill, a 44px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -14,11 +14,7 @@
     "QuantitySelect",
     "QuantitySelectProps"
   ],
-  "composes": [
-    "Button",
-    "ButtonGroup",
-    "Input"
-  ],
+  "composes": [],
   "props": {
     "value": {
       "type": "number",
@@ -56,7 +52,7 @@
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Uses shared focus aliases and native keyboard behavior."
+      "note": "Uses shared focus aliases and Base UI Select keyboard, option selection and dismissal behavior."
     },
     "radius": {
       "ruleId": "no-custom-radii",
@@ -72,6 +68,7 @@
     "--button-disabled",
     "--text-disabled",
     "--border-default",
+    "--border-focus",
     "--border-attention",
     "--focus-ring",
     "--radius-button-primary",
@@ -81,6 +78,8 @@
     "--font-size-caption-sm",
     "--line-height-caption-md",
     "--space-025",
+    "--space-050",
+    "--space-150",
     "--space-100",
     "--stroke-default",
     "--stroke-thick",
@@ -96,11 +95,13 @@
       "escape",
       "enter"
     ],
-    "ariaPattern": "Named native select and validated input; errors and busy state announced."
+    "ariaPattern": "Named combobox/listbox and inline input; over-limit toast announces via alert without changing row layout. Host errors and busy state remain associated with the control."
   },
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "react-dom",
+      "@base-ui/react/select"
     ],
     "peer": [],
     "devOnly": []

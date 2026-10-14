@@ -1,8 +1,8 @@
 import { StrictMode, useState } from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
-import { expect, test } from "vitest";
-import { page, userEvent } from "vitest/browser";
+import { expect, test, vi } from "vitest";
+import { cdp, page, userEvent } from "vitest/browser";
 import { Drawer } from "../../../packages/design-system/components/Drawer";
 import { QuantitySelect } from "../../../packages/design-system/components/QuantitySelect";
 import "@yami/design-system/tokens.css";
@@ -30,6 +30,7 @@ test("Drawer keeps right-edge desktop and safe mobile geometry, fixed footer and
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Open drawer" }).click();
       const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+      await expect.poll(() => dialog.dataset.drawerState).toBe("open");
       const content = dialog.querySelector<HTMLElement>("[data-sheet-content]")!;
       const footer = dialog.querySelector<HTMLElement>('[data-slot="sheet-footer"]')!;
       const rect = dialog.getBoundingClientRect();
@@ -55,18 +56,110 @@ test("Drawer keeps right-edge desktop and safe mobile geometry, fixed footer and
       expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
     }
     await page.getByRole("button", { name: "Open drawer" }).click();
-    const select = container.querySelector<HTMLSelectElement>("select")!;
-    select.value = "custom";
-    select.dispatchEvent(new Event("change", { bubbles: true }));
+    await page.getByRole("combobox", { name: "Mask quantity", exact: true }).click();
+    await page.getByRole("option", { name: "10+", exact: true }).click();
     await expect.element(page.getByRole("textbox", { name: "Mask quantity: enter quantity" })).toBeVisible();
     await userEvent.keyboard("{Escape}");
     expect(container.querySelector("dialog[open]")).not.toBeNull();
-    expect(select.value).toBe("1");
+    expect(container.querySelector('[data-slot="quantity-select-display"]')!.textContent).toBe("1");
     await expect.element(page.getByRole("combobox", { name: "Mask quantity" })).toHaveFocus();
     await userEvent.keyboard("{Escape}");
-    expect(container.querySelector("dialog[open]")).toBeNull();
+    await expect.poll(() => container.querySelector("dialog[open]")).toBeNull();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test.each([375, 1440])("Drawer animates its entry axis and retains content, focus and modal lock through exit at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const afterClose = vi.fn();
+  const render = (open: boolean) => flushSync(() => root.render(<>
+    <button>Open motion drawer</button>
+    <Drawer open={open} title={open ? "Motion details" : ""} closeLabel="Close details" onClose={() => render(false)} onAfterClose={afterClose}>
+      {open ? <p>Content stays visible until exit completes</p> : null}
+    </Drawer>
+  </>));
+  try {
+    await page.viewport(width, 812);
+    render(false);
+    const opener = container.querySelector("button")!;
+    opener.focus();
+    render(true);
+    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    const enter = dialog.getAnimations().find((animation) => (animation as CSSAnimation).animationName.includes("drawer-enter"))!;
+    expect(enter).toBeDefined();
+    expect(enter.effect!.getTiming().duration).toBe(200);
+    expect(getComputedStyle(dialog, "::backdrop").animationDuration).toBe("0.15s");
+    enter.pause();
+    enter.currentTime = 100;
+    const transform = new DOMMatrix(getComputedStyle(dialog).transform);
+    expect(width < 1024 ? transform.m42 : transform.m41).toBeGreaterThan(0);
+    expect(width < 1024 ? transform.m41 : transform.m42).toBe(0);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close details");
+    enter.finish();
+    await expect.poll(() => dialog.dataset.drawerState).toBe("open");
+    render(false);
+    expect(dialog.dataset.drawerState).toBe("exiting");
+    expect(dialog.matches(":modal")).toBe(true);
+    expect(dialog.textContent).toContain("Motion details");
+    expect(dialog.textContent).toContain("Content stays visible until exit completes");
+    expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close details");
+    await expect.poll(() => container.querySelector("dialog")).toBeNull();
+    expect(document.activeElement).toBe(opener);
+    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+    expect(afterClose).toHaveBeenCalledTimes(1);
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("Drawer cancels a pending exit when reopened and releases the modal on unmount", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const afterClose = vi.fn();
+  const render = (open: boolean) => flushSync(() => root.render(<Drawer open={open} title="Details" closeLabel="Close details" onClose={() => render(false)} onAfterClose={afterClose}>Details</Drawer>));
+  try {
+    render(true);
+    render(false);
+    render(true);
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    expect(dialog.matches(":modal")).toBe(true);
+    expect(dialog.dataset.drawerState).toBe("open");
+    expect(afterClose).not.toHaveBeenCalled();
+    flushSync(() => root.render(null));
+    expect(document.querySelector("dialog:modal[data-sheet]")).toBeNull();
+    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+  } finally {
+    root.unmount(); container.remove();
+  }
+});
+
+test("Drawer skips motion and closes immediately for reduced-motion users", async () => {
+  const session = cdp();
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const afterClose = vi.fn();
+  const render = (open: boolean) => flushSync(() => root.render(<Drawer open={open} title="Details" closeLabel="Close details" onClose={() => render(false)} onAfterClose={afterClose}>Details</Drawer>));
+  try {
+    await session.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
+    render(true);
+    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    expect(getComputedStyle(dialog).animationDuration).toBe("0s");
+    expect(getComputedStyle(dialog, "::backdrop").animationDuration).toBe("0s");
+    render(false);
+    expect(container.querySelector("dialog")).toBeNull();
+    expect(afterClose).toHaveBeenCalledTimes(1);
+  } finally {
+    root.unmount(); container.remove();
+    await session.send("Emulation.setEmulatedMedia", { features: [] });
   }
 });

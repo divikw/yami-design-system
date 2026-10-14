@@ -6,9 +6,13 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Right-side desktop drawer with a responsive mobile bottom sheet, sharing Sheet modal and focus behavior.",
+  "description": "Right-side desktop drawer with a responsive mobile bottom sheet. Native 200ms slide and 150ms scrim animations retain Sheet modal/focus behavior through exit and respect reduced motion.",
   "source": "components/Drawer",
   "files": [
+    {
+      "source": "components/Drawer/Drawer.module.css",
+      "target": "components/Drawer/Drawer.module.css"
+    },
     {
       "source": "components/Drawer/Drawer.tsx",
       "target": "components/Drawer/Drawer.tsx"
@@ -63,5 +67,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "b0302533af25ac1cfeec7466812c544ca58138c9d9334abfc9fce853b23d8a16"
+  "contentDigest": "1d495c02618d7410e7a599d69bbbf4399f39e6b7c685c61840e6c79070d1064a"
 }

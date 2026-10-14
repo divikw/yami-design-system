@@ -186,6 +186,7 @@ emphasis, or replace the literal serif token with the language-aware token.
 | body-md     | 14      | 20          | `--font-size-body-md`     | **Default body.** sm/md button label                                                          |
 | caption-md  | 14      | 20          | `--font-size-caption-md`  | Rating row in ProductCard                                                                     |
 | caption-sm  | 12      | 14          | `--font-size-caption-sm`  | ProductCard brand row, smallest legal text and helper labels                                  |
+| app-tabbar-label | 10 | 14 | `--font-size-app-tabbar-label` | App bottom navigation labels and quantity badges only; Figma Cart Tabbar |
 | link-xl     | 16      | 20          | `--font-size-link-xl`     | Large inline link                                                                              |
 | link-md     | 14      | 20          | `--font-size-link-md`     | Inline link                                                                                   |
 | link-sm     | 12      | 16          | `--font-size-link-sm`     | Compact link                                                                                  |
@@ -502,13 +503,15 @@ Static membership artwork verified against Figma node `1632:21283`. Exposes the 
 
 ### Input — `components/Input/`
 
+`density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This is a code-defined exception to the general touch-target guidance. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
+
 |              |                                                                              |
 | ------------ | ---------------------------------------------------------------------------- |
 | **States**   | default · hover · focus · error · disabled                                   |
 | **Radius**   | `--radius-component-default` (8px)                                           |
 | **Border**   | `--border-default` → `--border-focus` (focus) → `--border-attention` (error) |
-| **Focus**    | Separate 2px blue `--focus-ring` keyboard outline, 2px offset; keep the existing state border.                                       |
-| **Disabled** | `--button-disabled` bg, `--text-disabled` fg                                 |
+| **Focus**    | Tab/Shift+Tab adds a separate 2px blue `--focus-ring` outline at 2px offset. Pointer focus retains only the state border, including label/clear clicks; keyboard clearing preserves the ring on return focus.                                       |
+| **Disabled** | `--fill-tertiary` bg, `--text-secondary` fg, not-allowed cursor; keep this appearance alongside error borders/messages. |
 
 ### FilterChip — `components/FilterChip/`
 
@@ -520,7 +523,7 @@ Shared modal shell for PDP details and search filters. Below 1024px, mobile uses
 
 ### QuantitySelect — `components/QuantitySelect/`
 
-Controlled cart quantity input with a 60×24px visible pill and a minimum 44px native-select target: native options 1–9 and a validated 10+ editor. The host supplies a positive stock/purchase limit and owns asynchronous updates. Cancel or Escape preserves the last committed quantity and restores select focus. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
+Controlled cart quantity input with a 60×24px visible pill and a minimum 44px target: accessible popup options 1–9 and an inline 10+ input that commits on blur or Enter. Non-digits are filtered; empty/zero becomes 1 and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. Escape preserves the last committed quantity. The host supplies a positive stock/purchase limit and owns asynchronous updates. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
 
 ### Drawer — `components/Drawer/`
 
@@ -535,22 +538,22 @@ Centered modal for confirmation, alerts, and short tasks on mobile and desktop. 
 |                |                                                                                                                                |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | **States**     | default · hover · selected · disabled-selected · disabled-unselected · focus-visible · indeterminate (code-only)               |
-| **Geometry**   | 24px frame · 20px visible square · 4px `--radius-tag-primary`                                                                  |
+| **Geometry**   | 40px frame · 20px visible square · 4px `--radius-tag-primary`                                                                  |
 | **Color**      | Neutral selection: `--text-primary`, never brand or operational red.                                                           |
 | **Disabled**   | `--fill-disabled`; never CSS opacity.                                                                                          |
 | **Behavior**   | Base UI checkbox with controlled/uncontrolled state, hidden native form input, Space-key toggle, and ARIA checked/mixed state. |
-| **Tap target** | Pseudo-element expands the 24px frame to at least 44px without changing layout.                                                |
+| **Tap target** | 40×40px layout and pointer target at every breakpoint; focus outline follows the visible square.                                                |
 
 ### RadioGroup — `components/RadioGroup/`
 
 |                |                                                                                                                                   |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | **States**     | default · hover · selected · disabled-selected · disabled-unselected · focus-visible                                              |
-| **Geometry**   | 24px frame · 20px outer circle · 12px selected dot                                                                                |
+| **Geometry**   | 40px frame · 20px outer circle · 12px selected dot                                                                                |
 | **Color**      | Neutral selection: `--text-primary`, never brand or operational red.                                                              |
 | **Disabled**   | `--fill-disabled`; never CSS opacity.                                                                                             |
 | **Behavior**   | Base UI radiogroup/radio composition with exclusive selection, roving focus, arrow-key navigation, and hidden native form inputs. |
-| **Tap target** | Each 24px item expands to at least 44px without changing group layout.                                                            |
+| **Tap target** | Each item reserves a 40×40px layout and pointer target at every breakpoint; focus outline follows the visible circle.                                                            |
 
 ### Divider — `components/Divider/`
 
