@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 24px frame, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
+          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 40px pointer target, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
       },
     },
   },
@@ -107,7 +107,6 @@ export const Showcase: Story = {
 
     const rootStyle = getComputedStyle(checkbox)
     const visibleStyle = getComputedStyle(checkbox, "::before")
-    const hitAreaStyle = getComputedStyle(checkbox, "::after")
     const uncheckedCheckbox = canvasElement.querySelector<HTMLElement>(
       '[data-demo="unchecked"]',
     )
@@ -115,14 +114,14 @@ export const Showcase: Story = {
       '[data-slot="checkbox-indicator"]',
     )
     if (
-      rootStyle.width !== "20px" ||
-      rootStyle.height !== "20px" ||
+      rootStyle.width !== "40px" ||
+      rootStyle.height !== "40px" ||
       visibleStyle.width !== "20px" ||
       visibleStyle.height !== "20px" ||
       visibleStyle.borderRadius !== "4px" ||
-      hitAreaStyle.inset !== "-2px"
+      visibleStyle.inset !== "10px"
     ) {
-      throw new Error("Checkbox must retain its 20px control, 24px pointer target, and 4px radius")
+      throw new Error("Checkbox must retain its 20px control, 40px pointer target, and 4px radius")
     }
     if (visibleStyle.borderColor !== "rgba(0, 0, 0, 0.08)") {
       throw new Error("Unchecked Checkbox must use the subtle default border token")

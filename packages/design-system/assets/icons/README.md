@@ -46,3 +46,16 @@ Usage in HTML: `<img src="https://unpkg.com/lucide-static@latest/icons/shopping-
 `system/delivery-line.png` preserves the exact inline PNG from the live cart (`.shipping-progress-bar__text__img`, inspected 2026-10-14). Its native 32×33px alpha image is rendered at the source size of 16×16px, also recorded in metadata. It is a distinct outlined asset from `base/delivery-fill.svg`; the source pixels are retained without tracing. The Icons Storybook supports both SVG and source PNG assets, and CartPage references this library asset directly.
 
 `system/shipping-qualified.png` is the exact celebration PNG from the cart's qualified free-shipping state (inspected 2026-10-14). Native size is 28×29px; CartPage preserves its aspect ratio at 14×14.5px as in the source. The icon-library preview uses the standard 16px canvas. It replaces the outlined delivery truck only after the merchant qualifies for free shipping.
+
+
+## App tab bar
+
+`tabbar/` contains five exact 24×24px Figma exports from [Cart Tabbar](https://www.figma.com/design/tFadbV4NMeeyN0JEExVncc/Cart--add-Reorder-tab-feature?node-id=2002-30763), imported 2026-10-14. These preserve the source geometry and colors; existing `base/account.svg` and `base/cart.svg` remain separate variants.
+
+- `yami.svg`: `I2002:30763;5668:39206;5168:23366`
+- `shop.svg`: `I2002:30763;5668:38788;5168:23366`
+- `community.svg`: `I2002:30763;5668:38789;5168:23366`
+- `account.svg`: `I2002:30763;5668:38791;5168:23366`
+- `cart-active.svg`: `I2002:30763;5668:38790;5168:23355;5211:56`, the red cart glyph only. Compose the quantity dynamically as a 14px Badge at x=14px/y=-4px within its 24px wrapper; do not bake the design's example quantity into the asset.
+
+All five entries are registered in `icons.meta.json` and appear in the Icons Storybook. CartPage references the shared library directly.

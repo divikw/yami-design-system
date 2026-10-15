@@ -17,6 +17,10 @@ export interface CartItemData {
   lowStock?: boolean;
   notifyAvailable?: boolean;
 }
+export interface CartReorderItem extends CartItemData {
+  category: string;
+  purchaseCount: number;
+}
 export interface CartMerchant {
   id: string;
   title: string;
@@ -43,6 +47,9 @@ export interface CartPageProps {
   recommendations: CartItemData[];
   history: CartItemData[];
   favorites: CartItemData[];
+  /** Local example purchase history; independent of browsing history. */
+  reorderItems?: CartReorderItem[];
+  frequentlyBoughtItems?: CartReorderItem[];
   coupons: CartCoupon[];
   loading?: boolean;
   error?: string;

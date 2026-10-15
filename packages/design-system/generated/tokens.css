@@ -1,5 +1,7 @@
 /* Generated from DTCG token sources. Do not edit. */
 :root {
+  --font-size-app-tabbar-label: 10px;
+  --line-height-app-tabbar-label: 14px;
   --background-primary: var(--color-white-1000);
   --background-secondary: var(--color-neutral-100);
   --badge-bg-primary-blue: var(--color-blue-600);

@@ -10,6 +10,12 @@ export const BasicInput = () => (
   </section>
 )
 
+export const CompactInput = () => (
+  <section data-example="CompactInput">
+    <Input density="compact" label="Promo code" placeholder="SAVE10" clearable />
+  </section>
+)
+
 export const FocusedInput = () => (
   <section data-example="FocusedInput">
     <Input label="Label" state="focused" />
@@ -61,14 +67,5 @@ export const RequiredInput = () => (
 export const WithHelperTextInput = () => (
   <section data-example="WithHelperTextInput">
     <Input label="Phone" type="tel" helperText="We'll text you order updates." />
-  </section>
-)
-
-export const ResettableInput = () => (
-  <section data-example="ResettableInput">
-    <form>
-      <Input label="Label" />
-      <button type="reset">Reset</button>
-    </form>
   </section>
 )

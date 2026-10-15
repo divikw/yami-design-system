@@ -42,6 +42,10 @@
     "system": {
       "count": 19,
       "canvas": 16
+    },
+    "tabbar": {
+      "count": 5,
+      "canvas": 24
     }
   },
   "icons": [
@@ -1100,6 +1104,46 @@
       "width": 16,
       "height": 16,
       "sha1": "dcd4903968"
+    },
+    {
+      "name": "yami",
+      "category": "tabbar",
+      "path": "assets/icons/tabbar/yami.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "40e97cec51"
+    },
+    {
+      "name": "shop",
+      "category": "tabbar",
+      "path": "assets/icons/tabbar/shop.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "e021f06dfd"
+    },
+    {
+      "name": "community",
+      "category": "tabbar",
+      "path": "assets/icons/tabbar/community.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "d874bd5391"
+    },
+    {
+      "name": "cart-active",
+      "category": "tabbar",
+      "path": "assets/icons/tabbar/cart-active.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "bddabf7d4f"
+    },
+    {
+      "name": "account",
+      "category": "tabbar",
+      "path": "assets/icons/tabbar/account.svg",
+      "width": 24,
+      "height": 24,
+      "sha1": "7ff56f9e14"
     }
   ]
 }

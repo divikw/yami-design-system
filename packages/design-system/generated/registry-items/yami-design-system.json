@@ -430,6 +430,7 @@
       "--font-family-ios",
       "--font-family-serif",
       "--font-family-win",
+      "--font-size-app-tabbar-label",
       "--font-size-body-md",
       "--font-size-body-xl",
       "--font-size-button-lg-desktop",
@@ -460,6 +461,7 @@
       "--layout-page-margin-default",
       "--letter-spacing-normal",
       "--letter-spacing-tight",
+      "--line-height-app-tabbar-label",
       "--line-height-body-md",
       "--line-height-body-xl",
       "--line-height-caption-md",
@@ -572,5 +574,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "2863daeb5893d0c5d5bf161f8ccc5dc906c48414d940cb4173c74d05783ae8f3"
+  "contentDigest": "9fc2c181d195abb0a76ab4cd220d0f18eade518fdb56a6b967f309d05226368b"
 }

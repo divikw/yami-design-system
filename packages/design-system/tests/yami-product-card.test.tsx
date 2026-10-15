@@ -40,6 +40,11 @@ interface ProductCardTestProps {
   countdown?: ReactNode
   badges?: Array<{ label: ReactNode; type: string }>
   onAddToCart?: MouseEventHandler<HTMLButtonElement>
+  availability?: "available" | "sold-out" | "delisted"
+  availabilityLabel?: string
+  onNotify?: MouseEventHandler<HTMLButtonElement>
+  notifyLabel?: string
+  notifyDisabled?: boolean
   presentation?: "rich" | "minimal" | "compact"
 }
 
@@ -62,6 +67,31 @@ describe("YAMI ProductCard interaction contracts", () => {
   afterEach(async () => {
     await act(async () => root.unmount())
     container.remove()
+  })
+
+  it.each(["rich", "minimal", "compact"] as const)("hides sold-out quick add and controls the independent notification in %s", async (presentation) => {
+    const { ProductCard } = await vi.importActual<{ ProductCard: ComponentType<ProductCardTestProps> }>("../components/ProductCard/ProductCard.tsx")
+    const add = vi.fn()
+    const notify = vi.fn()
+    const props = { href: "/product/sold-out", title: "Sold-out product", priceCurrent: "$5.99", presentation, onAddToCart: add, availability: "sold-out" as const, onNotify: notify }
+    await act(async () => root.render(<ProductCard {...props} availabilityLabel="已售完" notifyLabel="到货通知" />))
+    expect(container.querySelector('[data-slot="product-card-quick-add"]')).toBeNull()
+    expect(container.textContent).toContain("已售完")
+    const button = container.querySelector<HTMLButtonElement>('button[aria-label="到货通知 Sold-out product"]')!
+    expect(button.closest("a")).toBeNull()
+    await act(async () => button.click())
+    expect(notify).toHaveBeenCalledOnce()
+    expect(add).not.toHaveBeenCalled()
+    await act(async () => root.render(<ProductCard {...props} notifyLabel="已设置到货通知" notifyDisabled />))
+    expect(button.getAttribute("aria-disabled")).toBe("true")
+    await act(async () => button.click())
+    expect(notify).toHaveBeenCalledOnce()
+    await act(async () => root.render(<ProductCard {...props} availability="available" />))
+    expect(container.querySelector('[data-slot="product-card-availability"]')).toBeNull()
+    expect(container.querySelector('[data-slot="product-card-quick-add"]')).not.toBeNull()
+    await act(async () => root.render(<ProductCard {...props} availability="delisted" />))
+    expect(container.textContent).toContain("No longer available")
+    expect(container.querySelector("button")).toBeNull()
   })
 
   it("keeps the quick-add button outside the product link", async () => {

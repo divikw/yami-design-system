@@ -170,8 +170,8 @@
 
 .optionControl {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: var(--space-500);
+  height: var(--space-500);
   flex: 0 0 auto;
   place-items: center;
 }

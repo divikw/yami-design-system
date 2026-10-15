@@ -1,5 +1,6 @@
 /** ProductCard — Figma-backed YAMI desktop product tile. */
 
+import { Button } from "../Button";
 import { Card } from "../Card";
 
 import styles from "./ProductCard.module.css";
@@ -39,8 +40,19 @@ export function ProductCard({
   onAddToCart,
   addButtonDisabled = false,
   addButtonAriaLabel = "Add to cart",
+  availability = "available",
+  availabilityLabel = availability === "delisted" ? "No longer available" : "Sold out",
+  onNotify,
+  notifyLabel = "Notify me",
+  notifyDisabled = false,
   href,
 }: ProductCardProps) {
+  const availabilityContent = availability !== "available" ? (
+    <div className={styles.availability} data-slot="product-card-availability">
+      <p>{availabilityLabel}</p>
+      {availability === "sold-out" && onNotify ? <Button className={styles.notify} size="sm" variant="tertiary" onClick={onNotify} disabled={notifyDisabled} aria-label={`${notifyLabel} ${typeof title === "string" ? title : ""}`.trim()}>{notifyLabel}</Button> : null}
+    </div>
+  ) : null;
   return (
     <Card
       as="article"
@@ -53,6 +65,7 @@ export function ProductCard({
         data-slot="product-card"
         data-presentation={presentation}
         data-surface={surface}
+        data-availability={availability}
       >
         <ProductCardMedia
           image={image}
@@ -61,7 +74,7 @@ export function ProductCard({
           imageFetchPriority={imageFetchPriority}
           badges={presentation === "rich" ? badges : undefined}
           onAddToCart={
-            presentation === "compact" ? undefined : onAddToCart
+            presentation === "compact" || availability !== "available" ? undefined : onAddToCart
           }
           addButtonAriaLabel={addButtonAriaLabel}
           addButtonDisabled={addButtonDisabled}
@@ -88,13 +101,15 @@ export function ProductCard({
               promotions={presentation === "rich" ? promotions : undefined}
               countdown={presentation === "rich" ? countdown : undefined}
               onAddToCart={
-                presentation === "compact" ? onAddToCart : undefined
+                presentation === "compact" && availability === "available" ? onAddToCart : undefined
               }
               addButtonAriaLabel={addButtonAriaLabel}
-          addButtonDisabled={addButtonDisabled}
+              addButtonDisabled={addButtonDisabled}
             />
+            {availabilityContent}
           </div>
         )}
+        {presentation === "minimal" && availabilityContent ? <div className={styles.content}>{availabilityContent}</div> : null}
       </div>
     </Card>
   );

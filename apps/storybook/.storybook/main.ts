@@ -21,6 +21,7 @@ const config: StorybookConfig = {
   typescript: { reactDocgen: "react-docgen" },
   viteFinal: async (viteConfig) => ({
     ...viteConfig,
+    optimizeDeps: { ...viteConfig.optimizeDeps, include: [...(viteConfig.optimizeDeps?.include ?? []), "@yami/design-system > @base-ui/react/select"] },
     resolve: { ...viteConfig.resolve, preserveSymlinks: false }
   })
 };

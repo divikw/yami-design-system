@@ -105,13 +105,12 @@ export const Showcase: Story = {
 
     const uncheckedStyle = getComputedStyle(unchecked)
     const uncheckedSurface = getComputedStyle(unchecked, "::before")
-    const hitArea = getComputedStyle(unchecked, "::after")
     if (
-      uncheckedStyle.width !== "20px" ||
-      uncheckedStyle.height !== "20px" ||
+      uncheckedStyle.width !== "40px" ||
+      uncheckedStyle.height !== "40px" ||
       uncheckedSurface.width !== "20px" ||
       uncheckedSurface.height !== "20px" ||
-      hitArea.inset !== "-2px" ||
+      uncheckedSurface.inset !== "10px" ||
       uncheckedSurface.borderColor !== "rgba(0, 0, 0, 0.08)"
     ) {
       throw new Error("RadioGroupItem must match the Checkbox geometry and subtle border")

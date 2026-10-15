@@ -15,6 +15,7 @@ export default defineConfig({
       "@base-ui/react/checkbox",
       "@base-ui/react/radio",
       "@base-ui/react/radio-group",
+      "@yami/design-system > @base-ui/react/select",
       "@storybook/react-vite",
       "@storybook/addon-docs/blocks",
       "storybook/theming",
@@ -45,7 +46,7 @@ export default defineConfig({
       {
         extends: false,
         plugins: [react()],
-        optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@storybook/react-vite", "@storybook/addon-docs/blocks", "storybook/theming", "storybook/test"] },
+        optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@yami/design-system > @base-ui/react/select", "@storybook/react-vite", "@storybook/addon-docs/blocks", "storybook/theming", "storybook/test"] },
         test: {
           name: "browser",
           include: ["tests/**/*.browser.test.tsx"],

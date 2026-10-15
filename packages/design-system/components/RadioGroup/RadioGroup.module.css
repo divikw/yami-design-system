@@ -6,8 +6,8 @@
 .item {
   position: relative;
   display: inline-flex;
-  width: 20px;
-  height: 20px;
+  width: var(--space-500);
+  height: var(--space-500);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -20,18 +20,12 @@
 
 .item::before {
   position: absolute;
-  inset: 0;
+  inset: calc(var(--space-250) / 2);
   box-sizing: border-box;
   content: "";
   border: 1.5px solid var(--border-default);
   border-radius: var(--radius-button-primary);
   background: var(--background-primary);
-}
-
-.item::after {
-  position: absolute;
-  inset: calc(var(--space-025) * -1);
-  content: "";
 }
 
 .selected::before,
@@ -50,7 +44,7 @@
   }
 }
 
-.item:focus-visible {
+.item:focus-visible::before {
   border-radius: var(--radius-button-primary);
   outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);

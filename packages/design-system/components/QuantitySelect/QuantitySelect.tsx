@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ButtonGroup } from "../ButtonGroup";
-import { Button } from "../Button";
-import { Input } from "../Input";
+import { createPortal } from "react-dom";
+import { Select } from "@base-ui/react/select";
 import styles from "./QuantitySelect.module.css";
 
+const warningIcon = new URL("../../assets/icons/base/warning-fill.svg", import.meta.url).href;
 const arrowIcon = new URL("../../assets/icons/action/arrow-down.svg", import.meta.url).href;
 
 export interface QuantitySelectProps {
@@ -23,76 +23,118 @@ export interface QuantitySelectProps {
 
 export function QuantitySelect({ value, max, onValueChange, label, locale = "zh", disabled = false, loading = false, error }: QuantitySelectProps) {
   const id = useId();
-  const selectRef = useRef<HTMLSelectElement>(null);
+  const selectRef = useRef<HTMLButtonElement>(null);
+  const displayRef = useRef<HTMLSpanElement>(null);
+  const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
+  const skipCommitRef = useRef(false);
+  const returnFocusRef = useRef(false);
   const [draft, setDraft] = useState(String(value));
-  const [validation, setValidation] = useState("");
+  const [limitToast, setLimitToast] = useState(0);
   const unavailable = disabled || loading;
-  const message = validation || error;
+  const message = error;
   const zh = locale === "zh";
-  const range = zh ? `请输入 1–${max} 之间的整数` : `Enter a whole number from 1 to ${max}`;
+  const showInput = editing || value >= 10;
+  const limitMessage = zh ? `已达到数量上限 ${max}` : `Maximum quantity is ${max}`;
+
+  useEffect(() => { if (unavailable) setOpen(false); }, [unavailable]);
+
+  useEffect(() => {
+    if (!limitToast) return;
+    const timeout = window.setTimeout(() => setLimitToast(0), 2500);
+    return () => window.clearTimeout(timeout);
+  }, [limitToast]);
 
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
       inputRef.current?.select();
+    } else {
+      setDraft(String(value));
+      if (returnFocusRef.current && value < 10) selectRef.current?.focus({ preventScroll: true });
+      returnFocusRef.current = false;
     }
-  }, [editing]);
+  }, [editing, value]);
 
-  function finish() {
-    selectRef.current?.focus({ preventScroll: true });
+  function commit() {
     setEditing(false);
-    setValidation("");
+    if (skipCommitRef.current || unavailable) {
+      skipCommitRef.current = false;
+      setDraft(String(value));
+      return;
+    }
+    const entered = Number(draft);
+    const next = Math.max(1, Math.min(max, entered));
+    setDraft(String(next));
+    if (entered > max) setLimitToast((count) => count + 1);
+    if (next !== value) onValueChange(next);
   }
 
   return <div className={styles.root} lang={locale} data-slot="quantity-select" aria-busy={loading || undefined}>
-    <span className={styles.control} data-slot="quantity-select-control">
-    <select ref={selectRef} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
-      aria-invalid={!editing && Boolean(message) || undefined} value={value >= 10 ? "custom" : String(value)} disabled={unavailable}
-      onChange={(event) => {
-        setValidation("");
-        if (event.target.value === "custom") {
-          setDraft(String(value >= 10 ? value : Math.min(10, max)));
-          setEditing(true);
-        } else {
-          setEditing(false);
-          onValueChange(Number(event.target.value));
-        }
-      }}>
-      {Array.from({ length: Math.min(9, max) }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1}</option>)}
-      {max >= 10 && <option value="custom">{value >= 10 ? value : "10+"}</option>}
-    </select>
-    <span className={styles.display} data-slot="quantity-select-display" aria-hidden="true">
-      <span>{value}</span><span className={styles.arrow} style={{ maskImage: `url("${arrowIcon}")` }} />
+    <span className={styles.control} hidden={showInput} data-slot="quantity-select-control">
+      <Select.Root value={value >= 10 ? "custom" : String(value)} open={open && !unavailable} onOpenChange={setOpen} disabled={unavailable} modal={false}
+        onValueChange={(next) => {
+          if (next === null) return;
+          setOpen(false);
+          if (next === "custom") {
+            setDraft(String(value >= 10 ? value : Math.min(10, max)));
+            setEditing(true);
+          } else {
+            setEditing(false);
+            onValueChange(Number(next));
+          }
+        }}>
+        <Select.Trigger ref={selectRef} hidden={showInput} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
+          aria-invalid={!editing && Boolean(message) || undefined}>
+          <span ref={displayRef} className={styles.display} data-slot="quantity-select-display" aria-hidden="true">
+            <span className={styles.value}>{value}</span><span className={styles.arrow} style={{ maskImage: `url("${arrowIcon}")` }} />
+          </span>
+        </Select.Trigger>
+        <Select.Portal container={selectRef.current?.closest("dialog") ?? undefined}>
+          <Select.Positioner className={styles.positioner} anchor={displayRef} align="start" alignItemWithTrigger={false} sideOffset={-12} collisionPadding={8}>
+            <Select.Popup className={styles.popup} data-slot="quantity-select-popup" finalFocus={editing ? inputRef : true}>
+              <Select.List className={styles.list}>
+                {[...Array.from({ length: Math.min(9, max) }, (_, index) => ({ value: String(index + 1), label: String(index + 1) })), ...(max >= 10 ? [{ value: "custom", label: value >= 10 ? String(value) : "10+" }] : [])].map((option) =>
+                  <Select.Item className={styles.option} key={option.value} value={option.value}>
+                    <Select.ItemText>{option.label}</Select.ItemText>
+                    <Select.ItemIndicator className={styles.check}>
+                      <svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true"><path d="m3 8 3 3 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </Select.ItemIndicator>
+                  </Select.Item>)}
+              </Select.List>
+            </Select.Popup>
+          </Select.Positioner>
+        </Select.Portal>
+      </Select.Root>
     </span>
-    </span>
-    {value >= 10 && !editing && <Button size="sm" variant="tertiary" disabled={unavailable} aria-label={zh ? `修改${label}` : `Edit ${label}`} onClick={() => { setDraft(String(value)); setEditing(true); }}>{zh ? "修改" : "Edit"}</Button>}
-    {editing && <form className={styles.editor} noValidate onKeyDown={(event) => {
-      if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(); }
-    }} onSubmit={(event) => {
-      event.preventDefault();
-      if (unavailable) return;
-      const next = Number(draft);
-      if (!/^\d+$/.test(draft) || !Number.isSafeInteger(next) || next < 1 || next > max) {
-        setValidation(range);
-        inputRef.current?.focus();
-        return;
-      }
-      onValueChange(next);
-      finish();
-    }}>
-      <Input ref={inputRef} fullWidth value={draft} label={zh ? "数量" : "Quantity"} aria-label={zh ? `${label}：输入数量` : `${label}: enter quantity`} inputMode="numeric" disabled={unavailable}
-        state={message ? "error" : undefined} aria-describedby={validation ? `${id}-error` : `${id}-hint${error ? ` ${id}-error` : ""}`}
-        onChange={(event) => { setDraft(event.target.value); setValidation(""); }} />
-      {!validation && <p id={`${id}-hint`} className={styles.hint}>{range}</p>}
-      {message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
-      <ButtonGroup className={styles.actions} aria-label={zh ? `修改${label}` : `Edit ${label}`}>
-        <Button size="sm" htmlType="submit" loading={loading} disabled={disabled}>{zh ? "确认" : "Apply"}</Button>
-        <Button size="sm" variant="tertiary" onClick={finish}>{zh ? "取消" : "Cancel"}</Button>
-      </ButtonGroup>
-    </form>}
-    {!editing && message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
+    {showInput && <label className={styles.inputTarget} htmlFor={`${id}-input`}>
+      <input ref={inputRef} id={`${id}-input`} className={styles.input} data-slot="quantity-select-input" type="text" inputMode="numeric" autoComplete="off"
+        value={draft} disabled={unavailable} aria-label={zh ? `${label}：输入数量` : `${label}: enter quantity`}
+        aria-invalid={Boolean(message) || undefined} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
+        onFocus={() => setEditing(true)} onBlur={commit}
+        onChange={(event) => setDraft(event.target.value.replace(/[^0-9]/g, ""))}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+            event.preventDefault();
+            event.stopPropagation();
+            returnFocusRef.current = true;
+            event.currentTarget.blur();
+          } else if (event.key === "Escape") {
+            event.preventDefault();
+            event.stopPropagation();
+            skipCommitRef.current = true;
+            returnFocusRef.current = true;
+            setDraft(String(value));
+            event.currentTarget.blur();
+          }
+        }} />
+    </label>}
+    {limitToast > 0 && createPortal(<div key={limitToast} className={styles.toast} data-slot="quantity-limit-toast" role="alert" lang={locale}>
+      <span className={styles.toastIcon} style={{ maskImage: `url("${warningIcon}")` }} aria-hidden="true" />
+      <p>{limitMessage}</p>
+    </div>, inputRef.current?.closest("dialog") ?? document.body)}
+    {message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
     {loading && <span id={`${id}-status`} className={styles.hint} role="status">{zh ? "正在更新数量…" : "Updating quantity…"}</span>}
   </div>;
 }

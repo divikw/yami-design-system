@@ -2,7 +2,7 @@
 
 ## 使用场景
 
-用于首页、分类、搜索结果的商品网格，横向推荐列表，以及详情页的关联推荐。不用于购物车、订单记录、文章卡片或详情页主图区域。
+用于首页、分类、搜索结果的商品网格，横向推荐列表，以及详情页的关联推荐。不用于购物车的待结算商品行、订单记录、文章卡片或详情页主图区域；购物车的“稍后购买”等商品集合可使用卡片网格。
 
 ## Storybook 预览
 
@@ -55,6 +55,22 @@ surface 默认 plain，去除外部内边距。card 适合背景上的商品卡�
 rich、minimal 的按钮位于图片右下角，compact 位于价格旁。独立按钮 ProductCardAddButton 使用 disabled 属性禁用；卡片内按钮使用 addButtonDisabled。
 
 Mobile 按钮视觉尺寸 40×40、图标 22px；PC 为 42×42、图标 24px；指针目标至少 44×44。PC 悬停及按下时使用强调红与白色图标。图片上的按钮背景不随页面明暗主题变化。
+
+## 库存状态
+
+`availability` 默认为 `available`。`sold-out` 和 `delisted` 保留图片、商品链接与价格，并隐藏所有形态的加购按钮，在价格后显示灰色库存文案；通过 `availabilityLabel` 本地化。minimal 在图片和价格徽标下显示状态。
+
+售完商品可提供 `onNotify` 和本地化 `notifyLabel` 显示链接式到货通知按钮，悬浮/按下保持透明背景及 1px 细下划线，到货通知使用 20px 单行高度，紧接库存状态且不增加上下内边距；去掉按钮圆角，键盘焦点框使用直角。订阅状态由调用方控制：更新文案并设置 `notifyDisabled`，组件不请求服务或储存订阅。下架商品不显示到货通知。集合删除操作由页面在卡片外组合。
+
+```tsx
+<ProductCard
+  href="/product/example" title="保湿面霜 100ml" priceCurrent="$12.99"
+  availability="sold-out" availabilityLabel="已售完"
+  onNotify={() => subscribe(product.id)}
+  notifyLabel={subscribed ? "已设置到货通知" : "到货通知"}
+  notifyDisabled={subscribed}
+/>
+```
 
 ## 徽标与价格
 

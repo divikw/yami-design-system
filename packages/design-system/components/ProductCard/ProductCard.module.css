@@ -419,6 +419,41 @@
   color: var(--text-emphasis);
 }
 
+.availability {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.availability p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.notify {
+  padding-inline: 0;
+  font-weight: var(--font-weight-normal);
+  text-decoration: underline;
+  text-underline-offset: var(--space-025);
+  text-decoration-thickness: var(--stroke-default);
+}
+
+.availability button[data-slot="button"].notify { height: var(--line-height-body-md); border-radius: 0; }
+.availability button[data-slot="button"].notify::before { top: 0; height: 100%; transform: none; }
+
+.notify:not([aria-disabled="true"]):active {
+  background-color: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .notify:not([aria-disabled="true"]):hover {
+    background-color: transparent;
+  }
+}
+
 .priceOriginal {
   min-width: 0;
   overflow: hidden;

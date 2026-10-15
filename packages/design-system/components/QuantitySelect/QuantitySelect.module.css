@@ -18,28 +18,22 @@
   flex: 0 0 auto;
 }
 
-/* Keep native selection and a 44px target around the source cart's 24px pill. */
+/* Keep the source 24px pill inside a 44px button target. */
 .select {
-  position: absolute;
-  inset: 0;
+  position: relative;
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  display: grid;
+  align-items: center;
+  min-width: 60px;
   min-height: 44px;
   margin: 0;
   padding: 0;
-  appearance: none;
   border: 0;
   outline: 0;
   background: transparent;
-  color: transparent;
+  color: inherit;
   font: inherit;
   cursor: pointer;
-}
-
-.select option {
-  background: var(--surface-primary);
-  color: var(--text-primary);
 }
 
 .display {
@@ -47,7 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-100);
+  gap: 0;
   min-width: 60px;
   height: var(--space-300);
   padding-inline: var(--space-100);
@@ -56,6 +50,8 @@
   background: var(--surface-primary);
   pointer-events: none;
 }
+
+.value { min-width: var(--space-300); text-align: center; }
 
 .arrow {
   display: block;
@@ -86,19 +82,35 @@
   color: var(--text-disabled);
 }
 
-.editor {
-  flex: 1 0 100%;
+.control[hidden], .select[hidden] { display: none; }
+
+.inputTarget {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-100);
-  min-width: 0;
-  max-width: 280px;
+  align-items: center;
+  min-width: 60px;
+  min-height: 44px;
+  cursor: text;
 }
 
-.actions {
-  display: flex;
-  gap: var(--space-100);
+.input {
+  box-sizing: border-box;
+  width: 60px;
+  height: var(--space-300);
+  margin: 0;
+  padding: 0 var(--space-100);
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-button-primary);
+  background: var(--surface-primary);
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  outline: none;
 }
+
+.input:focus { border: var(--stroke-thick) solid var(--border-focus); }
+.input:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
+.input[aria-invalid="true"] { border-color: var(--border-attention); }
+.input:disabled { background: var(--button-disabled); color: var(--text-disabled); cursor: not-allowed; }
 
 .hint, .error {
   flex-basis: 100%;
@@ -113,7 +125,45 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .control:has(.select:not(:disabled):hover) .display {
+  .control:has(.select:not(:disabled):not([data-popup-open]):hover) .display {
     background: var(--surface-secondary);
   }
 }
+
+.select[data-popup-open] .display { position: relative; z-index: 51; pointer-events: auto; border: var(--stroke-thick) solid var(--border-focus); }
+.select[data-popup-open] .arrow { transform: rotate(180deg); }
+.positioner { z-index: 50; }
+.popup { box-sizing: border-box; width: var(--anchor-width); min-width: 60px; background: var(--surface-primary); color: var(--text-primary); border: var(--stroke-thick) solid var(--border-focus); border-top: 0; padding-top: var(--space-150); outline: none; font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
+.list { max-height: calc(var(--available-height) - var(--stroke-thick) - var(--space-150)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.option { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: 0; min-height: 44px; padding-inline: var(--space-200) var(--space-050); cursor: pointer; outline: none; }
+.option[data-highlighted] { background: var(--surface-secondary); }
+.check { display: flex; }
+@media (min-width: 1024px) { .option { min-height: 28px; } }
+
+.popup[data-side="top"] { border-top: var(--stroke-thick) solid var(--border-focus); border-bottom: 0; padding-top: 0; padding-bottom: var(--space-150); }
+
+.toast {
+  position: fixed;
+  z-index: 99999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-100);
+  width: 244px;
+  max-width: calc(100vw - 2 * var(--space-200));
+  padding: var(--space-300);
+  border: var(--stroke-thick) solid var(--border-focus);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  text-align: center;
+  pointer-events: none;
+}
+
+.toast p { margin: 0; overflow-wrap: anywhere; }
+.toastIcon { width: 36px; height: 36px; background: currentColor; mask-position: center; mask-repeat: no-repeat; mask-size: contain; }
