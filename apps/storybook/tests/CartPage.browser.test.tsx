@@ -143,7 +143,31 @@ for (const locale of ["zh", "en"] as const) {
   });
 }
 
-test.each([360, 375, 402, 768, 1024, 1440])("CartPage fits the viewport and supports inline quantities at %ipx", async (width) => {
+test.each([375, 940])("CartPage keeps bare product titles clickable beside centered quantity controls at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const fixture = createCartPageFixture("en");
+  fixture.initialItems = [{ ...fixture.initialItems[0], attributes: [], originalPriceCents: undefined }];
+  try {
+    await page.viewport(width, 812);
+    flushSync(() => root.render(<CartPage {...fixture} />));
+    const row = container.querySelector('[data-slot="cart-item"]')!;
+    const title = row.querySelector<HTMLAnchorElement>("h3 a")!;
+    const titleBounds = title.getBoundingClientRect();
+    expect(title.contains(document.elementFromPoint(titleBounds.right - 15, titleBounds.bottom - 2))).toBe(true);
+    const quantity = row.querySelector('[role="combobox"]')!.getBoundingClientRect();
+    const price = row.querySelector('[class*="price"]')!.getBoundingClientRect();
+    expect(quantity.height).toBeGreaterThanOrEqual(44);
+    expect(Math.abs(quantity.top + quantity.height / 2 - price.top - price.height / 2)).toBeLessThan(1);
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test.each([360, 375, 402, 660, 768, 1024, 1440])("CartPage fits the viewport and supports inline quantities at %ipx", async (width) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -154,6 +178,39 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage fits the viewport and supp
     await page.viewport(width, 812);
     flushSync(() => root.render(<CartPage key={width} {...fixture} />));
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+    for (const row of container.querySelectorAll('[data-slot="cart-item"]')) {
+      const group = row.querySelector('[data-slot="cart-product-group"]')!;
+      const details = group.querySelector('[data-slot="cart-product-details"]')!;
+      const image = group.querySelector("img")!.getBoundingClientRect();
+      const info = details.querySelector('[class*="itemInfo"]')!.getBoundingClientRect();
+      expect(image.top).toBe(info.top);
+      expect(info.left - image.right).toBe(parseFloat(getComputedStyle(group).columnGap));
+      expect(details.contains(row.querySelector('[role="group"]'))).toBe(true);
+      expect(details.contains(row.querySelector('[class*="price"]'))).toBe(true);
+      if (width < 1024) {
+        const price = details.querySelector('[class*="price"]')!.getBoundingClientRect();
+        const actions = details.querySelector('[role="group"]')!.getBoundingClientRect();
+        expect(price.top - info.bottom).toBe(4);
+        expect(actions.top - price.bottom).toBe(4);
+        const quantity = details.querySelector('[data-slot="quantity-select-display"]')!.getBoundingClientRect();
+        expect(Math.abs(quantity.top + quantity.height / 2 - price.top - price.height / 2)).toBeLessThan(1);
+      }
+      const stockHint = row.querySelector('[class*="stockQuantity"]');
+      if (stockHint) {
+        expect(stockHint.getClientRects().length > 0).toBe(width >= 1024);
+        expect(row.querySelector('[class*="stockInfo"]')!.getClientRects().length > 0).toBe(width < 1024);
+        if (width >= 1024) {
+          const hint = stockHint.getBoundingClientRect();
+          const control = row.querySelector('[role="combobox"]')!.getBoundingClientRect();
+          expect(hint.top).toBeGreaterThanOrEqual(control.bottom);
+          expect(Math.abs(hint.left + hint.width / 2 - control.left - control.width / 2)).toBeLessThan(1);
+        }
+      }
+      if (width >= 1024) {
+        const selection = row.querySelector('[class*="itemCheck"]')!.getBoundingClientRect();
+        expect(group.getBoundingClientRect().left - selection.right).toBe(4);
+      }
+    }
     if (width < 768) {
       const merchant = container.querySelector('[aria-labelledby="merchant-yami"]')!;
       const heading = merchant.querySelector("h2")!.getBoundingClientRect();
@@ -349,7 +406,8 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
       expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(40);
     }
     await page.getByRole("checkbox", { name: `Select ${fixture.initialItems[0].title}`, exact: true }).click();
-    expect(merchant.getAttribute("aria-checked")).toBe("mixed");
+    expect(merchant.getAttribute("aria-checked")).toBe("false");
+    expect(all.getAttribute("aria-checked")).toBe("false");
     await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
     expect(merchant.getAttribute("aria-checked")).toBe("true");
     expect(all.getAttribute("aria-checked")).toBe("true");
@@ -358,6 +416,20 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
     expect(merchant.getAttribute("aria-checked")).toBe("false");
     await userEvent.keyboard("{Space}");
     expect(merchant.getAttribute("aria-checked")).toBe("true");
+    expect(getComputedStyle(merchant, "::before").outlineStyle).toBe("solid");
+    await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
+    expect(merchant.getAttribute("aria-checked")).toBe("false");
+    expect(getComputedStyle(merchant, "::before").outlineStyle).toBe("none");
+    await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
+    await page.elementLocator(item).click();
+    expect(all.getAttribute("aria-checked")).toBe("false");
+    await page.elementLocator(all).click();
+    expect(all.getAttribute("aria-checked")).toBe("true");
+    expect(getComputedStyle(all, "::before").outlineStyle).toBe("none");
+    expect([...container.querySelectorAll('[data-slot="cart-item"] [data-slot="checkbox"]')].every((checkbox) => checkbox.getAttribute("aria-checked") === "true")).toBe(true);
+    await page.elementLocator(all).click();
+    expect(all.getAttribute("aria-checked")).toBe("false");
+    expect([...container.querySelectorAll('[data-slot="cart-item"] [data-slot="checkbox"]')].every((checkbox) => checkbox.getAttribute("aria-checked") === "false")).toBe(true);
     const tabs = container.querySelector('[data-slot="cart-discovery"] [role="tablist"]')!;
     const heading = container.querySelector('[data-slot="product-list-title"]')!;
     const products = container.querySelector('[data-slot="product-list-items"]')!;
@@ -366,6 +438,14 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
     const learn = page.getByRole("button", { name: "Learn more", exact: true });
     const learnElement = learn.element();
     if (width >= 1024) expect(getComputedStyle(learnElement).textDecorationLine).toContain("underline");
+    else {
+      const intro = learnElement.closest('[class*="protectionIntro"]')!;
+      expect(intro.tagName).toBe("DIV");
+      expect(intro.querySelector("p")!.getBoundingClientRect().top - learnElement.getBoundingClientRect().bottom).toBe(2);
+      expect(getComputedStyle(learnElement).borderRadius).toBe("0px");
+      await userEvent.hover(learn);
+      await expect.poll(() => getComputedStyle(learnElement).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+    }
     await learn.click();
     await expect.element(page.getByRole("dialog", { name: "Shopping protection", exact: true })).toBeVisible();
     await userEvent.keyboard("{Escape}");
@@ -481,7 +561,7 @@ test("CartPage payment marks match the source geometry and wrap within narrow co
       const marks = container.querySelector('ul[aria-label="Payment methods"]')!;
       const intro = marks.previousElementSibling!;
       expect(intro.tagName).toBe("DIV");
-      expect(intro.querySelector("p")!.getBoundingClientRect().top - intro.querySelector("h2")!.getBoundingClientRect().bottom).toBe(4);
+      expect(intro.querySelector("p")!.getBoundingClientRect().top - intro.querySelector("h2")!.getBoundingClientRect().bottom).toBe(width < 1024 ? 2 : 4);
       const items = Array.from(marks.children);
       expect(items).toHaveLength(12);
       expect(getComputedStyle(marks).gap).toBe(width < 1024 ? "4px" : "5px");
@@ -824,8 +904,8 @@ for (const locale of ["zh", "en"] as const) {
           const actions = shipping.parentElement!;
           const addMore = actions.querySelector("a")!;
           if (width <= 1366) {
-            expect(actions.getBoundingClientRect().top).toBe(identity.getBoundingClientRect().bottom);
-            expect(header.getBoundingClientRect().bottom - actions.getBoundingClientRect().bottom).toBe(width < 1024 ? 4 : 12);
+            expect(actions.getBoundingClientRect().top - identity.getBoundingClientRect().bottom).toBe(width < 1024 ? 4 : 0);
+            expect(header.getBoundingClientRect().bottom - actions.getBoundingClientRect().bottom).toBe(width < 1024 ? 8 : 12);
             const checkbox = identity.querySelector('[data-slot="checkbox"]')!;
             expect(checkbox.getBoundingClientRect().width).toBe(40);
             expect(checkbox.getBoundingClientRect().height).toBe(40);
@@ -958,6 +1038,8 @@ for (const locale of ["zh", "en"] as const) {
       expect(protection.querySelector('img[alt="Apple Pay"]')).not.toBeNull();
       await page.elementLocator(bar.querySelector('[role="checkbox"]')!).click();
       expect(container.querySelector('[aria-labelledby="merchant-yami"] [role="checkbox"]')!.getAttribute('aria-checked')).toBe('true');
+      await userEvent.hover(page.elementLocator(total));
+      await expect.poll(() => getComputedStyle(total).backgroundColor).toBe("rgba(0, 0, 0, 0)");
       await page.elementLocator(bar.querySelector('button[aria-haspopup="dialog"]')!).click();
       await expect.element(page.getByRole('dialog', { name: locale === 'zh' ? '订单摘要' : 'Order summary', exact: true })).toBeVisible();
       await userEvent.keyboard('{Escape}');
@@ -982,9 +1064,19 @@ test("mobile Reorder filters purchase examples, adds locally and preserves cart 
     expect(getComputedStyle(purchaseBadge).color).not.toBe("rgb(255, 255, 255)");
     expect(purchaseBadge.textContent).toContain("purchased");
     expect(container.querySelector('[data-slot="cart-checkout-bar"]')!.getBoundingClientRect().height).toBe(0);
-    await page.getByRole('button', { name: 'Grocery', exact: true }).click();
+    expect(page.getByRole('tab', { name: 'Your Reorder', exact: true }).element().closest('[role="tablist"]')!.getAttribute('data-variant')).toBe('secondary');
+    const grocery = page.getByRole('tab', { name: 'Grocery', exact: true });
+    expect(grocery.element().closest('[role="tablist"]')!.getAttribute('data-variant')).toBe('tertiary');
+    await grocery.click();
+    expect(grocery.element().getAttribute('aria-controls')).toBe(visibleGrid().id);
+    expect(visibleGrid().children).toHaveLength(2);
+    await userEvent.keyboard('{Home}');
+    expect(visibleGrid().children).toHaveLength(fixture.reorderItems!.length);
+    await userEvent.keyboard('{End}');
+    await expect.element(grocery).toHaveAttribute('aria-selected', 'true');
     expect(visibleGrid().children).toHaveLength(2);
     await page.getByRole('tab', { name: 'Frequently Bought', exact: true }).click();
+    await expect.element(page.getByRole('tab', { name: 'All', exact: true })).toHaveAttribute('aria-selected', 'true');
     const frequentGrid = page.getByRole('tabpanel', { name: 'Frequently Bought', exact: true }).element().querySelector('[data-slot="cart-reorder-grid"]')!;
     expect(frequentGrid.children).toHaveLength(fixture.frequentlyBoughtItems!.length);
     await page.getByRole('tab', { name: 'Your Reorder', exact: true }).click();
@@ -1024,7 +1116,7 @@ test("mobile page swipes exclude collection rails, interactive targets and verti
     expect(cart.getAttribute('data-page-tab')).toBe('cart');
     swipe(container.querySelector('section[class*="merchant"]')!, -100);
     expect(cart.getAttribute('data-page-tab')).toBe('reorder');
-    swipe(container.querySelector('[data-slot="filter-chip-group"]')!, 100);
+    swipe(page.getByRole('tablist', { name: 'Product categories', exact: true }).element(), 100);
     expect(cart.getAttribute('data-page-tab')).toBe('reorder');
     swipe(container.querySelector('[class*="reorderPanel"]')!, 100);
     expect(cart.getAttribute('data-page-tab')).toBe('cart');
@@ -1050,4 +1142,33 @@ test("mobile Reorder handles missing history and unavailable purchase examples",
     expect(panel.querySelector('button')).toBeNull();
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(375);
   } finally { root.unmount(); container.remove(); await page.viewport(viewport.width, viewport.height); }
+});
+
+test.each([1024, 1280, 1440])("CartPage keeps PC navigation pinned and the summary clear while scrolling at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const scroll = { x: window.scrollX, y: window.scrollY };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await page.viewport(width, 812);
+    flushSync(() => root.render(<CartPage {...createCartPageFixture("en")} />));
+    const header = container.querySelector<HTMLElement>('[data-slot="cart-desktop-header"]')!;
+    const summary = container.querySelector("aside")!;
+    window.scrollTo(0, 800);
+    await expect.poll(() => window.scrollY).toBeGreaterThan(400);
+    expect(header.getBoundingClientRect().top).toBe(0);
+    expect(header.getBoundingClientRect().height).toBeGreaterThan(100);
+    await expect.poll(() => summary.getBoundingClientRect().top).toBeCloseTo(header.getBoundingClientRect().bottom + 24, 1);
+    await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
+    await expect.element(dialog).toBeVisible();
+    await expect.poll(() => dialog.element().contains(document.elementFromPoint(width - 32, 32))).toBe(true);
+    await userEvent.keyboard("{Escape}");
+    await expect.poll(() => document.querySelector("dialog[open]")).toBeNull();
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+    window.scrollTo(scroll.x, scroll.y);
+  }
 });

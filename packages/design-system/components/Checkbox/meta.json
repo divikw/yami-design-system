@@ -56,7 +56,7 @@
     "--text-primary": { "property": "background/border-color", "selector": ".root[data-checked]::before, .root[data-indeterminate]::before" },
     "--border-default": { "property": "border-color", "selector": ".root::before" },
     "--fill-disabled": { "property": "background/border-color", "selector": ".root[data-disabled]::before" },
-    "--focus-ring": { "property": "outline-color", "selector": ".root:focus-visible::before" },
+    "--focus-ring": { "property": "outline-color", "selector": ".root[data-keyboard-focus]:focus-visible::before" },
     "--radius-tag-primary": { "property": "border-radius", "selector": ".root::before" }
   },
   "accessibility": {

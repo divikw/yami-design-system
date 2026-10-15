@@ -28,4 +28,5 @@ Dark theme is automatic through semantic aliases. Checkbox has no `dark` prop an
 - Base UI supplies the checkbox role, `aria-checked`, hidden native form input, and Space-key behavior.
 - A visible `<label>` is preferred. If no visible label is rendered, pass `aria-label`.
 - Use native `disabled`, `required`, `name`, `value`, and `form` props.
+- Mouse and touch clicks do not show the blue focus outline, including clicks on an associated label or after keyboard interaction. Tab and Space retain the keyboard focus outline.
 - The component reserves a 40×40px layout and pointer target at every breakpoint, with a centered 20×20px visible square and a 4px radius. The keyboard focus outline follows the visible square. Keep the full 40px layout space so adjacent targets cannot overlap. In option lists, wrap it with a native `<label>` so the full row can remain clickable.

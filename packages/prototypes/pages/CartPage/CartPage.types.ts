@@ -54,4 +54,7 @@ export interface CartPageProps {
   loading?: boolean;
   error?: string;
   onRetry?: () => void;
+  initialPageTab?: "cart" | "reorder";
+  initialCollection?: "recommended" | "saved" | "history" | "favorites";
+  initialDrawer?: "coupons" | "unavailable" | "protection" | "summary" | null;
 }
