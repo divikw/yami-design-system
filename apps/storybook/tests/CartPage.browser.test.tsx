@@ -143,54 +143,67 @@ for (const locale of ["zh", "en"] as const) {
   });
 }
 
-test("CartPage fits mobile and desktop, supports quantities, coupon invalidation and inline removal feedback", async () => {
+test.each([360, 375, 402, 768, 1024, 1440])("CartPage fits the viewport and supports inline quantities at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const fixture = createCartPageFixture("en");
+  const second = fixture.initialItems[1];
+  try {
+    await page.viewport(width, 812);
+    flushSync(() => root.render(<CartPage key={width} {...fixture} />));
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+    if (width < 768) {
+      const merchant = container.querySelector('[aria-labelledby="merchant-yami"]')!;
+      const heading = merchant.querySelector("h2")!.getBoundingClientRect();
+      const shipping = merchant.querySelector('[data-slot="cart-shipping"] p')!;
+      expect(shipping.getBoundingClientRect().top).toBeGreaterThanOrEqual(heading.bottom);
+      expect(shipping.getBoundingClientRect().width).toBeGreaterThan(100);
+      expect(shipping.getBoundingClientRect().height).toBeLessThanOrEqual(3 * parseFloat(getComputedStyle(shipping).lineHeight));
+      const row = container.querySelector('[data-slot="cart-item"]')!;
+      expect(row.querySelector('[role="group"]')!.getBoundingClientRect().top).toBeGreaterThanOrEqual(row.querySelector("strong")!.getBoundingClientRect().bottom);
+    }
+    await page.getByRole("checkbox", { name: `Select ${second.title}`, exact: true }).click();
+    await chooseQuantity(`${second.title} quantity`, "10+");
+    await expect.element(page.getByRole("textbox", { name: `${second.title} quantity: enter quantity` })).toBeVisible();
+    const input = page.getByRole("textbox", { name: `${second.title} quantity: enter quantity` });
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+    const quantityRow = input.element().closest('[data-slot="cart-item"]')!;
+    const rowHeight = quantityRow.getBoundingClientRect().height;
+    await input.fill("26");
+    await userEvent.keyboard("{Enter}");
+    await expect.element(page.getByRole("alert")).toHaveTextContent("Maximum quantity is 25");
+    await expect.element(input).toHaveValue("25");
+    expect(quantityRow.getBoundingClientRect().height).toBe(rowHeight);
+    expect(quantityRow.contains(page.getByRole("alert").element())).toBe(false);
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+    await input.fill("12");
+    await userEvent.keyboard("{Enter}");
+    expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
+    await expect.element(page.getByText("$219.96", { exact: true }).first()).toBeVisible();
+    if (width < 1024) {
+      const button = container.querySelector<HTMLButtonElement>('[data-slot="cart-checkout-bar"] > button:last-child')!;
+      expect(getComputedStyle(button.parentElement!).position).toBe("fixed");
+      expect(button.parentElement!.getBoundingClientRect().bottom).toBe(812 - 49);
+      expect(button.getBoundingClientRect().bottom).toBeLessThanOrEqual(812);
+    }
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("CartPage invalidates coupons and keeps removal feedback inline", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   const fixture = createCartPageFixture("en");
   const first = fixture.initialItems[0];
-  const second = fixture.initialItems[1];
   try {
-    for (const width of [360, 375, 402, 768, 1024, 1440]) {
-      await page.viewport(width, 812);
-      flushSync(() => root.render(<CartPage key={width} {...fixture} />));
-      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
-      if (width < 768) {
-        const merchant = container.querySelector('[aria-labelledby="merchant-yami"]')!;
-        const heading = merchant.querySelector("h2")!.getBoundingClientRect();
-        const shipping = merchant.querySelector('[data-slot="cart-shipping"] p')!;
-        expect(shipping.getBoundingClientRect().top).toBeGreaterThanOrEqual(heading.bottom);
-        expect(shipping.getBoundingClientRect().width).toBeGreaterThan(100);
-        expect(shipping.getBoundingClientRect().height).toBeLessThanOrEqual(3 * parseFloat(getComputedStyle(shipping).lineHeight));
-        const row = container.querySelector('[data-slot="cart-item"]')!;
-        expect(row.querySelector('[role="group"]')!.getBoundingClientRect().top).toBeGreaterThanOrEqual(row.querySelector("strong")!.getBoundingClientRect().bottom);
-      }
-      await page.getByRole("checkbox", { name: `Select ${second.title}`, exact: true }).click();
-      await chooseQuantity(`${second.title} quantity`, "10+");
-      await expect.element(page.getByRole("textbox", { name: `${second.title} quantity: enter quantity` })).toBeVisible();
-      const input = page.getByRole("textbox", { name: `${second.title} quantity: enter quantity` });
-      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
-      const quantityRow = input.element().closest('[data-slot="cart-item"]')!;
-      const rowHeight = quantityRow.getBoundingClientRect().height;
-      await input.fill("26");
-      await userEvent.keyboard("{Enter}");
-      await expect.element(page.getByRole("alert")).toHaveTextContent("Maximum quantity is 25");
-      await expect.element(input).toHaveValue("25");
-      expect(quantityRow.getBoundingClientRect().height).toBe(rowHeight);
-      expect(quantityRow.contains(page.getByRole("alert").element())).toBe(false);
-      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
-      await input.fill("12");
-      await userEvent.keyboard("{Enter}");
-      expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
-      await expect.element(page.getByText("$219.96", { exact: true }).first()).toBeVisible();
-      if (width < 1024) {
-        const button = container.querySelector<HTMLButtonElement>('[data-slot="cart-checkout-bar"] > button:last-child')!;
-        expect(getComputedStyle(button.parentElement!).position).toBe("fixed");
-        expect(button.parentElement!.getBoundingClientRect().bottom).toBe(812 - 49);
-        expect(button.getBoundingClientRect().bottom).toBeLessThanOrEqual(812);
-      }
-    }
+    await page.viewport(1440, 812);
+    flushSync(() => root.render(<CartPage {...fixture} />));
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
     const unavailableDialog = container.querySelector('dialog[open]')!;
     expect(unavailableDialog.scrollWidth).toBeLessThanOrEqual(unavailableDialog.clientWidth);
@@ -302,7 +315,7 @@ test.each([375, 1440])("CartPage removes an empty merchant and focuses its visib
   }
 });
 
-test("CartPage aligns checkbox glyphs and targets, compacts discovery gutters and preserves the text-link drawer action", async () => {
+test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, discovery gutters and drawer actions at %ipx", async (width) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -310,55 +323,53 @@ test("CartPage aligns checkbox glyphs and targets, compacts discovery gutters an
   const fixture = createCartPageFixture("en");
   fixture.initialItems = fixture.initialItems.map((item) => ({ ...item, selected: item.availability === "available" }));
   try {
-    for (const width of [360, 375, 402, 768, 1024, 1440]) {
-      await page.viewport(width, 812);
-      flushSync(() => root.render(<CartPage key={width} {...fixture} />));
-      const all = container.querySelector<HTMLElement>(width < 1024 ? '[data-slot="cart-checkout-bar"] [data-slot="checkbox"]' : '[aria-labelledby="cart-title"] [data-slot="checkbox"]')!;
-      const merchant = container.querySelector<HTMLElement>('[aria-labelledby="merchant-yami"] header [data-slot="checkbox"]')!;
-      const item = container.querySelector<HTMLElement>('[data-slot="cart-item"] [data-slot="checkbox"]')!;
-      const center = (element: Element) => element.getBoundingClientRect().left + element.getBoundingClientRect().width / 2;
-      if (width >= 1024) expect(Math.abs(center(all) - center(item))).toBeLessThan(1);
-      if (width >= 1024) expect(Math.abs(center(merchant) - center(item))).toBeLessThan(1);
-      else {
-        const shipping = container.querySelector('[aria-labelledby="merchant-yami"] [class*="shippingActions"]')!;
-        const squareLeft = merchant.getBoundingClientRect().left + parseFloat(getComputedStyle(merchant, "::before").left);
-        expect(squareLeft).toBe(shipping.getBoundingClientRect().left);
-        expect(merchant.getBoundingClientRect().left).toBe(merchant.parentElement!.getBoundingClientRect().left);
-        expect(center(item)).toBe(center(merchant));
-        expect(container.querySelector('#merchant-yami')!.getBoundingClientRect().left - squareLeft).toBe(32);
-        expect(container.querySelector('[data-slot="cart-item"] img')!.getBoundingClientRect().left).toBe(container.querySelector('#merchant-yami')!.getBoundingClientRect().left);
-      }
-      const glyph = merchant.querySelector('[data-slot="checkbox-indicator"] svg')!;
-      expect(Math.abs(center(glyph) - center(merchant))).toBeLessThan(1);
-      expect(Math.abs(glyph.getBoundingClientRect().top + glyph.getBoundingClientRect().height / 2 - merchant.getBoundingClientRect().top - merchant.getBoundingClientRect().height / 2)).toBeLessThan(1);
-      const target = merchant.parentElement!;
-      for (const checkbox of [all, merchant, item]) {
-        expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().width).toBe(40);
-        expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(40);
-      }
-      await page.getByRole("checkbox", { name: `Select ${fixture.initialItems[0].title}`, exact: true }).click();
-      expect(merchant.getAttribute("aria-checked")).toBe("mixed");
-      await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
-      expect(merchant.getAttribute("aria-checked")).toBe("true");
-      expect(all.getAttribute("aria-checked")).toBe("true");
-      expect(container.querySelector("#merchant-yami")!.getAttribute("href")).toBe(fixture.merchants[0].href);
-      await page.elementLocator(merchant).click();
-      expect(merchant.getAttribute("aria-checked")).toBe("false");
-      await userEvent.keyboard("{Space}");
-      expect(merchant.getAttribute("aria-checked")).toBe("true");
-      const tabs = container.querySelector('[data-slot="cart-discovery"] [role="tablist"]')!;
-      const heading = container.querySelector('[data-slot="product-list-title"]')!;
-      const products = container.querySelector('[data-slot="product-list-items"]')!;
-      expect(heading.closest('[data-slot="product-list-heading"]')!.getBoundingClientRect().width).toBe(1);
-      expect(Math.abs((width < 1024 ? tabs.firstElementChild! : tabs).getBoundingClientRect().left - products.getBoundingClientRect().left)).toBeLessThan(1);
-      const learn = page.getByRole("button", { name: "Learn more", exact: true });
-      const learnElement = learn.element();
-      if (width >= 1024) expect(getComputedStyle(learnElement).textDecorationLine).toContain("underline");
-      await learn.click();
-      await expect.element(page.getByRole("dialog", { name: "Shopping protection", exact: true })).toBeVisible();
-      await userEvent.keyboard("{Escape}");
-      await expect.element(learn).toHaveFocus();
+    await page.viewport(width, 812);
+    flushSync(() => root.render(<CartPage key={width} {...fixture} />));
+    const all = container.querySelector<HTMLElement>(width < 1024 ? '[data-slot="cart-checkout-bar"] [data-slot="checkbox"]' : '[aria-labelledby="cart-title"] [data-slot="checkbox"]')!;
+    const merchant = container.querySelector<HTMLElement>('[aria-labelledby="merchant-yami"] header [data-slot="checkbox"]')!;
+    const item = container.querySelector<HTMLElement>('[data-slot="cart-item"] [data-slot="checkbox"]')!;
+    const center = (element: Element) => element.getBoundingClientRect().left + element.getBoundingClientRect().width / 2;
+    if (width >= 1024) expect(Math.abs(center(all) - center(item))).toBeLessThan(1);
+    if (width >= 1024) expect(Math.abs(center(merchant) - center(item))).toBeLessThan(1);
+    else {
+      const shipping = container.querySelector('[aria-labelledby="merchant-yami"] [class*="shippingActions"]')!;
+      const squareLeft = merchant.getBoundingClientRect().left + parseFloat(getComputedStyle(merchant, "::before").left);
+      expect(squareLeft).toBe(shipping.getBoundingClientRect().left);
+      expect(merchant.getBoundingClientRect().left).toBe(merchant.parentElement!.getBoundingClientRect().left);
+      expect(center(item)).toBe(center(merchant));
+      expect(container.querySelector('#merchant-yami')!.getBoundingClientRect().left - squareLeft).toBe(32);
+      expect(container.querySelector('[data-slot="cart-item"] img')!.getBoundingClientRect().left).toBe(container.querySelector('#merchant-yami')!.getBoundingClientRect().left);
     }
+    const glyph = merchant.querySelector('[data-slot="checkbox-indicator"] svg')!;
+    expect(Math.abs(center(glyph) - center(merchant))).toBeLessThan(1);
+    expect(Math.abs(glyph.getBoundingClientRect().top + glyph.getBoundingClientRect().height / 2 - merchant.getBoundingClientRect().top - merchant.getBoundingClientRect().height / 2)).toBeLessThan(1);
+    const target = merchant.parentElement!;
+    for (const checkbox of [all, merchant, item]) {
+      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().width).toBe(40);
+      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(40);
+    }
+    await page.getByRole("checkbox", { name: `Select ${fixture.initialItems[0].title}`, exact: true }).click();
+    expect(merchant.getAttribute("aria-checked")).toBe("mixed");
+    await page.elementLocator(target).click({ position: { x: 2, y: 2 } });
+    expect(merchant.getAttribute("aria-checked")).toBe("true");
+    expect(all.getAttribute("aria-checked")).toBe("true");
+    expect(container.querySelector("#merchant-yami")!.getAttribute("href")).toBe(fixture.merchants[0].href);
+    await page.elementLocator(merchant).click();
+    expect(merchant.getAttribute("aria-checked")).toBe("false");
+    await userEvent.keyboard("{Space}");
+    expect(merchant.getAttribute("aria-checked")).toBe("true");
+    const tabs = container.querySelector('[data-slot="cart-discovery"] [role="tablist"]')!;
+    const heading = container.querySelector('[data-slot="product-list-title"]')!;
+    const products = container.querySelector('[data-slot="product-list-items"]')!;
+    expect(heading.closest('[data-slot="product-list-heading"]')!.getBoundingClientRect().width).toBe(1);
+    expect(Math.abs((width < 1024 ? tabs.firstElementChild! : tabs).getBoundingClientRect().left - products.getBoundingClientRect().left)).toBeLessThan(1);
+    const learn = page.getByRole("button", { name: "Learn more", exact: true });
+    const learnElement = learn.element();
+    if (width >= 1024) expect(getComputedStyle(learnElement).textDecorationLine).toContain("underline");
+    await learn.click();
+    await expect.element(page.getByRole("dialog", { name: "Shopping protection", exact: true })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+    await expect.element(learn).toHaveFocus();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
