@@ -64,7 +64,7 @@
   mask-size: contain;
 }
 
-.control:has(.select:focus-visible) .display {
+.root[data-keyboard-focus] .control:has(.select:focus-visible) .display {
   outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
@@ -108,7 +108,7 @@
 }
 
 .input:focus { border: var(--stroke-thick) solid var(--border-focus); }
-.input:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
+.root[data-keyboard-focus] .input:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
 .input[aria-invalid="true"] { border-color: var(--border-attention); }
 .input:disabled { background: var(--button-disabled); color: var(--text-disabled); cursor: not-allowed; }
 

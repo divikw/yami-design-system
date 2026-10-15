@@ -2103,7 +2103,7 @@
           },
           "--focus-ring": {
             "property": "outline-color",
-            "selector": ".root:focus-visible::before"
+            "selector": ".root[data-keyboard-focus]:focus-visible::before"
           },
           "--radius-tag-primary": {
             "property": "border-radius",
@@ -5587,7 +5587,7 @@
           },
           "--focus-ring": {
             "property": "outline-color",
-            "selector": ".control:has(.select:focus-visible) .display"
+            "selector": ".root[data-keyboard-focus] .control:has(.select:focus-visible) .display"
           },
           "--button-disabled": {
             "property": "background",

@@ -129,7 +129,7 @@
     },
     "--focus-ring": {
       "property": "outline-color",
-      "selector": ".control:has(.select:focus-visible) .display"
+      "selector": ".root[data-keyboard-focus] .control:has(.select:focus-visible) .display"
     },
     "--button-disabled": {
       "property": "background",

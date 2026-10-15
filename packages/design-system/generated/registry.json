@@ -117,7 +117,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
-      "digest": "6023d4f727e36184855d1e02389d4cf684d125281f009d5dd67a2b0eb78bed21"
+      "digest": "e46a2cb8abbf3c12ef042c200501c172b6a377c578f3e9432cda5b9181055486"
     },
     {
       "name": "dialog",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.3.1",
       "path": "registry-items/quantity-select.json",
-      "digest": "5eb84a853bf9e7bf179f4b9c86cd1cb60d6ab58a109dcc31f1e1fc7186738d74"
+      "digest": "3097f95ae81b59a5126d655276208f07074e85af3bfb8f43f240494e8c745a95"
     },
     {
       "name": "radio-group",

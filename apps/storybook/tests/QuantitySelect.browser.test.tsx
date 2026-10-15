@@ -156,6 +156,40 @@ function InlineQuantity({ onChange, loading = false, disabled = false, locale = 
   return <><QuantitySelect value={value} max={25} label="Inline quantity" locale={locale} loading={loading} disabled={disabled} onValueChange={(next) => { setValue(next); onChange(next); }} /><button style={{ marginLeft: 160 }}>Outside</button></>;
 }
 
+test.each([375, 1440])("QuantitySelect shows blue focus only for keyboard interaction at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await page.viewport(width, 812);
+    flushSync(() => root.render(<InlineQuantity onChange={() => {}} />));
+    const trigger = page.getByRole("combobox", { name: "Inline quantity", exact: true });
+    const display = container.querySelector<HTMLElement>('[data-slot="quantity-select-display"]')!;
+    await trigger.click();
+    expect(getComputedStyle(display).outlineStyle).toBe("none");
+    await page.getByRole("option", { name: "3", exact: true }).click();
+    await expect.element(trigger).toHaveFocus();
+    expect(getComputedStyle(display).outlineStyle).toBe("none");
+    await trigger.click();
+    await page.getByRole("option", { name: "10+", exact: true }).click();
+    const input = page.getByRole("textbox", { name: "Inline quantity: enter quantity", exact: true });
+    await expect.element(input).toHaveFocus();
+    expect(getComputedStyle(input.element()).outlineStyle).toBe("none");
+    await userEvent.keyboard("{ArrowRight}");
+    expect(getComputedStyle(input.element()).outlineWidth).toBe("2px");
+    expect(getComputedStyle(input.element()).outlineStyle).toBe("solid");
+    await input.click();
+    expect(getComputedStyle(input.element()).outlineStyle).toBe("none");
+    await userEvent.keyboard("{Escape}");
+    await expect.element(trigger).toHaveFocus();
+    expect(getComputedStyle(display).outlineStyle).toBe("solid");
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test.each([375, 1440])("QuantitySelect replaces 10+ in place and commits once on blur or Enter at %ipx", async (width) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");

@@ -16,7 +16,7 @@ for (const theme of ["light", "dark"]) {
     try {
       await page.viewport(width, 812);
       flushSync(() => root.render(<>
-        <Checkbox aria-label="Select item" />
+        <label><Checkbox aria-label="Select item" /><span>Select item label</span></label>
         <RadioGroup aria-label="Delivery" defaultValue="standard">
           <RadioGroupItem value="standard" aria-label="Standard" />
           <RadioGroupItem value="express" aria-label="Express" />
@@ -40,8 +40,18 @@ for (const theme of ["light", "dark"]) {
       expect(standard.getBoundingClientRect().bottom).toBeLessThanOrEqual(express.getBoundingClientRect().top);
       await page.elementLocator(checkbox).click({ position: { x: 2, y: 2 } });
       expect(checkbox.getAttribute("aria-checked")).toBe("true");
+      expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("none");
       await userEvent.keyboard("{Space}");
       expect(checkbox.getAttribute("aria-checked")).toBe("false");
+      expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("solid");
+      await page.elementLocator(checkbox).click();
+      expect(checkbox.getAttribute("aria-checked")).toBe("true");
+      expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("none");
+      await userEvent.keyboard("{Space}");
+      expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("solid");
+      await page.getByText("Select item label", { exact: true }).click();
+      expect(checkbox.getAttribute("aria-checked")).toBe("true");
+      expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("none");
       await page.elementLocator(express).click({ position: { x: 38, y: 38 } });
       expect(express.getAttribute("aria-checked")).toBe("true");
       expect(standard.getAttribute("aria-checked")).toBe("false");

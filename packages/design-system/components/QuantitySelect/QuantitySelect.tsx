@@ -26,6 +26,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
   const selectRef = useRef<HTMLButtonElement>(null);
   const displayRef = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useState(false);
+  const [keyboardFocus, setKeyboardFocus] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
   const skipCommitRef = useRef(false);
@@ -39,6 +40,18 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
   const limitMessage = zh ? `已达到数量上限 ${max}` : `Maximum quantity is ${max}`;
 
   useEffect(() => { if (unavailable) setOpen(false); }, [unavailable]);
+
+  useEffect(() => {
+    const ownerDocument = selectRef.current!.ownerDocument;
+    const onKeyDown = () => setKeyboardFocus(true);
+    const onPointerDown = () => setKeyboardFocus(false);
+    ownerDocument.addEventListener("keydown", onKeyDown, true);
+    ownerDocument.addEventListener("pointerdown", onPointerDown, true);
+    return () => {
+      ownerDocument.removeEventListener("keydown", onKeyDown, true);
+      ownerDocument.removeEventListener("pointerdown", onPointerDown, true);
+    };
+  }, []);
 
   useEffect(() => {
     if (!limitToast) return;
@@ -71,7 +84,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
     if (next !== value) onValueChange(next);
   }
 
-  return <div className={styles.root} lang={locale} data-slot="quantity-select" aria-busy={loading || undefined}>
+  return <div className={styles.root} lang={locale} data-slot="quantity-select" data-keyboard-focus={keyboardFocus || undefined} aria-busy={loading || undefined}>
     <span className={styles.control} hidden={showInput} data-slot="quantity-select-control">
       <Select.Root value={value >= 10 ? "custom" : String(value)} open={open && !unavailable} onOpenChange={setOpen} disabled={unavailable} modal={false}
         onValueChange={(next) => {

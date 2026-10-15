@@ -3,10 +3,12 @@ import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { CartPage } from "./CartPage";
 import { createCartPageFixture } from "./fixtures";
-import type { CartLocale } from "./CartPage.types";
+import type { CartLocale, CartPageProps } from "./CartPage.types";
 
 type Scenario = "default" | "selected" | "empty" | "loading" | "error" | "long" | "no-coupons" | "shipping-partial" | "shipping-qualified";
-function Demo({ locale, scenario = "default" }: { locale: CartLocale; scenario?: Scenario }) {
+type View = "cart" | "reorder" | "saved" | "coupons" | "unavailable" | "protection" | "summary";
+type CartStoryArgs = CartPageProps & { scenario: Scenario; view: View };
+function Demo({ locale, scenario = "default", view = "cart" }: { locale: CartLocale; scenario?: Scenario; view?: View }) {
   const [failed, setFailed] = useState(scenario === "error");
   const fixture = createCartPageFixture(locale);
   if (scenario === "selected") fixture.initialItems = fixture.initialItems.map((item) => ({ ...item, selected: item.availability === "available" }));
@@ -14,58 +16,65 @@ function Demo({ locale, scenario = "default" }: { locale: CartLocale; scenario?:
   if (scenario === "empty") fixture.initialItems = [];
   if (scenario === "no-coupons") fixture.coupons = [];
   if (scenario === "long") fixture.initialItems = Array.from({ length: 8 }, (_, index) => fixture.initialItems.filter((item) => item.availability === "available").map((item) => ({ ...item, id: `${item.id}-${index}` }))).flat();
-  return <CartPage {...fixture} loading={scenario === "loading"} error={failed ? locale === "zh" ? "购物车加载失败，请重试" : "Could not load your cart. Try again." : undefined} onRetry={() => setFailed(false)} />;
+  return <CartPage {...fixture} initialPageTab={view === "reorder" ? "reorder" : "cart"} initialCollection={view === "saved" ? "saved" : "recommended"}
+    initialDrawer={view === "coupons" || view === "unavailable" || view === "protection" || view === "summary" ? view : null} loading={scenario === "loading"} error={failed ? locale === "zh" ? "购物车加载失败，请重试" : "Could not load your cart. Try again." : undefined} onRetry={() => setFailed(false)} />;
 }
 const meta = {
   id: "yami-pages-cart",
-  title: "YAMI/Pages/Cart/Draft",
+  title: "YAMI/Pages/Cart",
   component: CartPage,
-  tags: ["draft"],
-  parameters: { layout: "fullscreen", controls: { disable: true }, docs: {
+  tags: ["!autodocs", "draft"],
+  argTypes: {
+    scenario: { control: "select", options: ["default", "selected", "empty", "loading", "error", "long", "no-coupons", "shipping-partial", "shipping-qualified"],
+      description: "选择页面数据状态；切换后重置本地预览操作。" },
+    view: { control: "select", options: ["cart", "reorder", "saved", "coupons", "unavailable", "protection", "summary"],
+      description: "Reorder 仅适用于 Mobile；其余区域同时支持 PC 和 Mobile。" },
+  },
+  render: ({ scenario, view }, { globals }) => <Demo key={`${globals.locale}-${scenario}-${view}`} locale={globals.locale === "en" ? "en" : "zh"} scenario={scenario} view={view} />,
+  parameters: { layout: "fullscreen", controls: { include: ["scenario", "view"] }, docs: {
     description: { component: "**Draft · 草稿**：基于 2026-10-13 线上 PC 购物车观察的响应式原型。商品图片和可见价格为来源快照；库存、数量、优惠券和集合是可重复的示例数据，所有操作仅在本次预览内生效。Mobile 参考 Figma Cart / Reorder App 方案；购买次数与分类为本地示例。去结算打开订单摘要，不提交订单。" },
     story: { inline: false, height: "1200px" },
   } },
   globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
-  args: createCartPageFixture("zh"),
-} satisfies Meta<typeof CartPage>;
+  args: { ...createCartPageFixture("zh"), scenario: "default", view: "cart" },
+} satisfies Meta<CartStoryArgs>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 function renderScenario(scenario: Scenario): NonNullable<Story["render"]> {
   return (_args, { globals }) => <Demo key={`${globals.locale}-${scenario}`} locale={globals.locale === "en" ? "en" : "zh"} scenario={scenario} />;
 }
-export const PC: Story = { render: renderScenario("default") };
-export const Mobile: Story = { render: renderScenario("default"), globals: { viewport: { value: "yamiMobile", isRotated: false } } };
-export const MobileReorder: Story = { render: renderScenario("default"), globals: { viewport: { value: "yamiMobile", isRotated: false } },
+export const PC: Story = { argTypes: { view: { options: ["cart", "saved", "coupons", "unavailable", "protection", "summary"] } } };
+export const Mobile: Story = { globals: { viewport: { value: "yamiMobile", isRotated: false } } };
+export const MobileReorder: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("default"), globals: { viewport: { value: "yamiMobile", isRotated: false } },
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("tab", { name: /^(再次购买|Reorder)$/ })); },
 };
-export const Selected: Story = { render: renderScenario("selected") };
-export const Empty: Story = { render: renderScenario("empty") };
-export const Loading: Story = { render: renderScenario("loading") };
-export const Failure: Story = { render: renderScenario("error") };
-export const LongCart: Story = { render: renderScenario("long") };
-export const NoCoupons: Story = { render: renderScenario("no-coupons") };
-export const CouponDrawer: Story = {
+export const Selected: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("selected") };
+export const Empty: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("empty") };
+export const Loading: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("loading") };
+export const Failure: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("error") };
+export const LongCart: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("long") };
+export const NoCoupons: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("no-coupons") };
+export const CouponDrawer: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("selected"),
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(编辑 优惠券|Edit Coupons)$/ })); },
 };
-export const EmptyCouponDrawer: Story = {
+export const EmptyCouponDrawer: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("no-coupons"),
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(编辑 优惠券|Edit Coupons)$/ })); },
 };
-export const UnavailableDrawer: Story = {
+export const UnavailableDrawer: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("selected"),
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(查看全部 以下商品已失效|View all Unavailable items)$/ })); },
 };
-export const ProtectionDrawer: Story = {
+export const ProtectionDrawer: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("selected"),
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("button", { name: /^(了解更多|Learn more)$/ })); },
 };
-export const SavedForLater: Story = {
+export const SavedForLater: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("selected"),
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("tab", { name: /^(稍后购买|Save for later) \(2\)$/ })); },
 };
-export const Interaction: Story = {
-  tags: ["!dev"], render: () => <Demo locale="en" />,
+export const Interaction: Story = { tags: ["!dev", "!autodocs"], render: () => <Demo locale="en" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const fixture = createCartPageFixture("en");
@@ -108,7 +117,7 @@ export const Interaction: Story = {
   },
 };
 
-export const SecurityCarousel: Story = {
+export const SecurityCarousel: Story = { tags: ["!dev", "!autodocs"],
   render: renderScenario("selected"),
   play: async ({ canvasElement }) => {
     const track = canvasElement.querySelector('[data-slot="cart-security-track"]')!;
@@ -121,5 +130,5 @@ export const SecurityCarousel: Story = {
   },
 };
 
-export const ShippingPartial: Story = { render: renderScenario("shipping-partial") };
-export const ShippingQualified: Story = { render: renderScenario("shipping-qualified") };
+export const ShippingPartial: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("shipping-partial") };
+export const ShippingQualified: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("shipping-qualified") };

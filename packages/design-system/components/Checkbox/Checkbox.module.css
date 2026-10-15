@@ -47,7 +47,7 @@
   }
 }
 
-.root:focus-visible::before {
+.root[data-keyboard-focus]:focus-visible::before {
   border-radius: var(--radius-tag-primary);
   outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);

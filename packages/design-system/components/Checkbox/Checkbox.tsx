@@ -1,7 +1,7 @@
 "use client"
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
-import { forwardRef } from "react"
+import { forwardRef, useEffect, useState } from "react"
 
 import styles from "./Checkbox.module.css"
 
@@ -15,6 +15,19 @@ export const Checkbox = forwardRef<HTMLElement, CheckboxProps>(function Checkbox
   { className, ...props },
   ref,
 ) {
+  const [keyboardFocus, setKeyboardFocus] = useState(true)
+
+  useEffect(() => {
+    const onKeyDown = () => setKeyboardFocus(true)
+    const onPointerDown = () => setKeyboardFocus(false)
+    document.addEventListener("keydown", onKeyDown, true)
+    document.addEventListener("pointerdown", onPointerDown, true)
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true)
+      document.removeEventListener("pointerdown", onPointerDown, true)
+    }
+  }, [])
+
   const mergedClassName = (state: CheckboxPrimitive.Root.State) =>
     cx(
       styles.root,
@@ -29,6 +42,7 @@ export const Checkbox = forwardRef<HTMLElement, CheckboxProps>(function Checkbox
       ref={ref}
       className={mergedClassName}
       data-slot="checkbox"
+      data-keyboard-focus={keyboardFocus || undefined}
     >
       <CheckboxPrimitive.Indicator
         className={styles.indicator}

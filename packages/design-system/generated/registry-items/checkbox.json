@@ -94,7 +94,7 @@
       },
       "--focus-ring": {
         "property": "outline-color",
-        "selector": ".root:focus-visible::before"
+        "selector": ".root[data-keyboard-focus]:focus-visible::before"
       },
       "--radius-tag-primary": {
         "property": "border-radius",
@@ -117,5 +117,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "6023d4f727e36184855d1e02389d4cf684d125281f009d5dd67a2b0eb78bed21"
+  "contentDigest": "e46a2cb8abbf3c12ef042c200501c172b6a377c578f3e9432cda5b9181055486"
 }
