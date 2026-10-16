@@ -1,9 +1,9 @@
 "use client";
 
-import { useId, useState } from "react";
-import { Button, ButtonGroup, ButtonLink, Checkbox, Input, QuantitySelect } from "@yami/design-system";
+import { forwardRef, useId, useRef, useState } from "react";
+import { Button, ButtonGroup, ButtonLink, Checkbox, Coupon, Input, QuantitySelect } from "@yami/design-system";
 import type { CartCoupon, CartItemData, CartLocale, CartMerchant } from "./CartPage.types";
-import { formatCartMoney as money } from "./cart-totals";
+import { type calculateCartTotals, formatCartMoney as money } from "./cart-totals";
 import { cartGuarantees, cartPaymentMarks, cartProtectionDetails, cartSecurityCertifications } from "./fixtures";
 import { text } from "./CartPage.copy";
 import styles from "./CartPage.module.css";
@@ -11,15 +11,23 @@ import styles from "./CartPage.module.css";
 const deliveryIcon = new URL("../../../design-system/assets/icons/system/delivery-line.png", import.meta.url).href;
 const qualifiedShippingIcon = new URL("../../../design-system/assets/icons/system/shipping-qualified.png", import.meta.url).href;
 
-export function CouponCodeForm({ locale, onRedeem }: { locale: CartLocale; onRedeem: (code: string) => string }) {
+export const CartAddNotice = forwardRef<HTMLDivElement, { item: CartItemData; locale: CartLocale; onClose: () => void }>(function CartAddNotice({ item, locale, onClose }, ref) {
+  return <div ref={ref} className={styles.addNotice} data-slot="cart-add-notice">
+    <div className={styles.addNoticeProduct} role="status"><span className={styles.srOnly}>{text[locale].added}</span><span className={styles.addNoticeImage}><img src={item.image} alt="" width={96} height={96} /></span><div><p>{item.title}</p><div className={styles.addNoticePrice}><strong>{money(item.priceCents)}</strong>{item.originalPriceCents && item.originalPriceCents > item.priceCents ? <del>{money(item.originalPriceCents)}</del> : null}</div></div></div>
+    <Button className={styles.addNoticeClose} variant="tertiary" size="sm" form="icon" aria-label={locale === "zh" ? "关闭加购提示" : "Dismiss added item"} onClick={onClose}><span className={styles.closeIcon} aria-hidden="true" /></Button>
+  </div>;
+});
+
+export function CouponCodeForm({ locale, onRedeem, compact = false, embeddedAction = false }: { locale: CartLocale; onRedeem: (code: string) => string; compact?: boolean; embeddedAction?: boolean }) {
   const t = text[locale];
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const codeId = useId();
-  return <form className={styles.couponForm} noValidate onSubmit={(event) => { event.preventDefault(); setError(code.trim() ? onRedeem(code.trim()) : t.codeRequired); }}>
-    <label htmlFor={codeId}>{t.code}</label>
-    <Input id={codeId} density="compact" fullWidth value={code} error={error} onChange={(event) => { setCode(event.target.value); setError(""); }} />
-    <Button className={`${styles.actionLink} ${styles.couponAction}`} size="md" variant="tertiary" htmlType="submit">{t.redeem}</Button>
+  const inputRef = useRef<HTMLInputElement>(null);
+  return <form className={`${styles.couponForm} ${compact ? styles.couponDrawerForm : ""}`} data-embedded-action={embeddedAction || undefined} noValidate onSubmit={(event) => { event.preventDefault(); const message = code.trim() ? onRedeem(code.trim()) : t.codeRequired; setError(message); if (message) inputRef.current?.focus(); }}>
+    <label className={compact ? styles.srOnly : undefined} htmlFor={codeId}>{t.code}</label>
+    <Input ref={inputRef} id={codeId} name="promoCode" placeholder={compact ? t.code : undefined} autoComplete="off" spellCheck={false} density="compact" fullWidth value={code} error={error} action={embeddedAction ? { label: t.redeem, htmlType: "submit" } : undefined} onChange={(event) => { setCode(event.target.value); setError(""); }} />
+    {!embeddedAction && <Button className={`${styles.actionLink} ${styles.couponAction}`} size="md" variant="tertiary" htmlType="submit">{t.redeem}</Button>}
   </form>;
 }
 
@@ -93,18 +101,57 @@ export function CartSecurityCarousel({ locale }: { locale: CartLocale }) {
   </div>;
 }
 
-export function CartCoupons({ locale, coupons, couponId, subtotalCents, quantity, onRedeem, onApply }: {
+export function CartCoupons({ locale, coupons, couponId, subtotalCents, quantity, onRedeem, onSelect, mobile = false }: {
   locale: CartLocale; coupons: CartCoupon[]; couponId: string | null; subtotalCents: number; quantity: number;
-  onRedeem: (code: string) => string; onApply: (id: string | null) => void;
+  onRedeem: (code: string) => string; onSelect: (id: string | null) => void;
+  mobile?: boolean;
 }) {
   const t = text[locale];
-  return <><p>{t.couponHint}</p><CouponCodeForm locale={locale} onRedeem={onRedeem} />
-    {coupons.length === 0 ? <p className={styles.drawerEmpty}>{t.noCoupons}</p> : <ul className={styles.couponList}>{coupons.map((entry) => <li key={entry.id}>
-      <h3 className={styles.couponTitle}>{entry.title}</h3><p>{entry.description}</p><p className={styles.muted}>{entry.code}</p>
-      {subtotalCents < entry.minSubtotalCents ? <p className={styles.attention}>{t.condition}</p> : null}
-      <Button size="sm" aria-pressed={couponId === entry.id} disabled={couponId !== entry.id && (quantity === 0 || subtotalCents < entry.minSubtotalCents)} onClick={() => onApply(couponId === entry.id ? null : entry.id)}>{couponId === entry.id ? t.unused : t.use}</Button>
-    </li>)}</ul>}{couponId ? <Button variant="tertiary" onClick={() => onApply(null)}>{t.noCoupon}</Button> : null}
-  </>;
+  const eligible = coupons.filter((entry) => quantity > 0 && subtotalCents >= entry.minSubtotalCents);
+  return <div className={styles.couponContent}>{!mobile && <p>{t.couponHint}</p>}<CouponCodeForm locale={locale} onRedeem={onRedeem} compact embeddedAction={mobile} />
+    {eligible.length === 0 ? <p className={styles.drawerEmpty}>{t.noCoupons}</p> : <ul className={styles.couponList} aria-label={t.availableCoupons}>{eligible.map((entry) => <li key={entry.id}>
+      <Coupon title={entry.title} description={entry.description} validity={entry.validUntil ? `${t.validUntil} ${entry.validUntil}` : undefined}
+        selected={couponId === entry.id} onSelectedChange={(selected) => onSelect(selected ? entry.id : null)} />
+    </li>)}</ul>}
+  </div>;
+}
+
+export function CartCouponActions({ locale, onSave, disabled = false }: { locale: CartLocale; onSave: () => void; disabled?: boolean }) {
+  const t = text[locale];
+  return <div className={styles.couponFooter}>
+    <Button variant="emphasis" size="lg" form="full" disabled={disabled} onClick={onSave}>{t.saveCoupon}</Button>
+  </div>;
+}
+
+export function CartOrderDetails({ locale, items, merchants, totals }: {
+  locale: CartLocale; items: CartItemData[]; merchants: CartMerchant[]; totals: ReturnType<typeof calculateCartTotals>;
+}) {
+  const t = text[locale];
+  const [shippingInfoOpen, setShippingInfoOpen] = useState(false);
+  const shippingInfoId = useId();
+  const selected = items.filter((item) => item.selected && item.availability === "available");
+  const selectedMerchants = merchants.filter((merchant) => selected.some((item) => item.merchantId === merchant.id));
+  const count = locale === "zh" ? `${selectedMerchants.length} 个商家，${totals.quantity} 件商品` : `${selectedMerchants.length} ${selectedMerchants.length === 1 ? "seller" : "sellers"}, ${totals.quantity} ${totals.quantity === 1 ? "item" : "items"}`;
+  return <section className={styles.orderDetails} data-slot="cart-order-details">
+    <p>{t.cart}（{totals.quantity}）</p>
+    <ul className={styles.orderThumbnails} aria-label={t.selected}>
+      {selected.map((item) => <li key={item.id}><img src={item.image} alt={item.title} width={64} height={64} /><span><span className={styles.srOnly}>{t.quantity} </span>{item.quantity}</span></li>)}
+    </ul>
+    <dl className={styles.orderAmounts}>
+      <div><dt>{t.merchandiseAmount}<small>{count}</small></dt><dd>{money(totals.subtotalCents)}</dd></div>
+      <div className={styles.orderShipping}><dt>{t.estimatedShipping}<Button variant="tertiary" size="sm" form="icon" aria-label={t.shippingInfo} aria-expanded={shippingInfoOpen} aria-controls={shippingInfoId} onClick={() => setShippingInfoOpen((value) => !value)}><span className={styles.shippingInfoIcon} aria-hidden="true" /></Button></dt><dd>
+        <p id={shippingInfoId} className={styles.shippingHelp} hidden={!shippingInfoOpen}>{t.shippingHelp}</p>
+        <dl>{selectedMerchants.map((merchant) => {
+          const subtotal = totals.merchantSubtotals[merchant.id];
+          const fee = subtotal > 0 && subtotal < merchant.freeShippingCents ? merchant.shippingCents : 0;
+          return <div key={merchant.id}><dt>{merchant.title}</dt><dd>{fee === 0 ? t.free : money(fee)}</dd></div>;
+        })}</dl>
+      </dd></div>
+      {totals.discountCents > 0 && <div><dt>{t.discount}</dt><dd>−{money(totals.discountCents)}</dd></div>}
+      <div><dt>{t.taxLabel}</dt><dd>{t.taxAtCheckout}</dd></div>
+      <div className={styles.orderDetailTotal}><dt>{t.orderSubtotal}</dt><dd><strong>{money(totals.totalCents)}</strong></dd></div>
+    </dl>
+  </section>;
 }
 
 export function CartProtectionDetails({ locale }: { locale: CartLocale }) {

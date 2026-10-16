@@ -5,8 +5,8 @@
  * Default: no border (rule card-no-border), 12px radius
  * (rule no-custom-radii → --radius-surface-default), no shadow.
  *
- * If a card is clickable, hover/press changes background color. Depth tokens
- * are not part of the current Figma source, so Card does not expose elevation.
+ * If a card is clickable, hover/press changes background color. Static Figma
+ * depth tokens are opt-in; Card keeps its shadow-free default.
  *
  * Use as="a" with href for navigation or as="button" for an action.
  */

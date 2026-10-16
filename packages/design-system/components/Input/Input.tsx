@@ -17,6 +17,7 @@ import {
   type FocusEvent,
   type InputHTMLAttributes,
   type MouseEvent,
+  type MouseEventHandler,
   type ReactNode,
   useCallback,
   useEffect,
@@ -25,6 +26,7 @@ import {
   useState,
 } from 'react'
 
+import { Button } from '../Button'
 import styles from './Input.module.css'
 
 export type InputState =
@@ -60,6 +62,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   leadingIcon?: ReactNode
   /** Trailing icon, text, or action inside the field. Prefer currentColor SVGs from assets/icons. */
   trailingIcon?: ReactNode
+  /** Inline text action in the field. Takes precedence over trailingIcon/suffix and clear. */
+  action?: { label: string; onClick?: MouseEventHandler<HTMLButtonElement>; htmlType?: 'button' | 'submit'; disabled?: boolean }
   /** Backward-compatible alias for leadingIcon. */
   prefix?: ReactNode
   /** Backward-compatible alias for trailingIcon. */
@@ -130,6 +134,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     density = 'default',
     leadingIcon,
     trailingIcon,
+    action,
     prefix,
     suffix,
     clearable = false,
@@ -285,7 +290,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     .join(' ') || undefined
 
   const startSlot = leadingIcon ?? prefix
-  const endSlot = trailingIcon ?? suffix
+  const endSlot = action ? <Button className={styles.fieldAction} variant="tertiary" size="md"
+    htmlType={action.htmlType ?? 'button'} htmlForm={rest.form} disabled={isDisabled || action.disabled} onClick={action.onClick}>{action.label}</Button> : trailingIcon ?? suffix
   const showClear =
     clearable &&
     !isDisabled &&
@@ -358,6 +364,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       data-floating={isFloating || undefined}
       data-label={hasLabel || undefined}
       data-leading={Boolean(startSlot) || undefined}
+      data-action={Boolean(action) || undefined}
       data-disabled={isDisabled || undefined}
       data-keyboard-focus={keyboardFocus || undefined}
       onFocusCapture={() => {

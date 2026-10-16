@@ -47,7 +47,7 @@
   opacity: 1;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .imageWrap:hover .image {
     transform: scale(1.03);
   }
@@ -166,7 +166,7 @@
 
 }
 
-@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
   .imageWrap:hover .image {
     transform: none;
   }
@@ -224,7 +224,7 @@
   white-space: nowrap;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .brand:hover > span {
     text-decoration: underline;
   }
@@ -277,7 +277,7 @@
   text-decoration: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .cardLink:hover .titleLinkText {
     text-decoration: underline;
   }
@@ -448,7 +448,7 @@
   background-color: transparent;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .notify:not([aria-disabled="true"]):hover {
     background-color: transparent;
   }

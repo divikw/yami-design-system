@@ -124,7 +124,7 @@
   color: var(--text-emphasis);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .control:has(.select:not(:disabled):not([data-popup-open]):hover) .display {
     background: var(--surface-secondary);
   }

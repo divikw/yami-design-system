@@ -56,6 +56,9 @@ function cssName(trail) {
 }
 
 function valueForCss(value, type, extensions) {
+  if (type === "shadow" && value && typeof value === "object" && !Array.isArray(value)) {
+    return [value.offsetX, value.offsetY, value.blur, value.spread, value.color].join(" ");
+  }
   if (type === "fontFamily" && value && typeof value === "object" && !Array.isArray(value)) {
     const families = [...new Set(Object.values(value).filter((item) => typeof item === "string"))];
     const genericFamily = extensions?.["com.yami.generic-family"] ?? "sans-serif";

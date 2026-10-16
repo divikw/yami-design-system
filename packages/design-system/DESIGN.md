@@ -251,9 +251,19 @@ container instead of the global viewport.
 
 > **Hard rule:** the 6 semantic slots above are the **only** sanctioned consumption surface. Never raw values like `8.5px` / `16px` / `50%`, and **never** primitive tokens like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl` (they exist in tokens.css as building blocks for the semantic slots but components must reach for the semantic name).
 
-### Depth — no local elevation scale
+### Depth — Figma elevation effects
 
-Figma currently does not provide a YAMI elevation token collection. Components must not invent local elevation CSS variables. Use color, spacing, radius, and optional `--border-default` hairlines for separation.
+The [Figma Elevation page](https://www.figma.com/design/6oOAy72DBff4P6NzJYc2hi/YAMI-UI-UX-Guidelines?node-id=2651-5692) defines five Effect Styles (source status: Draft, synced 2026-10-16). `tokens/semantic/elevation.tokens.json` preserves their names, composite shadow values and Figma style keys. Storybook → Foundations → Elevation previews the generated CSS tokens.
+
+| Token | CSS shadow | Intended layer |
+| --- | --- | --- |
+| `--elevation-100-canvas` | `0px 1px 2px -1px rgba(0, 0, 0, 0.04)` | Canvas / card base; barely raised content |
+| `--elevation-200-raised-surface` | `0px 2px 4px -2px rgba(0, 0, 0, 0.08)` | Raised independent surfaces |
+| `--elevation-300-tooltip` | `0px 4px 8px -4px rgba(0, 0, 0, 0.12)` | Immediate feedback and lightweight floating information |
+| `--elevation-400-menu-panel` | `0px 4px 12px -6px rgba(0, 0, 0, 0.16)` | Menus, dropdowns and action panels |
+| `--elevation-500-modal-window` | `0px 8px 16px -8px rgba(0, 0, 0, 0.24)` | Highest interaction layer; requires an overlay |
+
+These are static depth styles, not hover or press feedback. Existing component defaults remain unchanged; do not automatically add shadows to Card or migrate page styles when consuming this scale. Do not invent local elevation variables. The source provides no separate dark-mode effects, so these values are shared across themes. `component-add-to-cart-glass` is a separate business-component effect and is not part of this five-level scale.
 
 ### Breakpoints
 
@@ -392,6 +402,8 @@ YAMI's current inventory is generated in [`generated/catalog.json`](./generated/
 
 ### Button — `components/Button/`
 
+Button, Checkbox, Tabs, QuantitySelect, Coupon and ProductCard mouse-hover feedback requires a viewport of at least 1024px plus `(hover: hover) and (pointer: fine)`. Mobile layouts have no hover feedback even when previewed with a desktop mouse. Press/active, selection and keyboard focus remain available. / 移动端不显示鼠标悬停反馈，保留按下、选中和键盘焦点反馈。
+
 Choose by behavior: actions use Button; navigation and direct file downloads use anchors with real `href`. Button has no `href`, `as`, or `asChild` API. Links and buttons may share a layout; preserve labels, destinations, and actions when repairing presentation. See [Button usage](./components/Button/usage.md) for mixed actions, grouping, and the current button-styled-link limitation. / 先判断行为：操作使用 Button，导航和文件直接下载使用链接；修正外观时保留业务含义，链接与按钮允许并列。
 
 |                |                                                                                                  |
@@ -503,6 +515,8 @@ Static membership artwork verified against Figma node `1632:21283`. Exposes the 
 
 ### Input — `components/Input/`
 
+Opt-in `action` composes a shared tertiary Button inside the field border, with underlined 14px action text and 14px value text. It preserves native form submission, disabled and error behavior. Ordinary inputs keep their current appearance; cart uses the option only on mobile. See [usage](./components/Input/usage.md).
+
 `density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This is a code-defined exception to the general touch-target guidance. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
 
 |              |                                                                              |
@@ -519,6 +533,8 @@ Interactive filter-pill family with filled and outlined treatments, selected sta
 
 ### Sheet — `components/Sheet/`
 
+Optional `description` keeps supporting copy beneath the title in the fixed header, above its divider, linked with `aria-describedby`. Omission preserves the existing header; Drawer inherits the same capability.
+
 Shared modal shell for PDP details and search filters. Below 1024px, mobile uses a bottom sheet with content or full-height sizing, 16px top corners (`--radius-surface-sheet`), and square bottom corners. From 1024px, desktop uses a centered 560px dialog with 12px corners (`--radius-surface-default`). Both sizes and child views share this rule in Light and Dark. The token-backed header, close/back action, modal focus behavior, scroll lock, independent content scrolling, and optional fixed footer are shared. Child views reuse one shell and backdrop; callers retain business state and restore the parent entry on return. Desktop quick-filter menus remain anchored Popovers.
 
 ### QuantitySelect — `components/QuantitySelect/`
@@ -528,6 +544,10 @@ Controlled cart quantity input with a 60×24px visible pill and a minimum 44px t
 ### Drawer — `components/Drawer/`
 
 Contextual modal for coupons and unavailable items. Composes Sheet's native dialog, keyboard, focus restoration and scroll locking. PC is flush right, 480px wide and full viewport height with square edge-attached corners; Mobile uses Sheet's full bottom presentation and existing semantic top radii. Header and optional footer stay outside the scrolling body. See [usage](./components/Drawer/usage.md).
+
+### Coupon — `components/Coupon/`
+
+Controlled coupon selection card with title, scope and optional localized validity text. Composes Checkbox with a circular marker, transparent ticket cutouts and a dashed divider. The host owns eligibility, selection limits and saving; the cart commits its zero-or-one selection only on Save and discards drafts on dismissal. See [usage](./components/Coupon/usage.md).
 
 ### Dialog — `components/Dialog/`
 
@@ -923,7 +943,7 @@ Observed failures from real `validateDesign` runs + audit findings in [`decision
 <!-- /anti-pattern -->
 
 **Why**: Material Design grammar; "elevation increase signals interactivity".
-**Why it's wrong**: Figma currently provides no YAMI elevation token source. Hover changes `background-color`, never shadow (rule `elevation-on-press`).
+**Why it's wrong**: Figma elevation effects express static depth, not interaction feedback. Hover changes `background-color`, never shadow (rule `elevation-on-press`).
 **Fix**: `background: var(--surface-secondary);` on hover. Keep Card shadow-free.
 
 ### F4. Hardcoded focus ring

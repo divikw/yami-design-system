@@ -17,6 +17,7 @@
   },
 
   "exports": ["Input", "InputProps", "InputSize", "InputState", "InputDensity"],
+  "composes": ["Button"],
 
   "variants": {
     "platform": ["mobile", "pc"],
@@ -33,6 +34,7 @@
   },
 
   "props": {
+    "action": { "type": "{ label: string; onClick?: MouseEventHandler<HTMLButtonElement>; htmlType?: 'button' | 'submit'; disabled?: boolean }", "required": false, "description": "Opt-in underlined text action inside the shared field border. Uses 14px value and action text, inherits disabled, and replaces trailingIcon/suffix and clear. Consumer owns submission and validation." },
     "density": {
       "type": "enum",
       "values": ["default", "compact"],
@@ -179,6 +181,7 @@
     "--space-050",
     "--space-100",
     "--space-150",
+    "--space-200",
     "--space-300",
     "--space-500",
     "--space-600",
@@ -188,6 +191,7 @@
 
   "tokenBindings": {
     "--space-100": { "property": "padding-inline-end", "selector": ".field" },
+    "--space-200": { "property": "padding-inline-start", "selector": ".root[data-action='true'] .field" },
     "--space-300": { "property": "width", "selector": ".clearButton" },
     "--space-500": { "property": "height", "selector": "@media(min-width:1024px) .root[data-density='compact'] .field" },
     "--focus-ring": { "property": "outline-color", "selector": ".root[data-keyboard-focus='true'] .field:has(.control:focus-visible), .root[data-keyboard-focus='true'] .clearButton:focus-visible" },
@@ -216,7 +220,7 @@
     },
     "--radius-component-default": { "property": "border-radius", "selector": ".field" },
     "--font-family-ios": { "property": "font-family", "selector": ".root" },
-    "--font-size-body-md": { "property": "font-size", "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control" },
+    "--font-size-body-md": { "property": "font-size", "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control, .root[data-action='true'] .control, .fieldAction" },
     "--font-size-body-xl": { "property": "font-size", "selector": "@media(min-width:1024px) .root[data-density='default'] .control" },
     "--font-size-caption-md": {
       "property": "font-size",
@@ -248,6 +252,7 @@
   "examples": [
     "./examples.tsx#BasicInput",
     "./examples.tsx#CompactInput",
+    "./examples.tsx#ActionInput",
     "./examples.tsx#FocusedInput",
     "./examples.tsx#TypingInput",
     "./examples.tsx#CompleteInput",

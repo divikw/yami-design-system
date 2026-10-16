@@ -10,6 +10,8 @@ const backIcon = new URL("../../assets/icons/action/arrow-left.svg", import.meta
 export interface SheetProps extends Omit<ComponentPropsWithoutRef<"dialog">, "open" | "title" | "onClose" | "onCancel"> {
   open: boolean;
   title: string;
+  /** Supporting copy stays with the title above the scrolling body. */
+  description?: string;
   closeLabel: string;
   onClose: () => void;
   /** A child view replaces Close with Back; Escape also returns to its parent. */
@@ -24,8 +26,8 @@ export interface SheetProps extends Omit<ComponentPropsWithoutRef<"dialog">, "op
 }
 
 export function Sheet({
-  open, title, closeLabel, onClose, back, size = "content", contentPadding = "default", desktopPlacement = "center",
-  footer, id: providedId, className, children, onClick, onKeyDown, "data-slot": slot = "sheet", ...rest
+  open, title, description, closeLabel, onClose, back, size = "content", contentPadding = "default", desktopPlacement = "center",
+  footer, id: providedId, className, children, onClick, onKeyDown, "aria-describedby": ariaDescribedBy, "data-slot": slot = "sheet", ...rest
 }: SheetProps) {
   const generatedId = useId();
   const id = providedId ?? `sheet-${generatedId}`;
@@ -64,6 +66,7 @@ export function Sheet({
       className={[styles.sheet, className].filter(Boolean).join(" ")}
       aria-modal="true"
       aria-labelledby={`${id}-title`}
+      aria-describedby={[ariaDescribedBy, description ? `${id}-description` : undefined].filter(Boolean).join(" ") || undefined}
       data-slot={slot}
       data-sheet=""
       data-size={size}
@@ -113,6 +116,7 @@ export function Sheet({
           </Button>
         </div>
         <h2 className={styles.title} id={`${id}-title`}>{title}</h2>
+        {description && <p className={styles.description} id={`${id}-description`} data-slot="sheet-description">{description}</p>}
       </header>
       <div ref={contentRef} className={styles.content} data-slot={`${id}-content`} data-sheet-content="" data-padding={contentPadding}>
         {children}

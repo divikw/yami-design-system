@@ -4,6 +4,8 @@
 
 从 `@yami/design-system` 导入 Drawer。open、title、closeLabel、onClose 为必填；内容通过 children 传入，footer 始终位于滚动正文外。contentPadding、size、back 的含义与 Sheet 相同。简短确认使用 Dialog，居中详情使用 Sheet。
 
+可选 `description` 复用 Sheet 的固定标题说明区和分隔线，并关联弹层的 `aria-describedby`。不传此属性时保持原来的头部。
+
 Drawer 组合 Sheet，共用原生 modal dialog、Tab 循环、Esc、遮罩关闭、关闭后的焦点归还和背景滚动锁定。子页面用 back，Esc 返回上层。业务方维护 loading、error、empty 和选中内容；关闭会卸载正文。本次 Storybook 示例与验收仅覆盖浅色模式。
 
 打开和关闭均为 200ms：PC 从右侧滑入/滑出，Mobile 从底部滑入/滑出；遮罩同时进行 150ms 淡入/淡出。使用原生 CSS 动画与现有 enter/exit 曲线，不依赖 Motion 运行时。退场期间保留最后一次打开的内容、模态锁和焦点，动画完成后才卸载并归还焦点；重新打开会取消待完成的关闭。`prefers-reduced-motion: reduce` 下取消动画并立即关闭。

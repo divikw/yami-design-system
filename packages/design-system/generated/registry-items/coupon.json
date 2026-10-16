@@ -1,0 +1,118 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "coupon",
+  "title": "Coupon",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Controlled coupon selection card with a circular Checkbox, scope, optional validity, dashed divider and transparent ticket cutouts. Hosts own eligibility and saving.",
+  "source": "components/Coupon",
+  "files": [
+    {
+      "source": "components/Coupon/Coupon.module.css",
+      "target": "components/Coupon/Coupon.module.css"
+    },
+    {
+      "source": "components/Coupon/Coupon.tsx",
+      "target": "components/Coupon/Coupon.tsx"
+    },
+    {
+      "source": "components/Coupon/index.ts",
+      "target": "components/Coupon/index.ts"
+    }
+  ],
+  "exports": [
+    "Coupon",
+    "CouponProps"
+  ],
+  "composes": [
+    "Checkbox"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/Coupon/usage.md",
+    "stories": [
+      "components/Coupon/Coupon.stories.tsx"
+    ],
+    "examples": [
+      "components/Coupon/examples.tsx#CouponExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--background-secondary",
+      "--border-default",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-caption-sm",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--line-height-caption-md",
+      "--line-height-heading-sm",
+      "--radius-button-primary",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--space-600",
+      "--stroke-default",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-disabled",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "elevation-on-press",
+      "focus-style",
+      "no-opacity-disabled"
+    ],
+    "tokenBindings": {
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".segment"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".segment, .segment::before, .segment::after"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".coupon"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".details"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".coupon[data-disabled] .segment"
+      },
+      "--radius-button-primary": {
+        "property": "border-radius",
+        "selector": ".selector::before, .segment::before, .segment::after"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "wcagLevel": "AA",
+      "tapTargetMin": 44,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "space"
+      ],
+      "ariaPattern": "Controlled Checkbox with a visible native label, title as accessible name and scope/validity as description."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "894fe68bda3e880ffef9487bf14b6c5f017b161fce61bf363b95d4093b46e9c8"
+}

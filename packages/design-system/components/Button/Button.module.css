@@ -289,7 +289,7 @@
   color: var(--text-disabled-inverse);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .emphasis:not([aria-disabled="true"]):hover {
     background-color: var(--button-emphasis-active);
   }

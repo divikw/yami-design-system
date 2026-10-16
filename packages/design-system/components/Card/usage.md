@@ -25,7 +25,7 @@ Card 默认使用：
 - `--radius-surface-default` 圆角（12px）。
 - `padding='md'` 内边距（16px）。
 - **无边框**（规则 `card-no-border`）。
-- **无阴影**（目前没有可用的层级阴影令牌来源）。
+- **默认无阴影**。Figma 的 E100–E500 层级已同步为 `--elevation-*` token，仅在明确需要静态层级时使用，不自动改变 Card 默认外观。
 
 仅在卡片排列紧密、需要细线分隔以提升浏览效率的密集列表或网格中启用 `bordered`。
 
@@ -250,7 +250,7 @@ Cards ship with:
 - `--radius-surface-default` (12px)
 - `padding='md'` (16px interior)
 - **No border** (rule `card-no-border`)
-- **No shadow** (Figma currently provides no elevation token source)
+- **No shadow by default**. Figma E100–E500 tokens are available for explicitly requested static depth; they do not change Card defaults.
 
 Opt into `bordered` only in dense listing grids where cards are tightly packed and hairline separation improves scanability.
 
