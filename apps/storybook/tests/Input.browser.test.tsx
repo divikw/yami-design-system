@@ -18,6 +18,30 @@ afterEach(() => {
   container.remove();
 });
 
+test("inline action submits by click and Enter and inherits disabled without losing field semantics", async () => {
+  const submit = vi.fn((event: React.FormEvent) => event.preventDefault());
+  const render = (disabled = false) => flushSync(() => root.render(<>
+    <form id="action-input-form" onSubmit={submit} />
+    <Input form="action-input-form" density="compact" aria-label="Promo code" defaultValue="SAVE10" disabled={disabled}
+      error="Check this code" action={{ label: "Redeem", htmlType: "submit" }} />
+  </>));
+  render();
+  const input = container.querySelector("input")!;
+  const action = page.getByRole("button", { name: "Redeem", exact: true });
+  expect(input.closest('[data-slot="input"]')!.contains(action.element())).toBe(true);
+  await expect.element(page.elementLocator(input)).toHaveAccessibleName("Promo code");
+  expect(input.getAttribute("aria-invalid")).toBe("true");
+  expect(document.getElementById(input.getAttribute("aria-describedby")!)!.textContent).toBe("Check this code");
+  await action.click();
+  expect(submit).toHaveBeenCalledTimes(1);
+  await page.elementLocator(input).click();
+  await userEvent.keyboard("{Enter}");
+  expect(submit).toHaveBeenCalledTimes(2);
+  render(true);
+  await expect.element(action).toBeDisabled();
+  expect(input.disabled).toBe(true);
+});
+
 test.each(["default", "compact"] as const)("%s native reset follows the current form association", async (density) => {
   const render = (form: string) => flushSync(() => root.render(<>
     <form id="first-form"><button type="reset">Reset first</button></form>

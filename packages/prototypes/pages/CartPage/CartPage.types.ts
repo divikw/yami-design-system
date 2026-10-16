@@ -36,6 +36,8 @@ export interface CartCoupon {
   description: string;
   minSubtotalCents: number;
   discountCents: number;
+  /** Localized display date supplied by the fixture or host. */
+  validUntil?: string;
 }
 export interface CartPageProps {
   locale: CartLocale;
@@ -51,6 +53,8 @@ export interface CartPageProps {
   reorderItems?: CartReorderItem[];
   frequentlyBoughtItems?: CartReorderItem[];
   coupons: CartCoupon[];
+  /** Account state supplied by the host; previewing it does not authenticate a user. */
+  signedIn?: boolean;
   loading?: boolean;
   error?: string;
   onRetry?: () => void;

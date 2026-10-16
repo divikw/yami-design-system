@@ -1,0 +1,75 @@
+.coupon {
+  display: grid;
+  min-width: 0;
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  cursor: pointer;
+}
+
+.segment {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  background: var(--surface-primary);
+  overflow: hidden;
+  border: var(--stroke-default) solid var(--border-default);
+  mask-composite: intersect;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-150);
+  min-height: var(--space-600);
+  padding: var(--space-100) var(--space-200);
+  padding-right: var(--space-100);
+  border-bottom-style: dashed;
+  mask-image: radial-gradient(circle at left bottom, transparent var(--space-100), black var(--space-100)), radial-gradient(circle at right bottom, transparent var(--space-100), black var(--space-100));
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+  font-weight: var(--font-weight-emphasize);
+}
+
+.coupon .selector::before { border-radius: var(--radius-button-primary); }
+
+.details {
+  display: grid;
+  gap: var(--space-100);
+  padding: var(--space-200);
+  border-top: 0;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  mask-image: radial-gradient(circle at left top, transparent var(--space-100), black var(--space-100)), radial-gradient(circle at right top, transparent var(--space-100), black var(--space-100));
+}
+
+.validity { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); }
+
+.segment::before, .segment::after {
+  position: absolute;
+  box-sizing: border-box;
+  width: calc(2 * (var(--space-100) + var(--stroke-default)));
+  height: calc(2 * (var(--space-100) + var(--stroke-default)));
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-button-primary);
+  content: "";
+  pointer-events: none;
+}
+.segment::before { left: calc(-1 * (var(--space-100) + 2 * var(--stroke-default))); }
+.segment::after { right: calc(-1 * (var(--space-100) + 2 * var(--stroke-default))); }
+.header::before, .header::after { bottom: calc(-1 * (var(--space-100) + 2 * var(--stroke-default))); }
+.details::before, .details::after { top: calc(-1 * (var(--space-100) + var(--stroke-default))); }
+
+.coupon[data-disabled] { cursor: not-allowed; }
+.coupon[data-disabled] .segment { background: var(--background-secondary); color: var(--text-disabled); }
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .coupon:not([data-disabled]):hover .segment { background: var(--surface-secondary); }
+}

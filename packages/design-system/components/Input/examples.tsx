@@ -16,6 +16,13 @@ export const CompactInput = () => (
   </section>
 )
 
+export const ActionInput = () => (
+  <form onSubmit={(event) => event.preventDefault()}>
+    <Input density="compact" aria-label="Promo code" placeholder="Promo code"
+      action={{ label: "Redeem", htmlType: "submit" }} />
+  </form>
+)
+
 export const FocusedInput = () => (
   <section data-example="FocusedInput">
     <Input label="Label" state="focused" />

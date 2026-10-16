@@ -3,7 +3,7 @@
  * pseudo-class selectors (`:hover`, `:active`, `:focus`, `:focus-visible`).
  *
  * Rationale: interaction feedback uses color (the -active token variants),
- * not shadow. Figma currently provides no YAMI elevation token source.
+ * not shadow. Figma elevation tokens express static depth only.
  */
 
 import type { Validator, Violation } from '../schema'

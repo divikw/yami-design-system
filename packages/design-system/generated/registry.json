@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "9fc2c181d195abb0a76ab4cd220d0f18eade518fdb56a6b967f309d05226368b"
+      "digest": "dfb624112f12f58472ab9e65be68fa5ee004766ef75392b485e54d80909e75a6"
     },
     {
       "name": "activity-page-header",
@@ -90,7 +90,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "4fc48190b01885dfaf36b2a9927c22c47f21c571b051805011235f1a6fd4ec40"
+      "digest": "0a877082053add7ba08b1afc9b214aea962d7b2f4ec13a85a35a3365272bb02f"
     },
     {
       "name": "button-group",
@@ -108,7 +108,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/card.json",
-      "digest": "476460b7b9d727cd504fbe586dc22dbd1f364774f34991da8787d472738508c4"
+      "digest": "aebbda639a6dadcd2c70a9f4ae94c987f8166b0d8ffd74bc10e8cd3cc0ccd7e8"
     },
     {
       "name": "checkbox",
@@ -117,7 +117,16 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
-      "digest": "e46a2cb8abbf3c12ef042c200501c172b6a377c578f3e9432cda5b9181055486"
+      "digest": "2ed44483bfe3b9c00450bacd8964d81f0210581ef86071dfaf05eec0f2ef10d2"
+    },
+    {
+      "name": "coupon",
+      "title": "Coupon",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/coupon.json",
+      "digest": "894fe68bda3e880ffef9487bf14b6c5f017b161fce61bf363b95d4093b46e9c8"
     },
     {
       "name": "dialog",
@@ -144,7 +153,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "1d495c02618d7410e7a599d69bbbf4399f39e6b7c685c61840e6c79070d1064a"
+      "digest": "6f177301e658a666de1759a04534d4cf531dc83d437d1634cd6640f2e9edafa5"
     },
     {
       "name": "filter-chip",
@@ -198,7 +207,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "4faef0ecfeaf2870782d660b069011b6c3bf47a1e2aadb13428ac0f1becd0520"
+      "digest": "32d05f34e47f3a3152031e405674b33f02c2fd627419a44767580e018cb93890"
     },
     {
       "name": "membership-badge",
@@ -234,7 +243,7 @@
       "status": "stable",
       "version": "0.3.2",
       "path": "registry-items/product-card.json",
-      "digest": "0d9e3a5d9d83a8e93e24372b3440a32fbc99939a647a4130d5d0159d4d500af9"
+      "digest": "6df43805b34dccdf0e49ead37a252fe146a0d5b10e5a0fe6fda4b521d5b46708"
     },
     {
       "name": "product-list",
@@ -270,7 +279,7 @@
       "status": "experimental",
       "version": "0.3.1",
       "path": "registry-items/quantity-select.json",
-      "digest": "3097f95ae81b59a5126d655276208f07074e85af3bfb8f43f240494e8c745a95"
+      "digest": "3cd053e99abb902a0b7cbc39adfe0b8790c0b2908989cea4d23db6a42678a23c"
     },
     {
       "name": "radio-group",
@@ -306,7 +315,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "eaa2186b3d1667cd285549774ad963394983869c4784aa0c5842985dfc2e5513"
+      "digest": "3386baf4500b50b7ab3122ab9127c1a6e2683198d81379cc5c9f92431eaf7009"
     },
     {
       "name": "shortcut-rail",
@@ -333,7 +342,7 @@
       "status": "stable",
       "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "3df540c523015db8047f2d29c91dfeade1a48e205ffa2735d7889ef44ce4c246"
+      "digest": "767fd5677ed930be562408de2a90bbc691b7d6d970a225ffd787f57a87643d16"
     },
     {
       "name": "tag",

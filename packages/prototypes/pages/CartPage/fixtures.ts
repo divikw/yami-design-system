@@ -65,7 +65,10 @@ export function createCartPageFixture(locale: CartLocale = "zh"): CartPageProps 
     recommendations, history: [items[2], items[4]], favorites: [items[1], items[7]],
     reorderItems: [items[0], items[1], items[2], items[3], items[4], items[6]].map((item, index) => ({ ...item, category: index === 1 || index === 3 ? zh ? "食品" : "Grocery" : zh ? "美妆" : "Beauty", purchaseCount: index % 3 + 1 })),
     frequentlyBoughtItems: recommendations.slice(0, 6).map((item, index) => ({ ...item, category: index === 1 ? zh ? "食品" : "Grocery" : zh ? "美妆" : "Beauty", purchaseCount: [300, 1000, 900, 200, 500, 700][index] })),
-    coupons: [{ id: "demo-10", code: "DEMO10", title: zh ? "满 $100 减 $10" : "$10 off $100", description: zh ? "适用于已选商品，不与其他折扣码叠加" : "Applies to selected items. Cannot be combined with other codes.", minSubtotalCents: 10000, discountCents: 1000 }],
+    coupons: [
+      { id: "demo-10", code: "DEMO10", title: zh ? "满 $100 减 $10" : "$10 off $100", description: zh ? "适用于已选商品，不与其他折扣码叠加" : "Applies to selected items. Cannot be combined with other codes.", minSubtotalCents: 10000, discountCents: 1000, validUntil: "01/01/2027 15:59" },
+      { id: "demo-5", code: "DEMO5", title: zh ? "满 $50 减 $5" : "$5 off $50", description: zh ? "适用于已选商品，不与其他折扣码叠加" : "Applies to selected items. Cannot be combined with other codes.", minSubtotalCents: 5000, discountCents: 500, validUntil: "01/01/2027 15:59" },
+    ],
   };
 }
 
