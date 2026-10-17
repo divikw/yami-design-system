@@ -372,7 +372,7 @@ export const Showcase: Story = {
 }
 
 export const HallSwitcher: Story = {
-  name: 'Hall Switcher (EN only)',
+  name: 'Hall Switcher (EN Only)',
   tags: ['!dev', '!autodocs'],
   // PC-only anatomy — these assertions need the desktop band live, so the
   // story pins its viewport rather than following the toolbar.

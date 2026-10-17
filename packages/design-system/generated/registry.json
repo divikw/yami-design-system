@@ -81,7 +81,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/breadcrumb.json",
-      "digest": "553bae6284092ad020adf211ca01923b81436c541ba72d0f43ea266329618a33"
+      "digest": "d81462be2380b15dffb0003e82a6ffc44b58af7377330d72547809905b777d76"
     },
     {
       "name": "button",
@@ -135,7 +135,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/dialog.json",
-      "digest": "c62241680f217ffb85810fef98174fc237bdfd6defc2089aab140738fcfe2421"
+      "digest": "31a1084110ec9ec2f609442ac41ccd347c8b117d2610d280ba15df8e0d1466cf"
     },
     {
       "name": "divider",
@@ -180,7 +180,7 @@
       "status": "beta",
       "version": "0.2.0",
       "path": "registry-items/header.json",
-      "digest": "f7834a9293c9d7d2cfa37c3077eb4a97c2d68e75ff4632ff9b942d5c70645035"
+      "digest": "ca65b3f32855cca28075ad6736b0d77b8c11cbc5f27c7bb2d29ce6d2ceb6e2c6"
     },
     {
       "name": "hero-banner",
@@ -189,7 +189,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "8336c8f1d737e1b497637d67f638c2b016b43fbd253e12c9c53ac6dd0b97b980"
+      "digest": "dd5f66e9941a0f8fba7391baf481a56545b2f9e03f18cd8d715b6796eba5c6f7"
     },
     {
       "name": "horizontal-scroll-list",
@@ -198,7 +198,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/horizontal-scroll-list.json",
-      "digest": "eaafa2a9d7ca49106cfae0e1ebf9205049c704a3bb344a8cadf067d2c2584e2a"
+      "digest": "1cf2e4cde8248e01bdf11bd401f4da5153d4b512e9c0f48a226561d60fa90c2f"
     },
     {
       "name": "input",
@@ -207,7 +207,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "32d05f34e47f3a3152031e405674b33f02c2fd627419a44767580e018cb93890"
+      "digest": "2a3de8c4fc6af6d4e9c46bb6386ac1596343260f5188333c861a4702682ddece"
     },
     {
       "name": "membership-badge",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
-      "digest": "d7cab4b46fbaebd5691b31b398e8de418f97a8ea4474f5f7cb7f8b20e79cd971"
+      "digest": "049c271d2dd16b035ca796dcec48e588a563bb1e5527787badd323611c497432"
     },
     {
       "name": "quantity-select",
@@ -315,7 +315,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "3386baf4500b50b7ab3122ab9127c1a6e2683198d81379cc5c9f92431eaf7009"
+      "digest": "4241909abf9349ad1a07c9d1d2671dad8ca1a7a33fa2d39e92d735f6e69516c9"
     },
     {
       "name": "shortcut-rail",
@@ -324,7 +324,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/shortcut-rail.json",
-      "digest": "b3b62f7d3065a7506d8587a61485c9679a4a4eb00fb9e031523a1550301c05cd"
+      "digest": "5f93f824c8e59f7b0d7845774e402a79503175042273b68a24054aaca6e182e9"
     },
     {
       "name": "social-media-gallery",
@@ -342,7 +342,7 @@
       "status": "stable",
       "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "767fd5677ed930be562408de2a90bbc691b7d6d970a225ffd787f57a87643d16"
+      "digest": "3437048560f1bc929c67a498b12dc787d7400153dafbb736c933fded421bfe9b"
     },
     {
       "name": "tag",

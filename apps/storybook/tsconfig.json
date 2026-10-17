@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "types": ["vite/client"] },
+  "compilerOptions": { "types": ["vite/client"], "allowImportingTsExtensions": true },
   "files": [
     "proxy.ts",
     "scripts/preview-protected.ts",

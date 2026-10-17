@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Button, FilterChip, Input, Tabs, TabsContent, TabsList, TabsTrigger } from "./components"
 
 const meta = {
-  title: "YAMI/Foundations/Focus",
+  title: "YAMI/Foundations/focus",
   parameters: { layout: "padded" },
 } satisfies Meta
 export default meta

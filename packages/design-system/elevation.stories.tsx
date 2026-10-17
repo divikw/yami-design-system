@@ -16,7 +16,7 @@ const englishUses = [
 ]
 
 const meta = {
-  title: "YAMI/Foundations/Elevation",
+  title: "YAMI/Foundations/elevation",
   tags: ["!autodocs"],
   parameters: { layout: "fullscreen", controls: { disable: true } },
 } satisfies Meta

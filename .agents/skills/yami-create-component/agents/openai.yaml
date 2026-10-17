@@ -1,0 +1,4 @@
+interface:
+  display_name: "YAMI 新建组件"
+  short_description: "Create YAMI components with stories, docs and registration"
+  default_prompt: "使用 $yami-create-component，按当前项目规范创建一个组件，并完成 Storybook、文档、导出注册和校验。"

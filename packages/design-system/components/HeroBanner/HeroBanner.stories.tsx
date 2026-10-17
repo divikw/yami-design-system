@@ -596,7 +596,7 @@ export const ImageOnlyCard: Story = {
 
 export const ImageTextCard: Story = {
   tags: ["!dev", "!autodocs"],
-  name: "Image with Text",
+  name: "Image With Text",
   render: (_args, { globals }) => {
     const [, item] = createVariantItems(localeFromGlobals(globals.locale));
     return (
@@ -609,7 +609,7 @@ export const ImageTextCard: Story = {
 
 export const ImageTextProductsCard: Story = {
   tags: ["!dev", "!autodocs"],
-  name: "Image with Text and Products",
+  name: "Image With Text And Products",
   render: (_args, { globals }) => {
     const [, , item] = createVariantItems(
       localeFromGlobals(globals.locale),

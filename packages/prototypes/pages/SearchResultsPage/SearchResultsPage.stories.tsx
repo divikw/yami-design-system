@@ -152,7 +152,7 @@ export const Results: Story = {
 };
 
 export const ResultsInteractions: Story = {
-  name: "PC interaction tests",
+  name: "PC Interaction Tests",
   tags: ["!dev"],
   render: renderSimulatedFilterLoading,
   play: async ({ canvasElement }) => {
@@ -704,7 +704,7 @@ export const Mobile: Story = {
 };
 
 export const MobileInteractions: Story = {
-  name: "Mobile interaction tests",
+  name: "Mobile Interaction Tests",
   tags: ["!dev"],
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
@@ -1076,7 +1076,7 @@ export const MobileInteractions: Story = {
 };
 
 export const FiltersLoading: Story = {
-  name: "Filters loading",
+  name: "Filters Loading",
   render: (_args, { globals }) => (
     <SearchResultsPage
       {...createSearchResultsStoryFixture(localeFromGlobals(globals.locale))}
