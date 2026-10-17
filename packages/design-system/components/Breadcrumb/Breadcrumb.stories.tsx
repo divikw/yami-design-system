@@ -109,7 +109,7 @@ export const Playground: Story = {
 };
 
 export const LongLabels: Story = {
-  name: "Long labels",
+  name: "Long Labels",
   render: (_args, { globals }) => {
     const locale = globals.locale === "en" ? "en" : "zh";
     return <div style={{ maxWidth: 320, padding: "var(--space-200)" }}>

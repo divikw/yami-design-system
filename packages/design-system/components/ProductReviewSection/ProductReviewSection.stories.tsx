@@ -652,7 +652,7 @@ export const Mobile: Story = {
 };
 
 export const Tablet: Story = {
-  name: "Tablet aligned mobile layout",
+  name: "Tablet Aligned Mobile Layout",
   parameters: { viewport: { defaultViewport: "yamiTablet" } },
   globals: import.meta.env.MODE === "test"
     ? { viewport: { value: "yamiTablet", isRotated: false } }
@@ -709,6 +709,7 @@ export const Tablet: Story = {
 };
 
 export const DesktopXl: Story = {
+  name: "Desktop XL",
   parameters: { viewport: { defaultViewport: "yamiDesktopXl" } },
   globals: import.meta.env.MODE === "test"
     ? { viewport: { value: "yamiDesktopXl", isRotated: false } }

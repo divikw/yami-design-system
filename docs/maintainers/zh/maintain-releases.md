@@ -35,6 +35,8 @@ pnpm changeset:status
 
 现有配置关闭自动 Changelog 和自动提交，并忽略 Canvas、Storybook 两个应用包。因此应用发布情况和完整迁移说明仍需由负责人记录，不应假设工具会替团队完成。
 
+共享包保持 `private: true`；Changesets 通过 `privatePackages.version: true` 记录其版本变化，并以 `privatePackages.tag: false` 关闭私有包打标签。该配置不将私有包改为公开发布包。
+
 至少说明：
 
 - 修复了什么或新增了什么，涉及哪些组件与调用方。

@@ -648,7 +648,7 @@ export const Tertiary: Story = {
 }
 
 export const States: Story = {
-  name: "States — Disabled & loading",
+  name: "States — Disabled & Loading",
   render: (_args, { globals }) => (
     <div style={storyStackStyle}>
       <Section title={globals.locale === "en" ? "Selected, default, and disabled" : "选中、默认与禁用"}>
@@ -762,7 +762,7 @@ export const Controlled: Story = {
 }
 
 export const ManualActivation: Story = {
-  name: "Behavior — Manual activation",
+  name: "Behavior — Manual Activation",
   args: { defaultValue: "details", activationMode: "manual" },
   render: (args) => (
     <Tabs {...args}>

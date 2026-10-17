@@ -41,7 +41,7 @@ const usageByComponent = new Map(
 
 function getUsageLoaderForTitle(title: string) {
   const segments = title.split("/");
-  const componentName = segments.at(-1) === "Draft"
+  const componentName = segments.at(-1)?.toLowerCase() === "draft"
     ? segments.at(-2) ?? title
     : segments.at(-1) ?? title;
   const normalizedName = normalizeComponentName(componentName);
@@ -74,6 +74,7 @@ export function UsageMarkdown({ children }: { children: string }) {
 export function ComponentDocsPage() {
   const context = useContext(DocsContext);
   const { csfFile, preparedMeta } = useOf("meta", ["meta"]);
+  const sourceTitle = csfFile.moduleExports.default.title ?? preparedMeta.title;
   const primaryStory = context.componentStories()[0];
   const [locale, setLocale] = useState(context.getStoryContext(primaryStory).globals.locale);
   useEffect(() => {
@@ -123,7 +124,7 @@ export function ComponentDocsPage() {
 
   return (
     <DocsContext.Provider value={translation ? localizedContext : context}>
-      <Title />
+      <Title>{sourceTitle.trim().split(/\s*\/\s*/).at(-1)}</Title>
       <Subtitle />
       {translation ? <Markdown>{translation.description}</Markdown> : <Description of="meta" />}
       {isSingleStory ? <Description of="story" /> : null}

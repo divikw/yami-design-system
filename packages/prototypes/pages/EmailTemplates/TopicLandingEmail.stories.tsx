@@ -106,7 +106,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BrandExample: Story = {
-  name: "Brand example",
+  name: "Brand Example",
   play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
     const root = canvasElement.querySelector<HTMLElement>(
       '[data-slot="topic-landing-email"]',

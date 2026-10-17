@@ -48,7 +48,7 @@ function renderScenario(scenario: Scenario): NonNullable<Story["render"]> {
 }
 export const PC: Story = { argTypes: { view: { options: ["cart", "saved", "coupons", "unavailable", "protection", "summary"] } } };
 export const Mobile: Story = { globals: { viewport: { value: "yamiMobile", isRotated: false } } };
-export const MobileOrderDetails: Story = { name: "Mobile — Order details", args: { scenario: "shipping-partial", view: "summary", account: "signed-in" }, globals: { viewport: { value: "yamiMobile", isRotated: false } } };
+export const MobileOrderDetails: Story = { name: "Mobile — Order Details", args: { scenario: "shipping-partial", view: "summary", account: "signed-in" }, globals: { viewport: { value: "yamiMobile", isRotated: false } } };
 export const MobileReorder: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("default"), globals: { viewport: { value: "yamiMobile", isRotated: false } },
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("tab", { name: /^(再次购买|Reorder)$/ })); },
 };

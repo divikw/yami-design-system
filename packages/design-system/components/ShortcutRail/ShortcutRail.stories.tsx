@@ -256,7 +256,7 @@ export const CardSurface: Story = {
 };
 
 export const FullBleedImages: Story = {
-  name: "Mobile — Full-bleed",
+  name: "Mobile — Full-Bleed",
   globals: {
     viewport: { value: "yamiMobile", isRotated: false },
   },
@@ -462,7 +462,7 @@ export const MobileTwoLines: Story = {
 };
 
 export const ImageCards: Story = {
-  name: "PC — Image cards",
+  name: "PC — Image Cards",
   globals: {
     theme: "light",
     viewport: { value: "yamiDesktopMd", isRotated: false },
@@ -595,7 +595,7 @@ export const ImageCards: Story = {
 
 export const ImageCardsMinimumWidth: Story = {
   ...ImageCards,
-  name: "PC 1024 — Image cards",
+  name: "PC 1024 — Image Cards",
   tags: ["!dev", "!autodocs"],
   globals: {
     theme: "light",
@@ -605,7 +605,7 @@ export const ImageCardsMinimumWidth: Story = {
 
 export const ImageCardsSix: Story = {
   ...ImageCardsMinimumWidth,
-  name: "PC 1024 — 6 image cards",
+  name: "PC 1024 — 6 Image Cards",
   args: {
     ...ImageCards.args,
     items: createFullBleedShortcutItems().slice(0, 6),
@@ -675,7 +675,7 @@ export const ImageCardsSix: Story = {
 
 export const ImageCardsSeven: Story = {
   ...ImageCards,
-  name: "PC — 7 compact entries",
+  name: "PC — 7 Compact Entries",
   tags: ["!dev", "!autodocs"],
   args: {
     ...ImageCards.args,
@@ -721,7 +721,7 @@ export const ImageCardsSeven: Story = {
 
 export const MobileImageCards: Story = {
   ...ImageCards,
-  name: "Mobile — Image cards",
+  name: "Mobile — Image Cards",
   globals: {
     theme: "light",
     viewport: { value: "yamiMobile", isRotated: false },
@@ -771,7 +771,7 @@ export const MobileImageCards: Story = {
 
 export const MobileImageCardsSeven: Story = {
   ...MobileImageCards,
-  name: "Mobile — 7 entries",
+  name: "Mobile — 7 Entries",
   tags: ["!dev", "!autodocs"],
   args: ImageCardsSeven.args,
 };

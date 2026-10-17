@@ -1,6 +1,7 @@
 import { addons } from "storybook/manager-api";
 import { create } from "storybook/theming/create";
 import { STORY_CHANGED, STORY_PREPARED } from "storybook/internal/core-events";
+import { formatSidebarLabel } from "./sidebar-label";
 
 // Story defaults apply on entry; subsequent toolbar changes remain editable.
 addons.register("yami/viewport-default", (api) => {
@@ -21,5 +22,8 @@ addons.register("yami/viewport-default", (api) => {
 });
 
 addons.setConfig({
+  sidebar: {
+    renderLabel: ({ name }) => formatSidebarLabel(name),
+  },
   theme: create({ base: "light", brandTitle: "Yami Design System", brandUrl: "/", colorPrimary: "#ff2d2d", colorSecondary: "#202020" })
 });

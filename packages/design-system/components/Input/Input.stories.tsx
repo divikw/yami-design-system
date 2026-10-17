@@ -277,7 +277,7 @@ function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }
 }
 
 export const WithAction: Story = {
-  name: "With inline action",
+  name: "With Inline Action",
   args: { label: undefined },
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: (args, { globals }) => <ActionInputDemo {...args} english={globals.locale === "en"} />,
