@@ -723,6 +723,13 @@ describe("Topic Generator managed run loading", () => {
   });
 
   it("imports one selected external run from the saved-topic picker", async () => {
+    const digest = crypto.subtle.digest.bind(crypto.subtle);
+    let finishHashing!: () => void;
+    const hashing = new Promise<void>((resolve) => { finishHashing = resolve; });
+    const digestSpy = vi.spyOn(crypto.subtle, "digest").mockImplementation(async (...args) => {
+      await hashing;
+      return digest(...args);
+    });
     const plans = buildTopicPagePlanMatrix({
       keyword: "matcha",
       site: "us",
@@ -846,20 +853,34 @@ describe("Topic Generator managed run loading", () => {
       .find((button) => button.textContent === "加载主题")!;
     await act(async () => {
       loadButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
     });
     const dialog = container.querySelector<HTMLDialogElement>(
       "#topic-generator-managed-run-picker",
     )!;
-    expect(dialog.open).toBe(true);
-    expect(container.textContent).toContain("受管目录中还没有主题");
+    await vi.waitFor(async () => {
+      await act(() => Promise.resolve());
+      expect(dialog.open).toBe(true);
+      expect(dialog.textContent).toContain("受管目录中还没有主题");
+    });
 
     const externalImportButton = [...container.querySelectorAll<HTMLButtonElement>("button")]
       .find((button) => button.textContent === "导入")!;
     await act(async () => {
       externalImportButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    // Real Web Crypto completion is independent of React act and timer turns.
+    await vi.waitFor(() => expect(digestSpy).toHaveBeenCalledTimes(2));
+    expect(dialog.querySelectorAll('input[name="topic-generator-import-candidate"]')).toHaveLength(0);
+    expect(fetchMock.mock.calls.some(([input]) => String(input).endsWith("/imports/start"))).toBe(false);
+    expect(externalImportButton.disabled).toBe(true);
+    await act(async () => {
+      finishHashing();
+      await Promise.all(digestSpy.mock.results.map(({ value }) => value));
+    });
+    await vi.waitFor(async () => {
+      await act(() => Promise.resolve());
+      expect(dialog.querySelectorAll('input[name="topic-generator-import-candidate"]')).toHaveLength(2);
+      expect(dialog.querySelector<HTMLInputElement>('input[name="topic-generator-import-candidate"]')?.disabled).toBe(false);
     });
 
     const candidates = [...container.querySelectorAll<HTMLInputElement>(
@@ -882,8 +903,13 @@ describe("Topic Generator managed run loading", () => {
       .find((button) => button.textContent === "导入运行")!;
     await act(async () => {
       commit.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    await vi.waitFor(async () => {
+      await act(() => Promise.resolve());
+      expect(dialog.open).toBe(false);
+      expect(container.querySelector<HTMLInputElement>(
+        '#topic-source-load-panel input:disabled',
+      )?.value).toBe("matcha");
     });
 
     expect(fetchMock.mock.calls.some(([input, init]) =>
