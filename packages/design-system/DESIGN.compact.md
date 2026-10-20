@@ -54,7 +54,7 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 
 - **Base unit** 8px. Scale `4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 · 80`.
 - **6 semantic radii — nothing else**: tag `4px`, component `8px`, emphasis-button `8px`, surface (Card / centered Dialog / desktop Sheet) `12px`, mobile Sheet top corners `16px` (`--radius-surface-sheet`, bottom corners square), pill button `9999px`. Never raw values, never primitive `--radius-sm/md/lg/xl` (they exist but are not consumed by components).
-- **No local elevation scale.** Figma provides no YAMI elevation tokens; hover / press never changes `box-shadow`, only `background-color`.
+- **Figma elevation E100–E500.** Use the named `--elevation-*` tokens for explicit static depth; existing component defaults stay unchanged. Never invent local levels. Hover / press changes `background-color`, not `box-shadow`.
 
 ---
 

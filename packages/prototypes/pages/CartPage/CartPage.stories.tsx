@@ -7,16 +7,18 @@ import type { CartLocale, CartPageProps } from "./CartPage.types";
 
 type Scenario = "default" | "selected" | "empty" | "loading" | "error" | "long" | "no-coupons" | "shipping-partial" | "shipping-qualified";
 type View = "cart" | "reorder" | "saved" | "coupons" | "unavailable" | "protection" | "summary";
-type CartStoryArgs = CartPageProps & { scenario: Scenario; view: View };
-function Demo({ locale, scenario = "default", view = "cart" }: { locale: CartLocale; scenario?: Scenario; view?: View }) {
+type Account = "scenario" | "guest" | "signed-in";
+type CartStoryArgs = CartPageProps & { scenario: Scenario; view: View; account: Account };
+function Demo({ locale, scenario = "default", view = "cart", account = "scenario" }: { locale: CartLocale; scenario?: Scenario; view?: View; account?: Account }) {
   const [failed, setFailed] = useState(scenario === "error");
+  const signedIn = account === "scenario" ? scenario !== "empty" : account === "signed-in";
   const fixture = createCartPageFixture(locale);
   if (scenario === "selected") fixture.initialItems = fixture.initialItems.map((item) => ({ ...item, selected: item.availability === "available" }));
   if (scenario === "shipping-partial" || scenario === "shipping-qualified") fixture.initialItems = fixture.initialItems.map((item, index) => ({ ...item, selected: index === (scenario === "shipping-qualified" ? 0 : 1) }));
   if (scenario === "empty") fixture.initialItems = [];
   if (scenario === "no-coupons") fixture.coupons = [];
   if (scenario === "long") fixture.initialItems = Array.from({ length: 8 }, (_, index) => fixture.initialItems.filter((item) => item.availability === "available").map((item) => ({ ...item, id: `${item.id}-${index}` }))).flat();
-  return <CartPage {...fixture} initialPageTab={view === "reorder" ? "reorder" : "cart"} initialCollection={view === "saved" ? "saved" : "recommended"}
+  return <CartPage {...fixture} signedIn={signedIn} initialPageTab={view === "reorder" ? "reorder" : "cart"} initialCollection={view === "saved" ? "saved" : "recommended"}
     initialDrawer={view === "coupons" || view === "unavailable" || view === "protection" || view === "summary" ? view : null} loading={scenario === "loading"} error={failed ? locale === "zh" ? "购物车加载失败，请重试" : "Could not load your cart. Try again." : undefined} onRetry={() => setFailed(false)} />;
 }
 const meta = {
@@ -25,18 +27,19 @@ const meta = {
   component: CartPage,
   tags: ["!autodocs", "draft"],
   argTypes: {
+    account: { control: "select", options: ["scenario", "guest", "signed-in"], description: "scenario：空购物车默认游客，其余默认已登录。手动切换只改变示例账户状态，不执行真实登录。" },
     scenario: { control: "select", options: ["default", "selected", "empty", "loading", "error", "long", "no-coupons", "shipping-partial", "shipping-qualified"],
       description: "选择页面数据状态；切换后重置本地预览操作。" },
     view: { control: "select", options: ["cart", "reorder", "saved", "coupons", "unavailable", "protection", "summary"],
       description: "Reorder 仅适用于 Mobile；其余区域同时支持 PC 和 Mobile。" },
   },
-  render: ({ scenario, view }, { globals }) => <Demo key={`${globals.locale}-${scenario}-${view}`} locale={globals.locale === "en" ? "en" : "zh"} scenario={scenario} view={view} />,
-  parameters: { layout: "fullscreen", controls: { include: ["scenario", "view"] }, docs: {
+  render: ({ scenario, view, account }, { globals }) => <Demo key={`${globals.locale}-${scenario}-${view}-${account}`} locale={globals.locale === "en" ? "en" : "zh"} scenario={scenario} view={view} account={account} />,
+  parameters: { layout: "fullscreen", controls: { include: ["scenario", "view", "account"] }, docs: {
     description: { component: "**Draft · 草稿**：基于 2026-10-13 线上 PC 购物车观察的响应式原型。商品图片和可见价格为来源快照；库存、数量、优惠券和集合是可重复的示例数据，所有操作仅在本次预览内生效。Mobile 参考 Figma Cart / Reorder App 方案；购买次数与分类为本地示例。去结算打开订单摘要，不提交订单。" },
     story: { inline: false, height: "1200px" },
   } },
   globals: { theme: "light", viewport: { value: "yamiDesktopLg", isRotated: false } },
-  args: { ...createCartPageFixture("zh"), scenario: "default", view: "cart" },
+  args: { ...createCartPageFixture("zh"), scenario: "default", view: "cart", account: "scenario" },
 } satisfies Meta<CartStoryArgs>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -45,6 +48,7 @@ function renderScenario(scenario: Scenario): NonNullable<Story["render"]> {
 }
 export const PC: Story = { argTypes: { view: { options: ["cart", "saved", "coupons", "unavailable", "protection", "summary"] } } };
 export const Mobile: Story = { globals: { viewport: { value: "yamiMobile", isRotated: false } } };
+export const MobileOrderDetails: Story = { name: "Mobile — Order Details", args: { scenario: "shipping-partial", view: "summary", account: "signed-in" }, globals: { viewport: { value: "yamiMobile", isRotated: false } } };
 export const MobileReorder: Story = { tags: ["!dev", "!autodocs"], render: renderScenario("default"), globals: { viewport: { value: "yamiMobile", isRotated: false } },
   play: async ({ canvasElement }) => { await userEvent.click(within(canvasElement).getByRole("tab", { name: /^(再次购买|Reorder)$/ })); },
 };
@@ -85,12 +89,12 @@ export const Interaction: Story = { tags: ["!dev", "!autodocs"], render: () => <
     await expect(summary.getByRole("alert")).toHaveTextContent("Please select at least one item to Checkout");
     await userEvent.click(canvas.getByRole("checkbox", { name: /^Select all/ }));
     await expect(summary.getByText("$293.67")).toBeVisible();
-    await userEvent.click(summary.getByText("Promo code", { exact: true }));
+    await userEvent.click(summary.getByRole("textbox", { name: "Promo code" }));
     await userEvent.type(summary.getByRole("textbox", { name: "Promo code" }), "BAD", { skipClick: true });
     await userEvent.click(summary.getByRole("button", { name: "Redeem" }));
     await expect(summary.getByText("Invalid promo code. Check it and try again.")).toBeVisible();
     await userEvent.clear(summary.getByRole("textbox", { name: "Promo code" }));
-    await userEvent.click(summary.getByText("Promo code", { exact: true }));
+    await userEvent.click(summary.getByRole("textbox", { name: "Promo code" }));
     await userEvent.type(summary.getByRole("textbox", { name: "Promo code" }), "DEMO10", { skipClick: true });
     await userEvent.click(summary.getByRole("button", { name: "Redeem" }));
     await expect(summary.getByText("$283.67")).toBeVisible();

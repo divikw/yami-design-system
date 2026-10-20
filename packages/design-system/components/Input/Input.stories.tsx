@@ -1,7 +1,7 @@
-import type { CSSProperties } from "react"
+import { useState, type CSSProperties } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
-import { Input, type InputState } from "./Input"
+import { Input, type InputProps, type InputState } from "./Input"
 
 const meta = {
   title: "YAMI/Components/Forms/Input",
@@ -257,4 +257,28 @@ export const Playground: Story = {
 export const Compact: Story = {
   args: { density: "compact", label: undefined, clearable: true, defaultValue: "SAVE10" },
   render: (args, { globals }) => <Input {...args} label={args.label ?? (globals.locale === "en" ? "Promo code" : "折扣码")} helperText={globals.locale === "en" ? "40px on desktop; 48px on mobile." : "桌面端 40px，移动端 48px。"} />,
+}
+
+function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }) {
+  const [value, setValue] = useState("")
+  const [error, setError] = useState("")
+  const [submitted, setSubmitted] = useState("")
+  const label = english ? "Promo code" : "折扣码"
+  return <form noValidate onSubmit={(event) => {
+    event.preventDefault()
+    setError(value.trim() ? "" : english ? "Enter a promo code" : "请输入折扣码")
+    setSubmitted(value.trim())
+  }}>
+    <Input {...args} density="compact" aria-label={label} placeholder={label} value={value} error={error}
+      action={{ label: english ? "Redeem" : "兑换", htmlType: "submit" }}
+      onChange={(event) => { setValue(event.target.value); setError(""); setSubmitted("") }} />
+    {submitted && <p role="status">{english ? "Submitted: " : "已提交："}{submitted}</p>}
+  </form>
+}
+
+export const WithAction: Story = {
+  name: "With Inline Action",
+  args: { label: undefined },
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: (args, { globals }) => <ActionInputDemo {...args} english={globals.locale === "en"} />,
 }

@@ -1229,6 +1229,61 @@
     "$value": "{color.white.400}",
     "$description": "用于反向极性表面上的低干扰分割线，保持内容节奏而不强化边界。"
   },
+  "elevation.100-canvas": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": "0px",
+      "offsetY": "1px",
+      "blur": "2px",
+      "spread": "-1px",
+      "color": "rgba(0, 0, 0, 0.04)"
+    },
+    "$description": "E100 · Canvas / Card Base：基础内容承载层，仅用于区分内容与背景，不应明显感知为悬浮。"
+  },
+  "elevation.200-raised-surface": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": "0px",
+      "offsetY": "2px",
+      "blur": "4px",
+      "spread": "-2px",
+      "color": "rgba(0, 0, 0, 0.08)"
+    },
+    "$description": "E200 · Raised Surface：轻度抬升的独立表面，适用于卡片、面板与悬浮容器，不打断页面操作。"
+  },
+  "elevation.300-tooltip": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": "0px",
+      "offsetY": "4px",
+      "blur": "8px",
+      "spread": "-4px",
+      "color": "rgba(0, 0, 0, 0.12)"
+    },
+    "$description": "E300 · Tooltip：即时反馈与轻量悬浮信息，应浮于内容之上，但不压过 Menu / Modal。"
+  },
+  "elevation.400-menu-panel": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": "0px",
+      "offsetY": "4px",
+      "blur": "12px",
+      "spread": "-6px",
+      "color": "rgba(0, 0, 0, 0.16)"
+    },
+    "$description": "E400 · Menu / Panel：菜单、下拉面板与操作面板，表达当前操作优先级高于页面内容。"
+  },
+  "elevation.500-modal-window": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": "0px",
+      "offsetY": "8px",
+      "blur": "16px",
+      "spread": "-8px",
+      "color": "rgba(0, 0, 0, 0.24)"
+    },
+    "$description": "E500 · Modal / Window：最高交互层，必须配合 Overlay，用于需要强层级区分的弹窗表面。"
+  },
   "fill.disabled": {
     "$type": "color",
     "$value": "{color.neutral.300}",

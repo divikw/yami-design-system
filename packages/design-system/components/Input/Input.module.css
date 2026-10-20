@@ -302,3 +302,21 @@
     height: var(--space-500);
   }
 }
+
+/* Opt-in action fields; the existing default and compact controls are unchanged. */
+.root[data-action="true"] .control {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-xl);
+}
+
+.root[data-action="true"] .field {
+  padding-inline-start: var(--space-200);
+}
+
+.root .fieldAction {
+  padding-inline: var(--space-100);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-normal);
+  text-decoration: underline;
+  text-underline-offset: var(--space-025);
+}

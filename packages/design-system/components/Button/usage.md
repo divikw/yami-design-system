@@ -241,7 +241,7 @@ Wrong — two red emphasis buttons on the same screen:
 <Button variant="emphasis">Apply Coupon</Button>  {/* ✗ breaks emphasis-limit */}
 ```
 
-Tertiary is a low-emphasis button with a transparent background and no outline at rest, on both default and inverse surfaces. Hover and press add a subtle theme-aware fill; keyboard focus retains the focus ring. Disabled and loading states retain the shared disabled treatment.
+Tertiary is a low-emphasis button with a transparent background and no outline at rest, on both default and inverse surfaces. Desktop hover (at least 1024px, with hover capability and a fine pointer) and press add a subtle theme-aware fill; keyboard focus retains the focus ring. Below 1024px, mouse hover has no visual effect, including in a desktop Storybook window; press and keyboard focus still work. Disabled and loading states retain the shared disabled treatment.
 
 ## Sizes
 

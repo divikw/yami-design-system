@@ -33,7 +33,7 @@
   color: var(--text-primary-inverse);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .root:hover:not([data-disabled])::before {
     background: var(--surface-secondary);
   }

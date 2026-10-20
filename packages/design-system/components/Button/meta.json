@@ -31,7 +31,7 @@
       }
     },
     "sizeDelta": "Per-form size coverage in Figma: Full + Inline ship Size=Medium (40) and Size=Large (Mobile 48 / PC 56). Icon ships Size=Small (32) / Medium (40) / Large (48 on both Mobile + PC — does NOT bump to 56). Code unifies the size axis to sm/md/lg across all forms; Full/Inline 'sm' is a YAMI-product extension beyond Figma. CSS scopes the lg→56 desktop bump to :not(.iconOnly) so Icon Large stays 48×48.",
-    "stateMapping": "Figma 'Hover / Active' collapses to two CSS states (:hover + :active) which already share the same `-active` token. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
+    "stateMapping": "Figma 'Hover / Active' collapses to two CSS states (:hover + :active) which already share the same `-active` token. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
   },
 
   "exports": ["Button", "ButtonLink", "ButtonLinkProps", "ButtonForm", "ButtonProps", "ButtonSize", "ButtonVariant"],

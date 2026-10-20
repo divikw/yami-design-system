@@ -37,7 +37,7 @@ test("CartPage link-style actions keep transparent hover feedback and keyboard f
     for (const button of actions) {
       const bounds = button.getBoundingClientRect();
       await userEvent.hover(page.elementLocator(button));
-      await expect.poll(() => getComputedStyle(button).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      await expect.poll(() => getComputedStyle(button).backgroundColor).toMatch(/^rgba\(\d+, \d+, \d+, 0\)$/);
       expect(getComputedStyle(button).textDecorationLine).toBe("underline");
       expect(getComputedStyle(button).textDecorationThickness).toBe("1px");
       expect(getComputedStyle(button).borderRadius).toBe("0px");
@@ -80,7 +80,7 @@ test.each([375, 1440])("CartPage keeps checkout red and validates an empty selec
     await page.getByRole("checkbox", { name: `选择 ${fixture.initialItems[0].title}`, exact: true }).click();
     expect(container.querySelector('[data-slot="cart-checkout-bar"] [role="alert"]')).toBeNull();
     await page.getByRole("button", { name: /^去结算 \(/ }).click();
-    await expect.element(page.getByRole("dialog", { name: "订单摘要", exact: true })).toBeVisible();
+    await expect.element(page.getByRole("dialog", { name: width < 1024 ? "订单明细" : "订单摘要", exact: true })).toBeVisible();
     await userEvent.keyboard("{Escape}");
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
   } finally {
@@ -108,11 +108,11 @@ for (const locale of ["zh", "en"] as const) {
       const fieldBounds = field.getBoundingClientRect();
       const label = form.querySelector("label")!;
       expect(fieldBounds.height).toBeCloseTo(width < 1024 ? 48 : 40, 2);
-      expect(redeem.getBoundingClientRect().height).toBeCloseTo(fieldBounds.height, 2);
+      expect(redeem.getBoundingClientRect().height).toBeCloseTo(width < 1024 ? 40 : fieldBounds.height, 2);
       if (width >= 1024) expect(edit.getBoundingClientRect().height).toBe(fieldBounds.height);
       for (const button of width < 1024 ? [redeem] : [redeem, edit]) {
-        expect(getComputedStyle(button).paddingLeft).toBe("16px");
-        expect(getComputedStyle(button).paddingRight).toBe("16px");
+        expect(getComputedStyle(button).paddingLeft).toBe(width < 1024 ? "8px" : "16px");
+        expect(getComputedStyle(button).paddingRight).toBe(width < 1024 ? "8px" : "16px");
       }
       if (width >= 1024) expect(edit.getBoundingClientRect().right).toBe(redeem.getBoundingClientRect().right);
       const redeemLabel = redeem.lastElementChild!.getBoundingClientRect();
@@ -122,19 +122,19 @@ for (const locale of ["zh", "en"] as const) {
         expect(edit.getBoundingClientRect().width).toBe(redeem.getBoundingClientRect().width);
         expect(editLabel.left).toBe(redeemLabel.left);
       }
-      expect(redeem.getBoundingClientRect().top).toBe(fieldBounds.top);
+      expect(redeem.getBoundingClientRect().top).toBe(fieldBounds.top + (width < 1024 ? 4 : 0));
       expect(getComputedStyle(redeem).marginTop).toBe("0px");
       expect(label.htmlFor).toBe(input.id);
-      expect(label.getBoundingClientRect().bottom).toBeLessThanOrEqual(fieldBounds.top - 4);
+      if (width >= 1024) expect(label.getBoundingClientRect().bottom).toBeLessThanOrEqual(fieldBounds.top - 4);
       await expect.element(page.elementLocator(input)).toHaveAccessibleName(locale === "zh" ? "折扣码" : "Promo code");
       await userEvent.click(redeem);
       expect(form.querySelector('[role="alert"]')!.textContent).toBe(locale === "zh" ? "请输入折扣码" : "Enter a promo code");
       expect(input.getAttribute("aria-invalid")).toBe("true");
-      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top);
+      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top + (width < 1024 ? 4 : 0));
       await page.elementLocator(input).fill("BAD");
       await userEvent.keyboard("{Enter}");
       expect(form.querySelector('[role="alert"]')!.textContent).toBe(locale === "zh" ? "折扣码无效，请检查后重试" : "Invalid promo code. Check it and try again.");
-      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top);
+      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top + (width < 1024 ? 4 : 0));
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
     } finally {
       root.unmount(); container.remove();
@@ -271,8 +271,9 @@ test("CartPage invalidates coupons and keeps removal feedback inline", async () 
     await page.getByRole("checkbox", { name: /^Select all/ }).click();
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     await expect.element(page.getByRole("dialog", { name: "Coupons", exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "Apply", exact: true }).click();
-    await userEvent.keyboard("{Escape}");
+    await page.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
     const totals = container.querySelector('[data-slot="cart-totals"]')!;
     expect(totals.textContent).toContain("Discount");
     await page.getByRole("checkbox", { name: /^Select all/ }).click();
@@ -336,7 +337,7 @@ test.each([375, 1440])("CartPage keeps save/delete feedback in place and exclude
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).toContain("$151.34");
     expect(container.querySelector('[aria-labelledby="merchant-yami"] [data-slot="cart-shipping"]')!.getAttribute("data-qualified")).toBe("false");
     await page.getByRole("button", { name: /^去结算 \(/ }).click();
-    const summary = page.getByRole("dialog", { name: "订单摘要", exact: true });
+    const summary = page.getByRole("dialog", { name: width < 1024 ? "订单明细" : "订单摘要", exact: true });
     expect(summary.element().textContent).not.toContain(first.title);
     expect(summary.element().textContent).not.toContain(second.title);
     await userEvent.keyboard("{Escape}");
@@ -444,7 +445,7 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
       expect(intro.querySelector("p")!.getBoundingClientRect().top - learnElement.getBoundingClientRect().bottom).toBe(2);
       expect(getComputedStyle(learnElement).borderRadius).toBe("0px");
       await userEvent.hover(learn);
-      await expect.poll(() => getComputedStyle(learnElement).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      await expect.poll(() => getComputedStyle(learnElement).backgroundColor).toMatch(/^rgba\(\d+, \d+, \d+, 0\)$/);
     }
     await learn.click();
     await expect.element(page.getByRole("dialog", { name: "Shopping protection", exact: true })).toBeVisible();
@@ -482,8 +483,8 @@ test("CartPage shows eight desktop recommendation rows from the source snapshot 
     expect(cards[0].textContent).toContain(first.title);
     expect(cards[0].textContent).toContain("$18.59");
     expect(cards[0].querySelector('a')!.getAttribute("href")).toBe(first.href);
-    await page.getByRole("button", { name: `Move to cart ${first.title}`, exact: true }).click();
-    await expect.element(page.getByRole("checkbox", { name: `Select ${first.title}`, exact: true })).not.toBeChecked();
+    await page.getByRole("button", { name: `Add to cart ${first.title}`, exact: true }).click();
+    await expect.element(page.getByRole("checkbox", { name: `Select ${first.title}`, exact: true })).toBeChecked();
     const viewAll = page.getByRole("button", { name: "View all Unavailable items", exact: true });
     const opener = Array.from(container.querySelectorAll("button")).find((button) => button.getAttribute("aria-label") === "View all Unavailable items")!;
     expect(getComputedStyle(opener).textDecorationLine).toContain("underline");
@@ -672,13 +673,16 @@ test("CartPage reports coupon changes and focuses the empty unavailable drawer a
     flushSync(() => root.render(<CartPage {...fixture} />));
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     let dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
-    await dialog.getByRole("button", { name: "Apply", exact: true }).click();
-    await expect.element(dialog.getByRole("status")).toHaveTextContent("Coupon applied");
-    await expect.element(dialog.getByRole("button", { name: "Remove coupon", exact: true })).toHaveAttribute("aria-pressed", "true");
-    await dialog.getByRole("button", { name: "Remove coupon", exact: true }).click();
-    await expect.element(dialog.getByRole("status")).toHaveTextContent("Coupon removed");
-    await expect.element(dialog.getByRole("button", { name: "Apply", exact: true })).toHaveAttribute("aria-pressed", "false");
-    await userEvent.keyboard("{Escape}");
+    await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
+    await dialog.getByRole("button", { name: "Save", exact: true }).click();
+    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
+    expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).toContain("Discount");
+    await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
+    dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
+    await expect.element(dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true })).toBeChecked();
+    await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
+    await dialog.getByRole("button", { name: "Save", exact: true }).click();
+    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).not.toContain("Discount");
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
     dialog = page.getByRole("dialog", { name: "Unavailable items", exact: true });
@@ -766,7 +770,7 @@ test.each([375, 1440])("CartPage saved cards support stock states, notifications
     expect(cards[2].querySelector("button")).toBeNull();
     const notify = page.getByRole("button", { name: `到货通知 ${soldOut.title}`, exact: true });
     await userEvent.hover(notify);
-    expect(getComputedStyle(notify.element()).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+    expect(getComputedStyle(notify.element()).backgroundColor).toMatch(/^rgba\(\d+, \d+, \d+, 0\)$/);
     expect(getComputedStyle(notify.element()).borderRadius).toBe("0px");
     expect(getComputedStyle(notify.element()).textDecorationThickness).toBe("1px");
     const savedDelete = page.getByRole("button", { name: `删除 ${soldOut.title}`, exact: true });
@@ -871,7 +875,7 @@ for (const locale of ["zh", "en"] as const) {
         expect(getComputedStyle(button).borderRadius).toBe("0px");
         expect(button.getBoundingClientRect().width).toBeGreaterThanOrEqual(44);
         await userEvent.hover(page.elementLocator(button));
-        await expect.poll(() => getComputedStyle(button).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+        await expect.poll(() => getComputedStyle(button).backgroundColor).toMatch(/^rgba\(\d+, \d+, \d+, 0\)$/);
       }
       actions[2].focus();
       await userEvent.keyboard("{Enter}");
@@ -1039,9 +1043,9 @@ for (const locale of ["zh", "en"] as const) {
       await page.elementLocator(bar.querySelector('[role="checkbox"]')!).click();
       expect(container.querySelector('[aria-labelledby="merchant-yami"] [role="checkbox"]')!.getAttribute('aria-checked')).toBe('true');
       await userEvent.hover(page.elementLocator(total));
-      await expect.poll(() => getComputedStyle(total).backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      await expect.poll(() => getComputedStyle(total).backgroundColor).toMatch(/^rgba\(\d+, \d+, \d+, 0\)$/);
       await page.elementLocator(bar.querySelector('button[aria-haspopup="dialog"]')!).click();
-      await expect.element(page.getByRole('dialog', { name: locale === 'zh' ? '订单摘要' : 'Order summary', exact: true })).toBeVisible();
+      await expect.element(page.getByRole('dialog', { name: locale === 'zh' ? '订单明细' : 'Order details', exact: true })).toBeVisible();
       await userEvent.keyboard('{Escape}');
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
     } finally { root.unmount(); container.remove(); await page.viewport(viewport.width, viewport.height); }

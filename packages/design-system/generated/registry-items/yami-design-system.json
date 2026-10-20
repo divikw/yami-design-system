@@ -77,6 +77,7 @@
     "button-group",
     "card",
     "checkbox",
+    "coupon",
     "dialog",
     "divider",
     "drawer",
@@ -406,6 +407,11 @@
       "--divider-emphasis-inverse",
       "--divider-subtle",
       "--divider-subtle-inverse",
+      "--elevation-100-canvas",
+      "--elevation-200-raised-surface",
+      "--elevation-300-tooltip",
+      "--elevation-400-menu-panel",
+      "--elevation-500-modal-window",
       "--fill-disabled",
       "--fill-error-primary",
       "--fill-error-secondary",
@@ -574,5 +580,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "9fc2c181d195abb0a76ab4cd220d0f18eade518fdb56a6b967f309d05226368b"
+  "contentDigest": "dfb624112f12f58472ab9e65be68fa5ee004766ef75392b485e54d80909e75a6"
 }

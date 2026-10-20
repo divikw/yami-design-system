@@ -124,7 +124,7 @@
   outline-color: var(--focus-ring-inverse);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .trigger:not([aria-disabled="true"]):hover {
     color: var(--text-primary);
   }
@@ -350,7 +350,7 @@
   background: var(--surface-primary);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .list[data-variant="tertiary"]
     .trigger[data-state="inactive"]:not([aria-disabled="true"]):hover::before {
     background: var(--button-secondary);

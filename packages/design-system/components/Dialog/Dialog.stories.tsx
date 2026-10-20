@@ -86,7 +86,7 @@ type Story = StoryObj<typeof meta>;
 export const Showcase: Story = { name: "Mobile — Confirmation" };
 
 export const Destructive: Story = {
-  name: "Mobile — Destructive confirmation",
+  name: "Mobile — Destructive Confirmation",
   args: { title: "删除该记录？", role: "alertdialog" },
   render: (args) => (
     <DialogDemo
@@ -99,7 +99,7 @@ export const Destructive: Story = {
 };
 
 export const LongTitleThreeActions: Story = {
-  name: "Mobile — Long title + three actions",
+  name: "Mobile — Long Title + Three Actions",
   args: { title: "是否继续使用当前地址完成配送设置并保存本次修改？" },
   render: (args) => <LongTitleDialogDemo {...args} />,
 };
