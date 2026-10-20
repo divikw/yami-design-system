@@ -71,8 +71,8 @@ export const StoryBanner: Story = {
     const main = canvasElement.querySelector("main")!;
     const banner = main.querySelector<HTMLElement>('[data-slot="section-banner"]')!;
     await expect(banner.nextElementSibling).toBe(main.querySelector("#brand-special"));
-    await expect(within(banner).getByRole("heading", { name: "Best Stories & Products" })).toBeVisible();
-    await expect(within(banner).getByText("See what's trending on Yami")).toBeVisible();
+    await expect(within(banner).getByRole("heading", { name: "베스트 상품" })).toBeVisible();
+    await expect(within(banner).getByText("실시간 가장 인기 있는 스킨케어 & 메이크업 셀렉션")).toBeVisible();
     const cards = banner.querySelectorAll('[data-slot="hero-banner-item"]');
     await expect(new Set(Array.from(cards, (card) => card.getAttribute("href"))).size).toBe(8);
     for (const card of cards) {
@@ -95,6 +95,7 @@ export const StoryBanner: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Switch to English" }));
     await expect(banner.querySelector('[data-slot="hero-banner-item"]')?.getAttribute("href")).toContain("/en/story/");
     await expect(within(banner).getByRole("heading", { level: 2 })).toHaveTextContent("Best Stories & Products");
+    await expect(within(banner).getByText("See what's trending on Yami")).toBeVisible();
   },
 };
 

@@ -330,8 +330,8 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
       {variant === "full" && <>
       <SectionBanner
         className={styles.storyBanner}
-        title={appDownloadBannerTitle}
-        description={appDownloadBannerDescription}
+        title={appDownloadBannerTitle[locale]}
+        description={appDownloadBannerDescription[locale]}
         headingAlign="center"
         items={createAppDownloadBanners()}
         previousLabel={ko ? "이전 상품" : "Previous products"}
