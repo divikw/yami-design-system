@@ -434,6 +434,7 @@
       "--focus-ring-inverse",
       "--font-family-android",
       "--font-family-ios",
+      "--font-family-ko",
       "--font-family-serif",
       "--font-family-win",
       "--font-size-app-tabbar-label",
@@ -580,5 +581,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "469a452568c9aae8cd5d9439e977b75828dd18926facea6692d49448f69f0c79"
+  "contentDigest": "49dd8324e76658831732b4657f2de899f34f03642ac656e0de611a59798465a7"
 }

@@ -22,7 +22,7 @@ const YAMI_VIEWPORTS = {
 const preview: Preview = {
   tags: ["autodocs"],
   globalTypes: {
-    locale: { description: "Content language", toolbar: { icon: "globe", items: [{ value: "zh", title: "中文" }, { value: "en", title: "English" }] } },
+    locale: { description: "Content language", toolbar: { icon: "globe", items: [{ value: "zh", title: "中文" }, { value: "en", title: "English" }, { value: "ko", title: "한국어" }] } },
     theme: { description: "Color theme", toolbar: { icon: "paintbrush", items: [{ value: "light", title: "Light" }, { value: "dark", title: "Dark" }] } }
   },
   initialGlobals: {

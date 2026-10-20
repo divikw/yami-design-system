@@ -256,6 +256,11 @@
   line-clamp: 2;
 }
 
+.title:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
 .title:has(.cardLink) {
   display: block;
   overflow: visible;

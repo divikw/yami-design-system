@@ -14,12 +14,21 @@ Four files, three roles:
 Font-family and font-weight don't vary across breakpoints (verified: 21/21 scales have identical values in Figma's mobile/tablet/desktop-lg modes). They come to the runtime via `primitives/typography.tokens.json` + `styles/base.css` class rules, which is why mode files only need `font-size` and `line-height`.
 
 Ordinary emphasis does vary by language: the primitive's EN value is Medium 500
-and CN is SemiBold 600. `tooling/tokens/build.mjs` emits `locale-en` and `locale-zh`
-contexts for differing language weights, including CSS selectors that follow
+and CN/KO are SemiBold 600. `tooling/tokens/build.mjs` emits `locale-en`, `locale-zh`,
+and `locale-ko` contexts for differing language weights, including CSS selectors that follow
 inherited `lang` and reset on nested language switches. Regular and explicit serif
 weights stay language-independent. The approved serif stack is optical
 `Source Serif 4 Variable` for Latin + `Noto Serif SC` for Chinese through
 `--font-family-serif`. Never hard-code per-page language overrides.
+
+`font-family.ko` defines the native Korean stack with GT Walsheim first for Latin
+and numerals. The three legacy platform-family tokens use `com.yami.locales` to
+select that alias for Korean and reset to their original stack for EN/ZH. Only
+locally installed Korean families are used; there is no Korean `@font-face` or
+font package. System weight matching is permitted for the 600 emphasis request.
+`styles/base.css` rebinds legacy aliases at each element and applies the sans
+family at explicit language boundaries; explicit serif/monospace styles retain
+their family. Portal content needs an explicit language if its host differs.
 
 But `sync-tokens-ci` (the Figma ↔ code drift checker) still needs to know the authored intent for every scale at every mode. Putting cross-mode invariants in `_base.tokens.json` is the canonical answer to "what is `display-xl.font-weight` in Figma's typography-mobile collection?" without repeating it 20× per mode file.
 

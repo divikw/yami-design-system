@@ -17,6 +17,7 @@ const contexts = [
   { id: "desktop-lg", media: "(min-width: 1440px)" },
   { id: "locale-en", selector: ":root:lang(en), :where(:lang(en))" },
   { id: "locale-zh", selector: ":root:lang(zh), :where(:lang(zh))" },
+  { id: "locale-ko", selector: ":root:lang(ko), :where(:lang(ko))" },
 ];
 
 async function list(dir) {
@@ -135,11 +136,16 @@ for (const file of files) {
     record.values.push(asValue(token, contextId));
     tokenRecords.set(token.id, record);
 
-    // Keep language-specific weights in the generated runtime and catalog.
+    // Keep language-specific families and weights in the runtime and catalog.
     // Match inherited language on every element so nested lang switches reset.
-    if (token.type === "fontWeight" && token.value?.EN !== token.value?.CN && token.value?.CN) {
-      for (const [locale, key] of [["en", "EN"], ["zh", "CN"]]) {
-        const override = { ...enriched, value: token.value[key] };
+    const localeOverrides = token.extensions?.["com.yami.locales"];
+    const localizedWeight = token.type === "fontWeight" &&
+      [token.value?.CN, token.value?.KO].some((value) => value && value !== token.value?.EN);
+    if (localeOverrides || localizedWeight) {
+      for (const [locale, key] of [["en", "EN"], ["zh", "CN"], ["ko", "KO"]]) {
+        const value = localeOverrides?.[locale] ??
+          (localizedWeight ? token.value[key] ?? token.value.EN : token.value);
+        const override = { ...enriched, value };
         byContext.get(`locale-${locale}`).push(override);
         record.values.push(asValue(override, `locale-${locale}`));
       }

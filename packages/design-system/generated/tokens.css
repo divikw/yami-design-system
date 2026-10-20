@@ -316,6 +316,7 @@
   --focus-ring-inverse: var(--color-blue-400);
   --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ko: 'GT Walsheim', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Sans KR', system-ui, sans-serif;
   --font-family-serif: 'Source Serif 4 Variable', 'Noto Serif SC', serif;
   --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-weight-emphasize: 500;
@@ -530,8 +531,20 @@
   }
 }
 :root:lang(en), :where(:lang(en)) {
+  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-weight-emphasize: 500;
 }
 :root:lang(zh), :where(:lang(zh)) {
+  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-weight-emphasize: 600;
+}
+:root:lang(ko), :where(:lang(ko)) {
+  --font-family-android: var(--font-family-ko);
+  --font-family-ios: var(--font-family-ko);
+  --font-family-win: var(--font-family-ko);
   --font-weight-emphasize: 600;
 }

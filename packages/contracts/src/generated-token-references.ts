@@ -316,6 +316,7 @@ export const registeredTokenReferenceTypes = {
   "focus.ring-inverse": "color",
   "font-family.android": "fontFamily",
   "font-family.ios": "fontFamily",
+  "font-family.ko": "fontFamily",
   "font-family.serif": "fontFamily",
   "font-family.win": "fontFamily",
   "font-weight.emphasize": "fontWeight",

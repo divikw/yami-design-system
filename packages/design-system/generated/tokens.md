@@ -395,12 +395,23 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `focus.ring-inverse` | root | color | `var(--color-blue-400)` |
 | `focus.ring-inverse` | dark | color | `var(--color-blue-600)` |
 | `font-family.android` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.android` | locale-en | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.android` | locale-zh | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.android` | locale-ko | fontFamily | `var(--font-family-ko)` |
 | `font-family.ios` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.ios` | locale-en | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.ios` | locale-zh | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.ios` | locale-ko | fontFamily | `var(--font-family-ko)` |
+| `font-family.ko` | root | fontFamily | `'GT Walsheim', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans CJK KR', 'Noto Sans KR', system-ui, sans-serif` |
 | `font-family.serif` | root | fontFamily | `'Source Serif 4 Variable', 'Noto Serif SC', serif` |
 | `font-family.win` | root | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.win` | locale-en | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.win` | locale-zh | fontFamily | `'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif` |
+| `font-family.win` | locale-ko | fontFamily | `var(--font-family-ko)` |
 | `font-weight.emphasize` | root | fontWeight | `500` |
 | `font-weight.emphasize` | locale-en | fontWeight | `500` |
 | `font-weight.emphasize` | locale-zh | fontWeight | `600` |
+| `font-weight.emphasize` | locale-ko | fontWeight | `600` |
 | `font-weight.normal` | root | fontWeight | `400` |
 | `font-weight.semibold` | root | fontWeight | `600` |
 | `heading-2xl.font-size` | root | dimension | `24px` |

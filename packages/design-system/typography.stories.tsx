@@ -298,3 +298,18 @@ export const Overview: Story = {
     }
   },
 }
+
+export const Korean: Story = {
+  name: "korean",
+  render: () => (
+    <TokenStoryFrame title="korean typography" intro="Native Korean fonts, GT Walsheim Latin and numerals. Body 400 / emphasis 600; no Korean webfont download.">
+      <section lang="ko" style={{ ...tokenStoryStyles.cardBody, gap: "var(--space-200)" }}>
+        <h2>내 혜택 미리 계산해보기</h2>
+        <p>쿠폰과 배송비 혜택을 직접 확인해보세요.</p>
+        <strong>주문 금액 $1,235.93</strong>
+        <p lang="en"><strong>Welcome benefits $30.00</strong></p>
+        <p lang="zh"><strong>首单优惠 $30.00</strong></p>
+      </section>
+    </TokenStoryFrame>
+  ),
+}
