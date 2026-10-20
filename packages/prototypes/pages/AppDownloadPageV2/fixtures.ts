@@ -27,8 +27,11 @@ export const asset = (name: string) => new URL(`../AppDownloadPage/assets/${name
 export const productImage = (product: CampaignProduct) => asset(product.image.split("/").pop()!);
 export const money = (amount: number) => `$${amount.toFixed(2)}`;
 
-export const appDownloadBannerTitle = storyBanners.title;
-export const appDownloadBannerDescription = storyBanners.description;
+export const appDownloadBannerTitle = { ko: "베스트 상품", en: storyBanners.title };
+export const appDownloadBannerDescription = {
+  ko: "실시간 가장 인기 있는 스킨케어 & 메이크업 셀렉션",
+  en: storyBanners.description,
+};
 const bannerImage = (src: string) => new URL(`./assets/story-banners/${src.split("/").pop()}`, import.meta.url).href;
 
 export function createAppDownloadBanners(): SectionBannerItem[] {
