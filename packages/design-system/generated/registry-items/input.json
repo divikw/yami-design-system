@@ -29,7 +29,9 @@
     "InputSize",
     "InputState"
   ],
-  "composes": [],
+  "composes": [
+    "Button"
+  ],
   "dependencies": {
     "runtime": [
       "react"
@@ -45,6 +47,7 @@
     "examples": [
       "components/Input/examples.tsx#BasicInput",
       "components/Input/examples.tsx#CompactInput",
+      "components/Input/examples.tsx#ActionInput",
       "components/Input/examples.tsx#FocusedInput",
       "components/Input/examples.tsx#TypingInput",
       "components/Input/examples.tsx#CompleteInput",
@@ -79,6 +82,7 @@
       "--space-050",
       "--space-100",
       "--space-150",
+      "--space-200",
       "--space-300",
       "--space-500",
       "--space-600",
@@ -99,6 +103,10 @@
       "--space-100": {
         "property": "padding-inline-end",
         "selector": ".field"
+      },
+      "--space-200": {
+        "property": "padding-inline-start",
+        "selector": ".root[data-action='true'] .field"
       },
       "--space-300": {
         "property": "width",
@@ -154,7 +162,7 @@
       },
       "--font-size-body-md": {
         "property": "font-size",
-        "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control"
+        "selector": ".label, .externalLabel, .control, .root[data-density='compact'] .control, .root[data-action='true'] .control, .fieldAction"
       },
       "--font-size-body-xl": {
         "property": "font-size",
@@ -198,5 +206,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4faef0ecfeaf2870782d660b069011b6c3bf47a1e2aadb13428ac0f1becd0520"
+  "contentDigest": "2a3de8c4fc6af6d4e9c46bb6386ac1596343260f5188333c861a4702682ddece"
 }

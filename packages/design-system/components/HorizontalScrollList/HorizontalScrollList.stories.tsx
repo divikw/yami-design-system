@@ -372,7 +372,7 @@ export const Disabled: Story = {
 
 export const PCSideNavigation: Story = {
   tags: ["!dev", "!autodocs"],
-  name: "PC · Side navigation",
+  name: "PC · Side Navigation",
   globals: PC.globals,
   render: (args, { globals }) => (
     <Example enabled={args.enabled} locale={globals.locale === "en" ? "en" : "zh"} surface={args.surface} navigation="sides" />

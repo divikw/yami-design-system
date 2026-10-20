@@ -18,6 +18,13 @@ with leading or trailing slots. In left-to-right layouts, the clear button's hit
 - **Showcase**: all visual states, icon slots, compact examples, and validation edges.
 - **Playground**: one input driven by Controls, with a localized operation hint. Enable `clearable` to try clearing on the same input.
 - **Compact**: focused inspection of compact density.
+- **With inline action**: a shared field border containing a text input and a submit action; validation stays with the consumer.
+
+## Inline text action
+
+Use `action={{ label: "兑换", htmlType: "submit" }}` inside a native form for redeem/search/verify actions. Outside a form, omit `htmlType` (defaults to `button`) and provide `onClick`. This opt-in field uses 14px value and action text, an underlined shared Button, and the existing density heights and 8px component radius. The action inherits input disabled state and can additionally be disabled with `action.disabled`. It replaces `trailingIcon`/`suffix` and clear; do not combine these slots.
+
+Keep an accessible label (`label`, external label, or `aria-label`). Errors remain below the whole field and retain `aria-invalid`/`aria-describedby`. Input owns appearance and native semantics; its host owns validation, submitted values, and business feedback. Existing fields without `action` retain their styling. Cart enables this option only below 1024px; its desktop redeem button remains outside the input.
 
 The browser regression suite covers Input behavior independently of these navigation entries.
 

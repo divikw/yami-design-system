@@ -93,6 +93,17 @@
   line-height: var(--line-height-heading-2xl);
 }
 
+.header:has(.description) .title {
+  padding-block-end: var(--space-050);
+}
+
+.description {
+  margin: 0;
+  padding-block-end: var(--space-200);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
 .content {
   display: flex;
   min-height: 0;

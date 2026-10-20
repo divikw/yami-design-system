@@ -18,8 +18,8 @@ afterEach(() => {
   container.remove();
 });
 
-test("Input exports only Showcase, Playground and Compact beside automatic Docs", () => {
-  expect(Object.keys(stories).filter((name) => name !== "default").sort()).toEqual(["Compact", "Playground", "Showcase"]);
+test("Input exports Showcase, Playground, Compact and the inline action example beside automatic Docs", () => {
+  expect(Object.keys(stories).filter((name) => name !== "default").sort()).toEqual(["Compact", "Playground", "Showcase", "WithAction"]);
 });
 
 for (const locale of ["zh", "en"]) {

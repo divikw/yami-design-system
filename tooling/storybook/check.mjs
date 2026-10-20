@@ -44,7 +44,7 @@ const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
 const entries = Object.values(index.entries ?? {});
 // Draft components expose versioned preview stories before publishing Docs.
 const draftStoryPaths = new Set(entries
-  .filter((entry) => entry.type === "story" && entry.tags?.includes("draft") && entry.title.includes("/Draft/"))
+  .filter((entry) => entry.type === "story" && entry.tags?.includes("draft") && /\/draft\//i.test(entry.title))
   .map((entry) => path.resolve(root, "apps/storybook", entry.importPath)));
 const docsEntries = entries.filter((entry) => entry.type === "docs");
 const docsComponentNames = new Set(docsEntries.map((entry) => normalizeComponentName(entry.title.split("/").at(-1))));
@@ -93,5 +93,5 @@ for (const component of componentDocs) {
   }
 }
 
-if (!entries.some((entry) => entry.title === "YAMI/Pages/Ecommerce Home")) throw new Error("Ecommerce Home story is missing");
+if (!entries.some((entry) => entry.title.toLowerCase() === "yami/pages/ecommerce home")) throw new Error("Ecommerce Home story is missing");
 console.log(`Storybook verified: ${stories.length} source files, ${componentDocs.length} component usage guides, ${docsEntries.length} docs entries, ${entries.length} indexed entries.`);

@@ -83,10 +83,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = { name: "Mobile — Content" };
 
-export const FullHeight: Story = { name: "Mobile — Full height", args: { size: "full" } };
+export const FullHeight: Story = { name: "Mobile — Full Height", args: { size: "full" } };
+
+export const WithDescription: Story = {
+  name: "Mobile — Header Description",
+  args: { open: true, size: "full", title: "优惠券", description: "这里仅显示可用于当前购物车中商品的优惠券" },
+};
 
 export const ChildView: Story = {
-  name: "Mobile — Child view",
+  name: "Mobile — Child View",
   args: { title: "全部筛选", contentPadding: "compact" },
   render: (args) => <SheetDemo {...args} childView />,
 };

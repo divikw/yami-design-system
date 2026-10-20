@@ -1,0 +1,138 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Coupon",
+  "category": "composite",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Controlled coupon selection card with a circular Checkbox, scope, optional validity, dashed divider and transparent ticket cutouts. Hosts own eligibility and saving.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Based on the live cart observed on 2026-10-16; no independent Figma binding."
+  },
+  "exports": [
+    "Coupon",
+    "CouponProps"
+  ],
+  "composes": [
+    "Checkbox"
+  ],
+  "props": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "validity": {
+      "type": "string",
+      "required": false
+    },
+    "selected": {
+      "type": "boolean",
+      "required": true
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false
+    },
+    "onSelectedChange": {
+      "type": "(selected: boolean) => void",
+      "required": true
+    },
+    "className": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Composes Checkbox keyboard focus; the whole label is clickable."
+    },
+    "disabled": {
+      "ruleId": "no-opacity-disabled",
+      "note": "Uses semantic disabled surfaces and text without opacity."
+    },
+    "depth": {
+      "ruleId": "elevation-on-press",
+      "note": "Hover uses surface color only."
+    }
+  },
+  "tokens": [
+    "--background-secondary",
+    "--border-default",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--font-size-caption-sm",
+    "--font-size-heading-sm",
+    "--font-weight-emphasize",
+    "--line-height-body-md",
+    "--line-height-caption-md",
+    "--line-height-heading-sm",
+    "--radius-button-primary",
+    "--space-100",
+    "--space-150",
+    "--space-200",
+    "--space-600",
+    "--stroke-default",
+    "--surface-primary",
+    "--surface-secondary",
+    "--text-disabled",
+    "--text-primary",
+    "--text-secondary"
+  ],
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".segment"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".segment, .segment::before, .segment::after"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".coupon"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".details"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".coupon[data-disabled] .segment"
+    },
+    "--radius-button-primary": {
+      "property": "border-radius",
+      "selector": ".selector::before, .segment::before, .segment::after"
+    }
+  },
+  "accessibility": {
+    "wcagLevel": "AA",
+    "tapTargetMin": 44,
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "space"
+    ],
+    "ariaPattern": "Controlled Checkbox with a visible native label, title as accessible name and scope/validity as description."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#CouponExample"
+  ],
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Storybook verifies full-label pointer activation, deselection and Space-key selection. Cart browser tests verify staged selection, saving and cancellation."
+  }
+}

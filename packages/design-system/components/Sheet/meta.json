@@ -10,6 +10,7 @@
   "composes": ["Button"],
   "variants": { "size": ["content", "full"], "contentPadding": ["default", "compact", "none"] },
   "props": {
+    "description": { "type": "string", "required": false, "description": "Optional supporting copy below the title, inside the fixed header above its divider. Linked with aria-describedby. Omission preserves the original header." },
     "open": { "type": "boolean", "required": true, "description": "Controlled visibility. Closed sheets unmount their content." },
     "title": { "type": "string", "required": true, "description": "Visible heading and accessible dialog name." },
     "closeLabel": { "type": "string", "required": true, "description": "Localized accessible label for the close action." },

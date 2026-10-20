@@ -275,7 +275,7 @@ async function verifySkuAvailability(canvasElement: HTMLElement) {
 }
 
 export const SkuAvailability: Story = {
-  name: "SKU availability",
+  name: "SKU Availability",
   tags: ["!dev", "!autodocs"],
   globals: { locale: "en", viewport: { value: "yamiDesktop", isRotated: false } },
   play: async ({ canvasElement }) => verifySkuAvailability(canvasElement),
@@ -283,13 +283,13 @@ export const SkuAvailability: Story = {
 
 export const SkuAvailabilityMobile: Story = {
   ...SkuAvailability,
-  name: "SKU availability / Mobile",
+  name: "SKU Availability / Mobile",
   tags: ["!dev", "!autodocs"],
   globals: { locale: "zh", viewport: { value: "yamiMobile", isRotated: false } },
 };
 
 export const SoldOutOption: Story = {
-  name: "SKU availability / All firming sizes sold out",
+  name: "SKU Availability / All Firming Sizes Sold Out",
   tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => {
     const fixture = createProductDetailPageFixture(globals.locale === "zh" ? "zh" : "en");
@@ -309,7 +309,7 @@ export const SoldOutOption: Story = {
 };
 
 export const SoldOutProduct: Story = {
-  name: "SKU availability / Product sold out",
+  name: "SKU Availability / Product Sold Out",
   tags: ["!dev", "!autodocs"],
   render: (_args, { globals }) => <ProductDetailPage {...createProductDetailPageFixture(globals.locale === "zh" ? "zh" : "en")} skus={[]} />,
   play: async ({ canvasElement }) => {
@@ -321,7 +321,7 @@ export const SoldOutProduct: Story = {
 };
 
 export const DesktopRegression: Story = {
-  name: "Desktop regression",
+  name: "Desktop Regression",
   tags: ["!dev", "!autodocs"],
   globals: {
     locale: "en",
@@ -1318,7 +1318,7 @@ export const Mobile: Story = {
 };
 
 export const ChineseRegression: Story = {
-  name: "Chinese regression",
+  name: "Chinese Regression",
   tags: ["!dev", "!autodocs"],
   globals: {
     locale: "zh",
@@ -1424,7 +1424,7 @@ export const ChineseRegression: Story = {
 };
 
 export const MobileRegression: Story = {
-  name: "Mobile regression",
+  name: "Mobile Regression",
   tags: ["!dev", "!autodocs"],
   globals: {
     locale: "en",
@@ -2142,7 +2142,7 @@ export const MobileRegression: Story = {
 };
 
 export const Tablet: Story = {
-  name: "Tablet aligned mobile layout",
+  name: "Tablet Aligned Mobile Layout",
   tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiTablet", isRotated: false },
@@ -2246,7 +2246,7 @@ export const Tablet: Story = {
 };
 
 export const DesktopMdBoundary: Story = {
-  name: "Fluid desktop media at 1280",
+  name: "Fluid Desktop Media At 1280",
   tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiDesktopMd", isRotated: false },
@@ -2291,7 +2291,7 @@ export const DesktopMdBoundary: Story = {
 };
 
 export const StickyPurchaseBar: Story = {
-  name: "Sticky purchase bar after Add to Cart",
+  name: "Sticky Purchase Bar After Add To Cart",
   tags: ["!dev", "!autodocs"],
   globals: {
     locale: "en",
@@ -2380,7 +2380,7 @@ export const StickyPurchaseBar: Story = {
 };
 
 export const NarrowDesktop: Story = {
-  name: "Narrow desktop stable layout",
+  name: "Narrow Desktop Stable Layout",
   tags: ["!dev", "!autodocs"],
   globals: {
     viewport: { value: "yamiDesktop", isRotated: false },
@@ -2443,7 +2443,7 @@ export const NarrowDesktop: Story = {
 };
 
 export const CustomContentWidth: Story = {
-  name: "Custom content width",
+  name: "Custom Content Width",
   tags: ["!dev", "!autodocs"],
   args: {
     contentMaxWidth: 1200,

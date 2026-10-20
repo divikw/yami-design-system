@@ -25,6 +25,36 @@ function Demo() {
 
 const brands = ["SKIN1004", "COSRX", "Anua"];
 
+test("Sheet keeps its accessible description and divider in the fixed header while content scrolls", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await page.viewport(375, 812);
+    flushSync(() => root.render(<Sheet open size="full" title="Coupons" description="Only applicable coupons are shown."
+      closeLabel="Close coupons" onClose={() => {}} aria-describedby="extra-description">
+      <p id="extra-description">Select one coupon.</p>
+      {Array.from({ length: 40 }, (_, index) => <p key={index}>Coupon {index + 1}</p>)}
+      <button>Last coupon</button>
+    </Sheet>));
+    const dialog = container.querySelector("dialog")!;
+    const description = dialog.querySelector('[data-slot="sheet-description"]')!;
+    const header = dialog.querySelector('[data-slot="sheet-header"]')!;
+    expect(dialog.getAttribute("aria-describedby")).toContain(description.id);
+    expect(dialog.getAttribute("aria-describedby")).toContain("extra-description");
+    expect(header.contains(description)).toBe(true);
+    expect(getComputedStyle(header).borderBottomWidth).toBe("1px");
+    const top = description.getBoundingClientRect().top;
+    await page.getByRole("button", { name: "Last coupon", exact: true }).click();
+    expect(dialog.querySelector('[data-sheet-content]')!.scrollTop).toBeGreaterThan(0);
+    expect(description.getBoundingClientRect().top).toBe(top);
+  } finally {
+    root.unmount(); container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobile and 12px all around on desktop", async (size) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");

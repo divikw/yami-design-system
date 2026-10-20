@@ -313,7 +313,6 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
             href: productHref(product, locale), brand: product.brand[locale], brandHref: brandHref(product, locale),
             priceCurrent: <>{money(product.appPrice)} <span className={styles.appPriceLabel}>{ko ? "(앱 전용가)" : "(App Price)"}</span></>, priceOriginal: money(product.originalPrice),
             unitPrice: <a className={styles.dealComparePrice} href={productHref(product, locale)}>{ko ? "웹 가격과 비교해보기" : "Compare Web Price"}</a>,
-            badges: [{ type: "discount" as const, label: `${product.discountPercent}% OFF` }],
           }))}
         />
       <section {...dividerAttributes(sectionDividers["coupon-guide"] ?? {})} id="coupon-guide" className={styles.guideSection}>

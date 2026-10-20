@@ -2,7 +2,7 @@ import baseMeta, * as examples from "./ProductList.story-examples";
 
 export default { ...baseMeta, tags: ["!dev", "!autodocs"], id: "yami-components-commerce-product-list-mobile", title: "YAMI/Modules/Commerce/Product List/Mobile" };
 
-export const MobileTitleSizes = { ...examples.MobileTitleSizes, name: "Title sizes" };
+export const MobileTitleSizes = { ...examples.MobileTitleSizes, name: "Title Sizes" };
 export const MobilePlain = { ...examples.MobilePlain, name: "Plain" };
 export const ThemedBackgroundMobile = { ...examples.ThemedBackgroundMobile, name: "Banner · Plain" };
 export const BackgroundRailMobile = { ...examples.BackgroundRailMobile, name: "Background · Plain" };

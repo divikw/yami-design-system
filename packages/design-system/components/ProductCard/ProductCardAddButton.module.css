@@ -36,12 +36,6 @@
   background-color: var(--product-card-add-surface-active-mobile);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .root:not(:disabled):hover {
-    background-color: var(--product-card-add-surface-active-mobile);
-  }
-}
-
 .root:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

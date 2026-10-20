@@ -18,6 +18,7 @@
     "Sheet"
   ],
   "props": {
+    "description": { "type": "string", "required": false, "description": "Optional supporting copy below the title, inside the fixed header above its divider. Linked with aria-describedby. Omission preserves the original header." },
     "open": {
       "type": "boolean",
       "required": true

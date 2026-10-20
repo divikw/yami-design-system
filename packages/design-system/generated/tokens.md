@@ -349,6 +349,11 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `divider.subtle` | dark | color | `var(--color-white-400)` |
 | `divider.subtle-inverse` | root | color | `var(--color-white-400)` |
 | `divider.subtle-inverse` | dark | color | `var(--color-black-400)` |
+| `elevation.100-canvas` | root | shadow | `0px 1px 2px -1px rgba(0, 0, 0, 0.04)` |
+| `elevation.200-raised-surface` | root | shadow | `0px 2px 4px -2px rgba(0, 0, 0, 0.08)` |
+| `elevation.300-tooltip` | root | shadow | `0px 4px 8px -4px rgba(0, 0, 0, 0.12)` |
+| `elevation.400-menu-panel` | root | shadow | `0px 4px 12px -6px rgba(0, 0, 0, 0.16)` |
+| `elevation.500-modal-window` | root | shadow | `0px 8px 16px -8px rgba(0, 0, 0, 0.24)` |
 | `fill.disabled` | root | color | `var(--color-neutral-300)` |
 | `fill.disabled` | dark | color | `var(--color-neutral-700)` |
 | `fill.error-primary` | root | color | `var(--color-red-500)` |

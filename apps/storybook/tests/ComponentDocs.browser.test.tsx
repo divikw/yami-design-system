@@ -91,6 +91,15 @@ describe("component docs usage content", () => {
     expect(await loadUsageForTitle("YAMI/Components/Commerce/Product Media Gallery/Draft")).toContain("# ProductMediaGallery");
   });
 
+  test.each([
+    "YAMI/Modules/Commerce/Product Review Section/Draft",
+    "YAMI/Components/Commerce/Product Media Gallery/Draft",
+  ])("preserves the full usage content for lowercase index title %s", async (title) => {
+    const original = await loadUsageForTitle(title);
+    expect(original).toContain("# ");
+    expect(await loadUsageForTitle(title.toLowerCase())).toBe(original);
+  });
+
   test("demotes the usage title below the component page title", () => {
     expect(formatUsageMarkdown("# Button — Usage\n\n## When to use")).toBe(
       "## Button — Usage\n\n## When to use",
