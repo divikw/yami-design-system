@@ -169,8 +169,8 @@ Apple platforms prefer Apple SD Gothic Neo, Windows prefers Malgun Gothic, and
 Android/other hosts use available Noto Korean fonts or their system sans-serif.
 The CSS emphasis request is 600; hosts may match the available system weight, so
 platform glyphs, stroke weight, and line breaks can differ. Sizes and line heights
-keep the existing typography tokens. Explicit language boundaries select the
-sans stack; explicit serif and monospace styles retain their own family. Portal
+keep the existing typography tokens. Within Korean content, explicit language
+boundaries select the sans stack; explicit serif and monospace styles retain their own family. Existing English/Chinese host font overrides remain unchanged. Portal
 content must declare its content language when the portal host differs.
 App Download Korean headings and coupon labels prefer word boundaries; shared
 ProductCard titles allow emergency wrapping within long words and retain their line clamp. Amounts remain

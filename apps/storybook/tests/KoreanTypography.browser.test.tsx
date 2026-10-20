@@ -2,11 +2,37 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page } from "vitest/browser";
+import type { CSSProperties } from "react";
 import { Button } from "../../../packages/design-system/components/Button/Button";
 import { Input } from "../../../packages/design-system/components/Input/Input";
 import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/fonts.css";
 import "@yami/design-system/styles/base.css";
+
+test("Korean locale rules preserve existing host font overrides in English and Chinese", () => {
+  const documentLocale = document.documentElement.lang;
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    for (const locale of ["en", "zh"]) {
+      document.documentElement.lang = locale;
+      flushSync(() => root.render(
+        <section lang={locale} style={{ "--font-family-ios": '"Host Sans", Arial, sans-serif' } as CSSProperties}>
+          <div style={{ fontFamily: "var(--font-family-ios)" }}><p>Existing host typography</p></div>
+          <h2>Existing legacy heading</h2>
+        </section>,
+      ));
+      expect(getComputedStyle(container.querySelector("p")!).fontFamily).toContain("Host Sans");
+      expect(getComputedStyle(container.querySelector("h2")!).fontFamily).toContain("GT Walsheim");
+      expect(getComputedStyle(container.querySelector("h2")!).fontFamily).not.toContain("Host Sans");
+    }
+  } finally {
+    flushSync(() => root.unmount());
+    container.remove();
+    document.documentElement.lang = documentLocale;
+  }
+});
 
 test("Korean system typography follows nested language boundaries and existing component tokens", async () => {
   const viewport = { width: innerWidth, height: innerHeight };

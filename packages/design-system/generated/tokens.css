@@ -531,15 +531,9 @@
   }
 }
 :root:lang(en), :where(:lang(en)) {
-  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-weight-emphasize: 500;
 }
 :root:lang(zh), :where(:lang(zh)) {
-  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   --font-weight-emphasize: 600;
 }
 :root:lang(ko), :where(:lang(ko)) {
@@ -547,4 +541,14 @@
   --font-family-ios: var(--font-family-ko);
   --font-family-win: var(--font-family-ko);
   --font-weight-emphasize: 600;
+}
+:where(:lang(ko) :lang(en)) {
+  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+}
+:where(:lang(ko) :lang(zh)) {
+  --font-family-android: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-ios: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-family-win: 'GT Walsheim', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
 }

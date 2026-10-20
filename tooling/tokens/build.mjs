@@ -18,6 +18,8 @@ const contexts = [
   { id: "locale-en", selector: ":root:lang(en), :where(:lang(en))" },
   { id: "locale-zh", selector: ":root:lang(zh), :where(:lang(zh))" },
   { id: "locale-ko", selector: ":root:lang(ko), :where(:lang(ko))" },
+  { id: "locale-en-after-ko", selector: ":where(:lang(ko) :lang(en))" },
+  { id: "locale-zh-after-ko", selector: ":where(:lang(ko) :lang(zh))" },
 ];
 
 async function list(dir) {
@@ -146,8 +148,11 @@ for (const file of files) {
         const value = localeOverrides?.[locale] ??
           (localizedWeight ? token.value[key] ?? token.value.EN : token.value);
         const override = { ...enriched, value };
-        byContext.get(`locale-${locale}`).push(override);
-        record.values.push(asValue(override, `locale-${locale}`));
+        const localeContext = localeOverrides && locale !== "ko"
+          ? `locale-${locale}-after-ko`
+          : `locale-${locale}`;
+        byContext.get(localeContext).push(override);
+        record.values.push(asValue(override, localeContext));
       }
     }
 

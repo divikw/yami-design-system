@@ -35,15 +35,19 @@
 
 /* Resolve legacy aliases locally after inherited language changes. */
 :where(*) {
-  --font-brand: var(--font-family-ios);
-  --font-cn-ios: var(--font-family-ios);
-  --font-cn-android: var(--font-family-android);
   --fw-emphasize: var(--font-weight-emphasize);
   --fw-bold: var(--font-weight-emphasize);
 }
 
+/* Preserve host font aliases outside Korean content and its nested switches. */
+:where(:lang(ko), :lang(ko) *) {
+  --font-brand: var(--font-family-ios);
+  --font-cn-ios: var(--font-family-ios);
+  --font-cn-android: var(--font-family-android);
+}
+
 /* ============ SEMANTIC ELEMENT BASELINES ============ */
-:where([lang]) {
+:where([lang]):where(:lang(ko), :lang(ko) *) {
   font-family: var(--font-family-ios);
 }
 

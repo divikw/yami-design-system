@@ -23,11 +23,14 @@ weights stay language-independent. The approved serif stack is optical
 
 `font-family.ko` defines the native Korean stack with GT Walsheim first for Latin
 and numerals. The three legacy platform-family tokens use `com.yami.locales` to
-select that alias for Korean and reset to their original stack for EN/ZH. Only
+select that alias for Korean and reset to their original stack for nested EN/ZH
+inside Korean content (`locale-en-after-ko` / `locale-zh-after-ko`). Outside that
+scope, existing host family overrides remain unchanged. Only
 locally installed Korean families are used; there is no Korean `@font-face` or
 font package. System weight matching is permitted for the 600 emphasis request.
-`styles/base.css` rebinds legacy aliases at each element and applies the sans
-family at explicit language boundaries; explicit serif/monospace styles retain
+`styles/base.css` rebinds legacy font aliases within Korean content and its nested
+language switches, applying the sans family at explicit language boundaries in
+that scope; explicit serif/monospace styles retain
 their family. Portal content needs an explicit language if its host differs.
 
 But `sync-tokens-ci` (the Figma ↔ code drift checker) still needs to know the authored intent for every scale at every mode. Putting cross-mode invariants in `_base.tokens.json` is the canonical answer to "what is `display-xl.font-weight` in Figma's typography-mobile collection?" without repeating it 20× per mode file.
