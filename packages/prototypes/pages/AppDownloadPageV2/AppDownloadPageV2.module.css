@@ -11,6 +11,7 @@
 .root *, .root *::before, .root *::after { box-sizing: border-box; }
 .root h1, .root h2, .root h3, .root p { margin: 0; }
 .root h1, .root h2, .root h3, .root strong { font-weight: var(--font-weight-emphasize); }
+.root :is(h1, h2, h3, .couponTabTitle):lang(ko) { word-break: keep-all; overflow-wrap: anywhere; }
 .root h2:where(:not([data-section-heading-title])) { font-size: var(--font-size-heading-2xl); line-height: var(--line-height-heading-2xl); text-align: center; }
 .root h3 { font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); }
 .root a { color: inherit; text-decoration: none; }

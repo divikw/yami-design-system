@@ -5,7 +5,8 @@
       "$type": "fontWeight",
       "$value": {
         "EN": "Regular",
-        "CN": "Regular"
+        "CN": "Regular",
+        "KO": "Regular"
       },
       "$description": "默认字重，适用于正文与说明信息。不用于强调信息、价格主信息或标题层级。"
     },
@@ -13,15 +14,17 @@
       "$type": "fontWeight",
       "$value": {
         "EN": "Medium",
-        "CN": "SemiBold"
+        "CN": "SemiBold",
+        "KO": "SemiBold"
       },
-      "$description": "常规强调字重：英文 Medium 500，中文 SemiBold 600，按 lang 生效，移动端和桌面端一致。适用于重点信息、价格、按钮与短标题，不用于普通正文。"
+      "$description": "常规强调字重：英文 Medium 500，中文与韩文 SemiBold 600，按 lang 生效，移动端和桌面端一致。韩文允许系统匹配可用字重。适用于重点信息、价格、按钮与短标题，不用于普通正文。"
     },
     "semibold": {
       "$type": "fontWeight",
       "$value": {
         "EN": "SemiBold",
-        "CN": "SemiBold"
+        "CN": "SemiBold",
+        "KO": "SemiBold"
       },
       "$description": "衬线标题字重，适用于 heading-md serif 变体，不用于正文。"
     }
@@ -36,7 +39,8 @@
       },
       "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。",
       "$extensions": {
-        "com.yami.generic-family": "system-ui, sans-serif"
+        "com.yami.generic-family": "system-ui, sans-serif",
+        "com.yami.locales": { "ko": "{font-family.ko}" }
       }
     },
     "android": {
@@ -48,7 +52,8 @@
       },
       "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。",
       "$extensions": {
-        "com.yami.generic-family": "system-ui, sans-serif"
+        "com.yami.generic-family": "system-ui, sans-serif",
+        "com.yami.locales": { "ko": "{font-family.ko}" }
       }
     },
     "win": {
@@ -59,6 +64,21 @@
         "CN-Windows": "Microsoft YaHei"
       },
       "$description": "跨平台原生中文回退：英文与数字优先 GT Walsheim，中文依次使用本机 PingFang SC、Microsoft YaHei、系统默认无衬线字体。不下载中文正文字体。保留平台 Token 名称以兼容现有引用。",
+      "$extensions": {
+        "com.yami.generic-family": "system-ui, sans-serif",
+        "com.yami.locales": { "ko": "{font-family.ko}" }
+      }
+    },
+    "ko": {
+      "$type": "fontFamily",
+      "$value": {
+        "EN": "GT Walsheim",
+        "KO-Apple": "Apple SD Gothic Neo",
+        "KO-Windows": "Malgun Gothic",
+        "KO-Noto-CJK": "Noto Sans CJK KR",
+        "KO-Noto": "Noto Sans KR"
+      },
+      "$description": "韩文原生字体栈：英文、数字与金额优先 GT Walsheim；韩文使用本机 Apple SD Gothic Neo、Malgun Gothic、Noto 韩文字体或系统默认无衬线字体。不下载韩文字体，允许平台字形及可用字重差异。",
       "$extensions": {
         "com.yami.generic-family": "system-ui, sans-serif"
       }

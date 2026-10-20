@@ -10,10 +10,12 @@ describe("YAMI serif typography", () => {
       expect.objectContaining({ contextId: "root", cssValue: "500" }),
       expect.objectContaining({ contextId: "locale-en", cssValue: "500" }),
       expect.objectContaining({ contextId: "locale-zh", cssValue: "600" }),
+      expect.objectContaining({ contextId: "locale-ko", cssValue: "600" }),
     ]))
     const css = readFileSync("generated/tokens.css", "utf8")
-    expect(css).toContain(":root:lang(zh), :where(:lang(zh)) {\n  --font-weight-emphasize: 600;")
-    expect(css).toContain(":root:lang(en), :where(:lang(en)) {\n  --font-weight-emphasize: 500;")
+    expect(css).toMatch(/:root:lang\(zh\), :where\(:lang\(zh\)\) \{[^}]*--font-weight-emphasize: 600;/)
+    expect(css).toMatch(/:root:lang\(en\), :where\(:lang\(en\)\) \{[^}]*--font-weight-emphasize: 500;/)
+    expect(css).toMatch(/:root:lang\(ko\), :where\(:lang\(ko\)\) \{[^}]*--font-weight-emphasize: 600;/)
   })
 
   it("keeps Latin glyphs at Medium inside Chinese emphasized text", () => {

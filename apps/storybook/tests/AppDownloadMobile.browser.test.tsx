@@ -41,8 +41,11 @@ for (const [version, Page] of [["V1", AppDownloadPage], ["V2", AppDownloadPageV2
           for (const checkbox of container.querySelectorAll<HTMLElement>('#calculator-panel-app [role="checkbox"]')) checkbox.click();
         });
         expect(container.querySelector('[data-testid="final-payment"]')!.textContent).toBe("$2919.34");
-        for (const width of [320, 375, 402, 768]) {
+        for (const width of [320, 375, 402, 768, 1024, 1440]) {
           await page.viewport(width, 844);
+          const headingStyle = getComputedStyle(container.querySelector("h1")!);
+          expect(headingStyle.fontFamily).toContain(locale === "ko" ? "Apple SD Gothic Neo" : "PingFang SC");
+          expect(headingStyle.fontWeight).toBe(locale === "ko" ? "600" : "500");
           expectSingleLineAmounts(container);
           expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
           for (const amount of container.querySelectorAll<HTMLElement>('[data-testid="selected-items-total"], [data-testid="final-payment"]')) {
@@ -59,6 +62,8 @@ for (const [version, Page] of [["V1", AppDownloadPage], ["V2", AppDownloadPageV2
             for (const item of reviewRail.children) expect(item.getBoundingClientRect().width).toBeLessThanOrEqual(availableWidth);
           }
         }
+        flushSync(() => container.querySelector<HTMLButtonElement>(`button[aria-label="${locale === "ko" ? "Switch to English" : "한국어로 전환"}"]`)!.click());
+        expect(getComputedStyle(container.querySelector("h1")!).fontFamily).toContain(locale === "ko" ? "PingFang SC" : "Apple SD Gothic Neo");
       } finally {
         flushSync(() => root.unmount());
         container.remove();

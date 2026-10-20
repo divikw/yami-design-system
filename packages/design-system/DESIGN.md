@@ -21,7 +21,7 @@ typography:
   cn_windows: "Microsoft YaHei"
   serif_en: "Source Serif 4 Variable"
   serif_cn: "Noto Serif SC"
-  weights: [400, 500, 600] # normal 400; emphasis EN 500 / CN 600; serif 600 preserved
+  weights: [400, 500, 600] # normal 400; emphasis EN 500 / CN and KO 600; serif 600 preserved
 status:
   success: "#27812B" # emerald-700 — WCAG-AA on white
   warning: "#9E4303" # amber-700  — WCAG-AA on white
@@ -144,6 +144,7 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 | `--font-family-ios`     | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Brand Latin, numerals, prices, and CN fallback for iOS / web surfaces. |
 | `--font-family-android` | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Shared native fallback stack; legacy platform name.                                   |
 | `--font-family-win`     | `GT Walsheim` → `PingFang SC` → `Microsoft YaHei` → `system-ui` → `sans-serif` | Shared native fallback stack; legacy platform name.                                   |
+| `--font-family-ko`      | `GT Walsheim` → `Apple SD Gothic Neo` → `Malgun Gothic` → `Noto Sans CJK KR` → `Noto Sans KR` → `system-ui` → `sans-serif` | Native Korean stack, selected by inherited `lang="ko"` on all three legacy platform tokens. |
 | `--font-family-serif`   | `Source Serif 4 Variable` + `Noto Serif SC` | Approved editorial display and heading variants only; Latin uses optical sizing; never body or functional text. |
 
 ### Weights
@@ -151,21 +152,33 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 | Token                     | Value | Use                                            |
 | ------------------------- | ----- | ---------------------------------------------- |
 | `--font-weight-normal`    | `400` | Body, captions, default reading.               |
-| `--font-weight-emphasize` | EN `500` / CN `600` | Headings, prices, short titles, button labels; resolved from inherited `lang`. |
+| `--font-weight-emphasize` | EN `500` / CN and KO `600` | Headings, prices, short titles, button labels; resolved from inherited `lang`. |
 | `--font-weight-semibold` | `600` | Explicit serif heading weight; independent of language. |
 
 Use `--font-weight-emphasize` for all ordinary emphasis, including `strong` and
 `b`. The generated token CSS matches inherited `lang="zh"` (including `zh-CN`)
-and `lang="en"` (including `en-US`) on both desktop and mobile. Nested language
+and `lang="en"` (including `en-US`), plus `lang="ko"` (including `ko-KR`), on both desktop and mobile. Nested language
 changes reset the token. Callers must declare the content language; mixed-language
 emphasized elements need their own `lang` and must consume the emphasis token.
 Regular text stays 400. Shared sans section headings use 20px/400 by default on
 mobile; the 16px option uses the language-aware emphasis weight. Explicit serif
 titles retain their existing weight.
 
+Korean uses locally installed system fonts; no Korean webfont is downloaded.
+Apple platforms prefer Apple SD Gothic Neo, Windows prefers Malgun Gothic, and
+Android/other hosts use available Noto Korean fonts or their system sans-serif.
+The CSS emphasis request is 600; hosts may match the available system weight, so
+platform glyphs, stroke weight, and line breaks can differ. Sizes and line heights
+keep the existing typography tokens. Within Korean content, explicit language
+boundaries select the sans stack; explicit serif and monospace styles retain their own family. Existing English/Chinese host font overrides remain unchanged. Portal
+content must declare its content language when the portal host differs.
+App Download Korean headings and coupon labels prefer word boundaries; shared
+ProductCard titles allow emergency wrapping within long words and retain their line clamp. Amounts remain
+single-line under the owning component's layout rules, without global `keep-all`.
+
 GT Walsheim Medium covers CSS weights 500–600 so Latin letters and numerals in a
-Chinese emphasis run still render the approved Medium glyphs. A separately tagged
-English run computes to 500; Chinese computes to 600. Do not use 700 for ordinary
+Chinese or Korean emphasis run still render the approved Medium glyphs. A separately tagged
+English run computes to 500; Chinese and Korean compute to 600. Do not use 700 for ordinary
 emphasis, or replace the literal serif token with the language-aware token.
 
 ### Type Scale (Desktop = Desktop-LG; separate authored modes)
@@ -412,7 +425,7 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 | **Sizes**      | `sm` (32) · `md` (40) · `lg` (48 mobile; 56 desktop text at ≥1024px; icon stays 48)                                                                |
 | **States**     | default · hover · active · disabled · loading · focus-visible                                    |
 | **Radius**     | `form=full` → `--radius-component-default` (8px) · `form=inline` → `--radius-button-primary` (pill) · `form=icon` keeps hierarchy-specific radius |
-| **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
+| **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN and KO 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
 | **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. Native iOS 44pt / Android 48dp are separate requirements.                                    |
 | **Rate limit** | **`emphasis` = 1 per screen.** No exceptions. (rule `emphasis-limit`)                            |
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
