@@ -37,8 +37,8 @@ describe("YAMI serif typography", () => {
 
     const packageJson = JSON.parse(readFileSync("package.json", "utf8"))
     expect(packageJson.dependencies).toMatchObject({
-      "@fontsource-variable/source-serif-4": "5.3.0",
-      "@fontsource/noto-serif-sc": "5.3.0",
+      "@fontsource-variable/source-serif-4": "5.3.1",
+      "@fontsource/noto-serif-sc": "5.3.1",
     })
     expect(packageJson.dependencies).not.toHaveProperty("@fontsource/noto-serif")
   })
