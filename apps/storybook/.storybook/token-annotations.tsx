@@ -40,11 +40,13 @@ export function installTokenAnnotations() {
   };
   const inspect = (event: Event) => {
     if (annotation.isActive?.() === false) return;
-    if (!(event.target instanceof HTMLElement) || (event.target === lastTarget && !dirty)) return;
-    lastTarget = event.target;
+    let hovered = event.target instanceof Element ? event.target : null;
+    while (hovered && !(hovered instanceof HTMLElement)) hovered = hovered.parentElement;
+    if (!(hovered instanceof HTMLElement) || (hovered === lastTarget && !dirty)) return;
+    lastTarget = hovered;
     if (dirty) { styles.refresh(); dirty = false; }
     const ancestry: HTMLElement[] = [];
-    for (let target: HTMLElement | null = event.target; target; target = target.parentElement) ancestry.unshift(target);
+    for (let target: HTMLElement | null = hovered; target; target = target.parentElement) ancestry.unshift(target);
     for (const target of ancestry) if (!previews.has(target)) styles.syncInline(target);
     for (const target of ancestry.reverse()) {
       const declarations = readTokenDeclarations(target);

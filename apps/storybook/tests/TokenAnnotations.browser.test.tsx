@@ -123,6 +123,14 @@ test("discovers logical spacing and border tokens used by horizontal LTR YDS lay
   ]));
 });
 
+test("registers an icon button when the pointer lands on its SVG path", () => {
+  flushSync(() => root.render(<Button form="icon" aria-label="Favorite"><svg><path d="M0 0h10v10H0z" /></svg></Button>));
+  const { controls } = mockAnnotations();
+  container.querySelector("path")!.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+  const button = container.querySelector("button")!;
+  expect(controls.get(button)!.controls).toEqual(expect.arrayContaining([expect.objectContaining({ reference: "--button-primary" })]));
+});
+
 test("previews only the selected element and restores its token binding on comparison, reset, and cleanup", () => {
   flushSync(() => root.render(<><Badge color="red" emphasis="secondary">First</Badge><Badge color="red" emphasis="secondary">Second</Badge></>));
   const { inspect, disposeRegistration } = mockAnnotations();
