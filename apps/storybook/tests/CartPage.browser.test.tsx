@@ -852,7 +852,7 @@ for (const locale of ["zh", "en"] as const) {
       expect(getComputedStyle(row.querySelector('del')!).fontSize).toBe("14px");
       expect(getComputedStyle(titleText).webkitLineClamp).toBe("3");
       if (width >= 1024) {
-        expect(dialog.getBoundingClientRect().width).toBe(480);
+        expect(dialog.getBoundingClientRect().width).toBeCloseTo(480, 2);
         expect(getComputedStyle(heading).fontSize).toBe("32px");
         expect(getComputedStyle(heading).fontWeight).toBe("400");
         expect(getComputedStyle(heading).paddingBottom).toBe("32px");

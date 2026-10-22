@@ -477,6 +477,15 @@ PC-only numbered pagination, shown from 1024px and hidden below it. / 仅 PC 使
 | **Focus**               | 2px `--focus-ring` outline; inverse uses `--focus-ring-inverse`.                                    |
 | **ARIA**                | Named `tablist` / `tab` / `tabpanel`; one roving Tab stop, arrow keys, Home/End, automatic/manual activation, controlled and uncontrolled state. Values preserve distinct IDs across languages. |
 
+### Accordion — `components/Accordion/`
+
+Inline disclosure extracted from ProductDetailPage's DetailDisclosure. / 从商品详情页现有 DetailDisclosure 抽取的内联折叠面板。
+
+- Each panel expands independently, with `label`, `children`, `defaultExpanded` (false), or controlled `expanded` / `onExpandedChange`. The host can coordinate exclusive expansion. `disabled` prevents toggling; `headingLevel` supports 2–6, defaulting to 2.
+- Preserves the existing 16px title, 16px plus/minus icon, minimum 44px Web trigger and adjacent-panel separators. Semantic text/divider/disabled tokens adapt to Light and Dark; keyboard focus uses a 2px `--focus-ring` outline at 2px offset. No height animation or hover treatment.
+- A native button controls a labelled content region with `aria-expanded`, `aria-controls` and `hidden`. Long labels wrap; collapsed content retains state and leaves the focus order. Page-specific mobile Sheet behavior remains host-owned.
+- Public exports: `Accordion`, `AccordionProps`. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
+
 ### Card — `components/Card/`
 
 Use Card for a discrete, self-contained content item (an order, product summary, or saved address), not ordinary page sections. Use headings, spacing, and layout containers for settings groups and page structure. Mixed actions belong inside a static Card; do not nest controls inside an anchor or button Card. / Card 用于订单、商品摘要、已保存地址等独立内容项；普通设置分组和页面结构使用标题、间距与布局容器。多个操作放在静态 Card 内，不嵌套在链接或按钮卡片中。

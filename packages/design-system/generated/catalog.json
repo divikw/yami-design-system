@@ -3,6 +3,234 @@
   "generatedFrom": "components/*/meta.json",
   "components": [
     {
+      "id": "Accordion",
+      "source": "components/Accordion",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Accordion",
+        "category": "layout",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Inline disclosure extracted from ProductDetailPage: independent panels with plus/minus icons, controlled or uncontrolled expansion, native keyboard activation and theme-aware semantic tokens.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Extracted from the maintained ProductDetailPage DetailDisclosure. No independently verified Figma component binding."
+        },
+        "exports": [
+          "Accordion",
+          "AccordionProps"
+        ],
+        "props": {
+          "label": {
+            "type": "ReactNode",
+            "required": true,
+            "description": "Visible heading and accessible trigger name. Static inline content only."
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true,
+            "description": "Panel content; stays mounted while hidden."
+          },
+          "expanded": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled expansion state."
+          },
+          "defaultExpanded": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Initial uncontrolled expansion."
+          },
+          "onExpandedChange": {
+            "type": "(expanded: boolean) => void",
+            "required": false,
+            "description": "Requests expansion changes. Controlled callers update expanded."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Disables the trigger without changing expansion."
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": 2,
+            "description": "Heading level chosen for the surrounding document."
+          },
+          "id": {
+            "type": "string",
+            "required": false,
+            "description": "Optional unique root ID; also prefixes trigger/content IDs."
+          }
+        },
+        "variants": {
+          "state": [
+            "collapsed",
+            "expanded",
+            "disabled",
+            "focus-visible"
+          ]
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Separate 2px blue outline, offset 2px."
+          },
+          "disabled": {
+            "ruleId": "no-opacity-disabled",
+            "note": "Uses button-disabled and text-disabled without opacity."
+          },
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Neutral semantic text and divider colors; blue is reserved for keyboard focus."
+          },
+          "type": {
+            "ruleId": "numerals-font",
+            "note": "GT Walsheim/native CJK stack through font-family-ios."
+          },
+          "target": {
+            "ruleId": "tap-target",
+            "note": "Retains the existing minimum 44px Web trigger; does not claim native Android 48dp compliance."
+          }
+        },
+        "tokens": [
+          "--space-050",
+          "--text-primary",
+          "--font-family-ios",
+          "--stroke-default",
+          "--divider-default",
+          "--font-weight-emphasize",
+          "--font-size-heading-sm",
+          "--line-height-heading-sm",
+          "--space-600",
+          "--space-150",
+          "--button-tertiary-active",
+          "--stroke-thick",
+          "--focus-ring",
+          "--space-025",
+          "--button-disabled",
+          "--text-disabled",
+          "--space-200",
+          "--font-weight-normal",
+          "--font-size-body-md",
+          "--line-height-body-md"
+        ],
+        "tokenBindings": {
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".root"
+          },
+          "--divider-default": {
+            "property": "border-block-start-color",
+            "selector": ".root + .root"
+          },
+          "--stroke-default": {
+            "property": "border-block-start-width",
+            "selector": ".root + .root"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".heading"
+          },
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".heading"
+          },
+          "--line-height-heading-sm": {
+            "property": "line-height",
+            "selector": ".heading"
+          },
+          "--space-600": {
+            "property": "min-height (calc minus space-050)",
+            "selector": ".trigger"
+          },
+          "--space-150": {
+            "property": "gap / padding-block-end",
+            "selector": ".trigger, .content"
+          },
+          "--space-200": {
+            "property": "width / height",
+            "selector": ".icon"
+          },
+          "--button-tertiary-active": {
+            "property": "background",
+            "selector": ".trigger:active:not(:disabled)"
+          },
+          "--button-disabled": {
+            "property": "background",
+            "selector": ".trigger:disabled"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".trigger:disabled"
+          },
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".trigger:focus-visible"
+          },
+          "--stroke-thick": {
+            "property": "outline-width",
+            "selector": ".trigger:focus-visible"
+          },
+          "--space-025": {
+            "property": "outline-offset",
+            "selector": ".trigger:focus-visible"
+          },
+          "--space-050": {
+            "property": "padding-block",
+            "selector": ".root"
+          },
+          "--font-weight-normal": {
+            "property": "font-weight",
+            "selector": ".content"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".content"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".content"
+          }
+        },
+        "accessibility": {
+          "role": "native heading/button with a named region",
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "enter",
+            "space"
+          ],
+          "tapTargetMin": 44,
+          "ariaPattern": "aria-expanded and aria-controls on the native button; aria-labelledby and hidden on the panel.",
+          "notes": "Disabled buttons use native disabled. Collapsed children retain state but leave the focus order and accessibility tree. Choose the heading level to match the document; labels must not contain interactive children."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Story play tests exercise independent expansion, Enter/Space/Tab, focus styles, ID associations, controlled updates/refused updates, disabled activation, hidden-content focus and narrow content."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ProductDetailsAccordion",
+          "./examples.tsx#ControlledAccordion"
+        ]
+      }
+    },
+    {
       "id": "ActivityPageHeader",
       "source": "components/ActivityPageHeader",
       "meta": {

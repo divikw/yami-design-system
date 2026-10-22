@@ -1,0 +1,102 @@
+.root {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding-block: var(--space-050);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+}
+
+.root + .root {
+  border-block-start: var(--stroke-default) solid var(--divider-default);
+}
+
+.heading {
+  margin: 0;
+  font-weight: var(--font-weight-emphasize);
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  min-height: calc(var(--space-600) - var(--space-050));
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-150);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.trigger:active:not(:disabled) {
+  background: var(--button-tertiary-active);
+}
+
+.trigger:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+
+.trigger:disabled {
+  background: var(--button-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.icon {
+  width: var(--space-200);
+  height: var(--space-200);
+  flex: 0 0 auto;
+  background: currentColor;
+  mask: url("../../assets/icons/system/add.svg") center / contain no-repeat;
+}
+
+.icon[data-direction="up"] {
+  mask-image: url("../../assets/icons/system/minus.svg");
+}
+
+.content {
+  padding-block: 0 var(--space-150);
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  overflow-wrap: anywhere;
+}
+
+.content[hidden] {
+  display: none;
+}
+
+.content > :first-child {
+  margin-block-start: 0;
+}
+
+.content > :last-child {
+  margin-block-end: 0;
+}
+
+@media (max-width: 1023.98px) {
+  .root {
+    padding-block: 0;
+  }
+
+  .root + .root {
+    padding-block-start: var(--space-050);
+  }
+
+  .content {
+    margin-block-end: var(--space-150);
+    padding-block: 0;
+  }
+}

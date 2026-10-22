@@ -16,6 +16,7 @@
  *   4. Phase 5 build-component-index scans this directory tree
  */
 
+export * from './Accordion'
 export * from './Badge'
 export * from './ActivityPageHeader'
 export * from './Billboard'
