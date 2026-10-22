@@ -53,6 +53,9 @@ jobs:
         if: matrix.check == 'changeset' && github.event_name == 'pull_request'
         run: git fetch --no-tags origin main:refs/heads/main
       - uses: pnpm/setup@v3
+        env:
+          # Default DNS ordering can time out against the registry on these runners.
+          NODE_OPTIONS: --dns-result-order=ipv4first
         with:
           runtime: node@24
           cache: true
