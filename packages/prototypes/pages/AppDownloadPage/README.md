@@ -17,3 +17,11 @@ Visible stories: PC and Mobile under `YAMI/Pages/App Download/V1`, both initiall
 Validation: `pnpm validate`; `pnpm --filter @yami/storybook exec vitest run --project storybook AppDownloadPage`.
 
 Store download links use the shared StoreDownloadButtons component: catalog Apple/Google Play icons plus HTML text, with the original store destinations.
+
+## Codex token annotations
+
+Storybook's global integration discovers Token references automatically for both App Download versions. In Codex's built-in browser, open the story directly at `/iframe.html?id=yami-pages-app-download-v1--mobile&viewMode=story` on your Storybook host. The annotation API requires a secure top-level page (HTTPS or localhost); the normal Storybook manager embeds stories in an iframe.
+
+Enter Annotation mode, select an offer label, and expand Adjust. Alongside the built-in controls, expect `文字颜色 · --badge-fg-secondary-red` and `背景颜色 · --badge-bg-secondary-red`, plus typography, spacing, and radius references. Color previews apply only to the selected element and can be reset. See the root README's “Storybook Token annotations” section for global coverage and limits.
+
+Regression check: `pnpm --filter @yami/storybook exec vitest run --project=browser tests/TokenAnnotations.browser.test.tsx`. This checks global registration, cascade and theme values, preview cleanup, deferred initialization, and unchanged App Download styles; visible native controls must also be checked in Codex.

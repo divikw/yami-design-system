@@ -5,6 +5,7 @@ import "@yami/design-system/styles/base.css";
 import "./preview.css";
 
 import { ComponentDocsPage } from "./component-docs";
+import { TokenAnnotations } from "./token-annotations";
 
 const YAMI_VIEWPORTS = {
   yamiMobileSm: { name: "YAMI Mobile-sm (360)", styles: { width: "360px", height: "800px" }, type: "mobile" as const },
@@ -78,7 +79,7 @@ const preview: Preview = {
         root.dataset.locale = context.globals.locale;
       }
 
-      return <Story />;
+      return <><TokenAnnotations /><Story /></>;
     }
   ]
 };
