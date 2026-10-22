@@ -42,6 +42,8 @@ export function installTokenAnnotations() {
     if (annotation.isActive?.() === false) return;
     let hovered = event.target instanceof Element ? event.target : null;
     while (hovered && !(hovered instanceof HTMLElement)) hovered = hovered.parentElement;
+    // The native editor lives in the page, but its own controls cannot be registered.
+    if (hovered?.closest("#codex-browser-sidebar-comments-root")) return;
     if (!(hovered instanceof HTMLElement) || (hovered === lastTarget && !dirty)) return;
     lastTarget = hovered;
     if (dirty) { styles.refresh(); dirty = false; }

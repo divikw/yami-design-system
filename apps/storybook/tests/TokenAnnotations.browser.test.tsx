@@ -43,6 +43,28 @@ function mockAnnotations() {
   return { controls, active, registerControls, disposeRegistration, inspect };
 }
 
+test("ignores the browser's own annotation editor and its shadow descendants", () => {
+  flushSync(() => root.render(<Button>Action</Button>));
+  const editor = document.createElement("div");
+  editor.id = "codex-browser-sidebar-comments-root";
+  editor.style.color = "var(--text-primary)";
+  const editorControl = document.createElement("button");
+  editorControl.style.color = "var(--text-secondary)";
+  editor.attachShadow({ mode: "open" }).append(editorControl);
+  document.body.append(editor);
+  try {
+    const { inspect, registerControls } = mockAnnotations();
+    inspect(container.querySelector("button")!);
+    registerControls.mockClear();
+    editorControl.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, composed: true }));
+    editorControl.dispatchEvent(new FocusEvent("focusin", { bubbles: true, composed: true }));
+    expect(registerControls).not.toHaveBeenCalled();
+    expect(editor.style.getPropertyValue("--yds-annotation-color")).toBe("");
+  } finally {
+    editor.remove();
+  }
+});
+
 test("discovers actual tokens on App Download, Button, and Badge without page-specific configuration", () => {
   flushSync(() => root.render(<><AppDownloadPage initialLocale="ko" /><Button>Action</Button><Badge color="blue" emphasis="secondary">Status</Badge></>));
   const badge = container.querySelector<HTMLElement>("[data-campaign-hero] span")!;
