@@ -1,6 +1,7 @@
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { afterEach, expect, test, vi } from "vitest";
+import { page } from "vitest/browser";
 import { AppDownloadPage } from "../../../packages/prototypes/pages/AppDownloadPage/AppDownloadPage";
 import { Button } from "../../../packages/design-system/components/Button/Button";
 import { Badge } from "../../../packages/design-system/components/Badge/Badge";
@@ -102,6 +103,50 @@ test("registers a stationary pointer's target before the first annotation click"
     expect.objectContaining({ reference: "--button-primary" }),
     expect.objectContaining({ reference: "--text-primary-inverse" }),
   ]));
+});
+
+test("resolves a trusted native overlay click to the underlying page target before selection", async () => {
+  flushSync(() => root.render(<AppDownloadPage initialLocale="ko" />));
+  const link = container.querySelector<HTMLAnchorElement>('#welcome-coupon a[href="#discount-products"]')!;
+  link.scrollIntoView({ block: "center" });
+  const editor = document.createElement("div");
+  editor.id = "codex-browser-sidebar-comments-root";
+  const shadow = editor.attachShadow({ mode: "open" });
+  const layer = document.createElement("div");
+  layer.popover = "manual";
+  layer.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;border:0;padding:0;background:transparent";
+  const blocker = document.createElement("div");
+  blocker.dataset.browserCommentInteractionBlocker = "true";
+  blocker.style.cssText = "position:absolute;inset:0";
+  layer.append(blocker);
+  shadow.append(layer);
+  document.body.append(editor);
+  layer.showPopover();
+  const { controls, registerControls } = mockAnnotations();
+  let selected: Parameters<AnnotationAPI["registerControls"]>[0] | undefined;
+  let retargeted = false;
+  const select = (event: Event) => {
+    retargeted = event.target === editor && event.isTrusted;
+    selected = controls.get(link);
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+  document.addEventListener("pointerdown", select, true);
+  try {
+    const bounds = link.getBoundingClientRect();
+    await page.elementLocator(blocker).click({ position: { x: bounds.x + 10, y: bounds.y + 10 } });
+    expect(retargeted).toBe(true);
+    expect(selected?.controls).toEqual(expect.arrayContaining([
+      expect.objectContaining({ reference: "--button-primary" }),
+      expect.objectContaining({ reference: "--text-primary-inverse" }),
+      expect.objectContaining({ reference: "--radius-component-default" }),
+    ]));
+    expect(registerControls.mock.calls.some(([options]) => options.targets === editor)).toBe(false);
+  } finally {
+    document.removeEventListener("pointerdown", select, true);
+    editor.remove();
+    window.scrollTo(0, 0);
+  }
 });
 
 test("discovers actual tokens on App Download, Button, and Badge without page-specific configuration", () => {
