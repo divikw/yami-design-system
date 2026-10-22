@@ -1,0 +1,176 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "accordion",
+  "title": "Accordion",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Inline disclosure extracted from ProductDetailPage: independent panels with plus/minus icons, controlled or uncontrolled expansion, native keyboard activation and theme-aware semantic tokens.",
+  "source": "components/Accordion",
+  "files": [
+    {
+      "source": "components/Accordion/Accordion.module.css",
+      "target": "components/Accordion/Accordion.module.css"
+    },
+    {
+      "source": "components/Accordion/Accordion.tsx",
+      "target": "components/Accordion/Accordion.tsx"
+    },
+    {
+      "source": "components/Accordion/index.ts",
+      "target": "components/Accordion/index.ts"
+    }
+  ],
+  "exports": [
+    "Accordion",
+    "AccordionProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/Accordion/usage.md",
+    "stories": [
+      "components/Accordion/Accordion.stories.tsx"
+    ],
+    "examples": [
+      "components/Accordion/examples.tsx#ProductDetailsAccordion",
+      "components/Accordion/examples.tsx#ControlledAccordion"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--button-disabled",
+      "--button-tertiary-active",
+      "--divider-default",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--font-weight-normal",
+      "--line-height-body-md",
+      "--line-height-heading-sm",
+      "--space-025",
+      "--space-050",
+      "--space-150",
+      "--space-200",
+      "--space-600",
+      "--stroke-default",
+      "--stroke-thick",
+      "--text-disabled",
+      "--text-primary"
+    ],
+    "rules": [
+      "focus-style",
+      "no-opacity-disabled",
+      "numerals-font",
+      "semantic-color-only",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      },
+      "--divider-default": {
+        "property": "border-block-start-color",
+        "selector": ".root + .root"
+      },
+      "--stroke-default": {
+        "property": "border-block-start-width",
+        "selector": ".root + .root"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".heading"
+      },
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".heading"
+      },
+      "--line-height-heading-sm": {
+        "property": "line-height",
+        "selector": ".heading"
+      },
+      "--space-600": {
+        "property": "min-height (calc minus space-050)",
+        "selector": ".trigger"
+      },
+      "--space-150": {
+        "property": "gap / padding-block-end",
+        "selector": ".trigger, .content"
+      },
+      "--space-200": {
+        "property": "width / height",
+        "selector": ".icon"
+      },
+      "--button-tertiary-active": {
+        "property": "background",
+        "selector": ".trigger:active:not(:disabled)"
+      },
+      "--button-disabled": {
+        "property": "background",
+        "selector": ".trigger:disabled"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".trigger:disabled"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".trigger:focus-visible"
+      },
+      "--stroke-thick": {
+        "property": "outline-width",
+        "selector": ".trigger:focus-visible"
+      },
+      "--space-025": {
+        "property": "outline-offset",
+        "selector": ".trigger:focus-visible"
+      },
+      "--space-050": {
+        "property": "padding-block",
+        "selector": ".root"
+      },
+      "--font-weight-normal": {
+        "property": "font-weight",
+        "selector": ".content"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".content"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".content"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "native heading/button with a named region",
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "enter",
+        "space"
+      ],
+      "tapTargetMin": 44,
+      "ariaPattern": "aria-expanded and aria-controls on the native button; aria-labelledby and hidden on the panel.",
+      "notes": "Disabled buttons use native disabled. Collapsed children retain state but leave the focus order and accessibility tree. Choose the heading level to match the document; labels must not contain interactive children."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "515171ac3ac253d26bb079142f513db75575285a28849e9dc9553217a89f84d6"
+}
