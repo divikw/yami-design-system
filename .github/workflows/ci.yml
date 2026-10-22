@@ -53,10 +53,8 @@ jobs:
         if: matrix.check == 'changeset' && github.event_name == 'pull_request'
         run: git fetch --no-tags origin main:refs/heads/main
       - uses: pnpm/setup@v3
-        env:
-          # Default DNS ordering can time out against the registry on these runners.
-          NODE_OPTIONS: --dns-result-order=ipv4first
         with:
+          registry: https://registry.npmmirror.com
           runtime: node@24
           cache: true
           install: false
@@ -86,6 +84,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: pnpm/setup@v3
         with:
+          registry: https://registry.npmmirror.com
           runtime: node@24
           cache: true
           install: false
@@ -112,6 +111,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: pnpm/setup@v3
         with:
+          registry: https://registry.npmmirror.com
           runtime: node@24
           cache: true
           install: false
