@@ -41,6 +41,14 @@ export function installTokenAnnotations() {
   const inspect = (event: Event) => {
     if (annotation.isActive?.() === false) return;
     let hovered = event.target instanceof Element ? event.target : null;
+    // Native selection events are retargeted from a shadow overlay to its host.
+    // Hit-test through only the selection blocker; editor controls stay excluded.
+    if (event instanceof PointerEvent && event.composedPath().some((node) =>
+      node instanceof Element && node.hasAttribute("data-browser-comment-interaction-blocker") && node.getRootNode() instanceof ShadowRoot &&
+      (node.getRootNode() as ShadowRoot).host.id === "codex-browser-sidebar-comments-root")) {
+      hovered = document.elementsFromPoint(event.clientX, event.clientY).find((element) =>
+        !element.closest("#codex-browser-sidebar-comments-root")) ?? null;
+    }
     while (hovered && !(hovered instanceof HTMLElement)) hovered = hovered.parentElement;
     // The native editor lives in the page, but its own controls cannot be registered.
     if (hovered?.closest("#codex-browser-sidebar-comments-root")) return;
