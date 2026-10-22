@@ -65,6 +65,45 @@ test("ignores the browser's own annotation editor and its shadow descendants", (
   }
 });
 
+test("registers the App Download deals link before native annotation selection consumes pointer events", () => {
+  flushSync(() => root.render(<AppDownloadPage initialLocale="ko" />));
+  const link = container.querySelector<HTMLAnchorElement>('#welcome-coupon a[href="#discount-products"]')!;
+  let selected: Parameters<AnnotationAPI["registerControls"]>[0] | undefined;
+  let controls: ReturnType<typeof mockAnnotations>["controls"];
+  const consumeHover = (event: Event) => event.stopImmediatePropagation();
+  const select = (event: Event) => {
+    selected = controls.get(link);
+    event.stopImmediatePropagation();
+  };
+  // The desktop installs these capture listeners before the page's scripts.
+  document.addEventListener("pointerover", consumeHover, true);
+  document.addEventListener("pointerdown", select, true);
+  try {
+    ({ controls } = mockAnnotations());
+    link.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+    link.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+    expect(selected?.controls).toEqual(expect.arrayContaining([
+      expect.objectContaining({ reference: "--button-primary" }),
+      expect.objectContaining({ reference: "--text-primary-inverse" }),
+      expect.objectContaining({ reference: "--radius-component-default" }),
+    ]));
+  } finally {
+    document.removeEventListener("pointerover", consumeHover, true);
+    document.removeEventListener("pointerdown", select, true);
+  }
+});
+
+test("registers a stationary pointer's target before the first annotation click", () => {
+  flushSync(() => root.render(<AppDownloadPage initialLocale="ko" />));
+  const link = container.querySelector<HTMLAnchorElement>('#welcome-coupon a[href="#discount-products"]')!;
+  const { controls } = mockAnnotations();
+  link.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+  expect(controls.get(link)?.controls).toEqual(expect.arrayContaining([
+    expect.objectContaining({ reference: "--button-primary" }),
+    expect.objectContaining({ reference: "--text-primary-inverse" }),
+  ]));
+});
+
 test("discovers actual tokens on App Download, Button, and Badge without page-specific configuration", () => {
   flushSync(() => root.render(<><AppDownloadPage initialLocale="ko" /><Button>Action</Button><Badge color="blue" emphasis="secondary">Status</Badge></>));
   const badge = container.querySelector<HTMLElement>("[data-campaign-hero] span")!;

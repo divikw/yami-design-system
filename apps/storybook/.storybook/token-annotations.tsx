@@ -118,8 +118,9 @@ export function installTokenAnnotations() {
     if (records.some((record) => record.target !== styles.mirror && !styles.mirror.contains(record.target))) invalidate();
   });
   observer.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true });
-  document.addEventListener("pointerover", inspect, true);
-  document.addEventListener("focusin", inspect, true);
+  // Inspect before the native annotation selector consumes events at document.
+  // Pointerdown also covers entering annotation mode with a stationary pointer.
+  for (const event of ["pointerover", "pointerdown", "focusin"]) window.addEventListener(event, inspect, true);
   document.addEventListener("oaiannotationcontrolchange", onChange);
   document.addEventListener("oaiannotationmodechange", invalidate);
   document.addEventListener("load", onLoad, true);
@@ -127,8 +128,7 @@ export function installTokenAnnotations() {
 
   return () => {
     observer.disconnect();
-    document.removeEventListener("pointerover", inspect, true);
-    document.removeEventListener("focusin", inspect, true);
+    for (const event of ["pointerover", "pointerdown", "focusin"]) window.removeEventListener(event, inspect, true);
     document.removeEventListener("oaiannotationcontrolchange", onChange);
     document.removeEventListener("oaiannotationmodechange", invalidate);
     document.removeEventListener("load", onLoad, true);
