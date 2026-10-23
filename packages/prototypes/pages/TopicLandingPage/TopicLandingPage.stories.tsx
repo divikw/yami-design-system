@@ -717,7 +717,7 @@ export const Pc: Story = {
           style.backgroundColor !==
             (usesLightBadge
               ? "rgba(255, 255, 255, 0.68)"
-              : "rgba(0, 0, 0, 0.68)") ||
+              : "rgba(0, 0, 0, 0.08)") ||
           style.color !==
             (usesLightBadge ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)") ||
           style.boxShadow !== "none"

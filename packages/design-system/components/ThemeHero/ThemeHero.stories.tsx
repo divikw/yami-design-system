@@ -171,7 +171,8 @@ export const Showcase: Story = {
           style.height !== "20px" ||
           style.borderRadius !== "4px" ||
           style.fontSize !== "12px" ||
-          style.lineHeight !== "16px"
+          style.lineHeight !== "16px" ||
+          style.backgroundColor !== "rgba(0, 0, 0, 0.08)"
         );
       })
     ) {
