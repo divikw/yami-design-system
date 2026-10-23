@@ -11,12 +11,12 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@vercel/functions": "3.9.11",
+    "@vercel/functions": "3.10.1",
     "@yami/design-system": "workspace:*",
     "@yami/prototypes": "workspace:*",
     "@yami/site-access": "workspace:*",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "10.6.2",
