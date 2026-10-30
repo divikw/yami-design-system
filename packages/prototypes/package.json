@@ -14,5 +14,5 @@
   },
   "scripts": { "typecheck": "tsc -p tsconfig.json", "test": "vitest run", "build": "tsc -p tsconfig.json" },
   "dependencies": { "@yami/contracts": "workspace:*", "@yami/design-system": "workspace:*", "react": "19.3.0" },
-  "devDependencies": { "@types/react": "19.3.0", "@types/react-dom": "19.3.0", "happy-dom": "21.0.1", "react-dom": "19.3.0", "storybook": "10.6.2", "typescript": "7.0.2", "vitest": "5.0.4" }
+  "devDependencies": { "@types/react": "19.3.0", "@types/react-dom": "19.3.0", "happy-dom": "21.0.4", "react-dom": "19.3.0", "storybook": "10.6.4", "typescript": "7.0.2", "vitest": "5.0.5" }
 }
