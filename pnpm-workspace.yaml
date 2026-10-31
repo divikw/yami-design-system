@@ -2,6 +2,11 @@ packages:
   - "apps/*"
   - "packages/*"
 
+overrides:
+  # Security patches for transitive dependencies (GHSA-2883-xcg3-v3hh, GHSA-mrhx-c7xc-m3w5).
+  "js-yaml@3.15.1": "3.15.2"
+  "@vercel/cli-config@0.3.4>zod": "4.6.7"
+
 onlyBuiltDependencies:
   - esbuild
   - sharp
