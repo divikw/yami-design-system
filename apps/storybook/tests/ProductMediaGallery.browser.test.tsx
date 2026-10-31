@@ -146,52 +146,6 @@ test("desktop overflow keeps every thumbnail reachable when preview is disabled"
   }
 });
 
-test.each([false, true])("overflowing mobile thumbnails support touch scrolling with desktopPreview=%s", async (desktopPreview) => {
-  const viewport = { width: innerWidth, height: innerHeight };
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  const session = cdp();
-  const galleryImages = Array.from({ length: 8 }, (_, index) => ({
-    ...images[index % images.length]!,
-    id: `mobile-overflow-${index}`,
-    thumbnailPinned: desktopPreview && index === 7,
-  }));
-  try {
-    await page.viewport(375, 900);
-    await session.send("Emulation.setTouchEmulationEnabled", { enabled: true });
-    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview={desktopPreview} />));
-    const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnails"]')!;
-    const scroller = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail-scroller"]')!;
-    await expect.poll(() => rail.dataset.thumbnailOverflow).toBe("true");
-    expect(getComputedStyle(scroller).overflowX).toBe("auto");
-    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
-    const rect = scroller.getBoundingClientRect();
-    const frame = window.frameElement!.getBoundingClientRect();
-    const scale = frame.width / innerWidth;
-    const point = {
-      x: frame.left + (rect.left + rect.width / 2) * scale,
-      y: frame.top + (rect.top + rect.height / 2) * scale,
-      id: 0,
-    };
-    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [point] });
-    for (let step = 1; step <= 16; step++) {
-      await session.send("Input.dispatchTouchEvent", {
-        type: "touchMove", touchPoints: [{ ...point, x: point.x - 150 * scale * step / 16 }],
-      });
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-    await expect.poll(() => scroller.scrollLeft).toBeGreaterThan(0);
-    expect(container.querySelector("dialog[open]")).toBeNull();
-  } finally {
-    await session.send("Emulation.setTouchEmulationEnabled", { enabled: false });
-    root.unmount();
-    container.remove();
-    await page.viewport(viewport.width, viewport.height);
-  }
-});
-
 test.each([false, true])("desktop selection reveals thumbnails without moving the page with pinned=%s", async (pinned) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
@@ -305,6 +259,54 @@ test("desktop arrows hide after mouse clicks and remain available for keyboard f
     await outside.click();
     for (const arrow of arrows) expect(getComputedStyle(arrow).visibility).toBe("hidden");
   } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+// Keep CDP touch emulation after desktop cases: Linux headless Chromium can
+// retain coarse-pointer media capabilities after touch emulation is disabled.
+test.each([false, true])("overflowing mobile thumbnails support touch scrolling with desktopPreview=%s", async (desktopPreview) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const session = cdp();
+  const galleryImages = Array.from({ length: 8 }, (_, index) => ({
+    ...images[index % images.length]!,
+    id: `mobile-overflow-${index}`,
+    thumbnailPinned: desktopPreview && index === 7,
+  }));
+  try {
+    await page.viewport(375, 900);
+    await session.send("Emulation.setTouchEmulationEnabled", { enabled: true });
+    flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview={desktopPreview} />));
+    const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnails"]')!;
+    const scroller = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail-scroller"]')!;
+    await expect.poll(() => rail.dataset.thumbnailOverflow).toBe("true");
+    expect(getComputedStyle(scroller).overflowX).toBe("auto");
+    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
+    const rect = scroller.getBoundingClientRect();
+    const frame = window.frameElement!.getBoundingClientRect();
+    const scale = frame.width / innerWidth;
+    const point = {
+      x: frame.left + (rect.left + rect.width / 2) * scale,
+      y: frame.top + (rect.top + rect.height / 2) * scale,
+      id: 0,
+    };
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [point] });
+    for (let step = 1; step <= 16; step++) {
+      await session.send("Input.dispatchTouchEvent", {
+        type: "touchMove", touchPoints: [{ ...point, x: point.x - 150 * scale * step / 16 }],
+      });
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await expect.poll(() => scroller.scrollLeft).toBeGreaterThan(0);
+    expect(container.querySelector("dialog[open]")).toBeNull();
+  } finally {
+    await session.send("Emulation.setTouchEmulationEnabled", { enabled: false });
     root.unmount();
     container.remove();
     await page.viewport(viewport.width, viewport.height);
