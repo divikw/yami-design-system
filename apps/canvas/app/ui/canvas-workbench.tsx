@@ -1,7 +1,6 @@
 "use client";
 
 import { PreviewNavigateMessageSchema } from "@yami/contracts";
-import { motion, useReducedMotion } from "motion/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SegmentedControl, WorkbenchButton, WorkbenchLink, WorkbenchSelect } from "./workbench-controls";
@@ -76,7 +75,6 @@ const viewportOptions = [
 export function CanvasWorkbench() {
   const params = useSearchParams();
   const router = useRouter();
-  const reduced = useReducedMotion();
   const importDialog = useRef<HTMLDialogElement>(null);
   const previewFrame = useRef<HTMLIFrameElement>(null);
   const historyIndex = useRef(0);
@@ -232,7 +230,7 @@ export function CanvasWorkbench() {
       </header>
 
       <section className="canvas-grid">
-        <motion.aside className="control-panel" initial={{ opacity: 0, x: reduced ? 0 : -8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: reduced ? 0 : 0.18 }}>
+        <aside className="control-panel">
           <div className="panel-heading"><span>页面管理</span></div>
           <WorkbenchSelect
             label="页面"
@@ -261,7 +259,7 @@ export function CanvasWorkbench() {
             onValueChange={(value) => update({ viewport: value as Viewport })}
           />
           <div className="path-readout"><span>{storyId ? "Storybook Story" : "当前路径"}</span><code>{storyId || path}</code></div>
-        </motion.aside>
+        </aside>
 
         <section className="preview-stage" aria-label="原型预览区">
           <div className="stage-bar">

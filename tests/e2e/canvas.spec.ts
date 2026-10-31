@@ -117,6 +117,25 @@ test("groups standalone prototype routes under the Preview Module", async ({ pag
   await expect(page.getByRole("heading", { name: /搜索结果：“抹茶”/ })).toBeVisible();
 });
 
+for (const reducedMotion of ["reduce", "no-preference"] as const) {
+  test(`hydrates the workbench without warnings with reduced motion ${reducedMotion}`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    const hydrationErrors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error" && /hydrat/i.test(message.text())) hydrationErrors.push(message.text());
+    });
+    page.on("pageerror", (error) => hydrationErrors.push(error.message));
+
+    await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+    const panel = page.locator(".control-panel");
+    await expect(panel).toHaveCSS("opacity", "1");
+    await expect(panel).toHaveCSS("transform", "none");
+    await expect(page.frameLocator('iframe[title="YAMI 原型预览"]').getByRole("heading", { name: "热销榜单" })).toBeVisible();
+    if (reducedMotion === "reduce") await expect(panel).toHaveCSS("animation-duration", "0s");
+    expect(hydrationErrors).toEqual([]);
+  });
+}
+
 test("renders Ecommerce Home and routes iframe links through parent history", async ({ page }) => {
   await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
   await expect(page.getByText("PROTOTYPE", { exact: true })).toBeVisible();
