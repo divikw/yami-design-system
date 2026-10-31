@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "d4e67551f518d5a6fd27b480255ea602416c898d59642fce2739100c4160539a"
+      "digest": "d6cc3623efce7efdd7d38f58bcd15d12021109751b58ff2b4047d570e9b319a6"
     },
     {
       "name": "accordion",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "4085c32e6c185b8d4c781aad0f7a4eb306299b8cba4cf060e753d78abab6fd6c"
+      "digest": "ef342d8290af2b9df118ac970ceed22e986becde27dd57df650f54f228f496f0"
     },
     {
       "name": "product-review-section",

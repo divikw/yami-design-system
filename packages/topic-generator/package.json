@@ -38,13 +38,13 @@
     "@base-ui/react": "1.9.0",
     "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.10",
-    "react": "19.3.0"
+    "react": "19.3.1"
   },
   "devDependencies": {
     "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "react-dom": "19.3.0",
+    "react-dom": "19.3.1",
     "typescript": "7.0.2",
     "vitest": "5.0.5"
   }
