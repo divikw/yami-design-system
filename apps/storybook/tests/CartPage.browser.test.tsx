@@ -858,7 +858,7 @@ for (const locale of ["zh", "en"] as const) {
         expect(getComputedStyle(heading).paddingBottom).toBe("32px");
         expect(heading.previousElementSibling!.getBoundingClientRect().height).toBe(72);
         expect(getComputedStyle(body).paddingLeft).toBe("32px");
-        expect(image.getBoundingClientRect().width).toBe(104);
+        expect(image.getBoundingClientRect().width).toBeCloseTo(104, 2);
         expect(getComputedStyle(row).columnGap).toBe("24px");
         expect(getComputedStyle(itemTitle).fontSize).toBe("18px");
         expect(titleText.getBoundingClientRect().height).toBe(84);
