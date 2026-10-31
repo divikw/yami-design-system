@@ -22,7 +22,7 @@
     "images": {
       "type": "ProductMediaGalleryItem[]",
       "required": true,
-      "description": "Ordered product images with stable IDs, responsive-capable sources, and meaningful alt text."
+      "description": "Ordered product images with stable IDs, responsive-capable sources, and meaningful alt text. Optional thumbnailPinned keeps a reference visible; thumbnailOverlayLabel and thumbnailOverlayLang provide a labeled overlay and its hyphenation language."
     },
     "defaultIndex": {
       "type": "number",
@@ -169,11 +169,11 @@
     },
     "--space-200": {
       "property": "desktop control inset; wide-mobile stage bleed and counter inset",
-      "selector": ".previousButton, .nextButton, .stage, .counter"
+      "selector": ".mainPrevious, .mainNext, .stage, .counter"
     },
     "--space-100": {
       "property": "thumbnail and mobile image gap; counter inset; wide-mobile outer padding",
-      "selector": ".thumbnails, .imageRail, .counter, .root"
+      "selector": ".thumbnailClip, .thumbnailScroller, .imageRail, .counter, .root"
     },
     "--space-150": {
       "property": "vertical padding",

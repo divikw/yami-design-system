@@ -139,7 +139,7 @@ export const Showcase: Story = {
       thumbnailRailStyle.paddingRight !== "0px" ||
       thumbnailRailStyle.paddingBottom !== "12px" ||
       thumbnailRailStyle.paddingLeft !== "0px" ||
-      thumbnailScrollerStyle.overflowX !== "hidden"
+      thumbnailScrollerStyle.overflowX !== "auto"
     ) {
       throw new Error(
         "Product media gallery thumbnails must stay inline when every image fits, with 12px vertical padding",
@@ -227,7 +227,7 @@ export const Showcase: Story = {
     const controls = within(preview);
     const close = controls.getByRole("button", { name: "Close image preview" });
     await expect(preview).toBeVisible();
-    await expect(controls.getByText("1 / 4", { exact: true })).toBeVisible();
+    await expect(controls.getByText("4 / 4", { exact: true })).toBeVisible();
     await expect(preview).toHaveAttribute("open");
     await expect(preview.matches(":modal")).toBe(true);
     await expect(close).toHaveFocus();
@@ -235,6 +235,10 @@ export const Showcase: Story = {
     await expect(preview.getBoundingClientRect().width).toBe(window.innerWidth);
     await expect(preview.getBoundingClientRect().height).toBe(window.innerHeight);
     await expect(getComputedStyle(controls.getByRole("img")).objectFit).toBe("contain");
+    await expect(controls.getByRole("button", { name: "Next image" })).toHaveAttribute("aria-disabled", "true");
+    await userEvent.click(controls.getByRole("button", { name: "Previous image" }));
+    await expect(controls.getByRole("img")).toHaveAttribute("alt", images[2].alt);
+    await userEvent.click(controls.getByRole("button", { name: `1 / 4: ${images[0].alt}` }));
     await expect(controls.getByRole("button", { name: "Previous image" })).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(controls.getByRole("button", { name: "Next image" }));
     await expect(controls.getByRole("img")).toHaveAttribute("alt", images[1].alt);

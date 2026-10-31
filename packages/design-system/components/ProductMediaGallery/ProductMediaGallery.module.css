@@ -60,10 +60,6 @@
   scrollbar-width: none;
 }
 
-.thumbnails[data-thumbnail-overflow="true"] .thumbnailScroller {
-  overflow: hidden;
-}
-
 @media (min-width: 1024px) {
   .thumbnails[data-thumbnail-overflow="true"] .thumbnailViewport {
     width: 100%;

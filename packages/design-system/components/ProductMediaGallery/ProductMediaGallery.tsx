@@ -203,10 +203,18 @@ export const ProductMediaGallery = forwardRef<ProductMediaGalleryHandle, Product
   }
 
   function revealThumbnail(index: number) {
-    const thumbnail = thumbnailScrollerRef.current?.querySelector<HTMLElement>(
+    const scroller = thumbnailScrollerRef.current;
+    const thumbnail = scroller?.querySelector<HTMLElement>(
       `[data-thumbnail-index="${index}"]`,
     );
-    thumbnail?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    if (!scroller || !thumbnail) return;
+    const viewport = scroller.getBoundingClientRect();
+    const target = thumbnail.getBoundingClientRect();
+    const endPadding = parseFloat(getComputedStyle(scroller).scrollPaddingInlineEnd) || 0;
+    const visibleRight = viewport.right - endPadding;
+    const left = target.left < viewport.left ? target.left - viewport.left
+      : target.right > visibleRight ? target.right - visibleRight : 0;
+    if (left) scroller.scrollBy({ left, behavior: "smooth" });
   }
 
   function selectImage(index: number) {

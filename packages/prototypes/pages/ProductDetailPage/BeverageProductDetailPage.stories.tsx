@@ -61,11 +61,12 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await expect(bestBefore.getBoundingClientRect().top).toBeGreaterThanOrEqual(bestBefore.previousElementSibling!.getBoundingClientRect().bottom);
   await expect(canvasElement.querySelector('[data-pdp-add-to-cart]')).toBeEnabled();
   const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>('[data-slot="product-media-gallery-thumbnail"]');
-  if (mobile) {
-    await expect(thumbnails).toHaveLength(fixture.images.length);
-  } else {
-    await expect(thumbnails).toHaveLength(4);
-    await expect(canvasElement.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeVisible();
+  await expect(thumbnails).toHaveLength(fixture.images.length);
+  await expect(canvasElement.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();
+  if (!mobile) {
+    const scroller = canvasElement.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail-scroller"]')!;
+    await expect(getComputedStyle(scroller).overflowX).toBe("auto");
+    await expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
   }
   await expect(canvasElement.querySelector('[data-pdp-module="brand-products"]')).toBeNull();
   await expect(canvasElement.querySelector('[data-pdp-module="recently-viewed"]')).toBeNull();
