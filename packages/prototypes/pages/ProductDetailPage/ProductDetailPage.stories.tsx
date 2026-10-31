@@ -1450,7 +1450,7 @@ export const MobileRegression: Story = {
       '[data-slot="product-media-gallery-thumbnails"]'
     );
     const galleryNavigationButtons = gallery?.querySelectorAll<HTMLElement>(
-      '[data-rail-navigation-button="true"]'
+      '[data-slot="product-media-gallery-stage"] [data-rail-navigation-button="true"]'
     );
     const mobileHeaderBar = canvasElement.querySelector<HTMLElement>(
       '[data-slot="header-mobile-bar"]'
@@ -2194,7 +2194,7 @@ export const Tablet: Story = {
       '[data-slot="product-media-gallery-stage"]'
     );
     const galleryNavigationButtons = gallery?.querySelectorAll<HTMLElement>(
-      '[data-rail-navigation-button="true"]'
+      '[data-slot="product-media-gallery-stage"] [data-rail-navigation-button="true"]'
     );
 
     if (

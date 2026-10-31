@@ -6,7 +6,8 @@
 Use `ProductMediaGallery` for a PDP media region when several product images
 share one bounded viewing window. It keeps one identity image visible at a time
 and offers thumbnail, previous/next, and keyboard ArrowLeft/ArrowRight
-navigation.
+navigation. Main-gallery arrows and keyboard navigation stop at the first and
+last images rather than wrapping.
 
 Provide a stable `id`, source, and meaningful product `alt` for every image.
 The active image is product identity content, so empty alt text is not valid.
@@ -16,32 +17,26 @@ full image position and alt text.
 For a labeled reference image such as a nutrition panel, set
 `thumbnailOverlayLabel` on that image. Keep this reference image at
 the end of the ordered image list and set `thumbnailPinned` when it must remain
-visible in the final position of the first thumbnail viewport. With
-`desktopPreview` enabled, the desktop main-gallery thumbnail rail does not
-scroll. When regular images overflow, the
-last available regular slot becomes a dark `+N` control: `N` counts only hidden
-regular images, never the pinned reference. Activating it opens the full image
-preview at the first hidden image. On hover-capable desktop devices, hovering
-the `+N` control also selects that first hidden image in the main stage. When all
-regular images fit, the `+N` control is omitted and the labeled reference stays inline immediately after the other
-images instead of leaving an empty gap at the edge. When it overflows, the
-reference pins to the final visible slot. Desktop thumbnails stay within the
-64–88px range; narrower containers reduce the number of complete slots.
-When `desktopPreview` is disabled (the default), every thumbnail remains in a
-horizontally scrollable rail; keyboard users can focus and activate each image.
-No `+N` control is shown without an enabled preview.
-Preview-dialog thumbnails retain their existing sizing.
+visible. On desktop, all thumbnails stay inline when they fit. Overflowing
+regular thumbnails remain in a horizontally scrollable rail with previous/next
+controls, while the reference stays fixed at the right edge. This works with or
+without `desktopPreview`; no `+N` control replaces hidden images. Desktop
+thumbnails are 64px square. Below 1024px, regular thumbnails support native
+horizontal scrolling and the reference remains inline after the scroll viewport.
+Keyboard users can focus and activate every image. Selecting an offscreen
+thumbnail scrolls only its horizontal container, preserving the page position.
+Set `thumbnailOverlayLang` when the overlay needs an explicit language for
+automatic hyphenation. Preview-dialog thumbnails retain their existing sizing.
 
-The component's 560px maximum applies only from the 1024px desktop breakpoint.
-The PDP sizes the gallery continuously from 280px at a 1024px viewport to 560px
-at a 1920px viewport. Tablet and mobile layouts remain full-width so their
+The component's 568px maximum applies only from the 1024px desktop breakpoint.
+The PDP sizes the gallery continuously from 280px at a 1024px viewport toward
+that maximum. Tablet and mobile layouts remain full-width so their
 horizontal image rail can use the complete viewport without clipping the active
 slide.
 
 The thumbnail rail sits under the square stage at every viewport. The mobile
-gallery rail, preview-dialog thumbnail row, and desktop thumbnails without
-preview support native horizontal scrolling. Desktop thumbnails with preview
-enabled use the `+N` affordance above. The component consumes
+gallery rail, preview-dialog thumbnail row, and overflowing main-gallery
+thumbnails support native horizontal scrolling. The component consumes
 YAMI surface, border, focus, radius, typography, and spacing tokens; callers
 control only the image data and localized labels.
 
@@ -51,8 +46,8 @@ Labeled reference thumbnails follow the same rule: hover selects the reference
 image, then clicking the main image opens the full-viewport preview at that
 selection. A thumbnail never opens the preview directly.
 
-The non-interactive image counter is 24px tall including its border at every
-breakpoint. It shares ProductCardAddButton's translucent surface, 1px border,
+The non-interactive image counter is shown below 1024px and is 24px tall
+including its border. It shares ProductCardAddButton's translucent surface, 1px border,
 and 4px backdrop blur, with an 8px inset from the content edges.
 
 Previous and next buttons are PC controls and appear from 1024px.

@@ -115,11 +115,11 @@
       },
       "--space-200": {
         "property": "desktop control inset; wide-mobile stage bleed and counter inset",
-        "selector": ".previousButton, .nextButton, .stage, .counter"
+        "selector": ".mainPrevious, .mainNext, .stage, .counter"
       },
       "--space-100": {
         "property": "thumbnail and mobile image gap; counter inset; wide-mobile outer padding",
-        "selector": ".thumbnails, .imageRail, .counter, .root"
+        "selector": ".thumbnailClip, .thumbnailScroller, .imageRail, .counter, .root"
       },
       "--space-150": {
         "property": "vertical padding",
@@ -175,5 +175,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4085c32e6c185b8d4c781aad0f7a4eb306299b8cba4cf060e753d78abab6fd6c"
+  "contentDigest": "ef342d8290af2b9df118ac970ceed22e986becde27dd57df650f54f228f496f0"
 }

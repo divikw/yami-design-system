@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "4085c32e6c185b8d4c781aad0f7a4eb306299b8cba4cf060e753d78abab6fd6c"
+      "digest": "ef342d8290af2b9df118ac970ceed22e986becde27dd57df650f54f228f496f0"
     },
     {
       "name": "product-review-section",
