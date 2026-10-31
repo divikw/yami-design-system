@@ -590,7 +590,7 @@
     --pdp-gallery-width: clamp(
       calc(var(--space-1000) * 3 + var(--space-500)),
       calc(31.25vw - var(--space-500)),
-      calc(var(--space-1000) * 7)
+      568px
     );
 
     grid-template-columns: var(--pdp-gallery-width) minmax(0, 1fr);

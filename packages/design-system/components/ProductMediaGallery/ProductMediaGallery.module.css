@@ -19,34 +19,34 @@
 
 @media (min-width: 1024px) {
   .root {
-    max-width: calc(var(--space-1000) * 7);
+    --product-media-thumbnail-size: 64px;
+
+    max-width: 568px;
   }
 }
 
 .thumbnails {
   position: relative;
-  display: flex;
   min-width: 0;
   grid-row: 2;
-  flex-direction: row;
-  gap: var(--space-100);
   padding: var(--space-150) 0;
+  overflow: visible;
+}
+
+.thumbnailClip {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  gap: var(--space-100);
   overflow: hidden;
 }
 
-.thumbnails > .thumbnailButton[data-pinned="true"] {
-  flex: 0 0 auto;
-}
-
-.thumbnails[data-pinned-layout="inline"] .thumbnailScroller {
-  width: max-content;
-  max-width: 100%;
+.thumbnailViewport {
+  position: relative;
+  min-width: 0;
   flex: 0 1 auto;
-}
-
-.thumbnails[data-pinned-layout="edge"] .thumbnailScroller {
-  width: auto;
-  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .thumbnailScroller {
@@ -64,23 +64,107 @@
   overflow: hidden;
 }
 
-@container (max-width: 423.98px) {
-  .thumbnails {
-    --product-media-thumbnail-size: clamp(
-      var(--space-800),
-      calc((100cqw - var(--space-400)) / 5),
-      calc(var(--space-1000) + var(--space-100))
-    );
+@media (min-width: 1024px) {
+  .thumbnails[data-thumbnail-overflow="true"] .thumbnailViewport {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .thumbnails[data-thumbnail-overflow="true"] .thumbnailScroller {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    flex: 1 1 auto;
+    padding-inline-end: calc(var(--product-media-thumbnail-size) + var(--space-100));
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline-end: calc(var(--product-media-thumbnail-size) + var(--space-100));
+    scroll-snap-type: inline proximity;
+    scrollbar-width: none;
+    touch-action: pan-x;
+  }
+
+  .thumbnailScroller::-webkit-scrollbar {
+    display: none;
   }
 }
 
-@container (max-width: 351.98px) {
-  .thumbnails {
-    --product-media-thumbnail-size: clamp(
-      var(--space-800),
-      calc((100cqw - var(--space-300)) / 4),
-      calc(var(--space-1000) + var(--space-100))
+.pinnedThumbnailSlot {
+  position: relative;
+  display: grid;
+  width: var(--product-media-thumbnail-size);
+  height: var(--product-media-thumbnail-size);
+  flex: 0 0 auto;
+  place-items: center;
+  isolation: isolate;
+}
+
+.pinnedThumbnailSlot > .thumbnailButton {
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .thumbnails[data-thumbnail-overflow="true"] .pinnedThumbnailSlot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 3;
+  }
+
+  .thumbnails[data-thumbnail-overflow="true"] .pinnedThumbnailSlot::before {
+    position: absolute;
+    inset-block: 0;
+    right: 0;
+    left: calc(-1 * var(--space-200));
+    z-index: 0;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--surface-primary) var(--space-200),
+      var(--surface-primary)
     );
+    content: "";
+    pointer-events: none;
+  }
+}
+
+.thumbnailNavigation {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .thumbnails[data-thumbnail-overflow="true"] .thumbnailNavigation.thumbnailNavigation {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    z-index: 4;
+    display: inline-flex;
+    width: var(--space-300);
+    min-width: var(--space-300);
+    height: var(--space-300);
+    padding: 0;
+    transform: translateY(-50%);
+    border: var(--stroke-default) solid var(--border-default);
+    border-radius: var(--radius-full);
+    box-shadow: 0 var(--space-025) var(--space-100) calc(-1 * var(--space-050)) var(--product-card-add-shadow);
+  }
+
+  .thumbnails[data-thumbnail-overflow="true"] .thumbnailNavigation.thumbnailNavigation::before {
+    width: var(--space-400);
+    height: var(--space-400);
+  }
+
+  .thumbnails[data-thumbnail-overflow="true"] .thumbnailNavigation[aria-disabled="true"] {
+    pointer-events: none;
+  }
+
+  .thumbnailPrevious {
+    left: calc(-1 * var(--space-150));
+  }
+
+  .thumbnailNext {
+    right: calc(-1 * var(--space-150));
   }
 }
 
@@ -99,6 +183,7 @@
   outline: 0;
   background: var(--fill-tertiary);
   cursor: pointer;
+  scroll-snap-align: start;
 }
 
 .thumbnailOverlay {
@@ -113,19 +198,9 @@
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-caption-sm);
   text-align: center;
-  pointer-events: none;
-}
-
-.thumbnailMoreOverlay {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: var(--overlay-scrim);
-  color: var(--text-on-emphasis);
-  font-size: var(--font-size-heading-sm);
-  font-weight: var(--font-weight-emphasize);
-  line-height: var(--line-height-heading-sm);
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: normal;
   pointer-events: none;
 }
 
@@ -175,16 +250,21 @@
   background: var(--fill-tertiary);
 }
 
+@media (min-width: 1024px) {
+  .stage::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: rgb(0 0 0 / 2%);
+    content: "";
+    pointer-events: none;
+  }
+}
+
 .zoomPane,
 .zoomLens {
   display: none;
-}
-
-.navigationButton {
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-  transform: translateY(-50%);
 }
 
 .imageRail {
@@ -206,6 +286,47 @@
 
 .slide[data-active="true"] {
   display: block;
+}
+
+.mainNavigation {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .mainNavigation {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+    display: inline-flex;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .root:not([data-pointer-focus="true"]):focus-visible .mainNavigation,
+  .root:not([data-pointer-focus="true"]):has(:focus-visible) .mainNavigation {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mainPrevious {
+    left: var(--space-200);
+  }
+
+  .mainNext {
+    right: var(--space-200);
+  }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .stage:hover .mainNavigation {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
@@ -250,12 +371,13 @@
     position: absolute;
     top: var(--product-media-zoom-lens-y);
     left: var(--product-media-zoom-lens-x);
+    z-index: 3;
     display: none;
     width: var(--product-media-zoom-lens-width, 40%);
     height: var(--product-media-zoom-lens-height, 40%);
     transform: translate(-50%, -50%);
     border: var(--stroke-default) solid var(--border-default);
-    background: var(--product-card-add-surface);
+    background: rgb(255 255 255 / 60%);
     pointer-events: none;
   }
 
@@ -263,29 +385,6 @@
     display: block;
   }
 
-  .navigationButton {
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  .stage:hover .navigationButton,
-  .root:not([data-pointer-focus="true"]):focus-visible .navigationButton,
-  .root:not([data-pointer-focus="true"]):has(:focus-visible) .navigationButton {
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .navigationButton {
-    z-index: 5;
-  }
-}
-
-.previousButton {
-  left: var(--space-200);
-}
-
-.nextButton {
-  right: var(--space-200);
 }
 
 .counter {
@@ -310,9 +409,16 @@
   pointer-events: none;
 }
 
+@media (min-width: 1024px) {
+  .counter {
+    display: none;
+  }
+}
+
 .previewTrigger {
   position: absolute;
   inset: 0;
+  z-index: 2;
   padding: 0;
   border: 0;
   border-radius: inherit;
@@ -520,17 +626,6 @@
     scroll-snap-stop: always;
   }
 
-  .navigationButton {
-    display: none;
-  }
-
-  .previousButton {
-    left: var(--space-100);
-  }
-
-  .nextButton {
-    right: var(--space-100);
-  }
 }
 
 @media (440px < width < 1024px) {

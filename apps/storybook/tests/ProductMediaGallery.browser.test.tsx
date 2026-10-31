@@ -31,6 +31,7 @@ test("desktop thumbnail hover selects images and the main image exposes a cursor
     const pinnedThumbnail = thumbnails[thumbnails.length - 1]!;
     await page.elementLocator(thumbnails[1]!).hover();
     await expect.poll(() => gallery.dataset.activeIndex).toBe("1");
+    expect(thumbnails[1]!.getAttribute("aria-pressed")).toBe("true");
     await page.elementLocator(pinnedThumbnail).hover();
     await expect.poll(() => gallery.dataset.activeIndex).toBe(String(hoverImages.length - 1));
     expect(pinnedThumbnail.getAttribute("aria-pressed")).toBe("true");
@@ -59,7 +60,7 @@ test("desktop thumbnail hover selects images and the main image exposes a cursor
   }
 });
 
-test("desktop thumbnail overflow uses a +N preview control instead of horizontal scrolling", async () => {
+test("desktop thumbnail overflow stays scrollable while the reference image remains pinned", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   container.style.width = "480px";
@@ -75,25 +76,31 @@ test("desktop thumbnail overflow uses a +N preview control instead of horizontal
   try {
     await page.viewport(1440, 900);
     flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview />));
-    const gallery = container.querySelector<HTMLElement>('[data-slot="product-media-gallery"]')!;
     const rail = container.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnails"]')!;
     const scroller = container.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnail-scroller"]',
     )!;
+    const pinned = rail.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail"][data-pinned="true"]')!;
     await expect.poll(() => rail.dataset.thumbnailOverflow).toBe("true");
-    const more = container.querySelector<HTMLButtonElement>(
-      '[data-slot="product-media-gallery-more-thumbnail"]',
+    const next = rail.querySelector<HTMLButtonElement>(
+      '[data-rail-navigation-button="true"][data-direction="right"]',
     )!;
-    expect(getComputedStyle(scroller).overflowX).toBe("hidden");
-    expect(more.textContent).toBe("+3");
-    await page.elementLocator(more).hover();
-    await expect.poll(() => gallery.dataset.activeIndex).toBe("4");
-    more.focus();
-    await userEvent.keyboard("{Enter}");
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
-    expect(dialog.open).toBe(true);
-    expect(dialog.querySelector('[data-slot="product-media-preview-image"]')?.getAttribute("alt"))
-      .toBe(galleryImages[4]!.alt);
+    const pinnedRight = pinned.getBoundingClientRect().right;
+    expect(container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();
+    expect(scroller.children).toHaveLength(galleryImages.length - 1);
+    expect(getComputedStyle(scroller).overflowX).toBe("auto");
+    expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
+    expect(pinned.getBoundingClientRect().left).toBeLessThan(scroller.getBoundingClientRect().right);
+    expect(getComputedStyle(next).width).toBe("24px");
+    expect(getComputedStyle(next).height).toBe("24px");
+    expect(getComputedStyle(next, "::before").width).toBe("32px");
+    expect(getComputedStyle(next, "::before").height).toBe("32px");
+    expect(new Set(Array.from(rail.querySelectorAll<HTMLElement>('[data-slot="product-media-gallery-thumbnail"]')).map(
+      (thumbnail) => thumbnail.getBoundingClientRect().width,
+    ))).toEqual(new Set([64]));
+    await page.elementLocator(next).click();
+    await expect.poll(() => scroller.scrollLeft).toBeGreaterThan(0);
+    expect(pinned.getBoundingClientRect().right).toBeCloseTo(pinnedRight, 0);
   } finally {
     root.unmount();
     container.remove();
@@ -126,7 +133,9 @@ test("desktop overflow keeps every thumbnail reachable when preview is disabled"
     expect(lastRegular.getBoundingClientRect().right).toBeLessThanOrEqual(scroller.getBoundingClientRect().right + 1);
     expect(container.querySelector("dialog[open]")).toBeNull();
     flushSync(() => root.render(<ProductMediaGallery images={galleryImages} desktopPreview />));
-    await expect.poll(() => container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).not.toBeNull();
+    await expect.poll(() => scroller.querySelectorAll("button").length).toBe(7);
+    expect(container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();
+    expect(getComputedStyle(scroller).overflowX).toBe("auto");
     flushSync(() => root.render(<ProductMediaGallery images={galleryImages} />));
     await expect.poll(() => scroller.querySelectorAll("button").length).toBe(7);
     expect(container.querySelector('[data-slot="product-media-gallery-more-thumbnail"]')).toBeNull();

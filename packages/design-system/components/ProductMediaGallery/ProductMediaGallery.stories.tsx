@@ -80,16 +80,19 @@ export const Showcase: Story = {
         '[data-slot="product-media-gallery-image"]',
       );
     const next = canvasElement.querySelector<HTMLButtonElement>(
-      '[data-rail-navigation-button="true"][data-direction="right"]',
+      '[data-slot="product-media-gallery-stage"] [data-rail-navigation-button="true"][data-direction="right"]',
     );
     const previous = canvasElement.querySelector<HTMLButtonElement>(
-      '[data-rail-navigation-button="true"][data-direction="left"]',
+      '[data-slot="product-media-gallery-stage"] [data-rail-navigation-button="true"][data-direction="left"]',
     );
     const thumbnails = canvasElement.querySelectorAll<HTMLButtonElement>(
       '[data-slot="product-media-gallery-thumbnail"]',
     );
     const thumbnailRail = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnails"]',
+    );
+    const thumbnailScroller = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="product-media-gallery-thumbnail-scroller"]',
     );
     const stage = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-stage"]',
@@ -102,6 +105,7 @@ export const Showcase: Story = {
       !previous ||
       !next ||
       !thumbnailRail ||
+      !thumbnailScroller ||
       !stage ||
       !counter ||
       thumbnails.length !== images.length
@@ -110,7 +114,12 @@ export const Showcase: Story = {
     }
     const counterStyle = getComputedStyle(counter);
     const thumbnailRailStyle = getComputedStyle(thumbnailRail);
-    if (
+    const thumbnailScrollerStyle = getComputedStyle(thumbnailScroller);
+    if (window.innerWidth >= 1024) {
+      if (counterStyle.display !== "none") {
+        throw new Error("Desktop gallery must not show an image counter");
+      }
+    } else if (
       counterStyle.right !== "8px" ||
       counterStyle.bottom !== "8px" ||
       counter.getBoundingClientRect().height !== 24 ||
@@ -122,17 +131,18 @@ export const Showcase: Story = {
       counterStyle.color !== "rgba(0, 0, 0, 0.87)"
     ) {
       throw new Error(
-        "Product media gallery counter must share the quick-add surface and border, use a 24px outer height, and keep an 8px stage inset",
+        "Mobile product media gallery counter must keep its compact quick-add treatment",
       );
     }
     if (
       thumbnailRailStyle.paddingTop !== "12px" ||
       thumbnailRailStyle.paddingRight !== "0px" ||
       thumbnailRailStyle.paddingBottom !== "12px" ||
-      thumbnailRailStyle.paddingLeft !== "0px"
+      thumbnailRailStyle.paddingLeft !== "0px" ||
+      thumbnailScrollerStyle.overflowX !== "hidden"
     ) {
       throw new Error(
-        "Product media gallery thumbnail rail must use 12px vertical padding with no inline inset",
+        "Product media gallery thumbnails must stay inline when every image fits, with 12px vertical padding",
       );
     }
     if (
@@ -202,9 +212,10 @@ export const Showcase: Story = {
       throw new Error("Thumbnail selection must update the active image");
     }
     gallery.focus();
+    await expect(next).toHaveAttribute("aria-disabled", "true");
     await userEvent.keyboard("{ArrowRight}");
-    if (image()?.alt !== images[0].alt) {
-      throw new Error("ArrowRight must wrap the gallery from last to first");
+    if (image()?.alt !== images[3].alt || gallery.dataset.activeIndex !== "3") {
+      throw new Error("ArrowRight must stop at the final product image");
     }
 
     const canvas = within(canvasElement);
@@ -254,14 +265,16 @@ export const InlinePinnedReference: Story = {
     const rail = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnails"]',
     )!;
-    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "inline"));
+    const pinned = rail.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail"][data-pinned="true"]')!;
     const thumbnails = rail.querySelectorAll<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnail"]',
     );
     const previousRect = thumbnails[thumbnails.length - 2]!.getBoundingClientRect();
-    const pinnedRect = thumbnails[thumbnails.length - 1]!.getBoundingClientRect();
+    const pinnedRect = pinned.getBoundingClientRect();
+    const navigation = rail.querySelectorAll<HTMLElement>('[data-rail-navigation-button="true"]');
     await expect(Math.abs(pinnedRect.left - previousRect.right - 8)).toBeLessThanOrEqual(0.5);
-    await expect(getComputedStyle(rail, "::after").content).toBe("none");
+    await expect(pinnedRect.width).toBe(64);
+    await expect(navigation).toHaveLength(0);
   },
 };
 
@@ -275,40 +288,38 @@ export const EdgePinnedReference: Story = {
     ),
   ],
   play: async ({ canvasElement }) => {
-    const gallery = canvasElement.querySelector<HTMLElement>(
-      '[data-slot="product-media-gallery"]',
-    )!;
     const rail = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnails"]',
     )!;
-    const scroller = canvasElement.querySelector<HTMLElement>(
+    const scroller = rail.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnail-scroller"]',
     )!;
-    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
+    const pinned = rail.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail"][data-pinned="true"]')!;
     await waitFor(() => expect(rail).toHaveAttribute("data-thumbnail-overflow", "true"));
-    const pinned = rail.querySelector<HTMLElement>(':scope > [data-pinned="true"]')!;
-    const more = rail.querySelector<HTMLButtonElement>(
-      '[data-slot="product-media-gallery-more-thumbnail"]',
+    const next = rail.querySelector<HTMLButtonElement>(
+      '[data-rail-navigation-button="true"][data-direction="right"]',
     )!;
-    const railRect = rail.getBoundingClientRect();
-    const pinnedRect = pinned.getBoundingClientRect();
+    const pinnedRight = pinned.getBoundingClientRect().right;
+    const nextStyle = getComputedStyle(next);
+    const nextHitArea = getComputedStyle(next, "::before");
     if (
-      Math.abs(railRect.right - pinnedRect.right) > 0.5 ||
-      scroller.children.length !== 5 ||
-      more.textContent !== "+3" ||
-      getComputedStyle(scroller).overflowX !== "hidden"
+      rail.querySelector('[data-slot="product-media-gallery-more-thumbnail"]') ||
+      scroller.children.length !== overflowPinnedImages.length - 1 ||
+      getComputedStyle(scroller).overflowX !== "auto" ||
+      Math.abs(rail.getBoundingClientRect().right - pinnedRight) > 0.5 ||
+      pinned.getBoundingClientRect().left >= scroller.getBoundingClientRect().right ||
+      nextStyle.width !== "24px" ||
+      nextStyle.height !== "24px" ||
+      nextHitArea.width !== "32px" ||
+      nextHitArea.height !== "32px"
     ) {
       throw new Error(
-        "Overflowing galleries must replace the final regular slot with a non-scrolling +N control and pin the reference image at the edge",
+        "Overflowing galleries must keep every regular thumbnail in a horizontal rail and pin the reference image at the right edge",
       );
     }
-    await userEvent.hover(more);
-    await waitFor(() => expect(gallery).toHaveAttribute("data-active-index", "4"));
-    await userEvent.click(more);
-    await waitFor(() => expect(canvasElement.querySelector("dialog[open]")).not.toBeNull());
-    await expect(
-      canvasElement.querySelector('[data-slot="product-media-preview-image"]'),
-    ).toHaveAttribute("alt", overflowPinnedImages[4]!.alt);
+    await userEvent.click(next);
+    await waitFor(() => expect(scroller.scrollLeft).toBeGreaterThan(0));
+    await expect(Math.abs(pinned.getBoundingClientRect().right - pinnedRight)).toBeLessThanOrEqual(0.5);
   },
 };
 
@@ -331,19 +342,17 @@ export const NarrowEdgePinnedReference: Story = {
     const scroller = gallery.querySelector<HTMLElement>(
       '[data-slot="product-media-gallery-thumbnail-scroller"]',
     )!;
-    await waitFor(() => expect(rail).toHaveAttribute("data-pinned-layout", "edge"));
+    const pinned = rail.querySelector<HTMLElement>('[data-slot="product-media-gallery-thumbnail"][data-pinned="true"]')!;
     await waitFor(() => expect(rail).toHaveAttribute("data-thumbnail-overflow", "true"));
-    const more = rail.querySelector<HTMLButtonElement>(
-      '[data-slot="product-media-gallery-more-thumbnail"]',
-    )!;
     if (
       Math.abs(gallery.getBoundingClientRect().width - 400) > 0.5 ||
-      scroller.children.length !== 4 ||
-      more.textContent !== "+4" ||
-      getComputedStyle(scroller).overflowX !== "hidden"
+      scroller.children.length !== overflowPinnedImages.length - 1 ||
+      rail.querySelector('[data-slot="product-media-gallery-more-thumbnail"]') ||
+      getComputedStyle(scroller).overflowX !== "auto" ||
+      Math.abs(rail.getBoundingClientRect().right - pinned.getBoundingClientRect().right) > 0.5
     ) {
       throw new Error(
-        "A 400px gallery must expose three regular thumbnails, a +4 control, and the pinned reference slot without horizontal scrolling",
+        "A narrow desktop gallery must retain the 64px scrollable thumbnail rail and fixed reference slot",
       );
     }
   },
@@ -369,7 +378,7 @@ export const Mobile: Story = {
     );
     if (
       !gallery ||
-      navigationButtons.length !== 2 ||
+      navigationButtons.length === 0 ||
       Array.from(navigationButtons).some(
         (button) => getComputedStyle(button).display !== "none",
       )
