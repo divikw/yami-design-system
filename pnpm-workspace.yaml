@@ -12,6 +12,12 @@ overrides:
   "body-parser@1.20.6": "1.20.9"
   "basic-ftp@5.3.1": "6.2.1"
   "zod@4.5.4": "4.6.7"
+  "fast-uri@3.1.7": "3.1.9"
+  "ip-address@10.7.0": "10.7.4"
+  "qs@6.15.3": "6.16.1"
+  "minimatch@10.2.6": "11.0.1"
+  "glob@13.0.6": "14.0.2"
+  "@lhci/cli@0.16.0>chrome-launcher": "1.2.2"
 
 onlyBuiltDependencies:
   - esbuild
