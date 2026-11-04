@@ -6,6 +6,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import Ajv2020 from "ajv/dist/2020.js";
+import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
 
@@ -35,7 +37,8 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       const content = await fs.readFile(path.join(unpacked, entry.path));
       assert.equal(content.length, entry.bytes, entry.path);
       assert.equal(createHash("sha256").update(content).digest("hex"), entry.sha256, entry.path);
-      assert.ok(!/\.(stories|figma)\.|fixtures|examples\.tsx|\.tsx$/.test(entry.path), entry.path);
+      assert.ok(!/\.(stories|figma)\.|fixtures/.test(entry.path), entry.path);
+      assert.ok(!entry.path.endsWith(".tsx") || /^knowledge\/yami-design-system\/references\/components\/(Button|Input|Card|ProductCard|ProductList)\/examples\.tsx$/.test(entry.path), entry.path);
       assert.ok(!entry.path.endsWith(".ts") || entry.path.endsWith(".d.ts"), entry.path);
       payload.push({ path: entry.path, content });
       if (entry.path.endsWith(".css")) {
@@ -60,6 +63,56 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       }
     }
     assert.equal(pkg.exports["./components/Header"], undefined);
+    await t.test("knowledge is self-contained and bound to the installed component contract", async () => {
+      const knowledge = path.join(unpacked, "knowledge/yami-design-system");
+      const index = JSON.parse(await fs.readFile(path.join(knowledge, "index.json"), "utf8"));
+      assert.equal(index.schemaVersion, 1);
+      for (const key of ["package", "packageVersion", "sourceCommit", "sourceDirty"]) assert.equal(index[key], manifest[key], key);
+      assert.deepEqual(index.components.map(({ name, version, status }) => ({ name, version, status })), manifest.entries);
+      assert.deepEqual(Object.keys(index.skills), ["en", "zh-CN"]);
+      for (const file of [...Object.values(index.skills), ...Object.values(index.references)]) await fs.access(path.join(knowledge, file));
+      for (const extension of ["css", "json"]) {
+        assert.deepEqual(await fs.readFile(path.join(knowledge, `references/generated/tokens.${extension}`)), await fs.readFile(path.join(unpacked, `generated/tokens.${extension}`)));
+      }
+      const schema = JSON.parse(await fs.readFile(path.join(knowledge, index.references.componentSchema), "utf8"));
+      const validate = new Ajv2020({ strict: false }).compile(schema);
+      for (const component of index.components) {
+        assert.ok(pkg.exports[component.import.replace(pkg.name, ".")]);
+        const meta = JSON.parse(await fs.readFile(path.join(knowledge, component.contract), "utf8"));
+        const upstream = JSON.parse(await fs.readFile(path.join(root, `packages/design-system/components/${component.name}/meta.json`), "utf8"));
+        assert.ok(validate(meta), JSON.stringify(validate.errors));
+        assert.deepEqual(meta, { ...upstream, exports: component.exports, examples: component.examples.map((example) => `./examples.tsx#${example.export}`) });
+        await fs.access(path.join(path.dirname(path.join(knowledge, component.contract)), meta.$schema));
+        assert.equal(path.resolve(knowledge, component.usage), path.resolve(knowledge, path.dirname(component.contract), meta.usageRef));
+        for (const example of component.examples) {
+          const content = await fs.readFile(path.join(knowledge, example.path), "utf8");
+          assert.ok(content.includes(`export function ${example.export}(`));
+          for (const { fileName } of ts.preProcessFile(content, true, true).importedFiles) {
+            assert.ok(fileName === "react" || index.components.some((entry) => entry.import === fileName), fileName);
+          }
+          assert.ok(!/https?:\/\//.test(content), "Examples must not require external media");
+        }
+      }
+      for (const document of index.documents) {
+        assert.ok(!path.isAbsolute(document.path) && !document.path.split("/").includes(".."), document.path);
+        const original = await fs.readFile(path.join(root, document.source));
+        assert.equal(createHash("sha256").update(original).digest("hex"), document.sourceSha256);
+        const file = path.join(knowledge, document.path);
+        const content = await fs.readFile(file, "utf8");
+        if (!document.transform) assert.deepEqual(Buffer.from(content), original);
+        if (!file.endsWith(".md")) continue;
+        for (const [, label, target] of content.matchAll(/\[([^\]]*)\]\(([^)]+)\)/g)) {
+          if (label.includes("upstream reference")) assert.ok(target.includes(`/${manifest.sourceCommit}/`));
+          if (/^(?:[a-z][a-z\d+.-]*:|#|\/\/)/i.test(target)) continue;
+          const resolved = path.resolve(path.dirname(file), target.split("#")[0]);
+          assert.ok(resolved.startsWith(`${knowledge}${path.sep}`), `${file}: ${target}`);
+          await fs.access(resolved);
+        }
+      }
+      const skillSource = await fs.readFile(path.join(root, index.sourceSkill.path));
+      assert.equal(createHash("sha256").update(skillSource).digest("hex"), index.sourceSkill.sha256);
+      assert.ok(skillSource.toString().includes(`version: ${index.sourceSkill.version}`));
+    });
     build();
     const rebuilt = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-candidate/candidate-manifest.json"), "utf8"));
     assert.equal(rebuilt.contentDigest, manifest.contentDigest);
@@ -72,6 +125,11 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       const file = path.join(unpacked, "components/Button/Button.js");
       const original = await fs.readFile(file, "utf8");
       await fs.writeFile(file, original.replace("Button", "Bvtton"));
+      await assert.rejects(verifyInstalledCandidate(unpacked, manifest), /Installed file digest differs/);
+      await fs.writeFile(file, original);
+      const skill = path.join(unpacked, "knowledge/yami-design-system/SKILL.md");
+      const instructions = await fs.readFile(skill, "utf8");
+      await fs.writeFile(skill, instructions.replace("YAMI", "YAMX"));
       await assert.rejects(verifyInstalledCandidate(unpacked, manifest), /Installed file digest differs/);
     });
   } finally {
