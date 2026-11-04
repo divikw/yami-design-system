@@ -34,6 +34,9 @@ jobs:
             command: pnpm evaluate:design-system-skill
           - check: package-boundaries
             command: pnpm check:boundaries
+          - check: component-candidate
+            command: pnpm verify:design-system-candidate
+            installBrowser: true
           - check: build
             command: pnpm --filter @yami/topic-generator-app build && pnpm --filter @yami/canvas build
           - check: storybook
