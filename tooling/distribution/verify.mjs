@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 import { createWriteStream } from "node:fs";
 import { promises as fs } from "node:fs";
 import { createServer } from "node:net";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { setTimeout } from "node:timers/promises";
@@ -80,12 +81,32 @@ try {
     const installed = await fs.realpath(path.join(directory, "node_modules/@yami/design-system"));
     assert.ok(installed.startsWith(`${directory}${path.sep}`), `Consumer must install tarball bytes, not link to the repository: ${installed}`);
     const manifest = await verifyInstalledCandidate(installed, expected);
+    const resolve = createRequire(path.join(directory, "package.json")).resolve;
+    const knowledgeFile = resolve("@yami/design-system/knowledge/index.json");
+    const knowledgeDirectory = path.dirname(knowledgeFile);
+    const knowledge = JSON.parse(await fs.readFile(knowledgeFile, "utf8"));
+    for (const key of ["packageVersion", "sourceCommit", "sourceDirty"]) assert.equal(knowledge[key], manifest[key]);
+    assert.deepEqual(knowledge.components.map(({ name, version, status }) => ({ name, version, status })), manifest.entries);
+    for (const [specifier, language] of [["skill", "en"], ["skill/zh", "zh-CN"]]) {
+      assert.equal(resolve(`@yami/design-system/${specifier}`), path.join(knowledgeDirectory, knowledge.skills[language]));
+    }
+    const imports = [];
+    const sections = [];
+    await fs.mkdir(path.join(src, "knowledge"));
+    for (const component of knowledge.components) {
+      const example = component.examples[0];
+      // Compile and render the installed package's examples, never repository fixtures.
+      await fs.copyFile(path.join(knowledgeDirectory, example.path), path.join(src, "knowledge", `${component.name}.tsx`));
+      imports.push(`import { ${example.export} } from "./knowledge/${component.name}";`);
+      sections.push(`<section aria-label="${component.name} packaged example"><h3>${component.name}</h3><${example.export} /></section>`);
+    }
+    await fs.writeFile(path.join(src, "KnowledgeExamples.tsx"), `"use client";\n${imports.join("\n")}\nexport function KnowledgeExamples() { return <section aria-label="Packaged examples"><h2>Versioned knowledge examples</h2>${sections.join("\n")}</section>; }\n`);
     const versions = Object.fromEntries(await Promise.all([host, "react", "react-dom", "typescript"].map(async (name) => [
       name, JSON.parse(await fs.readFile(path.join(directory, "node_modules", name, "package.json"), "utf8")).version,
     ])));
     await run("npm", ["run", "typecheck"], directory, `${host}-typecheck`);
     await run("npm", ["run", "build"], directory, `${host}-build`);
-    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, types: "pass", build: "pass" });
+    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
   }
 
   async function unusedPort() {
@@ -145,7 +166,7 @@ try {
       await input.fill("invalid");
       await expect(input).toHaveAttribute("aria-invalid", "true");
       await expect(input).toHaveAccessibleDescription("Enter another search");
-      await page.getByRole("button", { name: "Clear input", exact: true }).click();
+      await page.locator("form").getByRole("button", { name: "Clear input", exact: true }).click();
       await expect(input).toHaveValue("");
       await expect(input).not.toHaveAttribute("aria-invalid", "true");
       const disabled = page.getByRole("button", { name: "Unavailable action" });
@@ -167,6 +188,27 @@ try {
       await page.getByTestId("language").click();
       await expect(apply).toHaveCSS("font-weight", "600");
       await page.getByTestId("language").click();
+      await expect(page.getByRole("region", { name: / packaged example$/ })).toHaveCount(5);
+      const buttonExample = page.getByRole("region", { name: "Button packaged example", exact: true });
+      await buttonExample.getByRole("button", { name: "Save example", exact: true }).click();
+      await expect(buttonExample.getByRole("status")).toHaveText("Example saved");
+      await expect(buttonExample.getByRole("link", { name: "View example order", exact: true })).toHaveAttribute("href", "#example-order");
+      const inputExample = page.getByRole("region", { name: "Input packaged example", exact: true });
+      await inputExample.getByRole("textbox", { name: "Example search", exact: true }).fill("example");
+      await inputExample.getByRole("button", { name: "Clear input", exact: true }).click();
+      await expect(inputExample.getByRole("textbox")).toHaveValue("");
+      await expect(page.getByRole("region", { name: "Card packaged example", exact: true }).getByRole("link")).toHaveAttribute("href", "#example-order");
+      const productExample = page.getByRole("region", { name: "ProductCard packaged example", exact: true });
+      await productExample.getByRole("button", { name: "Add example product", exact: true }).click();
+      await expect(productExample.getByRole("status")).toHaveText("Example items added: 1");
+      assert.equal(page.url(), `${url}/`, "Packaged product quick-add must preserve navigation");
+      const listExample = page.getByRole("region", { name: "ProductList packaged example", exact: true });
+      await listExample.getByRole("tab", { name: "Sold out examples", exact: true }).click();
+      await expect(listExample.getByRole("link", { name: /Available example/ })).toHaveCount(0);
+      await expect(listExample.getByRole("listitem").filter({ hasText: "Sold out example" })).toBeVisible();
+      await listExample.getByRole("tab", { name: "All examples", exact: true }).click();
+      await expect(listExample.getByRole("listitem").filter({ hasText: "Available example" })).toBeVisible();
+      result.knowledge.browser = "pass";
       await page.screenshot({ path: path.join(reportDir, `${result.host}-desktop-light.png`), fullPage: true });
       const light = await page.locator("body").evaluate((body) => getComputedStyle(body).backgroundColor);
       await page.getByTestId("theme").click();

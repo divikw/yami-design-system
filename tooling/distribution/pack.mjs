@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
+import { buildKnowledge } from "./knowledge.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const source = path.join(root, "packages/design-system");
@@ -102,6 +103,14 @@ const emitted = program.emit(undefined, undefined, undefined, false, {
   afterDeclarations: [rewriteModules],
 });
 if (emitted.emitSkipped) throw new Error("Candidate JavaScript/declaration emission failed");
+const checker = program.getTypeChecker();
+const publicExports = Object.fromEntries(policy.entries.map((name) => [name, checker.getExportsOfModule(
+  checker.getSymbolAtLocation(program.getSourceFile(path.join(components, name, "index.ts"))),
+).map((symbol) => symbol.name).sort()]));
+const provenance = {
+  sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
+  sourceDirty: execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim().length > 0,
+};
 
 async function copy(relative) {
   const destination = path.join(output, relative);
@@ -121,6 +130,7 @@ for (const relative of [
   "assets/fonts/GT-Walsheim-Regular.woff2", "assets/fonts/GT-Walsheim-Medium.woff2", "assets/fonts/GT-Walsheim-Bold.woff2", "assets/fonts/LICENSE.txt",
 ]) await copy(relative);
 await fs.copyFile(path.join(source, "DISTRIBUTION.md"), path.join(output, "README.md"));
+const knowledgeExports = await buildKnowledge({ root, source, output, policy, packageName: workspacePackage.name, provenance, publicExports });
 
 const exports = {
   ".": { types: "./components/index.d.ts", import: "./components/index.js" },
@@ -129,6 +139,7 @@ const exports = {
   "./tokens.css": "./generated/tokens.css",
   "./tokens.json": "./generated/tokens.json",
   "./candidate-manifest.json": "./candidate-manifest.json",
+  ...knowledgeExports,
 };
 const barrel = policy.entries.map((name) => `export * from './${name}/index.js';`).join("\n");
 await fs.writeFile(path.join(output, "components/index.js"), `"use client";\n${barrel}\n`);
@@ -164,8 +175,7 @@ const manifest = {
   schemaVersion: policy.schemaVersion,
   package: workspacePackage.name,
   packageVersion: policy.version,
-  sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
-  sourceDirty: execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim().length > 0,
+  ...provenance,
   buildTools: { node: process.version, typescript: ts.version },
   entries,
   verificationTargets: policy.verification,

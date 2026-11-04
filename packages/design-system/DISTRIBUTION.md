@@ -1,4 +1,4 @@
-# 跨项目消费契约：首个组件候选包
+# 跨项目消费契约：组件与设计知识候选包
 
 状态：本地候选验证。包名为 `@yami/design-system`，版本由 `distribution.json`
 管理，与当前 workspace 包及各组件的版本分别记录。尚未发布到 npm 或内部 Registry。
@@ -11,7 +11,8 @@
 - React/React DOM 为宿主提供的 peer dependencies；首版范围为 `~19.3.1`。
 - 首轮验证 Node 24.18.0、Next.js 16.4.3 App Router、Vite 8.3.5、TypeScript 6.0.2。
   其他版本和原生端尚未验证。
-- 这是 React Web 组件候选包。MCP、shadcn 适配、页面模板和完整 AI 知识分发不在此阶段。
+- 同一版本内分发中英文消费方 Skill、设计规范、内容与动效规范、Token、组件契约和可复制示例。
+- 这是 React Web 组件候选包。MCP、shadcn 适配、页面模板和模型运行时尚未提供。
 
 ## 构建与安装
 
@@ -25,7 +26,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.2.tgz
+npm install /absolute/path/to/yami-design-system-0.1.0-candidate.3.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -51,6 +52,48 @@ Token 数据与构建身份可以单独读取：
 import tokens from '@yami/design-system/tokens.json';
 import candidate from '@yami/design-system/candidate-manifest.json';
 ```
+
+## 随版本分发的设计知识
+
+消费项目无需读取 YAMI 源码 checkout，也不依赖本地 Storybook 服务。
+三个稳定的文件入口可用 Node 的模块解析器定位；Markdown 入口供工具读取，不作为 JS 执行：
+
+```js
+import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
+const resolve = createRequire(import.meta.url).resolve;
+const indexFile = resolve('@yami/design-system/knowledge/index.json');
+const index = JSON.parse(readFileSync(indexFile, 'utf8'));
+console.log(index.packageVersion, indexFile);
+console.log(resolve('@yami/design-system/skill'));    // English
+console.log(resolve('@yami/design-system/skill/zh')); // 简体中文
+```
+
+`index.json` 的 `skills`、`references`、组件契约和示例路径均相对于索引所在目录；
+`sourceSkill.path` 与 `documents[].source` 是相对于源码仓库根目录的溯源记录。
+其 `components` 只列出上述五个公开组件，
+包含具名导出、成熟度、组件版本、契约、用法和示例路径；其中导出清单由实际 TypeScript
+入口生成。元数据保留原有属性、Token 绑定和无障碍契约，`exports` 与 `examples` 分别
+投影为候选包真实导出和经过验证的消费示例。组合依赖不等于独立公开入口。
+
+完整设计规范描述的范围更大，文件顶部会说明可用范围；未收录的组件、仓库脚本等链接
+标为 `upstream reference`，固定到快照的源码提交，仅作补充参考。包内已有设计概览、
+完整规范、内容与动效规范及组件用法，不要求联网才能读取这些知识。
+参考目录中的 Token 与运行时文件逐字节一致。
+
+索引与 `candidate-manifest.json` 记录相同包版本、源码提交及工作树状态；索引还记录
+来源 Skill 版本及每份源文档的 SHA-256，外层清单覆盖最终知识文件。不要混用其他版本
+的全局 Skill。可在目标项目的 `AGENTS.md` 中添加以下约定，不需要更改全局配置：
+
+```text
+制作或检查 YAMI 界面时，先读取
+node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
+按相邻 index.json 确认安装版本、查阅契约和示例。仅使用索引列出的公开组件。
+```
+
+示例是应用源码参考，需复制到消费项目后连接真实业务；不要直接导入包内示例 TSX。
+示例只依赖 React 与候选包公开入口，使用中性占位内容，不请求外部商品图片。
+随包 Skill 用于引导现有 AI 工具读取规范，不包含 MCP 或 shadcn 安装机制。
 
 ## 样式、主题与语言
 
@@ -101,7 +144,8 @@ pnpm verify:design-system-candidate
 ```
 
 第二个命令先打包，再在系统临时目录创建两个独立项目，分别安装同一 `.tgz`、
-逐文件验证安装内容与构建指纹，再执行类型检查和生产构建、启动生产服务并做浏览器验证。
+逐文件验证安装内容与构建指纹，通过公开文件入口定位 Skill 和索引，复制包内五个示例，
+再执行类型检查和生产构建、启动生产服务并验证原有场景及包内示例的交互。
 字体检查要求真实的字体面加载，不能仅凭字体名称可用就通过。它需要网络安装宿主依赖及
 本机 Playwright Chromium。命令使用 `tar` 和 POSIX 进程组；Windows 尚未验证。
 回执和截图写入仓库根目录 `dist/candidate-verification/`，

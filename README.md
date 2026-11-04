@@ -30,8 +30,10 @@ Regression check: `pnpm --filter @yami/storybook exec vitest run --project=brows
 ## Cross-project component candidate
 
 `pnpm pack:design-system-candidate` builds a local `.tgz` for Button, Input, Card,
-ProductCard and ProductList. `pnpm verify:design-system-candidate` installs it in
-independent Next.js and Vite projects and checks production builds and browser behavior.
+ProductCard and ProductList, with versioned English/Chinese Skills, design rules,
+component contracts and consumer examples. `pnpm verify:design-system-candidate`
+installs it in independent Next.js and Vite projects, compiles the packaged examples,
+and checks production builds and browser behavior.
 Read the [candidate consumption contract](packages/design-system/DISTRIBUTION.md)
 for supported versions, styles, client boundaries and asset restrictions.
 This does not publish the package or change workspace source consumption.

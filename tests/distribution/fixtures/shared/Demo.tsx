@@ -5,6 +5,7 @@ import { Button } from "@yami/design-system/components/Button";
 import { Input } from "@yami/design-system/components/Input";
 import { ProductCard } from "@yami/design-system/components/ProductCard";
 import { ProductList, type ProductListItem } from "@yami/design-system/components/ProductList";
+import { KnowledgeExamples } from "./KnowledgeExamples";
 
 const products: ProductListItem[] = [
   { id: "sample", title: "Product image sample", href: "#sample", image: "/product.svg", imageAlt: "Neutral product image fixture", priceCurrent: "$12.99", priceOriginal: "$19.99", addButtonAriaLabel: "Add sample product", badges: [{ type: "sale", label: "Sale" }] },
@@ -50,6 +51,7 @@ export function Demo() {
       <section aria-label="Saved item" className="single-product">
         <ProductCard title="Saved item" href="#saved" image="/product.svg" imageAlt="Saved product image fixture" priceCurrent="$6.99" onAddToCart={() => setCart((count) => count + 1)} addButtonAriaLabel="Add saved item" />
       </section>
+      <KnowledgeExamples />
     </>
   );
 }
