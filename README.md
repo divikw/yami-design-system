@@ -33,10 +33,14 @@ Regression check: `pnpm --filter @yami/storybook exec vitest run --project=brows
 ProductCard and ProductList, with versioned English/Chinese Skills, design rules,
 component contracts and consumer examples. `pnpm verify:design-system-candidate`
 installs it in independent Next.js and Vite projects, compiles the packaged examples,
-and checks production builds and browser behavior.
+and checks production builds and browser behavior. It also creates the optional
+private `@yami/design-system-mcp` companion and verifies its read-only stdio tools
+and resources against the installed knowledge in both consumers.
 Read the [candidate consumption contract](packages/design-system/DISTRIBUTION.md)
 for supported versions, styles, client boundaries and asset restrictions.
 This does not publish the package or change workspace source consumption.
+See [MCP setup](packages/design-system/distribution/MCP.md) for local client
+configuration, query examples and version/integrity boundaries.
 
 ## AI workflow
 

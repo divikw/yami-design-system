@@ -10,6 +10,7 @@ import { setTimeout } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 import { chromium, expect } from "@playwright/test";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
+import { verifyMcp } from "./verify-mcp.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const fixtures = path.join(root, "tests/distribution/fixtures");
@@ -55,6 +56,9 @@ try {
   const packed = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-pack.json"), "utf8"))[0];
   tarball = path.join(root, "dist", packed.filename);
   const expected = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-candidate/candidate-manifest.json"), "utf8"));
+  const mcpPacked = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-mcp-pack.json"), "utf8"))[0];
+  const mcpTarball = path.join(root, "dist", mcpPacked.filename);
+  const mcpExpected = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-mcp-candidate/candidate-manifest.json"), "utf8"));
   for (const host of ["next", "vite"]) {
     const directory = path.join(consumers, host);
     const src = path.join(directory, host === "next" ? "app" : "src");
@@ -68,7 +72,7 @@ try {
       : { build: "vite build", start: "vite preview --host 127.0.0.1", typecheck: "tsc --noEmit" };
     await fs.writeFile(path.join(directory, "package.json"), JSON.stringify({
       name: `yami-${host}-candidate-consumer`, private: true, type: "module", scripts,
-      dependencies: { "@yami/design-system": `file:${tarball}`, react: "19.3.1", "react-dom": "19.3.1", [host]: policy.verification[host] },
+      dependencies: { "@yami/design-system": `file:${tarball}`, "@yami/design-system-mcp": `file:${mcpTarball}`, react: "19.3.1", "react-dom": "19.3.1", [host]: policy.verification[host] },
       devDependencies: { typescript: policy.verification.typescript, "@types/react": "19.3.0", "@types/react-dom": "19.3.0", ...(host === "next" ? { "@types/node": "26.6.5" } : {}) },
     }, null, 2));
     await fs.writeFile(path.join(directory, "tsconfig.json"), JSON.stringify({
@@ -81,6 +85,12 @@ try {
     const installed = await fs.realpath(path.join(directory, "node_modules/@yami/design-system"));
     assert.ok(installed.startsWith(`${directory}${path.sep}`), `Consumer must install tarball bytes, not link to the repository: ${installed}`);
     const manifest = await verifyInstalledCandidate(installed, expected);
+    const mcpInstalled = await fs.realpath(path.join(directory, "node_modules/@yami/design-system-mcp"));
+    await verifyInstalledCandidate(mcpInstalled, mcpExpected);
+    const mcp = await verifyMcp(directory, manifest, mcpExpected);
+    console.log(`${host}: legacy/modern stdio MCP verification passed`);
+    await verifyInstalledCandidate(installed, expected);
+    await verifyInstalledCandidate(mcpInstalled, mcpExpected);
     const resolve = createRequire(path.join(directory, "package.json")).resolve;
     const knowledgeFile = resolve("@yami/design-system/knowledge/index.json");
     const knowledgeDirectory = path.dirname(knowledgeFile);
@@ -106,7 +116,7 @@ try {
     ])));
     await run("npm", ["run", "typecheck"], directory, `${host}-typecheck`);
     await run("npm", ["run", "build"], directory, `${host}-build`);
-    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
+    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, mcp, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
   }
 
   async function unusedPort() {
