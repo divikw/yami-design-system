@@ -1,7 +1,7 @@
 # YAMI 只读 MCP 候选包
 
-`@yami/design-system-mcp@0.1.0-candidate.1` 是本地 stdio MCP 服务，绑定
-`@yami/design-system@0.1.0-candidate.4` 的知识快照。两个包均为 private 本地候选包，
+`@yami/design-system-mcp@0.1.0-candidate.2` 是本地 stdio MCP 服务，绑定
+`@yami/design-system@0.1.0-candidate.5` 的知识快照。两个包均为 private 本地候选包，
 尚未发布。MCP SDK 与 Zod 只安装在配套服务中，不进入 React 组件运行时。
 
 ## 安装与启动
@@ -10,7 +10,7 @@
 在消费项目中安装两者及 lockfile，不使用源码链接，也不使用 `npx -y` 下载未发布的包：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.4.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.1.tgz
+npm install /absolute/path/to/yami-design-system-0.1.0-candidate.5.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.2.tgz
 ```
 
 需要 Node 24。服务命令入口为消费项目的

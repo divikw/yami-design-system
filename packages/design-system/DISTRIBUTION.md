@@ -3,6 +3,10 @@
 状态：本地候选验证。包名为 `@yami/design-system`，版本由 `distribution.json`
 管理，与当前 workspace 包及各组件的版本分别记录。尚未发布到 npm 或内部 Registry。
 
+统一消费入口：[在现有项目使用 YAMI](https://yds-docsite.vercel.app/zh/docs/consume-package)。
+该入口由本仓库文档站构建；线上版本以实际部署为准。升级与回退规则见同包
+[UPGRADING.md](./UPGRADING.md)，本次配对版本的迁移说明在 `UPGRADE.json`。
+
 ## 范围
 
 - 公开组件入口：Button（含 ButtonLink）、Input、Card、ProductCard、ProductList。
@@ -27,7 +31,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.4.tgz
+npm install /absolute/path/to/yami-design-system-0.1.0-candidate.5.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -132,6 +136,8 @@ Source Serif 4 Variable 和 Noto Serif SC。候选包不额外打包业务商品
 它表示候选内容，不把带本地改动的构建误标为某个干净提交。
 
 - 已交付的版本不能替换成不同内容；修改候选内容时提升 candidate 序号。
+- `tooling/distribution/releases/` 记录已交付版本，打包前拒绝重建其中任一组件/MCP 版本。
+  新候选会比较真实 `.d.ts` 和公开 Token，按变更级别执行版本门禁；具体覆盖与人工审查边界见升级指南。
 - 兼容修复使用 patch，新增公开能力使用 minor；删除或重命名公开 API/Token、
   不兼容的默认行为使用 major，并附迁移说明。组件版本与候选包版本分别记录。
 - API、Token、默认视觉和交互的变化均须说明，不能只依赖类型兼容判断。

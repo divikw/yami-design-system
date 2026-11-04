@@ -5,13 +5,15 @@ description: "Fork the main repository into your own downstream project, create 
 group: start
 order: 10
 keywords: ["GitHub", "Fork", "downstream project", "origin", "upstream", "Storybook"]
-updatedAt: "2026-09-02"
+updatedAt: "2026-11-04"
 sourceRefs:
   - README.md
   - package.json
   - apps/storybook/package.json
   - packages/design-system/SKILL.md
 ---
+
+To install components in an existing React Web application, start with [Use YAMI in an existing project](/en/docs/consume-package) and read the Skill and contracts for the installed version.
 
 When you first use YAMI locally, Codex or Kiro can help fork and clone the project, install dependencies, and verify Storybook. The process should use an independent directory without affecting the main project, existing files, or services owned by other tasks.
 

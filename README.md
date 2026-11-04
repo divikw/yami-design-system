@@ -29,6 +29,12 @@ Regression check: `pnpm --filter @yami/storybook exec vitest run --project=brows
 
 ## Cross-project component candidate
 
+Start with [在现有项目使用 YAMI](apps/docsite/content/docs/zh/consume-package.md) /
+[Use YAMI in an existing project](apps/docsite/content/docs/en/consume-package.md)
+for installation, project-scoped Skill/MCP configuration, troubleshooting and rollback.
+Delivery locks and API/Token upgrade checks are described in
+[UPGRADING.md](packages/design-system/UPGRADING.md).
+
 `pnpm pack:design-system-candidate` builds a local `.tgz` for Button, Input, Card,
 ProductCard and ProductList, with versioned English/Chinese Skills, design rules,
 component contracts and consumer examples. `pnpm verify:design-system-candidate`

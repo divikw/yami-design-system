@@ -21,8 +21,8 @@ describe("repository content", () => {
   it("keeps all documents paired with stable structural metadata", () => {
     const zh = getAllDocs("zh");
     const en = getAllDocs("en");
-    expect(zh).toHaveLength(13);
-    expect(en).toHaveLength(13);
+    expect(zh).toHaveLength(14);
+    expect(en).toHaveLength(14);
     expect(en.map((item) => item.frontmatter.slug)).toEqual(
       zh.map((item) => item.frontmatter.slug),
     );
@@ -78,11 +78,13 @@ describe("repository content", () => {
       expect(documents.filter(({ frontmatter }) => frontmatter.group === "start").map(({ frontmatter }) => frontmatter.slug)).toEqual([
         "fork-project",
         "getting-started",
+        "consume-package",
         "browse-components",
       ]);
-      expect(documents.slice(0, 8).map(({ frontmatter }) => frontmatter.slug)).toEqual([
+      expect(documents.slice(0, 9).map(({ frontmatter }) => frontmatter.slug)).toEqual([
         "fork-project",
         "getting-started",
+        "consume-package",
         "browse-components",
         "using-yami-with-ai",
         "prepare-environment",

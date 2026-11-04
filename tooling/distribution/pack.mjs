@@ -7,6 +7,7 @@ import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
 import { buildKnowledge } from "./knowledge.mjs";
 import { packMcp } from "./mcp.mjs";
+import { assertUnreleased, loadReleases, verifyUpgrade } from "./upgrade.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const source = path.join(root, "packages/design-system");
@@ -15,6 +16,16 @@ const output = path.join(root, "dist/design-system-candidate");
 const readJson = async (file) => JSON.parse(await fs.readFile(file, "utf8"));
 const policy = await readJson(path.join(source, "distribution.json"));
 const workspacePackage = await readJson(path.join(source, "package.json"));
+const upgradeReport = path.join(root, "dist/candidate-upgrade.json");
+await fs.mkdir(path.dirname(upgradeReport), { recursive: true });
+await fs.writeFile(upgradeReport, '{"status":"running"}\n');
+// 在删除工作目录或写 tarball 之前拒绝重新打包已交付的两个版本。
+try {
+  assertUnreleased(policy, await loadReleases(root));
+} catch (error) {
+  await fs.writeFile(upgradeReport, `${JSON.stringify({ status: "fail", failure: error.message }, null, 2)}\n`);
+  throw error;
+}
 const files = new Set();
 const styles = new Set();
 const external = new Set();
@@ -131,6 +142,10 @@ for (const relative of [
   "assets/fonts/GT-Walsheim-Regular.woff2", "assets/fonts/GT-Walsheim-Medium.woff2", "assets/fonts/GT-Walsheim-Bold.woff2", "assets/fonts/LICENSE.txt",
 ]) await copy(relative);
 await fs.copyFile(path.join(source, "DISTRIBUTION.md"), path.join(output, "README.md"));
+await fs.mkdir(path.join(output, "distribution"), { recursive: true });
+await fs.copyFile(path.join(source, "distribution/MCP.md"), path.join(output, "distribution/MCP.md"));
+await fs.copyFile(path.join(source, "UPGRADING.md"), path.join(output, "UPGRADING.md"));
+await fs.copyFile(path.join(source, `distribution/upgrades/${policy.version}.json`), path.join(output, "UPGRADE.json"));
 const knowledgeExports = await buildKnowledge({ root, source, output, policy, packageName: workspacePackage.name, provenance, publicExports });
 
 const exports = {
@@ -185,6 +200,7 @@ const manifest = {
   files: payload.map(({ path: file, content }) => ({ path: file, bytes: content.length, sha256: createHash("sha256").update(content).digest("hex") })),
 };
 await fs.writeFile(path.join(output, "candidate-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+await verifyUpgrade(root);
 const receipt = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", path.dirname(output)], { cwd: output, encoding: "utf8" }));
 await fs.writeFile(path.join(root, "dist/candidate-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
 console.log(`Candidate: ${path.join(root, "dist", receipt[0].filename)}\nContent: ${manifest.contentDigest}\nSource: ${manifest.sourceCommit}${manifest.sourceDirty ? " (working tree modified)" : ""}`);
