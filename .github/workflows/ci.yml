@@ -16,8 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - check: security-audit
-            command: pnpm audit --audit-level=low --registry=https://registry.npmjs.org
           - check: yami-freeze
             command: pnpm check:yami-freeze
           - check: typecheck
@@ -62,6 +60,9 @@ jobs:
           install: false
       - name: install
         run: pnpm install --frozen-lockfile
+      - name: security-audit
+        if: matrix.check == 'lint'
+        run: pnpm audit --audit-level=low --registry=https://registry.npmjs.org
       - name: install-storybook-browser
         if: matrix.installBrowser == true
         run: pnpm exec playwright install --with-deps chromium
