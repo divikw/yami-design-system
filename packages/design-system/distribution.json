@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0-candidate.2",
+  "entries": ["Button", "Input", "Card", "ProductCard", "ProductList"],
+  "react": "~19.3.1",
+  "verification": {
+    "node": "24.18.0",
+    "next": "16.4.3",
+    "vite": "8.3.5",
+    "typescript": "6.0.2"
+  }
+}

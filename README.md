@@ -27,6 +27,15 @@ Style analysis starts only when Annotation mode is first entered; subsequent hov
 
 Regression check: `pnpm --filter @yami/storybook exec vitest run --project=browser tests/TokenAnnotations.browser.test.tsx`.
 
+## Cross-project component candidate
+
+`pnpm pack:design-system-candidate` builds a local `.tgz` for Button, Input, Card,
+ProductCard and ProductList. `pnpm verify:design-system-candidate` installs it in
+independent Next.js and Vite projects and checks production builds and browser behavior.
+Read the [candidate consumption contract](packages/design-system/DISTRIBUTION.md)
+for supported versions, styles, client boundaries and asset restrictions.
+This does not publish the package or change workspace source consumption.
+
 ## AI workflow
 
 Yami Design System does not call a model at runtime. Generate a `DirectionManifestV1`
