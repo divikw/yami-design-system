@@ -41,4 +41,5 @@ import '@yami/design-system/styles/base.css';
 
 执行消费项目自己的类型检查、生产构建、测试和相关浏览器检查，核对实际状态及目标
 屏幕尺寸、主题。`pnpm validate`、上游 Storybook 和 Registry 脚本属于 YAMI 源码仓库，
-本包不会安装它们。此快照不提供 MCP、shadcn 安装、模型运行时或独立设计校验 CLI。
+本包不会安装它们。可选配套 MCP 候选包对相同快照提供只读查询，见
+[MCP 接入说明](./references/MCP.md)。它不提供 shadcn 安装、模型运行时或独立设计校验 CLI。

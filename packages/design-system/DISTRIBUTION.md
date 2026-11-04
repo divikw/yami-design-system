@@ -12,7 +12,8 @@
 - 首轮验证 Node 24.18.0、Next.js 16.4.3 App Router、Vite 8.3.5、TypeScript 6.0.2。
   其他版本和原生端尚未验证。
 - 同一版本内分发中英文消费方 Skill、设计规范、内容与动效规范、Token、组件契约和可复制示例。
-- 这是 React Web 组件候选包。MCP、shadcn 适配、页面模板和模型运行时尚未提供。
+- 可选配套 `@yami/design-system-mcp` 提供本地只读查询，SDK 依赖不进入组件运行时。
+- 这是 React Web 组件候选包。shadcn 适配、页面模板和模型运行时尚未提供。
 
 ## 构建与安装
 
@@ -22,11 +23,11 @@
 pnpm pack:design-system-candidate
 ```
 
-输出位于根目录 `dist/`：候选目录、带版本号的 `.tgz` 及打包回执。
+输出位于根目录 `dist/`：组件和 MCP 候选目录、两个带版本号的 `.tgz` 及各自打包回执。
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.3.tgz
+npm install /absolute/path/to/yami-design-system-0.1.0-candidate.4.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -93,7 +94,8 @@ node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
 
 示例是应用源码参考，需复制到消费项目后连接真实业务；不要直接导入包内示例 TSX。
 示例只依赖 React 与候选包公开入口，使用中性占位内容，不请求外部商品图片。
-随包 Skill 用于引导现有 AI 工具读取规范，不包含 MCP 或 shadcn 安装机制。
+随包 Skill 用于引导现有 AI 工具读取规范。可选 MCP 服务通过配套候选包安装，
+只读查询相同知识快照，详见[接入说明](./distribution/MCP.md)；shadcn 安装机制尚未提供。
 
 ## 样式、主题与语言
 
@@ -143,9 +145,10 @@ pnpm test:distribution
 pnpm verify:design-system-candidate
 ```
 
-第二个命令先打包，再在系统临时目录创建两个独立项目，分别安装同一 `.tgz`、
+第二个命令先打包，再在系统临时目录创建两个独立项目，分别安装同一对 `.tgz`、
 逐文件验证安装内容与构建指纹，通过公开文件入口定位 Skill 和索引，复制包内五个示例，
-再执行类型检查和生产构建、启动生产服务并验证原有场景及包内示例的交互。
+再以官方 MCP Client 验证真实 stdio 查询，执行类型检查和生产构建、
+启动生产服务并验证原有场景及包内示例的交互。
 字体检查要求真实的字体面加载，不能仅凭字体名称可用就通过。它需要网络安装宿主依赖及
 本机 Playwright Chromium。命令使用 `tar` 和 POSIX 进程组；Windows 尚未验证。
 回执和截图写入仓库根目录 `dist/candidate-verification/`，

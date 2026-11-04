@@ -51,5 +51,7 @@ language, theme, and responsive behavior.
 Run the consuming app's type check, production build, tests, and relevant browser
 checks. Inspect real states at the supported widths/themes. `pnpm validate` and
 the upstream Storybook/Registry scripts belong to the YAMI source repository;
-they are not installed by this package. This snapshot does not provide MCP,
-shadcn installation, a model runtime, or a standalone design-validation CLI.
+they are not installed by this package. The optional companion MCP candidate
+offers read-only queries over this same snapshot; see [MCP setup](./references/MCP.md).
+It does not provide shadcn installation, a model runtime, or a standalone
+design-validation CLI.

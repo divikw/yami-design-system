@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
 import { buildKnowledge } from "./knowledge.mjs";
+import { packMcp } from "./mcp.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const source = path.join(root, "packages/design-system");
@@ -187,3 +188,4 @@ await fs.writeFile(path.join(output, "candidate-manifest.json"), `${JSON.stringi
 const receipt = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", path.dirname(output)], { cwd: output, encoding: "utf8" }));
 await fs.writeFile(path.join(root, "dist/candidate-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
 console.log(`Candidate: ${path.join(root, "dist", receipt[0].filename)}\nContent: ${manifest.contentDigest}\nSource: ${manifest.sourceCommit}${manifest.sourceDirty ? " (working tree modified)" : ""}`);
+await packMcp({ root, policy, provenance });

@@ -14,6 +14,7 @@ export async function buildKnowledge({ root, source, output, policy, packageName
   for (const file of ["DESIGN.md", "DESIGN.compact.md", "DISTRIBUTION.md", "schema/component.json", "generated/tokens.css", "generated/tokens.json"]) {
     register(file, `references/${file}`);
   }
+  register("distribution/MCP.md", "references/MCP.md");
   for (const folder of ["content", "motion"]) {
     for (const file of (await fs.readdir(path.join(source, folder))).filter((name) => name.endsWith(".md")).sort()) {
       register(`${folder}/${file}`, `references/${folder}/${file}`);
@@ -82,7 +83,7 @@ export async function buildKnowledge({ root, source, output, policy, packageName
     sourceRepository,
     sourceSkill: { path: "packages/design-system/SKILL.md", version: sourceSkill.toString().match(/^version:\s*(\S+)/m)[1], sha256: createHash("sha256").update(sourceSkill).digest("hex") },
     skills: { en: "SKILL.md", "zh-CN": "SKILL.zh-CN.md" },
-    references: { overview: "references/DESIGN.compact.md", design: "references/DESIGN.md", installation: "references/DISTRIBUTION.md", componentSchema: "references/schema/component.json", tokensCSS: "references/generated/tokens.css", tokensJSON: "references/generated/tokens.json" },
+    references: { overview: "references/DESIGN.compact.md", design: "references/DESIGN.md", installation: "references/DISTRIBUTION.md", mcp: "references/MCP.md", componentSchema: "references/schema/component.json", tokensCSS: "references/generated/tokens.css", tokensJSON: "references/generated/tokens.json" },
     components: policy.entries.map((name) => ({
       name,
       import: `${packageName}/components/${name}`,

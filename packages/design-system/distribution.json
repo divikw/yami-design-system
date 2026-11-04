@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-candidate.3",
+  "version": "0.1.0-candidate.4",
+  "mcpVersion": "0.1.0-candidate.1",
   "entries": ["Button", "Input", "Card", "ProductCard", "ProductList"],
   "react": "~19.3.1",
   "verification": {

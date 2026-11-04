@@ -29,6 +29,16 @@ implicit. Calling that surface shadcn-compatible overstated the current delivery
 - Defer CLI and MCP productization until the M4 pilot demonstrates repeated workflow friction that
   cannot be addressed through the package, Registry, Skill, and existing repository scripts.
 
+## Read-only MCP pilot — 2026-11-04
+
+After the installable candidate and versioned knowledge distribution landed in PRs #197 and #198,
+add a local, read-only MCP pilot. This supersedes the MCP deferral above for that scope.
+A separate private companion candidate consumes the exact
+installed design-system peer version; MCP SDK dependencies stay outside the React runtime.
+It exposes only indexed local design documents, component contracts and consumer examples through
+stdio tools and resources. It has no write, install, code-execution, remote-fetch or validation tools.
+Remote hosting, general CLI productization, shadcn adaptation and package publication remain deferred.
+
 ## Consequences
 
 Registry v2 replaces v1 at the existing generated paths because no runtime consumer of the v1 wire

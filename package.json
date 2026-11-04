@@ -72,6 +72,8 @@
     "@axe-core/playwright": "4.14.0",
     "@changesets/cli": "3.0.3",
     "@eslint/js": "10.0.1",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/server": "2.4.0",
     "@playwright/test": "1.64.1",
     "@types/node": "26.6.5",
     "@typescript/native": "npm:typescript@7.0.2",
@@ -83,6 +85,7 @@
     "tsx": "4.23.15",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-eslint": "8.72.1",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "zod": "4.6.7"
   }
 }

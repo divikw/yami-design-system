@@ -10,6 +10,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
+import { loadSnapshot } from "../mcp/snapshot.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -26,6 +27,8 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
     assert.equal(pkg.private, true);
     assert.deepEqual(Object.keys(pkg.peerDependencies), ["react", "react-dom"]);
     assert.equal(pkg.dependencies.react, undefined);
+    assert.equal(pkg.dependencies["@modelcontextprotocol/server"], undefined);
+    assert.equal(pkg.dependencies.zod, undefined);
     assert.equal(pkg.version, manifest.packageVersion);
     assert.match(manifest.sourceCommit, /^[a-f0-9]{40}$/);
     assert.equal(typeof manifest.sourceDirty, "boolean");
@@ -63,6 +66,66 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       }
     }
     assert.equal(pkg.exports["./components/Header"], undefined);
+    const mcpReceipt = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-mcp-pack.json"), "utf8"))[0];
+    const mcpDirectory = path.join(directory, "mcp");
+    await fs.mkdir(mcpDirectory);
+    execFileSync("tar", ["-xzf", path.join(root, "dist", mcpReceipt.filename), "-C", mcpDirectory]);
+    const mcpRoot = path.join(mcpDirectory, "package");
+    const mcpManifest = JSON.parse(await fs.readFile(path.join(mcpRoot, "candidate-manifest.json"), "utf8"));
+    const mcpPackage = JSON.parse(await fs.readFile(path.join(mcpRoot, "package.json"), "utf8"));
+    assert.equal(mcpPackage.private, true);
+    assert.equal(mcpPackage.peerDependencies["@yami/design-system"], pkg.version);
+    assert.deepEqual(Object.keys(mcpPackage.dependencies), ["@modelcontextprotocol/server", "zod"]);
+    assert.equal(mcpManifest.sourceCommit, manifest.sourceCommit);
+    assert.equal(mcpManifest.sourceDirty, manifest.sourceDirty);
+    assert.equal(mcpManifest.designSystemVersion, manifest.packageVersion);
+    assert.equal(mcpPackage.bin["yami-design-system-mcp"], "./cli.mjs");
+    assert.match(await fs.readFile(path.join(mcpRoot, "cli.mjs"), "utf8"), /^#!\/usr\/bin\/env node\n/);
+    assert.ok((await fs.stat(path.join(mcpRoot, "cli.mjs"))).mode & 0o111);
+    await verifyInstalledCandidate(mcpRoot, mcpManifest);
+    assert.deepEqual(mcpReceipt.files.map((entry) => entry.path).sort(), [...mcpManifest.files.map((entry) => entry.path), "candidate-manifest.json"].sort());
+    await t.test("MCP loads only the matching verified knowledge snapshot", async () => {
+      const options = { manifestFile: path.join(unpacked, "candidate-manifest.json"), indexFile: path.join(unpacked, "knowledge/yami-design-system/index.json"), expectedVersion: pkg.version };
+      const snapshot = await loadSnapshot(options);
+      assert.equal(snapshot.identity.contentDigest, manifest.contentDigest);
+      assert.equal(snapshot.files.size, snapshot.index.documents.length + 1);
+      await assert.rejects(loadSnapshot({ ...options, expectedVersion: "0.0.0" }), /peer version/);
+      await fs.writeFile(options.manifestFile, JSON.stringify({ ...manifest, schemaVersion: 2 }));
+      await assert.rejects(loadSnapshot(options), /Unsupported candidate schema/);
+      await fs.writeFile(options.manifestFile, JSON.stringify(manifest));
+      const original = await fs.readFile(options.indexFile, "utf8");
+      async function rejectIndex(change, message) {
+        const changed = JSON.parse(original);
+        change(changed);
+        const content = JSON.stringify(changed);
+        const updated = structuredClone(manifest);
+        Object.assign(updated.files.find((entry) => entry.path === "knowledge/yami-design-system/index.json"), { bytes: Buffer.byteLength(content), sha256: createHash("sha256").update(content).digest("hex") });
+        try {
+          await fs.writeFile(options.indexFile, content);
+          await fs.writeFile(options.manifestFile, JSON.stringify(updated));
+          await assert.rejects(loadSnapshot(options), message);
+        } finally {
+          await fs.writeFile(options.indexFile, original);
+          await fs.writeFile(options.manifestFile, JSON.stringify(manifest));
+        }
+      }
+      await rejectIndex((index) => { index.schemaVersion = 2; }, /Unsupported knowledge schema/);
+      await rejectIndex((index) => { index.packageVersion = "0.0.0"; }, /Knowledge identity differs/);
+      await rejectIndex((index) => { index.components.pop(); }, /Knowledge scope differs/);
+      await rejectIndex((index) => { index.documents[0].path = "../../outside.txt"; }, /Invalid knowledge path/);
+      const skill = path.join(unpacked, "knowledge/yami-design-system/SKILL.md");
+      const instructions = await fs.readFile(skill);
+      const outside = path.join(directory, "outside.txt");
+      await fs.writeFile(outside, "must never be exposed by MCP");
+      try {
+        await fs.rm(skill);
+        await fs.symlink(outside, skill);
+        await assert.rejects(loadSnapshot(options), /escapes package root/);
+      } finally {
+        await fs.rm(skill);
+        await fs.writeFile(skill, instructions);
+      }
+    });
     await t.test("knowledge is self-contained and bound to the installed component contract", async () => {
       const knowledge = path.join(unpacked, "knowledge/yami-design-system");
       const index = JSON.parse(await fs.readFile(path.join(knowledge, "index.json"), "utf8"));
@@ -117,6 +180,7 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
     const rebuilt = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-candidate/candidate-manifest.json"), "utf8"));
     assert.equal(rebuilt.contentDigest, manifest.contentDigest);
     assert.deepEqual(rebuilt.files, manifest.files);
+    assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, "dist/design-system-mcp-candidate/candidate-manifest.json"), "utf8")), mcpManifest);
     await t.test("installed candidate must match the expected build", async () => {
       await verifyInstalledCandidate(unpacked, manifest);
       await assert.rejects(verifyInstalledCandidate(unpacked, { ...manifest, sourceCommit: "0".repeat(40) }), /identity differs/);
