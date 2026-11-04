@@ -142,6 +142,10 @@ jobs:
       - name: lighthouse-budgets
         run: pnpm test:docsite:lighthouse
       - name: repository-validation
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
         run: pnpm validate
       - name: docsite-browser-artifacts
         if: always()
