@@ -1,33 +1,29 @@
 import assert from "node:assert/strict";
-import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { promisify } from "node:util";
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { DESIGN, MCP, verifyCandidate, verifyPair } from "./artifacts.mjs";
 import { CONFIG, SERVER, SKILL, TOOLS, inspectProject, parseConfig, resolveLocal, sameServer, serverConfig, skillContent, verifyHost } from "./project.mjs";
 
 export const manualChecks = ["Connect runtime CSS and authorized fonts at the host entry; inspect the existing reset.", "Trust/reconnect the project in Codex and confirm Skill/tool discovery in the client.", "Run the consuming app's type check, production build and browser checks; inspect responsive, theme and keyboard states.", "AI-generated output quality has not been evaluated by this command."];
-const execute = promisify(execFile);
 const { version } = JSON.parse(await fs.readFile(new URL("../package.json", import.meta.url), "utf8"));
 
 export async function installedPair(project) {
   const design = await verifyCandidate(path.dirname(await resolveLocal(project.root, `${DESIGN}/candidate-manifest.json`)), DESIGN);
   const entry = await resolveLocal(project.root, `${MCP}/cli`);
   const mcp = await verifyCandidate(path.dirname(entry), MCP);
+  assert.equal(entry, path.join(mcp.directory, "cli.mjs"), "Resolved MCP entry differs from the verified executable");
   const index = verifyPair(design, mcp);
-  assert.ok((await fs.stat(path.join(project.root, project.manager === "npm" ? "package-lock.json" : "pnpm-lock.yaml"))).isFile(), "A package-manager lockfile is required");
+  assert.ok((await fs.stat(path.join(project.root, project.lockfile))).isFile(), "A package-manager lockfile is required");
   assert.ok(project.pkg.dependencies?.[DESIGN], "The design package must be an application dependency");
   assert.ok(project.pkg.devDependencies?.[MCP] && !project.pkg.dependencies?.[MCP], "MCP must be a development dependency");
   return { design, mcp, index, entry };
 }
 
-async function queryMcp(project, pair, config) {
-  const { stdout } = await execute(config.command, ["--version"], { cwd: project.root, timeout: 5000 });
-  assert.match(stdout.trim(), /^v24\./, "Configured MCP command must use Node 24");
+async function queryMcp(pair, config) {
   const identity = Object.fromEntries(["package", "packageVersion", "sourceCommit", "sourceDirty", "contentDigest"].map((key) => [key, pair.design.manifest[key]]));
-  const transport = new StdioClientTransport({ command: config.command, args: config.args, cwd: config.cwd, stderr: "pipe" });
+  const transport = new StdioClientTransport({ command: process.execPath, args: config.args, cwd: config.cwd, stderr: "pipe" });
   let stderr = "";
   transport.stderr.on("data", (data) => { stderr = (stderr + data).slice(-4000); });
   const client = new Client({ name: "yami-design-cli", version }, { supportedProtocolVersions: ["2025-06-18"], versionNegotiation: "legacy" });
@@ -86,10 +82,10 @@ export async function doctor({ cwd = process.cwd(), packageManager } = {}) {
     });
     config = await check("mcp_config", async () => {
       const value = parseConfig(await fs.readFile(path.join(project.root, CONFIG), "utf8")).mcp_servers?.[SERVER];
-      assert.ok(sameServer(value, serverConfig(project.root, pair.entry)), "Missing or conflicting project MCP configuration; review it before running init");
+      assert.ok(await sameServer(value, serverConfig(project.root, pair.entry)), "Missing or conflicting project MCP configuration; review it before running init");
       return value;
     });
-    if (config) mcp = await check("mcp_queries", () => queryMcp(project, pair, config));
+    if (config) mcp = await check("mcp_queries", () => queryMcp(pair, config));
   }
   return { schemaVersion: 1, command: "doctor", status: checks.every((check) => check.status === "pass") ? "pass" : "fail", cwd: project?.root ?? path.resolve(cwd), checks, ...(pair ? { versions: { design: pair.design.pkg.version, mcp: pair.mcp.pkg.version }, snapshot: mcp?.snapshot ?? Object.fromEntries(["package", "packageVersion", "sourceCommit", "sourceDirty", "contentDigest"].map((key) => [key, pair.design.manifest[key]])) } : {}), ...(mcp ? { mcp } : {}), manualChecks, modelCalls: 0 };
 }

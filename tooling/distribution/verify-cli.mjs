@@ -39,17 +39,26 @@ export async function verifyCliSetup({ root, directory, host, tarball, mcpTarbal
   const configFile = path.join(directory, ".codex/config.toml");
   await fs.mkdir(path.dirname(configFile));
   const originalConfig = "# Preserve consumer comments and unrelated MCP settings.\n[mcp_servers.consumer_fixture]\ncommand = 'false'\nenabled = false\n";
-  await fs.writeFile(configFile, originalConfig, { mode: 0o600 });
+  await fs.writeFile(configFile, originalConfig);
+  await fs.chmod(configFile, 0o640);
   await fs.writeFile(path.join(directory, "AGENTS.md"), "Consumer-owned instructions: preserve this file.\n");
   const before = await fingerprint(directory);
   const dryRun = JSON.parse(await fs.readFile(await run(binary, [...args, "--dry-run"], directory, `${host}-cli-dry-run`), "utf8"));
   assert.equal(dryRun.status, "planned");
   assert.deepEqual(await fingerprint(directory), before, "dry-run modified the consuming project");
-  const init = JSON.parse(await fs.readFile(await run(binary, args, directory, `${host}-cli-init`), "utf8"));
+  const installEnv = { NODE_ENV: "production" };
+  const globalPrefix = path.join(path.dirname(directory), "unused-npm-global-prefix");
+  if (manager === "npm") {
+    await fs.mkdir(globalPrefix);
+    Object.assign(installEnv, { npm_config_global: "true", npm_config_prefix: globalPrefix });
+  }
+  const initLog = await run("/bin/sh", ["-c", 'umask 077 && exec "$@"', "fixture", binary, ...args], directory, `${host}-cli-init`, installEnv);
+  const init = JSON.parse(await fs.readFile(initLog, "utf8"));
   assert.equal(init.status, "pass");
+  if (manager === "npm") assert.deepEqual(await fs.readdir(globalPrefix), [], "init wrote to the npm global prefix");
   const configured = await fs.readFile(configFile, "utf8");
   assert.ok(configured.startsWith(originalConfig));
-  assert.equal((await fs.stat(configFile)).mode & 0o777, 0o600, "init changed existing Codex file permissions");
+  assert.equal((await fs.stat(configFile)).mode & 0o777, 0o640, "init changed existing Codex file permissions");
   const installed = await fingerprint(directory);
   const repeated = JSON.parse(await fs.readFile(await run(binary, args, directory, `${host}-cli-repeat`), "utf8"));
   assert.equal(repeated.status, "pass");
@@ -71,14 +80,19 @@ export async function verifyCliSetup({ root, directory, host, tarball, mcpTarbal
   } finally { await fs.writeFile(configFile, configured); }
   assert.deepEqual(await fingerprint(directory), installed);
   const lockfile = path.join(directory, manager === "npm" ? "package-lock.json" : "pnpm-lock.yaml");
+  await fs.rename(lockfile, `${lockfile}.saved`);
   try {
-    await fs.rename(lockfile, `${lockfile}.saved`);
     await assert.rejects(run(binary, ["doctor", "--json"], directory, `${host}-cli-missing-lock`), /failed \(1\)/);
+    const repaired = JSON.parse(await fs.readFile(await run(binary, args, directory, `${host}-cli-recreate-lock`, installEnv), "utf8"));
+    assert.equal(repaired.status, "pass");
+    assert.ok((await fs.stat(lockfile)).isFile());
+    assert.deepEqual(repaired.configuration, []);
+    if (manager === "npm") assert.deepEqual(await fs.readdir(globalPrefix), []);
   } finally { await fs.rename(`${lockfile}.saved`, lockfile); }
   assert.deepEqual(await fingerprint(directory), installed);
   const application = JSON.parse(await fs.readFile(path.join(directory, "package.json"), "utf8"));
   assert.ok(application.dependencies["@yami/design-system"]);
   assert.ok(application.devDependencies["@yami/design-system-mcp"]);
   assert.equal(application.dependencies["@yami/design-system-mcp"], undefined);
-  return { status: "pass", packageVersion: pkg.version, contentDigest: expected.contentDigest, manager, locale, dryRun: "unchanged", repeat: "unchanged", doctor: health, conflictingCommand: "rejected" };
+  return { status: "pass", packageVersion: pkg.version, contentDigest: expected.contentDigest, manager, locale, dryRun: "unchanged", repeat: "unchanged", missingLockfile: "recreated", doctor: health, conflictingCommand: "rejected" };
 }

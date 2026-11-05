@@ -45,6 +45,12 @@ export async function verifyCandidate(directory, name, expected) {
   assert.equal(pkg.name, name);
   assert.equal(pkg.version, manifest.packageVersion);
   assert.equal(pkg.private, true, "Only private local candidates are supported");
+  if (name === DESIGN) {
+    assert.equal(pkg.exports?.["./candidate-manifest.json"], "./candidate-manifest.json", "Missing candidate manifest export");
+  } else if (name === MCP) {
+    assert.equal(pkg.exports?.["./cli"], "./cli.mjs", "Unexpected MCP entry export");
+    assert.ok(files.has("cli.mjs"), "MCP entry must be listed in the candidate manifest");
+  }
   return { directory, manifest, pkg, files };
 }
 

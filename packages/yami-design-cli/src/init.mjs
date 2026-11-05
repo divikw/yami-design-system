@@ -3,7 +3,7 @@ import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
-import { DESIGN, MCP, openArtifacts, sha, verifyCandidate } from "./artifacts.mjs";
+import { DESIGN, MCP, openArtifacts, readJson, sha, verifyCandidate } from "./artifacts.mjs";
 import { doctor, manualChecks } from "./doctor.mjs";
 import { CONFIG, SERVER, inspectProject, managedFile, optionalStat, parseConfig, planConfiguration, resolveLocal, skillContent, verifyHost } from "./project.mjs";
 
@@ -40,6 +40,8 @@ async function writeConfiguration(project, plans) {
         const mode = (await fs.stat(file)).mode & 0o777;
         const replacement = path.join(temporary, "replacement");
         await fs.writeFile(replacement, plan.after, { flag: "wx", mode });
+        await fs.chmod(replacement, mode);
+        assert.equal(await fs.readFile(file, "utf8"), plan.before, `Configuration changed before writing: ${plan.relative}`);
         await fs.rename(replacement, file);
       } finally { await fs.rm(temporary, { recursive: true, force: true }); }
     }
@@ -62,16 +64,36 @@ export async function initialise({ cwd = process.cwd(), packageManager, designPa
     assert.ok(!existingConfig || mcpEntry, `MCP configuration conflict: ${CONFIG}; installed MCP is missing`);
     const plans = await planConfiguration(project, locale, mcpEntry ?? path.join(project.root, "node_modules", MCP, "cli.mjs"));
     const install = [];
-    if (!designEntry || !refersToArtifact(project.pkg.dependencies?.[DESIGN], artifacts.design.artifact.file, project.root) || project.pkg.devDependencies?.[DESIGN]) install.push({ candidate: artifacts.design, dev: false });
-    if (!mcpEntry || !refersToArtifact(project.pkg.devDependencies?.[MCP], artifacts.mcp.artifact.file, project.root) || project.pkg.dependencies?.[MCP]) install.push({ candidate: artifacts.mcp, dev: true });
-    const result = { schemaVersion: 1, command: "init", status: dryRun ? "planned" : "running", cwd: project.root, packageManager: project.manager, framework: project.framework, packages: [artifacts.design, artifacts.mcp].map(({ pkg, artifact }) => ({ name: pkg.name, version: pkg.version, ...artifact })), install: install.map(({ candidate, dev }) => ({ name: candidate.pkg.name, section: dev ? "devDependencies" : "dependencies" })), dependencyFiles: install.length ? ["package.json", project.manager === "npm" ? "package-lock.json" : "pnpm-lock.yaml"] : [], configuration: plans.filter(({ before, after }) => before !== after).map(({ relative }) => relative), styleEntry: project.framework === "next" ? "app/layout.tsx (or src/app/layout.tsx)" : "src/main.tsx", styleImports, manualChecks };
+    const missingLockfile = !await optionalStat(path.join(project.root, project.lockfile));
+    if (missingLockfile || !designEntry || !refersToArtifact(project.pkg.dependencies?.[DESIGN], artifacts.design.artifact.file, project.root) || project.pkg.devDependencies?.[DESIGN]) {
+      install.push({ candidate: artifacts.design, dev: false });
+    }
+    if (!mcpEntry || !refersToArtifact(project.pkg.devDependencies?.[MCP], artifacts.mcp.artifact.file, project.root) || project.pkg.dependencies?.[MCP]) {
+      install.push({ candidate: artifacts.mcp, dev: true });
+    }
+    const result = {
+      schemaVersion: 1,
+      command: "init",
+      status: dryRun ? "planned" : "running",
+      cwd: project.root,
+      packageManager: project.manager,
+      framework: project.framework,
+      packages: [artifacts.design, artifacts.mcp].map(({ pkg, artifact }) => ({ name: pkg.name, version: pkg.version, ...artifact })),
+      install: install.map(({ candidate, dev }) => ({ name: candidate.pkg.name, section: dev ? "devDependencies" : "dependencies" })),
+      dependencyFiles: install.length ? ["package.json", project.lockfile] : [],
+      configuration: plans.filter(({ before, after }) => before !== after).map(({ relative }) => relative),
+      styleEntry: project.framework === "next" ? "app/layout.tsx (or src/app/layout.tsx)" : "src/main.tsx",
+      styleImports,
+      manualChecks,
+    };
     if (dryRun) return result;
     stage = "install";
     for (const { candidate, dev } of install) {
       assert.equal(sha(await fs.readFile(candidate.artifact.file), "sha512"), Buffer.from(candidate.artifact.integrity.slice("sha512-".length), "base64").toString("hex"), "Artifact changed after preflight");
+      const dependency = [dev ? "--save-dev" : "--save-prod", "--save-exact", "--ignore-scripts", candidate.artifact.file];
       const args = project.manager === "npm"
-        ? ["install", dev ? "--save-dev" : "--save-prod", "--save-exact", "--ignore-scripts", "--no-audit", "--no-fund", candidate.artifact.file]
-        : ["add", ...(dev ? ["--save-dev"] : []), "--save-exact", "--ignore-scripts", candidate.artifact.file];
+        ? ["install", "--prefix", project.root, "--no-global", "--include=dev", "--package-lock", "--no-audit", "--no-fund", ...dependency]
+        : ["add", ...dependency];
       await execute(project.manager, args, { cwd: project.root, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 });
     }
     stage = "installed-artifacts";
@@ -79,6 +101,9 @@ export async function initialise({ cwd = process.cwd(), packageManager, designPa
     const installedEntry = await resolveLocal(project.root, `${MCP}/cli`);
     await verifyCandidate(path.dirname(installedEntry), MCP, artifacts.mcp.manifest);
     for (const candidate of [artifacts.design, artifacts.mcp]) assert.equal(sha(await fs.readFile(candidate.artifact.file), "sha512"), Buffer.from(candidate.artifact.integrity.slice("sha512-".length), "base64").toString("hex"), "Artifact changed during installation");
+    const installedPackage = await readJson(await managedFile(project.root, "package.json"));
+    assert.ok(refersToArtifact(installedPackage.dependencies?.[DESIGN], artifacts.design.artifact.file, project.root), "The design dependency must reference the supplied tarball");
+    assert.ok(refersToArtifact(installedPackage.devDependencies?.[MCP], artifacts.mcp.artifact.file, project.root), "The MCP development dependency must reference the supplied tarball");
     stage = "configuration";
     const finalPlans = await planConfiguration(project, locale, installedEntry);
     await writeConfiguration(project, finalPlans);

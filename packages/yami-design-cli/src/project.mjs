@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { isDeepStrictEqual } from "node:util";
-import { promises as fs } from "node:fs";
+import { constants, promises as fs } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { parse, stringify } from "smol-toml";
@@ -46,12 +46,17 @@ export async function inspectProject(cwd, override) {
   }
   assert.ok(override || declared || locks.length <= 1, "Ambiguous lockfiles; specify --package-manager");
   for (const file of ["yarn.lock", "bun.lock", "bun.lockb"]) assert.ok(!await optionalStat(path.join(root, file)), `Unsupported package-manager lockfile: ${file}`);
-  const manager = override ?? declared ?? locks[0] ?? "npm";
+  let manager = override ?? declared ?? locks[0];
+  if (!manager) {
+    const pnpmLayout = await optionalStat(path.join(root, "node_modules/.modules.yaml"));
+    manager = pnpmLayout?.isFile() ? "pnpm" : "npm";
+  }
+  const lockfile = manager === "npm" ? "package-lock.json" : "pnpm-lock.yaml";
   const dependencies = { ...pkg.devDependencies, ...pkg.dependencies };
   const framework = dependencies.next ? "next" : dependencies.vite ? "vite" : null;
   assert.ok(framework, "Expected an existing Next.js or Vite application");
   for (const relative of [SKILL, CONFIG]) await managedFile(root, relative);
-  return { root, pkg, manager, framework };
+  return { root, pkg, manager, framework, lockfile };
 }
 
 export async function resolveLocal(root, specifier) {
@@ -82,10 +87,27 @@ export function skillContent(locale) {
 export const serverConfig = (root, entry) => ({ command: process.execPath, args: [entry], cwd: root, enabled_tools: TOOLS, startup_timeout_sec: 20, tool_timeout_sec: 30 });
 export const parseConfig = (text) => parse(text, { unsafeKeyBehaviour: "throw" });
 
-export function sameServer(actual, expected) {
+async function nodeOnPath(cwd) {
+  for (const directory of process.env.PATH?.split(path.delimiter) ?? []) {
+    const file = path.resolve(cwd, directory, "node");
+    try {
+      if (!(await fs.stat(file)).isFile()) continue;
+      await fs.access(file, constants.X_OK);
+      return await fs.realpath(file);
+    } catch (error) {
+      if (!["ENOENT", "ENOTDIR", "EACCES"].includes(error.code)) throw error;
+    }
+  }
+  return null;
+}
+
+export async function sameServer(actual, expected) {
   if (!actual || typeof actual !== "object") return false;
   const normalized = { ...actual };
-  if (normalized.command === "node") normalized.command = process.execPath;
+  if (normalized.command === "node") {
+    if (await nodeOnPath(expected.cwd) !== await fs.realpath(expected.command)) return false;
+    normalized.command = expected.command;
+  }
   if (Array.isArray(normalized.enabled_tools)) normalized.enabled_tools = [...normalized.enabled_tools].sort();
   return isDeepStrictEqual(normalized, { ...expected, enabled_tools: [...expected.enabled_tools].sort() });
 }
@@ -99,7 +121,7 @@ export async function planConfiguration(project, locale, entry) {
   const before = await optionalStat(config) ? await fs.readFile(config, "utf8") : "";
   const existing = parseConfig(before).mcp_servers?.[SERVER];
   const expected = serverConfig(project.root, entry);
-  assert.ok(existing === undefined || sameServer(existing, expected), `MCP configuration conflict: ${CONFIG} [mcp_servers.${SERVER}]`);
+  assert.ok(existing === undefined || await sameServer(existing, expected), `MCP configuration conflict: ${CONFIG} [mcp_servers.${SERVER}]`);
   const after = existing === undefined ? `${before}${before && !before.endsWith("\n") ? "\n" : ""}\n# yami-design-cli: project-local read-only design knowledge\n${stringify({ mcp_servers: { [SERVER]: expected } })}` : before;
   parseConfig(after);
   return [

@@ -44,7 +44,7 @@ async function fixture(t, options = {}) {
       files.push(...documents.map(({ path, content }) => ({ path: `knowledge/${path}`, content })));
       const index = { schemaVersion: options.knowledgeSchema ?? 1, package: name, packageVersion: version, sourceCommit: commit, sourceDirty: false, skills: { en: "SKILL.md", "zh-CN": "SKILL.zh-CN.md" }, references: { overview: "references/DESIGN.compact.md" }, documents: documents.map(({ path }) => ({ path })), components: [{ ...entries[0], import: `${DESIGN}/components/Button`, exports: ["Button"], contract: "references/Button.json", usage: options.knowledgeMissing ? "references/missing.md" : "references/usage.md", examples: [{ path: "references/example.tsx", export: "ButtonExample" }] }] };
       files.push({ path: "knowledge/index.json", content: JSON.stringify(index) }, { path: "Button.js", content: "export const Button = null;" });
-    } else files.push({ path: "cli.mjs", content: "process.exit(1);" });
+    } else if (!options.missingMcpEntry) files.push({ path: "cli.mjs", content: "process.exit(1);" });
     for (const file of files) { await fs.mkdir(path.dirname(path.join(pkgRoot, file.path)), { recursive: true }); await fs.writeFile(path.join(pkgRoot, file.path), file.content); }
     const digest = createHash("sha256");
     for (const file of [...files].sort((a, b) => a.path.localeCompare(b.path))) digest.update(file.path).update("\0").update(file.content).update("\0");
@@ -58,6 +58,19 @@ async function fixture(t, options = {}) {
   const mcp = await candidate(MCP, mcpVersion, options.peer ?? version);
   const args = { cwd: root, designPackage: design.archive, mcpPackage: mcp.archive };
   return { directory, root, design, mcp, args };
+}
+
+async function installFixture({ root, design, mcp }) {
+  for (const candidate of [design, mcp]) {
+    await fs.cp(candidate.pkgRoot, path.join(root, "node_modules", candidate.manifest.package), { recursive: true });
+  }
+  const file = path.join(root, "package.json");
+  const pkg = JSON.parse(await fs.readFile(file, "utf8"));
+  pkg.dependencies[DESIGN] = `file:${design.archive}`;
+  pkg.devDependencies[MCP] = `file:${mcp.archive}`;
+  await fs.writeFile(file, JSON.stringify(pkg));
+  await fs.writeFile(path.join(root, "package-lock.json"), JSON.stringify({ lockfileVersion: 3, packages: { "": pkg } }));
+  return pkg;
 }
 
 async function fingerprint(root) {
@@ -103,9 +116,9 @@ test("a missing package lookup before installation does not poison resolution af
 });
 
 test("init binds matching installed bytes to the supplied local artifact instead of retaining registry ranges", async (t) => {
-  const { root, args, design, mcp } = await fixture(t);
-  for (const candidate of [design, mcp]) await fs.cp(candidate.pkgRoot, path.join(root, "node_modules", candidate.manifest.package), { recursive: true });
-  const pkg = JSON.parse(await fs.readFile(path.join(root, "package.json"), "utf8"));
+  const app = await fixture(t);
+  const { root, args } = app;
+  const pkg = await installFixture(app);
   pkg.dependencies[DESIGN] = designVersion;
   pkg.devDependencies[MCP] = mcpVersion;
   await fs.writeFile(path.join(root, "package.json"), JSON.stringify(pkg));
@@ -113,6 +126,25 @@ test("init binds matching installed bytes to the supplied local artifact instead
   const plan = await initialise({ ...args, dryRun: true });
   assert.deepEqual(plan.install.map(({ name }) => name), [DESIGN, MCP]);
   assert.deepEqual(await fingerprint(root), before);
+});
+
+test("init preflight rejects an artifact without its declared MCP executable", async (t) => {
+  const { root, args } = await fixture(t, { missingMcpEntry: true });
+  const before = await fingerprint(root);
+  await assert.rejects(initialise({ ...args, dryRun: true }), /MCP entry.*manifest/);
+  assert.deepEqual(await fingerprint(root), before);
+});
+
+test("init can infer pnpm from the installed layout when its lockfile is missing", async (t) => {
+  const app = await fixture(t);
+  await installFixture(app);
+  await fs.unlink(path.join(app.root, "package-lock.json"));
+  await fs.writeFile(path.join(app.root, "node_modules/.modules.yaml"), "packageManager: pnpm@11.20.0\n");
+  const before = await fingerprint(app.root);
+  const plan = await initialise({ ...app.args, dryRun: true });
+  assert.equal(plan.packageManager, "pnpm");
+  assert.deepEqual(plan.dependencyFiles, ["package.json", "pnpm-lock.yaml"]);
+  assert.deepEqual(await fingerprint(app.root), before);
 });
 
 test("mismatched peer versions, knowledge schema and host React fail before project changes", async (t) => {
@@ -223,6 +255,29 @@ test("doctor reports failed/skipped checks and nonzero exit without changing the
     assert.equal(result.modelCalls, 0);
     assert.ok(result.checks.some(({ id, status }) => id === "packages" && status === "fail"));
     assert.ok(result.checks.some(({ id, status }) => id === "mcp_queries" && status === "not_run"));
+    return true;
+  });
+  assert.deepEqual(await fingerprint(root), before);
+});
+
+test("doctor refuses to execute a Node wrapper from the consumer PATH", async (t) => {
+  const app = await fixture(t);
+  const { root, directory } = app;
+  await installFixture(app);
+  const entry = path.join(root, "node_modules", MCP, "cli.mjs");
+  for (const plan of await planConfiguration({ root }, "zh", entry)) {
+    const file = path.join(root, plan.relative);
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    await fs.writeFile(file, plan.relative === CONFIG ? plan.after.replace(/^command = .*$/m, 'command = "node"') : plan.after);
+  }
+  const bin = path.join(directory, "bin");
+  await fs.mkdir(bin);
+  await fs.writeFile(path.join(bin, "node"), '#!/bin/sh\nprintf ran > doctor-ran-node-wrapper\nprintf "v24.18.0\\n"\n', { mode: 0o755 });
+  const before = await fingerprint(root);
+  await assert.rejects(execute(process.execPath, [cli, "doctor", "--cwd", root, "--json"], { env: { ...process.env, PATH: `${bin}${path.delimiter}${process.env.PATH}` } }), (error) => {
+    const checks = JSON.parse(error.stdout).checks;
+    assert.equal(checks.find(({ id }) => id === "mcp_config").status, "fail");
+    assert.equal(checks.find(({ id }) => id === "mcp_queries").status, "not_run");
     return true;
   });
   assert.deepEqual(await fingerprint(root), before);

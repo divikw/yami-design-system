@@ -25,10 +25,11 @@ npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ```
 
 Run the same `init` command without `--dry-run` to apply it. The design package
-is installed as an application dependency; the MCP companion is a development
-dependency. Installation uses the selected package manager with lifecycle
-scripts disabled. Host dependencies must already be installed and satisfy the
-candidate's React peers. The CLI does not change React or framework versions.
+is an application dependency and the MCP companion is a development dependency.
+Installation targets the selected project, includes the MCP companion under
+`NODE_ENV=production` and disables lifecycle scripts. Host dependencies must
+already be installed and satisfy the candidate's React peers. `init` retains the
+React and framework dependency declarations.
 Tarball hashes identify supplied bytes; they do not authenticate the publisher.
 Keep original artifacts and the lockfile available to other authorized machines.
 
@@ -38,6 +39,8 @@ Keep original artifacts and the lockfile available to other authorized machines.
 configuration is reused; conflicting content, invalid artifacts, symlinked
 managed paths and unsupported hosts fail preflight before installation.
 Repeated successful initialization makes no further changes.
+When the lockfile is missing, `init` runs the selected package manager to create
+one from the current dependency declarations and the supplied tarballs.
 
 Use `--cwd /absolute/application` to select another application. Tarball paths
 are resolved from the invocation directory. `--package-manager npm|pnpm`
@@ -77,6 +80,9 @@ each response must match the installed snapshot. It does not call a model or
 write project files. JSON reports use `schemaVersion: 1`; exit 0 means connection
 checks passed, while a nonzero exit means a blocker. Not-run checks remain
 explicitly `not_run`.
+
+A project configuration with `command = "node"` is reusable when its PATH
+resolves to the same executable that is running `yami-design-cli`.
 
 Reconnect/trust the project in Codex and confirm discovery in the client;
 project configuration follows the [official Codex MCP rules](https://developers.openai.com/codex/mcp).

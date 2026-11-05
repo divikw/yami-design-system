@@ -24,11 +24,11 @@ const policy = JSON.parse(await fs.readFile(path.join(root, "packages/design-sys
 const env = { ...process.env, NEXT_TELEMETRY_DISABLED: "1" };
 delete env.NODE_PATH;
 
-async function run(command, args, cwd, label) {
+async function run(command, args, cwd, label, envOverrides = {}) {
   console.log(label);
   const log = path.join(reportDir, `${label}.log`);
   const stream = createWriteStream(log);
-  const child = spawn(command, args, { cwd, env, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(command, args, { cwd, env: { ...env, ...envOverrides }, stdio: ["ignore", "pipe", "pipe"] });
   child.stdout.pipe(stream);
   child.stderr.pipe(stream);
   const status = await new Promise((resolve, reject) => { child.once("error", reject); child.once("close", resolve); });
