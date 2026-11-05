@@ -45,6 +45,18 @@ import '@yami/design-system/styles/base.css';
 路由、素材及搜索行为由宿主提供。为活动与快捷入口分别接上实际目的地，使用整张
 `8:9` 画布的活动图，并为纯图片链接提供可访问名称。滚动后也要确认搜索仍可操作。
 
+实现前读取[首页组装规则](./references/DISTRIBUTION.md#组合商城首页入口)。通过 MCP 可在
+`DISTRIBUTION` 中搜索「组合商城首页入口」并读取该节。宿主全局样式设置
+`body { margin: 0; }`，让页头左右贴齐视口。手机通过 `Billboard` 的 `className` 设置
+`width: calc(100% - 2 * var(--layout-page-margin-card))`、`margin-inline: auto` 和
+`padding: 0`，在浏览器确认条幅、快捷入口和榜单的左右外缘分别对齐。手机主内容用
+`gap: var(--layout-page-margin-card)` 统一留出区块间距，活动轨与快捷入口之间为 8px。
+把 `HeroBanner` 的 `onActiveSurfaceColorChange` 接到页面外层的渐变。渐变起始色用 16% 活动色
+与 `--background-primary` 混合，并向下过渡到 `--background-secondary`。实测横滑活动后顶部透明
+页头透出的颜色随之更新，纵向滚动后页头恢复实底。在 `<main>` 中提供一个可访问的
+`<h1>`。快捷入口使用简短标签，避免换行把条幅推到首屏下方。用浏览器确认 `1440 × 900`
+首屏完整显示条幅及行动文案，`402 × 844` 快捷入口为单行横滑，且首屏露出首张商品卡的图片。
+
 执行消费项目自己的类型检查、生产构建、测试和相关浏览器检查，核对实际状态及目标
 屏幕尺寸、主题。`pnpm validate`、上游 Storybook 和 Registry 脚本属于 YAMI 源码仓库，
 本包不会安装它们。可选配套 MCP 候选包对相同快照提供只读查询，见

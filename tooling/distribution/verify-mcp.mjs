@@ -69,6 +69,16 @@ export async function verifyMcp(directory, manifest, mcpManifest) {
       assert.match(design.split("\n")[search.matches[0].line - 1], /focus/i);
       assert.equal((await call("search_design_documents", { query: "不存在的测试词__yami__" })).matches.length, 0);
       assert.equal((await call("search_design_documents", { query: "按钮", id: "DESIGN", limit: 1 })).matches.length, 1);
+      const homeSection = await call("search_design_documents", { id: "DISTRIBUTION", query: "组合商城首页入口", limit: 1 });
+      assert.equal(homeSection.matches.length, 1);
+      const homeRules = await call("read_design_document", { id: "DISTRIBUTION", startLine: homeSection.matches[0].line, maxLines: 80 });
+      for (const rule of [
+        "1440 × 900", "简短标签", "完整显示桌面条幅", "402 × 844", "单行横滑", "露出首张商品卡的图片", "<h1>",
+        "body { margin: 0; }", "width: calc(100% - 2 * var(--layout-page-margin-card));", "margin-inline: auto;",
+        "gap: var(--layout-page-margin-card)", "onActiveSurfaceColorChange", "color-mix(in srgb", "16%",
+      ]) {
+        assert.ok(homeRules.text.includes(rule), `Missing storefront composition rule: ${rule}`);
+      }
       const components = await call("list_components");
       assert.deepEqual(components.components.map((component) => component.name), manifest.entries.map((component) => component.name));
       for (const component of index.components) {
@@ -118,5 +128,5 @@ export async function verifyMcp(directory, manifest, mcpManifest) {
     await writeFile(indexFile, original);
   }
   assert.deepEqual(await readdir(cwd), [], "MCP must not create files in the consuming working directory");
-  return { status: "pass", packageVersion: mcpManifest.packageVersion, contentDigest: mcpManifest.contentDigest, designSystemVersion: manifest.packageVersion, modes, tools: 6, components: index.components.length, arbitraryWorkingDirectory: "pass", tamperedStartup: "rejected", errors: [] };
+  return { status: "pass", packageVersion: mcpManifest.packageVersion, contentDigest: mcpManifest.contentDigest, designSystemVersion: manifest.packageVersion, modes, tools: 6, components: index.components.length, storefrontGuidance: "pass", arbitraryWorkingDirectory: "pass", tamperedStartup: "rejected", errors: [] };
 }
