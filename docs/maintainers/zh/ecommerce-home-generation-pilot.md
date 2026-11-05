@@ -81,5 +81,6 @@ Chromium 156.0.8078.4 从本地生产构建渲染。两种视口的页面均无�
 `YAMI_DISTRIBUTION_OUTPUT_DIR=dist/homepage-reuse/verification pnpm verify:yami-design-cli`。
 真实素材的并排截图在 `dist/homepage-reuse/comparison.html`，测量和交互在
 `browser-comparison.json`，独立项目检查在 `verification/cli-verification/result.json`。
-此前试点和候选包校验值均保留。手机条幅与页头有预期的视觉变更，提交 PR 时需在锁定的
-Linux 流程中刷新受影响的视觉快照。
+此前试点和候选包校验值均保留。Linux 视觉快照覆盖中英文、明暗主题及 402px、768px
+首页视口。复核了条幅改为文字后，下方商品区随之移动的预期差异。
+[快照生成记录](https://github.com/divikw/yami-design-system/actions/runs/42004252753)
