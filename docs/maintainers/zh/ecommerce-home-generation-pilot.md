@@ -197,3 +197,55 @@ Chromium 156.0.8078.4 从本地生产构建渲染。两种视口的页面均无�
 首屏、横滑后和纵向滚动后的截图在 `dist/homepage-atmosphere-pilot/comparison.html`。
 同目录的 `browser-comparison.json` 保存区块坐标、截图取样和交互数据，
 `model-events.jsonl` 和 `generated-source/` 保存查询记录与首次完成的生成源码。
+
+## PR #204 合并后的独立生成
+
+从干净的 `main` 提交 `1c5183a` 构建维护版 Storybook 和本地候选包
+`@yami/design-system@0.2.0-candidate.4`、`@yami/design-system-mcp@0.1.0-candidate.8`。
+全新的独立 Vite 项目沿用同一份中文浅色业务素材。Codex CLI 0.155.0 使用 `gpt-6-astra`
+生成一次，设计依据来自已安装的组件包、中文 Skill 和只读 MCP。两次文档查询超过 200 行上限，
+缩小读取范围后成功取回规则。28 次成功查询的版本、提交和内容摘要均与安装包一致。
+
+Chromium 156.0.8078.4 对照了维护版和首次生成的生产构建，范围从页头到第一个热销榜单。
+
+| 检查 | 维护版与生成版实测 |
+|---|---|
+| 桌面 `1440 × 900` 条幅 | 两版原图从 y751 到 y887，共 136px，图片和「立即购买」均完整入屏。 |
+| 手机 `402 × 844` 首屏商品 | 两版首张商品图都从 y762 开始，在首屏露出 82px。活动轨与快捷入口之间均为 8px。 |
+| 手机页头换色 | 在截图坐标 x2、y8 取样。两版初始「扭蛋机」为 `#F2F7FC`，横滑到「glow 裸妆感彩妆」后为 `#FDF9F9`。重新进入首页并纵向滚动后，页头均恢复为 `#FFFFFF`。 |
+
+独立项目类型检查与生产构建通过。两种视口的活动浏览、吸顶搜索、分类筛选和加购均通过，
+并在桌面逐一验证了 31 个本地目标页。生成版整页 Axe 在两种视口均为 0 项。整页示例继续留在内部。
+
+### 复现浏览器对照
+
+本轮归档位于执行机器的 `dist/homepage-main-1c5183a-pilot/`，由 Git 忽略。`receipt.json`
+记录包身份及验收摘要，`browser-comparison.json` 保存两版的测量、取色和交互结果，
+`comparison.html` 可打开原尺寸截图。`generated-source/` 含首次生成的源码、业务素材、锁文件和
+两份原始 tarball，`reference-storybook/` 是同一提交的维护版生产构建。
+
+取得归档后，在已安装锁定依赖的 YAMI 仓库根目录运行以下命令。需要 Node 24、Python 3 和
+Playwright Chromium。命令在新的临时项目中安装并构建生成版，把测量和截图写入新的对照目录。
+
+```sh
+set -e
+pilot_dir="$PWD/dist/homepage-main-1c5183a-pilot"
+replay_dir=$(mktemp -d "$PWD/dist/homepage-main-1c5183a-replay.XXXXXX")
+consumer_dir=$(mktemp -d "${TMPDIR:-/tmp}/yami-homepage-replay.XXXXXX")
+cp -R "$pilot_dir/generated-source/." "$consumer_dir/"
+cp "$pilot_dir/compare-home.mjs" "$pilot_dir/render-comparison.mjs" "$replay_dir/"
+ln -s "$pilot_dir/reference-storybook" "$replay_dir/reference-storybook"
+printf '%s\n' "$consumer_dir" > "$replay_dir/consumer-path.txt"
+(cd "$consumer_dir" && npm ci --ignore-scripts --no-audit --no-fund && npm run typecheck && \
+  npm run build -- --outDir "$replay_dir/generated-build")
+node "$replay_dir/compare-home.mjs"
+node "$replay_dir/render-comparison.mjs"
+```
+
+重跑独立生成时，另建一个仓库外的 Vite 项目，只带入归档中的 `content/`、`public/`、
+`artifacts/`、`index.html`、`tsconfig.json` 和 npm 清单及锁文件。安装后，从项目读取
+`node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md`。将 MCP 客户端
+的服务工作目录设为新项目，启动命令为 `node ./node_modules/@yami/design-system-mcp/cli.mjs`，
+通过 stdio 查询。
+将归档的 `task.txt` 交给同一模型，隔离维护版、原仓库和此前生成结果。以该次首次完成的
+源码重新执行浏览器对照。原会话的 Skill 读取与 MCP 查询见归档中的 `model-events.jsonl`。
