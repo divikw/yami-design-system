@@ -11,26 +11,30 @@ import { fileURLToPath } from "node:url";
 import { chromium, expect } from "@playwright/test";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
 import { verifyMcp } from "./verify-mcp.mjs";
+import { verifyCliSetup } from "./verify-cli.mjs";
+import { verifyNativeCodex } from "./verify-cli-codex.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const fixtures = path.join(root, "tests/distribution/fixtures");
-const reportDir = path.join(root, "dist/candidate-verification");
+const withCli = process.argv.includes("--cli");
+const reportDir = path.join(root, withCli ? "dist/cli-verification" : "dist/candidate-verification");
 await fs.mkdir(reportDir, { recursive: true });
 const consumers = await fs.realpath(await fs.mkdtemp(path.join(tmpdir(), "yami-candidate-consumers-")));
 const policy = JSON.parse(await fs.readFile(path.join(root, "packages/design-system/distribution.json"), "utf8"));
 const env = { ...process.env, NEXT_TELEMETRY_DISABLED: "1" };
 delete env.NODE_PATH;
 
-async function run(command, args, cwd, label) {
+async function run(command, args, cwd, label, envOverrides = {}) {
   console.log(label);
   const log = path.join(reportDir, `${label}.log`);
   const stream = createWriteStream(log);
-  const child = spawn(command, args, { cwd, env, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(command, args, { cwd, env: { ...env, ...envOverrides }, stdio: ["ignore", "pipe", "pipe"] });
   child.stdout.pipe(stream);
   child.stderr.pipe(stream);
   const status = await new Promise((resolve, reject) => { child.once("error", reject); child.once("close", resolve); });
   await new Promise((resolve) => stream.end(resolve));
   if (status !== 0) throw new Error(`${label} failed (${status}):\n${(await fs.readFile(log, "utf8")).slice(-6000)}`);
+  return log;
 }
 
 const results = [];
@@ -59,6 +63,11 @@ try {
   const mcpPacked = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-mcp-pack.json"), "utf8"))[0];
   const mcpTarball = path.join(root, "dist", mcpPacked.filename);
   const mcpExpected = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-mcp-candidate/candidate-manifest.json"), "utf8"));
+  let cliReceipt;
+  if (withCli) {
+    await run(process.execPath, ["tooling/distribution/pack-cli.mjs"], root, "pack-cli");
+    cliReceipt = JSON.parse(await fs.readFile(path.join(root, "dist/yami-design-cli-pack.json"), "utf8"))[0];
+  }
   for (const host of ["next", "vite"]) {
     const directory = path.join(consumers, host);
     const src = path.join(directory, host === "next" ? "app" : "src");
@@ -72,8 +81,9 @@ try {
       : { build: "vite build", start: "vite preview --host 127.0.0.1", typecheck: "tsc --noEmit" };
     await fs.writeFile(path.join(directory, "package.json"), JSON.stringify({
       name: `yami-${host}-candidate-consumer`, private: true, type: "module", scripts,
-      dependencies: { "@yami/design-system": `file:${tarball}`, "@yami/design-system-mcp": `file:${mcpTarball}`, react: "19.3.1", "react-dom": "19.3.1", [host]: policy.verification[host] },
-      devDependencies: { typescript: policy.verification.typescript, "@types/react": "19.3.0", "@types/react-dom": "19.3.0", ...(host === "next" ? { "@types/node": "26.6.5" } : {}) },
+      ...(withCli && host === "vite" ? { packageManager: "pnpm@11.20.0" } : {}),
+      dependencies: { ...(!withCli ? { "@yami/design-system": `file:${tarball}`, "@yami/design-system-mcp": `file:${mcpTarball}` } : {}), react: "19.3.1", "react-dom": "19.3.1", [host]: policy.verification[host] },
+      devDependencies: { ...(withCli ? { "yami-design-cli": `file:${path.join(root, "dist", cliReceipt.filename)}` } : {}), typescript: policy.verification.typescript, "@types/react": "19.3.0", "@types/react-dom": "19.3.0", ...(host === "next" ? { "@types/node": "26.6.5" } : {}) },
     }, null, 2));
     await fs.writeFile(path.join(directory, "tsconfig.json"), JSON.stringify({
       compilerOptions: { target: "ES2022", lib: ["ES2022", "DOM", "DOM.Iterable"], module: "ESNext", moduleResolution: "Bundler", jsx: "react-jsx", strict: true, skipLibCheck: true, esModuleInterop: true, resolveJsonModule: true, noEmit: true, types: [host === "next" ? "next" : "vite/client"], ...(host === "next" ? { plugins: [{ name: "next" }] } : {}) },
@@ -81,7 +91,9 @@ try {
       exclude: ["node_modules"],
     }, null, 2));
     if (host === "vite") await fs.writeFile(path.join(directory, "index.html"), '<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>YAMI candidate · Vite</title></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>');
-    await run("npm", ["install", "--no-audit", "--no-fund"], directory, `${host}-install`);
+    const manager = withCli && host === "vite" ? "pnpm" : "npm";
+    await run(manager, manager === "npm" ? ["install", "--no-audit", "--no-fund"] : ["install", "--ignore-scripts"], directory, `${host}-install`);
+    const cli = withCli ? await verifyCliSetup({ root, directory, host, tarball, mcpTarball, run }) : undefined;
     const installed = await fs.realpath(path.join(directory, "node_modules/@yami/design-system"));
     assert.ok(installed.startsWith(`${directory}${path.sep}`), `Consumer must install tarball bytes, not link to the repository: ${installed}`);
     const manifest = await verifyInstalledCandidate(installed, expected);
@@ -116,7 +128,13 @@ try {
     ])));
     await run("npm", ["run", "typecheck"], directory, `${host}-typecheck`);
     await run("npm", ["run", "build"], directory, `${host}-build`);
-    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, artifactIntegrity: packed.integrity, mcpArtifactIntegrity: mcpPacked.integrity, mcp, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
+    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, artifactIntegrity: packed.integrity, mcpArtifactIntegrity: mcpPacked.integrity, ...(cli ? { cli: { ...cli, artifactIntegrity: cliReceipt.integrity } } : {}), mcp, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
+  }
+
+  if (withCli && process.argv.includes("--native-codex")) {
+    const native = await verifyNativeCodex(results);
+    for (const result of results) result.cli.nativeCodex = native;
+    console.log("Native Codex recognized both generated MCP configurations and Skills; no model calls.");
   }
 
   async function unusedPort() {

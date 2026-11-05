@@ -37,6 +37,9 @@ jobs:
           - check: component-candidate
             command: pnpm verify:design-system-candidate
             installBrowser: true
+          - check: yami-design-cli
+            command: pnpm verify:yami-design-cli
+            installBrowser: true
           - check: build
             command: pnpm --filter @yami/topic-generator-app build && pnpm --filter @yami/canvas build
           - check: storybook
@@ -64,7 +67,7 @@ jobs:
       - name: install
         run: pnpm install --frozen-lockfile
       - name: preserve-delivery-history
-        if: matrix.check == 'component-candidate'
+        if: matrix.check == 'component-candidate' || matrix.check == 'yami-design-cli'
         env:
           DISTRIBUTION_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |

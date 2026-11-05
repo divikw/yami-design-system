@@ -52,8 +52,8 @@ AI-generated task quality or adoption in a real business project.
 
 Follow-up order:
 
-1. Finish PR #200's unified consumer entry and upgrade/delivery guards, then verify main-branch checks
-   after an authorized merge.
+1. PR #200's unified consumer entry and upgrade/delivery guards are merged as `cb6ed5e`;
+   all 19 main-branch CI jobs passed. Implement and verify the bounded local CLI pilot below.
 2. Evaluate real AI tasks against the installed package, Skill and MCP: generation, refinement,
    missing-component handling, and type/build/browser results. Keep query success distinct from
    generated-output quality.
@@ -65,6 +65,28 @@ Follow-up order:
 5. Use pilot evidence to decide remote artifact retrieval for new machines/CI and a registry delivery
    workflow. Package publication requires separate authorization; packages remain unpublished during
    the current work.
+
+## Local yami-design-cli pilot — 2026-11-05
+
+The authorized next step adds a separate private `yami-design-cli` candidate with
+two commands, superseding the general CLI deferral above for this local scope.
+`init` preflights supplied paired tarballs, installs through npm/pnpm, and connects
+the project-owned Skill bridge and Codex MCP table. `--dry-run` does not modify
+the project. Conflicts are rejected; matching repeated initialization is unchanged.
+`doctor` verifies installed manifests and performs real read-only MCP queries,
+without model calls. Host styles, client trust and visual/behavioral acceptance
+remain explicit consumer responsibilities.
+
+The pilot covers standalone Next.js/Vite applications on Node 24 and macOS/Linux.
+Workspace installation, arbitrary clients, automatic upgrades, component copying,
+generation, remote delivery and publication are outside this implementation.
+Existing component/MCP package names and exact peer pairing remain unchanged.
+See [the CLI contract](../../packages/yami-design-cli/README.md) and verify with
+`pnpm test:yami-design-cli`, `pnpm verify:yami-design-cli` and `pnpm validate`.
+Local native Codex discovery can be included with `--native-codex`; CI does not
+require an authenticated Codex client. Fixture trust is supplied only to the
+verification subprocess, without persisting global trust settings. No package
+is published by these commands.
 
 ## Consequences
 
