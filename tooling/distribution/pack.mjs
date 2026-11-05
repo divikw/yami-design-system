@@ -7,16 +7,18 @@ import ts from "typescript";
 import { contentDigest } from "../registry/contracts.mjs";
 import { buildKnowledge } from "./knowledge.mjs";
 import { packMcp } from "./mcp.mjs";
+import { distributionOutput } from "./output.mjs";
 import { assertUnreleased, loadReleases, verifyUpgrade } from "./upgrade.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const source = path.join(root, "packages/design-system");
 const components = path.join(source, "components");
-const output = path.join(root, "dist/design-system-candidate");
+const dist = distributionOutput(root);
+const output = path.join(dist, "design-system-candidate");
 const readJson = async (file) => JSON.parse(await fs.readFile(file, "utf8"));
 const policy = await readJson(path.join(source, "distribution.json"));
 const workspacePackage = await readJson(path.join(source, "package.json"));
-const upgradeReport = path.join(root, "dist/candidate-upgrade.json");
+const upgradeReport = path.join(dist, "candidate-upgrade.json");
 await fs.mkdir(path.dirname(upgradeReport), { recursive: true });
 await fs.writeFile(upgradeReport, '{"status":"running"}\n');
 // 在删除工作目录或写 tarball 之前拒绝重新打包已交付的两个版本。
@@ -200,8 +202,8 @@ const manifest = {
   files: payload.map(({ path: file, content }) => ({ path: file, bytes: content.length, sha256: createHash("sha256").update(content).digest("hex") })),
 };
 await fs.writeFile(path.join(output, "candidate-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
-await verifyUpgrade(root);
+await verifyUpgrade(root, dist);
 const receipt = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", path.dirname(output)], { cwd: output, encoding: "utf8" }));
-await fs.writeFile(path.join(root, "dist/candidate-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
-console.log(`Candidate: ${path.join(root, "dist", receipt[0].filename)}\nContent: ${manifest.contentDigest}\nSource: ${manifest.sourceCommit}${manifest.sourceDirty ? " (working tree modified)" : ""}`);
-await packMcp({ root, policy, provenance });
+await fs.writeFile(path.join(dist, "candidate-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+console.log(`Candidate: ${path.join(dist, receipt[0].filename)}\nContent: ${manifest.contentDigest}\nSource: ${manifest.sourceCommit}${manifest.sourceDirty ? " (working tree modified)" : ""}`);
+await packMcp({ root, dist, policy, provenance });

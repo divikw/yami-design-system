@@ -46,7 +46,8 @@ pnpm check:distribution-upgrade
 联合类型按各分支的属性名合并检查，避免漏掉分支独有的可选属性。
 宿主 peer 要求变化保守地按破坏性变化处理，需要独立兼容性评审。
 
-回执在 `dist/candidate-upgrade.json`，先写 `running`，检查完成后才写 `pass` 或 `fail`。
+回执默认为 `dist/candidate-upgrade.json`，先写 `running`，检查完成后才写 `pass` 或 `fail`。
+若打包时设置了 `YAMI_DISTRIBUTION_OUTPUT_DIR`，复验、升级检查和记录交付时使用同一目录。
 `runtimeChanged` 比较组件 JS/CSS、Token 数据、基础样式、字体摘要与外部依赖版本。类型通过不能证明
 视觉、默认值、交互或无障碍兼容；这些仍需人工说明与浏览器验证。
 带默认参数的泛型按默认实例检查，并比较组件函数签名，不枚举全部泛型实参。

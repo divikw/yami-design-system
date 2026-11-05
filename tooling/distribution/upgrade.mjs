@@ -170,8 +170,8 @@ export function assertUpgrade(previous, current, note, diff, mcpVersion) {
   assert.ok(["patch", "minor", "major"].indexOf(note.changeType) >= ["patch", "minor", "major"].indexOf(required), `Upgrade note understates ${required} changes`);
 }
 
-export async function verifyUpgrade(root) {
-  const reportFile = path.join(root, "dist/candidate-upgrade.json");
+export async function verifyUpgrade(root, dist) {
+  const reportFile = path.join(dist, "candidate-upgrade.json");
   await fs.mkdir(path.dirname(reportFile), { recursive: true });
   await fs.writeFile(reportFile, '{"status":"running"}\n');
   try {
@@ -180,7 +180,7 @@ export async function verifyUpgrade(root) {
     assertUnreleased(policy, releases);
     const baseline = releases.at(-1);
     assert.ok(compareVersions(policy.mcpVersion, baseline.mcp.version) > 0, "MCP version must increase with its component peer");
-    const current = await capturePackage(path.join(root, "dist/design-system-candidate"));
+    const current = await capturePackage(path.join(dist, "design-system-candidate"));
     assert.equal(current.package.version, policy.version, "Pack the current candidate before checking upgrades");
     const note = JSON.parse(await fs.readFile(path.join(root, `packages/design-system/distribution/upgrades/${policy.version}.json`), "utf8"));
     assert.equal(note.mcpFrom, baseline.mcp.version);

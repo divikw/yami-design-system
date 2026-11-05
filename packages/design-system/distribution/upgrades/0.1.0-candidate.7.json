@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "0.1.0-candidate.7",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.4",
+  "changeType": "patch",
+  "summary": "Keep the consumer knowledge snapshot scoped to the design system and its public component examples.",
+  "migration": "Install the candidate.7/candidate.4 pair, update the consumer lockfile and restart the project MCP. Use the installed index to discover the current document IDs.",
+  "rollback": "Reinstall the previously verified paired tarballs and restore the previous consumer lockfile and MCP process. Preserve the original artifacts for each version.",
+  "visualAndBehavior": "Component JavaScript, styles, fonts and Tokens retain their existing behavior. The consumer guides and MCP use the same versioned knowledge snapshot."
+}

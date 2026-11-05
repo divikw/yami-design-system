@@ -66,6 +66,12 @@ Follow-up order:
    workflow. Package publication requires separate authorization; packages remain unpublished during
    the current work.
 
+The inventory workbench example is an internal test fixture. Page generation pilots go through
+desktop and mobile review against a maintained YAMI page before the distribution scope changes.
+The first homepage comparison kept the generated example internal.
+[Inventory workbench evaluation](../maintainers/zh/inventory-workbench-pilot.md) ·
+[Ecommerce Home evaluation](../maintainers/zh/ecommerce-home-generation-pilot.md)
+
 ## Local yami-design-cli pilot — 2026-11-05
 
 The authorized next step adds a separate private `yami-design-cli` candidate with

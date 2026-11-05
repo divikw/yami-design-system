@@ -41,7 +41,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.5.tgz
+npm install /absolute/path/to/yami-design-system-0.1.0-candidate.7.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -167,5 +167,6 @@ pnpm verify:design-system-candidate
 启动生产服务并验证原有场景及包内示例的交互。
 字体检查要求真实的字体面加载，不能仅凭字体名称可用就通过。它需要网络安装宿主依赖及
 本机 Playwright Chromium。命令使用 `tar` 和 POSIX 进程组；Windows 尚未验证。
-回执和截图写入仓库根目录 `dist/candidate-verification/`，
-保留临时项目路径供复查；该命令不发布包或站点。
+回执和截图默认写入仓库根目录 `dist/candidate-verification/`。可用
+`YAMI_DISTRIBUTION_OUTPUT_DIR` 将本轮候选包和回执写入独立目录，相对路径从仓库根解析。
+回执记录临时项目路径供复查。该命令只在本地打包和安装候选包。
