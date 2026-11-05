@@ -54,6 +54,10 @@ export async function verifyMcp(directory, manifest, mcpManifest) {
       const documents = await call("list_design_documents");
       assert.ok(documents.documents.some((document) => document.id === "DESIGN"));
       assert.ok(documents.documents.some((document) => document.id === "components/Button/usage"));
+      const retiredRecipe = "recipes/inventory-workbench";
+      assert.ok(!documents.documents.some(({ id }) => id === retiredRecipe));
+      assert.deepEqual((await call("search_design_documents", { query: "库存与采购工作台" })).matches, []);
+      await rejectTool("read_design_document", { id: retiredRecipe });
       const page = await call("read_design_document", { id: "DESIGN", maxLines: 8 });
       const design = await readFile(path.join(knowledgeDirectory, index.references.design), "utf8");
       assert.equal(page.text, design.split("\n").slice(0, 8).join("\n"));
@@ -75,6 +79,8 @@ export async function verifyMcp(directory, manifest, mcpManifest) {
       }
       const { resources } = await client.listResources();
       assert.equal(resources.length, index.documents.length + 1);
+      assert.ok(!resources.some(({ uri }) => /inventory-?workbench/i.test(uri)));
+      await assert.rejects(client.readResource({ uri: `yami://design-system/${manifest.packageVersion}/references/recipes/InventoryWorkbench.tsx` }));
       for (const resource of resources) {
         const result = await client.readResource({ uri: resource.uri });
         const relative = new URL(resource.uri).pathname.split("/").slice(2).join("/");

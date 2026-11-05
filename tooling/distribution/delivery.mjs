@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { distributionOutput } from "./output.mjs";
 import { assertUnreleased, capturePackage, loadReleases, verifyUpgrade } from "./upgrade.mjs";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
 
@@ -43,12 +44,13 @@ export async function checkReleaseHistory(root, base) {
 
 async function recordDelivery(root) {
   const git = (args) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+  const dist = distributionOutput(root);
   assert.equal(git(["status", "--porcelain"]), "", "Commit the reviewed source, then build and verify before recording delivery");
   const policy = JSON.parse(await fs.readFile(path.join(root, "packages/design-system/distribution.json"), "utf8"));
   assertUnreleased(policy, await loadReleases(root));
-  await verifyUpgrade(root);
-  const component = await capturePackage(path.join(root, "dist/design-system-candidate"));
-  const mcpDirectory = path.join(root, "dist/design-system-mcp-candidate");
+  await verifyUpgrade(root, dist);
+  const component = await capturePackage(path.join(dist, "design-system-candidate"));
+  const mcpDirectory = path.join(dist, "design-system-mcp-candidate");
   const mcp = JSON.parse(await fs.readFile(path.join(mcpDirectory, "candidate-manifest.json"), "utf8"));
   await verifyInstalledCandidate(mcpDirectory, mcp);
   assert.equal(mcp.packageVersion, policy.mcpVersion);
@@ -56,10 +58,10 @@ async function recordDelivery(root) {
   const artifacts = {};
   for (const [key, name, version] of [["component", "yami-design-system", policy.version], ["mcp", "yami-design-system-mcp", policy.mcpVersion]]) {
     const filename = `${name}-${version}.tgz`;
-    const content = await fs.readFile(path.join(root, "dist", filename));
+    const content = await fs.readFile(path.join(dist, filename));
     artifacts[key] = { filename, integrity: `sha512-${createHash("sha512").update(content).digest("base64")}` };
   }
-  const report = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-verification/result.json"), "utf8"));
+  const report = JSON.parse(await fs.readFile(path.join(dist, "candidate-verification/result.json"), "utf8"));
   assertVerifiedDelivery(report, component, mcp, git(["rev-parse", "HEAD"]), artifacts);
   const release = { schemaVersion: 1, component: { ...component, artifact: artifacts.component }, mcp: { version: mcp.packageVersion, sourceCommit: mcp.sourceCommit, sourceDirty: mcp.sourceDirty, contentDigest: mcp.contentDigest, artifact: artifacts.mcp } };
   const file = path.join(root, `tooling/distribution/releases/${policy.version}.json`);

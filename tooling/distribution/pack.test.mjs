@@ -46,6 +46,7 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       assert.equal(content.length, entry.bytes, entry.path);
       assert.equal(createHash("sha256").update(content).digest("hex"), entry.sha256, entry.path);
       assert.ok(!/\.(stories|figma)\.|fixtures/.test(entry.path), entry.path);
+      assert.doesNotMatch(entry.path, /inventory-?workbench/i);
       assert.ok(!entry.path.endsWith(".tsx") || /^knowledge\/yami-design-system\/references\/components\/(Button|Input|Card|ProductCard|ProductList)\/examples\.tsx$/.test(entry.path), entry.path);
       assert.ok(!entry.path.endsWith(".ts") || entry.path.endsWith(".d.ts"), entry.path);
       payload.push({ path: entry.path, content });
@@ -138,6 +139,10 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       for (const key of ["package", "packageVersion", "sourceCommit", "sourceDirty"]) assert.equal(index[key], manifest[key], key);
       assert.deepEqual(index.components.map(({ name, version, status }) => ({ name, version, status })), manifest.entries);
       assert.deepEqual(Object.keys(index.skills), ["en", "zh-CN"]);
+      assert.doesNotMatch(JSON.stringify(index), /inventory-?workbench/i);
+      for (const file of Object.values(index.skills)) {
+        assert.doesNotMatch(await fs.readFile(path.join(knowledge, file), "utf8"), /inventory[- ]?workbench|库存与采购工作台/i);
+      }
       for (const file of [...Object.values(index.skills), ...Object.values(index.references)]) await fs.access(path.join(knowledge, file));
       for (const extension of ["css", "json"]) {
         assert.deepEqual(await fs.readFile(path.join(knowledge, `references/generated/tokens.${extension}`)), await fs.readFile(path.join(unpacked, `generated/tokens.${extension}`)));

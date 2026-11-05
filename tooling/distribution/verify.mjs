@@ -14,6 +14,7 @@ import { verifyInstalledCandidate } from "./verify-package.mjs";
 import { verifyMcp } from "./verify-mcp.mjs";
 import { verifyCliSetup } from "./verify-cli.mjs";
 import { verifyNativeCodex } from "./verify-cli-codex.mjs";
+import { verifyInventoryWorkbench } from "./verify-inventory-workbench.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const fixtures = path.join(root, "tests/distribution/fixtures");
@@ -125,6 +126,15 @@ try {
       sections.push(`<section aria-label="${component.name} packaged example"><h3>${component.name}</h3><${example.export} /></section>`);
     }
     await fs.writeFile(path.join(src, "KnowledgeExamples.tsx"), `"use client";\n${imports.join("\n")}\nexport function KnowledgeExamples() { return <section aria-label="Packaged examples"><h2>Versioned knowledge examples</h2>${sections.join("\n")}</section>; }\n`);
+    const inventoryFixture = path.join(fixtures, "shared/inventory-workbench");
+    for (const file of ["InventoryWorkbench.tsx", "inventory-workbench.css"]) {
+      await fs.copyFile(path.join(inventoryFixture, file), path.join(src, file));
+    }
+    if (host === "next") {
+      const route = path.join(src, "inventory-workbench");
+      await fs.mkdir(route);
+      await fs.writeFile(path.join(route, "page.tsx"), 'export { InventoryWorkbench as default } from "../InventoryWorkbench";\n');
+    }
     const versions = Object.fromEntries(await Promise.all([host, "react", "react-dom", "typescript"].map(async (name) => [
       name, JSON.parse(await fs.readFile(path.join(directory, "node_modules", name, "package.json"), "utf8")).version,
     ])));
@@ -248,6 +258,7 @@ try {
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "Mobile layout must not overflow horizontally");
       await expect(page.getByRole("button", { name: "Add sample product", exact: true })).toBeVisible();
       await page.screenshot({ path: path.join(reportDir, `${result.host}-mobile-dark.png`), fullPage: true });
+      result.internalInventoryWorkbench = await verifyInventoryWorkbench({ page, url, reportDir, host: result.host });
       assert.deepEqual(errors, [], `${result.host} browser errors`);
       assert.deepEqual(failures, [], `${result.host} failed asset requests`);
       result.browser = { status: "pass", desktop: "1440/light/en", mobile: "375/dark/en", languageWeights: "en:500/zh:600", fonts: "400/500/700 loaded", interactions: ["keyboard-focus-submit", "input-error-clear", "disabled-action", "add-to-cart", "controlled-tabs"], errors, failures };

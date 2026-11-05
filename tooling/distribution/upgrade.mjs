@@ -170,7 +170,7 @@ export function assertUpgrade(previous, current, note, diff, mcpVersion) {
   assert.ok(["patch", "minor", "major"].indexOf(note.changeType) >= ["patch", "minor", "major"].indexOf(required), `Upgrade note understates ${required} changes`);
 }
 
-export async function verifyUpgrade(root, dist = path.join(root, "dist")) {
+export async function verifyUpgrade(root, dist) {
   const reportFile = path.join(dist, "candidate-upgrade.json");
   await fs.mkdir(path.dirname(reportFile), { recursive: true });
   await fs.writeFile(reportFile, '{"status":"running"}\n');
