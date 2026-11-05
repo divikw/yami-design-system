@@ -70,9 +70,9 @@
       "title": "Billboard",
       "type": "component",
       "status": "stable",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "path": "registry-items/billboard.json",
-      "digest": "3bbaf92f3185f9886946624617bffcbb4a1336a25b48bf6b168f8164a7061077"
+      "digest": "9113659233df315c666c7a5c5fa73147e1f7722cf600659e1d79adea8ef4794a"
     },
     {
       "name": "brand-product-rail",
@@ -187,9 +187,9 @@
       "title": "Header",
       "type": "component",
       "status": "beta",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "path": "registry-items/header.json",
-      "digest": "ca65b3f32855cca28075ad6736b0d77b8c11cbc5f27c7bb2d29ce6d2ceb6e2c6"
+      "digest": "5f292fed3c5b3d653d2cda7ef982df574b32e435ed9fb49ab83abb1cb0c52754"
     },
     {
       "name": "hero-banner",
@@ -198,7 +198,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "dd5f66e9941a0f8fba7391baf481a56545b2f9e03f18cd8d715b6796eba5c6f7"
+      "digest": "dabeda9e86caf99914e096e4e7a953abe9455063dee0f6439f9c40feca428ccc"
     },
     {
       "name": "horizontal-scroll-list",

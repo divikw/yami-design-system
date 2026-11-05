@@ -107,6 +107,7 @@
   width: 16px;
   height: 16px;
   flex: 0 0 16px;
+  background: url('./assets/category-menu/arrow-right.svg') center / contain no-repeat;
 }
 
 .imagesMenu .column {

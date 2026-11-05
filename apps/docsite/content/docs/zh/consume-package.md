@@ -24,9 +24,10 @@ sourceRefs:
 
 | 项目 | 当前范围 |
 | --- | --- |
-| 组件包 | `@yami/design-system@0.1.0-candidate.7` |
-| 配套 MCP | `@yami/design-system-mcp@0.1.0-candidate.4`，精确绑定上述组件版本 |
-| 公开组件 | Button（含 ButtonLink）、Input、Card、ProductCard、ProductList |
+| 组件包 | `@yami/design-system@0.2.0-candidate.1` |
+| 配套 MCP | `@yami/design-system-mcp@0.1.0-candidate.5`，精确绑定上述组件版本 |
+| 稳定组件 | Button（含 ButtonLink）、Input、Card、ProductCard、ProductList、HeroBanner、ShortcutRail、Billboard |
+| Beta 预览 | `@yami/design-system/components/Header`（含商城首页吸顶页头） |
 | 运行环境 | Node 24；React / React DOM `~19.3.1` |
 | 已验证宿主 | Next.js 16.4.3 App Router、Vite 8.3.5、TypeScript 6.0.2 |
 
@@ -43,8 +44,8 @@ YAMI 通过自有版本包、随包 Skill 和只读 MCP 接入消费项目，内
 ```bash
 npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package /artifacts/yami-design-system-0.1.0-candidate.7.tgz \
-  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.4.tgz \
+  --design-package /artifacts/yami-design-system-0.2.0-candidate.1.tgz \
+  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.5.tgz \
   --locale zh --dry-run
 ```
 
@@ -63,7 +64,7 @@ CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局�
 在消费项目目录执行，路径替换为维护者提供的原始文件：
 
 ```bash
-npm install /absolute/path/yami-design-system-0.1.0-candidate.7.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.4.tgz
+npm install /absolute/path/yami-design-system-0.2.0-candidate.1.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.5.tgz
 ```
 
 提交消费项目的依赖声明与 lockfile；原始 tarball 保存在团队授权的产物位置。新机器或 CI 必须先取得相同字节的文件，当前没有远端自动分发服务。两个包保持 `private: true`，安装不等于发布。

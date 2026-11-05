@@ -24,9 +24,10 @@ These are local candidates for the authorized environment. They are not publishe
 
 | Item | Current scope |
 | --- | --- |
-| Component package | `@yami/design-system@0.1.0-candidate.7` |
-| Companion MCP | `@yami/design-system-mcp@0.1.0-candidate.4`, bound to that exact component version |
-| Public components | Button (including ButtonLink), Input, Card, ProductCard, ProductList |
+| Component package | `@yami/design-system@0.2.0-candidate.1` |
+| Companion MCP | `@yami/design-system-mcp@0.1.0-candidate.5`, bound to that exact component version |
+| Stable components | Button (including ButtonLink), Input, Card, ProductCard, ProductList, HeroBanner, ShortcutRail, Billboard |
+| Beta preview | `@yami/design-system/components/Header` (includes the sticky storefront header) |
 | Runtime | Node 24; React / React DOM `~19.3.1` |
 | Verified hosts | Next.js 16.4.3 App Router, Vite 8.3.5, TypeScript 6.0.2 |
 
@@ -43,8 +44,8 @@ Obtain the three authorized original tarballs and run in the consuming applicati
 ```bash
 npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package /artifacts/yami-design-system-0.1.0-candidate.7.tgz \
-  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.4.tgz \
+  --design-package /artifacts/yami-design-system-0.2.0-candidate.1.tgz \
+  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.5.tgz \
   --locale en --dry-run
 ```
 
@@ -63,7 +64,7 @@ The CLI does not modify application entry points, global resets, AGENTS.md, clie
 Run in the consumer project, replacing paths with the original files supplied by the maintainer:
 
 ```bash
-npm install /absolute/path/yami-design-system-0.1.0-candidate.7.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.4.tgz
+npm install /absolute/path/yami-design-system-0.2.0-candidate.1.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.5.tgz
 ```
 
 Commit the consumer dependency declarations and lockfile; keep original tarballs in the team's authorized artifact location. A new machine or CI must obtain the same bytes first. There is no remote automatic distribution service. Both packages retain `private: true`; installation does not publish them.

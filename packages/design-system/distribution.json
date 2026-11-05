@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0-candidate.7",
-  "mcpVersion": "0.1.0-candidate.4",
-  "entries": ["Button", "Input", "Card", "ProductCard", "ProductList"],
+  "version": "0.2.0-candidate.1",
+  "mcpVersion": "0.1.0-candidate.5",
+  "entries": ["Button", "Input", "Card", "ProductCard", "ProductList", "HeroBanner", "ShortcutRail", "Billboard"],
+  "previewEntries": ["Header"],
   "react": "~19.3.1",
   "verification": {
     "node": "24.18.0",

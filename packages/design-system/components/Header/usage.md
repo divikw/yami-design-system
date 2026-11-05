@@ -68,6 +68,17 @@ every consumer, where nothing validates it.
 ## When to use
 
 - Every logged-in and anonymous storefront page, at any width
+- Use `StickyStorefrontHeader` for the document-scrolling storefront home. It
+  accepts `HeaderProps`, pins the desktop search to the top, and compacts the
+  default mobile band after scrolling while keeping search and actions visible.
+  Place it above `<main>` inside a container that spans the scrolling page.
+  Ancestors with `overflow: auto`, `scroll` or `hidden` can stop it from pinning
+  to the viewport. Use `overflow: clip` when the page only needs to clip paint.
+  The host supplies `onSearchSubmit` and `mobileSearchHref` for its search flow.
+  With `mobileSearchHref`, the mobile pill is a link: focusing it keeps the
+  current page in place, and tapping it or pressing Enter opens search.
+  The locally installable candidate exposes this Beta component from
+  `@yami/design-system/components/Header`.
 
 ## When NOT to use
 
@@ -187,7 +198,7 @@ categories={[
     label: 'Health',
     href: '/en/c/health/7',
     menuItemId: '8765',
-    image: { src: '/images/categories/health.png', alt: 'Health' },
+    image: { src: '/images/categories/health.png', alt: '' },
     badges: ['999+', 'NEW'],
   },
 ]}
@@ -201,8 +212,8 @@ Do **not** substitute `assets/icons/category/*.svg` icon components. Those are
 the line-art system icons; the rail carries full-color artwork, and the icon set
 does not cover the production category list.
 
-`alt` carries the category name and the visible label repeats it, so keep them
-identical.
+Use empty `alt` for decorative category artwork. The visible label names the
+destination; the rail drops `alt` when it only repeats that label.
 
 Supply artwork at 2× (48 × 48) for raster sources — that is what production
 ships.
@@ -317,7 +328,8 @@ which is the barcode glyph. Give it a localized `scanLabel`; without one the
 control is not rendered at all, since an unnamed icon button is unusable to
 assistive tech. Set `mobileSearchHref` when mobile search lives on a dedicated
 page; activating the field then opens that destination instead of editing the
-header field in place.
+header field in place. A supplied `searchValue` remains visible in the link and
+is included in its accessible name.
 
 ### Why the search field is not an `Input`
 

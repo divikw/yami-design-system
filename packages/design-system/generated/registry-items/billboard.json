@@ -5,8 +5,8 @@
   "title": "Billboard",
   "type": "component",
   "status": "stable",
-  "version": "0.1.0",
-  "description": "Floating Bars / 活动快捷浮动栏. Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
+  "version": "0.2.0",
+  "description": "Floating Bars / 活动快捷浮动栏. A promotional band with one link, responsive campaign artwork and an optional text fallback for phones.",
   "source": "components/Billboard",
   "files": [
     {
@@ -63,14 +63,22 @@
   },
   "design": {
     "tokens": [
+      "--button-secondary",
       "--focus-ring",
       "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--radius-button-primary",
       "--radius-surface-default",
       "--space-025",
+      "--space-100",
+      "--space-1000",
       "--space-200",
       "--space-600",
       "--stroke-thick",
-      "--surface-primary"
+      "--surface-primary",
+      "--text-primary"
     ],
     "rules": [
       "focus-style",
@@ -105,11 +113,11 @@
         "tab",
         "enter"
       ],
-      "ariaPattern": "section[aria-label] wrapping one a[aria-label] around decorative artwork",
-      "structure": "The label names both the region and the link inside it. Naming only the region leaves the link nameless, since its only content is artwork with empty alt and a link takes its name from its content.",
+      "ariaPattern": "section[aria-label] wrapping one a[aria-label] containing artwork or the mobile text fallback",
+      "structure": "The label names both the region and the link. The optional mobile fallback shows that same label as visible text.",
       "interaction": "One link covers the band; there is no secondary target."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "3bbaf92f3185f9886946624617bffcbb4a1336a25b48bf6b168f8164a7061077"
+  "contentDigest": "9113659233df315c666c7a5c5fa73147e1f7722cf600659e1d79adea8ef4794a"
 }

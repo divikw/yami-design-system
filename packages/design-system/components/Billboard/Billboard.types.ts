@@ -35,6 +35,8 @@ export interface BillboardProps
    * 供屏幕阅读器朗读的链接名称，应清楚说明活动内容或跳转目的。
    */
   label: string;
+  /** 小于 1024px 且没有同活动的移动图片时，用 label 渲染可读条幅。 */
+  mobileTextFallback?: boolean;
   /** 图片加载方式。首屏图片使用 eager，非首屏使用 lazy。 */
   imageLoading?: ImgHTMLAttributes<HTMLImageElement>["loading"];
   /** 图片解码完成后再显示；加载期间保留背景，减少闪烁。 */

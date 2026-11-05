@@ -11,7 +11,7 @@ function cx(...classes: Array<string | false | null | undefined>) {
 }
 
 /**
- * A full-bleed promotional band whose entire content is one image.
+ * A full-bleed promotional band with one campaign destination.
  *
  * The artwork carries the offer, the styling and the call to action; the
  * component contributes the band, the link and the accessible name. That name
@@ -24,11 +24,13 @@ export function Billboard({
   image,
   href,
   label,
+  mobileTextFallback = false,
   imageLoading = "lazy",
   revealOnLoad = false,
   className,
   ...rest
 }: BillboardProps) {
+  const showMobileText = mobileTextFallback && !image.mobile;
   return (
     <section
       {...rest}
@@ -41,6 +43,7 @@ export function Billboard({
         href={href}
         aria-label={label}
         data-slot="billboard-link"
+        data-mobile-text={showMobileText || undefined}
       >
         <picture>
           {image.mobile && (
@@ -81,6 +84,14 @@ export function Billboard({
             data-slot="billboard-image"
           />
         </picture>
+        {showMobileText && (
+          <span className={styles.mobileText} data-slot="billboard-mobile-text">
+            <span>{label}</span>
+            <svg className={styles.mobileArrow} width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M10 16h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        )}
       </a>
     </section>
   );

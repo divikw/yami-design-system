@@ -16,7 +16,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Floating Bars / 活动快捷浮动栏。\n\nA full-bleed promotional band whose entire content is one image. Campaign teams ship finished artwork — offer, styling and call to action are drawn into it — so the component contributes the band, the link and an accessible name. That name is a prop, because the words on the artwork are pixels a reader cannot reach.",
+          "Floating Bars / 活动快捷浮动栏。\n\nA promotional band with a single destination. Use artwork for the same offer at both sizes. If matching mobile artwork is unavailable, the mobile text fallback keeps the visible offer and accessible name aligned.",
       },
     },
   },
@@ -55,10 +55,9 @@ export const Showcase: Story = {
         "Billboard link has no accessible name: naming the band does not name the link inside it",
       );
     }
-    if (link.textContent?.trim()) {
-      throw new Error(
-        "Billboard is image-only: any text belongs in the artwork, not the DOM",
-      );
+    const mobileText = link.querySelector('[data-slot="billboard-mobile-text"]');
+    if (mobileText && getComputedStyle(mobileText).display !== "none") {
+      throw new Error("Desktop billboard must show its desktop artwork, without the mobile text fallback");
     }
 
     // Height is reserved from the artwork's intrinsic dimensions, so the band
@@ -193,32 +192,12 @@ export const MobileCard: Story = {
       throw new Error(`Mobile floating bars must use 16px padding, got ${style.padding}`);
     }
 
-    // The narrow source carries its own dimensions, since portrait campaign
-    // artwork rarely shares the wide one's ratio. Checking here because this
-    // is the only story where that source is the one the viewport picks.
-    const image = band.querySelector<HTMLImageElement>(
-      '[data-slot="billboard-image"]',
-    );
-    const source = band.querySelector<HTMLSourceElement>("source");
-    if (!image || !source) throw new Error("Mobile billboard did not render");
-    if (!source.srcset.includes("campaign-banner-mobile.png")) {
-      throw new Error("Mobile billboard artwork must remain unchanged");
-    }
-    await new Promise<void>((resolve) => {
-      if (image.complete) return resolve();
-      image.addEventListener("load", () => resolve(), { once: true });
-      image.addEventListener("error", () => resolve(), { once: true });
-    });
-    if (image.currentSrc === image.src) {
-      throw new Error("Mobile billboard must serve its narrow artwork");
-    }
-    if (
-      Number(source.getAttribute("width")) !== image.naturalWidth ||
-      Number(source.getAttribute("height")) !== image.naturalHeight
-    ) {
-      throw new Error(
-        `Mobile billboard reserved ${source.getAttribute("width")}x${source.getAttribute("height")} for artwork that is ${image.naturalWidth}x${image.naturalHeight}`,
-      );
+    const link = band.querySelector('[data-slot="billboard-link"]');
+    const copy = link?.querySelector('[data-slot="billboard-mobile-text"]');
+    const picture = link?.querySelector("picture");
+    if (!copy || !picture || getComputedStyle(picture).display !== "none" ||
+        copy.getBoundingClientRect().height < 44 || copy.textContent?.trim() !== link?.getAttribute("aria-label")) {
+      throw new Error("Mobile billboard must show the same named offer as readable text when matching artwork is missing");
     }
   } : undefined,
 };

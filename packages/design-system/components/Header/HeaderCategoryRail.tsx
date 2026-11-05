@@ -6,7 +6,6 @@ import { ImageLoadingWindow, ResponsiveImage } from '../ResponsiveImage'
 import styles from './Header.module.css'
 import type { HeaderCategoryRailProps } from './Header.types'
 
-const allIcon = new URL('../../assets/icons/base/all.svg', import.meta.url).href
 
 /**
  * Boundary tolerance in px. Fractional `scrollWidth` / `clientWidth` leave the
@@ -208,7 +207,6 @@ export function HeaderCategoryRail({
                         className={styles.categoryBuiltinIcon}
                         data-slot="header-all-icon"
                         aria-hidden="true"
-                        style={{ ['--category-icon' as string]: `url("${allIcon}")` }}
                       />
                     </span>
                     <span className={styles.categoryLabel} data-slot="header-category-label">
@@ -276,7 +274,7 @@ export function HeaderCategoryRail({
                         <ResponsiveImage
                           className={styles.categoryImage}
                           source={category.image.src}
-                          alt={category.image.alt}
+                          alt={category.image.alt.trim() === category.label.trim() ? '' : category.image.alt}
                           width={24}
                           height={24}
                           loading="lazy"
@@ -287,7 +285,6 @@ export function HeaderCategoryRail({
                           className={styles.categoryBuiltinIcon}
                           data-slot="header-all-icon"
                           aria-hidden="true"
-                          style={{ ['--category-icon' as string]: `url("${allIcon}")` }}
                         />
                       )}
                     </span>

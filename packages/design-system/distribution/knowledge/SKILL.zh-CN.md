@@ -13,6 +13,8 @@ Skill 或其他源码 checkout 的版本。版本不一致时停止使用该快�
 索引中的 `components` 是本候选包完整的可导入组件清单。每项给出公开导入路径、
 具名导出、成熟度、契约、用法和可复制示例。契约中的 `composes` 和相对依赖只描述
 内部组合关系，不代表新增公开入口。缺少所需能力时说明缺口，不编造组件或属性。
+默认使用 `status: stable` 的组件；仅在消费项目明确接入页头预览时使用
+`components/Header` 的 Beta 入口。
 
 先读[品牌概览](./references/DESIGN.compact.md)，再按任务读取
 [完整设计规则](./references/DESIGN.md)的相关章节。它们由维护中的上游文档生成，
@@ -38,6 +40,10 @@ import '@yami/design-system/styles/base.css';
 区分操作与导航：Button 执行操作，ButtonLink 或原生链接通过真实 href 导航。
 保留用户的文案、目标地址和操作含义。强调层级、焦点、禁用状态、语言、主题和响应式
 行为以设计规则和组件用法为依据。
+
+商城首页按用途组合 `HeroBanner`、`ShortcutRail`、`Billboard` 和 `ProductList`。
+路由、素材及搜索行为由宿主提供。为活动与快捷入口分别接上实际目的地，使用整张
+`8:9` 画布的活动图，并为纯图片链接提供可访问名称。滚动后也要确认搜索仍可操作。
 
 执行消费项目自己的类型检查、生产构建、测试和相关浏览器检查，核对实际状态及目标
 屏幕尺寸、主题。`pnpm validate`、上游 Storybook 和 Registry 脚本属于 YAMI 源码仓库，

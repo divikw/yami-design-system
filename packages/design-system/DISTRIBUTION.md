@@ -9,7 +9,9 @@
 
 ## 范围
 
-- 公开组件入口：Button（含 ButtonLink）、Input、Card、ProductCard、ProductList。
+- 稳定组件入口：Button（含 ButtonLink）、Input、Card、ProductCard、ProductList、
+  HeroBanner、ShortcutRail、Billboard。
+- Beta 页头仅通过 `@yami/design-system/components/Header` 导入，不出现在包根导出中。
 - 组件的传递依赖随包提供，未列出的组件没有候选包公开入口。
 - 默认采用组件现有行为和语义 Token，不复制样式到消费项目。
 - React/React DOM 为宿主提供的 peer dependencies；首版范围为 `~19.3.1`。
@@ -41,7 +43,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.7.tgz
+npm install /absolute/path/to/yami-design-system-0.2.0-candidate.1.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -86,7 +88,7 @@ console.log(resolve('@yami/design-system/skill/zh')); // 简体中文
 
 `index.json` 的 `skills`、`references`、组件契约和示例路径均相对于索引所在目录；
 `sourceSkill.path` 与 `documents[].source` 是相对于源码仓库根目录的溯源记录。
-其 `components` 只列出上述五个公开组件，
+其 `components` 列出上述稳定组件和 Beta 预览入口，
 包含具名导出、成熟度、组件版本、契约、用法和示例路径；其中导出清单由实际 TypeScript
 入口生成。元数据保留原有属性、Token 绑定和无障碍契约，`exports` 与 `examples` 分别
 投影为候选包真实导出和经过验证的消费示例。组合依赖不等于独立公开入口。
@@ -108,6 +110,20 @@ node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
 
 示例是应用源码参考，需复制到消费项目后连接真实业务；不要直接导入包内示例 TSX。
 示例只依赖 React 与候选包公开入口，使用中性占位内容，不请求外部商品图片。
+
+## 组合商城首页入口
+
+页头预览提供 `StickyStorefrontHeader`，接收 `HeaderProps`。放在文档滚动的页面容器内、
+`<main>` 之前，避免给祖先设置会创建独立滚动容器的 `overflow: hidden/auto/scroll`。
+桌面保留搜索栏吸顶，手机滚动后保留紧凑搜索和操作。`onSearchSubmit` 和
+`mobileSearchHref` 分别由宿主接到桌面查询和手机搜索页。
+
+在主内容内按顺序组合 `HeroBanner`、`ShortcutRail`、`Billboard` 和 `ProductList`。
+为每个活动、快捷入口和条幅提供真实 `href`。活动主图按 `8:9` 整卡出图，底部给文字
+和商品留出空间。条幅传同一活动的桌面与手机素材和各自原始尺寸；缺少同活动手机图时用
+`mobileTextFallback` 显示 `label`。`label` 表达可见活动文案和行动。使用组件默认的文本
+配色与焦点样式。页面路由、素材、区块外边距和数据由宿主维护；
+候选包的示例覆盖单个组件，整页试点不随包提供。
 随包 Skill 用于引导现有 AI 工具读取规范。可选 MCP 服务通过配套候选包安装，
 只读查询相同知识快照，详见[接入说明](./distribution/MCP.md)。
 

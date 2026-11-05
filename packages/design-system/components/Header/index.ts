@@ -1,6 +1,7 @@
 export { Header } from './Header'
 export { HeaderCategoryRail } from './HeaderCategoryRail'
 export { HeaderSearch } from './HeaderSearch'
+export { StickyStorefrontHeader } from './StickyStorefrontHeader'
 export type {
   HeaderAccount,
   HeaderCart,
