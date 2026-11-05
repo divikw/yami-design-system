@@ -59,9 +59,13 @@ async function visit(file) {
 }
 
 const entries = [];
-for (const name of policy.entries) {
+for (const [name, status] of [
+  ...policy.entries.map((name) => [name, "stable"]),
+  ...policy.previewEntries.map((name) => [name, "beta"]),
+]) {
+  if (entries.some((entry) => entry.name === name)) throw new Error(`Duplicate candidate entry: ${name}`);
   const meta = await readJson(path.join(components, name, "meta.json"));
-  if (meta.status !== "stable") throw new Error(`Candidate entry must be Stable: ${name}`);
+  if (meta.status !== status) throw new Error(`Candidate entry must be ${status}: ${name}`);
   entries.push({ name, version: meta.version, status: meta.status });
   await visit(path.join(components, name, "index.ts"));
 }
@@ -118,7 +122,7 @@ const emitted = program.emit(undefined, undefined, undefined, false, {
 });
 if (emitted.emitSkipped) throw new Error("Candidate JavaScript/declaration emission failed");
 const checker = program.getTypeChecker();
-const publicExports = Object.fromEntries(policy.entries.map((name) => [name, checker.getExportsOfModule(
+const publicExports = Object.fromEntries(entries.map(({ name }) => [name, checker.getExportsOfModule(
   checker.getSymbolAtLocation(program.getSourceFile(path.join(components, name, "index.ts"))),
 ).map((symbol) => symbol.name).sort()]));
 const provenance = {
@@ -148,7 +152,7 @@ await fs.mkdir(path.join(output, "distribution"), { recursive: true });
 await fs.copyFile(path.join(source, "distribution/MCP.md"), path.join(output, "distribution/MCP.md"));
 await fs.copyFile(path.join(source, "UPGRADING.md"), path.join(output, "UPGRADING.md"));
 await fs.copyFile(path.join(source, `distribution/upgrades/${policy.version}.json`), path.join(output, "UPGRADE.json"));
-const knowledgeExports = await buildKnowledge({ root, source, output, policy, packageName: workspacePackage.name, provenance, publicExports });
+const knowledgeExports = await buildKnowledge({ root, source, output, policy, entries, packageName: workspacePackage.name, provenance, publicExports });
 
 const exports = {
   ".": { types: "./components/index.d.ts", import: "./components/index.js" },
@@ -162,7 +166,7 @@ const exports = {
 const barrel = policy.entries.map((name) => `export * from './${name}/index.js';`).join("\n");
 await fs.writeFile(path.join(output, "components/index.js"), `"use client";\n${barrel}\n`);
 await fs.writeFile(path.join(output, "components/index.d.ts"), `${barrel}\n`);
-for (const name of policy.entries) {
+for (const { name } of entries) {
   exports[`./components/${name}`] = { types: `./components/${name}/index.d.ts`, import: `./components/${name}/index.js` };
   const entry = path.join(output, `components/${name}/index.js`);
   await fs.writeFile(entry, `"use client";\n${await fs.readFile(entry, "utf8")}`);

@@ -54,7 +54,7 @@ export const Pc: Story = {
     if (!page) throw new Error("Ecommerce home did not render");
 
     const stickyHeader = page.querySelector<HTMLElement>(
-      '[data-slot="ecommerce-home-header"]',
+      '[data-slot="sticky-storefront-header"]',
     );
     const stickyHeaderStyle = stickyHeader && getComputedStyle(stickyHeader);
     if (

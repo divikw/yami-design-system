@@ -5,7 +5,7 @@ import path from "node:path";
 const prefix = "knowledge/yami-design-system";
 const sourceRepository = "https://github.com/divikw/yami-design-system";
 
-export async function buildKnowledge({ root, source, output, policy, packageName, provenance, publicExports }) {
+export async function buildKnowledge({ root, source, output, policy, entries, packageName, provenance, publicExports }) {
   const directory = path.join(output, prefix);
   const mappings = new Map();
   const documents = [];
@@ -20,7 +20,7 @@ export async function buildKnowledge({ root, source, output, policy, packageName
       register(`${folder}/${file}`, `references/${folder}/${file}`);
     }
   }
-  for (const name of policy.entries) {
+  for (const { name } of entries) {
     register(`components/${name}/meta.json`, `references/components/${name}/meta.json`);
     register(`components/${name}/usage.md`, `references/components/${name}/usage.md`);
     register(`distribution/knowledge/examples/${name}.tsx`, `references/components/${name}/examples.tsx`);
@@ -84,8 +84,10 @@ export async function buildKnowledge({ root, source, output, policy, packageName
     sourceSkill: { path: "packages/design-system/SKILL.md", version: sourceSkill.toString().match(/^version:\s*(\S+)/m)[1], sha256: createHash("sha256").update(sourceSkill).digest("hex") },
     skills: { en: "SKILL.md", "zh-CN": "SKILL.zh-CN.md" },
     references: { overview: "references/DESIGN.compact.md", design: "references/DESIGN.md", installation: "references/DISTRIBUTION.md", mcp: "references/MCP.md", componentSchema: "references/schema/component.json", tokensCSS: "references/generated/tokens.css", tokensJSON: "references/generated/tokens.json" },
-    components: policy.entries.map((name) => ({
+    components: entries.map(({ name, version, status }) => ({
       name,
+      version,
+      status,
       import: `${packageName}/components/${name}`,
       exports: publicExports[name],
       contract: `references/components/${name}/meta.json`,
@@ -94,10 +96,6 @@ export async function buildKnowledge({ root, source, output, policy, packageName
     })),
     documents,
   };
-  for (const component of index.components) {
-    const meta = JSON.parse(await fs.readFile(path.join(directory, component.contract), "utf8"));
-    Object.assign(component, { version: meta.version, status: meta.status });
-  }
   await fs.writeFile(path.join(directory, "index.json"), `${JSON.stringify(index, null, 2)}\n`);
   return { "./knowledge/index.json": `./${prefix}/index.json`, "./skill": `./${prefix}/SKILL.md`, "./skill/zh": `./${prefix}/SKILL.zh-CN.md` };
 }

@@ -30,7 +30,8 @@ export interface HeaderCategory {
   /**
    * Category artwork, rendered as a 24px `<img>` so campaign teams reskin
    * categories without a component release. Omit for the leading
-   * "Categories" entry, which uses the built-in grid glyph.
+   * "Categories" entry, which uses the built-in grid glyph. Use empty alt
+   * for decorative artwork; a repeated category label is omitted by the rail.
    */
   image?: HeaderImage
   /**
@@ -188,9 +189,9 @@ export interface HeaderProps extends Omit<ComponentProps<'header'>, 'children'> 
   onSearchSubmit?: (query: string) => void
   /** PC search discovery content. Omit to keep the field without a popover. */
   searchPanel?: HeaderSearchPanel
-  /** Destination opened when the mobile search field is activated. */
+  /** Destination opened by activating the mobile search link. Without it, search is a form. */
   mobileSearchHref?: string
-  /** Visual search, mobile field only. Omit while the entry is not configured. */
+  /** Visual search, mobile field only. The control is disabled without a callback. */
   onScan?: () => void
 
   account: HeaderAccount

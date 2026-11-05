@@ -5,7 +5,7 @@ Public React export: `Billboard`.
 Section padding is 48px on all sides from 1024px, and 16px on all sides below
 1024px. Artwork remains centered with a maximum width of 1440px.
 
-A full-bleed promotional band whose entire content is one image.
+A full-bleed promotional band with one destination and responsive artwork.
 
 ## When to use
 
@@ -32,8 +32,11 @@ The label lands on the link as well as the band. Naming only the band is not
 enough: a link takes its name from its content, and the content here is an
 image with empty alt.
 
-Supply `image.mobile` when the desktop artwork's text becomes unreadable at
-phone widths; the component swaps below 1024px.
+Supply `image.mobile` for a narrower rendering of the **same** offer. Both
+artworks share `label` and `href`; using another campaign's artwork would
+misrepresent what the link does. If the matching phone artwork is unavailable,
+omit `image.mobile` and set `mobileTextFallback` to show `label` as live text
+below 1024px. The default without either option is the desktop artwork at all widths.
 
 ## Layout
 

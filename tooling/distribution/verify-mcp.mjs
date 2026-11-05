@@ -87,7 +87,7 @@ export async function verifyMcp(directory, manifest, mcpManifest) {
         assert.equal(result.contents[0].text, await readFile(path.join(knowledgeDirectory, relative), "utf8"));
         assert.deepEqual(result.contents[0]._meta["yami.design/snapshot"], identity);
       }
-      await rejectTool("get_component_contract", { component: "Header" });
+      await rejectTool("get_component_contract", { component: "Footer" });
       await rejectTool("get_component_example", { component: "Button", example: "MissingExample" });
       await rejectTool("read_design_document", { id: "../../package.json" });
       await rejectTool("read_design_document", { id: "DESIGN", startLine: page.totalLines + 1 });

@@ -5,6 +5,8 @@
 后续品牌、内容、推荐和页脚属于另一段页面。本轮的结论覆盖这段购物入口。
 [首页 Story](../../../packages/prototypes/pages/EcommerceHome/EcommerceHome.stories.tsx)
 
+下方保留首次生成的记录。本轮修复与独立项目验收见[组件复用试点](#组件复用试点)。
+
 ## 生成条件
 
 独立 Vite 消费项目安装本地 `@yami/design-system@0.1.0-candidate.7`，读取安装包的
@@ -51,3 +53,34 @@ Chromium 156.0.8078.4 从本地生产构建渲染。两种视口的页面均无�
 `task.txt`、`model-events.jsonl` 和 `review-home.mjs` 保存任务、生成记录和浏览器测量方法。
 `pilot-inputs.sha256` 记录候选包、布局图、任务和样例数据的校验值。
 可用相同种子和候选包重新安装消费项目，并用本地 Storybook 构建复核参考页。
+
+## 组件复用试点
+
+本轮用维护版组件组装同一段首页。`@yami/design-system@0.2.0-candidate.1` 增加
+`HeroBanner`、`ShortcutRail`、`Billboard` 三个稳定组件入口。吸顶页头
+`StickyStorefrontHeader` 与维护版共用，只从 Beta 子路径 `@yami/design-system/components/Header`
+导入。配套 `@yami/design-system-mcp@0.1.0-candidate.5` 能查询这些组件的契约和示例。
+[接入方式](../../../packages/design-system/DISTRIBUTION.md#组合商城首页入口)说明了宿主滚动容器、
+路由、素材及回调的责任。随包提供单组件示例，整页和品牌素材仍留在内部。
+
+独立 Next.js 和 Vite 安装本地配对 tarball，使用现有 `yami-design-cli` 完成 `init` 与 `doctor`。
+两个生产构建都通过类型检查、包内 Skill 和 MCP 查询、桌面及手机浏览器检查。再从维护版
+取同一份中文浅色数据，用独立 Vite 生产构建和当前 Storybook 进行 Chromium 视觉对照。
+
+| 检查 | 桌面 1440 × 900 | 手机 402 × 844 |
+|---|---|---|
+| 构图 | 四张活动卡从 x48、y147 起排列，商品首列也在 x48。榜单从 y935 开始。 | 第一张卡宽 320px，下一张露出 66px。快捷入口、条幅、榜单分别从 y468、y564、y660 开始。 |
+| 活动图和条幅 | 主图使用完整 8:9 画布，不再截成短图。保留桌面活动条幅原图。 | 主图沿用相同画布。条幅缺少同活动的手机图，显示同一活动的可读文字，保留原链接。 |
+| 滚动和搜索 | 滚动到商品后搜索仍在顶部，提交「抹茶」得到 1 件夹具商品。活动轨可用箭头翻页。 | 吸顶栏压缩为 52px。搜索获得焦点时留在本页，点按和 Enter 均打开搜索。活动轨支持触摸滑动。 |
+| 跳转和无障碍 | 7 张活动卡、23 个快捷入口和 1 个条幅都有独立本地目标；键盘实际打开三类代表入口。「继续购买」本次测得 13.01:1。 | 用触摸打开三类代表入口，条幅可见文案与可访问名称一致。 |
+
+两种视口在页头至首个商品榜单范围的 Axe 检查均为 0 项，截图中的资源加载和浏览器错误检查均通过。
+搜索、活动和商品的目的地使用本地验收数据，未验证生产业务或重复进行独立模型生成。
+
+复查中性夹具可运行
+`YAMI_DISTRIBUTION_OUTPUT_DIR=dist/homepage-reuse/verification pnpm verify:yami-design-cli`。
+真实素材的并排截图在 `dist/homepage-reuse/comparison.html`，测量和交互在
+`browser-comparison.json`，独立项目检查在 `verification/cli-verification/result.json`。
+此前试点和候选包校验值均保留。Linux 视觉快照覆盖中英文、明暗主题及 402px、768px
+首页视口。复核了条幅改为文字后，下方商品区随之移动的预期差异。
+[快照生成记录](https://github.com/divikw/yami-design-system/actions/runs/42004252753)

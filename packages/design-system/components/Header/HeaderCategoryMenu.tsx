@@ -5,7 +5,6 @@ import { ResponsiveImage } from '../ResponsiveImage'
 import type { HeaderCategoryMenuData, HeaderCategoryMenuItem } from './Header.types'
 import styles from './HeaderCategoryMenu.module.css'
 
-const arrow = new URL('./assets/category-menu/arrow-right.svg', import.meta.url).href
 const SUBMENU_SWITCH_DELAY = 60
 const SUBMENU_AIM_DELAY = 300
 const SUBMENU_AIM_TOLERANCE = 16
@@ -325,7 +324,7 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
                   <ResponsiveImage source={item.image.src} alt="" width={item.imageRatio === 2 ? 160 : 80} height={80} loading="lazy" />
                 </span>}
                 <span className={styles.label}>{item.label}</span>
-                {branch && <img className={styles.arrow} src={arrow} width={16} height={16} alt="" />}
+                {branch && <span className={styles.arrow} aria-hidden="true" />}
               </>
               const shared = {
                 className: styles.item,

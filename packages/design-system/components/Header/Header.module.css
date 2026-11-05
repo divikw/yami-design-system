@@ -207,6 +207,7 @@
 }
 
 .zipcodeIcon {
+  --zipcode-icon: url('../../assets/icons/base/zipcode.svg');
   display: block;
   width: 20px;
   height: 20px;
@@ -514,6 +515,7 @@
 }
 
 .accountIcon {
+  --account-icon: url('../../assets/icons/base/account.svg');
   display: block;
   width: 20px;
   height: 20px;
@@ -563,6 +565,7 @@
 }
 
 .cartIcon {
+  --cart-icon: url('../../assets/icons/base/cart.svg');
   display: block;
   width: 24px;
   height: 24px;
@@ -676,6 +679,7 @@
 }
 
 .categoryBuiltinIcon {
+  --category-icon: url('../../assets/icons/base/all.svg');
   display: block;
   width: 24px;
   height: 24px;
@@ -870,6 +874,22 @@
   mask: var(--mobile-action-icon) center / contain no-repeat;
 }
 
+.mobileAction:is([data-slot='header-mobile-zipcode'], [data-slot='header-mobile-pdp-zipcode']) {
+  --mobile-action-icon: url('../../assets/icons/base/zipcode.svg');
+}
+
+.mobileAction[data-slot='header-mobile-inbox'] {
+  --mobile-action-icon: url('../../assets/icons/base/message.svg');
+}
+
+.mobileAction[data-slot='header-mobile-search-action'] {
+  --mobile-action-icon: url('../../assets/icons/action/search.svg');
+}
+
+.mobileAction[data-slot='header-mobile-cart'] {
+  --mobile-action-icon: url('../../assets/icons/base/cart.svg');
+}
+
 .mobileActionLabel {
   font-size: var(--font-size-caption-sm);
   /* 12px rather than --line-height-caption-sm (14px): the Figma action box is
@@ -907,6 +927,42 @@
   height: 28px;
 }
 
+.searchDestination {
+  position: relative;
+}
+
+.searchPrompt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchPrompt[data-placeholder] {
+  color: var(--text-secondary);
+}
+
+/* Keep the whole pill a single link while leaving the camera action separate. */
+.searchDestination .searchSubmit::before {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-button-primary);
+  content: '';
+}
+
+.searchDestination:has(.searchSubmit:focus-visible) {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+
+.searchDestination .searchSubmit:focus-visible {
+  outline: none;
+}
+
+.searchDestination .searchScan:enabled {
+  position: relative;
+  z-index: 1;
+}
+
 .searchScan {
   display: inline-flex;
   width: 40px;
@@ -921,7 +977,12 @@
   cursor: pointer;
 }
 
+.searchScan:disabled {
+  cursor: default;
+}
+
 .searchScanIcon {
+  --scan-icon: url('../../assets/icons/action/camera.svg');
   display: block;
   width: 20px;
   height: 20px;

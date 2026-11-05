@@ -34,12 +34,6 @@ import { HeaderCategoryMenu } from './HeaderCategoryMenu'
 import { HeaderSearch } from './HeaderSearch'
 import type { HeaderImage, HeaderProps } from './Header.types'
 
-const accountIcon = new URL('../../assets/icons/base/account.svg', import.meta.url).href
-const cartIcon = new URL('../../assets/icons/base/cart.svg', import.meta.url).href
-const zipcodeIcon = new URL('../../assets/icons/base/zipcode.svg', import.meta.url).href
-const messageIcon = new URL('../../assets/icons/base/message.svg', import.meta.url).href
-const searchIcon = new URL('../../assets/icons/action/search.svg', import.meta.url).href
-
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ')
 }
@@ -231,7 +225,6 @@ export function Header({
                 <span
                   className={styles.mobileActionIcon}
                   aria-hidden="true"
-                  style={{ ['--mobile-action-icon' as string]: `url("${zipcodeIcon}")` }}
                 />
                 <span className={styles.mobileActionLabel} aria-hidden="true">
                   {zipcode.code}
@@ -249,7 +242,6 @@ export function Header({
                 <span
                   className={styles.mobileActionIcon}
                   aria-hidden="true"
-                  style={{ ['--mobile-action-icon' as string]: `url("${messageIcon}")` }}
                 />
                 <span className={styles.mobileActionLabel} aria-hidden="true">
                   {inbox.label}
@@ -273,7 +265,6 @@ export function Header({
                   <span
                     className={styles.mobileActionIcon}
                     aria-hidden="true"
-                    style={{ ['--mobile-action-icon' as string]: `url("${zipcodeIcon}")` }}
                   />
                   <span className={styles.mobileActionLabel} aria-hidden="true">
                     {zipcode.code}
@@ -289,7 +280,6 @@ export function Header({
                 <span
                   className={styles.mobileActionIcon}
                   aria-hidden="true"
-                  style={{ ['--mobile-action-icon' as string]: `url("${searchIcon}")` }}
                 />
               </a>
               <a
@@ -301,7 +291,6 @@ export function Header({
                 <span
                   className={styles.mobileActionIcon}
                   aria-hidden="true"
-                  style={{ ['--mobile-action-icon' as string]: `url("${cartIcon}")` }}
                 />
               </a>
             </div>
@@ -386,7 +375,6 @@ export function Header({
                   className={styles.zipcodeIcon}
                   data-slot="header-zipcode-icon"
                   aria-hidden="true"
-                  style={{ ['--zipcode-icon' as string]: `url("${zipcodeIcon}")` }}
                 />
                 <span aria-hidden="true">{zipcode.code}</span>
               </a>
@@ -411,7 +399,6 @@ export function Header({
               className={styles.accountIcon}
               data-slot="header-account-icon"
               aria-hidden="true"
-              style={{ ['--account-icon' as string]: `url("${accountIcon}")` }}
             />
             <span className={styles.accountLabel}>{account.label}</span>
             <ChevronDownIcon />
@@ -427,7 +414,6 @@ export function Header({
               className={styles.cartIcon}
               data-slot="header-cart-icon"
               aria-hidden="true"
-              style={{ ['--cart-icon' as string]: `url("${cartIcon}")` }}
             />
           </a>
         </div>

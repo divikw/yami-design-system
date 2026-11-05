@@ -13,6 +13,7 @@ import { verifyInstalledCandidate } from "./verify-package.mjs";
 import { loadSnapshot } from "../mcp/snapshot.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const stableEntries = ["Button", "Input", "Card", "ProductCard", "ProductList", "HeroBanner", "ShortcutRail", "Billboard"];
 
 test("packed candidate is complete, scoped, traceable and reproducible", async (t) => {
   const directory = await fs.mkdtemp(path.join(tmpdir(), "yami-candidate-contract-"));
@@ -37,8 +38,9 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
     assert.equal(pkg.version, manifest.packageVersion);
     assert.match(manifest.sourceCommit, /^[a-f0-9]{40}$/);
     assert.equal(typeof manifest.sourceDirty, "boolean");
-    assert.deepEqual(manifest.entries.map((entry) => entry.name), ["Button", "Input", "Card", "ProductCard", "ProductList"]);
-    assert.ok(manifest.entries.every((entry) => entry.status === "stable"));
+    assert.deepEqual(manifest.entries.map(({ name, status }) => [name, status]), [
+      ...stableEntries.map((name) => [name, "stable"]), ["Header", "beta"],
+    ]);
 
     const payload = [];
     for (const entry of manifest.files) {
@@ -47,7 +49,8 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       assert.equal(createHash("sha256").update(content).digest("hex"), entry.sha256, entry.path);
       assert.ok(!/\.(stories|figma)\.|fixtures/.test(entry.path), entry.path);
       assert.doesNotMatch(entry.path, /inventory-?workbench/i);
-      assert.ok(!entry.path.endsWith(".tsx") || /^knowledge\/yami-design-system\/references\/components\/(Button|Input|Card|ProductCard|ProductList)\/examples\.tsx$/.test(entry.path), entry.path);
+      assert.ok(!entry.path.endsWith(".tsx") || manifest.entries.some(({ name }) => entry.path === `knowledge/yami-design-system/references/components/${name}/examples.tsx`), entry.path);
+      assert.doesNotMatch(entry.path, /assets\/(logos|hero-banner)\/|\.(webp|png|jpe?g|gif)$/i);
       assert.ok(!entry.path.endsWith(".ts") || entry.path.endsWith(".d.ts"), entry.path);
       payload.push({ path: entry.path, content });
       if (entry.path.endsWith(".css")) {
@@ -65,13 +68,15 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
     }
     assert.equal(contentDigest(payload), manifest.contentDigest);
     assert.deepEqual(receipt.files.map((entry) => entry.path).sort(), [...manifest.files.map((entry) => entry.path), "candidate-manifest.json"].sort());
-    for (const [specifier, target] of Object.entries(pkg.exports)) {
+    for (const target of Object.values(pkg.exports)) {
       for (const file of typeof target === "string" ? [target] : Object.values(target)) await fs.access(path.join(unpacked, file));
-      if (specifier === "." || specifier.startsWith("./components/")) {
+      if (typeof target === "object") {
         assert.match(await fs.readFile(path.join(unpacked, target.import), "utf8"), /^"use client";/);
       }
     }
-    assert.equal(pkg.exports["./components/Header"], undefined);
+    assert.equal(pkg.exports["./components/Footer"], undefined);
+    assert.ok(pkg.exports["./components/Header"]);
+    assert.doesNotMatch(await fs.readFile(path.join(unpacked, pkg.exports["."].import), "utf8"), /Header/);
     const mcpReceipt = JSON.parse(await fs.readFile(path.join(dist, "candidate-mcp-pack.json"), "utf8"))[0];
     const mcpDirectory = path.join(directory, "mcp");
     await fs.mkdir(mcpDirectory);

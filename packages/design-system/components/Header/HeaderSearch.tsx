@@ -6,8 +6,6 @@ import { ResponsiveImage } from '../ResponsiveImage'
 import styles from './Header.module.css'
 import type { HeaderSearchProps, HeaderSearchTag } from './Header.types'
 
-const cameraIcon = new URL('../../assets/icons/action/camera.svg', import.meta.url).href
-
 function SearchIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -58,10 +56,6 @@ export function HeaderSearch({
   const panelId = useId()
   const query = value ?? draftValue
   const canOpenPanel = !isMobile && panel !== undefined
-
-  function openMobileSearch() {
-    if (isMobile && openHref) window.location.assign(openHref)
-  }
 
   function updateValue(nextValue: string) {
     if (value === undefined) setDraftValue(nextValue)
@@ -126,6 +120,49 @@ export function HeaderSearch({
       ]
     : []
 
+  const scan = isMobile && scanLabel && (
+    <button
+      className={styles.searchScan}
+      data-slot="header-search-scan"
+      type="button"
+      aria-label={scanLabel}
+      disabled={!onScan}
+      onClick={onScan}
+    >
+      <span className={styles.searchScanIcon} aria-hidden="true" />
+    </button>
+  )
+
+  if (isMobile && openHref) {
+    const prompt = query || placeholder
+    return (
+      <div
+        className={`${styles.search} ${styles.searchMobile} ${styles.searchDestination}`}
+        data-slot="header-search"
+        data-variant={variant}
+        role="search"
+        aria-label={searchLabel}
+      >
+        <span
+          className={`${styles.searchField} ${styles.searchPrompt}`}
+          data-placeholder={!query || undefined}
+          aria-hidden="true"
+        >
+          {prompt}
+        </span>
+        {scan}
+        <a
+          className={styles.searchSubmit}
+          data-slot="header-search-field"
+          href={openHref}
+          aria-label={prompt && prompt !== searchLabel ? `${searchLabel}: ${prompt}` : searchLabel}
+        >
+          <SearchIcon />
+        </a>
+      </div>
+    )
+  }
+
   return (
     <form
       className={isMobile ? `${styles.search} ${styles.searchMobile}` : styles.search}
@@ -161,31 +198,10 @@ export function HeaderSearch({
         aria-controls={canOpenPanel ? panelId : undefined}
         aria-haspopup={canOpenPanel ? 'dialog' : undefined}
         value={query}
-        onFocus={() => {
-          if (isMobile && openHref) {
-            openMobileSearch()
-            return
-          }
-          if (canOpenPanel) setIsOpen(true)
-        }}
-        onClick={openMobileSearch}
+        onFocus={canOpenPanel ? () => setIsOpen(true) : undefined}
         onChange={(event) => updateValue(event.currentTarget.value)}
       />
-      {isMobile && scanLabel && (
-        <button
-          className={styles.searchScan}
-          data-slot="header-search-scan"
-          type="button"
-          aria-label={scanLabel}
-          onClick={onScan}
-        >
-          <span
-            className={styles.searchScanIcon}
-            aria-hidden="true"
-            style={{ ['--scan-icon' as string]: `url("${cameraIcon}")` }}
-          />
-        </button>
-      )}
+      {scan}
       <button className={styles.searchSubmit} type="submit" aria-label={searchLabel}>
         <SearchIcon />
       </button>

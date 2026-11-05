@@ -669,14 +669,14 @@ Responsive curated-review rail that composes ReviewCard children with the shared
 
 Display name: **Floating Bars / 活动快捷浮动栏**.
 
-Full-bleed promotional band whose entire content is one campaign image.
+Full-bleed promotional band linking to one campaign.
 
 | Axis | Contract |
 | --- | --- |
-| **Composition** | One link wraps one `picture`. There is no text layer: the offer, its styling and its call to action are drawn into the artwork, which is what lets campaign teams ship a finished image instead of a copy deck. |
+| **Composition** | One link contains the campaign artwork. The optional mobile fallback shows the same offer as text. |
 | **Geometry** | The band spans the page with 48px padding on all sides from 1024px (`--space-600`) and 16px below 1024px (`--space-200`). Artwork is centered with a 1440px maximum width and `--radius-surface-default` corners. |
-| **Responsive behavior** | `image.mobile` swaps artwork below 1024px, for campaigns whose desktop lettering is unreadable at phone widths. Each artwork carries its intrinsic `width`/`height`, which reserve the band's height before it loads — the band has nothing else to establish a ratio from. |
-| **Structure** | A labelled region wrapping a single anchor, `label` naming both. Naming only the region leaves the link nameless: a link takes its name from its content, and the content is artwork whose `alt` is empty because it would only repeat that label. |
+| **Responsive behavior** | `image.mobile` swaps to artwork for the same campaign below 1024px. Set `mobileTextFallback` to show `label` when that artwork is unavailable. Supply each image's intrinsic `width` and `height` to reserve space before it loads. |
+| **Structure** | `label` names the region and the link. Use empty image `alt` when it would repeat the label. The mobile text fallback uses the label as visible copy. |
 
 ### BrandProductRail — `components/BrandProductRail/` _(composite: composes ProductList + ProductCard + Button)_
 
@@ -712,7 +712,7 @@ Responsive homepage campaign rail shared by PC and Mobile.
 | **Content** | `HeroBanner` delegates each item to one of four public cards: image only, image with text, image with text and products, or products only. Three thumbnails form a strip; four form a 2 × 2 grid. |
 | **Campaign surface** | Image variants sample the artwork's bottom-edge dominant color and use it for the content surface and Figma-specified functional 24px fade. Caller-provided `backgroundColor` is the loading and cross-origin fallback. |
 | **Paging** | Mobile uses native overflow and scroll snap. PC composes 36px YAMI icon Buttons, pages one visible group, reports progress, and disables controls at boundaries. |
-| **Structure** | The region contains a semantic list of campaign links. Image variants require meaningful alt text; image-only cards use that alt as the link name. Products-only cards require visible campaign copy and render no empty media placeholder. |
+| **Structure** | The region contains a semantic list of campaign links. Image-only cards use the image alt as the link name. Use empty alt when the visible title already describes the destination and the image adds no essential information. Products-only cards require visible campaign copy. |
 
 ### SectionBanner — `components/SectionBanner/` _(composite)_
 
@@ -720,7 +720,7 @@ Page-middle campaign module that composes SectionHeading above HeroBanner. The r
 
 ### Header — `components/Header/`
 
-PC global navigation band. **PC only** — the mobile header is a separate component and is not yet shipped. Geometry and token bindings are reconciled against the production storefront header; sanctioned-value substitutions are tabled in the component's `usage.md`.
+Web storefront navigation with desktop and mobile layouts. `StickyStorefrontHeader` keeps search available while the document scrolls and compacts the default mobile header after scrolling. The candidate package exposes Header through its Beta component subpath.
 
 | Axis | Contract |
 | --- | --- |
@@ -728,7 +728,7 @@ PC global navigation band. **PC only** — the mobile header is a separate compo
 | **Category entries** | Artwork, not icon components. Each entry renders `categories[].image` as a 24px `<img>` above a `caption-sm` label capped at 76px, so campaign teams reskin categories without a component release. Omitting the image yields the built-in grid glyph, reserved for the leading Categories entry. `startsGroup` opens the regional block with one 1px × 32px divider. |
 | **Halls** | `All \| Beauty` switches the **storefront**, not the search query, so it sits in the brand group as an exclusive `radiogroup` and reports through `onHallChange`. **EN-only** — the CN storefront ships no hall switcher, and the lockup is separated from deliver-to by a rule instead. The two locales are separate CMS feeds, so their rails differ in count, labels, order, and some artwork. |
 | **Promotion badges** | Optional per-category counts and promotion flags in `--text-emphasis`, stacked above the artwork and clipped to one line so a multi-badge entry cannot change the row height. This is the **only** red permitted in the chrome, and only for promotions (rule `red-usage`). |
-| **Search** | 40px pill (`--radius-button-primary`) with an embedded 52 × 32 submit, deliberately **not** composed from `Input` (8px labelled form field). Hot-search rotation through the placeholder is a data concern. |
+| **Search** | Desktop uses a 40px pill with a 52 × 32 submit. The default mobile header uses a 36px pill. With `mobileSearchHref`, the pill is a native link that shows the current search value or placeholder and navigates on activation. |
 | **Rail paging** | 36px controls overlaid on the rail edges, ringed with `--border-default` rather than a shadow (rule `elevation-on-press`). They page one viewport minus a single anchor entry and **unmount** at the boundaries, matching production's `display: none`, so no dead control sits in the chrome. |
 | **Structure** | `banner` landmark containing a `search` landmark and a `nav` region wrapping a list of category links. The account control shows its label visibly; the cart is icon-only and folds its item count into `aria-label`, since the chrome renders no visible count. |
 

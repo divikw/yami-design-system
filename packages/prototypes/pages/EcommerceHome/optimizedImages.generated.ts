@@ -426,13 +426,6 @@ export const brandBannerImages = {
 } as const satisfies Record<string, ResponsiveImageSource>;
 
 export const billboardImages = {
-  "mobile": {
-    src: new URL("./assets/optimized/billboardImages/campaign-banner-mobile-1158.webp", import.meta.url).href,
-    width: 1158,
-    height: 264,
-    candidates: [{ src: new URL("./assets/optimized/billboardImages/campaign-banner-mobile-579.webp", import.meta.url).href, width: 579 }, { src: new URL("./assets/optimized/billboardImages/campaign-banner-mobile-1158.webp", import.meta.url).href, width: 1158 }],
-    sizes: "100vw",
-  },
   "zhDesktop": {
     src: new URL("./assets/optimized/billboardImages/weekly-picks-zh-desktop-3170.webp", import.meta.url).href,
     width: 3170,

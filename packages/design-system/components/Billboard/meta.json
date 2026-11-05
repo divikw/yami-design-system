@@ -3,8 +3,8 @@
   "name": "Billboard",
   "category": "composite",
   "status": "stable",
-  "version": "0.1.0",
-  "description": "Floating Bars / 活动快捷浮动栏. Full-bleed promotional band whose entire content is one campaign image, wrapped in a single link.",
+  "version": "0.2.0",
+  "description": "Floating Bars / 活动快捷浮动栏. A promotional band with one link, responsive campaign artwork and an optional text fallback for phones.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -32,6 +32,12 @@
       "type": "string",
       "required": true,
       "description": "Localized accessible name. Required: the artwork's words are pixels, so without it the band is an unnamed link."
+    },
+    "mobileTextFallback": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Below 1024px, show label as readable text when no same-campaign mobile artwork is supplied. Uses the same destination and accessible name."
     },
     "imageLoading": {
       "type": "\"eager\" | \"lazy\"",
@@ -62,7 +68,15 @@
     "--font-family-ios",
     "--space-200",
     "--space-025",
-    "--space-600"
+    "--space-600",
+    "--space-1000",
+    "--space-100",
+    "--text-primary",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--font-weight-emphasize",
+    "--radius-button-primary",
+    "--button-secondary"
   ],
   "tokenBindings": {
     "--surface-primary": {
@@ -90,8 +104,8 @@
       "tab",
       "enter"
     ],
-    "ariaPattern": "section[aria-label] wrapping one a[aria-label] around decorative artwork",
-    "structure": "The label names both the region and the link inside it. Naming only the region leaves the link nameless, since its only content is artwork with empty alt and a link takes its name from its content.",
+    "ariaPattern": "section[aria-label] wrapping one a[aria-label] containing artwork or the mobile text fallback",
+    "structure": "The label names both the region and the link. The optional mobile fallback shows that same label as visible text.",
     "interaction": "One link covers the band; there is no secondary target."
   },
   "dependencies": {

@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "0.2.0-candidate.1",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.5",
+  "changeType": "minor",
+  "summary": "Add HeroBanner, ShortcutRail and Billboard plus an opt-in Beta Header subpath for storefront assembly.",
+  "migration": "Install the 0.2.0-candidate.1 / 0.1.0-candidate.5 pair and restart the project MCP. Keep existing imports. Opt into the sticky storefront header only via @yami/design-system/components/Header.",
+  "rollback": "Restore the previously verified paired tarballs and consumer lockfile, revert newly adopted imports, then restart the project MCP.",
+  "visualAndBehavior": "The homepage building blocks use the maintained layouts. Routes, artwork and storefront behavior remain consumer-owned. Review desktop and mobile with the host's own content."
+}

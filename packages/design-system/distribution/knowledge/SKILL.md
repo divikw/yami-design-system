@@ -15,6 +15,8 @@ this candidate. Each entry gives its public import, named exports, maturity,
 contract, usage, and a copyable example. `composes` and relative dependencies in
 contracts describe implementation relationships, not additional public imports.
 If a required capability is absent, explain the gap instead of inventing an API.
+Use `status: stable` entries by default; use the `components/Header` Beta entry
+only when the consuming project opts into the storefront header preview.
 
 Read [the brand overview](./references/DESIGN.compact.md), then the relevant
 sections of [the full design rules](./references/DESIGN.md). These are snapshots
@@ -47,6 +49,12 @@ Keep actions and navigation distinct: Button performs an action; ButtonLink or a
 native anchor navigates with a real href. Preserve the user's labels and actions.
 Use the design rules and component usage for emphasis, focus, disabled states,
 language, theme, and responsive behavior.
+
+For a storefront home, compose `HeroBanner`, `ShortcutRail`, `Billboard`, and
+`ProductList` for their distinct purposes. The host supplies routes, artwork,
+and search behavior. Keep each campaign and shortcut tied to its actual
+destination; use full 8:9 campaign artwork and provide the artwork-only link's
+accessible name. Verify the sticky search after scrolling, not just at the top.
 
 Run the consuming app's type check, production build, tests, and relevant browser
 checks. Inspect real states at the supported widths/themes. `pnpm validate` and

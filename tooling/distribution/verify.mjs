@@ -14,6 +14,7 @@ import { verifyInstalledCandidate } from "./verify-package.mjs";
 import { verifyMcp } from "./verify-mcp.mjs";
 import { verifyCliSetup } from "./verify-cli.mjs";
 import { verifyNativeCodex } from "./verify-cli-codex.mjs";
+import { verifyHomepage } from "./verify-homepage.mjs";
 import { verifyInventoryWorkbench } from "./verify-inventory-workbench.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -130,10 +131,14 @@ try {
     for (const file of ["InventoryWorkbench.tsx", "inventory-workbench.css"]) {
       await fs.copyFile(path.join(inventoryFixture, file), path.join(src, file));
     }
+    await fs.cp(path.join(fixtures, "shared/homepage-pilot"), path.join(src, "homepage-fixture"), { recursive: true });
     if (host === "next") {
       const route = path.join(src, "inventory-workbench");
       await fs.mkdir(route);
       await fs.writeFile(path.join(route, "page.tsx"), 'export { InventoryWorkbench as default } from "../InventoryWorkbench";\n');
+      const homepage = path.join(src, "homepage-pilot");
+      await fs.mkdir(homepage);
+      await fs.writeFile(path.join(homepage, "page.tsx"), 'export { HomepagePilot as default } from "../homepage-fixture/HomepagePilot";\n');
     }
     const versions = Object.fromEntries(await Promise.all([host, "react", "react-dom", "typescript"].map(async (name) => [
       name, JSON.parse(await fs.readFile(path.join(directory, "node_modules", name, "package.json"), "utf8")).version,
@@ -228,7 +233,7 @@ try {
       await page.getByTestId("language").click();
       await expect(apply).toHaveCSS("font-weight", "600");
       await page.getByTestId("language").click();
-      await expect(page.getByRole("region", { name: / packaged example$/ })).toHaveCount(5);
+      await expect(page.getByRole("region", { name: / packaged example$/ })).toHaveCount(result.knowledge.examples.length);
       const buttonExample = page.getByRole("region", { name: "Button packaged example", exact: true });
       await buttonExample.getByRole("button", { name: "Save example", exact: true }).click();
       await expect(buttonExample.getByRole("status")).toHaveText("Example saved");
@@ -259,6 +264,7 @@ try {
       await expect(page.getByRole("button", { name: "Add sample product", exact: true })).toBeVisible();
       await page.screenshot({ path: path.join(reportDir, `${result.host}-mobile-dark.png`), fullPage: true });
       result.internalInventoryWorkbench = await verifyInventoryWorkbench({ page, url, reportDir, host: result.host });
+      result.internalHomepage = await verifyHomepage({ browser, url, reportDir, host: result.host });
       assert.deepEqual(errors, [], `${result.host} browser errors`);
       assert.deepEqual(failures, [], `${result.host} failed asset requests`);
       result.browser = { status: "pass", desktop: "1440/light/en", mobile: "375/dark/en", languageWeights: "en:500/zh:600", fonts: "400/500/700 loaded", interactions: ["keyboard-focus-submit", "input-error-clear", "disabled-action", "add-to-cart", "controlled-tabs"], errors, failures };

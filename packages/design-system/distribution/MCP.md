@@ -1,7 +1,7 @@
 # YAMI 只读 MCP 候选包
 
-`@yami/design-system-mcp@0.1.0-candidate.4` 是本地 stdio MCP 服务，绑定
-`@yami/design-system@0.1.0-candidate.7` 的知识快照。两个包均为 private 本地候选包，
+`@yami/design-system-mcp@0.1.0-candidate.5` 是本地 stdio MCP 服务，绑定
+`@yami/design-system@0.2.0-candidate.1` 的知识快照。两个包均为 private 本地候选包，
 尚未发布。MCP SDK 与 Zod 只安装在配套服务中，不进入 React 组件运行时。
 
 ## 安装与启动
@@ -10,7 +10,7 @@
 在消费项目中安装两者及 lockfile，不使用源码链接，也不使用 `npx -y` 下载未发布的包：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.1.0-candidate.7.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.4.tgz
+npm install /absolute/path/to/yami-design-system-0.2.0-candidate.1.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.5.tgz
 ```
 
 需要 Node 24。服务命令入口为消费项目的
@@ -52,7 +52,7 @@ node -p "require.resolve('@yami/design-system-mcp/cli')"
 先列文档，再使用返回的 ID；例如 `DESIGN.compact`、`DESIGN`、`content/voice`、
 `components/Button/usage`。先搜索定位规则，再按返回行号读取上下文。分页最多 200 行，
 搜索最多 20 项；`truncated` 表示仍有命中，可缩小到特定文档继续查询。
-目前组件范围仍为 Button、Input、Card、ProductCard、ProductList。
+`list_components` 的 `status` 区分稳定组件和 Beta 页头；Beta 页头需要宿主明确选用。
 
 每个成功 Tool 返回 `snapshot`：包名、包版本、源码提交、工作树状态和内容指纹。
 标准 MCP `resources/list` / `resources/read` 同时提供索引、Skill、规范、Token、
@@ -79,7 +79,7 @@ stdout 专用于 MCP 协议。摘要用于发现内容不一致，不是发布�
 `pnpm test:distribution` 检查两个实际 tarball 的内容契约，以及摘要、版本和路径错误。
 `pnpm verify:design-system-candidate` 在独立 Next.js/Vite 消费项目安装两个 tarball，
 由官方 MCP Client 启动真实 stdio 进程，完成握手、Tool/Resource 发现、规范搜索分页、
-五个组件契约和示例读取及错误查询，再验证组件类型、构建和浏览器交互。
+读取稳定组件及 Beta 页头的契约与示例，验证错误查询、类型、构建和浏览器交互。
 协议结果写入 `dist/candidate-verification/result.json`；验证不会发布包。
 
 实现采用[官方 TypeScript SDK v2](https://ts.sdk.modelcontextprotocol.io/v2/)，

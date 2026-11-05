@@ -578,9 +578,6 @@ function createBillboard(locale: EcommerceHomeLocale) {
     image: {
       ...billboard.image,
       src: locale === "zh" ? billboardImages.zhDesktop : billboardImages.enDesktop,
-      mobile: billboard.image.mobile
-        ? { ...billboard.image.mobile, src: billboardImages.mobile }
-        : undefined,
     },
   };
 }

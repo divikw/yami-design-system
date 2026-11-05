@@ -11,11 +11,11 @@ import {
   Billboard,
   BrandProductRail,
   Footer,
-  Header,
   HeroBanner,
   ProductList,
   ShortcutRail,
   SocialMediaGallery,
+  StickyStorefrontHeader,
   TrendingSearches,
 } from "@yami/design-system";
 
@@ -40,7 +40,6 @@ export function EcommerceHomeTemplate({
 }: EcommerceHomeProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const stickyHeaderRef = useRef<HTMLDivElement>(null);
   const contentMaxWidthValue =
     typeof contentMaxWidth === "number"
       ? `${contentMaxWidth}px`
@@ -55,8 +54,6 @@ export function EcommerceHomeTemplate({
   useLayoutEffect(() => {
     const main = mainRef.current;
     if (!main) return;
-
-    const stickyHeader = stickyHeaderRef.current;
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -108,7 +105,6 @@ export function EcommerceHomeTemplate({
     let scrollDirection: "down" | "up" = "down";
     const updateScrollState = () => {
       const currentScrollY = window.scrollY;
-      stickyHeader?.toggleAttribute("data-scrolled", currentScrollY > 0);
       if (currentScrollY === previousScrollY) return;
 
       const nextScrollDirection =
@@ -249,13 +245,7 @@ export function EcommerceHomeTemplate({
       className={cx(styles.root, className)}
       data-slot="ecommerce-home"
     >
-      <div
-        ref={stickyHeaderRef}
-        className={styles.stickyHeader}
-        data-slot="ecommerce-home-header"
-      >
-        <Header {...header} />
-      </div>
+      <StickyStorefrontHeader {...header} />
 
       <main
         ref={mainRef}

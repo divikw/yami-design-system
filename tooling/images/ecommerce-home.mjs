@@ -165,15 +165,6 @@ for (const name of [
 
 add(
   "billboardImages",
-  "mobile",
-  `${productListRoot}/campaign-banner-mobile.png`,
-  [579, 1158],
-  "100vw",
-  "marketing",
-  180_000,
-);
-add(
-  "billboardImages",
   "zhDesktop",
   `${billboardRoot}/weekly-picks-zh-desktop.png`,
   [1600, 3170],
