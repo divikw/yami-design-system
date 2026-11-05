@@ -32,6 +32,13 @@ Regression check: `pnpm --filter @yami/storybook exec vitest run --project=brows
 Start with [在现有项目使用 YAMI](apps/docsite/content/docs/zh/consume-package.md) /
 [Use YAMI in an existing project](apps/docsite/content/docs/en/consume-package.md)
 for installation, project-scoped Skill/MCP configuration, troubleshooting and rollback.
+The optional local [yami-design-cli](packages/yami-design-cli/README.md) candidate
+provides `init`, `init --dry-run` and read-only `doctor` for standalone Next.js/Vite
+consumers using npm or pnpm. It installs the paired packages and connects project
+Skill/MCP configuration; host CSS and client trust remain explicit steps.
+Maintainers can run `pnpm pack:yami-design-cli` and `pnpm verify:yami-design-cli`;
+append `--native-codex` to the verifier for local Codex discovery checks without
+model calls. CLI artifacts remain private and unpublished.
 Delivery locks and API/Token upgrade checks are described in
 [UPGRADING.md](packages/design-system/UPGRADING.md).
 

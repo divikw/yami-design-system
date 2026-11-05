@@ -13,6 +13,9 @@
     "node": "~24"
   },
   "scripts": {
+    "pack:yami-design-cli": "node tooling/distribution/pack-cli.mjs",
+    "verify:yami-design-cli": "node tooling/distribution/verify.mjs --cli",
+    "test:yami-design-cli": "pnpm --filter yami-design-cli test",
     "pack:design-system-candidate": "node tooling/distribution/pack.mjs",
     "test:distribution": "node --test tooling/distribution/*.test.mjs",
     "check:distribution-upgrade": "node tooling/distribution/check-upgrade.mjs",

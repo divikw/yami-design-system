@@ -7,6 +7,7 @@ order: 25
 keywords: ["安装", "组件包", "消费", "Skill", "MCP", "Codex", "升级", "回退"]
 updatedAt: "2026-11-05"
 sourceRefs:
+  - packages/yami-design-cli/README.md
   - docs/adr/009-agent-ready-contracts-and-distribution.md
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
@@ -32,6 +33,30 @@ sourceRefs:
 完整源码、Storybook 与旧 Registry 包含更多组件，它们不等于当前候选包的公开入口。React Native 和其他宿主版本不在本轮验证范围。
 
 YAMI 通过自有版本包、随包 Skill 和只读 MCP 接入消费项目，内部 Registry 维护源码分发契约。shadcn 仅作为结构化分发与 AI 发现、读取契约和示例的思路参考，其 CLI/Registry 兼容层不列入后续计划，也不作为使用 YAMI 的前置条件。
+
+## 使用 yami-design-cli 初始化
+
+首版 CLI 是单独的 private 本地候选包，名称与命令均为 `yami-design-cli`。支持 Node 24、npm/pnpm 和独立 Next.js/Vite 应用，目标平台为 macOS/Linux。本次本地验证在 macOS 执行，Linux 验证已配置到独立 CI 作业；workspace 与 Windows 尚不在验证范围。
+
+先取得三个获授权的原始 tarball，在消费应用中执行：
+
+```bash
+npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
+./node_modules/.bin/yami-design-cli init \
+  --design-package /artifacts/yami-design-system-0.1.0-candidate.5.tgz \
+  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.2.tgz \
+  --locale zh --dry-run
+```
+
+去掉 `--dry-run` 执行实际初始化。CLI 将组件包装入 dependencies、MCP 包装入 devDependencies，并连接下文相同的项目 Skill 和 MCP 配置。相同内容重复运行不追加；同名内容冲突、产物不匹配或不支持的环境会在安装前停止。安装后失败可能留下已完成的依赖或配置变更，按报错阶段检查并恢复已审查的产物与 lockfile。
+
+```bash
+./node_modules/.bin/yami-design-cli doctor --json
+```
+
+`doctor` 只读检查安装内容、版本、Skill、MCP 配置，并实际查询规范、组件契约和示例；成功退出码为 0，阻塞时非零。它不调用模型，也不代表页面视觉与行为验收通过。
+
+CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局配置。按下文加载样式，重连受信任的客户端，再执行消费应用检查。可用 `--cwd` 指定应用，`--package-manager npm|pnpm` 明确包管理器；tarball 相对路径按命令执行目录解析。以下手动流程仍可单独使用。
 
 ## 安装并锁定产物
 

@@ -1,0 +1,23 @@
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { contentDigest } from "../registry/contracts.mjs";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const source = path.join(root, "packages/yami-design-cli");
+const output = path.join(root, "dist/yami-design-cli-candidate");
+const pkg = JSON.parse(await fs.readFile(path.join(source, "package.json"), "utf8"));
+const git = (args) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+await fs.rm(output, { recursive: true, force: true });
+await fs.mkdir(output, { recursive: true });
+for (const file of ["package.json", "README.md", "src"]) await fs.cp(path.join(source, file), path.join(output, file), { recursive: true });
+await fs.chmod(path.join(output, "src/cli.mjs"), 0o755);
+const files = ["package.json", "README.md", ...(await fs.readdir(path.join(output, "src"))).map((file) => `src/${file}`)].sort();
+const payload = await Promise.all(files.map(async (file) => ({ path: file, content: await fs.readFile(path.join(output, file)) })));
+const manifest = { schemaVersion: 1, package: pkg.name, packageVersion: pkg.version, sourceCommit: git(["rev-parse", "HEAD"]), sourceDirty: git(["status", "--porcelain"]) !== "", distribution: "local-authorized-verification-only", contentDigest: contentDigest(payload), files: payload.map(({ path: file, content }) => ({ path: file, bytes: content.length, sha256: createHash("sha256").update(content).digest("hex") })) };
+await fs.writeFile(path.join(output, "candidate-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+const receipt = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", path.join(root, "dist")], { cwd: output, encoding: "utf8" }));
+await fs.writeFile(path.join(root, "dist/yami-design-cli-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+console.log(`Local CLI candidate: ${receipt[0].filename}. No package was published.`);

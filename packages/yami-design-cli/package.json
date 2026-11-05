@@ -1,0 +1,18 @@
+{
+  "name": "yami-design-cli",
+  "version": "0.1.0-candidate.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "Connect installed YAMI design components, versioned Skills and read-only MCP to an existing React Web project.",
+  "type": "module",
+  "engines": { "node": "~24" },
+  "bin": { "yami-design-cli": "./src/cli.mjs" },
+  "files": ["src", "README.md", "candidate-manifest.json"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.4.0",
+    "semver": "7.8.5",
+    "smol-toml": "1.9.1",
+    "tar": "7.5.22"
+  }
+}

@@ -24,6 +24,11 @@ shadcn 仅提供结构化分发、明确依赖以及 AI 按契约读取规范和
 其 CLI/Registry 兼容层不列入待办，也不作为交付前置条件。
 后续实施顺序见 [ADR 009](../../docs/adr/009-agent-ready-contracts-and-distribution.md)。
 
+独立 Next.js/Vite 应用可选用单独的本地候选工具
+[yami-design-cli](../yami-design-cli/README.md)，通过 `init` 安装配对包并连接
+项目 Skill/MCP，通过只读 `doctor` 检查真实查询。CLI 不随组件运行时安装，
+宿主样式接入与客户端信任仍需明确完成；手动流程继续可用。
+
 ## 构建与安装
 
 从 YAMI 仓库根目录执行：

@@ -7,6 +7,7 @@ order: 25
 keywords: ["Install", "Package", "Consumer", "Skill", "MCP", "Codex", "Upgrade", "Rollback"]
 updatedAt: "2026-11-05"
 sourceRefs:
+  - packages/yami-design-cli/README.md
   - docs/adr/009-agent-ready-contracts-and-distribution.md
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
@@ -32,6 +33,30 @@ These are local candidates for the authorized environment. They are not publishe
 The full source, Storybook and legacy Registry contain more components than the candidate exposes. React Native and other host versions are outside this verification scope.
 
 Consumer projects use YAMI's own versioned package, packaged Skill and read-only MCP; the internal Registry maintains the source-distribution contract. shadcn is a reference for structured distribution, AI discovery and contract/example retrieval. Its CLI/Registry compatibility layer is outside the roadmap and is not a prerequisite for using YAMI.
+
+## Initialize with yami-design-cli
+
+The CLI is a separate private local candidate named `yami-design-cli`, with the same executable name. It supports Node 24, npm/pnpm and standalone Next.js/Vite applications, targeting macOS/Linux. Local verification runs on macOS; Linux verification is configured in a dedicated CI job. Workspaces and Windows are outside that scope.
+
+Obtain the three authorized original tarballs and run in the consuming application:
+
+```bash
+npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
+./node_modules/.bin/yami-design-cli init \
+  --design-package /artifacts/yami-design-system-0.1.0-candidate.5.tgz \
+  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.2.tgz \
+  --locale en --dry-run
+```
+
+Remove `--dry-run` to initialize. The CLI adds the design package to dependencies and MCP to devDependencies, then connects the same project Skill and MCP configuration documented below. Repeated matching setup makes no additional changes. Conflicting content, mismatched artifacts and unsupported environments fail before installation. A later failure can leave completed dependency/configuration changes; inspect the reported phase and restore reviewed artifacts and lockfile as needed.
+
+```bash
+./node_modules/.bin/yami-design-cli doctor --json
+```
+
+`doctor` reads installed contents, versions, Skill and MCP configuration, then actually queries a design document, component contract and example. Exit 0 means connection checks passed; blockers produce a nonzero exit. It does not call a model or establish visual/behavioral acceptance.
+
+The CLI does not modify application entry points, global resets, AGENTS.md, client trust or global settings. Load styles below, reconnect the trusted client and run consumer checks. Use `--cwd` to select the application and `--package-manager npm|pnpm` to choose a manager explicitly; relative tarball paths use the invocation directory. The manual steps below also remain available independently.
 
 ## Install and lock the artifacts
 
