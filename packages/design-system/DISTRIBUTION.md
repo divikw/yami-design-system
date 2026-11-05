@@ -17,7 +17,12 @@
   其他版本和原生端尚未验证。
 - 同一版本内分发中英文消费方 Skill、设计规范、内容与动效规范、Token、组件契约和可复制示例。
 - 可选配套 `@yami/design-system-mcp` 提供本地只读查询，SDK 依赖不进入组件运行时。
-- 这是 React Web 组件候选包。shadcn 适配、页面模板和模型运行时尚未提供。
+- 这是 React Web 组件候选包，页面模板和模型运行时尚未提供。
+
+YAMI 通过自有版本包、内部 Registry、随包 Skill 和只读 MCP 实现跨项目复用。
+shadcn 仅提供结构化分发、明确依赖以及 AI 按契约读取规范和示例的思路参考，
+其 CLI/Registry 兼容层不列入待办，也不作为交付前置条件。
+后续实施顺序见 [ADR 009](../../docs/adr/009-agent-ready-contracts-and-distribution.md)。
 
 ## 构建与安装
 
@@ -99,7 +104,7 @@ node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
 示例是应用源码参考，需复制到消费项目后连接真实业务；不要直接导入包内示例 TSX。
 示例只依赖 React 与候选包公开入口，使用中性占位内容，不请求外部商品图片。
 随包 Skill 用于引导现有 AI 工具读取规范。可选 MCP 服务通过配套候选包安装，
-只读查询相同知识快照，详见[接入说明](./distribution/MCP.md)；shadcn 安装机制尚未提供。
+只读查询相同知识快照，详见[接入说明](./distribution/MCP.md)。
 
 ## 样式、主题与语言
 

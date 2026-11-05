@@ -7,6 +7,7 @@ order: 25
 keywords: ["Install", "Package", "Consumer", "Skill", "MCP", "Codex", "Upgrade", "Rollback"]
 updatedAt: "2026-11-05"
 sourceRefs:
+  - docs/adr/009-agent-ready-contracts-and-distribution.md
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
   - packages/design-system/distribution/MCP.md
@@ -28,7 +29,9 @@ These are local candidates for the authorized environment. They are not publishe
 | Runtime | Node 24; React / React DOM `~19.3.1` |
 | Verified hosts | Next.js 16.4.3 App Router, Vite 8.3.5, TypeScript 6.0.2 |
 
-The full source, Storybook and legacy Registry contain more components than the candidate exposes. React Native, other host versions and shadcn installation are outside this verification scope.
+The full source, Storybook and legacy Registry contain more components than the candidate exposes. React Native and other host versions are outside this verification scope.
+
+Consumer projects use YAMI's own versioned package, packaged Skill and read-only MCP; the internal Registry maintains the source-distribution contract. shadcn is a reference for structured distribution, AI discovery and contract/example retrieval. Its CLI/Registry compatibility layer is outside the roadmap and is not a prerequisite for using YAMI.
 
 ## Install and lock the artifacts
 

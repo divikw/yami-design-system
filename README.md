@@ -48,6 +48,13 @@ This does not publish the package or change workspace source consumption.
 See [MCP setup](packages/design-system/distribution/MCP.md) for local client
 configuration, query examples and version/integrity boundaries.
 
+YAMI borrows shadcn's structured distribution and AI-discovery ideas through its
+own package, internal Registry, Skill and MCP. shadcn CLI/Registry compatibility
+is outside the roadmap. See [ADR 009](docs/adr/009-agent-ready-contracts-and-distribution.md)
+for the current scope and follow-up order: main-branch verification, AI task
+evaluation, an authorized business-project pilot, evidence-driven coverage
+expansion, and a separate delivery decision. Packages remain unpublished.
+
 ## AI workflow
 
 Yami Design System does not call a model at runtime. Generate a `DirectionManifestV1`

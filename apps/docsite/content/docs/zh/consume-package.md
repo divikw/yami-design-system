@@ -7,6 +7,7 @@ order: 25
 keywords: ["安装", "组件包", "消费", "Skill", "MCP", "Codex", "升级", "回退"]
 updatedAt: "2026-11-05"
 sourceRefs:
+  - docs/adr/009-agent-ready-contracts-and-distribution.md
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
   - packages/design-system/distribution/MCP.md
@@ -28,7 +29,9 @@ sourceRefs:
 | 运行环境 | Node 24；React / React DOM `~19.3.1` |
 | 已验证宿主 | Next.js 16.4.3 App Router、Vite 8.3.5、TypeScript 6.0.2 |
 
-完整源码、Storybook 与旧 Registry 包含更多组件，它们不等于当前候选包的公开入口。React Native、其他宿主版本和 shadcn 安装机制不在本轮验证范围。
+完整源码、Storybook 与旧 Registry 包含更多组件，它们不等于当前候选包的公开入口。React Native 和其他宿主版本不在本轮验证范围。
+
+YAMI 通过自有版本包、随包 Skill 和只读 MCP 接入消费项目，内部 Registry 维护源码分发契约。shadcn 仅作为结构化分发与 AI 发现、读取契约和示例的思路参考，其 CLI/Registry 兼容层不列入后续计划，也不作为使用 YAMI 的前置条件。
 
 ## 安装并锁定产物
 

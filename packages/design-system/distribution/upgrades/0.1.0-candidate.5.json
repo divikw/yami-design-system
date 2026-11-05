@@ -4,7 +4,7 @@
   "mcpFrom": "0.1.0-candidate.1",
   "mcpTo": "0.1.0-candidate.2",
   "changeType": "patch",
-  "summary": "Unify consumer documentation and add delivery-version locks, TypeScript API/Token compatibility checks and upgrade guidance.",
+  "summary": "Unify consumer documentation, clarify YAMI-owned distribution and AI scope, and add delivery-version locks, TypeScript API/Token compatibility checks and upgrade guidance.",
   "migration": "Replace both local tarballs with the matching candidate.5/candidate.2 pair, update the consumer lockfile, read the installed Skill and restart the project MCP. Existing component imports and props remain unchanged.",
   "rollback": "Restore the original candidate.4/candidate.1 tarballs and previous consumer lockfile, reinstall and restart MCP. Do not rebuild or overwrite the delivery-locked versions.",
   "visualAndBehavior": "No component JavaScript, CSS, font or Token value changes are intended. Review the upgrade report runtimeChanged field and rerun the independent Next.js/Vite browser verification. This note is not a test result."
