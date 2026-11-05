@@ -18,8 +18,8 @@ async function fingerprint(root) {
   return files.sort((a, b) => a[0].localeCompare(b[0]));
 }
 
-export async function verifyCliSetup({ root, directory, host, tarball, mcpTarball, run }) {
-  const expected = JSON.parse(await fs.readFile(path.join(root, "dist/yami-design-cli-candidate/candidate-manifest.json"), "utf8"));
+export async function verifyCliSetup({ dist, reportDir, directory, host, tarball, mcpTarball, run }) {
+  const expected = JSON.parse(await fs.readFile(path.join(dist, "yami-design-cli-candidate/candidate-manifest.json"), "utf8"));
   const cliRoot = await fs.realpath(path.join(directory, "node_modules/yami-design-cli"));
   assert.ok(cliRoot.startsWith(`${directory}${path.sep}`), "CLI must be installed from the tarball");
   await verifyInstalledCandidate(cliRoot, expected);
@@ -74,7 +74,7 @@ export async function verifyCliSetup({ root, directory, host, tarball, mcpTarbal
   try {
     await fs.writeFile(configFile, configured.replace(/args = \[[^\]]*\]/, 'args = ["-e", "process.exit(77)"]'));
     await assert.rejects(run(binary, ["doctor", "--json"], directory, `${host}-cli-conflict`), /failed \(1\)/);
-    const conflict = JSON.parse(await fs.readFile(path.join(root, "dist/cli-verification", `${host}-cli-conflict.log`), "utf8"));
+    const conflict = JSON.parse(await fs.readFile(path.join(reportDir, `${host}-cli-conflict.log`), "utf8"));
     assert.equal(conflict.checks.find(({ id }) => id === "mcp_config").status, "fail");
     assert.equal(conflict.checks.find(({ id }) => id === "mcp_queries").status, "not_run");
   } finally { await fs.writeFile(configFile, configured); }

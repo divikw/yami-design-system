@@ -15,15 +15,20 @@ import { loadSnapshot } from "../mcp/snapshot.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 test("packed candidate is complete, scoped, traceable and reproducible", async (t) => {
-  const build = () => execFileSync(process.execPath, ["tooling/distribution/pack.mjs"], { cwd: root });
-  build();
-  const receipt = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-pack.json"), "utf8"))[0];
   const directory = await fs.mkdtemp(path.join(tmpdir(), "yami-candidate-contract-"));
+  const dist = path.join(directory, "dist");
+  const env = { ...process.env, YAMI_DISTRIBUTION_OUTPUT_DIR: dist };
+  const build = () => execFileSync(process.execPath, ["tooling/distribution/pack.mjs"], { cwd: root, env });
   try {
-    execFileSync("tar", ["-xzf", path.join(root, "dist", receipt.filename), "-C", directory]);
+    build();
+    const receipt = JSON.parse(await fs.readFile(path.join(dist, "candidate-pack.json"), "utf8"))[0];
+    execFileSync("tar", ["-xzf", path.join(dist, receipt.filename), "-C", directory]);
     const unpacked = path.join(directory, "package");
     const pkg = JSON.parse(await fs.readFile(path.join(unpacked, "package.json"), "utf8"));
     const manifest = JSON.parse(await fs.readFile(path.join(unpacked, "candidate-manifest.json"), "utf8"));
+    const upgrade = JSON.parse(await fs.readFile(path.join(dist, "candidate-upgrade.json"), "utf8"));
+    assert.equal(upgrade.status, "pass");
+    assert.equal(upgrade.contentDigest, manifest.contentDigest);
     assert.equal(pkg.private, true);
     assert.deepEqual(Object.keys(pkg.peerDependencies), ["react", "react-dom"]);
     assert.equal(pkg.dependencies.react, undefined);
@@ -66,10 +71,10 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       }
     }
     assert.equal(pkg.exports["./components/Header"], undefined);
-    const mcpReceipt = JSON.parse(await fs.readFile(path.join(root, "dist/candidate-mcp-pack.json"), "utf8"))[0];
+    const mcpReceipt = JSON.parse(await fs.readFile(path.join(dist, "candidate-mcp-pack.json"), "utf8"))[0];
     const mcpDirectory = path.join(directory, "mcp");
     await fs.mkdir(mcpDirectory);
-    execFileSync("tar", ["-xzf", path.join(root, "dist", mcpReceipt.filename), "-C", mcpDirectory]);
+    execFileSync("tar", ["-xzf", path.join(dist, mcpReceipt.filename), "-C", mcpDirectory]);
     const mcpRoot = path.join(mcpDirectory, "package");
     const mcpManifest = JSON.parse(await fs.readFile(path.join(mcpRoot, "candidate-manifest.json"), "utf8"));
     const mcpPackage = JSON.parse(await fs.readFile(path.join(mcpRoot, "package.json"), "utf8"));
@@ -177,10 +182,10 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
       assert.ok(skillSource.toString().includes(`version: ${index.sourceSkill.version}`));
     });
     build();
-    const rebuilt = JSON.parse(await fs.readFile(path.join(root, "dist/design-system-candidate/candidate-manifest.json"), "utf8"));
+    const rebuilt = JSON.parse(await fs.readFile(path.join(dist, "design-system-candidate/candidate-manifest.json"), "utf8"));
     assert.equal(rebuilt.contentDigest, manifest.contentDigest);
     assert.deepEqual(rebuilt.files, manifest.files);
-    assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, "dist/design-system-mcp-candidate/candidate-manifest.json"), "utf8")), mcpManifest);
+    assert.deepEqual(JSON.parse(await fs.readFile(path.join(dist, "design-system-mcp-candidate/candidate-manifest.json"), "utf8")), mcpManifest);
     await t.test("installed candidate must match the expected build", async () => {
       await verifyInstalledCandidate(unpacked, manifest);
       await assert.rejects(verifyInstalledCandidate(unpacked, { ...manifest, sourceCommit: "0".repeat(40) }), /identity differs/);
@@ -203,8 +208,8 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
 
 test("a packing failure replaces any previous passing verification receipt", async () => {
   const directory = await fs.mkdtemp(path.join(tmpdir(), "yami-candidate-failure-"));
-  const reportFile = path.join(root, "dist/candidate-verification/result.json");
-  const previous = await fs.readFile(reportFile).catch(() => null);
+  const dist = path.join(directory, "dist");
+  const reportFile = path.join(dist, "candidate-verification/result.json");
   let consumers;
   try {
     await fs.mkdir(path.dirname(reportFile), { recursive: true });
@@ -212,7 +217,9 @@ test("a packing failure replaces any previous passing verification receipt", asy
     const npm = path.join(directory, "npm");
     await fs.writeFile(npm, "#!/bin/sh\nexit 42\n", { mode: 0o700 });
     const result = spawnSync(process.execPath, ["tooling/distribution/verify.mjs"], {
-      cwd: root, encoding: "utf8", env: { ...process.env, PATH: `${directory}${path.delimiter}${process.env.PATH}` }, timeout: 30_000,
+      cwd: root, encoding: "utf8",
+      env: { ...process.env, PATH: `${directory}${path.delimiter}${process.env.PATH}`, YAMI_DISTRIBUTION_OUTPUT_DIR: dist },
+      timeout: 30_000,
     });
     assert.equal(result.status, 1, result.stderr);
     const report = JSON.parse(await fs.readFile(reportFile, "utf8"));
@@ -220,8 +227,6 @@ test("a packing failure replaces any previous passing verification receipt", asy
     assert.equal(report.status, "fail");
     assert.match(report.failure, /pack failed/);
   } finally {
-    if (previous) await fs.writeFile(reportFile, previous);
-    else await fs.rm(reportFile, { force: true });
     if (consumers) await fs.rm(consumers, { recursive: true, force: true });
     await fs.rm(directory, { recursive: true, force: true });
   }

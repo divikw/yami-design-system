@@ -4,8 +4,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { contentDigest } from "../registry/contracts.mjs";
 
-export async function packMcp({ root, policy, provenance }) {
-  const output = path.join(root, "dist/design-system-mcp-candidate");
+export async function packMcp({ root, dist, policy, provenance }) {
+  const output = path.join(dist, "design-system-mcp-candidate");
   await fs.rm(output, { recursive: true, force: true });
   await fs.mkdir(output, { recursive: true });
   for (const file of ["cli.mjs", "server.mjs", "snapshot.mjs"]) await fs.copyFile(path.join(root, "tooling/mcp", file), path.join(output, file));
@@ -29,6 +29,6 @@ export async function packMcp({ root, policy, provenance }) {
   };
   await fs.writeFile(path.join(output, "candidate-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   const receipt = JSON.parse(execFileSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", path.dirname(output)], { cwd: output, encoding: "utf8" }));
-  await fs.writeFile(path.join(root, "dist/candidate-mcp-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
-  console.log(`MCP candidate: ${path.join(root, "dist", receipt[0].filename)}\nContent: ${manifest.contentDigest}`);
+  await fs.writeFile(path.join(dist, "candidate-mcp-pack.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+  console.log(`MCP candidate: ${path.join(dist, receipt[0].filename)}\nContent: ${manifest.contentDigest}`);
 }
