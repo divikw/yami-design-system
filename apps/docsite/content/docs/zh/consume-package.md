@@ -5,7 +5,7 @@ description: "在现有 React Web 项目安装本地候选包，接入随版本 
 group: start
 order: 25
 keywords: ["安装", "组件包", "消费", "Skill", "MCP", "Codex", "升级", "回退"]
-updatedAt: "2026-11-04"
+updatedAt: "2026-11-05"
 sourceRefs:
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
@@ -84,7 +84,7 @@ description: 在当前项目制作或检查 YAMI 品牌的 React 界面时使用
 遵守当前项目的修改范围和验证要求；本 Skill 不授权发布。
 ```
 
-也可在项目 `AGENTS.md` 中写入同样的读取约定。查找实际安装入口：
+也可在项目根目录的 `AGENTS.md` 中写入读取约定，使用根目录下的 `node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md` 路径。不要照抄上述相对于 Skill 目录的 `../../../` 前缀。查找实际安装入口：
 
 ```bash
 node -p "require.resolve('@yami/design-system/skill/zh')"

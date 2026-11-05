@@ -27,9 +27,15 @@ export function assertVerifiedDelivery(report, component, mcp, head, artifacts) 
 
 export async function checkReleaseHistory(root, base) {
   const git = (args) => execFileSync("git", args, { cwd: root });
+  const directory = path.join(root, "tooling/distribution/releases");
+  const stat = await fs.lstat(directory).catch(() => null);
+  assert.ok(stat?.isDirectory(), "Delivery history is immutable and must remain a regular directory");
   const files = git(["ls-tree", "-r", "--name-only", base, "--", "tooling/distribution/releases"]).toString().trim().split("\n").filter((file) => file.endsWith(".json"));
   for (const file of files) {
-    const current = await fs.readFile(path.join(root, file)).catch(() => null);
+    const target = path.join(root, file);
+    const stat = await fs.lstat(target).catch(() => null);
+    assert.ok(stat?.isFile(), `Delivery record is immutable and must remain a regular file: ${file}`);
+    const current = await fs.readFile(target);
     assert.deepEqual(current, git(["show", `${base}:${file}`]), `Delivery record is immutable: ${file}`);
   }
   return files.length;

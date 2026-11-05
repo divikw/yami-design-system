@@ -5,7 +5,7 @@ description: "Install local React Web candidates, connect the versioned Skill an
 group: start
 order: 25
 keywords: ["Install", "Package", "Consumer", "Skill", "MCP", "Codex", "Upgrade", "Rollback"]
-updatedAt: "2026-11-04"
+updatedAt: "2026-11-05"
 sourceRefs:
   - packages/design-system/DISTRIBUTION.md
   - packages/design-system/distribution.json
@@ -84,7 +84,7 @@ Report missing capabilities without inventing APIs or falling back to another ve
 Follow the current project's edit scope and verification requirements. This Skill does not authorize publishing.
 ```
 
-The same reading convention can be placed in the project's `AGENTS.md`. Locate the installed entry points:
+The reading convention can also be placed in `AGENTS.md` at the project root, using `node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.md` relative to that root. Do not copy the Skill directory's `../../../` prefix. Locate the installed entry points:
 
 ```bash
 node -p "require.resolve('@yami/design-system/skill')"

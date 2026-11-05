@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { isDeepStrictEqual } from "node:util";
 import ts from "typescript";
 import { verifyInstalledCandidate } from "./verify-package.mjs";
 
@@ -21,8 +22,11 @@ export function compareVersions(left, right) {
 
 export async function loadReleases(root) {
   const directory = path.join(root, "tooling/distribution/releases");
+  assert.ok((await fs.lstat(directory)).isDirectory(), "Delivery records must use a regular directory, not a symlink");
   const releases = await Promise.all((await fs.readdir(directory)).filter((file) => file.endsWith(".json")).map(async (file) => {
-    const release = JSON.parse(await fs.readFile(path.join(directory, file), "utf8"));
+    const target = path.join(directory, file);
+    assert.ok((await fs.lstat(target)).isFile(), `Delivery record must be a regular file: ${file}`);
+    const release = JSON.parse(await fs.readFile(target, "utf8"));
     assert.equal(release.schemaVersion, 1);
     assert.equal(file, `${release.component.package.version}.json`);
     return release;
@@ -66,7 +70,7 @@ export async function compareApi(previous, current, root) {
   for (const name of Object.keys(current.package.exports)) if (!(name in previous.package.exports)) additions.push(`Added package export ${name}`);
   for (const token of previous.tokens) if (!current.tokens.includes(token)) breaking.push(`Removed Token ${token}`);
   for (const token of current.tokens) if (!previous.tokens.includes(token)) additions.push(`Added Token ${token}`);
-  if (JSON.stringify(previous.package.peerDependencies) !== JSON.stringify(current.package.peerDependencies)) breaking.push("Changed host peer requirements (manual compatibility review required)");
+  if (!isDeepStrictEqual(previous.package.peerDependencies ?? {}, current.package.peerDependencies ?? {})) breaking.push("Changed host peer requirements (manual compatibility review required)");
 
   await fs.mkdir(path.join(root, "dist"), { recursive: true });
   const temporary = await fs.mkdtemp(path.join(root, "dist/upgrade-types-"));
@@ -92,7 +96,7 @@ export async function compareApi(previous, current, root) {
     const diagnostics = ts.getPreEmitDiagnostics(program);
     assert.equal(diagnostics.length, 0, ts.formatDiagnostics(diagnostics, { getCurrentDirectory: () => root, getCanonicalFileName: (file) => file, getNewLine: () => "\n" }));
     const checker = program.getTypeChecker();
-    const lines = ["type Assert<T extends true> = T;", "type IsAny<T> = 0 extends (1 & T) ? true : false;"];
+    const lines = ["type Assert<T extends true> = T;", "type IsAny<T> = 0 extends (1 & T) ? true : false;", "type Keys<T> = T extends unknown ? keyof T : never;"];
     const checks = new Map();
     function check(expression, kind, label) {
       checks.set(lines.length, { kind, label });
@@ -130,8 +134,9 @@ export async function compareApi(previous, current, root) {
           check(`${to} extends ${from} ? true : false`, "additions", label);
           check(`IsAny<${oldType}> extends true ? true : IsAny<${newType}> extends true ? false : true`, "breaking", label);
           for (const [fromKeys, toKeys] of [[oldType, newType], ...(prefix && checker.getTypeOfSymbolAtLocation(oldSymbol, oldFile).getCallSignatures().length ? [[`Parameters<${oldType}>[0]`, `Parameters<${newType}>[0]`]] : [])]) {
-            check(`Exclude<keyof (${fromKeys}), keyof (${toKeys})> extends never ? true : false`, "breaking", label);
-            check(`Exclude<keyof (${toKeys}), keyof (${fromKeys})> extends never ? true : false`, "additions", label);
+            // keyof 联合类型只返回共有属性；分支独有的可选属性也必须保留。
+            check(`Exclude<Keys<${fromKeys}>, Keys<${toKeys}>> extends never ? true : false`, "breaking", label);
+            check(`Exclude<Keys<${toKeys}>, Keys<${fromKeys}>> extends never ? true : false`, "additions", label);
           }
         }
       }
@@ -144,7 +149,7 @@ export async function compareApi(previous, current, root) {
       assert.ok(item, ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
       (item.kind === "breaking" ? breaking : additions).push(`Type compatibility ${item.label}`);
     }
-    return { breaking: [...new Set(breaking)], additions: [...new Set(additions)], runtimeChanged: JSON.stringify(previous.runtime) !== JSON.stringify(current.runtime) || JSON.stringify(previous.package.dependencies) !== JSON.stringify(current.package.dependencies) };
+    return { breaking: [...new Set(breaking)], additions: [...new Set(additions)], runtimeChanged: !isDeepStrictEqual(previous.runtime, current.runtime) || !isDeepStrictEqual(previous.package.dependencies ?? {}, current.package.dependencies ?? {}) };
   } finally {
     await fs.rm(temporary, { recursive: true, force: true });
   }

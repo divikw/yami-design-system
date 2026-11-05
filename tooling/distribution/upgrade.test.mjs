@@ -78,6 +78,31 @@ test("added optional props, exports and enum values require a minor version", as
   assertUpgrade(snapshot(), { ...current, package: { ...current.package, version: "1.3.0" } }, note("1.3.0", "minor"), diff, "1.0.1");
 });
 
+test("variant-only optional props cannot be removed or added without the matching version bump", async () => {
+  const text = 'export type Props = { kind: "text"; label?: string } | { kind: "image"; src: string };\nexport declare function Control(props: Props): string;\n';
+  const withoutLabel = text.replace(" label?: string", "");
+  const removed = await compareApi(snapshot(text), snapshot(withoutLabel, "1.2.4"), root);
+  assert.ok(removed.breaking.length > 0, "Removing a union branch's optional prop must be detected");
+  assert.throws(() => assertUpgrade(snapshot(text), snapshot(withoutLabel, "1.2.4"), note(), removed, "1.0.1"), /major version/);
+  const added = await compareApi(snapshot(withoutLabel), snapshot(text, "1.2.4"), root);
+  assert.deepEqual(added.breaking, []);
+  assert.ok(added.additions.length > 0);
+  assert.throws(() => assertUpgrade(snapshot(withoutLabel), snapshot(text, "1.2.4"), note(), added, "1.0.1"), /minor version/);
+});
+
+test("dependency and runtime map key ordering does not change the compatibility result", async () => {
+  const previous = snapshot();
+  previous.package.peerDependencies = { react: "~19.3.1", "react-dom": "~19.3.1" };
+  previous.package.dependencies = { first: "1.0.0", second: "2.0.0" };
+  previous.runtime = { "components/index.js": "original", "styles/base.css": "original" };
+  const current = structuredClone(previous);
+  current.package.version = "1.2.4";
+  for (const [object, key] of [[current.package, "peerDependencies"], [current.package, "dependencies"], [current, "runtime"]]) object[key] = Object.fromEntries(Object.entries(object[key]).reverse());
+  assert.deepEqual(await compareApi(previous, current, root), { breaking: [], additions: [], runtimeChanged: false });
+  current.package.peerDependencies.react = "~20.0.0";
+  assert.ok((await compareApi(previous, current, root)).breaking.some((item) => item.includes("peer requirements")));
+});
+
 test("Token rename and removed package entry are breaking even when declarations match", async () => {
   const current = snapshot(declaration, "1.2.4");
   const previous = snapshot();
@@ -108,4 +133,26 @@ test("defaulted generic props are compared while required generic types fail clo
   assert.deepEqual(diff.breaking, []);
   await assert.rejects(compareApi(snapshot(text.replaceAll('T = "div"', "T")), snapshot(text, "2.0.0"), root), /Required generic/);
   await assert.rejects(compareApi(snapshot(text), snapshot(text + "export type Required<T> = T;\n", "1.3.0"), root), /Required generic/);
+});
+
+test("delivery ledger entries cannot be symlinks to matching JSON bytes", async () => {
+  await fs.mkdir(path.join(root, "dist"), { recursive: true });
+  const directory = await fs.mkdtemp(path.join(root, "dist/release-symlink-"));
+  try {
+    const records = path.join(directory, "tooling/distribution/releases");
+    await fs.mkdir(records, { recursive: true });
+    const target = path.join(directory, "data.json");
+    await fs.writeFile(target, JSON.stringify({ schemaVersion: 1, component: { package: { version: "1.0.0" } }, mcp: { version: "1.0.0" } }));
+    await fs.symlink(target, path.join(records, "1.0.0.json"));
+    await assert.rejects(loadReleases(directory), /regular file/);
+    await fs.unlink(path.join(records, "1.0.0.json"));
+    await fs.rmdir(records);
+    const targetDirectory = path.join(directory, "record-data");
+    await fs.mkdir(targetDirectory);
+    await fs.copyFile(target, path.join(targetDirectory, "1.0.0.json"));
+    await fs.symlink(targetDirectory, records, "dir");
+    await assert.rejects(loadReleases(directory), /regular directory/);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });
