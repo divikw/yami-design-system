@@ -81,6 +81,7 @@ test("chapter menu supports keyboard navigation, typeahead, Escape, and outside 
   await trigger.focus();
   await page.keyboard.press("Space");
   await expect(list).toBeVisible();
+  await expect(list.getByRole("option", { selected: true })).toBeFocused();
   await page.keyboard.press("ArrowDown");
   await expect(list.locator("[data-highlighted]")).toHaveAttribute("data-value", "why-start-with-storybook");
   await expect(list.locator("[data-highlighted]")).toHaveCSS("outline-width", "2px");
@@ -109,6 +110,7 @@ test("chapter menu supports keyboard navigation, typeahead, Escape, and outside 
   await trigger.focus();
   await trigger.press("Space");
   await expect(list).toBeVisible();
+  await expect(list.getByRole("option", { selected: true })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(list).not.toBeVisible();
   expect(await page.evaluate(() => document.activeElement?.hasAttribute("data-base-ui-focus-guard"))).toBe(false);

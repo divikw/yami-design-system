@@ -12,6 +12,10 @@
 
 当前组件库以私有 workspace 源码包使用；Changeset 和 Registry 元数据不是已建成的远程 npm 发布与自动升级平台。使用 commit 标识实际代码基线，不仅依赖页面显示的版本号。
 
+现有项目也可安装本地候选包，按[消费指南](../../../apps/docsite/content/docs/zh/consume-package.md)接入组件、Skill 和只读 MCP。
+候选交付另受[升级保护](../../../packages/design-system/UPGRADING.md)约束：版本锁定、实际声明与 Token 兼容检查、配对升级说明，以及原始 tarball 回退。
+这条路径尚未提供远端包分发服务，不替代下文的源码协作流程。
+
 ## 审核公共改动
 
 1. 确认贡献对应已接受的能力范围，业务内容与无关改动没有混入。

@@ -19,6 +19,10 @@ test("renders the desktop documentation shell, stable table of contents, and pag
   await expect(page.locator("#what-storybook-is")).toBeVisible();
 
   await page.getByRole("navigation", { name: "文档翻页" }).getByRole("link").last().click();
+  await expect(page).toHaveURL(/\/zh\/docs\/consume-package$/);
+  await expect(page.getByRole("heading", { level: 1, name: "在现有项目使用 YAMI" })).toBeVisible();
+
+  await page.getByRole("navigation", { name: "文档翻页" }).getByRole("link").last().click();
   await expect(page).toHaveURL(/\/zh\/docs\/browse-components$/);
   await expect(page.getByRole("heading", { level: 1, name: "查看组件与页面" })).toBeVisible();
 });

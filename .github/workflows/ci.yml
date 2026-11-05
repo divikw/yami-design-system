@@ -63,6 +63,13 @@ jobs:
           install: false
       - name: install
         run: pnpm install --frozen-lockfile
+      - name: preserve-delivery-history
+        if: matrix.check == 'component-candidate'
+        env:
+          DISTRIBUTION_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$DISTRIBUTION_BASE_REF"
+          pnpm check:distribution-history "$DISTRIBUTION_BASE_REF"
       - name: security-audit
         if: matrix.check == 'lint'
         run: pnpm audit --audit-level=low --registry=https://registry.npmjs.org

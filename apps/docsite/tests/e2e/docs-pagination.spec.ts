@@ -6,8 +6,9 @@ for (const locale of ["zh", "en"]) {
       await page.setViewportSize({ width, height: 900 });
       for (const { slug, directions, destinations } of [
         { slug: "fork-project", directions: ["next"], destinations: ["getting-started"] },
-        { slug: "getting-started", directions: ["prev", "next"], destinations: ["fork-project", "browse-components"] },
-        { slug: "browse-components", directions: ["prev", "next"], destinations: ["getting-started", "using-yami-with-ai"] },
+        { slug: "getting-started", directions: ["prev", "next"], destinations: ["fork-project", "consume-package"] },
+        { slug: "consume-package", directions: ["prev", "next"], destinations: ["getting-started", "browse-components"] },
+        { slug: "browse-components", directions: ["prev", "next"], destinations: ["consume-package", "using-yami-with-ai"] },
         { slug: "faq", directions: ["prev"], destinations: ["contribute-upstream"] },
       ]) {
         await page.goto(`/${locale}/docs/${slug}`);

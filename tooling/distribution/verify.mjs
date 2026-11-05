@@ -116,7 +116,7 @@ try {
     ])));
     await run("npm", ["run", "typecheck"], directory, `${host}-typecheck`);
     await run("npm", ["run", "build"], directory, `${host}-build`);
-    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, mcp, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
+    results.push({ host, directory, installed, versions, packageVersion: manifest.packageVersion, contentDigest: manifest.contentDigest, artifactIntegrity: packed.integrity, mcpArtifactIntegrity: mcpPacked.integrity, mcp, knowledge: { packageVersion: knowledge.packageVersion, skills: Object.keys(knowledge.skills), examples: knowledge.components.map((entry) => entry.name) }, types: "pass", build: "pass" });
   }
 
   async function unusedPort() {

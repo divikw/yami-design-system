@@ -102,9 +102,11 @@ Each `meta.json` declares props, variants, `tokenBindings` (which property of wh
 ## Storybook + registry consumption contract
 
 For AI prototype generation, Storybook is the maintained visual source of truth
-and Registry v2 is the deterministic internal source-distribution contract. It is
-not a generated shadcn registry; the future adapter mapping is documented in
-[`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md).
+and Registry v2 is the deterministic internal source-distribution contract.
+YAMI borrows shadcn's structured distribution and AI-discovery ideas through its
+own package, Registry, Skill and MCP; shadcn CLI/Registry compatibility is outside
+the roadmap. See [`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md)
+for the current scope and follow-up order.
 
 - First consume the injected `Storybook Catalog Source of Truth` section. Its
   titles and canonical exports tell you which YAMI assets/components are

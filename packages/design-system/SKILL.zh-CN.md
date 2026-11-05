@@ -103,7 +103,7 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 
 ## Storybook 与 Registry 使用约定
 
-为 AI 生成原型时，以维护中的 Storybook 作为视觉依据，Registry v2 提供确定性的内部源码分发契约。它不是已生成的 shadcn Registry；未来适配映射记录在 [`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md) 中。
+为 AI 生成原型时，以维护中的 Storybook 作为视觉依据，Registry v2 提供确定性的内部源码分发契约。YAMI 借鉴 shadcn 的结构化分发与 AI 发现思路，通过自有包、Registry、Skill 和 MCP 实现；shadcn CLI/Registry 兼容不列入后续计划。当前范围与实施顺序见 [`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md)。
 
 - 先读取注入的 `Storybook Catalog Source of Truth` 部分，通过标题和标准导出确认哪些 YAMI 素材与组件正用于生成任务。
 - 再读取 [`generated/registry.json`](./generated/registry.json) 和 [`generated/registry-items/`](./generated/registry-items/)，了解条目名称、源码与目标文件、依赖、设计规则、质量证据、内容摘要和设计系统基础包。

@@ -5,13 +5,15 @@ description: "将主项目 Fork 为自己的下游仓库，建立独立的本地
 group: start
 order: 10
 keywords: ["GitHub", "Fork", "下游项目", "origin", "upstream", "Storybook"]
-updatedAt: "2026-09-02"
+updatedAt: "2026-11-04"
 sourceRefs:
   - README.md
   - package.json
   - apps/storybook/package.json
   - packages/design-system/SKILL.md
 ---
+
+在已有 React Web 项目安装组件包时，请从[在现有项目使用 YAMI](/zh/docs/consume-package)开始，按实际安装版本读取 Skill 与契约。
 
 第一次在本地使用 YAMI 时，可以让 Codex 或 Kiro 协助完成 Fork、克隆、依赖安装和 Storybook 验证。整个过程应使用独立目录，不影响主项目、已有文件或其他任务的服务。
 

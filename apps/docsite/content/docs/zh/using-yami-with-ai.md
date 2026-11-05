@@ -5,7 +5,7 @@ description: "查看 YAMI Skill 的完整内容：适用任务、设计规范、
 group: ai
 order: 35
 keywords: ["AI", "Skill", "Codex", "Kiro", "规范", "复用"]
-updatedAt: "2026-09-03"
+updatedAt: "2026-11-04"
 sourceRefs:
   - .agents/skills/yami-design-system/SKILL.md
   - packages/design-system/SKILL.md
@@ -13,6 +13,8 @@ sourceRefs:
   - packages/design-system/DESIGN.compact.md
   - packages/design-system/generated/catalog.json
 ---
+
+在已有 React Web 项目安装组件包时，请从[在现有项目使用 YAMI](/zh/docs/consume-package)开始，按实际安装版本读取 Skill 与契约。
 
 下面是项目自带的中文版 Skill，包含适用任务、设计规范、组件与页面复用以及验证要求。点击代码块右上角可复制完整内容，也可以[查看 Markdown 文件](/zh/yami-skill.md)。
 

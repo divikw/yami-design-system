@@ -1,5 +1,11 @@
 # Maintain upstream versions
 
+Existing React Web projects can also install local candidates using the
+[consumer guide](../../../apps/docsite/content/docs/en/consume-package.md).
+The [upgrade policy](../../../packages/design-system/UPGRADING.md) covers delivery locks,
+declaration/Token compatibility, paired migration notes and original-tarball rollback.
+This does not establish a remote package registry or replace source collaboration below.
+
 For upstream maintainers and release owners. Start with a focused, verified PR. Deliver a traceable shared revision, change notes, and update instructions that Fork owners can follow.
 
 ## Separate three activities

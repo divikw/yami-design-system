@@ -5,7 +5,7 @@ description: "Understand what Storybook is, what it contains, and where its resp
 group: start
 order: 20
 keywords: ["Getting started","Component library","Storybook","AI","Fork"]
-updatedAt: "2026-09-02"
+updatedAt: "2026-11-04"
 sourceRefs:
   - packages/design-system/SKILL.md
   - packages/design-system/README.md
@@ -13,6 +13,8 @@ sourceRefs:
   - apps/storybook/.storybook/preview.tsx
   - docs/ai-workflow.md
 ---
+
+To install components in an existing React Web application, start with [Use YAMI in an existing project](/en/docs/consume-package) and read the Skill and contracts for the installed version.
 
 Storybook is the entry point for inspecting YAMI's real components, page patterns, and usage rules. It runs the actual implementation in a browser, so teammates who do not edit code can still find references, try states, and check behavior across viewport sizes.
 

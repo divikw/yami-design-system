@@ -5,7 +5,7 @@ description: "Read the complete YAMI Skill: supported tasks, design rules, compo
 group: ai
 order: 35
 keywords: ["AI", "Skill", "Codex", "Kiro", "Guidelines", "Reuse"]
-updatedAt: "2026-09-03"
+updatedAt: "2026-11-04"
 sourceRefs:
   - .agents/skills/yami-design-system/SKILL.md
   - packages/design-system/SKILL.md
@@ -13,6 +13,8 @@ sourceRefs:
   - packages/design-system/DESIGN.compact.md
   - packages/design-system/generated/catalog.json
 ---
+
+To install components in an existing React Web application, start with [Use YAMI in an existing project](/en/docs/consume-package) and read the Skill and contracts for the installed version.
 
 The Skill below includes supported tasks, design rules, component and page reuse, and validation requirements. Copy the full content with the button in the code block, or [view the Markdown file](/en/yami-skill.md).
 

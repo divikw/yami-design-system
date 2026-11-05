@@ -5,7 +5,7 @@ description: "了解 Storybook 的作用、内容结构和使用边界，再进�
 group: start
 order: 20
 keywords: ["入门","组件库","Storybook","AI","Fork"]
-updatedAt: "2026-09-02"
+updatedAt: "2026-11-04"
 sourceRefs:
   - packages/design-system/SKILL.md
   - packages/design-system/README.md
@@ -13,6 +13,8 @@ sourceRefs:
   - apps/storybook/.storybook/preview.tsx
   - docs/ai-workflow.md
 ---
+
+在已有 React Web 项目安装组件包时，请从[在现有项目使用 YAMI](/zh/docs/consume-package)开始，按实际安装版本读取 Skill 与契约。
 
 Storybook 是 YAMI 查看真实组件、页面模式和使用规则的入口。它在浏览器中运行真实实现；不会编辑代码的同事，也可以用它查找参考、体验状态并检查多端表现。
 
