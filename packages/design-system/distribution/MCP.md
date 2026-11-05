@@ -1,7 +1,7 @@
 # YAMI 只读 MCP 候选包
 
-`@yami/design-system-mcp@0.1.0-candidate.5` 是本地 stdio MCP 服务，绑定
-`@yami/design-system@0.2.0-candidate.1` 的知识快照。两个包均为 private 本地候选包，
+`@yami/design-system-mcp@0.1.0-candidate.8` 是本地 stdio MCP 服务，绑定
+`@yami/design-system@0.2.0-candidate.4` 的知识快照。两个包均为 private 本地候选包，
 尚未发布。MCP SDK 与 Zod 只安装在配套服务中，不进入 React 组件运行时。
 
 ## 安装与启动
@@ -10,7 +10,7 @@
 在消费项目中安装两者及 lockfile，不使用源码链接，也不使用 `npx -y` 下载未发布的包：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.2.0-candidate.1.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.5.tgz
+npm install /absolute/path/to/yami-design-system-0.2.0-candidate.4.tgz /absolute/path/to/yami-design-system-mcp-0.1.0-candidate.8.tgz
 ```
 
 需要 Node 24。服务命令入口为消费项目的
@@ -53,6 +53,10 @@ node -p "require.resolve('@yami/design-system-mcp/cli')"
 `components/Button/usage`。先搜索定位规则，再按返回行号读取上下文。分页最多 200 行，
 搜索最多 20 项；`truncated` 表示仍有命中，可缩小到特定文档继续查询。
 `list_components` 的 `status` 区分稳定组件和 Beta 页头；Beta 页头需要宿主明确选用。
+
+查询商城首页时，用 `search_design_documents` 在 `DISTRIBUTION` 中查「组合商城首页入口」，
+将命中行号作为 `read_design_document` 的 `startLine`，读取同一节的组件组合、页面外边距、
+手机区块间距、活动背景换色、条幅对齐与首屏验收规则。
 
 每个成功 Tool 返回 `snapshot`：包名、包版本、源码提交、工作树状态和内容指纹。
 标准 MCP `resources/list` / `resources/read` 同时提供索引、Skill、规范、Token、

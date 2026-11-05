@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "0.2.0-candidate.4",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.8",
+  "changeType": "minor",
+  "summary": "Adds the storefront building blocks relative to the delivery baseline and documents mobile homepage spacing and the active campaign background in the versioned Skill and MCP knowledge.",
+  "migration": "Install the 0.2.0-candidate.4 / 0.1.0-candidate.8 pair and restart the project MCP. Follow the storefront composition section in DISTRIBUTION to set the mobile section gap and wire the HeroBanner color callback to the page gradient.",
+  "rollback": "Restore the previously verified paired tarballs and consumer lockfile, revert imports and host styles added for that upgrade, then restart the project MCP.",
+  "visualAndBehavior": "Compared with 0.2.0-candidate.3, the update documents the mobile 8px hero-to-shortcuts gap and the background transition when swiping campaigns or scrolling the page. Verify both in the browser."
+}

@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "0.2.0-candidate.2",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.6",
+  "changeType": "minor",
+  "summary": "Adds the storefront building blocks relative to the delivery baseline and documents homepage composition and viewport acceptance in the versioned Skill and MCP knowledge.",
+  "migration": "Install the 0.2.0-candidate.2 / 0.1.0-candidate.6 pair and restart the project MCP. Follow the storefront composition section in DISTRIBUTION for homepage work. Opt into the sticky storefront header via @yami/design-system/components/Header.",
+  "rollback": "Restore the previously verified paired tarballs and consumer lockfile, revert imports added for that upgrade, then restart the project MCP.",
+  "visualAndBehavior": "Compared with 0.2.0-candidate.1, the update is design guidance for desktop offer visibility, mobile shortcuts and product visibility, and page heading semantics. Verify assembled pages using the stated desktop and mobile browser viewports."
+}

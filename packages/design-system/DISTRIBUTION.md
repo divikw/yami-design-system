@@ -43,7 +43,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.2.0-candidate.1.tgz
+npm install /absolute/path/to/yami-design-system-0.2.0-candidate.4.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。
@@ -124,6 +124,71 @@ node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
 `mobileTextFallback` 显示 `label`。`label` 表达可见活动文案和行动。使用组件默认的文本
 配色与焦点样式。页面路由、素材、区块外边距和数据由宿主维护；
 候选包的示例覆盖单个组件，整页试点不随包提供。
+
+### 首页布局与验收
+
+- **桌面 1440 × 900**。页头下紧接活动轨，区块之间使用组件自带的纵向间距。快捷入口使用简短标签，避免换行把条幅推到首屏下方。保留活动图和条幅的原始宽高比，首屏须完整显示桌面条幅及其行动文案。
+- **手机 402 × 844**。快捷入口使用 `lines={1}` 和 `surface="card"`，保持单行横滑。沿用活动轨在手机的卡片可见性。主内容统一用 `gap: var(--layout-page-margin-card)`，活动轨与快捷入口之间保留 8px。快捷入口、条幅和榜单卡片的左右外缘分别对齐。
+- **首屏商品**。榜单采用 `layout="rail"` 和 `mobileSurface="card"`，保留标题和分类。手机首屏须露出首张商品卡的图片。检查从页头到榜单的整体高度，再调整宿主间距。
+- **一级标题**。在 `<main>` 中提供一个能说明首页用途的 `<h1>`。设计未安排可见标题时，使用屏幕阅读器可读的视觉隐藏样式，保留标题语义与首屏空间。
+
+全宽首页由宿主在全局样式中将 `body` 外边距清零，页头与主内容容器占满可用视口。用 `.storefront-page` 包住 `StickyStorefrontHeader` 和 `<main className="storefront-home">`。手机条幅通过 `className="storefront-home-billboard"` 覆盖根节点的 `100%` 宽度，扣除两侧卡片边距后居中，由主内容的 `gap` 统一提供上下间距。
+
+在宿主客户端组件中，从 React 引入 `useRef` 和 `useCallback`，把 `pageRef` 绑定到 `.storefront-page`，把 `updateSurface` 传给 `HeroBanner` 的 `onActiveSurfaceColorChange`。组件会在首屏及横滑时报告当前最显眼卡片的实际表面色。手机顶部的透明页头与活动轨共用这层渐变，起始色由 16% 活动色与页面底色混合，向下过渡到 `--background-secondary`。桌面及手机纵向滚动后的吸顶页头沿用组件的实底。
+
+```tsx
+const pageRef = useRef<HTMLDivElement>(null);
+const updateSurface = useCallback((color: string) => {
+  pageRef.current?.style.setProperty('--storefront-active-surface', color);
+}, []);
+```
+
+```css
+body { margin: 0; }
+
+.storefront-page { position: relative; }
+
+@media (max-width: 1023.98px) {
+  .storefront-page {
+    background: var(--background-secondary);
+  }
+
+  .storefront-page::before {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    aspect-ratio: 1;
+    max-block-size: 440px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--storefront-active-surface, var(--background-primary)) 16%, var(--background-primary)),
+      var(--background-secondary)
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  .storefront-home {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--layout-page-margin-card);
+    background: transparent;
+  }
+
+  .storefront-home > .storefront-home-billboard {
+    width: calc(100% - 2 * var(--layout-page-margin-card));
+    margin-block: 0;
+    margin-inline: auto;
+    padding: 0;
+    border-radius: var(--radius-surface-default);
+  }
+}
+```
+
+在两种尺寸的浏览器首屏核对页头的上缘和左右外缘与可用视口齐平。手机端测量活动轨和快捷入口的间隔，以及快捷入口、条幅和榜单的左右外缘。横滑到另一张活动卡，确认页头透出的渐变跟着换色，再纵向滚动确认吸顶页头恢复实底。图片解码后再截图，检查条幅与商品卡。实测滚动搜索和三个区块的链接，并检查一级标题与键盘焦点。
+
 随包 Skill 用于引导现有 AI 工具读取规范。可选 MCP 服务通过配套候选包安装，
 只读查询相同知识快照，详见[接入说明](./distribution/MCP.md)。
 

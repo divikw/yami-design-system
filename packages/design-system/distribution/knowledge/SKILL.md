@@ -56,6 +56,25 @@ and search behavior. Keep each campaign and shortcut tied to its actual
 destination; use full 8:9 campaign artwork and provide the artwork-only link's
 accessible name. Verify the sticky search after scrolling, not just at the top.
 
+Before composing a storefront home, read the [storefront composition rules](./references/DISTRIBUTION.md#组合商城首页入口).
+With MCP, search `DISTRIBUTION` for `组合商城首页入口` and read that section.
+Set `body { margin: 0; }` in the host stylesheet so the header reaches both
+viewport edges. On mobile, use the `Billboard` root `className` to set
+`width: calc(100% - 2 * var(--layout-page-margin-card))`, `margin-inline: auto`,
+and `padding: 0`. Measure both card edges against the shortcut rail and product
+list in the browser.
+Stack mobile sections with `gap: var(--layout-page-margin-card)` so the hero
+rail and shortcuts have an 8px gap. Pass `onActiveSurfaceColorChange` to
+`HeroBanner` and use the reported color in the page wrapper's mobile gradient.
+Blend 16% of that color with `--background-primary` and fade to
+`--background-secondary`. Verify that swiping changes the color behind the
+transparent header at the top and vertical scrolling brings back its solid surface.
+Give the page an accessible `<h1>` in `<main>`. Keep shortcut labels short so
+wrapping does not push the offer out of view. In the browser, verify the full
+desktop offer artwork and call to action at 1440 × 900. At 402 × 844, verify a
+single horizontal row of shortcuts and a visible portion of the first product
+card image in the first viewport.
+
 Run the consuming app's type check, production build, tests, and relevant browser
 checks. Inspect real states at the supported widths/themes. `pnpm validate` and
 the upstream Storybook/Registry scripts belong to the YAMI source repository;

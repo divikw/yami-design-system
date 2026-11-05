@@ -7,7 +7,7 @@ function artwork(width: number, height: number, fill: string, label: string) {
 const logo = artwork(140, 48, "#fff", "Demo shop");
 const icon = artwork(32, 32, "#eee", "✦");
 const campaigns = ["Pantry essentials", "Tea season", "Sunday cooking", "Keep shopping", "Fruit market", "Dinner ideas"];
-const collections = ["New arrivals", "Weeknight meals", "Pantry", "Gift ideas", "Tea", "Snacks", "Drinks", "Kitchen", "Dessert", "Offers"];
+const collections = ["New arrivals", "Dinners", "Pantry", "Gift ideas", "Tea", "Snacks", "Drinks", "Kitchen", "Dessert", "Offers"];
 const products = ["Jasmine tea", "Rice crackers", "Chili oil", "Sesame noodles"];
 
 export const home: HomepageData = {
@@ -24,13 +24,15 @@ export const home: HomepageData = {
   hero: {
     ariaLabel: "Featured campaigns", previousLabel: "Previous campaigns", nextLabel: "Next campaigns",
     items: campaigns.map((title, index) => {
-      const common = { id: `campaign-${index}`, href: `#campaign-${index}`, title, backgroundColor: "#eef4e7" };
+      const backgroundColor = index === 1 ? "#f5ece5" : "#eef4e7";
+      const common = { id: `campaign-${index}`, href: `#campaign-${index}`, title, backgroundColor };
       return index === 3
         ? { ...common, products: [{ src: "/product.svg", alt: "Tea tin" }] }
-        : { ...common, image: { src: artwork(320, 360, "#eef4e7", ""), alt: "" }, description: `Explore ${title.toLowerCase()}` };
+        : { ...common, image: { src: artwork(320, 360, backgroundColor, ""), alt: "" }, description: `Explore ${title.toLowerCase()}` };
     }),
   },
   shortcuts: {
+    surface: "card",
     ariaLabel: "Shop by collection",
     items: collections.map((label, index) => ({ id: `collection-${index}`, href: `#collection-${index}`, label, iconSrc: icon })),
   },

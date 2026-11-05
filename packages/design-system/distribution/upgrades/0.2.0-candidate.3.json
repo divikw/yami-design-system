@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "0.2.0-candidate.3",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.7",
+  "changeType": "minor",
+  "summary": "Adds the storefront building blocks relative to the delivery baseline and documents full-width storefront chrome and mobile card alignment in the versioned Skill and MCP knowledge.",
+  "migration": "Install the 0.2.0-candidate.3 / 0.1.0-candidate.7 pair and restart the project MCP. Follow the storefront composition section in DISTRIBUTION for the host page margin reset and mobile Billboard width. Opt into the sticky storefront header via @yami/design-system/components/Header.",
+  "rollback": "Restore the previously verified paired tarballs and consumer lockfile, revert imports and host styles added for that upgrade, then restart the project MCP.",
+  "visualAndBehavior": "Compared with 0.2.0-candidate.2, the update guides the host to reset the page margin and center the mobile Billboard within the card gutters. Verify the storefront header and both edges of the mobile cards in the browser."
+}
