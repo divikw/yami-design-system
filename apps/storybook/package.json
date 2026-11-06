@@ -11,7 +11,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@vercel/functions": "3.10.4",
+    "@vercel/functions": "3.10.6",
     "@yami/design-system": "workspace:*",
     "@yami/prototypes": "workspace:*",
     "@yami/site-access": "workspace:*",
