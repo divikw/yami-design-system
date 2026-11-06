@@ -50,18 +50,19 @@ version. Registry v2 remains YAMI's internal source-distribution contract. The i
 and Vite rehearsals demonstrate package consumption and knowledge queries; they do not demonstrate
 AI-generated task quality or adoption in a real business project.
 
-Follow-up order:
+Follow-up status and order:
 
 1. PR #200's unified consumer entry and upgrade/delivery guards are merged as `cb6ed5e`;
-   all 19 main-branch CI jobs passed. Implement and verify the bounded local CLI pilot below.
-2. Evaluate real AI tasks against the installed package, Skill and MCP: generation, refinement,
-   missing-component handling, and type/build/browser results. Keep query success distinct from
-   generated-output quality.
-3. For an explicitly selected and authorized business-project pilot, preserve verified original
-   artifacts and record their paired identities before handoff. Measure discovery, correction,
-   upgrade and rollback friction. The current pilot scope excludes Project Board.
-4. Expand public components, page examples and supported host versions according to those task and
-   consumer results, with contracts and verification for each addition.
+   all 19 main-branch CI jobs passed. PR #201 merged the verified local CLI pilot below.
+2. The internal homepage and cross-project pilots evaluated generation, refinement and missing
+   components with the installed package, Skill and MCP. Their records distinguish knowledge
+   queries from type, build and browser results.
+3. The Pantry Restock copy completed local onboarding, paired upgrade and rollback. For a separate,
+   authorized team pilot, preserve verified original artifacts and record their paired identities
+   before handoff. Measure discovery, correction, upgrade and rollback on the receiving machine.
+   The current pilot scope excludes Project Board.
+4. Expand public components, usage examples and supported host versions according to task and
+   consumer results, with contracts and verification for each addition. Whole-page examples stay internal.
 5. Use pilot evidence to decide remote artifact retrieval for new machines/CI and a registry delivery
    workflow. Package publication requires separate authorization; packages remain unpublished during
    the current work.
@@ -93,6 +94,15 @@ Local native Codex discovery can be included with `--native-codex`; CI does not
 require an authenticated Codex client. Fixture trust is supplied only to the
 verification subprocess, without persisting global trust settings. No package
 is published by these commands.
+
+## Internal consumer validation — 2026-11-06
+
+The follow-up recorded a scoped edit to an existing storefront and handling of a missing
+public component. A trusted project with the CLI-generated configuration completed a native
+Codex MCP query. A separate copy of Pantry Restock exercised first install, paired upgrade,
+and rollback with the original tarballs and browser draft checks. These results cover isolated
+local projects; team handoff and production adoption remain unverified.
+[Cross-project consumption pilot](../maintainers/zh/cross-project-consumption-pilot.md)
 
 ## Consequences
 
