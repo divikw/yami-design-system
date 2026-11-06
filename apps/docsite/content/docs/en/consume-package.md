@@ -5,7 +5,7 @@ description: "Install local React Web candidates, connect the versioned Skill an
 group: start
 order: 25
 keywords: ["Install", "Package", "Consumer", "Skill", "MCP", "Codex", "Upgrade", "Rollback"]
-updatedAt: "2026-11-05"
+updatedAt: "2026-11-06"
 sourceRefs:
   - packages/yami-design-cli/README.md
   - docs/adr/009-agent-ready-contracts-and-distribution.md
@@ -20,12 +20,13 @@ For teams that already have a React Web application and want to reuse YAMI compo
 
 ## Check the supported scope
 
-These are local candidates for the authorized environment. They are not published to npm or an internal package registry. Obtain the original paired tarballs and their SHA-512 values from the maintainer; do not download them from public npm or rebuild delivered versions.
+These are local candidates for the authorized environment. They are not published to npm or an internal package registry.
 
 | Item | Current scope |
 | --- | --- |
 | Component package | `@yami/design-system@0.2.0-candidate.4` |
 | Companion MCP | `@yami/design-system-mcp@0.1.0-candidate.8`, bound to that exact component version |
+| Setup CLI (optional) | `yami-design-cli@0.1.0-candidate.1` |
 | Stable components | Button (including ButtonLink), Input, Card, ProductCard, ProductList, HeroBanner, ShortcutRail, Billboard |
 | Beta preview | `@yami/design-system/components/Header` (includes the sticky storefront header) |
 | Runtime | Node 24; React / React DOM `~19.3.1` |
@@ -35,17 +36,34 @@ The full source, Storybook and legacy Registry contain more components than the 
 
 Consumer projects use YAMI's own versioned package, packaged Skill and read-only MCP; the internal Registry maintains the source-distribution contract. shadcn is a reference for structured distribution, AI discovery and contract/example retrieval. Its CLI/Registry compatibility layer is outside the roadmap and is not a prerequisite for using YAMI.
 
+## Obtain and verify the candidates
+
+Ask the maintainer for the original component and MCP tarballs from the same delivery and the SHA-512 integrity value for each filename (in `sha512-...` format). If you use the CLI, obtain its original tarball and integrity value as well. This example places the received files under `./.artifacts/` and calculates their integrity values from the consumer project root.
+
+```bash
+node -e '
+const { createHash } = require("node:crypto");
+const { readFileSync } = require("node:fs");
+for (const file of process.argv.slice(1)) {
+  const digest = createHash("sha512").update(readFileSync(file)).digest("base64");
+  console.log(file, "sha512-" + digest);
+}
+' ./.artifacts/*.tgz
+```
+
+Check that all required files are present and compare each result by filename with the value supplied by the maintainer. Install after all values match. If a file is missing or a value differs, request the corresponding original file again.
+
 ## Initialize with yami-design-cli
 
 The CLI is a separate private local candidate named `yami-design-cli`, with the same executable name. It supports Node 24, npm/pnpm and standalone Next.js/Vite applications, targeting macOS/Linux. Local verification runs on macOS; Linux verification is configured in a dedicated CI job. Workspaces and Windows are outside that scope.
 
-Obtain the three authorized original tarballs and run in the consuming application:
+Use the three verified tarballs from the consumer project root:
 
 ```bash
-npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
+npm install --save-dev ./.artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package /artifacts/yami-design-system-0.2.0-candidate.4.tgz \
-  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
+  --design-package ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz \
+  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
   --locale en --dry-run
 ```
 
@@ -61,13 +79,18 @@ The CLI does not modify application entry points, global resets, AGENTS.md, clie
 
 ## Install and lock the artifacts
 
-Run in the consumer project, replacing paths with the original files supplied by the maintainer:
+For manual setup, install the component package first, then add the paired MCP package as a development dependency. Run both commands from the consumer project root.
 
 ```bash
-npm install /absolute/path/yami-design-system-0.2.0-candidate.4.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.8.tgz
+npm install ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz
+npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz
 ```
 
-Commit the consumer dependency declarations and lockfile; keep original tarballs in the team's authorized artifact location. A new machine or CI must obtain the same bytes first. There is no remote automatic distribution service. Both packages retain `private: true`; installation does not publish them.
+Commit the consumer's `package.json` and lockfile together. Keep the original tarballs in the team's authorized artifact location. On a new machine or in CI, obtain and verify the same files, then place them at the paths recorded by the `file:` references. Use paths relative to the project so the layout can be reproduced on another machine.
+
+Include development dependencies when verifying the CLI and MCP. Use `npm ci` or `pnpm install --frozen-lockfile` to restore the locked installation.
+
+If the project carries an MCP configuration from the previous environment, follow [Configure project read-only MCP](#configure-project-read-only-mcp) after installation to update the local Node path, MCP entry and working directory before running `doctor` or querying in Codex.
 
 GT Walsheim remains subject to its existing license. Confirm the target environment before loading its font entry; a preview with missing fonts is not a brand visual acceptance result.
 
@@ -124,17 +147,19 @@ This configuration guides existing AI tools to packaged knowledge. It does not i
 
 ## Configure project read-only MCP
 
-Resolve the actual CLI path first:
+From the consumer project root, resolve the local Node path, MCP entry and project directory.
 
 ```bash
+node -p "process.execPath"
 node -p "require.resolve('@yami/design-system-mcp/cli')"
+pwd -P
 ```
 
-Substitute the output into the project's `.codex/config.toml`, preserving existing settings:
+Put the three results into `command`, `args` and `cwd` in the project's `.codex/config.toml`, respectively. If `[mcp_servers.yami_design_system]` already exists, update its paths and preserve the rest of the project configuration.
 
 ```toml
 [mcp_servers.yami_design_system]
-command = "node"
+command = "/absolute/path/to/node"
 args = ["/absolute/path/returned/by/require.resolve/cli.mjs"]
 cwd = "/absolute/path/to/consumer"
 enabled_tools = ["list_design_documents", "search_design_documents", "read_design_document", "list_components", "get_component_contract", "get_component_example"]
@@ -142,13 +167,15 @@ startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
-Project configuration follows Codex's trusted-project rules; see the [official MCP documentation](https://developers.openai.com/codex/mcp). Change the current project's settings without overwriting global configuration. Node 24 must be available in the client's PATH.
+Project configuration follows Codex's trusted project rules. If you use `command = "node"`, the PATH for both Codex and `doctor` should resolve to the same Node 24 executable. [Official MCP documentation](https://developers.openai.com/codex/mcp)
 
 ```bash
 codex mcp get yami_design_system --json
 ```
 
-Restart or reconnect the client, call `list_components`, then read the contracts, examples and rules used. Each successful query's `snapshot` must match the installed `candidate-manifest.json`. The server reads indexed package files only; it has no file-writing, installation, generation or design-validation tools.
+The command above checks the configuration. Open and trust the consumer project in Codex, reconnect or restart the client, then ask it to make a real query. For example, “Call the project's `yami_design_system` MCP tool `list_components` and show the tool response's `snapshot`.”
+
+Confirm that `list_components` succeeded and read the `snapshot` in the actual tool response. With the CLI, confirm that `doctor --json` reports `status` as `pass` and compare every field in the two snapshots, including `packageVersion`, `sourceCommit` and `contentDigest`. With manual setup, compare the snapshot fields with the installed component package's `candidate-manifest.json`. Then read the contracts, examples and rules you need. The server reads indexed package files only and provides read-only knowledge queries.
 
 ## Verify first use
 
@@ -163,17 +190,20 @@ A successful MCP query proves knowledge is readable. The page must still use rea
 
 ## Upgrade and roll back
 
-Retain both previous original tarballs, the lockfile and verification evidence. Read the new package's `UPGRADE.json` for migration, visual/behavior changes and rollback before installing the pair, updating the lockfile, restarting MCP and rechecking pages.
+1. Keep both previous original tarballs and their integrity values, the consumer's `package.json` and lockfile, and the verified snapshot and page test results. Read the new component package's `UPGRADE.json` for the paired versions, migration steps and page acceptance checks.
+2. Update both component and MCP `file:` references in `package.json`, then use the project's package manager to run `npm install` or `pnpm install` and update the lockfile. If the install path changes, update the MCP configuration as described above. Reconnect Codex, verify the new snapshot in the same way and check the page again.
+3. To roll back, restore the previous `package.json`, lockfile and the two original tarballs they reference, then reinstall from the lockfile. Check the MCP paths and reconnect. Confirm a real query returns the previous snapshot, then rerun the consumer build and key browser checks.
 
-On failure, restore the previous tarballs and lockfile, reinstall and restart MCP. Never overwrite rollback files with a new build of the same version. The packaged `UPGRADING.md` explains version gates and their limits; type compatibility does not replace visual and interaction review.
+The packaged `UPGRADING.md` explains version gates and their limits. Use the original files for rollback.
 
 ## Troubleshoot common problems
 
 | Symptom | Action |
 | --- | --- |
-| Package or CLI not found | Resolve from the actual application and install both tarballs |
+| Package or CLI not found | Check the dependencies and tarball paths in the consumer project. If using the CLI, confirm that it is also installed |
 | MCP will not start | Check Node 24, the absolute CLI path and project directory; keep script logs out of protocol stdout |
+| Codex cannot find `list_components` | Open the trusted consumer project, check `codex mcp get yami_design_system --json`, then reconnect |
 | Snapshot version differs | Check the exact pair, lockfile and real installation path, then restart MCP |
 | Styles or fonts differ | Check CSS order, host reset, font requests and the authorized scope |
 | Missing component or prop | Read the current index and contract; report the gap without borrowing unopened source entries |
-| CI cannot install a local path | Restore the same authorized original tarballs first; a lockfile alone does not make them downloadable |
+| A new machine or CI cannot install a local path | Obtain and verify the original tarballs, restore them at the paths recorded by the `file:` references and reinstall from the lockfile |
