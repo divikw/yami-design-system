@@ -7,8 +7,9 @@ for (const locale of ["zh", "en"]) {
       for (const { slug, directions, destinations } of [
         { slug: "fork-project", directions: ["next"], destinations: ["getting-started"] },
         { slug: "getting-started", directions: ["prev", "next"], destinations: ["fork-project", "consume-package"] },
-        { slug: "consume-package", directions: ["prev", "next"], destinations: ["getting-started", "browse-components"] },
-        { slug: "browse-components", directions: ["prev", "next"], destinations: ["consume-package", "using-yami-with-ai"] },
+        { slug: "consume-package", directions: ["prev", "next"], destinations: ["getting-started", "cli"] },
+        { slug: "cli", directions: ["prev", "next"], destinations: ["consume-package", "browse-components"] },
+        { slug: "browse-components", directions: ["prev", "next"], destinations: ["cli", "using-yami-with-ai"] },
         { slug: "faq", directions: ["prev"], destinations: ["contribute-upstream"] },
       ]) {
         await page.goto(`/${locale}/docs/${slug}`);
