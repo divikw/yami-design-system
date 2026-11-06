@@ -163,14 +163,29 @@ test.each(['text', 'images'] as const)('%s keeps the current branch while the po
     const activeChild = menu.querySelector<HTMLElement>('[data-level="1"] [aria-expanded="true"]')!;
     const candidate = Array.from(menu.querySelectorAll<HTMLElement>('[data-level="0"] button'))
       .find((item) => item.textContent === 'Summer Picks')!;
-    await page.elementLocator(activeRoot).hover({ position: { x: 20, y: 10 } });
+
+    function movePointer(target: HTMLElement, offsetX: number, offsetY: number, from?: HTMLElement) {
+      const bounds = target.getBoundingClientRect();
+      const event = {
+        bubbles: true,
+        pointerType: 'mouse',
+        clientX: bounds.left + offsetX,
+        clientY: bounds.top + offsetY,
+      };
+      expect(target.contains(document.elementFromPoint(event.clientX, event.clientY))).toBe(true);
+      // React derives the next item's pointerenter from the previous item's pointerout.
+      if (from) from.dispatchEvent(new PointerEvent('pointerout', { ...event, relatedTarget: target }));
+      target.dispatchEvent(new PointerEvent('pointermove', event));
+    }
+
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
-    await page.elementLocator(candidate).hover({
-      position: { x: candidate.getBoundingClientRect().width - 20, y: 10 },
-    });
+    movePointer(activeRoot, 20, 10);
+    const timersBeforeCrossing = vi.getTimerCount();
+    movePointer(candidate, candidate.getBoundingClientRect().width - 20, 10, activeRoot);
+    expect(vi.getTimerCount()).toBe(timersBeforeCrossing + 1);
     tick(299);
     expect(activeRoot).toHaveAttribute('aria-expanded', 'true');
-    await page.elementLocator(activeChild).hover();
+    movePointer(activeChild, activeChild.clientWidth / 2, activeChild.clientHeight / 2, candidate);
     tick(300);
     expect(activeRoot).toHaveAttribute('aria-expanded', 'true');
   } finally {
