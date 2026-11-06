@@ -5,7 +5,7 @@ description: "在现有 React Web 项目安装本地候选包，接入随版本 
 group: start
 order: 25
 keywords: ["安装", "组件包", "消费", "Skill", "MCP", "Codex", "升级", "回退"]
-updatedAt: "2026-11-05"
+updatedAt: "2026-11-06"
 sourceRefs:
   - packages/yami-design-cli/README.md
   - docs/adr/009-agent-ready-contracts-and-distribution.md
@@ -20,12 +20,13 @@ sourceRefs:
 
 ## 确认支持范围
 
-当前是获授权环境中的本地候选包，尚未发布到 npm 或内部包仓库。先向维护者取得同一批原始 tarball 及其 SHA-512，不从公共 npm 下载，也不重新构建已交付版本。
+当前是获授权环境中的本地候选包，尚未发布到 npm 或内部包仓库。
 
 | 项目 | 当前范围 |
 | --- | --- |
 | 组件包 | `@yami/design-system@0.2.0-candidate.4` |
 | 配套 MCP | `@yami/design-system-mcp@0.1.0-candidate.8`，精确绑定上述组件版本 |
+| 接入 CLI（可选） | `yami-design-cli@0.1.0-candidate.1` |
 | 稳定组件 | Button（含 ButtonLink）、Input、Card、ProductCard、ProductList、HeroBanner、ShortcutRail、Billboard |
 | Beta 预览 | `@yami/design-system/components/Header`（含商城首页吸顶页头） |
 | 运行环境 | Node 24；React / React DOM `~19.3.1` |
@@ -35,17 +36,34 @@ sourceRefs:
 
 YAMI 通过自有版本包、随包 Skill 和只读 MCP 接入消费项目，内部 Registry 维护源码分发契约。shadcn 仅作为结构化分发与 AI 发现、读取契约和示例的思路参考，其 CLI/Registry 兼容层不列入后续计划，也不作为使用 YAMI 的前置条件。
 
+## 获取并校验候选包
+
+向维护者取得同一批组件包和 MCP 原始 tarball，以及按文件名列出的 SHA-512 校验值（`sha512-...` 格式）。使用 CLI 时，一并取得 CLI 原包及其校验值。以下示例将收到的包放在消费项目的 `./.artifacts/` 下，并从项目根目录计算校验值。
+
+```bash
+node -e '
+const { createHash } = require("node:crypto");
+const { readFileSync } = require("node:fs");
+for (const file of process.argv.slice(1)) {
+  const digest = createHash("sha512").update(readFileSync(file)).digest("base64");
+  console.log(file, "sha512-" + digest);
+}
+' ./.artifacts/*.tgz
+```
+
+先确认所需文件齐全，再按文件名逐项与维护者提供的值比对。全部一致后再安装。文件缺失或校验不符时，向维护者重新取得对应的原始文件。
+
 ## 使用 yami-design-cli 初始化
 
 首版 CLI 是单独的 private 本地候选包，名称与命令均为 `yami-design-cli`。支持 Node 24、npm/pnpm 和独立 Next.js/Vite 应用，目标平台为 macOS/Linux。本次本地验证在 macOS 执行，Linux 验证已配置到独立 CI 作业；workspace 与 Windows 尚不在验证范围。
 
-先取得三个获授权的原始 tarball，在消费应用中执行：
+在消费项目根目录使用已校验的三个 tarball：
 
 ```bash
-npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
+npm install --save-dev ./.artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package /artifacts/yami-design-system-0.2.0-candidate.4.tgz \
-  --mcp-package /artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
+  --design-package ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz \
+  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
   --locale zh --dry-run
 ```
 
@@ -57,17 +75,22 @@ npm install --save-dev /artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 
 `doctor` 只读检查安装内容、版本、Skill、MCP 配置，并实际查询规范、组件契约和示例；成功退出码为 0，阻塞时非零。它不调用模型，也不代表页面视觉与行为验收通过。
 
-CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局配置。按下文加载样式，重连受信任的客户端，再执行消费应用检查。可用 `--cwd` 指定应用，`--package-manager npm|pnpm` 明确包管理器；tarball 相对路径按命令执行目录解析。以下手动流程仍可单独使用。
+CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局配置。按下文加载样式，重连受信任的客户端，再执行消费应用检查。tarball 相对路径按命令执行目录解析。更多参数和检查结果见 [CLI](/zh/docs/cli)。以下手动流程仍可单独使用。
 
 ## 安装并锁定产物
 
-在消费项目目录执行，路径替换为维护者提供的原始文件：
+手动接入时，在消费项目根目录先安装组件包，再将同批 MCP 包加入开发依赖：
 
 ```bash
-npm install /absolute/path/yami-design-system-0.2.0-candidate.4.tgz /absolute/path/yami-design-system-mcp-0.1.0-candidate.8.tgz
+npm install ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz
+npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz
 ```
 
-提交消费项目的依赖声明与 lockfile；原始 tarball 保存在团队授权的产物位置。新机器或 CI 必须先取得相同字节的文件，当前没有远端自动分发服务。两个包保持 `private: true`，安装不等于发布。
+将消费项目的 `package.json` 和 lockfile 一起提交，原始 tarball 保存在团队授权的产物位置。新机器或 CI 先取回并校验同一批文件，将它们放到 `file:` 引用记录的路径。使用项目内的相对路径便于在不同机器恢复。
+
+在需要验证 CLI 和 MCP 的环境中保留开发依赖，使用 `npm ci` 或 `pnpm install --frozen-lockfile` 按锁文件还原安装。
+
+如果已有的 MCP 配置来自旧环境，安装后按[配置项目只读 MCP](#configure-project-read-only-mcp)更新本机的 Node 路径、MCP 入口和工作目录，再运行 `doctor` 或在 Codex 中查询。
 
 GT Walsheim 字体仍受原有许可限制。确认目标环境可使用后再加载字体入口；不要把缺失字体的预览当作品牌视觉验收通过。
 
@@ -124,17 +147,19 @@ node -p "require.resolve('@yami/design-system/knowledge/index.json')"
 
 ## 配置项目只读 MCP
 
-先取得实际 CLI 路径：
+在消费项目根目录运行以下命令，依次取得本机的 Node 路径、MCP 入口和项目目录。
 
 ```bash
+node -p "process.execPath"
 node -p "require.resolve('@yami/design-system-mcp/cli')"
+pwd -P
 ```
 
-把输出替换进项目 `.codex/config.toml`，保留已有配置：
+将三个结果分别填入项目 `.codex/config.toml` 的 `command`、`args` 和 `cwd`。如果已有 `[mcp_servers.yami_design_system]`，更新该表的路径并保留项目的其他配置。
 
 ```toml
 [mcp_servers.yami_design_system]
-command = "node"
+command = "/absolute/path/to/node"
 args = ["/absolute/path/returned/by/require.resolve/cli.mjs"]
 cwd = "/absolute/path/to/consumer"
 enabled_tools = ["list_design_documents", "search_design_documents", "read_design_document", "list_components", "get_component_contract", "get_component_example"]
@@ -142,13 +167,15 @@ startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
-项目配置遵循 Codex 的受信任项目规则，参见[官方 MCP 文档](https://developers.openai.com/codex/mcp)。只修改当前项目配置，不覆盖全局设置。Node 24 必须在客户端进程的 PATH 中可用。
+项目配置遵循 Codex 的受信任项目规则，参见[官方 MCP 文档](https://developers.openai.com/codex/mcp)。如果使用 `command = "node"`，Codex 和 `doctor` 的 PATH 都应解析到同一个 Node 24。
 
 ```bash
 codex mcp get yami_design_system --json
 ```
 
-重启或重新连接客户端后，先调用 `list_components`，再读取所用组件的契约、示例与规范。每个成功查询的 `snapshot` 应与安装包的 `candidate-manifest.json` 一致。服务只读包内索引文件，不提供写文件、安装、生成代码或设计校验工具。
+上面的命令用来检查配置。在 Codex 打开并信任消费项目，重启或重连后发起一次实际查询，例如「请直接调用项目的 `yami_design_system` MCP 工具 `list_components`，显示工具返回的 `snapshot`。」
+
+确认 `list_components` 调用成功，并读取实际工具回执里的 `snapshot`。使用 CLI 时，确认 `doctor --json` 的 `status` 为 `pass`，并逐项比对两份 `snapshot`，包括 `packageVersion`、`sourceCommit` 和 `contentDigest`。手动接入时，将快照字段与已安装组件包的 `candidate-manifest.json` 核对。通过后再读取所用组件的契约、示例与规范。服务只对已索引的包内文件提供只读知识查询。可用工具和查询示例见 [MCP](/zh/docs/mcp)。
 
 ## 验证首次使用
 
@@ -163,17 +190,20 @@ MCP 查询成功只证明知识可读。页面仍需使用真实组件并通过�
 
 ## 升级与回退
 
-升级前保留旧的两个原始 tarball、lockfile 与验证记录。阅读新包 `UPGRADE.json` 的迁移、视觉/交互和回退说明，再成对安装、更新 lockfile、重启 MCP 并重新验证页面。
+1. 保留旧版的两个原始 tarball 及其校验值、消费项目的 `package.json`、lockfile、已验证的快照和页面验收记录。先读新版组件包的 `UPGRADE.json`，确认配对版本、迁移步骤和页面验收要求。
+2. 同时更新 `package.json` 中组件包和 MCP 的两个 `file:` 引用，再用当前包管理器运行 `npm install` 或 `pnpm install` 来更新 lockfile。若安装路径变了，按上文更新 MCP 配置。重连 Codex，按相同方法核对新快照，再重新验证页面。
+3. 回退时，恢复旧 `package.json`、lockfile 和它们引用的两个原始 tarball，按锁文件重装。检查 MCP 路径并重新连接，确认实际查询返回旧快照，再重跑消费项目的构建和关键浏览器检查。
 
-若失败，恢复旧 tarball 与 lockfile，重新安装并重启 MCP。不得用同版本的新构建覆盖回退文件。包内 `UPGRADING.md` 说明版本门禁及其自动检查边界；类型检查通过不能替代视觉和交互审查。
+包内 `UPGRADING.md` 说明版本门禁及其自动检查边界。回退始终使用原始文件。
 
 ## 排查常见问题
 
 | 现象 | 处理 |
 | --- | --- |
-| 找不到包或 CLI | 确认在实际安装应用中执行解析命令，两个 tarball 均已安装 |
+| 找不到包或 CLI | 在实际消费项目中核对依赖与 tarball 路径。使用 CLI 时确认它也已安装 |
 | MCP 无法启动 | 检查 Node 24、绝对 CLI 路径、项目目录；协议 stdout 不应混入脚本日志 |
+| Codex 看不到 `list_components` | 确认打开的是受信任的消费项目，检查 `codex mcp get yami_design_system --json` 的结果，再重连 |
 | 快照版本不符 | 核对精确配对版本、lockfile 与真实安装位置，重启 MCP |
 | 样式或字体异常 | 检查 CSS 导入顺序、宿主 reset、字体网络请求和许可范围 |
 | 组件或属性不存在 | 查询当前索引与契约，说明缺口，不借用源码库中未开放的入口 |
-| CI 无法安装本地路径 | 先恢复同一份授权原始 tarball，不能只提交 lockfile 后假定文件可下载 |
+| 新机器或 CI 无法安装本地路径 | 取回并校验原始 tarball，放到 `file:` 引用记录的路径，再按 lockfile 重装 |
