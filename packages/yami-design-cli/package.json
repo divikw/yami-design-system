@@ -11,7 +11,7 @@
   "scripts": { "test": "node --test test/*.test.mjs" },
   "dependencies": {
     "@modelcontextprotocol/client": "2.4.0",
-    "semver": "7.8.5",
+    "semver": "7.8.6",
     "smol-toml": "1.9.1",
     "tar": "7.5.22"
   }
