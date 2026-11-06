@@ -75,7 +75,7 @@ Remove `--dry-run` to initialize. The CLI adds the design package to dependencie
 
 `doctor` reads installed contents, versions, Skill and MCP configuration, then actually queries a design document, component contract and example. Exit 0 means connection checks passed; blockers produce a nonzero exit. It does not call a model or establish visual/behavioral acceptance.
 
-The CLI does not modify application entry points, global resets, AGENTS.md, client trust or global settings. Load styles below, reconnect the trusted client and run consumer checks. Use `--cwd` to select the application and `--package-manager npm|pnpm` to choose a manager explicitly; relative tarball paths use the invocation directory. The manual steps below also remain available independently.
+The CLI does not modify application entry points, global resets, AGENTS.md, client trust or global settings. Load styles below, reconnect the trusted client and run consumer checks. Relative tarball paths use the invocation directory. See [CLI](/en/docs/cli) for options and check results. The manual steps below also remain available independently.
 
 ## Install and lock the artifacts
 
@@ -175,7 +175,7 @@ codex mcp get yami_design_system --json
 
 The command above checks the configuration. Open and trust the consumer project in Codex, reconnect or restart the client, then ask it to make a real query. For example, “Call the project's `yami_design_system` MCP tool `list_components` and show the tool response's `snapshot`.”
 
-Confirm that `list_components` succeeded and read the `snapshot` in the actual tool response. With the CLI, confirm that `doctor --json` reports `status` as `pass` and compare every field in the two snapshots, including `packageVersion`, `sourceCommit` and `contentDigest`. With manual setup, compare the snapshot fields with the installed component package's `candidate-manifest.json`. Then read the contracts, examples and rules you need. The server reads indexed package files only and provides read-only knowledge queries.
+Confirm that `list_components` succeeded and read the `snapshot` in the actual tool response. With the CLI, confirm that `doctor --json` reports `status` as `pass` and compare every field in the two snapshots, including `packageVersion`, `sourceCommit` and `contentDigest`. With manual setup, compare the snapshot fields with the installed component package's `candidate-manifest.json`. Then read the contracts, examples and rules you need. The server provides read-only queries on indexed package files. See [MCP](/en/docs/mcp) for the tool list and an example prompt.
 
 ## Verify first use
 

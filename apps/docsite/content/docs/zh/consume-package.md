@@ -75,7 +75,7 @@ npm install --save-dev ./.artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 
 `doctor` 只读检查安装内容、版本、Skill、MCP 配置，并实际查询规范、组件契约和示例；成功退出码为 0，阻塞时非零。它不调用模型，也不代表页面视觉与行为验收通过。
 
-CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局配置。按下文加载样式，重连受信任的客户端，再执行消费应用检查。可用 `--cwd` 指定应用，`--package-manager npm|pnpm` 明确包管理器；tarball 相对路径按命令执行目录解析。以下手动流程仍可单独使用。
+CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局配置。按下文加载样式，重连受信任的客户端，再执行消费应用检查。tarball 相对路径按命令执行目录解析。更多参数和检查结果见 [CLI](/zh/docs/cli)。以下手动流程仍可单独使用。
 
 ## 安装并锁定产物
 
@@ -175,7 +175,7 @@ codex mcp get yami_design_system --json
 
 上面的命令用来检查配置。在 Codex 打开并信任消费项目，重启或重连后发起一次实际查询，例如「请直接调用项目的 `yami_design_system` MCP 工具 `list_components`，显示工具返回的 `snapshot`。」
 
-确认 `list_components` 调用成功，并读取实际工具回执里的 `snapshot`。使用 CLI 时，确认 `doctor --json` 的 `status` 为 `pass`，并逐项比对两份 `snapshot`，包括 `packageVersion`、`sourceCommit` 和 `contentDigest`。手动接入时，将快照字段与已安装组件包的 `candidate-manifest.json` 核对。通过后再读取所用组件的契约、示例与规范。服务只对已索引的包内文件提供只读知识查询。
+确认 `list_components` 调用成功，并读取实际工具回执里的 `snapshot`。使用 CLI 时，确认 `doctor --json` 的 `status` 为 `pass`，并逐项比对两份 `snapshot`，包括 `packageVersion`、`sourceCommit` 和 `contentDigest`。手动接入时，将快照字段与已安装组件包的 `candidate-manifest.json` 核对。通过后再读取所用组件的契约、示例与规范。服务只对已索引的包内文件提供只读知识查询。可用工具和查询示例见 [MCP](/zh/docs/mcp)。
 
 ## 验证首次使用
 
