@@ -11,6 +11,7 @@ test("keeps Quick Start above four visible groups and three direct Storybook lin
   await expect(nav.getByRole("group", { name: "使用组件库", exact: true }).getByRole("link")).toHaveText([
     "Storybook 入门",
     "在现有项目使用 YAMI",
+    "CLI",
     "查看组件与页面",
   ]);
   for (const name of ["使用组件库", "用 AI 创建", "多人协作", "资源与帮助"]) {
@@ -18,7 +19,7 @@ test("keeps Quick Start above four visible groups and three direct Storybook lin
   }
   await expect(nav.getByRole("button", { name: "扩展与维护", exact: true })).toHaveCount(0);
   await expect(nav.getByRole("group", { name: "多人协作", exact: true }).getByRole("link", { name: "分享组件与页面", exact: true })).toBeVisible();
-  await expect(nav.getByRole("link")).toHaveCount(17);
+  await expect(nav.getByRole("link")).toHaveCount(19);
   for (const name of ["浏览组件", "查看设计规范", "查看页面示例"]) {
     const link = nav.getByRole("link", { name, exact: true });
     await expect(link).toHaveAttribute("href", /storybook\.vercel\.app\/\?path=\/story\/yami-/);
@@ -46,13 +47,11 @@ for (const locale of ["zh", "en"] as const) {
       if (width < 769) await page.getByRole("button", { name: labels.menu, exact: true }).click();
       const nav = page.getByRole("navigation", { name: labels.nav, exact: true });
       const entry = nav.getByRole("group", { name: labels.start, exact: true });
-      await expect(entry.getByRole("link")).toHaveCount(3);
+      await expect(entry.getByRole("link")).toHaveCount(4);
+      await expect(entry.getByRole("link", { name: "CLI", exact: true })).toHaveAttribute("href", `/${locale}/docs/cli`);
       const ai = nav.getByRole("group", { name: labels.ai, exact: true });
-      await expect(ai.getByRole("link").nth(0)).toHaveText("Skill");
-      await expect(ai.getByRole("link").nth(1)).toHaveText(labels.prepare);
-      await expect(ai.getByRole("link").nth(2)).toHaveText(labels.component);
-      await expect(ai.getByRole("link").nth(3)).toHaveText(labels.title);
-      await expect(ai.getByRole("link").nth(4)).toHaveText(labels.check);
+      await expect(ai.getByRole("link")).toHaveText(["Skill", "MCP", labels.prepare, labels.component, labels.title, labels.check]);
+      await expect(ai.getByRole("link", { name: "MCP", exact: true })).toHaveAttribute("href", `/${locale}/docs/mcp`);
       await expect(ai.getByRole("link", { name: labels.title, exact: true })).toHaveAttribute("aria-current", "page");
       const toggle = nav.getByRole("button", { name: labels.ai, exact: true });
       await toggle.click();
@@ -70,7 +69,7 @@ for (const locale of ["zh", "en"] as const) {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`/${locale}/docs/browse-components`);
     const pagination = page.getByRole("navigation", { name: labels.pagination, exact: true });
-    for (const [slug, title] of [["using-yami-with-ai", "Skill"], ["prepare-environment", labels.prepare], ["create-components", labels.component], ["choose-starting-point", labels.title], ["review-checklist", labels.check]]) {
+    for (const [slug, title] of [["using-yami-with-ai", "Skill"], ["mcp", "MCP"], ["prepare-environment", labels.prepare], ["create-components", labels.component], ["choose-starting-point", labels.title], ["review-checklist", labels.check]]) {
       const next = pagination.getByRole("link").last();
       await expect(next).toHaveAttribute("href", `/${locale}/docs/${slug}`);
       await next.click();
@@ -176,7 +175,7 @@ test("mobile creation navigation stays accessible with the compact guide", async
   await page.goto("/zh/docs/choose-starting-point");
   await page.getByRole("button", { name: "菜单", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "菜单", exact: true });
-  await expect(dialog.getByRole("navigation", { name: "YAMI 文档", exact: true }).getByRole("link")).toHaveCount(17);
+  await expect(dialog.getByRole("navigation", { name: "YAMI 文档", exact: true }).getByRole("link")).toHaveCount(19);
   await expect(dialog.getByRole("link", { name: "创建页面", exact: true })).toHaveAttribute("aria-current", "page");
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await dialog.getByRole("link", { name: "常见问题", exact: true }).click();
