@@ -4,7 +4,7 @@ import { AppDownloadPage } from "./AppDownloadPage";
 
 const meta = {
   id: "yami-pages-app-download-v1",
-  title: "YAMI/Pages/App Download/Draft/V1",
+  title: "YAMI/Pages/App Download/Korean/V1",
   component: AppDownloadPage,
   tags: ["!autodocs", "draft"],
   parameters: {

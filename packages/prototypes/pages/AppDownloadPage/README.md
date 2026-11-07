@@ -12,7 +12,7 @@ Preview: http://localhost:6006/iframe.html?id=yami-pages-app-download-v1--pc&vie
 
 PC content sections use 32px block padding and 48px inline gutters below the configurable content cap. `contentMaxWidth` accepts a number (px) or CSS length and defaults to 1920, matching EcommerceHome. Header height and narrow coupon/calculator widths remain independent of the outer content cap. Mobile retains its own spacing. The fixed download CTA is hidden while the tutorial, calculator, or bottom download section is visible and after reaching the footer.
 
-Visible stories: PC and Mobile under `YAMI/Pages/App Download/V1`, both initially in Korean with an in-page language switch. Interactions, SectionNavigation, and ContentWidth remain test-only stories, hidden from browsing. Autodocs is disabled for this page. Future V2 stories belong under `YAMI/Pages/App Download/V2`.
+Visible stories: PC and Mobile under `YAMI/Pages/App Download/Korean/V1`, both initially in Korean with an in-page language switch. Interactions, SectionNavigation, and ContentWidth remain test-only stories, hidden from browsing. Autodocs is disabled for this page.
 
 Validation: `pnpm validate`; `pnpm --filter @yami/storybook exec vitest run --project storybook AppDownloadPage`.
 

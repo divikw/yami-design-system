@@ -110,7 +110,6 @@ function SavingsCalculator({ locale, onGuide, ...divider }: { locale: AppDownloa
                 previousDisabled={railState.atStart} nextDisabled={railState.atEnd}
                 onPrevious={() => scrollByPage(-1)} onNext={() => scrollByPage(1)} />
             </div>
-            <p className={styles.moreDeals}>{ko ? "추천 상품 일부입니다. 더 많은 혜택 상품은 " : "These are a few featured picks. See more deals "}<a href="#discount-products">{ko ? "여기" : "here"}</a></p>
           </div>
           </div>
           <div className={styles.calculatorDetails}>
@@ -137,11 +136,12 @@ function SavingsCalculator({ locale, onGuide, ...divider }: { locale: AppDownloa
   </section>;
 }
 
-export interface AppDownloadPageV2Props { variant?: "full" | "compact"; initialLocale?: AppDownloadLocale; contentMaxWidth?: number | string; sectionDividers?: AppDownloadSectionDividers }
+export interface AppDownloadPageV2Props { variant?: "full" | "compact"; initialLocale?: AppDownloadLocale; englishOnly?: boolean; contentMaxWidth?: number | string; sectionDividers?: AppDownloadSectionDividers }
 
-export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440, sectionDividers = {}, variant = "full" }: AppDownloadPageV2Props) {
+export function AppDownloadPageV2({ initialLocale = "ko", englishOnly = false, contentMaxWidth = 1440, sectionDividers = {}, variant = "full" }: AppDownloadPageV2Props) {
   const sectionIds = variant === "compact" ? fullSectionIds.slice(0, 4) : fullSectionIds;
-  const [locale, setLocale] = useState(initialLocale);
+  const [selectedLocale, setLocale] = useState(initialLocale);
+  const locale = englishOnly ? "en" : selectedLocale;
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [copyFailed, setCopyFailed] = useState(false);
   const [category, setCategory] = useState<string>("beauty");
@@ -154,6 +154,10 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
   const pageStyle = { "--campaign-content-max-width": contentWidth } as CSSProperties;
   const t = campaignCopy[locale];
   const ko = locale === "ko";
+  const englishOffer = "$10 Welcome Offer + 10% Off Your Second Order";
+  const returningCoupon = englishOnly
+    ? { ...t.coupon.returning, badge: "Second order · Eligible items only", title: "10% Off" }
+    : t.coupon.returning;
   const labels = [t.nav.categories.welcomeCoupon, t.nav.categories.discountProducts, t.nav.categories.couponGuide, ko ? "혜택 계산기" : "Calculator", brandSpecial[locale].title, socialTrends[locale].title, customerReviews[locale].title];
 
   useEffect(() => {
@@ -229,7 +233,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
     <header className={styles.header}><div>
       <a href={`https://www.yami.com/${locale}`} aria-label="Yami Home"><picture><source media="(min-width: 1024px)" srcSet={desktopLogo} /><img className={styles.logo} src={logo} alt="YAMI" /></picture></a>
       <div className={styles.headerActions}>
-        <Button className={styles.languageButton} variant="secondary" leftIcon={<img className={styles.flag} src={localeFlag} alt="" />} onClick={() => setLocale(ko ? "en" : "ko")} aria-label={ko ? "Switch to English" : "한국어로 전환"}>{ko ? "KO" : "EN"}</Button>
+        {!englishOnly && <Button className={styles.languageButton} variant="secondary" leftIcon={<img className={styles.flag} src={localeFlag} alt="" />} onClick={() => setLocale(ko ? "en" : "ko")} aria-label={ko ? "Switch to English" : "한국어로 전환"}>{ko ? "KO" : "EN"}</Button>}
         <a className={styles.shopLink} href={`https://www.yami.com/${locale}`}>{t.nav.shopNow}</a>
       </div>
     </div></header>
@@ -238,7 +242,9 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         <div className={styles.downloadContainer}>
           <div className={styles.heroCopy}>
             <div className={styles.heroHeading}>
-            <span className={styles.offerBadge}>{t.hero.badge}</span>
+            <span className={styles.offerBadge}>
+              {englishOnly ? englishOffer : t.hero.badge}
+            </span>
             <div className={styles.heroTitleGroup}>
               <h1>{t.hero.headline}</h1>
               <p className={styles.heroDescription}>{t.hero.subheadline}</p>
@@ -270,9 +276,9 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
             </div>
           </div>
           <div className={styles.coupons}>
-            {[t.coupon.first, t.coupon.returning].map((coupon, index) => <div className={styles.coupon} key={coupon.code}>
-              <p className={styles.couponBadge}>{ko ? (index ? "다음 주문" : "첫 주문") : (index ? "Next order" : "First order")} · {coupon.badge}</p>
-              <h3>{coupon.title.split(/(\$[\d,]+)/).map((part, partIndex) => part.startsWith("$") ? <strong className={styles.couponAmount} key={partIndex}>{part}</strong> : part)}</h3>
+            {[t.coupon.first, returningCoupon].map((coupon, index) => <div className={styles.coupon} key={coupon.code}>
+              <p className={styles.couponBadge}>{!(englishOnly && index === 1) && <>{ko ? (index ? "다음 주문" : "첫 주문") : (index ? "Next order" : "First order")} · </>}{coupon.badge}</p>
+              <h3>{coupon.title.split(/(\$[\d,]+|\d+%)/).map((part, partIndex) => partIndex % 2 === 1 ? <strong className={styles.couponAmount} key={partIndex}>{part}</strong> : part)}</h3>
               <div className={styles.couponCode}>
                 <div className={styles.couponCopy}>{ko ? "쿠폰코드:" : "Code:"} <span>{coupon.code}</span><button type="button" aria-label={`${ko ? "복사" : "Copy"} ${coupon.code}`} onClick={async () => {
                   try {
@@ -302,7 +308,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         <ProductList
           id="discount-products"
           title={t.nav.categories.discountProducts}
-          description={ko ? "웰컴 쿠폰팩 적용으로 상상 초월 폭풍 할인!" : "Unlock incredible savings with your welcome coupon pack!"}
+          description={englishOnly ? "Prices shown after applying a coupon in the Yami app." : ko ? "웰컴 쿠폰팩 적용으로 상상 초월 폭풍 할인!" : "Unlock incredible savings with your welcome coupon pack!"}
           appearance="background" headingAlign="center" layout="rail" dividerPosition="none" {...sectionDividers["discount-products"]}
           backgroundColor="var(--brand-tertiary)"
           tabs={categories.map((value, index) => ({ value, label: categoryLabels[locale][index] }))}
@@ -311,7 +317,8 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
           products={campaignProducts.filter((product) => product.category === category).map((product) => ({
             id: product.sku, title: product.name[locale], image: productImage(product), imageAlt: product.name[locale],
             href: productHref(product, locale), brand: product.brand[locale], brandHref: brandHref(product, locale),
-            priceCurrent: <>{money(product.appPrice)} <span className={styles.appPriceLabel}>{ko ? "(앱 전용가)" : "(App Price)"}</span></>, priceOriginal: money(product.originalPrice),
+            priceCurrent: <>{money(product.appPrice)} <span className={styles.appPriceLabel}>{englishOnly ? "(App Coupon Price)" : ko ? "(앱 전용가)" : "(App Price)"}</span></>,
+            priceOriginal: englishOnly ? undefined : money(product.originalPrice),
             unitPrice: <a className={styles.dealComparePrice} href={productHref(product, locale)}>{ko ? "웹 가격과 비교해보기" : "Compare Web Price"}</a>,
           }))}
         />
@@ -333,7 +340,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         title={appDownloadBannerTitle[locale]}
         description={appDownloadBannerDescription[locale]}
         headingAlign="center"
-        items={createAppDownloadBanners()}
+        items={createAppDownloadBanners(locale)}
         previousLabel={ko ? "이전 상품" : "Previous products"}
         nextLabel={ko ? "다음 상품" : "Next products"}
         imageLoading="eager"
@@ -370,10 +377,10 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
         headingAlign="center"
         title={customerReviews[locale].title}
         description={customerReviews[locale].description}
-        reviews={customerReviews.reviews.map((review) => ({
-          ...review,
-          review: <><strong className={styles.reviewTitle}>{review.title}</strong>{review.review}</>,
-        }))}
+        reviews={customerReviews.reviews.map(({ en, ...review }) => {
+          const copy = !ko && en ? en : review;
+          return { ...review, title: copy.title, review: <><strong className={styles.reviewTitle}>{copy.title}</strong>{copy.review}</> };
+        })}
         mobileSurface="plain"
         previousLabel={ko ? "이전 리뷰" : "Previous reviews"}
         nextLabel={ko ? "다음 리뷰" : "Next reviews"}
@@ -382,7 +389,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", contentMaxWidth = 1440
       <section {...dividerAttributes({ dividerPosition: "top", dividerVariant: "gray", ...sectionDividers["bottom-cta-section"] })} className={styles.bottom} id="bottom-cta-section">
         <div className={styles.downloadContainer}>
           <div className={styles.heroHeading}>
-            <span className={styles.offerBadge}>{t.bottom.badge_combo1010}</span>
+            <span className={styles.offerBadge}>{englishOnly ? englishOffer : t.bottom.badge_combo1010}</span>
             <div className={styles.heroTitleGroup}>
               <h2>{t.bottom.title}</h2>
               <p className={styles.heroDescription}>{t.bottom.subtitle}</p>

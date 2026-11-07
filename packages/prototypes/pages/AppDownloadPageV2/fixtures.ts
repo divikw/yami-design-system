@@ -34,15 +34,18 @@ export const appDownloadBannerDescription = {
 };
 const bannerImage = (src: string) => new URL(`./assets/story-banners/${src.split("/").pop()}`, import.meta.url).href;
 
-export function createAppDownloadBanners(): SectionBannerItem[] {
-  return storyBanners.items.map((item) => ({
-    id: item.id,
-    href: item.href,
-    image: { src: bannerImage(item.image.src), alt: item.title },
-    title: item.title,
-    description: item.description,
-    products: item.products.map(({ src, alt }) => ({ src: bannerImage(src), alt })),
-  }));
+export function createAppDownloadBanners(locale: AppDownloadLocale = "ko"): SectionBannerItem[] {
+  return storyBanners.items.map((item) => {
+    const title = locale === "en" ? item.titleEn ?? item.title : item.title;
+    return {
+      id: item.id,
+      href: item.href,
+      image: { src: bannerImage(item.image.src), alt: title },
+      title,
+      description: item.description,
+      products: item.products.map(({ src, alt }) => ({ src: bannerImage(src), alt })),
+    };
+  });
 }
 
 /** Reference campaign rules; money is calculated in cents to avoid rounding drift. */

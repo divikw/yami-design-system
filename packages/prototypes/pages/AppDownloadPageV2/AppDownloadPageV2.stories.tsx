@@ -7,7 +7,7 @@ import socialTrends from "./social-trends.json";
 
 const meta = {
   id: "yami-pages-app-download-v2",
-  title: "YAMI/Pages/App Download/Draft/V2",
+  title: "YAMI/Pages/App Download/Korean/V2",
   component: AppDownloadPageV2,
   tags: ["!autodocs", "draft"],
   parameters: {
@@ -32,7 +32,7 @@ async function expectVideoPlaying(video: HTMLVideoElement) {
   await waitFor(() => expect(video.currentTime).not.toBe(time));
 }
 
-function contrastRatio(foreground: string, background: string) {
+function contrastRatio(foreground: string, background: string, surface?: string) {
   const parseColor = (color: string) => {
     const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
     if (!channels || channels.length !== 3) throw new Error(`Unable to parse computed color: ${color}`);
@@ -40,11 +40,12 @@ function contrastRatio(foreground: string, background: string) {
     const alpha = Number(color.match(/[\d.]+/g)?.[3] ?? 1);
     return { channels: normalized, alpha };
   };
-  const backgroundColor = parseColor(background);
-  const foregroundColor = parseColor(foreground);
-  const compositedForeground = foregroundColor.channels.map((channel, index) =>
-    channel * foregroundColor.alpha + backgroundColor.channels[index] * (1 - foregroundColor.alpha),
+  const composite = ({ channels, alpha }: ReturnType<typeof parseColor>, backdrop: number[]) => channels.map((channel, index) =>
+    channel * alpha + backdrop[index] * (1 - alpha),
   );
+  const backgroundColor = parseColor(background);
+  const backgroundChannels = surface ? composite(backgroundColor, parseColor(surface).channels) : backgroundColor.channels;
+  const compositedForeground = composite(parseColor(foreground), backgroundChannels);
   const luminance = (channels: number[]) => {
     const [red, green, blue] = channels.map((channel) =>
       channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
@@ -52,7 +53,7 @@ function contrastRatio(foreground: string, background: string) {
     return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
   };
   const foregroundLuminance = luminance(compositedForeground);
-  const backgroundLuminance = luminance(backgroundColor.channels);
+  const backgroundLuminance = luminance(backgroundChannels);
   return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
     (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
 }
@@ -177,7 +178,8 @@ export const ContentWidth: Story = {
     await expect(brandLink.href).not.toBe(productLink.href);
     for (const badge of page.querySelectorAll<HTMLElement>("span[class*=offerBadge]")) {
       const style = getComputedStyle(badge);
-      await expect(contrastRatio(style.color, style.backgroundColor)).toBeGreaterThanOrEqual(4.5);
+      const sectionBackground = getComputedStyle(badge.closest("section")!).backgroundColor;
+      await expect(contrastRatio(style.color, style.backgroundColor, sectionBackground)).toBeGreaterThanOrEqual(4.5);
     }
     const guideSection = page.querySelector<HTMLElement>("#coupon-guide")!;
     const guideDescription = guideSection.querySelector<HTMLElement>('[data-slot="coupon-guide-description"]')!;
