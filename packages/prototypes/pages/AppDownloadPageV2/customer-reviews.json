@@ -15,14 +15,22 @@
       "rating": 5,
       "reviewer": "gomiinny • MAY-2026",
       "title": "아마존보다 저렴하고 독점 상품도 많아요",
-      "review": "아마존/Weee보다 확실히 저렴해서 좋았어요. 프로틴바, 닥터지 스캘프 샴푸처럼 타 플랫폼엔 없는 제품도 있고, 메디힐 같은 화장품 브랜드는 할인폭도 커서 매력적이에요."
+      "review": "아마존/Weee보다 확실히 저렴해서 좋았어요. 프로틴바, 닥터지 스캘프 샴푸처럼 타 플랫폼엔 없는 제품도 있고, 메디힐 같은 화장품 브랜드는 할인폭도 커서 매력적이에요.",
+      "en": {
+        "title": "Lower prices than Amazon and lots of exclusive products",
+        "review": "I liked that the prices were lower than on Amazon or Weee. I found products I couldn't get on other platforms, like protein bars and Dr.G scalp shampoo, plus big discounts on beauty brands like Mediheal."
+      }
     },
     {
       "id": "happilyeverafter-lucy",
       "rating": 5,
       "reviewer": "happilyeverafter_lucy • MAY-2026",
       "title": "무료배송 기준이 확실히 경쟁력 있어요",
-      "review": "무료배송 기준이 $49라 타 플랫폼보다 경쟁력 있어요. 여러 아시아 국가 식품을 한 곳에서 살 수 있는 것도 큰 장점입니다."
+      "review": "무료배송 기준이 $49라 타 플랫폼보다 경쟁력 있어요. 여러 아시아 국가 식품을 한 곳에서 살 수 있는 것도 큰 장점입니다.",
+      "en": {
+        "title": "A competitive free shipping threshold",
+        "review": "Free shipping at $49 is a better deal than on other platforms. I also like being able to shop for food from several Asian countries in one place."
+      }
     },
     {
       "id": "yuki-kubota",

@@ -29,151 +29,181 @@
     },
     {
       "name": "구달",
+      "nameEn": "goodal",
       "image": "brand-06.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EA%B5%AC%EB%8B%AC.jpg"
     },
     {
       "name": "네오플램",
+      "nameEn": "NEOFLAM",
       "image": "brand-07.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%84%A4%EC%98%A4%ED%94%8C%EB%9E%A8.png"
     },
     {
       "name": "농심",
+      "nameEn": "Nongshim",
       "image": "brand-08.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%86%8D%EC%8B%AC.png"
     },
     {
       "name": "닥터알데하",
+      "nameEn": "Dr. Althea",
       "image": "brand-09.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%EC%95%8C%EB%8D%B0%ED%95%98.jpg"
     },
     {
       "name": "닥터자르트",
+      "nameEn": "Dr.Jart+",
       "image": "brand-10.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%EC%9E%90%EB%A5%B4%ED%8A%B8.png"
     },
     {
       "name": "닥터하우스",
+      "nameEn": "Dr.HOWS",
       "image": "brand-11.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%8B%A5%ED%84%B0%ED%95%98%EC%9A%B0%EC%8A%A4.png"
     },
     {
       "name": "락토핏",
+      "nameEn": "LACTO-FIT",
       "image": "brand-12.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%9D%BD%ED%86%A0%ED%95%8F.png"
     },
     {
       "name": "롯데",
+      "nameEn": "LOTTE",
       "image": "brand-13.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%A1%AF%EB%8D%B0.png"
     },
     {
       "name": "메디큐브",
+      "nameEn": "medicube",
       "image": "brand-14.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%A9%94%EB%94%94%ED%81%90%EB%B8%8C.jpg"
     },
     {
       "name": "바이오댄스",
+      "nameEn": "Biodance",
       "image": "brand-15.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%B0%94%EC%9D%B4%EC%98%A4%EB%8C%84%EC%8A%A4.png"
     },
     {
       "name": "베베숲",
+      "nameEn": "Bebesup",
       "image": "brand-16.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%B2%A0%EB%B2%A0%EC%88%B2.jpg"
     },
     {
       "name": "빙그레",
+      "nameEn": "Binggrae",
       "image": "brand-17.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EB%B9%99%EA%B7%B8%EB%A0%88.png"
     },
     {
       "name": "삼양",
+      "nameEn": "Samyang Foods",
       "image": "brand-18.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%82%BC%EC%96%91.png"
     },
     {
       "name": "생활공작소",
+      "nameEn": "Saenghwal Gongjakso",
       "image": "brand-19.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%83%9D%ED%99%9C%EA%B3%B5%EC%9E%91%EC%86%8C.jpg"
     },
     {
       "name": "설화수",
+      "nameEn": "Sulwhasoo",
       "image": "brand-20.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%84%A4%ED%99%94%EC%88%98.png"
     },
     {
       "name": "센텔라",
+      "nameEn": "Centellian24",
       "image": "brand-21.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%84%BC%ED%85%94%EB%9D%BC.jpg"
     },
     {
       "name": "쓰임",
+      "nameEn": "Sseuim",
       "image": "brand-22.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%93%B0%EC%9E%84.png"
     },
     {
       "name": "아누아",
+      "nameEn": "Anua",
       "image": "brand-23.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%EB%88%84%EC%95%84.png"
     },
     {
       "name": "아비브",
+      "nameEn": "Abib",
       "image": "brand-24.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%EB%B9%84%EB%B8%8C.png"
     },
     {
       "name": "아토팜",
+      "nameEn": "ATOPALM",
       "image": "brand-25.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%95%84%ED%86%A0%ED%8C%9C.png"
     },
     {
       "name": "에스트라",
+      "nameEn": "AESTURA",
       "image": "brand-26.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%97%90%EC%8A%A4%ED%8A%B8%EB%9D%BC.png"
     },
     {
       "name": "오뚜기",
+      "nameEn": "Ottogi",
       "image": "brand-27.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EB%9A%9C%EA%B8%B0.png"
     },
     {
       "name": "오리온",
+      "nameEn": "ORION",
       "image": "brand-28.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EB%A6%AC%EC%98%A8.png"
     },
     {
       "name": "오설록",
+      "nameEn": "OSULLOC",
       "image": "brand-29.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%98%A4%EC%84%A4%EB%A1%9D.jpg"
     },
     {
       "name": "웅진",
+      "nameEn": "Woongjin",
       "image": "brand-30.jpg",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%9B%85%EC%A7%84.jpg"
     },
     {
       "name": "정관장",
+      "nameEn": "Jung Kwan Jang",
       "image": "brand-31.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%A0%95%EA%B4%80%EC%9E%A5.png"
     },
     {
       "name": "정샘물",
+      "nameEn": "JUNG SAEM MOOL",
       "image": "brand-32.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%A0%95%EC%83%98%EB%AC%BC.png"
     },
     {
       "name": "조선미녀",
+      "nameEn": "Beauty of Joseon",
       "image": "brand-33.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%EC%A1%B0%EC%84%A0%EB%AF%B8%EB%85%80.png"
     },
     {
       "name": "토리든",
+      "nameEn": "Torriden",
       "image": "brand-34.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%ED%86%A0%EB%A6%AC%EB%93%A0.png"
     },
     {
       "name": "해태",
+      "nameEn": "Haitai",
       "image": "brand-35.png",
       "source": "https://yami-app-download.vercel.app/BRAND/%ED%95%B4%ED%83%9C.png"
     }
@@ -221,7 +251,7 @@
     "strengthsTitle": "OUR CORE STRENGTHS",
     "strengths": [
       [
-        "50만+",
+        "500,000+",
         "Active Users"
       ],
       [

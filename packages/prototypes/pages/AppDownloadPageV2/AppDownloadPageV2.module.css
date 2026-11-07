@@ -32,7 +32,7 @@
 .root .shopLink { height: var(--space-500); min-height: var(--space-500); padding-block: 0; background: var(--button-primary); color: var(--text-primary-inverse); border-radius: var(--radius-button-primary); }
 .hero { background: var(--brand-tertiary); }
 .downloadContainer { box-sizing: border-box; width: 100%; max-width: var(--campaign-content-max-width); margin-inline: auto; padding-inline: var(--space-200); display: flex; flex-direction: column; gap: var(--space-400); text-align: center; }
-.offerBadge { display: inline-block; background: var(--badge-bg-secondary-red); color: var(--badge-fg-secondary-red); font-weight: var(--font-weight-emphasize); border-radius: var(--radius-button-primary); padding: var(--space-100) var(--space-200); }
+.offerBadge { display: inline-block; background: color-mix(in srgb, var(--fill-promotion-primary) 10%, transparent); color: var(--badge-fg-secondary-red); font-weight: var(--font-weight-emphasize); border-radius: var(--radius-button-primary); padding: var(--space-100) var(--space-200); }
 .heroCopy { display: flex; flex-direction: column; align-items: center; gap: var(--space-200); }
 .heroHeading { display: flex; flex-direction: column; align-items: center; gap: 0; row-gap: var(--space-200); }
 .heroTitleGroup { display: flex; flex-direction: column; align-items: center; gap: var(--space-050); }
@@ -136,8 +136,6 @@
 .selectionProduct[data-selected="true"] { outline: var(--stroke-thick) solid var(--border-focus); outline-offset: calc(-1 * var(--stroke-thick)); }
 .selectionProduct:focus-within { outline: var(--stroke-thick) solid var(--border-focus); outline-offset: calc(-1 * var(--stroke-thick)); }
 .selectionCheck { display: flex; position: absolute; top: var(--space-025); right: var(--space-025); z-index: 1; }
-.moreDeals { margin: 0; font-size: var(--font-size-body-md); }
-.moreDeals a { text-decoration: underline; color: var(--text-emphasis); }
 .bottom { background: var(--surface-primary); }
 .bottom h2 { margin: 0; font-size: var(--font-size-heading-4xl); line-height: var(--line-height-heading-4xl); }
 .root .stickyCta { position: fixed; z-index: 40; bottom: max(var(--space-300), env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(480px, calc(100% - 32px)); min-height: 64px; border-radius: var(--radius-component-default); background: var(--button-emphasis); color: var(--text-on-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); text-align: center; }

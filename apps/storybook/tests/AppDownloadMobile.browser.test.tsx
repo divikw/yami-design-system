@@ -8,6 +8,29 @@ import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/fonts.css";
 import "@yami/design-system/styles/base.css";
 
+test("English-only App Download V2 has English copy and no language switch", () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    flushSync(() => root.render(<AppDownloadPageV2 englishOnly />));
+    expect(container.querySelector('[data-slot="app-download-page"]')?.getAttribute("lang")).toBe("en");
+    expect(container.querySelector("header button")).toBeNull();
+    expect(container.textContent).toContain("Midyear Sale Rankings");
+    expect(container.textContent).toContain("500,000+");
+    expect(container.textContent).toContain("Lower prices than Amazon and lots of exclusive products");
+    const labels = [...container.querySelectorAll("[aria-label], [alt], [title]")].flatMap((element) => [
+      element.getAttribute("aria-label"),
+      element.getAttribute("alt"),
+      element.getAttribute("title"),
+    ]);
+    expect([container.textContent, ...labels].join(" ")).not.toMatch(/[\p{Script=Hangul}\p{Script=Han}]/u);
+  } finally {
+    flushSync(() => root.unmount());
+    container.remove();
+  }
+});
+
 function expectSingleLineAmounts(container: HTMLElement) {
   for (const element of container.querySelectorAll<HTMLElement>("*")) {
     if (!element.getClientRects().length) continue;

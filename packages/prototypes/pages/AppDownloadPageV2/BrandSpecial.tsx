@@ -65,7 +65,7 @@ export function BrandSpecial({ locale, ...divider }: { locale: AppDownloadLocale
         <h3 id="brand-special-brands">{t.brandsTitle}</h3>
         <div className={styles.railFrame}>
         <HorizontalScrollList as="ul" className={styles.rail} ref={brandsRef} aria-labelledby="brand-special-brands">
-          {[false, true].map((copy) => content.brands.map((brand) => <li key={`${copy}-${brand.image}`} data-loop-copy={copy || undefined} aria-hidden={copy || undefined}><Card padding="md" className={styles.brand}><img src={media(brand.image)} alt={brand.name} loading="lazy" /></Card></li>))}
+          {[false, true].map((copy) => content.brands.map((brand) => <li key={`${copy}-${brand.image}`} data-loop-copy={copy || undefined} aria-hidden={copy || undefined}><Card padding="md" className={styles.brand}><img src={media(brand.image)} alt={locale === "en" ? brand.nameEn ?? brand.name : brand.name} loading="lazy" /></Card></li>))}
         </HorizontalScrollList>
         </div>
       </div>
