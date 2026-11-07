@@ -158,7 +158,7 @@ test("discovers actual tokens on App Download, Button, and Badge without page-sp
   expect(offer.controlsMode).toBe("extend");
   expect(offer.controls).toEqual(expect.arrayContaining([
     expect.objectContaining({ label: "文字颜色 · --badge-fg-secondary-red", currentValue: "#9b000d" }),
-    expect.objectContaining({ label: "背景颜色 · --badge-bg-secondary-red", currentValue: "#fbf1ef" }),
+    expect.objectContaining({ label: "背景颜色 · --fill-promotion-primary", currentValue: "color-mix(in srgb, var(--fill-promotion-primary) 10%, transparent)" }),
     expect.objectContaining({ reference: "--radius-button-primary" }),
     expect.objectContaining({ reference: "--font-weight-emphasize" }),
   ]));
