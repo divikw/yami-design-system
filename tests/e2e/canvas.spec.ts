@@ -147,11 +147,11 @@ test("renders Ecommerce Home and routes iframe links through parent history", as
   await expect(page.locator(".preview-stage")).toHaveCSS("background-color", "rgb(235, 235, 235)");
   await expect(page.locator(".canvas-header").getByRole("button", { name: "返回上一步" })).toHaveCount(0);
   const backButton = page.getByRole("button", { name: "返回上一步" });
-  await expect(backButton).toHaveCount(0);
+  await expect(backButton).toBeDisabled();
   await expect(page.locator(".path-readout")).toHaveCSS("border-left-color", "rgb(34, 34, 34)");
   const importButton = page.locator(".canvas-header").getByRole("button", { name: "导入", exact: true });
   await expect(importButton).toBeVisible();
-  const storybookLink = page.getByRole("link", { name: "Storybook ↗", exact: true });
+  const storybookLink = page.getByRole("link", { name: "Storybook", exact: true });
   const controlStyles = async (locator: typeof importButton) => locator.evaluate((element) => {
     const styles = getComputedStyle(element);
     return {
@@ -186,19 +186,19 @@ test("renders Ecommerce Home and routes iframe links through parent history", as
   await expect(preview.getByText("YAMI PROTOTYPE ROUTE")).toBeVisible();
   await page.evaluate(() => history.back());
   await expectCanvasPath(page, "/");
-  await expect(backButton).toHaveCount(0);
+  await expect(backButton).toBeDisabled();
 });
 
 test("renders accessible workbench controls and switches device by keyboard", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 900 });
-  await page.goto("/workbench?path=%2F&direction=current&locale=en&theme=light&viewport=360");
+  await page.goto("/workbench?path=%2F&direction=current&locale=en&theme=light&viewport=402");
   await expect(page).toHaveURL(/viewport=402/);
-  await expect(page.getByText("402 PX · LIGHT · EN")).toBeVisible();
+  await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("402");
   await expect(page.locator(".canvas-header").getByRole("button", { name: "导入", exact: true })).toBeVisible();
 
   await expectWorkbenchSelectValue(page, "页面", "/");
   await expectWorkbenchSelectValue(page, "语言", "en");
-  await expectWorkbenchSelectValue(page, "主题", "light");
+  await expect(workbenchSelect(page, "主题")).toHaveCount(0);
   await expect(workbenchSelect(page, "页面")).toHaveCSS("height", "36px");
   await expect(workbenchSelect(page, "页面")).toHaveCSS("border-radius", "0px");
 
@@ -218,14 +218,14 @@ test("renders accessible workbench controls and switches device by keyboard", as
   await expect(workbenchSelect(page, "语言")).toHaveCSS("outline-width", "2px");
 
   const fieldLabels = page.locator('[data-slot="workbench-field-label"]');
-  await expect(fieldLabels).toHaveCount(4);
+  await expect(fieldLabels).toHaveCount(3);
   for (const fieldLabel of await fieldLabels.all()) {
     await expect(fieldLabel).toHaveCSS("font-size", "12px");
     await expect(fieldLabel).toHaveCSS("line-height", "16px");
   }
 
   const selectIcons = page.locator('[data-slot="workbench-select-icon"]');
-  await expect(selectIcons).toHaveCount(3);
+  await expect(selectIcons).toHaveCount(2);
   const selectBounds = await workbenchSelect(page, "页面").boundingBox();
   const iconBounds = await selectIcons.first().boundingBox();
   expect(selectBounds).not.toBeNull();
@@ -234,20 +234,13 @@ test("renders accessible workbench controls and switches device by keyboard", as
   expect(iconBounds?.height).toBe(12);
   expect(Math.round((selectBounds?.x ?? 0) + (selectBounds?.width ?? 0) - (iconBounds?.x ?? 0) - (iconBounds?.width ?? 0))).toBe(8);
 
-  await workbenchSelect(page, "主题").focus();
-  await page.keyboard.press("Enter");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Enter");
-  await expectWorkbenchSelectValue(page, "主题", "dark");
-  await expect(page).toHaveURL(/theme=dark/);
-
   const deviceGroup = page.getByRole("group", { name: "设备" });
   const mobile = page.getByRole("radio", { name: "手机" });
   const tablet = page.getByRole("radio", { name: "平板" });
   const desktop = page.getByRole("radio", { name: "桌面" });
   await expect(deviceGroup).toBeVisible();
   await expect(mobile).toBeChecked();
-  const deviceTabs = deviceGroup.locator("div").first();
+  const deviceTabs = deviceGroup.locator('[data-slot="workbench-segmented-options"]');
   const mobileTab = mobile.locator("..").locator("span");
   await expect(deviceTabs).toHaveCSS("background-color", "rgb(245, 245, 245)");
   await expect(deviceTabs).toHaveCSS("border-top-width", "0px");
@@ -263,7 +256,7 @@ test("renders accessible workbench controls and switches device by keyboard", as
   await expect(deviceTabs).toHaveCSS("outline-width", "2px");
   await expect(tablet.locator("..").locator("span")).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(page).toHaveURL(/viewport=768/);
-  await expect(page.getByText("768 PX · DARK · EN")).toBeVisible();
+  await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("768");
 
   await desktop.click();
   await expect(desktop).toBeChecked();
@@ -334,7 +327,7 @@ test("routes cart, category, account and search destinations into prototype shel
   await expect(backButton).toBeVisible();
   await backButton.click();
   await expectCanvasPath(page, "/");
-  await expect(backButton).toHaveCount(0);
+  await expect(backButton).toBeDisabled();
 
   await preview.locator('a[href^="/categories/"]:visible').first().click();
   await expect(page).toHaveURL(/path=%2Fcategories%2F/);
@@ -429,7 +422,7 @@ test("imports a page from the Storybook page index", async ({ page }) => {
 test("uses the complete iframe state on first render and after deep-link refresh", async ({ page }) => {
   await seedTestDirection(page);
   await page.goto("/workbench?path=%2F&direction=test-direction&locale=en&theme=dark&viewport=768");
-  await expect(page.getByText("768 PX · DARK · EN")).toBeVisible();
+  await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("768");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.locator(".prototype-root")).toHaveAttribute("data-theme", "dark");
   await expect(preview.getByRole("heading", { name: "Test Selection" })).toBeVisible();

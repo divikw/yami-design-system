@@ -1,6 +1,7 @@
 "use client";
 
 import { tokenOverridesToStyle, type DirectionManifestV1 } from "@yami/contracts";
+import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import {
   EcommerceHomeTemplate,
   resolveEcommerceHome,
@@ -12,6 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { CSSProperties, useCallback, useEffect, useMemo, useState } from "react";
 import { findDraft } from "../lib/drafts";
 import { getPreviewMotion, type PreviewTransition } from "../lib/motion";
+import { WorkbenchIcon } from "./workbench-controls";
 import "@yami/design-system/styles/base.css";
 
 const anuaTopicPaths = new Set(["/brands/anua", "/brands/11712"]);
@@ -68,5 +70,5 @@ export function PreviewSurface({ localeOverride }: { localeOverride?: "en" | "zh
 
 function PlaceholderRoute({ path, onBack }: { path: string; onBack(): void }) {
   const name = path.split("/").filter(Boolean).at(-1)?.replaceAll("-", " ") || "page";
-  return <main className="placeholder-route"><span>YAMI PROTOTYPE ROUTE</span><h1>{name}</h1><p>这个页面已接入真实导航，具体内容将在后续原型阶段补充。</p><button onClick={onBack}>← 返回 Ecommerce Home</button></main>;
+  return <main className="placeholder-route"><span>YAMI PROTOTYPE ROUTE</span><h1>{name}</h1><p>这个页面已接入真实导航，具体内容将在后续原型阶段补充。</p><button onClick={onBack}><WorkbenchIcon icon={ArrowLeft01Icon} />返回 Ecommerce Home</button></main>;
 }

@@ -9,6 +9,7 @@ export interface ProductStickyPurchaseBarProps {
   title: string;
   addToCartLabel: string;
   disabled?: boolean;
+  onAddToCart?: () => void;
 }
 
 export function ProductStickyPurchaseBar({
@@ -18,6 +19,7 @@ export function ProductStickyPurchaseBar({
   title,
   addToCartLabel,
   disabled = false,
+  onAddToCart,
 }: ProductStickyPurchaseBarProps) {
   return (
     <div
@@ -55,6 +57,7 @@ export function ProductStickyPurchaseBar({
             size="lg"
             disabled={disabled}
             data-pdp-sticky-add-to-cart="true"
+            onClick={onAddToCart}
           >
             {addToCartLabel}
           </Button>

@@ -118,6 +118,10 @@ export function SearchResultsPage({
   filters,
   filtersLoading = false,
   interaction,
+  initialViewState,
+  onViewStateChange,
+  onQuerySubmit,
+  onAddToCart,
   copy,
   className,
   ...rest
@@ -126,24 +130,28 @@ export function SearchResultsPage({
     typeof contentMaxWidth === "number"
       ? `${contentMaxWidth}px`
       : contentMaxWidth;
-  const [draftQuery, setDraftQuery] = useState(query);
-  const [localAppliedQuery, setLocalAppliedQuery] = useState(query);
-  const [filterIds, setFilterIds] = useState<string[]>([]);
-  const [menuValues, setMenuValues] = useState<Record<string, string[]>>({});
-  const [fulfilled, setFulfilled] = useState(false);
-  const [localCategory, setLocalCategory] = useState("");
-  const [localSort, setLocalSort] = useState<SortValue>("featured");
+  const [draftQuery, setDraftQuery] = useState(initialViewState?.query ?? query);
+  const [localAppliedQuery, setLocalAppliedQuery] = useState(initialViewState?.query ?? query);
+  const [filterIds, setFilterIds] = useState<string[]>(initialViewState?.filterIds ?? []);
+  const [menuValues, setMenuValues] = useState<Record<string, string[]>>(initialViewState?.menuValues ?? {});
+  const [fulfilled, setFulfilled] = useState(initialViewState?.fulfilled ?? false);
+  const [localCategory, setLocalCategory] = useState(initialViewState?.category ?? "");
+  const [localSort, setLocalSort] = useState<SortValue>(initialViewState?.sort ?? "featured");
   const [allFiltersOpen, setAllFiltersOpen] = useState(false);
-  const [localPage, setLocalPage] = useState(1);
-  const [productView, setProductView] = useState<"grid" | "list">("grid");
+  const [localPage, setLocalPage] = useState(initialViewState?.page ?? 1);
+  const [productView, setProductView] = useState<"grid" | "list">(initialViewState?.productView ?? "grid");
   const appliedQuery = interaction?.request.query ?? localAppliedQuery;
   const category = interaction?.request.categoryIds[0] ?? localCategory;
   const sort = interaction?.request.sort ?? localSort;
   const page = interaction?.request.page ?? localPage;
 
   useEffect(() => {
-    setDraftQuery(interaction?.request.query ?? query);
-  }, [interaction?.request.query, query]);
+    setDraftQuery(interaction?.request.query ?? initialViewState?.query ?? query);
+  }, [interaction?.request.query, initialViewState?.query, query]);
+
+  useEffect(() => {
+    onViewStateChange?.({ query: appliedQuery, filterIds, menuValues, fulfilled, category, sort, page, productView });
+  }, [appliedQuery, filterIds, menuValues, fulfilled, category, sort, page, productView, onViewStateChange]);
 
   function updateRequest(patch: Partial<SearchResultsRequestState>) {
     if (!interaction) return false;
@@ -153,6 +161,7 @@ export function SearchResultsPage({
 
   function commitQuery(value: string) {
     const nextQuery = value.trim();
+    if (onQuerySubmit) { onQuerySubmit(nextQuery); return; }
     setDraftQuery(value);
     if (!updateRequest({ query: nextQuery, page: 1 })) {
       setLocalAppliedQuery(nextQuery);
@@ -576,7 +585,7 @@ export function SearchResultsPage({
             presentation={productView === "list" ? "compact" : undefined}
             dividerPosition="none"
             loadingLabel={copy.loading}
-            onAddToCart={() => {}}
+            onAddToCart={(id) => { const product = products.find((item) => item.id === id); if (product) onAddToCart?.(product); }}
           />
         ) : (
           <section className={styles.empty} aria-live="polite">
