@@ -12,8 +12,16 @@ updates:
           - "playwright-core"
       production-dependencies:
         dependency-type: production
+        exclude-patterns:
+          - "@playwright/test"
+          - "playwright"
+          - "playwright-core"
       development-dependencies:
         dependency-type: development
+        exclude-patterns:
+          - "@playwright/test"
+          - "playwright"
+          - "playwright-core"
     open-pull-requests-limit: 5
 
   - package-ecosystem: github-actions

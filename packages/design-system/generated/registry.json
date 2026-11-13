@@ -369,7 +369,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "f85c35cd0ea4b56382669c899372a5d8bab7d66f671871715b88b475a5e1654b"
+      "digest": "ffddd92a4313a8058c12d221d7d70c4dcf3a29f244988a083d315c3a23e805de"
     },
     {
       "name": "theme-product-list",
