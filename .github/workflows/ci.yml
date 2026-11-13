@@ -85,7 +85,7 @@ jobs:
   browser:
     name: ${{ matrix.check }}
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.64.0-noble
+    container: mcr.microsoft.com/playwright:v1.65.0-noble
     strategy:
       fail-fast: false
       matrix:
@@ -122,7 +122,7 @@ jobs:
   docsite:
     name: docsite
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.64.0-noble
+    container: mcr.microsoft.com/playwright:v1.65.0-noble
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/setup@v3
