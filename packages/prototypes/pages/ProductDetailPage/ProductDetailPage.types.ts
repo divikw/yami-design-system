@@ -144,6 +144,7 @@ export interface ProductDetailPageProps
   giftCardPrice?: Pick<GiftCardPriceProps, "label" | "price" | "detailsLabel">;
   vvipPrice?: Pick<VVIPPriceProps, "label" | "price" | "actionLabel">;
   optionGroups: readonly ProductDetailOptionGroup[];
+  onAddToCart?: (quantity: number, options: Record<string, string>) => void;
   /** Complete SKU inventory; omitted combinations are unavailable. Overrides option.unavailable. */
   skus?: readonly {
     options: Readonly<Record<string, string>>;

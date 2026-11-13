@@ -87,5 +87,21 @@ export interface SearchResultsPageProps
   filters: SearchResultsFilter[];
   filtersLoading?: boolean;
   interaction?: SearchResultsInteraction;
+  initialViewState?: SearchResultsViewState;
+  onViewStateChange?: (state: SearchResultsViewState) => void;
+  onQuerySubmit?: (query: string) => void;
+  onAddToCart?: (product: ProductListItem) => void;
   copy: SearchResultsCopy;
+}
+
+/** Local preview state; live server requests still use SearchResultsInteraction. */
+export interface SearchResultsViewState {
+  query: string;
+  filterIds: string[];
+  menuValues: Record<string, string[]>;
+  fulfilled: boolean;
+  category: string;
+  sort: SearchResultsSort;
+  page: number;
+  productView: "grid" | "list";
 }

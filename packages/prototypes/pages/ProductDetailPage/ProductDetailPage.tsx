@@ -220,6 +220,7 @@ export function ProductDetailPage({
   giftCardPrice,
   vvipPrice,
   optionGroups,
+  onAddToCart,
   skus,
   bestBefore,
   highlights,
@@ -385,6 +386,7 @@ export function ProductDetailPage({
             imageAlt={primaryImage.alt}
             brand={brand}
             title={title}
+            onAddToCart={() => onAddToCart?.(quantity, selectedOptions)}
             addToCartLabel={copy.addToCart}
             disabled={!selectionAvailable}
           />
@@ -861,6 +863,7 @@ export function ProductDetailPage({
                         form="full"
                         size="lg"
                         data-pdp-add-to-cart="true"
+                        onClick={() => onAddToCart?.(quantity, selectedOptions)}
                         disabled={!selectionAvailable}
                       >
                         {copy.addToCart}

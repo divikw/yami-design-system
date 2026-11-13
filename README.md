@@ -64,9 +64,14 @@ expansion, and a separate delivery decision. Packages remain unpublished.
 
 ## AI workflow
 
-Yami Design System does not call a model at runtime. Generate a `DirectionManifestV1`
-JSON file in Codex or Kiro, then import it from the Canvas control panel. The
-browser validates the schema before saving the direction to local storage.
+For multi-page project delivery, use the PROTOTYPE workbench's project and variant
+controls. Versioned variants have independent `/prototype?project=…&variant=…`
+links and per-variant browser-session state. See [PROTOTYPE delivery](apps/canvas/README.md)
+for the demonstration flow, sharing, state boundaries and authoring instructions.
+
+Yami Design System does not call a model at runtime. Legacy `DirectionManifestV1`
+JSON drafts are home-only overlays loaded from local storage by old direction
+links. The current control panel imports Storybook pages, not JSON directions.
 
 No API key, login, or database is required.
 

@@ -25,7 +25,7 @@ const mobileIcons = {
 
 type RowFeedback = { item: CartItemData; index: number; action: "removed" | "saved" };
 
-export function CartPage({ locale, header, footer, merchants, initialItems, initialSavedItems, recommendations, history, favorites, reorderItems = [], frequentlyBoughtItems = [], coupons, signedIn = true, loading = false, error, onRetry, initialPageTab = "cart", initialCollection = "recommended", initialDrawer = null }: CartPageProps) {
+export function CartPage({ locale, header, footer, merchants, initialItems, initialSavedItems, onCartChange, recommendations, history, favorites, reorderItems = [], frequentlyBoughtItems = [], coupons, signedIn = true, loading = false, error, onRetry, initialPageTab = "cart", initialCollection = "recommended", initialDrawer = null }: CartPageProps) {
   const t = text[locale];
   const [mobile, setMobile] = useState(false);
   const desktopHeaderRef = useRef<HTMLDivElement>(null);
@@ -62,6 +62,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
   const addNoticeTriggerRef = useRef<HTMLElement | null>(null);
   const [items, setItems] = useState(initialItems);
   const [saved, setSaved] = useState(initialSavedItems);
+  useEffect(() => { onCartChange?.(items, saved); }, [items, saved, onCartChange]);
   const [tab, setTab] = useState<string>(initialCollection);
   const requiresSignIn = !signedIn && initialDrawer === "coupons";
   const [signInOpen, setSignInOpen] = useState(requiresSignIn);

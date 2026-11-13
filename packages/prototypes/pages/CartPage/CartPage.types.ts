@@ -46,6 +46,8 @@ export interface CartPageProps {
   merchants: CartMerchant[];
   initialItems: CartItemData[];
   initialSavedItems: CartItemData[];
+  /** Reports the demonstration basket to a host that persists it across pages. */
+  onCartChange?: (items: CartItemData[], savedItems: CartItemData[]) => void;
   recommendations: CartItemData[];
   history: CartItemData[];
   favorites: CartItemData[];

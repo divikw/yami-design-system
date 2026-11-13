@@ -1,6 +1,8 @@
 "use client";
 
 import { Select } from "@base-ui/react/select";
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon, type HugeiconsIconProps } from "@hugeicons/react";
 import {
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
@@ -10,10 +12,9 @@ import {
 } from "react";
 import styles from "./workbench-controls.module.css";
 
-const arrowDownIcon = new URL(
-  "../../../../packages/design-system/assets/icons/system/arrow-down.svg",
-  import.meta.url,
-).href;
+export function WorkbenchIcon({ size = 16, ...props }: HugeiconsIconProps) {
+  return <HugeiconsIcon size={size} strokeWidth={1.5} aria-hidden="true" focusable="false" {...props} />;
+}
 
 export interface WorkbenchSelectOption {
   value: string;
@@ -24,10 +25,14 @@ export interface WorkbenchSelectOption {
 export interface WorkbenchTextFieldProps
   extends InputHTMLAttributes<HTMLInputElement> {
   label: ReactNode;
+  hideLabel?: boolean;
+  suffix?: ReactNode;
 }
 
 export function WorkbenchTextField({
   label,
+  hideLabel = false,
+  suffix,
   id,
   className,
   ...props
@@ -39,13 +44,16 @@ export function WorkbenchTextField({
   return (
     <div className={styles.field}>
       <label
-        className={styles.label}
-        data-slot="workbench-field-label"
+        className={hideLabel ? styles.visuallyHidden : styles.label}
+        data-slot={hideLabel ? undefined : "workbench-field-label"}
         htmlFor={inputId}
       >
         {label}
       </label>
-      <input {...props} id={inputId} className={inputClassName} />
+      <div className={styles.inputWrap} data-has-suffix={suffix ? true : undefined}>
+        <input {...props} id={inputId} className={inputClassName} />
+        {suffix && <span className={styles.inputSuffix} aria-hidden="true">{suffix}</span>}
+      </div>
     </div>
   );
 }
@@ -88,13 +96,10 @@ export function WorkbenchSelect({
         >
           <Select.Value className={styles.selectValue} />
           <Select.Icon className={styles.selectIcon}>
-            <img
-              src={arrowDownIcon}
-              alt=""
-              aria-hidden="true"
+            <WorkbenchIcon
+              icon={ArrowDown01Icon}
               data-slot="workbench-select-icon"
-              width="12"
-              height="12"
+              size={12}
             />
           </Select.Icon>
         </Select.Trigger>
@@ -176,6 +181,7 @@ export interface SegmentedOption {
 
 export interface SegmentedControlProps {
   label: ReactNode;
+  children?: ReactNode;
   options: readonly SegmentedOption[];
   value: string;
   onValueChange(value: string): void;
@@ -185,6 +191,7 @@ export interface SegmentedControlProps {
 
 export function SegmentedControl({
   label,
+  children,
   options,
   value,
   onValueChange,
@@ -194,23 +201,27 @@ export function SegmentedControl({
   const generatedName = useId();
 
   return (
-    <fieldset className={styles.segmentedFieldset} disabled={disabled}>
-      <legend className={styles.label} data-slot="workbench-field-label">{label}</legend>
-      <div className={styles.segmentedOptions}>
-        {options.map((option) => (
-          <label className={styles.segmentedOption} key={option.value}>
-            <input
-              className={styles.segmentedInput}
-              type="radio"
-              name={name ?? generatedName}
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onValueChange(option.value)}
-            />
-            <span className={styles.segmentedLabel}>{option.label}</span>
-          </label>
-        ))}
+    <div className={styles.segmentedField} role="group" aria-labelledby={`${generatedName}-label`} aria-disabled={disabled || undefined}>
+      <div id={`${generatedName}-label`} className={styles.label} data-slot="workbench-field-label">{label}</div>
+      <div className={styles.segmentedBody}>
+        <div className={styles.segmentedOptions} data-slot="workbench-segmented-options">
+          {options.map((option) => (
+            <label className={styles.segmentedOption} key={option.value}>
+              <input
+                className={styles.segmentedInput}
+                type="radio"
+                disabled={disabled}
+                name={name ?? generatedName}
+                value={option.value}
+                checked={value === option.value}
+                onChange={() => onValueChange(option.value)}
+              />
+              <span className={styles.segmentedLabel}>{option.label}</span>
+            </label>
+          ))}
+        </div>
+        {children}
       </div>
-    </fieldset>
+    </div>
   );
 }
