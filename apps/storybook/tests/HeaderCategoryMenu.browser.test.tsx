@@ -212,9 +212,20 @@ test.each(['text', 'images'] as const)('%s switches sibling categories quickly w
     const activeRoot = menu.querySelector<HTMLElement>('[data-level="0"] [aria-expanded="true"]')!;
     const candidate = Array.from(menu.querySelectorAll<HTMLElement>('[data-level="0"] button'))
       .find((item) => item.textContent === 'Summer Picks')!;
-    await page.elementLocator(activeRoot).hover();
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
-    await page.elementLocator(candidate).hover();
+    const activeBounds = activeRoot.getBoundingClientRect();
+    const candidateBounds = candidate.getBoundingClientRect();
+    const pointer = { bubbles: true, pointerType: 'mouse', clientX: activeBounds.left + 20 };
+    activeRoot.dispatchEvent(new PointerEvent('pointermove', {
+      ...pointer, clientY: activeBounds.top + 10,
+    }));
+    // Keep this a vertical move and advance the hover delay only through the test clock.
+    activeRoot.dispatchEvent(new PointerEvent('pointerout', {
+      ...pointer, clientY: candidateBounds.top + 10, relatedTarget: candidate,
+    }));
+    candidate.dispatchEvent(new PointerEvent('pointermove', {
+      ...pointer, clientY: candidateBounds.top + 10,
+    }));
     tick(59);
     expect(activeRoot).toHaveAttribute('aria-expanded', 'true');
     tick(1);
