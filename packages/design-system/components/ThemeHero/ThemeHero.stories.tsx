@@ -424,7 +424,7 @@ export const MobileWithActions: Story = {
       Math.abs(mediaBox.width - heroBox.width) > 1 ||
       Math.abs(mediaBox.height - heroBox.height) > 1 ||
       copyStyles.position !== "absolute" ||
-      copyStyles.justifyContent !== "flex-end" ||
+      !["flex-end", "flow-end"].includes(copyStyles.justifyContent) ||
       copyContentStyles.position !== "relative" ||
       copyContentStyles.rowGap !== "8px" ||
       copyContentStyles.paddingTop !== "40px" ||

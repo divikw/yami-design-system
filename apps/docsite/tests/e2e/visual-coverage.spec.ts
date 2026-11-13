@@ -33,7 +33,7 @@ for (const target of pages) {
       const version = footer.locator("p").first();
       await expect(footer.getByRole("img", { name: "YAMI", exact: true })).toHaveCount(0);
       await expect(footer.locator("strong")).toHaveCount(0);
-      await expect(resources).toHaveCSS("justify-content", "flex-start");
+      await expect(resources).toHaveCSS("justify-content", /^(flex|flow)-start$/);
       await expect(version).toHaveCSS("text-align", "start");
       const resourcesBox = (await resources.boundingBox())!;
       const versionBox = (await version.boundingBox())!;

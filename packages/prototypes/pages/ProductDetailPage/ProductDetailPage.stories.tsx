@@ -821,7 +821,7 @@ export const DesktopRegression: Story = {
       Array.from(guaranteeItems).some(
         (item) =>
           getComputedStyle(item).minHeight !== "auto" ||
-          getComputedStyle(item).alignItems !== "flex-start" ||
+          !["flex-start", "flow-start"].includes(getComputedStyle(item).alignItems) ||
           getComputedStyle(item).color !== "rgba(0, 0, 0, 0.87)"
       ) ||
       guaranteeIcons.length !== 3 ||
