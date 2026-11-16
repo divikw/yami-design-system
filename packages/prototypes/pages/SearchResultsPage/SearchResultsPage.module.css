@@ -221,7 +221,8 @@
     padding: var(--space-200) var(--space-600) 0;
   }
 
-  .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
+  /* The page grid takes precedence over ProductList regardless of bundle order. */
+  .root .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     column-gap: var(--space-300);
     row-gap: var(--space-300);
@@ -230,13 +231,13 @@
 }
 
 @media (min-width: 1200px) {
-  .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
+  .root .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1440px) {
-  .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
+  .root .results[data-layout="waterfall"] :global([data-slot="product-list-items"]) {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
