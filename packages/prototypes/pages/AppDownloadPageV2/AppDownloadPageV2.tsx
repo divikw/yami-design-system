@@ -230,7 +230,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", englishOnly = false, c
   };
 
   return <><div className={styles.root} style={pageStyle} lang={locale} ref={root} data-slot="app-download-page">
-    <header className={styles.header}><div>
+    <header className={styles.header} data-slot="campaign-header"><div>
       <a href={`https://www.yami.com/${locale}`} aria-label="Yami Home"><picture><source media="(min-width: 1024px)" srcSet={desktopLogo} /><img className={styles.logo} src={logo} alt="YAMI" /></picture></a>
       <div className={styles.headerActions}>
         {!englishOnly && <Button className={styles.languageButton} variant="secondary" leftIcon={<img className={styles.flag} src={localeFlag} alt="" />} onClick={() => setLocale(ko ? "en" : "ko")} aria-label={ko ? "Switch to English" : "한국어로 전환"}>{ko ? "KO" : "EN"}</Button>}
@@ -255,7 +255,7 @@ export function AppDownloadPageV2({ initialLocale = "ko", englishOnly = false, c
           <DownloadLinks />
         </div>
       </section>
-      <nav className={styles.sectionNav} aria-label={ko ? "페이지 섹션" : "Page sections"}>
+      <nav className={styles.sectionNav} data-slot="campaign-section-nav" aria-label={ko ? "페이지 섹션" : "Page sections"}>
         <Tabs value={activeSection} onValueChange={(id) => {
           pendingSection.current = id;
           setActiveSection(id);
@@ -399,6 +399,6 @@ export function AppDownloadPageV2({ initialLocale = "ko", englishOnly = false, c
         </div>
       </section>
     </main>
-    {showSticky && <a className={styles.stickyCta} href={appStoreHref}>{ko ? "앱 전용 첫 구매 혜택 받기" : "Claim Your App-Only Deal"}<img src={asset("chevron-right.svg")} alt="" /></a>}
+    {showSticky && <a className={styles.stickyCta} data-slot="campaign-sticky-cta" href={appStoreHref}>{ko ? "앱 전용 첫 구매 혜택 받기" : "Claim Your App-Only Deal"}<img src={asset("chevron-right.svg")} alt="" /></a>}
   </div><div className={styles.footerContainer} style={pageStyle} lang="en"><Footer {...homeFooter} /></div></>;
 }

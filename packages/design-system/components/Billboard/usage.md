@@ -32,11 +32,16 @@ The label lands on the link as well as the band. Naming only the band is not
 enough: a link takes its name from its content, and the content here is an
 image with empty alt.
 
-Supply `image.mobile` for a narrower rendering of the **same** offer. Both
-artworks share `label` and `href`; using another campaign's artwork would
-misrepresent what the link does. If the matching phone artwork is unavailable,
-omit `image.mobile` and set `mobileTextFallback` to show `label` as live text
-below 1024px. The default without either option is the desktop artwork at all widths.
+Supply `image.mobile` for narrower artwork below 1024px. Both artworks use
+`href`, so the destination must support both messages. When mobile copy differs,
+set `mobileLabel` to name its visible offer; the region and link switch names
+with the artwork. Without it, both sizes use `label`.
+
+The maintained Chinese fixture retains weekly picks on desktop and uses the
+new-customer offer on mobile. English mobile uses the supplied animated GIF.
+If phone artwork is unavailable, omit `image.mobile` and set
+`mobileTextFallback` to show `label` as live text. The default without either
+option is the desktop artwork at all widths.
 
 ## Layout
 

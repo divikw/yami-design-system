@@ -3,6 +3,7 @@
 import { PreviewNavigateMessageSchema } from "@yami/contracts";
 import { Cancel01Icon, Home01Icon, Layout01Icon, RefreshCcwIcon, ShoppingCart01Icon } from "@hugeicons/core-free-icons";
 import type { HeaderProps, ProductListItem } from "@yami/design-system";
+import { TabBar } from "@yami/design-system";
 import {
   CartPage, createCartPageFixture, createEcommerceHomeFixture, createProductDetailPageFixture,
   createSearchResultsFixture, createTopicLandingPageFixture, EcommerceHomeTemplate,
@@ -15,6 +16,14 @@ import { prototypeHref, prototypeProjects, type PrototypeProject } from "../lib/
 import { addPrototypeItem, emptyPrototypeSession, prototypeSessionKey, readPrototypeSession, type PrototypeSession } from "../lib/prototype-session";
 import { WorkbenchButton, WorkbenchIcon, WorkbenchLink, WorkbenchSelect } from "./workbench-controls";
 import "@yami/design-system/styles/base.css";
+
+const homeNavigationIcons = {
+  home: new URL("../../../../packages/design-system/assets/icons/tabbar/yami.svg", import.meta.url).href,
+  shop: new URL("../../../../packages/design-system/assets/icons/tabbar/shop.svg", import.meta.url).href,
+  community: new URL("../../../../packages/design-system/assets/icons/tabbar/community.svg", import.meta.url).href,
+  cart: new URL("../../../../packages/design-system/assets/icons/tabbar/cart-active.svg", import.meta.url).href,
+  account: new URL("../../../../packages/design-system/assets/icons/tabbar/account.svg", import.meta.url).href,
+};
 
 export function PrototypePlayer() {
   const params = useSearchParams();
@@ -32,6 +41,7 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
   const router = useRouter();
   const locale = params.get("locale") === "en" ? "en" : "zh";
   const theme = params.get("theme") === "dark" ? "dark" : "light";
+  const appPreview = params.get("previewMode") !== "h5";
   const path = params.get("path") ?? "/";
   const embedded = params.get("embedded") === "1";
   const sessionKey = prototypeSessionKey(project.id, variant.id);
@@ -133,7 +143,19 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
   }
 
   let content;
-  if (path === "/") content = <EcommerceHomeTemplate {...bind(fixtures.home)} header={header(fixtures.home.header)} />;
+  if (path === "/") content = <div className={appPreview ? "prototype-home" : undefined}>
+    <EcommerceHomeTemplate {...bind(fixtures.home)} header={header(fixtures.home.header)} />
+    {appPreview && <TabBar className="prototype-home-navigation" aria-label={locale === "zh" ? "App 导航" : "App navigation"} value="home" items={[
+      { value: "home", label: "YAMI", path: "/" },
+      { value: "shop", label: locale === "zh" ? "分类" : "Shop", path: "/search/all" },
+      { value: "community", label: locale === "zh" ? "社区" : "Community", path: "/show" },
+      { value: "cart", label: locale === "zh" ? "购物车" : "Cart", path: "/cart", badgeCount: session.cart.reduce((sum, item) => sum + item.quantity, 0) },
+      { value: "account", label: locale === "zh" ? "我的" : "Account", path: "/account" },
+    ].map(({ path: destination, ...item }) => ({
+      ...item, href: hrefFor(destination),
+      icon: <span className="prototype-home-navigation-icon" style={{ maskImage: `url("${homeNavigationIcons[item.value as keyof typeof homeNavigationIcons]}")` }} />,
+    }))} />}
+  </div>;
   else if (path === "/brands/anua" || path === "/brands/11712") content = <TopicLandingPage {...bind(fixtures.topic)} header={header(fixtures.topic.header)} />;
   else if (path.startsWith("/search/") || path.startsWith("/categories/")) {
     let query = path.slice(path.indexOf("/", 1) + 1);

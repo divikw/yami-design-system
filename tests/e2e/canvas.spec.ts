@@ -218,7 +218,7 @@ test("renders accessible workbench controls and switches device by keyboard", as
   await expect(workbenchSelect(page, "语言")).toHaveCSS("outline-width", "2px");
 
   const fieldLabels = page.locator('[data-slot="workbench-field-label"]');
-  await expect(fieldLabels).toHaveCount(3);
+  await expect(fieldLabels).toHaveText(["页面", "语言", "预览模式", "设备"]);
   for (const fieldLabel of await fieldLabels.all()) {
     await expect(fieldLabel).toHaveCSS("font-size", "12px");
     await expect(fieldLabel).toHaveCSS("line-height", "16px");

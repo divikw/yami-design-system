@@ -1,6 +1,7 @@
 "use client";
 
 import { PreviewNavigateMessageSchema } from "@yami/contracts";
+import { isPhonePreviewPage, PhonePreviewShell } from "@yami/prototypes/phone-preview";
 import { ArrowLeft02Icon, ArrowRight02Icon, Cancel01Icon, Copy01Icon, ImportIcon, LinkSquare02Icon, RefreshCcwIcon, SidebarLeftIcon } from "@hugeicons/core-free-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
@@ -53,13 +54,13 @@ function readStorybookPages(payload: unknown): StorybookPage[] {
   for (const entry of Object.values(entries)) {
     if (!entry || typeof entry !== "object") continue;
     const { id, name, title, type } = entry as Record<string, unknown>;
-    if (type !== "story" || typeof id !== "string" || typeof name !== "string" || typeof title !== "string" || !title.startsWith(STORYBOOK_PAGE_PREFIX)) continue;
+    if (type !== "story" || typeof id !== "string" || typeof name !== "string" || typeof title !== "string" || !title.toLowerCase().startsWith(STORYBOOK_PAGE_PREFIX.toLowerCase())) continue;
     grouped.set(title, [...(grouped.get(title) ?? []), { id, name, title }]);
   }
 
   return [...grouped.values()]
     .map((stories) => {
-      const story = stories.find((item) => /(^|—|\s)PC$/.test(item.name)) ?? stories[0];
+      const story = stories.find((item) => /(^|—|\s)PC$/i.test(item.name)) ?? stories[0];
       return {
         id: story.id,
         label: story.title.slice(STORYBOOK_PAGE_PREFIX.length).replaceAll("/", " / "),
@@ -95,6 +96,11 @@ export function CanvasWorkbench() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const importDialog = useRef<HTMLDialogElement>(null);
   const previewFrame = useRef<HTMLIFrameElement>(null);
+  const [phoneFrame, setPhoneFrame] = useState<HTMLIFrameElement | null>(null);
+  const attachPreviewFrame = useCallback((frame: HTMLIFrameElement | null) => {
+    previewFrame.current = frame;
+    setPhoneFrame(frame);
+  }, []);
   const deviceMat = useRef<HTMLDivElement>(null);
   const resizeStart = useRef<{ x: number; edge: number; available: number; width: number } | null>(null);
   const [dragWidth, setDragWidth] = useState<number | null>(null);
@@ -119,6 +125,7 @@ export function CanvasWorkbench() {
   const direction = params.get("direction") || "current";
   const locale = (params.get("locale") === "en" ? "en" : "zh") as Locale;
   const theme = (params.get("theme") === "dark" ? "dark" : "light") as Theme;
+  const previewMode = params.get("previewMode") === "h5" ? "h5" : "app";
   const requestedViewport = params.get("viewport");
   const viewport = requestedViewport && /^\d+$/.test(requestedViewport)
     ? String(clampPreviewWidth(Number(requestedViewport))) : "1440";
@@ -132,8 +139,9 @@ export function CanvasWorkbench() {
     ? "path"
     : previousPreviewState.current.direction !== direction ? "direction" : "none";
 
+  const selectedStorybookPage = storybookPages.find((page) => page.id.split("--")[0] === storyId.split("--")[0]);
   const currentImportedPage = storyId && !importedPages.some((page) => page.id === storyId)
-    ? storybookPages.find((page) => page.id === storyId) ?? { id: storyId, label: "Storybook 页面", title: storyId }
+    ? selectedStorybookPage ? { ...selectedStorybookPage, id: storyId } : { id: storyId, label: "Storybook 页面", title: storyId }
     : null;
   const visibleImportedPages = currentImportedPage ? [...importedPages, currentImportedPage] : importedPages;
   const pageOptions = [
@@ -145,7 +153,7 @@ export function CanvasWorkbench() {
     ? `storybook:${storyId}`
     : projectMode ? path : selectedCanvasPage;
 
-  const update = useCallback((next: Partial<{ path: string | null; story: string | null; direction: string; locale: Locale; theme: Theme; viewport: string; project: string; variant: string }>, mode: "push" | "replace" = "replace") => {
+  const update = useCallback((next: Partial<{ path: string | null; story: string | null; direction: string; locale: Locale; theme: Theme; viewport: string; previewMode: string; project: string; variant: string }>, mode: "push" | "replace" = "replace") => {
     // Read the current URL so consecutive edits cannot overwrite pending settings.
     const query = new URLSearchParams(window.location.search);
     if (projectMode && project && variant) {
@@ -223,6 +231,7 @@ export function CanvasWorkbench() {
         id: storyId,
         viewMode: "story",
         globals: `locale:${locale};theme:${theme}`,
+        previewMode,
       });
       return `${STORYBOOK_URL}/iframe.html?${storybookQuery.toString()}`;
     }
@@ -231,9 +240,9 @@ export function CanvasWorkbench() {
       previewParams.delete("viewport");
       return `${prototypeHref(previewParams, path)}&embedded=1&reset=${resetVersion}`;
     }
-    const previewQuery = new URLSearchParams({ path, direction, locale, theme, transition });
+    const previewQuery = new URLSearchParams({ path, direction, locale, theme, transition, previewMode });
     return `/preview?${previewQuery.toString()}`;
-  }, [path, direction, locale, theme, transition, storyId, projectMode, params, resetVersion]);
+  }, [path, direction, locale, theme, transition, previewMode, storyId, projectMode, params, resetVersion]);
 
   function startResize(event: PointerEvent<HTMLDivElement>) {
     if (event.button !== 0 || !deviceMat.current || !previewFrame.current) return;
@@ -367,6 +376,8 @@ export function CanvasWorkbench() {
             value={locale}
             onValueChange={(value) => update({ locale: value as Locale })}
           />
+          <SegmentedControl label="预览模式" options={[{ value: "h5", label: "H5" }, { value: "app", label: "App" }]}
+            value={previewMode} onValueChange={(value) => update({ previewMode: value })} />
           <SegmentedControl
             label="设备"
             options={viewportOptions}
@@ -409,7 +420,12 @@ export function CanvasWorkbench() {
           </div>
           <div className="device-mat" ref={deviceMat} data-resizing={resizing || undefined}>
             <div className="preview-frame-wrap" style={{ width: `${previewWidth}px`, boxSizing: "content-box" }}>
-              <iframe key={previewSrc} id="canvas-preview" ref={previewFrame} title="YAMI 原型预览" src={previewSrc} />
+              <iframe key={previewSrc} id="canvas-preview" ref={attachPreviewFrame} title="YAMI 原型预览" src={previewSrc} />
+              <PhonePreviewShell frame={phoneFrame} theme={theme} mode={previewMode}
+                enabled={!storyId || isPhonePreviewPage(visibleImportedPages.find((page) => page.id === storyId)?.title ?? "")}
+                safari={{ address: phoneFrame ? new URL(phoneFrame.src).host : "", openHref: projectMode && !storyId ? shareHref : previewSrc,
+                  canGoBack, onBack: () => navigatePreview(-1),
+                  onReload: () => { if (previewFrame.current) previewFrame.current.src = previewSrc; } }} />
               <div className="preview-resize-handle" role="separator" tabIndex={0} aria-label="调整预览宽度" aria-orientation="vertical"
                 aria-controls="canvas-preview" aria-valuemin={MIN_PREVIEW_WIDTH} aria-valuemax={MAX_PREVIEW_WIDTH} aria-valuenow={previewWidth}
                 aria-valuetext={`${previewWidth} 像素`} title="拖动调整宽度；方向键微调，Shift 加速"

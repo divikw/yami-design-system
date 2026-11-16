@@ -64,6 +64,7 @@
     "capture:host-visual": "node tooling/storybook/capture-host-comparison.mjs",
     "test:storybook": "pnpm --filter @yami/storybook test-storybook",
     "test:a11y": "playwright test --project=a11y",
+    "test:phone-preview": "playwright test --config=tests/preview-hosts/playwright.config.ts",
     "test:e2e": "playwright test --project=e2e",
     "test:docsite": "pnpm --filter @yami/docsite test",
     "test:docsite:e2e": "pnpm --filter @yami/docsite test:e2e",

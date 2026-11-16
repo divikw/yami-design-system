@@ -1,3 +1,4 @@
+import { PhonePreviewInsets } from "@yami/prototypes/phone-preview";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
@@ -22,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="zh-CN" className={yamiFont.variable}><body>{children}</body></html>;
+  return <html lang="zh-CN" className={yamiFont.variable}><body><PhonePreviewInsets />{children}</body></html>;
 }

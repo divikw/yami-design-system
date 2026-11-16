@@ -27,7 +27,7 @@ export const prototypeProjects: PrototypeProject[] = [{
 
 export function prototypeHref(params: URLSearchParams, path: string, variant?: string) {
   const query = new URLSearchParams();
-  for (const key of ["project", "variant", "locale", "theme", "viewport"]) {
+  for (const key of ["project", "variant", "locale", "theme", "viewport", "previewMode"]) {
     const value = params.get(key);
     if (value) query.set(key, value);
   }

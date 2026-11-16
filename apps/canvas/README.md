@@ -5,7 +5,7 @@ Run `pnpm dev:canvas` from the repository root and open
 
 ## Project delivery
 
-The workbench selects a project, variant, page, language and device width.
+The workbench selects a project, variant, page, language, H5/App preview mode and device width.
 “独立预览” opens the complete flow without the workbench frame; “复制方案链接”
 copies that same address. A recipient does not need the author's local drafts.
 Links use the current host: localhost links require the local service; remote
@@ -17,6 +17,21 @@ approved navigation redesign. Both reuse the maintained home, search, product,
 cart and Anua page compositions. Category routes use the search/list composition
 and fixture products; this is a simulated flow, not a live catalogue or checkout.
 Unknown pages show an explicit out-of-scope screen.
+
+Preview mode is independent of width. App is the default for existing links;
+on phone widths it shows the system chrome and the page's App navigation.
+H5 phone previews show fixed Safari chrome, system status and home indicators,
+without App navigation. The page fills the phone behind transparent chrome,
+with 62px top and 86px bottom safe areas for sticky headers and checkout bars.
+The status area follows the page at the top and matches the navigation when
+scrolled; only Safari's floating controls carry a glass background.
+Safari back uses preview history, refresh reloads the embedded
+page without clearing the basket, and More opens the standalone page. The
+address shows the preview host. Toolbars do not collapse while scrolling.
+`previewMode=h5` or `previewMode=app` is retained across navigation, refresh,
+standalone preview and shared links. Switching modes preserves the demo basket.
+Imported Storybook pages receive the same mode without changing standalone Storybook.
+Tablet/desktop and standalone H5 pages do not receive simulated Safari chrome.
 
 Example independent address:
 

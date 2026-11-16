@@ -96,6 +96,8 @@ jobs:
             command: pnpm test:e2e
           - check: visual
             command: pnpm test:visual
+          - check: phone-preview
+            command: pnpm test:phone-preview
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/setup@v3

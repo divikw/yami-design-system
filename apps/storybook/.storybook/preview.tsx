@@ -1,3 +1,4 @@
+import { isPhonePreviewPage, PhonePreviewInsets } from "@yami/prototypes/phone-preview";
 import type { Preview } from "@storybook/react-vite";
 import "@yami/design-system/styles/fonts.css";
 import "@yami/design-system/tokens.css";
@@ -79,7 +80,7 @@ const preview: Preview = {
         root.dataset.locale = context.globals.locale;
       }
 
-      return <><TokenAnnotations /><Story /></>;
+      return <><PhonePreviewInsets enabled={context.viewMode === "story" && isPhonePreviewPage(context.title)} /><TokenAnnotations /><Story /></>;
     }
   ]
 };

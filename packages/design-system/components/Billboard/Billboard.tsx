@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import styles from "./Billboard.module.css";
 import type { BillboardProps } from "./Billboard.types";
 import {
@@ -24,6 +27,7 @@ export function Billboard({
   image,
   href,
   label,
+  mobileLabel,
   mobileTextFallback = false,
   imageLoading = "lazy",
   revealOnLoad = false,
@@ -31,17 +35,27 @@ export function Billboard({
   ...rest
 }: BillboardProps) {
   const showMobileText = mobileTextFallback && !image.mobile;
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    if (!image.mobile || !mobileLabel) return;
+    const viewport = window.matchMedia("(max-width: 1023.98px)");
+    const update = () => setMobile(viewport.matches);
+    update();
+    viewport.addEventListener("change", update);
+    return () => viewport.removeEventListener("change", update);
+  }, [image.mobile, mobileLabel]);
+  const accessibleLabel = mobile && image.mobile && mobileLabel ? mobileLabel : label;
   return (
     <section
       {...rest}
       className={cx(styles.root, className)}
       data-slot="billboard"
-      aria-label={label}
+      aria-label={accessibleLabel}
     >
       <a
         className={styles.link}
         href={href}
-        aria-label={label}
+        aria-label={accessibleLabel}
         data-slot="billboard-link"
         data-mobile-text={showMobileText || undefined}
       >

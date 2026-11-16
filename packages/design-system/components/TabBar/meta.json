@@ -1,0 +1,128 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "TabBar",
+  "category": "navigation",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "App destination navigation extracted from CartPage, with native links or action buttons, controlled current destination, decorative icons and quantity badges.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Extracted from the maintained CartPage implementation; no independently verified Figma component binding."
+  },
+  "exports": [
+    "TabBar",
+    "TabBarProps",
+    "TabBarItem"
+  ],
+  "composes": [
+    "Badge"
+  ],
+  "variants": {
+    "state": [
+      "current",
+      "default",
+      "pressed",
+      "focus-visible",
+      "hidden"
+    ]
+  },
+  "props": {
+    "items": {
+      "type": "readonly TabBarItem[]",
+      "required": true,
+      "description": "Unique value, label, decorative icon, optional badgeCount and either href or onClick. Empty arrays render nothing."
+    },
+    "value": {
+      "type": "string",
+      "required": true,
+      "description": "Host-controlled current destination. Does not update automatically."
+    },
+    "aria-label": {
+      "type": "string",
+      "required": true,
+      "description": "Accessible name for the app navigation."
+    }
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "2px blue inset focus outline stays visible when fixed against viewport edges."
+    },
+    "tapTarget": {
+      "ruleId": "tap-target",
+      "note": "48px targets; use 3–5 destinations in a phone viewport."
+    }
+  },
+  "tokens": [
+    "--divider-default",
+    "--focus-ring",
+    "--font-family-ios",
+    "--font-size-app-tabbar-label",
+    "--font-weight-emphasize",
+    "--font-weight-normal",
+    "--line-height-app-tabbar-label",
+    "--radius-button-primary",
+    "--space-025",
+    "--space-050",
+    "--space-150",
+    "--space-300",
+    "--space-600",
+    "--stroke-default",
+    "--stroke-thick",
+    "--surface-primary",
+    "--surface-secondary",
+    "--text-emphasis",
+    "--text-primary"
+  ],
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".root"
+    },
+    "--text-emphasis": {
+      "property": "color",
+      "selector": ".item[aria-current=\"page\"]"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".item:focus-visible"
+    },
+    "--font-size-app-tabbar-label": {
+      "property": "font-size",
+      "selector": ".item, .count"
+    },
+    "--space-600": {
+      "property": "min-height",
+      "selector": ".item"
+    }
+  },
+  "accessibility": {
+    "role": "navigation / link / button",
+    "wcagLevel": "AA",
+    "tapTargetMin": 48,
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "enter",
+      "space"
+    ],
+    "ariaPattern": "Named nav with explicit aria-current=page; not an ARIA tablist.",
+    "notes": "Icons are decorative; count badges are included in each item accessible name using the full quantity. Native link and button keyboard behavior."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#CartTabBar"
+  ],
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Story play checks controlled action activation and keyboard focus; browser coverage checks links, counts, geometry and responsive CartPage integration."
+  }
+}
