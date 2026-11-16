@@ -1,0 +1,51 @@
+/* iOS browser chrome follows Figma system dimensions, independently of YAMI UI. */
+.toolbar {
+  --safari-ink: #404040;
+  --safari-glass: rgba(247, 247, 247, 0.88);
+  --safari-edge: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  inset: auto 0 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 86px;
+  padding: 4px 34px 34px;
+  background: transparent;
+  z-index: 1;
+  color: var(--safari-ink);
+  pointer-events: auto;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.toolbar[data-theme="dark"] {
+  --safari-ink: #bfbfbf;
+  --safari-glass: rgba(98, 98, 98, 0.88);
+  --safari-edge: rgba(255, 255, 255, 0.2);
+}
+.roundButton, .addressBar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border: 0;
+  border-radius: 296px;
+  background: var(--safari-glass);
+  box-shadow: inset 0 0 0 1px var(--safari-edge);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.roundButton { flex: 0 0 48px; width: 48px; padding: 6px; color: inherit; cursor: pointer; }
+.roundButton:disabled { cursor: default; background: var(--surface-secondary); }
+.addressBar { flex: 1; min-width: 0; padding-inline: 14px; gap: 12px; }
+.reader { flex: 0 0 20px; display: flex; align-items: center; justify-content: center; padding-top: 1px; }
+.reader img { display: block; }
+.address { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center; font-size: 16px; font-weight: 590; font-variation-settings: "wdth" 100; }
+.reload { position: relative; display: grid; place-items: center; flex: 0 0 20px; width: 20px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.reload::after { content: ""; position: absolute; inset: 0 -12px; }
+.toolbar button:focus-visible, .toolbar summary:focus-visible, .toolbar a:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.more { flex: 0 0 48px; }
+.more summary { list-style: none; }
+.more summary::-webkit-details-marker { display: none; }
+.menu { position: absolute; bottom: 90px; right: 34px; padding: 4px; border-radius: 12px; background: var(--surface-primary); border: 1px solid var(--border-default); }
+.menu a { display: flex; min-height: 44px; align-items: center; padding-inline: 12px; color: var(--text-primary); text-decoration: none; font-size: 14px; }

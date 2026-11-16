@@ -1,7 +1,8 @@
+import { expect, waitFor } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Billboard } from "./Billboard";
-import { createBillboardProps, type BillboardLocale } from "./fixtures";
+import { billboardCopy, createBillboardProps, type BillboardLocale } from "./fixtures";
 
 function localeFromGlobals(value: unknown): BillboardLocale {
   return value === "en" ? "en" : "zh";
@@ -16,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Floating Bars / 活动快捷浮动栏。\n\nA promotional band with a single destination. Use artwork for the same offer at both sizes. If matching mobile artwork is unavailable, the mobile text fallback keeps the visible offer and accessible name aligned.",
+          "Floating Bars / 活动快捷浮动栏。\n\nA promotional band with a single destination. Mobile artwork may use its own mobileLabel while retaining the same destination. If mobile artwork is unavailable, an optional text fallback shows the desktop label.",
       },
     },
   },
@@ -182,7 +183,7 @@ export const MobileCard: Story = {
     ? { viewport: { value: "yamiMobile", isRotated: false } }
     : {},
   render: Showcase.render,
-  play: import.meta.env.MODE === "test" ? async ({ canvasElement }) => {
+  play: import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
     const band = canvasElement.querySelector<HTMLElement>(
       '[data-slot="billboard"]',
     );
@@ -193,11 +194,29 @@ export const MobileCard: Story = {
     }
 
     const link = band.querySelector('[data-slot="billboard-link"]');
-    const copy = link?.querySelector('[data-slot="billboard-mobile-text"]');
-    const picture = link?.querySelector("picture");
-    if (!copy || !picture || getComputedStyle(picture).display !== "none" ||
-        copy.getBoundingClientRect().height < 44 || copy.textContent?.trim() !== link?.getAttribute("aria-label")) {
-      throw new Error("Mobile billboard must show the same named offer as readable text when matching artwork is missing");
-    }
+    const image = link?.querySelector<HTMLImageElement>('[data-slot="billboard-image"]');
+    const source = link?.querySelector("source");
+    const locale = localeFromGlobals(globals.locale);
+    if (!link || !image || !source) throw new Error("Mobile artwork is missing");
+    expect(link.querySelector('[data-slot="billboard-mobile-text"]')).toBeNull();
+    await waitFor(() => {
+      expect(image.complete && image.naturalWidth > 0).toBe(true);
+      expect(image.currentSrc).toContain(`new-user-offer-${locale}-mobile`);
+      expect(link).toHaveAccessibleName(billboardCopy[locale].mobileLabel);
+      expect(band).toHaveAccessibleName(billboardCopy[locale].mobileLabel);
+    });
+    const box = image.getBoundingClientRect();
+    const ratio = Number(source.width) / Number(source.height);
+    expect(Math.abs(box.height - box.width / ratio)).toBeLessThan(1);
+    expect(box.height).toBeGreaterThan(44);
+
   } : undefined,
+};
+
+export const EnglishMobileArtworkContract: Story = {
+  name: "English Mobile Artwork Contract",
+  tags: ["!dev", "!autodocs"],
+  globals: { locale: "en", viewport: { value: "yamiMobile", isRotated: false } },
+  render: MobileCard.render,
+  play: MobileCard.play,
 };

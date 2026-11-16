@@ -1,0 +1,115 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "tab-bar",
+  "title": "TabBar",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "App destination navigation extracted from CartPage, with native links or action buttons, controlled current destination, decorative icons and quantity badges.",
+  "source": "components/TabBar",
+  "files": [
+    {
+      "source": "components/TabBar/index.ts",
+      "target": "components/TabBar/index.ts"
+    },
+    {
+      "source": "components/TabBar/TabBar.module.css",
+      "target": "components/TabBar/TabBar.module.css"
+    },
+    {
+      "source": "components/TabBar/TabBar.tsx",
+      "target": "components/TabBar/TabBar.tsx"
+    }
+  ],
+  "exports": [
+    "TabBar",
+    "TabBarItem",
+    "TabBarProps"
+  ],
+  "composes": [
+    "Badge"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/TabBar/usage.md",
+    "stories": [
+      "components/TabBar/TabBar.stories.tsx"
+    ],
+    "examples": [
+      "components/TabBar/examples.tsx#CartTabBar"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--divider-default",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-app-tabbar-label",
+      "--font-weight-emphasize",
+      "--font-weight-normal",
+      "--line-height-app-tabbar-label",
+      "--radius-button-primary",
+      "--space-025",
+      "--space-050",
+      "--space-150",
+      "--space-300",
+      "--space-600",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-emphasis",
+      "--text-primary"
+    ],
+    "rules": [
+      "focus-style",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".root"
+      },
+      "--text-emphasis": {
+        "property": "color",
+        "selector": ".item[aria-current=\"page\"]"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".item:focus-visible"
+      },
+      "--font-size-app-tabbar-label": {
+        "property": "font-size",
+        "selector": ".item, .count"
+      },
+      "--space-600": {
+        "property": "min-height",
+        "selector": ".item"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "navigation / link / button",
+      "wcagLevel": "AA",
+      "tapTargetMin": 48,
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "enter",
+        "space"
+      ],
+      "ariaPattern": "Named nav with explicit aria-current=page; not an ARIA tablist.",
+      "notes": "Icons are decorative; count badges are included in each item accessible name using the full quantity. Native link and button keyboard behavior."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "39ebe15b77e7c87f0722a91d1b18091d84c71343fc4ee05db481b59e8f2732a8"
+}

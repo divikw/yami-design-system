@@ -35,6 +35,8 @@ export interface BillboardProps
    * 供屏幕阅读器朗读的链接名称，应清楚说明活动内容或跳转目的。
    */
   label: string;
+  /** 移动端图片文案不同时使用的链接名称；仅在 image.mobile 存在时生效。 */
+  mobileLabel?: string;
   /** 小于 1024px 且没有同活动的移动图片时，用 label 渲染可读条幅。 */
   mobileTextFallback?: boolean;
   /** 图片加载方式。首屏图片使用 eager，非首屏使用 lazy。 */

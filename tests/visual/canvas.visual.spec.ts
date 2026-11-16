@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { join } from "node:path";
+import sharp from "sharp";
 
 import searchImages from "./fixtures/search-images/manifest.json";
 
@@ -73,6 +74,11 @@ test.describe("ecommerce-home-full-matrix", () => {
       for (const viewport of ["402", "768", "1440"] as const) {
         test(`current in ${locale}/${theme} at ${viewport}px`, async ({ page }) => {
           await page.setViewportSize({ width: viewport === "1440" ? 1920 : 1440, height: 1100 });
+          if (locale === "en" && viewport !== "1440") {
+            // Snapshot the supplied artwork at a deterministic animation frame.
+            const poster = await sharp("packages/design-system/components/Billboard/assets/new-user-offer-en-mobile.gif").png().toBuffer();
+            await page.route(/\/new-user-offer-en-mobile[^/]*\.gif$/, (route) => route.fulfill({ contentType: "image/png", body: poster }));
+          }
           await page.goto(`/workbench?path=%2F&direction=current&locale=${locale}&theme=${theme}&viewport=${viewport}`);
           await waitForStablePreview(page);
           await expect(page).toHaveScreenshot(`current-${locale}-${theme}-${viewport}.png`, { fullPage: true });

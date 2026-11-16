@@ -4,7 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   Badge, Button, ButtonGroup, ButtonLink, Checkbox, Dialog, Drawer, Footer, Header, ProductCard, ProductList,
-  Tabs, TabsContent, TabsList, TabsTrigger,
+  TabBar, Tabs, TabsContent, TabsList, TabsTrigger,
 } from "@yami/design-system";
 import type { CartItemData, CartPageProps } from "./CartPage.types";
 import { calculateCartTotals, formatCartMoney as money } from "./cart-totals";
@@ -236,13 +236,15 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
           {mobile ? <><label className={styles.checkoutAll}><Checkbox checked={allSelected} onCheckedChange={selectAll} /><span>{locale === "zh" ? t.all : "All"}</span></label><Button className={styles.checkoutTotal} variant="tertiary" aria-label={`${t.details} ${money(totals.totalCents)}`} aria-haspopup="dialog" aria-expanded={mobileSummaryOpen} onClick={() => mobileSummaryOpen ? closeDrawer() : setDrawer("summary")}><span><small>{inSummary ? t.orderSubtotal : t.estimated}</small> <strong>{money(totals.totalCents)}</strong><span className={styles.totalChevron} aria-hidden="true" /></span><small>{totals.quantity === 0 ? "" : totals.shippingCents === 0 ? t.free : `${t.shipping} ${money(totals.shippingCents)}`}</small></Button></> : null}{checkoutError && totals.quantity === 0 ? <p className={styles.checkoutHint} role="alert">{t.choose}</p> : null}<Button variant="emphasis" size="lg" form="full" onClick={() => { if (!signedIn) { if (inSummary) closeDrawer(); setSignInOpen(true); return; } if (totals.quantity === 0) { setCheckoutError(true); return; } setDrawer("summary"); }}>{t.checkout}{totals.quantity > 0 && !inSummary ? ` (${totals.quantity})` : ""}</Button></div>;
   }
   function renderAppNavigation(inSummary = false) {
-    return <nav data-slot="cart-app-navigation" hidden={mobileSummaryOpen && !inSummary} className={styles.appNavigation} aria-label={locale === "zh" ? "App 导航" : "App navigation"}>
-      <a href={header.homeHref}><img src={mobileIcons.yami} alt="" width={24} height={24} /><span>YAMI</span></a>
-      <a href={`https://www.yami.com/us/${locale}/search`}><img src={mobileIcons.shop} alt="" width={24} height={24} /><span>{t.shopNav}</span></a>
-      <a href={`https://www.yami.com/us/${locale}/show`}><img src={mobileIcons.community} alt="" width={24} height={24} /><span>{t.community}</span></a>
-      <button type="button" aria-current="page" aria-label={`${locale === "zh" ? t.cart : "Cart"} ${cartQuantity}`} onClick={() => { if (inSummary) closeDrawer(); setPageTab("cart"); window.scrollTo({ top: 0 }); }}><span className={styles.navIcon}><img src={mobileIcons.cart} alt="" width={24} height={24} /><Badge className={styles.navCartCount} color="red" aria-hidden="true">{cartQuantity > 99 ? "99+" : cartQuantity}</Badge></span><span>{locale === "zh" ? t.cart : "Cart"}</span></button>
-      <a href={header.account?.href}><img src={mobileIcons.account} alt="" width={24} height={24} /><span>{t.account}</span></a>
-    </nav>;
+    return <TabBar data-slot="cart-app-navigation" hidden={mobileSummaryOpen && !inSummary} className={styles.appNavigation}
+      aria-label={locale === "zh" ? "App 导航" : "App navigation"} value="cart" items={[
+        { value: "home", label: "YAMI", href: header.homeHref ?? "/", icon: <img src={mobileIcons.yami} alt="" width={24} height={24} /> },
+        { value: "shop", label: t.shopNav, href: `https://www.yami.com/us/${locale}/search`, icon: <img src={mobileIcons.shop} alt="" width={24} height={24} /> },
+        { value: "community", label: t.community, href: `https://www.yami.com/us/${locale}/show`, icon: <img src={mobileIcons.community} alt="" width={24} height={24} /> },
+        { value: "cart", label: locale === "zh" ? t.cart : "Cart", badgeCount: cartQuantity, icon: <img src={mobileIcons.cart} alt="" width={24} height={24} />,
+          onClick: () => { if (inSummary) closeDrawer(); setPageTab("cart"); window.scrollTo({ top: 0 }); } },
+        { value: "account", label: t.account, href: header.account?.href ?? `https://customer.yami.com/us/${locale}/orders`, icon: <img src={mobileIcons.account} alt="" width={24} height={24} /> },
+      ]} />;
   }
 
   return <div className={styles.page} lang={locale} data-slot="cart-page" data-page-tab={pageTab} data-signed-in={signedIn} style={{ "--cart-header-height": `${desktopHeaderHeight}px` } as CSSProperties}>
@@ -250,7 +252,7 @@ export function CartPage({ locale, header, footer, merchants, initialItems, init
       {!mobile && notice.item ? <CartAddNotice ref={addNoticeRef} item={notice.item} locale={locale} onClose={() => { addNoticeTriggerRef.current?.focus({ preventScroll: true }); setNotice({ message: "", drawer: null }); }} /> : null}
     </div>
     <Tabs value={pageTab} onValueChange={switchPage} className={styles.appTabs}>
-      <header className={styles.mobileHeader}>
+      <header className={styles.mobileHeader} data-slot="cart-mobile-header">
         <TabsList variant="primary" aria-label={locale === "zh" ? "购物车页面" : "Cart pages"}>
           <TabsTrigger ref={mobileCartTabRef} value="cart">{locale === "zh" ? t.cart : "Cart"}</TabsTrigger><TabsTrigger value="reorder">{t.reorder}</TabsTrigger>
         </TabsList>

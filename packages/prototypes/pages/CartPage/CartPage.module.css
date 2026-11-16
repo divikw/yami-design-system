@@ -315,7 +315,8 @@
 }
 
 /* App-only chrome uses the existing mobile boundary; PC composition stays intact. */
-.mobileHeader, .appNavigation, .reorderPanel { display: none; }
+.mobileHeader, .reorderPanel { display: none; }
+.appNavigation[data-slot="cart-app-navigation"] { display: none; }
 .page .cartPanel { padding: 0; color: var(--text-primary); }
 .page .reorderPanel { color: var(--text-primary); }
 .mobileShipping { display: none; }
@@ -325,7 +326,7 @@
   .desktopHeader { display: none; }
   .mobileHeader { position: sticky; top: 0; z-index: 15; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--space-150) var(--space-100); background: var(--surface-primary); border-bottom: var(--stroke-default) solid var(--divider-default); }
   .mobileZipcode { display: grid; justify-items: center; color: var(--text-primary); text-decoration: none; font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
-  .mobileZipcode:focus-visible, .appNavigation :is(a, button):focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
+  .mobileZipcode:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
   .layout { padding: var(--space-100); gap: 0; }
   .mainColumn { gap: var(--space-100); }
   .overview { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
@@ -403,11 +404,7 @@
   .checkoutTotal > span:last-child > span { display: flex; align-items: baseline; gap: var(--space-025); }
   .checkoutBar > button:last-child { flex: 0 0 clamp(100px, 36vw, 144px); width: auto; padding-inline: var(--space-100); }
   .checkoutBar .checkoutHint { position: absolute; bottom: 100%; inset-inline: 0; margin: 0; padding: var(--space-100); background: var(--surface-primary); }
-  .appNavigation { position: fixed; bottom: 0; inset-inline: 0; z-index: 20; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom); background: var(--surface-primary); border-top: var(--stroke-default) solid var(--divider-default); }
-  .appNavigation :is(a, button) { position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-025); min-height: 49px; padding: calc(var(--space-050) + var(--stroke-default)) 0 calc(var(--space-050) - var(--stroke-default)); border: 0; color: var(--text-primary); background: transparent; font: inherit; font-size: var(--font-size-app-tabbar-label); line-height: var(--line-height-app-tabbar-label); text-decoration: none; cursor: pointer; }
-  .appNavigation [aria-current="page"] { color: var(--text-emphasis); font-weight: var(--font-weight-emphasize); }
-  .navIcon { position: relative; display: block; width: var(--space-300); height: var(--space-300); }
-  .appNavigation .navIcon .navCartCount[data-slot="badge"] { position: absolute; top: calc(var(--space-050) * -1); left: calc(var(--space-150) + var(--space-025)); box-sizing: border-box; height: calc(var(--space-150) + var(--space-025)); min-width: calc(var(--space-150) + var(--space-025)); padding: 0 var(--space-025); border-radius: var(--radius-button-primary); font-size: var(--font-size-app-tabbar-label); line-height: var(--line-height-app-tabbar-label); font-weight: var(--font-weight-normal); }
+  .appNavigation[data-slot="cart-app-navigation"] { position: fixed; bottom: 0; inset-inline: 0; z-index: 20; display: grid; }
 
   .reorderPanel:not([hidden]) { display: block; padding: var(--space-100) 0; background: var(--surface-primary); border-radius: var(--radius-surface-default); }
   .reorderPanel > [data-slot="tabs"] > [role="tablist"] { padding-inline: var(--space-100); }
@@ -429,11 +426,6 @@
   .reorderGrid > li { position: relative; }
   .purchaseBadge { border: var(--stroke-default) solid var(--border-default); position: absolute; top: var(--space-050); left: var(--space-050); pointer-events: none; }
   .purchaseBadge > span { color: var(--text-emphasis); }
-}
-
-@media (max-width: 1023px) {
-  .appNavigation { box-sizing: border-box; height: calc(49px + env(safe-area-inset-bottom)); }
-  .appNavigation :is(a, button) { min-height: var(--space-600); }
 }
 
 @media (max-width: 1023px) {

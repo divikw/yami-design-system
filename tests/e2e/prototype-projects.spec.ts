@@ -193,7 +193,9 @@ test("shares a complete variant and retains it through navigation, reload and br
   await page.getByRole("button", { name: "返回上一步" }).click();
   await expect(page).toHaveURL(/path=%2Fproducts%2Fdemo-product/);
 
-  const shared = await page.getByRole("link", { name: "独立预览", exact: true }).getAttribute("href");
+  const shareLink = page.getByRole("link", { name: "独立预览", exact: true });
+  await expect(shareLink).toHaveAttribute("href", /path=%2Fproducts%2Fdemo-product/);
+  const shared = await shareLink.getAttribute("href");
   const fresh = await browser.newContext();
   const receiver = await fresh.newPage();
   await receiver.goto(`http://localhost:3200${shared}`);

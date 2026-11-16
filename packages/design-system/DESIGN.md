@@ -462,6 +462,15 @@ PC-only numbered pagination, shown from 1024px and hidden below it. / 仅 PC 使
 - Default / inverse surfaces use the existing 2px blue focus aliases at 2px offset; a 4px gutter prevents clipping. Labels and usage guidance support Chinese and English.
 - Extracted from SearchResultsPage; no independently verified Figma component mapping. See [usage](./components/Pagination/usage.md).
 
+### TabBar — `components/TabBar/`
+
+App destination navigation extracted from the cart footer. / 从购物车底部导航抽取的共享 App 导航。
+
+- `items` supply labels, decorative icons, native links or action callbacks and optional quantity badges; `value` identifies the current destination with `aria-current="page"`.
+- Preserves the 49px bar, 48px targets, 24px icons, app-tabbar-label typography, semantic surfaces and count Badge. Counts above 99 display 99+ while accessible names retain the full quantity.
+- Host pages own routes, fixed positioning, breakpoint visibility and state updates. The component owns safe-area padding and blue keyboard focus; system chrome remains preview-owned.
+- No independently verified Figma component mapping. See [usage](./components/TabBar/usage.md) and the Showcase, Playground and Interaction stories.
+
 ### Tabs — `components/Tabs/`
 
 |                         |                                                                                                         |
@@ -675,7 +684,7 @@ Full-bleed promotional band linking to one campaign.
 | --- | --- |
 | **Composition** | One link contains the campaign artwork. The optional mobile fallback shows the same offer as text. |
 | **Geometry** | The band spans the page with 48px padding on all sides from 1024px (`--space-600`) and 16px below 1024px (`--space-200`). Artwork is centered with a 1440px maximum width and `--radius-surface-default` corners. |
-| **Responsive behavior** | `image.mobile` swaps to artwork for the same campaign below 1024px. Set `mobileTextFallback` to show `label` when that artwork is unavailable. Supply each image's intrinsic `width` and `height` to reserve space before it loads. |
+| **Responsive behavior** | `image.mobile` swaps artwork below 1024px; use `mobileLabel` when its copy differs. Both artworks share the destination. Set `mobileTextFallback` to show `label` when that artwork is unavailable. Supply each image's intrinsic `width` and `height` to reserve space before it loads. |
 | **Structure** | `label` names the region and the link. Use empty image `alt` when it would repeat the label. The mobile text fallback uses the label as visible copy. |
 
 ### BrandProductRail — `components/BrandProductRail/` _(composite: composes ProductList + ProductCard + Button)_

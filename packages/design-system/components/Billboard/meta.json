@@ -33,6 +33,11 @@
       "required": true,
       "description": "Localized accessible name. Required: the artwork's words are pixels, so without it the band is an unnamed link."
     },
+    "mobileLabel": {
+      "type": "string",
+      "required": false,
+      "description": "Accessible name for image.mobile when its copy differs from desktop; follows the artwork breakpoint. Both artworks must use the same destination."
+    },
     "mobileTextFallback": {
       "type": "boolean",
       "required": false,

@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "120a4a74b3bc575bfcdff72c29af73c069f4db81bf9dd755dc733fd5703ca874"
+      "digest": "a9b5ca36893cb4793a5c4738d6e1f67e0bd9eb287b6bed310222dc6d651333c0"
     },
     {
       "name": "accordion",
@@ -72,7 +72,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/billboard.json",
-      "digest": "9113659233df315c666c7a5c5fa73147e1f7722cf600659e1d79adea8ef4794a"
+      "digest": "590c17e1cca7a6194cc491be6cec9a9596f8ab28cb85a4d682bbc6895c7e42bc"
     },
     {
       "name": "brand-product-rail",
@@ -343,6 +343,15 @@
       "version": "0.1.0",
       "path": "registry-items/social-media-gallery.json",
       "digest": "c9dbf6cf57b086c76dd804c7c7d254f9d1a3fff33fbb310bdd4cb9d374001c30"
+    },
+    {
+      "name": "tab-bar",
+      "title": "TabBar",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/tab-bar.json",
+      "digest": "39ebe15b77e7c87f0722a91d1b18091d84c71343fc4ee05db481b59e8f2732a8"
     },
     {
       "name": "tabs",

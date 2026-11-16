@@ -1028,7 +1028,7 @@ for (const locale of ["zh", "en"] as const) {
       expect(count.top - cartIcon.top).toBe(-4);
       expect(count.height).toBe(14);
       expect(nav.getBoundingClientRect().bottom).toBe(874);
-      expect(getComputedStyle(nav.querySelector('span[class*="navCartCount"]')!).backgroundColor).toBe("rgb(224, 0, 0)");
+      expect(getComputedStyle(nav.querySelector('[data-slot="badge"]')!).backgroundColor).toBe("rgb(224, 0, 0)");
       expect(bar.getBoundingClientRect().bottom).toBe(nav.getBoundingClientRect().top);
       expect(bar.getBoundingClientRect().height).toBe(64);
       const total = bar.querySelector('button[aria-haspopup="dialog"]')!;

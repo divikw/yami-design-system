@@ -102,6 +102,7 @@
     "sheet",
     "shortcut-rail",
     "social-media-gallery",
+    "tab-bar",
     "tabs",
     "tag",
     "theme-hero",
@@ -582,5 +583,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "120a4a74b3bc575bfcdff72c29af73c069f4db81bf9dd755dc733fd5703ca874"
+  "contentDigest": "a9b5ca36893cb4793a5c4738d6e1f67e0bd9eb287b6bed310222dc6d651333c0"
 }

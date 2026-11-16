@@ -120,8 +120,9 @@ node_modules/@yami/design-system/knowledge/yami-design-system/SKILL.zh-CN.md，
 
 在主内容内按顺序组合 `HeroBanner`、`ShortcutRail`、`Billboard` 和 `ProductList`。
 为每个活动、快捷入口和条幅提供真实 `href`。活动主图按 `8:9` 整卡出图，底部给文字
-和商品留出空间。条幅传同一活动的桌面与手机素材和各自原始尺寸；缺少同活动手机图时用
-`mobileTextFallback` 显示 `label`。`label` 表达可见活动文案和行动。使用组件默认的文本
+和商品留出空间。条幅传桌面与手机素材及各自原始尺寸，两端共用跳转地址；手机文案不同时用
+`mobileLabel` 描述手机图片。缺少手机图时用 `mobileTextFallback` 显示 `label`。
+`label` 表达桌面活动文案和行动。使用组件默认的文本
 配色与焦点样式。页面路由、素材、区块外边距和数据由宿主维护；
 候选包的示例覆盖单个组件，整页试点不随包提供。
 
