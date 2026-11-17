@@ -49,6 +49,8 @@ const common: Record<string, Copy> = {
   back: ["返回按钮配置，包含名称与返回操作。", "Back-button configuration with its label and action."],
   contentPadding: ["是否保留正文区域的默认内边距。", "Whether to retain the default content padding."],
   desktopPlacement: ["PC 端浮层位置：居中或右侧。", "Desktop overlay placement: centered or on the right."],
+  initialFocus: ["浮层打开时的初始焦点目标。", "Initial focus target when the overlay opens."],
+  finalFocus: ["浮层关闭后的返回焦点目标。", "Return focus target when the overlay closes."],
   role: ["组件的 ARIA 语义角色。", "ARIA semantic role of the component."],
   size: ["组件的预设尺寸档位。", "Preset component size."],
   variant: ["组件的视觉或内容变体。", "Visual or content variant of the component."],
