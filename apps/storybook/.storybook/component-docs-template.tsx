@@ -4,6 +4,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { SyntaxHighlighter } from "storybook/internal/components";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import { Button } from "@yami/design-system";
+import { ComponentDocsPreview } from "./component-docs-preview";
 import styles from "./component-docs-template.module.css";
 
 export type DocsLocale = "zh" | "en";
@@ -49,7 +50,7 @@ export function Installation({ locale }: { locale: Locale }) {
 
 export function DocsExample({ code, locale, children, name }: { code: string; locale: Locale; children: ReactNode; name?: string }) {
   return <div className={styles.example} data-example={name}>
-    <div className={styles.preview}><div className={styles.demo}>{children}</div></div>
+    <ComponentDocsPreview locale={locale} name={name}>{children}</ComponentDocsPreview>
     <CodeBlock code={code} locale={locale} collapsible />
   </div>;
 }

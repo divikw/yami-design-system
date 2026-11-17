@@ -99,7 +99,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "053153e0c2e5a60941cfc0fe739ee9cc6c52e4e9c53b947a4255f3fbf5133524"
+      "digest": "134b5551d7f4c65bf7b2df1a5ab62146c7b4cc45596f5ac20ba7c51719a0b915"
     },
     {
       "name": "button-group",
@@ -108,7 +108,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/button-group.json",
-      "digest": "f4005df0fafc272e3491b598016ac950d8b0808db91668451034dff0e0a5ef37"
+      "digest": "a48ed9741c1184d3f46c654992189f5ad19baa0664393478a0318931364bfca3"
     },
     {
       "name": "card",

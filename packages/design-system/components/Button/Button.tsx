@@ -1,17 +1,19 @@
+'use client'
+
 /**
  * Button — YAMI primary interactive element.
  *
- * Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2):
- *   - variant: 4 hierarchies — emphasis / primary / secondary / tertiary
+ * Uses the YAMI UI/UX Guidelines (Mobile v2 + PC v2) as its visual reference:
+ *   - variant: emphasis / primary / secondary / tertiary / destructive
  *   - form:    3 layout modes — full / inline / icon
- *   - size:    sm (32, product-only) / md (40) / lg (Mobile 48 → PC 56 responsive)
+ *   - size:    sm / md / lg (32 / 40 / 48; PC full form uses 32 / 48 / 56)
  *   - inverse: false (default surface polarity) / true (opposite surface polarity)
  *
  * A11y contract:
  *   - form="icon" requires an aria-label (enforced at runtime in dev).
  *   - Disabled / loading uses `aria-disabled="true"` over native `disabled`,
  *     keeping the element keyboard-focusable so SR can still announce it.
- *     Clicks are blocked via the onClick guard.
+ *     Base UI blocks activation.
  *   - Loading additionally sets aria-busy="true".
  *   - Focus-visible outline is 2px solid var(--focus-ring) with 2px offset
  *     (var(--focus-ring-inverse) when inverse=true).
@@ -23,28 +25,29 @@
  * See meta.json for structured spec, usage.md for narrative.
  */
 
+import { Button as BaseButton } from '@base-ui/react/button'
 import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useEffect, useState } from 'react'
 
 import styles from './Button.module.css'
 
 declare const process: { env?: { NODE_ENV?: string } } | undefined
 
-export type ButtonVariant = 'emphasis' | 'primary' | 'secondary' | 'tertiary'
+export type ButtonVariant = 'emphasis' | 'primary' | 'secondary' | 'tertiary' | 'destructive'
 export type ButtonForm = 'full' | 'inline' | 'icon'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
-  /** Visual role. Default: 'primary'. Only one 'emphasis' button per screen (rule: emphasis-limit). */
+  /** Visual role. Defaults to 'primary'. Use 'destructive' for actions such as deleting data. */
   variant?: ButtonVariant
   /**
    * Layout mode (Figma Form axis).
    * - 'inline' (default): content-width, sits in a row
    * - 'full': stretches to container width — page-level CTAs
-   * - 'icon': square, icon-only — requires aria-label
+   * - 'icon': circular, icon-only — requires aria-label
    * When omitted, falls back to legacy iconOnly / fullWidth booleans.
    */
   form?: ButtonForm
-  /** Height / padding tier. Default: 'md'. 'sm' (32) is product-only — Figma covers md+lg. */
+  /** Height / padding tier. Defaults to 'md'. On PC, full md/lg are 48/56px. */
   size?: ButtonSize
   /** When true, swaps to the opposite-polarity token set in either Light or Dark. Default: false. */
   inverse?: boolean
@@ -97,6 +100,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     children,
     className,
     onClick,
+    onKeyDown,
+    onKeyUp,
+    onMouseDown,
+    onPointerDown,
+    tabIndex,
     'aria-label': ariaLabel,
     ...rest
   },
@@ -139,28 +147,35 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     .join(' ')
 
   return (
-    <button
-      // Pass-through props first so the component-controlled attributes
-      // below (aria-disabled / aria-busy / onClick / type / className /
-      // ref) always win over consumer rest. Without this order a
-      // consumer could spread `aria-busy={false}` and silently break
-      // the loading announcement.
+    <BaseButton
       {...rest}
       ref={ref}
-      type={htmlType}
       form={htmlForm}
       className={classes}
       data-slot="button"
-      aria-disabled={isInert || undefined}
+      disabled={isInert}
+      focusableWhenDisabled
       aria-busy={loading || undefined}
       aria-label={ariaLabel}
-      onClick={(e) => {
-        if (isInert) {
-          e.preventDefault()
-          return
-        }
-        onClick?.(e)
-      }}
+      onClick={isInert ? undefined : onClick}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+      onMouseDown={onMouseDown}
+      onPointerDown={onPointerDown}
+      // Preserve native form and tab defaults, and let inert buttons receive
+      // pointer focus and bubble key events such as Escape to parent overlays.
+      render={(props) => (
+        <button
+          {...props}
+          type={htmlType}
+          tabIndex={tabIndex}
+          aria-disabled={isInert || undefined}
+          onKeyDown={isInert ? onKeyDown : props.onKeyDown}
+          onKeyUp={isInert ? onKeyUp : props.onKeyUp}
+          onMouseDown={isInert ? onMouseDown : props.onMouseDown}
+          onPointerDown={isInert ? onPointerDown : props.onPointerDown}
+        />
+      )}
     >
       {leftIcon && !isIconOnly && <span className={styles.icon}>{leftIcon}</span>}
       {isIconOnly ? (
@@ -170,6 +185,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       )}
       {rightIcon && !isIconOnly && <span className={styles.icon}>{rightIcon}</span>}
       {showSpinner && <span className={styles.spinner} aria-hidden="true" />}
-    </button>
+    </BaseButton>
   )
 })

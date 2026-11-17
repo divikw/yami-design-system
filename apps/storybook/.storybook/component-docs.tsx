@@ -18,6 +18,8 @@ import { AccordionDocsPage } from "./accordion-docs";
 import { AspectRatioDocsPage } from "./aspect-ratio-docs";
 import { AvatarDocsPage } from "./avatar-docs";
 import { BadgeDocsPage } from "./badge-docs";
+import { ButtonDocsPage } from "./button-docs";
+import { ButtonGroupDocsPage } from "./button-group-docs";
 import { localizeArgTypes, type DescriptionTranslations } from "./arg-descriptions";
 import styles from "./component-docs.module.css";
 
@@ -176,7 +178,7 @@ export function ComponentDocsPage() {
     </p>
   ) : null;
 
-  const customDocsPages = { accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage };
+  const customDocsPages = { accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage };
   const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
   const DocsPage = customDocsPages[componentKey as keyof typeof customDocsPages];
   if (DocsPage) return <DocsPage locale={language} />;

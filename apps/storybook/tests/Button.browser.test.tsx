@@ -1,9 +1,10 @@
+import { createRef } from "react";
 import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
 import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 
-import { Button } from "@yami/design-system/components/Button";
+import { Button, type ButtonSize } from "@yami/design-system/components/Button";
 import "@yami/design-system/tokens.css";
 
 test("warns when an icon button has no accessible label in the Vite browser runtime", () => {
@@ -29,30 +30,96 @@ test("warns when an icon button has no accessible label in the Vite browser runt
   }
 });
 
-test("associates a submit button with an external form", () => {
+test("preserves native form actions, refs and focus order", async () => {
   const form = document.createElement("form");
   form.id = "profile-form";
+  const input = document.createElement("input");
+  input.defaultValue = "Original";
+  input.value = "Edited";
+  form.append(input);
   const container = document.createElement("div");
   document.body.append(form, container);
   const root = createRoot(container);
+  const ref = createRef<HTMLButtonElement>();
   const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
+  const onClick = vi.fn();
   form.addEventListener("submit", onSubmit);
 
   try {
     flushSync(() => {
       root.render(
-        <Button htmlForm="profile-form" htmlType="submit">Save</Button>,
+        <>
+          <Button htmlForm="profile-form">Preview</Button>
+          <Button ref={ref} htmlForm="profile-form" htmlType="submit" name="action" value="save" tabIndex={-1}>Save</Button>
+          <Button htmlForm="profile-form" htmlType="reset">Reset</Button>
+          <Button htmlForm="profile-form" htmlType="submit" disabled onClick={onClick}>Unavailable</Button>
+          <Button htmlForm="profile-form" htmlType="reset" loading onClick={onClick}>Saving</Button>
+        </>,
       );
     });
 
-    const button = container.querySelector("button")!;
-    expect(button).toHaveAttribute("form", "profile-form");
-    button.click();
+    const [preview, save, reset, disabled, loading] = container.querySelectorAll("button");
+    expect(ref.current).toBe(save);
+    expect(save.form).toBe(form);
+    expect(save.tabIndex).toBe(-1);
+    expect(save.name).toBe("action");
+    expect(save.value).toBe("save");
+    expect(save).not.toHaveAttribute("aria-disabled");
+    preview.click();
+    expect(onSubmit).not.toHaveBeenCalled();
+    save.click();
     expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit.mock.calls[0][0].submitter).toBe(save);
+
+    reset.focus();
+    await userEvent.keyboard("{Tab}{Enter} ");
+    expect(disabled).toHaveFocus();
+    expect(disabled).toHaveAttribute("aria-disabled", "true");
+    await userEvent.keyboard("{Tab}{Enter} ");
+    expect(loading).toHaveFocus();
+    expect(loading).toHaveAttribute("aria-busy", "true");
+    disabled.click();
+    loading.click();
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(input.value).toBe("Edited");
+    reset.click();
+    expect(input.value).toBe("Original");
   } finally {
     root.unmount();
     container.remove();
     form.remove();
+  }
+});
+
+test("disabled actions leave pointer focus and non-activation keys available", () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const onKeyDown = vi.fn();
+  const onKeyUp = vi.fn();
+  const onMouseDown = vi.fn();
+  const onPointerDown = vi.fn();
+
+  try {
+    flushSync(() => root.render(
+      <Button disabled onKeyDown={onKeyDown} onKeyUp={onKeyUp} onMouseDown={onMouseDown} onPointerDown={onPointerDown}>Unavailable</Button>,
+    ));
+    const button = container.querySelector("button")!;
+    const options = { bubbles: true, cancelable: true };
+    const keyboardOptions = { ...options, key: "Escape" };
+    for (const [event, handler] of [
+      [new PointerEvent("pointerdown", options), onPointerDown],
+      [new MouseEvent("mousedown", options), onMouseDown],
+      [new KeyboardEvent("keydown", keyboardOptions), onKeyDown],
+      [new KeyboardEvent("keyup", keyboardOptions), onKeyUp],
+    ] as const) {
+      expect(button.dispatchEvent(event)).toBe(true);
+      expect(handler).toHaveBeenCalledOnce();
+    }
+  } finally {
+    root.unmount();
+    container.remove();
   }
 });
 
@@ -105,7 +172,7 @@ test.each([375, 1023, 1024, 1440, 1920])(
       flushSync(() => {
         root.render(
           <>
-            {(["emphasis", "primary", "secondary", "tertiary"] as const).flatMap((variant) =>
+            {(["emphasis", "primary", "secondary", "tertiary", "destructive"] as const).flatMap((variant) =>
               (["full", "inline", "icon"] as const).flatMap((form) =>
                 (["sm", "md", "lg"] as const).flatMap((size) =>
                   [false, true].map((inverse) => (
@@ -130,16 +197,18 @@ test.each([375, 1023, 1024, 1440, 1920])(
       });
 
       for (const button of container.querySelectorAll<HTMLButtonElement>("button")) {
-        const large = button.dataset.size === "lg";
+        const size = button.dataset.size as ButtonSize;
+        const large = size === "lg";
+        const desktopFull = button.dataset.form === "full" && width >= 1024;
         const desktopTextLarge = large && button.dataset.form !== "icon" && width >= 1024;
         const styles = getComputedStyle(button);
-        expect(styles.height).toBe(large ? (desktopTextLarge ? "56px" : "48px") : button.dataset.size === "sm" ? "32px" : "40px");
+        const heights = desktopFull ? { sm: "32px", md: "48px", lg: "56px" } : { sm: "32px", md: "40px", lg: "48px" };
+        expect(styles.height).toBe(heights[size]);
         expect(styles.fontSize).toBe(large ? (desktopTextLarge ? "18px" : "16px") : "14px");
         expect(styles.lineHeight).toBe("20px");
-        if (button.dataset.form !== "icon") {
-          const radiusToken = button.dataset.form === "full" ? "--radius-component-default" : "--radius-button-primary";
-          expect(styles.borderRadius).toBe(styles.getPropertyValue(radiusToken).trim());
-        }
+        const radiusToken = button.dataset.form === "full" ? "--radius-component-default" : "--radius-button-primary";
+        expect(styles.borderRadius).toBe(styles.getPropertyValue(radiusToken).trim());
+        if (button.dataset.form === "icon") expect(styles.width).toBe(heights[size]);
       }
     } finally {
       root.unmount();
@@ -159,7 +228,7 @@ test.each([false, true])("inverse disabled/loading uses disabled tokens (dark=%s
     flushSync(() => root.render(
       <>
         <span data-reference style={{ backgroundColor: "var(--button-disabled-inverse)", color: "var(--text-disabled-inverse)" }} />
-        {(["emphasis", "primary", "secondary", "tertiary"] as const).flatMap((variant) =>
+        {(["emphasis", "primary", "secondary", "tertiary", "destructive"] as const).flatMap((variant) =>
           [false, true].map((loading) => (
             <Button key={`${variant}-${loading}`} variant={variant} inverse disabled={!loading} loading={loading} onClick={onClick}>Save</Button>
           )),

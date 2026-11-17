@@ -1,6 +1,7 @@
 .page { color: var(--text-primary); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: 1.65; min-width: 0; }
 .page h1 { font-size: var(--font-size-heading-2xl); line-height: 1.2; margin: 0 0 var(--space-150); font-weight: var(--font-weight-emphasize); }
 .page h2 { margin: 0 0 var(--space-200); padding: 0; border: 0; font-size: var(--font-size-heading-md); line-height: 1.4; font-weight: var(--font-weight-emphasize); scroll-margin-top: var(--space-400); }
+.legacyAnchor { display: block; scroll-margin-top: var(--space-400); }
 .page p { margin: 0 0 var(--space-200); }
 .page section { margin-top: var(--space-600); }
 .page a { color: inherit; text-underline-offset: 4px; }
@@ -9,7 +10,12 @@
 .actions { display: flex; align-items: center; gap: var(--space-100); flex-shrink: 0; }
 .actions a { display: grid; place-items: center; width: var(--space-400); height: var(--space-400); background: var(--surface-secondary); border-radius: var(--radius-full); text-decoration: none; }
 .example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
-.preview { display: grid; place-items: center; min-height: 300px; padding: var(--space-600) var(--space-400); background: var(--surface-primary); }
+.preview { display: flow-root; background: var(--surface-primary); }
+.tabs.previewDevices { width: fit-content; margin-block: 0; margin-inline: var(--space-200) auto; }
+.previewViewport { display: flex; justify-content: center; overflow: clip; border-block-start: var(--stroke-default) solid var(--border-default); }
+.previewFrame { display: block; flex: none; max-width: none; border: 0; }
+.frameBody { margin: 0; overflow: hidden; background: var(--surface-primary); }
+.frameContent { display: grid; place-items: center; width: 100%; min-height: 252px; margin-inline: auto; padding: var(--space-400) var(--space-200); }
 .demo { width: 100%; max-width: 400px; }
 .demo h3 { margin: 0; }
 .codeBlock { position: relative; background: var(--surface-secondary); border-radius: var(--radius-surface-default); margin-top: var(--space-200); overflow: hidden; }
@@ -35,7 +41,7 @@
   background: var(--surface-secondary);
   box-shadow: calc(-1 * var(--space-150)) 0 0 var(--surface-secondary);
 }
-.codeBlock[data-expanded="false"] .codeScroll { max-height: 120px; overflow: hidden; mask-image: linear-gradient(to bottom, black 35%, transparent 100%); }
+.codeBlock[data-expanded="false"] .codeScroll { height: 120px; overflow: hidden; mask-image: linear-gradient(to bottom, black 35%, transparent 100%); }
 .copy { --button-tertiary: color-mix(in srgb, var(--surface-secondary) 80%, transparent); position: absolute; inset-block-start: var(--space-100); inset-inline-end: var(--space-100); }
 .codeBlock .copy button:not([aria-disabled="true"]):active {
   background-color: var(--button-tertiary);
@@ -63,7 +69,6 @@
 :global(.sbdocs-content):has(.page) { max-width: 720px; min-width: 0; }
 @media (max-width: 600px) {
   .header { flex-direction: column; gap: var(--space-200); }
-  .preview { padding: var(--space-300) var(--space-200); min-height: 260px; }
   .page section { margin-top: var(--space-400); }
 }
 

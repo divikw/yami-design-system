@@ -55,7 +55,7 @@ test.each([375, 1024])("ButtonLink shares Button geometry, typography, and color
   try {
     await page.viewport(width, 900);
     flushSync(() => root.render(<>
-      {[false, true].flatMap((dark) => (["primary", "secondary", "tertiary", "emphasis"] as const).flatMap((variant) =>
+      {[false, true].flatMap((dark) => (["primary", "secondary", "tertiary", "emphasis", "destructive"] as const).flatMap((variant) =>
         (["sm", "md", "lg"] as const).flatMap((size) => (["inline", "full"] as const).flatMap((form) =>
           [false, true].map((inverse) => <div key={`${dark}-${variant}-${size}-${form}-${inverse}`} className={dark ? "dark" : undefined}>
             <ButtonGroup full={form === "full"} aria-label="Order actions">

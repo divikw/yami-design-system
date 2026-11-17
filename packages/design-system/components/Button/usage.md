@@ -20,7 +20,7 @@ ButtonLink 渲染原生 `a`，共享 Button 的尺寸、层级、圆角和焦点
 | 属性 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
 | `href` | `string` | 必填 | 真实导航或文件地址 |
-| `variant` | `emphasis / primary / secondary / tertiary` | `primary` | 与 Button 相同的视觉层级 |
+| `variant` | `emphasis / primary / secondary / tertiary / destructive` | `primary` | 与 Button 相同的视觉变体 |
 | `size` | `sm / md / lg` | `md` | 与 Button 相同的响应式尺寸 |
 | `form` | `inline / full` | `inline` | 内容宽度或填满父容器；不支持 icon 形态 |
 | `inverse` | `boolean` | `false` | 使用相反明暗表面的令牌 |
@@ -52,6 +52,7 @@ ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态�
 | `primary` | 黑色 / 反色文字 | 通用主操作、提交表单 |
 | `secondary` | 灰色 / 主要文字 | 与主操作配对的次要入口 |
 | `tertiary` | 透明 / 主要文字 | 低强调的轻量操作 |
+| `destructive` | 红色淡底 / 红色文字 | 删除地址、移除成员等可能造成数据丢失或不可逆后果的操作 |
 
 每个实际页面最多一个 `emphasis` 入口，ButtonLink 也计入限制。形态由 `form` 决定，不由视觉层级决定。Tertiary 默认无填充和描边，悬浮 / 按下添加背景反馈，键盘聚焦保留焦点框。
 
@@ -60,12 +61,12 @@ ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态�
 | size | 移动端 | 桌面端（≥1024px） | 使用场景 |
 |---|---|---|---|
 | `sm` | 32px | 32px | 紧凑操作；文字形态为产品扩展 |
-| `md` | 40px | 40px | 默认尺寸 |
-| `lg` | 48px | 文字 56px；图标 48px | 主要行动入口、页面底部操作 |
+| `md` | 40px | 通栏 48px，行内与图标 40px | 默认尺寸 |
+| `lg` | 48px | 通栏 56px，行内与图标 48px | 主要行动入口、页面底部操作 |
 
 SM / MD 标签为 14px，LG 标签在移动端为 16px、桌面端为 18px，行高均为 20px；1440px 不再次改变字号。ButtonLink 沿用文字按钮尺寸。
 
-SM / MD 文字按钮最小宽度为 44px，通过伪元素将纵向点击区域扩展至 44px；图标按钮扩展到 44×44px。扩展区域不占布局空间，需避免祖先裁切或相邻目标重叠。需要可见的 48px 移动端按钮时使用 LG。Web 扩展区域与原生 iOS / Android 的平台要求分别处理。
+SM / MD 文字按钮最小宽度为 44px，实际高度不足 44px 时通过伪元素扩展纵向点击区域；SM / MD 图标按钮扩展到 44×44px。扩展区域不占布局空间，需避免祖先裁切或相邻目标重叠。需要可见的 48px 移动端按钮时使用 LG。Web 扩展区域与原生 iOS / Android 的平台要求分别处理。
 
 ## 形态
 
@@ -73,7 +74,7 @@ SM / MD 文字按钮最小宽度为 44px，通过伪元素将纵向点击区域�
 |---|---|---|
 | `inline` | 内容宽度，胶囊圆角 | 默认形态 |
 | `full` | 填满父容器，8px 圆角 | 结算、弹窗底部等操作区 |
-| `icon` | 正方形，仅图标 | 仅 Button 支持，必须提供 `aria-label` |
+| `icon` | 等宽高、正圆，仅图标 | 仅 Button 支持，必须提供 `aria-label` |
 
 ```tsx
 <Button form="full" variant="emphasis">前往结算</Button>
@@ -122,7 +123,7 @@ Card 不裁切子项焦点框和扩展点击区域；贴边图片由媒体区域
 
 ## 禁用状态
 
-禁用使用语义背景和文字颜色，不能用透明度表现。Button 通过 `aria-disabled` 保持键盘可聚焦，并拦截点击；ButtonLink 不支持禁用操作。
+禁用使用语义背景和文字颜色，不能用透明度表现。Button 由 Base UI 管理禁用时的激活拦截，使用 `aria-disabled` 保持键盘可聚焦；ButtonLink 保留原生链接行为。
 
 ```tsx
 <Button disabled={!canSubmit}>提交</Button>
@@ -190,7 +191,7 @@ Use `<Button>` to perform an action: submit a form, add to cart, save, download 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `href` | `string` | Required | Real navigation or file destination |
-| `variant` | `emphasis / primary / secondary / tertiary` | `primary` | Same hierarchy as Button |
+| `variant` | `emphasis / primary / secondary / tertiary / destructive` | `primary` | Same variants as Button |
 | `size` | `sm / md / lg` | `md` | Same responsive text-button sizes |
 | `form` | `inline / full` | `inline` | Content-width or full-width; no icon form |
 | `inverse` | `boolean` | `false` | Opposite-polarity surface tokens |
@@ -224,6 +225,7 @@ Links and buttons may appear together. Keep navigation as a real link and the ac
 | `primary` | `--button-primary` (black) | Depends on `form` | Generic primary actions, form submits, non-emphasis CTAs |
 | `secondary` | `--button-secondary` (grey) | Depends on `form` | Secondary actions paired with a primary (Cancel / Back / Skip) |
 | `tertiary` | `--button-tertiary` (transparent) | Depends on `form` | Low-emphasis actions; lightweight card-level actions |
+| `destructive` | Subtle red tint with red text | Depends on `form` | Actions that can remove data or have irreversible effects, such as deleting an address |
 
 ### ⚠️ `emphasis-limit` rule (design.md)
 
@@ -248,15 +250,15 @@ Tertiary is a low-emphasis button with a transparent background and no outline a
 | Size | Mobile | Desktop (≥1024px) | Use when |
 |---|---|---|---|
 | `sm` | 32px | 32px | Inline table actions, filter chips, compact contexts. **Icon form only** in Figma; YAMI product extends it to text buttons. |
-| `md` | 40px | 40px | **Default.** Most buttons in the product |
-| `lg` | 48px | **56px** (text) · 48px (icon) | Hero CTAs, mobile primary action at the bottom of the screen, full-width sheet actions. Text-bearing `lg` bumps to 56 at ≥1024px to match PC Figma; icon-only `lg` stays 48×48. |
+| `md` | 40px | 48px (full) · 40px (inline and icon) | **Default.** Most buttons in the product |
+| `lg` | 48px | 56px (full) · 48px (inline and icon) | Hero CTAs, mobile primary actions at the bottom of the screen, and full-width sheet actions |
 
 Text-bearing `lg` uses 16px labels on mobile and 18px labels at ≥1024px
 (`--font-size-button-lg-desktop`), including ≥1440px. Line-height stays 20px.
-This applies to all four hierarchies and both surfaces. Icon-only `lg` and
+This applies to all variants and both surfaces. Icon-only `lg` and
 `sm`/`md` typography are unchanged.
 
-Web buttons with `sm` / `md` sizes reserve at least 44px of width for text labels and extend their pointer target to 44px vertically using a pseudo-element; icon buttons extend to 44×44px. This does not reserve layout space: leave enough room around compact buttons to avoid overlapping targets. For a visible 48px mobile target, use `size="lg"`. Native iOS / Android targets are separate platform requirements, not a guarantee of this Web component.
+Text buttons with `sm` / `md` sizes reserve at least 44px of width and use a pseudo-element to extend pointer targets where the visible height is below 44px. Icon buttons at these sizes extend to 44×44px. Leave room around compact buttons to avoid overlapping targets. For a visible 48px mobile target, use `size="lg"`. Native iOS / Android targets are separate platform requirements.
 
 ## Form
 
@@ -266,7 +268,7 @@ The `form` prop mirrors the Figma Form axis (Mobile v2 + PC v2). It controls lay
 |---|---|---|
 | `full` | Stretches to container width; uses `--radius-component-default` (8px) | Page-level CTAs (checkout, sheet footer, mobile bottom-fixed action) |
 | `inline` | Content-width; uses `--radius-button-primary` (pill) for every hierarchy | **Default.** Most buttons |
-| `icon` | Square (1:1), no label; keeps the hierarchy-specific radius | Compact actions where the icon alone communicates the verb. **Requires `aria-label`.** |
+| `icon` | Circular with equal width and height, icon only | Compact actions where the icon alone communicates the verb. **Requires `aria-label`.** |
 
 ```tsx
 <Button form="full" variant="emphasis">Checkout</Button>
@@ -351,6 +353,8 @@ Card does not clip child focus outlines or extended hit areas. Crop edge-to-edge
 ## Disabled state
 
 Uses `--button-disabled` background + `--text-disabled` foreground. **Never** use CSS `opacity` to imply disabled (rule: `no-opacity-disabled`) — it wrecks contrast unpredictably and may fail WCAG AA with dark backgrounds.
+
+Base UI blocks activation while Button remains keyboard-focusable with `aria-disabled`. ButtonLink keeps native link behavior.
 
 ```tsx
 <Button disabled={!canSubmit}>Submit</Button>

@@ -41,7 +41,7 @@ import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
 </ButtonGroup>
 ```
 
-`full` 不修改 Button / ButtonLink 的形态或尺寸。移动端 LG 文字按钮高 48px，桌面端从 1024px 起为 56px；MD 高 40px。
+子项的形态和高度由各自的 `form` 和 `size` 决定。通栏 MD / LG 在移动端高 40 / 48px，桌面端从 1024px 起高 48 / 56px。行内 MD / LG 在两端都高 40 / 48px。
 
 ## 交互与无障碍
 
@@ -97,7 +97,7 @@ Choose by behavior: saving, cancelling, and generating a receipt use Button; nav
 </ButtonGroup>
 ```
 
-`full` does not change Button / ButtonLink form or size. LG text entries are 48px on mobile and 56px from 1024px; MD is 40px.
+Each child’s height follows its own `form` and `size`. Full-width MD / LG are 40 / 48px on mobile and 48 / 56px from 1024px. Inline MD / LG are 40 / 48px on both.
 
 ## Interaction and accessibility
 
