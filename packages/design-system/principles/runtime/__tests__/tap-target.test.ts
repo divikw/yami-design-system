@@ -12,85 +12,41 @@ describe('tap-target (runtime)', () => {
     vi.restoreAllMocks()
   })
 
-  it('passes when all interactive elements meet 44×44 minimum', () => {
+  function mountTarget(width: number, height: number) {
     const button = createElement('button', {
-      textContent: 'Buy Now',
-      styles: { width: '120px', height: '48px', display: 'block' },
+      textContent: 'Action',
+      styles: { width: `${width}px`, height: `${height}px`, display: 'block' },
     })
-    const link = createElement('a', {
-      textContent: 'Learn more',
-      attributes: { href: '/about' },
-      styles: { display: 'inline-block', width: '100px', height: '44px' },
-    })
-
-    cleanup = mountFixture(button, link)
-
-    // happy-dom doesn't compute layout, so mock getBoundingClientRect
+    cleanup = mountFixture(button)
+    // happy-dom has no layout engine.
     vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
-      width: 120,
-      height: 48,
-      x: 0,
-      y: 0,
-      top: 0,
-      left: 0,
-      bottom: 48,
-      right: 120,
+      width, height, x: 0, y: 0, top: 0, left: 0, bottom: height, right: width,
       toJSON: () => {},
     })
-    vi.spyOn(link, 'getBoundingClientRect').mockReturnValue({
-      width: 100,
-      height: 44,
-      x: 0,
-      y: 50,
-      top: 50,
-      left: 0,
-      bottom: 94,
-      right: 100,
-      toJSON: () => {},
-    })
+  }
 
-    const violations = tapTarget.check(document.body)
-    expect(violations).toEqual([])
+  it.each([24, 32, 44])('accepts a %ipx target without requiring the 44px recommendation', (size) => {
+    mountTarget(size, size)
+    expect(tapTarget.check(document.body)).toEqual([])
   })
 
-  it('flags interactive elements smaller than 44×44', () => {
-    const smallButton = createElement('button', {
-      textContent: 'X',
-      styles: { width: '24px', height: '24px', display: 'block' },
-    })
-
-    cleanup = mountFixture(smallButton)
-
-    // Mock small bounding rect
-    vi.spyOn(smallButton, 'getBoundingClientRect').mockReturnValue({
-      width: 24,
-      height: 24,
-      x: 0,
-      y: 0,
-      top: 0,
-      left: 0,
-      bottom: 24,
-      right: 24,
-      toJSON: () => {},
-    })
-
+  it.each([[23, 24], [24, 23], [20, 20]])('requests exception review for a %i×%i target', (width, height) => {
+    mountTarget(width, height)
     const violations = tapTarget.check(document.body)
-
-    expect(violations.length).toBeGreaterThanOrEqual(1)
-    expect(violations[0]?.ruleId).toBe('tap-target')
-    expect(violations[0]?.severity).toBe('warning')
+    expect(violations).toHaveLength(1)
+    expect(violations[0]).toMatchObject({
+      ruleId: 'tap-target', severity: 'warning', measured: { width, height },
+    })
+    expect(violations[0]?.message).toContain('exceptions may apply')
+    expect(violations[0]?.suggestion).toContain('spacing or other exceptions')
     expect(violations[0]?.selector).toBeTruthy()
-    expect(violations[0]?.measured).toEqual({ width: 24, height: 24 })
   })
 
   it('skips hidden elements', () => {
-    const hiddenButton = createElement('button', {
+    cleanup = mountFixture(createElement('button', {
       textContent: 'Hidden',
       styles: { width: '10px', height: '10px', display: 'none' },
-    })
-
-    cleanup = mountFixture(hiddenButton)
-    const violations = tapTarget.check(document.body)
-    expect(violations).toEqual([])
+    }))
+    expect(tapTarget.check(document.body)).toEqual([])
   })
 })

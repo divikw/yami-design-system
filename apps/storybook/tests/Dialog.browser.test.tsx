@@ -66,8 +66,8 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       const icon = close.querySelector<HTMLImageElement>("img")!;
       expect(close.getBoundingClientRect().width).toBe(32);
       expect(close.getBoundingClientRect().height).toBe(32);
-      expect(icon.getBoundingClientRect().width).toBe(20);
-      expect(icon.getBoundingClientRect().height).toBe(20);
+      expect(icon.getBoundingClientRect().width).toBe(24);
+      expect(icon.getBoundingClientRect().height).toBe(24);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       expect(document.activeElement).toBe(close);
       await userEvent.tab();

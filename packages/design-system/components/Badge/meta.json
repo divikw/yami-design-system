@@ -288,7 +288,7 @@
   },
 
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": ["react", "@base-ui/react"],
     "peer": [],
     "devOnly": []
   },

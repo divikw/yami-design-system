@@ -59,3 +59,7 @@ export * from './TrendingSearches'
 export * from './QuantitySelect'
 export * from './Drawer'
 export * from './Coupon'
+
+export * from "./Switch";
+export * from "./Select";
+export * from "./Popover";

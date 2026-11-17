@@ -77,7 +77,7 @@
     "ariaPattern": "radiogroup",
     "notes": "Base UI preserves exclusive selection, roving focus, and hidden native form inputs. Name both the group and every item."
   },
-  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": ["@base-ui/react"], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
   "usageRef": "./usage.md",
   "examples": [
     "./examples.tsx#PaymentMethodRadioGroup",

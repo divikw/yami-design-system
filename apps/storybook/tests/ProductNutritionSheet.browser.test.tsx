@@ -36,12 +36,12 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
       expect(closeRect.height).toBe(32);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       expect(getComputedStyle(close, "::before").height).toBe("44px");
-      expect(sheet.getBoundingClientRect().right - closeRect.right).toBe(12);
-      expect(closeRect.top - sheet.getBoundingClientRect().top).toBe(8);
-      expect(closeIconRect.width).toBe(20);
-      expect(closeIconRect.height).toBe(20);
-      expect(sheet.getBoundingClientRect().right - closeIconRect.right).toBe(18);
-      expect(closeIconRect.top - sheet.getBoundingClientRect().top).toBe(14);
+      expect(sheet.getBoundingClientRect().right - closeRect.right).toBe(16);
+      expect(closeRect.top - sheet.getBoundingClientRect().top).toBe(16);
+      expect(closeIconRect.width).toBe(24);
+      expect(closeIconRect.height).toBe(24);
+      expect(sheet.getBoundingClientRect().right - closeIconRect.right).toBe(20);
+      expect(closeIconRect.top - sheet.getBoundingClientRect().top).toBe(20);
       await page.getByRole("button", { name: "Close nutrition facts" }).hover();
       await expect.poll(() => getComputedStyle(close).backgroundColor).toBe("rgba(0, 0, 0, 0)");
       const language = sheet.querySelector("select")!;

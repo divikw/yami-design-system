@@ -25,7 +25,7 @@
   "rules": {
     "radii": { "ruleId": "no-custom-radii", "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes." },
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
-    "tapTarget": { "ruleId": "tap-target", "note": "Close/back controls are visually 32px with centered 20px icons and Button's 44px hit-area extender." }
+    "tapTarget": { "ruleId": "tap-target", "note": "Close/back controls are visually 32px with centered 24px close icons and 20px back arrows and Button's 44px hit-area extender." }
   },
   "tokens": ["--surface-primary", "--text-primary", "--overlay-scrim", "--divider-default", "--radius-surface-sheet", "--radius-surface-default", "--font-size-heading-2xl", "--font-weight-emphasize", "--space-100", "--space-200", "--space-600",
     "--focus-ring"

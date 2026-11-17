@@ -33,7 +33,8 @@ const descriptions = {
 };
 
 const meta = {
-  title: "YAMI/Components/Navigation/Pagination",
+  id: "yami-components-navigation-pagination",
+  title: "YAMI/Components/Pagination",
   component: Pagination,
   globals: { viewport: { value: "yamiDesktopMd", isRotated: false } },
   decorators: [(Story, { viewMode }) => (
@@ -133,4 +134,19 @@ export const Disabled: Story = {
       </div>
     );
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: (_, { globals }) => <p>{globals.locale === "en" ? "Pagination appears from 1024px. On mobile, the page provides its own way to continue browsing." : "分页组件从 1024px 起显示。移动端由页面提供继续浏览的方式。"}</p>,
 };

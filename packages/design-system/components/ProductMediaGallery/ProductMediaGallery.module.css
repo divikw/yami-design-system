@@ -478,8 +478,8 @@
 
 .previewClose {
   position: absolute;
-  top: var(--space-300);
-  right: var(--space-300);
+  top: var(--space-200);
+  right: var(--space-200);
   z-index: 1;
 }
 
@@ -560,8 +560,7 @@
   }
 
   .previewClose {
-    top: calc(var(--space-100) + env(safe-area-inset-top, 0px));
-    right: var(--space-100);
+    top: calc(var(--space-200) + env(safe-area-inset-top, 0px));
   }
 
   .previewSidebar {

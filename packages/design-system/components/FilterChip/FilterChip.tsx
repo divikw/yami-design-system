@@ -7,7 +7,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-import { Popover } from "@base-ui/react/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 
 import { Button } from "../Button";
 import { Sheet } from "../Sheet";
@@ -175,17 +175,15 @@ function FilterChipPopup({
   }
 
   return (
-    <Popover.Root open={open} onOpenChange={onOpenChange}>
-      <Popover.Trigger render={trigger} />
-      <Popover.Portal>
-        <Popover.Positioner className={styles.menuPositioner} side="bottom" align="start" sideOffset={4} collisionPadding={16} collisionAvoidance={category ? { side: "none", align: "shift", fallbackAxisSide: "none" } : undefined}>
-          <Popover.Popup className={[styles.menuPopup, category && styles.categoryPopup].filter(Boolean).join(" ")} aria-label={ariaLabel} data-slot={slot} data-selection-mode={selectionMode}>
-            {children}
-            {footer}
-          </Popover.Popup>
-        </Popover.Positioner>
-      </Popover.Portal>
-    </Popover.Root>
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <PopoverTrigger render={trigger} />
+      <PopoverContent className={category ? styles.categoryPopup : undefined} aria-label={ariaLabel}
+        collisionAvoidance={category ? { side: "none", align: "shift", fallbackAxisSide: "none" } : undefined}
+        render={<div data-slot={slot} />} data-selection-mode={selectionMode}>
+        {children}
+        {footer}
+      </PopoverContent>
+    </Popover>
   );
 }
 

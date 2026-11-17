@@ -5,13 +5,13 @@ import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 
 import styles from "./RadioGroup.module.css"
 
-export type RadioGroupProps<Value = unknown> = RadioGroupPrimitive.Props<Value>
-export type RadioGroupItemProps<Value = unknown> = RadioPrimitive.Root.Props<Value>
+export type RadioGroupProps<Value extends string = string> = RadioGroupPrimitive.Props<Value | null>
+export type RadioGroupItemProps<Value extends string = string> = RadioPrimitive.Root.Props<Value>
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
 }
-export function RadioGroup<Value>({ className, ...props }: RadioGroupProps<Value>) {
+export function RadioGroup<Value extends string>({ className, ...props }: RadioGroupProps<Value>) {
   const mergedClassName =
     typeof className === "function"
       ? (state: RadioGroupPrimitive.State) => cx(styles.group, className(state))
@@ -26,7 +26,7 @@ export function RadioGroup<Value>({ className, ...props }: RadioGroupProps<Value
   )
 }
 
-export function RadioGroupItem<Value>({ className, ...props }: RadioGroupItemProps<Value>) {
+export function RadioGroupItem<Value extends string>({ className, render, ...props }: RadioGroupItemProps<Value>) {
   const mergedClassName = (state: RadioPrimitive.Root.State) =>
     cx(
       styles.item,
@@ -36,9 +36,10 @@ export function RadioGroupItem<Value>({ className, ...props }: RadioGroupItemPro
 
   return (
     <RadioPrimitive.Root
+      nativeButton
       {...props}
       className={mergedClassName}
-      data-slot="radio-group-item"
+      render={render ?? <button data-slot="radio-group-item" />}
     >
       <RadioPrimitive.Indicator className={styles.indicator} data-slot="radio-group-indicator">
         <span className={styles.dot} />

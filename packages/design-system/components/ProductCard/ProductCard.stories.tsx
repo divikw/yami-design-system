@@ -9,7 +9,7 @@ type ProductLocale = "zh" | "en";
 
 const meta = {
   id: "yami-components-commerce-productcard",
-  title: "YAMI/Components/Commerce/Products/Product Card",
+  title: "YAMI/Components/Product Card",
   component: ProductCard,
   decorators: [
     (Story, { args }) => (
@@ -432,4 +432,20 @@ export const PC: Story = {
 export const Mobile: Story = {
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: Playground.render,
+};
+
+export const PCPreview: Story = {
+  ...PC,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

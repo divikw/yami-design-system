@@ -34,7 +34,8 @@
   "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -229,5 +230,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "857325f9dacf9c5d0b8e81011b995db216575e121f9fe369f03756a589727976"
+  "contentDigest": "02b3fb0e8636daed9b52f6a1a173038aeef31083226a7f677edf0be4f7838213"
 }

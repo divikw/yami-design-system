@@ -1,3 +1,10 @@
+.group {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+}
+
 .root {
   display: flex;
   min-width: 0;
@@ -34,17 +41,12 @@
   cursor: pointer;
 }
 
-.trigger:active:not(:disabled) {
-  background: var(--button-tertiary-active);
-}
-
 .trigger:focus-visible {
   outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: var(--space-025);
 }
 
 .trigger:disabled {
-  background: var(--button-disabled);
   color: var(--text-disabled);
   cursor: not-allowed;
 }
@@ -62,7 +64,7 @@
   mask: url("../../assets/icons/system/add.svg") center / contain no-repeat;
 }
 
-.icon[data-direction="up"] {
+.trigger[data-panel-open] .icon {
   mask-image: url("../../assets/icons/system/minus.svg");
 }
 
@@ -74,7 +76,7 @@
   overflow-wrap: anywhere;
 }
 
-.content[hidden] {
+.content[hidden]:not([hidden="until-found"]) {
   display: none;
 }
 

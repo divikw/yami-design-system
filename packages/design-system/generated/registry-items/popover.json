@@ -1,0 +1,141 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "popover",
+  "title": "Popover",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile.",
+  "source": "components/Popover",
+  "files": [
+    {
+      "source": "components/Popover/examples.module.css",
+      "target": "components/Popover/examples.module.css"
+    },
+    {
+      "source": "components/Popover/index.ts",
+      "target": "components/Popover/index.ts"
+    },
+    {
+      "source": "components/Popover/Popover.module.css",
+      "target": "components/Popover/Popover.module.css"
+    },
+    {
+      "source": "components/Popover/Popover.tsx",
+      "target": "components/Popover/Popover.tsx"
+    },
+    {
+      "source": "components/Popover/story-translations.ts",
+      "target": "components/Popover/story-translations.ts"
+    }
+  ],
+  "exports": [
+    "Popover",
+    "PopoverClose",
+    "PopoverContent",
+    "PopoverContentProps",
+    "PopoverDescription",
+    "PopoverProps",
+    "PopoverTitle",
+    "PopoverTrigger"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Popover/usage.md",
+    "stories": [
+      "components/Popover/Popover.stories.tsx"
+    ],
+    "examples": [
+      "components/Popover/examples.tsx#BasicPopover"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--fill-primary",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--line-height-heading-sm",
+      "--radius-surface-default",
+      "--stroke-default",
+      "--text-primary"
+    ],
+    "rules": [
+      "focus-style",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--fill-primary": {
+        "property": "background",
+        "selector": ".content"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".content"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".content"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".content"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".title, .description"
+      },
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".title"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".title"
+      },
+      "--line-height-heading-sm": {
+        "property": "line-height",
+        "selector": ".title"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".description"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".description"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "dialog",
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "space",
+        "enter",
+        "escape"
+      ],
+      "tapTargetMin": 44,
+      "notes": "Name content with PopoverTitle or aria-label and provide a named trigger. Escape dismisses the inner layer and restores focus."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "b1f51ae2c0661283f7313002931d79082e7f3abd4c50d57a27491dc09c65aaa3"
+}

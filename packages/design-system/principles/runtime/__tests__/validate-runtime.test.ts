@@ -38,7 +38,7 @@ describe('validateRuntime (integration)', () => {
   it('catches multiple violations across different rules', () => {
     // Small tap target (tap-target violation)
     // Note: happy-dom getBoundingClientRect returns 0×0 (no layout engine),
-    // which is still < 44 so tap-target fires correctly.
+    // which is still < 24 so tap-target requests a rendered target review.
     const smallButton = createElement('button', {
       textContent: 'X',
       styles: { width: '20px', height: '20px', display: 'block' },

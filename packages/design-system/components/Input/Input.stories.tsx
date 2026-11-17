@@ -4,7 +4,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Input, type InputProps, type InputState } from "./Input"
 
 const meta = {
-  title: "YAMI/Components/Forms/Input",
+  id: "yami-components-forms-input",
+  title: "YAMI/Components/Input",
   component: Input,
   parameters: {
     layout: "padded",
@@ -282,3 +283,19 @@ export const WithAction: Story = {
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: (args, { globals }) => <ActionInputDemo {...args} english={globals.locale === "en"} />,
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

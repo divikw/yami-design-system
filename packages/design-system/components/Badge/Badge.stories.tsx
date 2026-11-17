@@ -3,7 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Badge, type BadgeType } from "./Badge"
 
 const meta = {
-  title: "YAMI/Components/Data Display/Badge",
+  id: "yami-components-data-display-badge",
+  title: "YAMI/Components/Badge",
   component: Badge,
   parameters: {
     layout: "centered",
@@ -300,3 +301,19 @@ export const SolidPrimary: Story = {
 export const TypeWithOverride: Story = {
   args: { type: "sale", color: "green", children: "Sold (overridden)" },
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

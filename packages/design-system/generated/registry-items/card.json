@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "source": "components/Card",
   "files": [
     {
@@ -59,9 +59,9 @@
       "--border-default-inverse",
       "--focus-ring",
       "--radius-surface-default",
-      "--space-150",
+      "--space-100",
       "--space-200",
-      "--space-300",
+      "--space-400",
       "--surface-inverse",
       "--surface-primary",
       "--surface-secondary",
@@ -121,17 +121,17 @@
         "property": "border-radius",
         "selector": ".card"
       },
-      "--space-150": {
-        "property": "padding",
-        "selector": ".pad-sm"
-      },
       "--space-200": {
-        "property": "padding",
-        "selector": ".pad-md"
+        "property": "padding (min-width 1024px)",
+        "selector": ".pad-sm, .pad-md, .pad-lg"
       },
-      "--space-300": {
-        "property": "padding",
-        "selector": ".pad-lg"
+      "--space-400": {
+        "property": "min-width / min-height",
+        "selector": ".interactive"
+      },
+      "--space-100": {
+        "property": "padding (below 1024px)",
+        "selector": ".pad-sm, .pad-md, .pad-lg"
       }
     }
   },
@@ -139,16 +139,16 @@
     "accessibility": {
       "role": "none (div); native button or link when as selects those hosts",
       "wcagLevel": "AA",
-      "tapTargetMin": 44,
+      "tapTargetMin": 32,
       "keyboardNav": [
         "tab",
         "enter",
         "space"
       ],
       "ariaPattern": "none (default) | native button | native link",
-      "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
+      "notes": "The 32px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "aebbda639a6dadcd2c70a9f4ae94c987f8166b0d8ffd74bc10e8cd3cc0ccd7e8"
+  "contentDigest": "7d08c9f8919165b0069c9cf6fd4d9a587a8ef2c19755a4c5f9a8b3e733d5de49"
 }

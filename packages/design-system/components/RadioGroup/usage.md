@@ -34,3 +34,8 @@ Dark theme is automatic through semantic aliases. RadioGroup has no `dark` prop 
 - Wrap each default `RadioGroupItem` in a visible `<label>`, or pass `aria-label` when no visible label is rendered. Use Base UI's native-button pattern for sibling labels.
 - Put `name`, `required`, `value`, `defaultValue`, `onValueChange`, and group-level `disabled` on `RadioGroup`.
 - Each item reserves a 40×40px layout and pointer target at every breakpoint, with a centered 20×20px visible circle. The keyboard focus outline follows the visible circle. Keep the full 40px layout space so adjacent targets cannot overlap. In option lists, the enclosing native `<label>` keeps the full row clickable.
+
+
+### State changes
+
+Use string values for radio options. `onValueChange` reports the selected value and Base UI change details. Use `null` for an empty controlled group.

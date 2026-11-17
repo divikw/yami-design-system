@@ -1,0 +1,4 @@
+.stateSummary { display: flex; align-items: center; gap: var(--space-050); list-style: none; cursor: pointer; }
+.stateSummary::-webkit-details-marker { display: none; }
+.stateSummary > svg { flex-shrink: 0; }
+details[open] > .stateSummary > svg { transform: rotate(90deg); }

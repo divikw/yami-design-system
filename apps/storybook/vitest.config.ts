@@ -7,26 +7,32 @@ import { defineConfig } from "vitest/config";
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
 
+const storybookDependencies = [
+  "@yami/design-system > @base-ui/react/accordion",
+  "@yami/design-system > @base-ui/react/avatar",
+  "@yami/design-system > @base-ui/react/checkbox",
+  "@yami/design-system > @base-ui/react/popover",
+  "@yami/design-system > @base-ui/react/radio",
+  "@yami/design-system > @base-ui/react/radio-group",
+  "@yami/design-system > @base-ui/react/select",
+  "@yami/design-system > @base-ui/react/switch",
+  "@yami/design-system > @base-ui/react/use-render",
+  "@storybook/react-vite",
+  "@storybook/addon-docs/blocks",
+  "storybook/theming",
+  "storybook/internal/components",
+  "react/jsx-dev-runtime",
+  "storybook/test",
+];
+
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    include: [
-      "@yami/design-system > @base-ui/react/avatar",
-      "@base-ui/react/checkbox",
-      "@base-ui/react/radio",
-      "@base-ui/react/radio-group",
-      "@yami/design-system > @base-ui/react/select",
-      "@storybook/react-vite",
-      "@storybook/addon-docs/blocks",
-      "storybook/theming",
-      "react/jsx-dev-runtime",
-      "storybook/test",
-    ],
-  },
+  optimizeDeps: { include: storybookDependencies },
   test: {
     projects: [
       {
         extends: false,
+        optimizeDeps: { include: storybookDependencies },
         plugins: [
           storybookTest({
             configDir: path.join(directory, ".storybook"),
@@ -46,7 +52,7 @@ export default defineConfig({
       {
         extends: false,
         plugins: [react()],
-        optimizeDeps: { include: ["@yami/design-system > @base-ui/react/avatar", "@yami/design-system > @base-ui/react/select", "@storybook/react-vite", "@storybook/addon-docs/blocks", "storybook/theming", "storybook/test"] },
+        optimizeDeps: { include: storybookDependencies },
         test: {
           name: "browser",
           include: ["tests/**/*.browser.test.tsx"],

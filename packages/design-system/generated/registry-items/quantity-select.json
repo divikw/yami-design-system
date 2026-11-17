@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.3.1",
-  "description": "Controlled cart quantity select with a 60×24px pill, a 44px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
+  "description": "Controlled cart quantity select with a 60×32px pill, a 32px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
   "source": "components/QuantitySelect",
   "files": [
     {
@@ -26,12 +26,13 @@
     "QuantitySelect",
     "QuantitySelectProps"
   ],
-  "composes": [],
+  "composes": [
+    "Select"
+  ],
   "dependencies": {
     "runtime": [
       "react",
-      "react-dom",
-      "@base-ui/react/select"
+      "react-dom"
     ],
     "peer": [],
     "devOnly": []
@@ -64,6 +65,7 @@
       "--space-150",
       "--space-200",
       "--space-300",
+      "--space-400",
       "--stroke-default",
       "--stroke-thick",
       "--surface-primary",
@@ -109,13 +111,17 @@
       "--radius-button-primary": {
         "property": "border-radius",
         "selector": ".display"
+      },
+      "--space-400": {
+        "property": "height / min-height",
+        "selector": ".display, .input, .control, .select, .inputTarget, .option"
       }
     }
   },
   "quality": {
     "accessibility": {
       "wcagLevel": "AA",
-      "tapTargetMin": 44,
+      "tapTargetMin": 28,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -126,5 +132,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "3cd053e99abb902a0b7cbc39adfe0b8790c0b2908989cea4d23db6a42678a23c"
+  "contentDigest": "24438c6847613a0a93d291624ef37c3e3a12e26f37ebf79b6d054b61809c86c1"
 }

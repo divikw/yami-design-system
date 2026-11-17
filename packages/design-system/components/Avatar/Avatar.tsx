@@ -58,6 +58,7 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
     >
       <span className={styles.portrait}>
         <AvatarPrimitive.Image
+          keepMounted
           src={imageSrc}
           alt=""
           aria-hidden="true"

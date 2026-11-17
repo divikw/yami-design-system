@@ -409,7 +409,12 @@ Focus geometry follows the visible control boundary and its corner radius, not a
 <!-- rule-id: card-no-border -->
 <!-- rule-id: tap-target -->
 
-> **Rules governing this section** — `emphasis-limit` (1 emphasis Button per screen), `card-no-border` (Cards default to no border), `tap-target` (iOS 44pt / Android 48dp minimum). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
+
+Web target sizing follows [WCAG 2.2 SC 2.5.8 (AA)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html): a 24×24 CSS px target or an applicable spacing, equivalent-control, inline, user-agent-control or essential exception. For the spacing exception, 24px-diameter circles centered on undersized target bounding boxes must not intersect another target or another undersized target's circle. A 44×44 CSS px target is an enhanced [SC 2.5.5 (AAA)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) goal and a recommendation for frequent or important touch actions. It is not a global component height. Native pt/dp guidance must not be treated as Web CSS-pixel layout requirements.
+
+Static checks cannot infer hit areas from a `size` prop. Runtime bounds below 24px request review of actual hit areas and exceptions; they are not a definitive WCAG failure. Bounds alone cannot verify circular geometry, pseudo-element hit areas, clipping, overlapping targets or all exceptions. Existing component-specific 44px hit-area enhancements may remain; they do not require every component to reserve 44px in layout.
+
+> **Rules governing this section** — `emphasis-limit` (1 emphasis Button per screen), `card-no-border` (Cards default to no border), `tap-target` (Web 24×24 CSS px minimum or applicable exceptions; 44×44px recommended for important touch controls). Full bilingual prose: [Hard Rules summary](#hard-rules-validator-linked).
 
 YAMI's current inventory is generated in [`generated/catalog.json`](./generated/catalog.json). Full anatomy, props, and `tokenBindings` live in each component's `meta.json` and `usage.md` under `components/<name>/`. Below is the canonical at-a-glance map.
 
@@ -426,7 +431,7 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 | **States**     | default · hover · active · disabled · loading · focus-visible                                    |
 | **Radius**     | `form=full` → `--radius-component-default` (8px) · `form=inline` → `--radius-button-primary` (pill) · `form=icon` keeps hierarchy-specific radius |
 | **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN and KO 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
-| **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. Native iOS 44pt / Android 48dp are separate requirements.                                    |
+| **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. This is Button behavior, not a global layout minimum. Web targets follow the 24px baseline and applicable exceptions.                                    |
 | **Rate limit** | **`emphasis` = 1 per screen.** No exceptions. (rule `emphasis-limit`)                            |
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
 | **Focus**      | 2px `--focus-ring` outline, 2px offset. (rule `focus-style`)                                   |
@@ -490,10 +495,11 @@ App destination navigation extracted from the cart footer. / 从购物车底部�
 
 Inline disclosure extracted from ProductDetailPage's DetailDisclosure. / 从商品详情页现有 DetailDisclosure 抽取的内联折叠面板。
 
-- Each panel expands independently, with `label`, `children`, `defaultExpanded` (false), or controlled `expanded` / `onExpandedChange`. The host can coordinate exclusive expansion. `disabled` prevents toggling; `headingLevel` supports 2–6, defaulting to 2.
+- Panels use shadcn/ui composition: `Accordion`, `AccordionItem`, `AccordionTrigger` and `AccordionContent`. The root uses Base UI's single expansion by default, `multiple` for simultaneous expansion, and `defaultValue` or controlled `value` / `onValueChange`.
+- `AccordionTrigger` includes Base UI Header (h3) internally. `disabled` on the root disables the group; on an item it disables that item. Disabled triggers keep a transparent background and use `--text-disabled` for text and icons.
 - Preserves the existing 16px title, 16px plus/minus icon, minimum 44px Web trigger and adjacent-panel separators. Semantic text/divider/disabled tokens adapt to Light and Dark; keyboard focus uses a 2px `--focus-ring` outline at 2px offset. No height animation or hover treatment.
-- A native button controls a labelled content region with `aria-expanded`, `aria-controls` and `hidden`. Long labels wrap; collapsed content retains state and leaves the focus order. Page-specific mobile Sheet behavior remains host-owned.
-- Public exports: `Accordion`, `AccordionProps`. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
+- A native button controls a labelled content region. Long labels wrap and collapsed content leaves the focus order. Set `keepMounted` on Accordion to retain child state when collapsed. Page-specific mobile Sheet behavior remains host-owned.
+- Public exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` and their Props types. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
 
 ### Card — `components/Card/`
 
@@ -501,11 +507,11 @@ Use Card for a discrete, self-contained content item (an order, product summary,
 
 |                 |                                                                                                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Padding**     | `none` (0) · `sm` (12) · `md` (16, default) · `lg` (24). Use `none` for edge-to-edge media and let the composite own inner spacing; keep sibling cards consistent. |
+| **Padding**     | `md` (default): PC ≥1024px = 16px, Mobile/Tablet <1024px = 8px. `sm`/`lg` are same-size compatibility aliases. `none` remains 0 for edge-to-edge media with composite-owned content spacing. |
 | **Surface**     | `primary` · `secondary` · `inverse`                                                                                                                                |
 | **Border**      | **none by default** (rule `card-no-border`). `bordered={true}` only for dense listing grids.                                                                       |
 | **Radius**      | `--radius-surface-default` (12px). ProductCard owns its compact geometry via `--radius-component-default` (8px); no arbitrary numeric overrides. |
-| **Interactive** | Inferred for `as="button"` or `as="a"` with `href`; minimum 44×44px target. Hover mixes 8% reading color into the selected surface; press mixes 16%. Preserves polarity and geometry; no shadow. Hover requires a fine pointer; reduced motion disables transitions. |
+| **Interactive** | Inferred for `as="button"` or `as="a"` with `href`; minimum 32×32px target. Hover mixes 8% reading color into the selected surface; press mixes 16%. Preserves polarity and geometry; no shadow. Hover requires a fine pointer; reduced motion disables transitions. |
 | **Focus**       | 2px `--focus-ring` outline with 2px offset, following the surrounding canvas theme rather than the card's own surface polarity. Focus remains available when `interactive={false}`. |
 | **Overflow**    | Visible: preserve child focus outlines and extended hit areas. Crop media separately; give wide code/tables their own scroll region. / 保留子控件焦点框与扩展点击区域，媒体单独裁切，宽内容独立滚动。 |
 | **Disabled**    | Native button `disabled` prevents activation and hover/press changes; preserve surface, use disabled text tokens, no opacity. |
@@ -548,7 +554,7 @@ Static membership artwork verified against Figma node `1632:21283`. Exposes the 
 
 Opt-in `action` composes a shared tertiary Button inside the field border, with underlined 14px action text and 14px value text. It preserves native form submission, disabled and error behavior. Ordinary inputs keep their current appearance; cart uses the option only on mobile. See [usage](./components/Input/usage.md).
 
-`density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This is a code-defined exception to the general touch-target guidance. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
+`density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This meets the Web target-size baseline; larger targets remain a touch recommendation. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
 
 |              |                                                                              |
 | ------------ | ---------------------------------------------------------------------------- |
@@ -570,7 +576,7 @@ Shared modal shell for PDP details and search filters. Below 1024px, mobile uses
 
 ### QuantitySelect — `components/QuantitySelect/`
 
-Controlled cart quantity input with a 60×24px visible pill and a minimum 44px target: accessible popup options 1–9 and an inline 10+ input that commits on blur or Enter. Non-digits are filtered; empty/zero becomes 1 and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. Escape preserves the last committed quantity. The host supplies a positive stock/purchase limit and owns asynchronous updates. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
+Controlled cart quantity input with a 60×32px visible pill and a minimum 32px trigger target: accessible popup options 1–9 and an inline 10+ input that commits on blur or Enter. Non-digits are filtered; empty/zero becomes 1 and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. Escape preserves the last committed quantity. The host supplies a positive stock/purchase limit and owns asynchronous updates. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
 
 ### Drawer — `components/Drawer/`
 
@@ -757,7 +763,7 @@ PC global site footer. **PC only** — the mobile footer stacks differently and 
 | **Optional bands** | `subscribe`, `socialLinks`, `appTitle`, and `appLinks` are each independently optional — a links-only footer is a supported configuration. The keep-in-touch band closes with a `--stroke-default` `--divider-subtle` rule only when it renders — the same weight and color as the masthead split, so the two never read as mismatched. |
 | **Newsletter** | The only stateful slot in the landmark, and deliberately **validation-free**: it fires `onSubmit` and renders the caller's `error`, wiring `aria-invalid` and `aria-describedby` itself. Its 246 × 40 field uses `--radius-component-default`; field and submit share `link-md` so the pair cannot drift, and both center on the row. The submit is text-only in `--text-emphasis` and is the **only** red in the landmark (rule `red-usage`). |
 | **App buttons** | 246 × 40 `--surface-inverse` pills exported standalone as `FooterAppButton`, so app-download modules outside the footer reuse the control without lifting the landmark. Badge artwork is a **caller-supplied** image slot — the Apple and Google marks are licensed and stay out of the DS bundle. |
-| **Structure** | Social glyphs are decorative (empty alt) and their anchors name themselves; payment marks carry the scheme name as alt because no visible label repeats it. Legal entries may override their accessible name via `ariaLabel` where the visible label under-describes the target. Column links and social glyphs keep production's visual size and gain transparent 44px hit areas rather than growing their rows (rule `tap-target`). |
+| **Structure** | Social glyphs are decorative (empty alt) and their anchors name themselves; payment marks carry the scheme name as alt because no visible label repeats it. Legal entries may override their accessible name via `ariaLabel` where the visible label under-describes the target. Column links and social glyphs keep production's visual size and gain transparent 44px hit areas rather than growing their rows (a component-level touch enhancement; rule `tap-target` does not require 44px layout height). |
 
 ### ShortcutRail — `components/ShortcutRail/` _(composite: composes Button)_
 
@@ -796,6 +802,18 @@ Ranked search terms with the results behind each one.
 | **Structure** | Below 1024px each row is a button with `aria-expanded` and `aria-controls`; above it the rows are gone and each card carries a link instead. Each is `display: none` at the other breakpoint, so only one structure reaches the accessibility tree. Rank numbers are `aria-hidden` — list order already carries them. One term is open at a time on mobile; every card is open on desktop. |
 
 ---
+
+### Switch — `components/Switch/`
+
+YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Switch/usage.md) for composition, state and accessibility.
+
+### Select — `components/Select/`
+
+YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Select/usage.md) for composition, state and accessibility.
+
+### Popover — `components/Popover/`
+
+YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Popover/usage.md) for composition, state and accessibility.
 
 ## Motion System
 
@@ -886,7 +904,7 @@ For the **why** behind each rule (trade-offs, history, edge cases), see [`decisi
 | **`border-strength`**     | Borders use 3 strengths only: default 8% black, focus 87% black, attention red.                                                                                                           | 边框只允许 3 档强度：默认 8% 黑、focus 87% 黑、attention 操作红。                                                                          |
 | **`emphasis-limit`**      | 1 emphasis Button per screen. No exceptions.                                                                                                                                              | 每屏最多 1 个强调按钮。无例外。                                                                                                            |
 | **`card-no-border`**      | Cards default to no border. Opt-in `bordered` only for dense listing grids.                                                                                                               | 卡片默认无边框。仅在密集列表网格中可显式 `bordered`。                                                                                      |
-| **`tap-target`**          | iOS 44pt, Android 48dp minimum hit area. Padding-expand the touch region without growing the visible affordance.                                                                          | 触屏可点击区域：iOS 44pt / Android 48dp。用 padding 扩大命中区，不要放大可见尺寸。                                                         |
+| **`tap-target`**          | Web: target size ≥24×24 CSS px, or meet a WCAG 2.2 SC 2.5.8 exception (including sufficient spacing). Prefer 44×44px for frequent or important touch controls; do not force layout size. Expanded targets must not overlap adjacent controls or be clipped.                                                                          | Web 点击目标至少 24×24 CSS px，或满足 WCAG 2.2 SC 2.5.8 的间距等例外。高频、重要触控操作建议 44×44px，不强制布局尺寸；扩展热区不得重叠或被裁切。                                                         |
 | **`no-emoji`**            | No emoji in product UI (buttons, nav, status, empty states). UGC excepted.                                                                                                                | 产品 UI 内禁用 emoji（按钮、导航、状态、空态）。UGC 内容例外。                                                                             |
 | **`no-decorative-media`** | No glassmorphism, hand-drawn illustration, unregistered serif/decorative fonts, patterns / noise / grain, pastel palettes, colored-left-border alert cards. Approved serif typography must use `--font-family-serif`. | 不用毛玻璃、手绘插画、未注册的衬线/装饰字体、纹理/噪点/颗粒、粉彩色板、左侧色条警示卡；批准的衬线样式必须使用 `--font-family-serif`。 |
 | **`token-exists`**        | Every `var(--name)` reference must exist in `tokens.css`. AI generators commonly fabricate plausible-but-fake tokens; CI's `check:tokens-in-docs` catches this on the documentation side. | 每个 `var(--name)` 引用必须真实存在于 `tokens.css`。AI 常见错误是捏造看似合理的 token；CI 的 `check:tokens-in-docs` 在文档层拦截这类问题。 |
@@ -1038,7 +1056,7 @@ Rating star:        #FA8005                (--color-amber-500)
 
 **Form field (with error)**
 
-> Input height `--space-500` (40px), radius `--radius-component-default` (8px), border `--border-default`. Focus: outline 2px `--focus-ring`, offset 2px. Error: border `--border-attention` (`#E00000`), helper text in `--text-error`. **Never use placeholder text in lieu of a label.** Tap target padding-expanded to 44pt min.
+> Input height `--space-500` (40px), radius `--radius-component-default` (8px), border `--border-default`. Focus: outline 2px `--focus-ring`, offset 2px. Error: border `--border-attention` (`#E00000`), helper text in `--text-error`. **Never use placeholder text in lieu of a label.** Keep the target at least 24×24 CSS px or meet an applicable exception; prefer 44×44px for important touch actions without forcing layout height.
 
 **Modal**
 

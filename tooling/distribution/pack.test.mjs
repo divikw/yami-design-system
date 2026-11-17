@@ -33,6 +33,8 @@ test("packed candidate is complete, scoped, traceable and reproducible", async (
     assert.equal(pkg.private, true);
     assert.deepEqual(Object.keys(pkg.peerDependencies), ["react", "react-dom"]);
     assert.equal(pkg.dependencies.react, undefined);
+    const workspacePackage = JSON.parse(await fs.readFile(path.join(root, "packages/design-system/package.json"), "utf8"));
+    assert.equal(pkg.dependencies["@base-ui/react"], workspacePackage.dependencies["@base-ui/react"]);
     assert.equal(pkg.dependencies["@modelcontextprotocol/server"], undefined);
     assert.equal(pkg.dependencies.zod, undefined);
     assert.equal(pkg.version, manifest.packageVersion);

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
@@ -5,6 +6,58 @@ import { page, userEvent } from "vitest/browser";
 import { Checkbox, RadioGroup, RadioGroupItem } from "@yami/design-system";
 import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/base.css";
+
+test("Base UI adapters preserve mixed selection, cancellation, form values and reset", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const changes: boolean[] = [];
+  function Form() {
+    const [mixed, setMixed] = useState(true);
+    const [checked, setChecked] = useState(false);
+    return <form>
+      <Checkbox aria-label="Mixed" name="mixed" checked={checked} indeterminate={mixed}
+        onCheckedChange={(value) => { changes.push(value); setMixed(false); setChecked(value); }} />
+      <Checkbox aria-label="Saved" name="saved" value="yes" defaultChecked />
+      <Checkbox aria-label="Canceled" name="canceled" onCheckedChange={(_, details) => details.cancel()} />
+      <Checkbox aria-label="Read only" name="readonly" defaultChecked readOnly />
+      <Checkbox aria-label="Disabled" name="disabled" defaultChecked disabled />
+      <RadioGroup aria-label="Shipping" name="shipping" defaultValue="standard">
+        <label htmlFor="shipping-standard">Standard delivery</label>
+        <RadioGroupItem id="shipping-standard" aria-label="Standard" value="standard" />
+        <RadioGroupItem aria-label="Unavailable" value="unavailable" disabled />
+        <label htmlFor="shipping-express">Express delivery</label>
+        <RadioGroupItem id="shipping-express" aria-label="Express" value="express" />
+      </RadioGroup>
+    </form>;
+  }
+  try {
+    flushSync(() => root.render(<Form />));
+    expect(container.querySelectorAll('[data-slot="radio-group-item"]')).toHaveLength(3);
+    const form = container.querySelector("form")!;
+    const data = () => Object.fromEntries(new FormData(form));
+    const mixed = page.getByRole("checkbox", { name: "Mixed", exact: true });
+    await expect.element(mixed).toHaveAttribute("aria-checked", "mixed");
+    expect(data()).toEqual({ saved: "yes", readonly: "on", shipping: "standard" });
+    await mixed.click();
+    expect(changes).toEqual([true]);
+    await expect.element(mixed).toHaveAttribute("aria-checked", "true");
+    await page.getByRole("checkbox", { name: "Canceled", exact: true }).click();
+    await page.getByRole("checkbox", { name: "Read only", exact: true }).click();
+    expect(data()).toEqual({ mixed: "on", saved: "yes", readonly: "on", shipping: "standard" });
+    await page.getByRole("checkbox", { name: "Saved", exact: true }).click();
+    await page.getByText("Express delivery", { exact: true }).click();
+    expect(data().shipping).toBe("express");
+    await userEvent.keyboard("{ArrowUp}");
+    expect(data().shipping).toBe("standard");
+    await userEvent.keyboard("{ArrowUp}");
+    expect(data().shipping).toBe("express");
+    form.reset();
+    await expect.poll(data).toEqual({ saved: "yes", readonly: "on", shipping: "standard" });
+  } finally {
+    root.unmount(); container.remove();
+  }
+});
 
 for (const theme of ["light", "dark"]) {
   test.each([375, 1280])(`${theme} selection controls reserve 40px targets and accept edge clicks at %ipx`, async (width) => {

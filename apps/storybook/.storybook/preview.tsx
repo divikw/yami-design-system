@@ -24,7 +24,7 @@ const YAMI_VIEWPORTS = {
 const preview: Preview = {
   tags: ["autodocs"],
   globalTypes: {
-    locale: { description: "Content language", toolbar: { icon: "globe", items: [{ value: "zh", title: "中文" }, { value: "en", title: "English" }, { value: "ko", title: "한국어" }] } },
+    locale: { description: "Content language", toolbar: { icon: "globe", items: [{ value: "zh", title: "中文" }, { value: "en", title: "English" }] } },
     theme: { description: "Color theme", toolbar: { icon: "paintbrush", items: [{ value: "light", title: "Light" }, { value: "dark", title: "Dark" }] } }
   },
   initialGlobals: {
@@ -44,29 +44,29 @@ const preview: Preview = {
       options: YAMI_VIEWPORTS
     },
     options: {
-      storySort: {
-        order: [
-          "YAMI",
-          [
-            "foundations",
-            "primitives",
-            "assets",
-            "components",
-            "modules",
-            "pages",
-            [
-              "ecommerce home",
-              "topic landing page",
-              ["brand", "topic", "campaign"],
-              "categories",
-              "email templates",
-              "search",
-              "product detail",
-              ["docs", "beauty", "food", "beverage"],
-              "search results",
-            ],
-          ],
-        ],
+      // Storybook extracts and evaluates this function as JavaScript.
+      storySort: ({ title: leftTitle = "" }, { title: rightTitle = "" }) => {
+        const order = new Map([
+          ["", ["YAMI"]],
+          ["YAMI", ["foundations", "primitives", "assets", "components", "modules", "pages"]],
+          ["YAMI/pages", ["ecommerce home", "topic landing page", "categories", "email templates", "search", "product detail", "search results"]],
+          ["YAMI/pages/topic landing page", ["brand", "topic", "campaign"]],
+          ["YAMI/pages/product detail", ["docs", "beauty", "food", "beverage"]],
+        ]);
+        const left = leftTitle.split("/");
+        const right = rightTitle.split("/");
+        for (let i = 0; i < Math.min(left.length, right.length); i++) {
+          if (left[i] === right[i]) continue;
+          const parent = left.slice(0, i).join("/");
+          if (parent === "YAMI/components") {
+            return left[i].localeCompare(right[i], "en", { numeric: true, sensitivity: "base" });
+          }
+          const siblings = order.get(parent) ?? [];
+          const leftRank = siblings.indexOf(left[i]);
+          const rightRank = siblings.indexOf(right[i]);
+          return (leftRank < 0 ? siblings.length : leftRank) - (rightRank < 0 ? siblings.length : rightRank);
+        }
+        return left.length - right.length;
       },
     }
   },

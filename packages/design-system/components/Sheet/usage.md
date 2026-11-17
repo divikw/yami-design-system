@@ -31,8 +31,8 @@
 
 ## 交互与边界
 
-原生 `dialog.showModal()` 提供顶层展示和背景 inert；组件统一处理 Tab 循环、关闭后的焦点归还、背景滚动锁定、独立正文滚动与安全区。标题和按钮使用 YAMI tokens；关闭/返回按钮的可见尺寸为 32 × 32px，内部图标为 20 × 20px，并由 Button 的透明扩展层保留 44 × 44px 点击热区。
+原生 `dialog.showModal()` 提供顶层展示和背景 inert；组件统一处理 Tab 循环、关闭后的焦点归还、背景滚动锁定、独立正文滚动与安全区。标题和按钮使用 YAMI tokens；关闭/返回按钮的可见尺寸为 32 × 32px；关闭图标为 24 × 24px，右上方距浮层边缘 16px，返回箭头保持 20 × 20px 和左侧位置，并由 Button 的透明扩展层保留 44 × 44px 点击热区。
 
-主题由语义 tokens 继承，不传 `dark`。传入实际内容语言的 `lang` 或放在有 `lang` 的父节点内。搜索快捷筛选在桌面仍用锚点 Popover，在移动端使用 Sheet。图片预览保留独立组件，不属于此次统一范围。
+主题由语义 tokens 继承，不传 `dark`。传入实际内容语言的 `lang` 或放在有 `lang` 的父节点内。搜索快捷筛选在桌面仍用锚点 Popover，在移动端使用 Sheet。图片预览使用独立组件，并遵循相同关闭按钮尺寸。
 
 Standalone Figma mapping is not assigned; do not publish a placeholder Code Connect node.

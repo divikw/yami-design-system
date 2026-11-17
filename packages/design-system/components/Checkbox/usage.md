@@ -30,3 +30,8 @@ Dark theme is automatic through semantic aliases. Checkbox has no `dark` prop an
 - Use native `disabled`, `required`, `name`, `value`, and `form` props.
 - Mouse and touch clicks do not show the blue focus outline, including clicks on an associated label or after keyboard interaction. Tab and Space retain the keyboard focus outline.
 - The component reserves a 40×40px layout and pointer target at every breakpoint, with a centered 20×20px visible square and a 4px radius. The keyboard focus outline follows the visible square. Keep the full 40px layout space so adjacent targets cannot overlap. In option lists, wrap it with a native `<label>` so the full row can remain clickable.
+
+
+### State changes
+
+`checked`, `defaultChecked` and the first argument to `onCheckedChange` are boolean. Use the separate `indeterminate` prop for the mixed state. Call `details.cancel()` to cancel a requested change.

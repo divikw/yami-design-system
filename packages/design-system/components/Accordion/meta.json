@@ -3,8 +3,8 @@
   "name": "Accordion",
   "category": "layout",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Inline disclosure extracted from ProductDetailPage: independent panels with plus/minus icons, controlled or uncontrolled expansion, native keyboard activation and theme-aware semantic tokens.",
+  "version": "0.2.0",
+  "description": "Base UI-backed accordion with shadcn/ui composition: Accordion, AccordionItem, AccordionTrigger and AccordionContent. Supports single or multiple expansion and controlled or uncontrolled values.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -12,51 +12,59 @@
   },
   "exports": [
     "Accordion",
-    "AccordionProps"
+    "AccordionItem",
+    "AccordionTrigger",
+    "AccordionContent",
+    "AccordionProps",
+    "AccordionItemProps",
+    "AccordionTriggerProps",
+    "AccordionContentProps"
   ],
   "props": {
-    "label": {
-      "type": "ReactNode",
-      "required": true,
-      "description": "Visible heading and accessible trigger name. Static inline content only."
-    },
     "children": {
       "type": "ReactNode",
-      "required": true,
-      "description": "Panel content; stays mounted while hidden."
-    },
-    "expanded": {
-      "type": "boolean",
       "required": false,
-      "description": "Controlled expansion state."
+      "description": "AccordionItem children composed with AccordionTrigger and AccordionContent."
     },
-    "defaultExpanded": {
+    "multiple": {
       "type": "boolean",
       "required": false,
       "default": false,
-      "description": "Initial uncontrolled expansion."
+      "description": "Allows multiple items to remain open."
     },
-    "onExpandedChange": {
-      "type": "(expanded: boolean) => void",
+    "value": {
+      "type": "Value[]",
       "required": false,
-      "description": "Requests expansion changes. Controlled callers update expanded."
+      "description": "Controlled values of the expanded items."
+    },
+    "defaultValue": {
+      "type": "Value[]",
+      "required": false,
+      "default": [],
+      "description": "Initially expanded items in uncontrolled mode."
+    },
+    "onValueChange": {
+      "type": "(value: Value[], details: AccordionRootChangeEventDetails) => void",
+      "required": false,
+      "description": "Requests expansion changes; update value when controlled. details.cancel() cancels the change."
     },
     "disabled": {
       "type": "boolean",
       "required": false,
       "default": false,
-      "description": "Disables the trigger without changing expansion."
+      "description": "Disables interaction for the entire group."
     },
-    "headingLevel": {
-      "type": "2 | 3 | 4 | 5 | 6",
+    "keepMounted": {
+      "type": "boolean",
       "required": false,
-      "default": 2,
-      "description": "Heading level chosen for the surrounding document."
+      "default": false,
+      "description": "Keeps closed panel content mounted to retain child state."
     },
-    "id": {
-      "type": "string",
+    "hiddenUntilFound": {
+      "type": "boolean",
       "required": false,
-      "description": "Optional unique root ID; also prefixes trigger/content IDs."
+      "default": false,
+      "description": "Allows browser find-in-page to find and expand collapsed content."
     }
   },
   "variants": {
@@ -74,7 +82,7 @@
     },
     "disabled": {
       "ruleId": "no-opacity-disabled",
-      "note": "Uses button-disabled and text-disabled without opacity."
+      "note": "Transparent background with text-disabled for text and icons; no opacity."
     },
     "color": {
       "ruleId": "semantic-color-only",
@@ -100,11 +108,9 @@
     "--line-height-heading-sm",
     "--space-600",
     "--space-150",
-    "--button-tertiary-active",
     "--stroke-thick",
     "--focus-ring",
     "--space-025",
-    "--button-disabled",
     "--text-disabled",
     "--space-200",
     "--font-weight-normal",
@@ -152,14 +158,6 @@
       "property": "width / height",
       "selector": ".icon"
     },
-    "--button-tertiary-active": {
-      "property": "background",
-      "selector": ".trigger:active:not(:disabled)"
-    },
-    "--button-disabled": {
-      "property": "background",
-      "selector": ".trigger:disabled"
-    },
     "--text-disabled": {
       "property": "color",
       "selector": ".trigger:disabled"
@@ -203,14 +201,15 @@
     ],
     "tapTargetMin": 44,
     "ariaPattern": "aria-expanded and aria-controls on the native button; aria-labelledby and hidden on the panel.",
-    "notes": "Disabled buttons use native disabled. Collapsed children retain state but leave the focus order and accessibility tree. Choose the heading level to match the document; labels must not contain interactive children."
+    "notes": "Disabled triggers use native disabled with transparent backgrounds. Closed panels leave the focus order and accessibility tree. Set keepMounted to retain child state. Trigger includes an h3 Header; labels must not contain interactive children."
   },
   "testing": {
     "interaction": "covered",
-    "rationale": "Story play tests exercise independent expansion, Enter/Space/Tab, focus styles, ID associations, controlled updates/refused updates, disabled activation, hidden-content focus and narrow content."
+    "rationale": "Story play tests exercise single and multiple expansion, Enter/Space/Tab, focus styles, ID associations, controlled updates/refused updates, disabled activation, hidden-content focus and narrow content."
   },
   "dependencies": {
     "runtime": [
+      "@base-ui/react",
       "react"
     ],
     "peer": [],

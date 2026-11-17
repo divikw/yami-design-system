@@ -26,14 +26,14 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg'
 export type CardSurface = 'primary' | 'secondary' | 'inverse'
 
 export interface CardBaseProps {
-  /** 内边距档位：none=0、sm=12px、md=16px、lg=24px。默认 md；贴边媒体使用 none，同组卡片保持一致。 */
+  /** 统一响应式内边距：PC（≥1024px）16px、Mobile/Tablet 8px；none=0 用于贴边媒体。默认 md，sm/lg 作为兼容别名使用相同尺寸。 */
   padding?: CardPadding
   /** 背景表面令牌。默认为 'primary'（--surface-primary）。 */
   surface?: CardSurface
   /** 是否显示细边框。默认不显示，按设计规范仅用于密集列表或网格。 */
   bordered?: boolean
   /**
-   * 启用悬浮和按下反馈，并提供至少 44×44px 的点击区域。
+   * 启用悬浮和按下反馈，并提供至少 32×32px 的点击区域。
    * as="button" 或 as="a" 且提供 href 时自动启用。
    * 自定义元素需自行提供语义和键盘行为。键盘焦点及禁用样式始终可用。
    */

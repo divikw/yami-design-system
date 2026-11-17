@@ -191,10 +191,11 @@ Maximum 2 badges per card. Every badge claims visual attention; overuse flattens
 
 ## Accessibility
 
-Badge renders a static `span`. It has no keyboard or focus behavior and does not
-announce count changes automatically. Include essential status or counts in the
-parent control's accessible name. Hide a visual count from assistive technology
-when that name already includes the same information.
+Badge renders a static `span` through Base UI's `useRender`. It has no keyboard
+or focus behavior and does not announce count changes automatically. Include
+essential status or counts in the parent control's accessible name. Hide a
+visual count from assistive technology when that name already includes the same
+information.
 
 Outline tones rely on the actual background for text contrast. Use dark outlines
 on light surfaces and light outlines on dark surfaces. Check image overlays on

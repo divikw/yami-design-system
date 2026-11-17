@@ -9,6 +9,10 @@ import "@yami/design-system/tokens.css";
 const validImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6C7sAAAAASUVORK5CYII=";
 const invalidImage = "data:image/png;base64,aW52YWxpZA==";
 
+function visibleImage(container: HTMLElement) {
+  return [...container.querySelectorAll("img")].find((image) => getComputedStyle(image).opacity !== "0" && image.getBoundingClientRect().width > 1);
+}
+
 test("image failure and source replacement never generate text or leave a broken image", async () => {
   const container = document.createElement("div");
   document.body.append(container);
@@ -17,26 +21,27 @@ test("image failure and source replacement never generate text or leave a broken
   try {
     flushSync(() => root.render(<Avatar alt="Alex Morgan" src={invalidImage} membershipTier="gold" ref={ref} />));
     expect(ref.current).toBe(container.firstElementChild);
-    await expect.poll(() => container.querySelector("img")?.naturalWidth ?? 0).toBe(512);
-    expect(container.querySelector("img")?.src).toContain("default-avatar.png");
+    await expect.poll(() => visibleImage(container)?.naturalWidth ?? 0).toBe(512);
+    expect(visibleImage(container)?.src).toContain("default-avatar.png");
     expect(container.textContent).toBe("");
+    expect(getComputedStyle(container.querySelector<HTMLElement>('[data-slot="avatar-image"]')!).opacity).toBe("0");
     expect(container.querySelector('[data-slot="avatar-membership"]')).not.toBeNull();
 
     flushSync(() => root.render(<Avatar alt="陈小米" src={validImage} />));
-    await expect.poll(() => container.querySelector("img")?.naturalWidth ?? 0).toBe(1);
-    await expect.poll(() => container.querySelector('[data-slot="avatar-fallback"]')).toBeNull();
+    await expect.poll(() => visibleImage(container)?.naturalWidth ?? 0).toBe(1);
+    await expect.poll(() => container.querySelector('[data-slot="avatar-default"]')).toBeNull();
     expect(container.firstElementChild?.getAttribute("aria-label")).toBe("陈小米");
-    expect(container.querySelector("img")?.alt).toBe("");
+    expect(visibleImage(container)?.alt).toBe("");
 
     flushSync(() => root.render(<Avatar alt="Jamie Chen" src={invalidImage} />));
-    await expect.poll(() => container.querySelector("img")?.naturalWidth ?? 0).toBe(512);
-    expect(container.querySelector("img")?.src).toContain("default-avatar.png");
+    await expect.poll(() => visibleImage(container)?.naturalWidth ?? 0).toBe(512);
+    expect(visibleImage(container)?.src).toContain("default-avatar.png");
     expect(container.textContent).toBe("");
 
     flushSync(() => root.render(<Avatar alt="Sam" />));
     expect(container.textContent).toBe("");
-    await expect.poll(() => container.querySelector("img")?.naturalWidth ?? 0).toBe(512);
-    expect(container.querySelector("img")?.src).toContain("default-avatar.png");
+    await expect.poll(() => visibleImage(container)?.naturalWidth ?? 0).toBe(512);
+    expect(visibleImage(container)?.src).toContain("default-avatar.png");
   } finally {
     root.unmount();
     container.remove();

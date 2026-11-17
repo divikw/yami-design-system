@@ -11,7 +11,7 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
 }
 
-export const Checkbox = forwardRef<HTMLElement, CheckboxProps>(function Checkbox(
+export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Checkbox(
   { className, ...props },
   ref,
 ) {
@@ -38,6 +38,8 @@ export const Checkbox = forwardRef<HTMLElement, CheckboxProps>(function Checkbox
 
   return (
     <CheckboxPrimitive.Root
+      render={<button />}
+      nativeButton
       {...props}
       ref={ref}
       className={mergedClassName}

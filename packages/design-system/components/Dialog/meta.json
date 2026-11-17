@@ -22,7 +22,7 @@
   "rules": {
     "radii": { "ruleId": "no-custom-radii", "note": "Uses the shared surface radius." },
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
-    "tapTarget": { "ruleId": "tap-target", "note": "The visual close control is 32px with a centered 20px icon and Button's 44px hit-area extender." }
+    "tapTarget": { "ruleId": "tap-target", "note": "The visual close control is 32px with a centered 24px icon and Button's 44px hit-area extender." }
   },
   "tokens": ["--surface-primary", "--text-primary", "--text-secondary", "--overlay-scrim", "--divider-default", "--radius-surface-default", "--font-size-heading-sm", "--font-weight-emphasize", "--space-100", "--space-150", "--space-200", "--space-400", "--space-600"],
   "tokenBindings": {

@@ -18,7 +18,7 @@ type PreviewArgs = ComponentProps<typeof HorizontalScrollList> & {
 
 const meta = {
   id: "yami-components-commerce-product-list-horizontal-scroll-list",
-  title: "YAMI/Components/Commerce/Products/Horizontal Scroll List",
+  title: "YAMI/Components/Horizontal Scroll List",
   component: HorizontalScrollList,
   decorators: [
     (Story, context) => (
@@ -395,3 +395,21 @@ export const PCSideNavigation: Story = {
     if (list.scrollLeft <= 0) throw new Error("Next must scroll the product rail");
   },
 };
+
+export const PCPreview: Story = {
+  ...PC,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

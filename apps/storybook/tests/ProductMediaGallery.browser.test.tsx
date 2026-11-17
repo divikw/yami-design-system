@@ -478,10 +478,13 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     expect(desktopStageRect.left).toBe(0);
     expect(desktopStageRect.right).toBeLessThanOrEqual(desktopSidebarRect.left);
     expect(desktopSidebarRect.right).toBeLessThan(closeButton.getBoundingClientRect().left);
-    const previousButton = dialog.querySelector<HTMLElement>('[data-rail-navigation-button="true"]')!;
-    const previousRect = previousButton.getBoundingClientRect();
     const closeRect = closeButton.getBoundingClientRect();
-    expect((previousRect.top + previousRect.bottom) / 2).toBe((closeRect.top + closeRect.bottom) / 2);
+    expect(closeRect.width).toBe(32);
+    expect(closeRect.height).toBe(32);
+    expect(closeRect.top - dialog.getBoundingClientRect().top).toBe(16);
+    expect(dialog.getBoundingClientRect().right - closeRect.right).toBe(16);
+    expect(closeButton.querySelector("img")!.getBoundingClientRect().width).toBe(24);
+    expect(getComputedStyle(closeButton, "::before").width).toBe("44px");
     await page.viewport(375, 812);
     expect(getComputedStyle(rail).flexDirection).toBe("row");
     await page.getByRole("button", { name: "Close image preview" }).click();

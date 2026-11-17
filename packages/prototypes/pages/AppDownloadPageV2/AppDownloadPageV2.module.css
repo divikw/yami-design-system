@@ -91,7 +91,6 @@
 .couponTabLabel { text-transform: uppercase; font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
 .couponTabTitle { color: var(--text-primary); font-weight: var(--font-weight-emphasize); }
 .calculatorTabHint { color: var(--text-secondary); font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }
-.calculatorCard { padding: var(--space-400); }
 .calculatorCard > [data-slot="card-content"] { display: flex; flex-direction: column; gap: var(--space-300); }
 .calculatorInput { display: flex; flex-direction: column; gap: var(--space-250); min-width: 0; }
 .calculatorControls[aria-labelledby="calculator-tab-app"]:not([hidden]) { row-gap: var(--space-150); }
@@ -175,7 +174,6 @@
   .coupon h3 { font-size: var(--font-size-body-md); }
   .couponCode { gap: var(--space-050); }
   .couponCode button { min-height: 32px; }
-  .root .calculatorCard { padding: var(--space-300) var(--space-200); }
   .amountHeading > strong { font-size: var(--font-size-price-md); line-height: var(--line-height-price-md); }
   .ticks span { white-space: nowrap; }
   .ticks span:first-child { transform: none; align-items: flex-start; }

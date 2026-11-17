@@ -42,7 +42,7 @@ const overflowPinnedImages = Array.from({ length: 8 }, (_, index) => ({
 
 const meta = {
   id: "yami-components-commerce-product-media-gallery",
-  title: "YAMI/Components/Commerce/Product Media Gallery/Draft",
+  title: "YAMI/Components/Product Media Gallery",
   tags: ["draft"],
   component: ProductMediaGallery,
   parameters: {
@@ -460,3 +460,21 @@ export const Mobile: Story = {
     });
   },
 };
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

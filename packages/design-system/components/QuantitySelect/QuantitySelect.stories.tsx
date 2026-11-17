@@ -9,13 +9,36 @@ function Controlled(props: QuantitySelectProps) {
 }
 
 const meta = {
-  title: "YAMI/Components/Form/QuantitySelect",
+  id: "yami-components-form-quantityselect",
+  title: "YAMI/Components/QuantitySelect",
   component: QuantitySelect,
   globals: { theme: "light" },
-  parameters: { layout: "padded", docs: { playground: "Playground", showStories: false,
+  parameters: { layout: "padded", controls: { localizeDescriptions: true }, docs: { playground: "Playground", showStories: false,
     translations: {
-      zh: { description: "购物车受控数量选择：自定义下拉列表与 10+ 输入；业务提供库存／限购上限。失焦或 Enter 提交，支持键盘、更新中、禁用和错误。" },
-      en: { description: "Controlled cart quantity select with accessible 1–9 options and a validated 10+ editor. The host supplies purchase limits and asynchronous state." },
+      zh: { description: "购物车受控数量选择：自定义下拉列表与 10+ 输入；业务提供库存／限购上限。失焦或 Enter 提交，支持键盘、更新中、禁用和错误。",
+        argDescriptions: {
+          value: "当前数量，受控值；取值为 1 至 max 的整数。",
+          max: "由业务提供的库存／限购上限，必须为正整数。",
+          onValueChange: "数量提交回调，返回校正后的整数；相同数量不重复触发。",
+          label: "控件的无障碍名称；多个数量选择器并列时，应包含商品名称。",
+          locale: "内置操作和提示文案的语言；示例跟随顶部语言切换。",
+          disabled: "禁用数量选择和输入。",
+          loading: "更新中状态，锁定编辑并播报进度。",
+          error: "业务错误提示，与数量控件关联显示。",
+        },
+      },
+      en: { description: "Controlled cart quantity select with accessible 1–9 options and a validated 10+ editor. The host supplies purchase limits and asynchronous state.",
+        argDescriptions: {
+          value: "Controlled quantity; an integer from 1 to max.",
+          max: "Positive integer stock/purchase limit supplied by the host.",
+          onValueChange: "Called with the normalized integer on commit; unchanged quantities do not trigger it.",
+          label: "Accessible control name; include the product name when multiple selectors appear together.",
+          locale: "Language for built-in actions and messages; examples follow the toolbar language.",
+          disabled: "Disables quantity selection and input.",
+          loading: "Locks editing and announces progress while updating.",
+          error: "Host-provided error message displayed and associated with the control.",
+        },
+      },
     },
   } },
   args: { value: 1, max: 25, label: "商品数量", disabled: false, loading: false, onValueChange: () => {} },
@@ -91,4 +114,20 @@ export const Interaction: Story = {
     await expect(restored).toHaveTextContent("1");
     await expect(restored).toHaveFocus();
   },
+};
+
+export const PCPreview: Story = {
+  ...PC,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

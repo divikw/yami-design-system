@@ -37,7 +37,8 @@ const descriptions = {
 };
 
 const meta = {
-  title: "YAMI/Components/Navigation/Breadcrumb",
+  id: "yami-components-navigation-breadcrumb",
+  title: "YAMI/Components/Breadcrumb",
   component: Breadcrumb,
   parameters: { layout: "padded", docs: { playground: "Playground", showStories: false, translations: descriptions } },
   args: { items: [], size: "sm", inverse: false, underline: true },
@@ -135,4 +136,20 @@ export const States: Story = {
       </section>
     </div>;
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

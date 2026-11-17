@@ -9,7 +9,8 @@ function Controlled(props: CouponProps) {
 }
 
 const meta = {
-  title: "YAMI/Components/Commerce/Coupon",
+  id: "yami-components-commerce-coupon",
+  title: "YAMI/Components/Coupon",
   component: Coupon,
   parameters: { layout: "padded", docs: { playground: "Playground", showStories: false, translations: {
     zh: { description: "受控优惠券卡片。业务方维护可用性、单选或多选，以及保存后的应用逻辑。" },
@@ -48,4 +49,20 @@ export const Interaction: Story = {
     await userEvent.keyboard(" ");
     await expect(checkbox).toBeChecked();
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

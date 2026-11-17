@@ -32,7 +32,7 @@ export const NoPaddingCard = () => (
 
 export const BorderedCard = () => (
   <section data-example="BorderedCard">
-    <Card bordered padding="sm">Dense grid item — hairline separation.</Card>
+    <Card bordered padding="md">Dense grid item — hairline separation.</Card>
   </section>
 )
 
@@ -70,7 +70,7 @@ export const SurfaceSecondaryCard = () => (
 
 export const SurfaceInverseCard = () => (
   <section data-example="SurfaceInverseCard">
-    <Card surface="inverse" padding="lg">
+    <Card surface="inverse" padding="md">
       <h2
         style={{
           margin: 0,

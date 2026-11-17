@@ -91,6 +91,7 @@
     "membership-badge",
     "membership-icon",
     "pagination",
+    "popover",
     "product-card",
     "product-list",
     "product-media-gallery",
@@ -99,9 +100,11 @@
     "radio-group",
     "review-list",
     "section-banner",
+    "select",
     "sheet",
     "shortcut-rail",
     "social-media-gallery",
+    "switch",
     "tab-bar",
     "tabs",
     "tag",
@@ -583,5 +586,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "a9b5ca36893cb4793a5c4738d6e1f67e0bd9eb287b6bed310222dc6d651333c0"
+  "contentDigest": "75f9a4ef135704da93b140296c85ecd281c59f931d3f67d37d7bcac76eb95bba"
 }

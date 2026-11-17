@@ -74,7 +74,8 @@ const copy = {
 };
 
 const meta = {
-  title: "YAMI/Components/Layout/Card",
+  id: "yami-components-layout-card",
+  title: "YAMI/Components/Card",
   component: Card,
   parameters: {
     layout: "padded",
@@ -82,12 +83,12 @@ const meta = {
       playground: "Playground",
       translations: {
         zh: {
-          description: "用于呈现订单、商品摘要等独立内容项的基础表面。普通页面分区使用标题、间距和布局容器。默认内边距 16px、圆角 12px，无边框和阴影；支持静态、链接和按钮卡片。",
+          description: "用于呈现订单、商品摘要等独立内容项的基础表面。普通页面分区使用标题、间距和布局容器。统一内边距 PC 16px、Mobile/Tablet 8px，圆角 12px，无边框和阴影；支持静态、链接和按钮卡片。",
           argDescriptions: {
-            padding: "内边距：none=0、sm=12px、md=16px、lg=24px，默认 md。贴边媒体使用 none，由组合组件管理内部间距；同组卡片保持一致，不随断点自动切换。",
+            padding: "统一响应式内边距：PC（≥1024px）16px、Mobile/Tablet 8px。默认 md，sm/lg 为同尺寸兼容别名。none=0 用于贴边媒体。",
             surface: "背景表面令牌。默认为 'primary'（--surface-primary）。",
             bordered: "是否显示细边框。默认不显示，按设计规范仅用于密集列表或网格。",
-            interactive: '启用悬浮和按下反馈，并提供至少 44×44px 的点击区域。as="button" 或 as="a" 且提供 href（含空字符串）时自动启用。自定义元素需自行提供语义和键盘行为。关闭交互反馈后，键盘焦点及禁用样式仍然可用。',
+            interactive: '启用悬浮和按下反馈，并提供至少 32×32px 的点击区域。as="button" 或 as="a" 且提供 href（含空字符串）时自动启用。自定义元素需自行提供语义和键盘行为。关闭交互反馈后，键盘焦点及禁用样式仍然可用。',
             children: "卡片内容。",
             as: "渲染的元素类型，默认为 'div'。链接卡片使用 'a' 并提供 href；操作卡片使用 'button'。",
             href: "原生链接目标，仅用于 as=a。空字符串指向当前文档；业务导航请提供明确地址。",
@@ -96,12 +97,12 @@ const meta = {
           },
         },
         en: {
-          description: "Surface for independent items such as orders or product summaries. Ordinary page sections use headings, spacing, and layout containers. Defaults to 16px padding, 12px radius, no border or shadow; supports static, link, and button cards.",
+          description: "Surface for independent items such as orders or product summaries. Ordinary page sections use headings, spacing, and layout containers. Defaults to 16px padding on PC (≥1024px), 8px on Mobile/Tablet, and 12px radius, no border or shadow; supports static, link, and button cards.",
           argDescriptions: {
-            padding: "Padding: none=0, sm=12px, md=16px, lg=24px; default md. Use none for edge-to-edge media with composite-owned inner spacing. Keep peer cards consistent; no automatic breakpoint changes.",
+            padding: "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg are compatibility aliases with the same sizes. Use none=0 for edge-to-edge media.",
             surface: "Background surface token. Default: 'primary' (--surface-primary).",
             bordered: "Opt-in hairline border. Off by default; only use in dense lists or grids per the design specification.",
-            interactive: 'Adds hover/press styling and a 44×44px minimum target. Inferred for as="button" or as="a" with href, including an empty string. Custom hosts retain responsibility for semantics and keyboard behavior. Focus-visible and disabled styling remain available when interaction feedback is off.',
+            interactive: 'Adds hover/press styling and a 32×32px minimum target. Inferred for as="button" or as="a" with href, including an empty string. Custom hosts retain responsibility for semantics and keyboard behavior. Focus-visible and disabled styling remain available when interaction feedback is off.',
             children: "Card content.",
             as: "Element type to render. Defaults to 'div'. Use 'a' with href for link cards, 'button' for button cards.",
             href: "Native destination for as=a. An empty string links to the current document; provide an explicit destination for business navigation.",
@@ -112,7 +113,7 @@ const meta = {
       },
       description: {
         component:
-          "Surface for independent content items, not ordinary page sections. Default 16px padding, 12px radius, no border or shadow; supports static, link, and button cards.",
+          "Surface for independent content items, not ordinary page sections. Default padding: PC 16px, Mobile/Tablet 8px; 12px radius, no border or shadow; supports static, link, and button cards.",
       },
     },
   },
@@ -133,7 +134,7 @@ const meta = {
     type: { control: "select", options: ["button", "submit", "reset"], if: { arg: "as", eq: "button" } },
     disabled: { control: "boolean", if: { arg: "as", eq: "button" } },
     children: { control: "text" },
-    padding: { control: "select", options: ["none", "sm", "md", "lg"] },
+    padding: { control: "select", options: ["none", "md"] },
     surface: {
       control: "select",
       options: ["primary", "secondary", "inverse"],
@@ -172,7 +173,7 @@ export const Showcase: Story = {
           <strong>{text.surfaces.inverse}</strong>
           <p style={{ marginBottom: 0 }}>{text.inverseDescription}</p>
         </Card>
-        <Card bordered padding="sm">
+        <Card bordered padding="md">
           <strong>{text.borderedTitle}</strong>
           <p style={{ marginBottom: 0, color: "var(--text-secondary)" }}>
             {text.borderedDescription}
@@ -226,9 +227,9 @@ export const Padding: Story = {
     const text = copy[globals.locale === "en" ? "en" : "zh"];
     return (
       <div style={showcaseStyle}>
-        {(["none", "sm", "md", "lg"] as const).map((padding, index) => (
+        {(["none", "md"] as const).map((padding) => (
           <Card key={padding} padding={padding} surface="secondary">
-            <strong>{text.padding}: {padding} ({[0, 12, 16, 24][index]}px)</strong>
+            <strong>{text.padding}: {padding} ({padding === "none" ? "0px" : "PC 16px / Mobile 8px"})</strong>
             <p style={{ marginBottom: 0 }}>{text.paddingUses[padding]}</p>
           </Card>
         ))}
@@ -336,11 +337,11 @@ export const ResponsiveContent: Story = {
     const text = copy[globals.locale === "en" ? "en" : "zh"];
     return (
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--space-200)", width: "min(375px, 100%)" }}>
-        <Card as="article" surface="secondary" padding="sm">
+        <Card as="article" surface="secondary" padding="md">
           <h3 style={{ marginTop: 0 }}>{text.longTitle}Y20261011-123456789012345678901234567890</h3>
           <p style={{ marginBottom: 0 }}>{text.longReference}</p>
         </Card>
-        <Card as="article" surface="secondary" padding="sm">
+        <Card as="article" surface="secondary" padding="md">
           <h3 style={{ marginTop: 0 }}>{text.record}</h3>
           <p>{text.recordDescription}</p>
           <div role="region" aria-label={text.scrollLabel} tabIndex={0} style={{ maxWidth: "100%", overflowX: "auto" }}>
@@ -367,4 +368,20 @@ export const ResponsiveContent: Story = {
     region.focus();
     await expect(region).toHaveFocus();
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

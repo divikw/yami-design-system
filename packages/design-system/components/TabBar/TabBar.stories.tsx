@@ -5,7 +5,8 @@ import { TabBar } from "./TabBar";
 import { tabBarExampleItems } from "./examples";
 
 const meta = {
-  title: "YAMI/Components/Navigation/Tab Bar",
+  id: "yami-components-navigation-tab-bar",
+  title: "YAMI/Components/Tab Bar",
   component: TabBar,
   parameters: { layout: "fullscreen", docs: { playground: "Playground", showStories: false,
     translations: {
@@ -57,4 +58,20 @@ export const Interaction: Story = {
     await userEvent.keyboard("{Enter}");
     await expect(canvas.getByRole("button", { name: "Account", exact: true })).toHaveAttribute("aria-current", "page");
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

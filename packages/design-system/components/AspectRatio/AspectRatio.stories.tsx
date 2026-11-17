@@ -4,7 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AspectRatio } from './AspectRatio'
 
 const meta = {
-  title: 'YAMI/Components/Layout/AspectRatio',
+  id: 'yami-components-layout-aspectratio',
+  title: 'YAMI/Components/AspectRatio',
   component: AspectRatio,
   parameters: {
     layout: 'padded',
@@ -74,3 +75,19 @@ export const Playground: Story = {
     </div>
   ),
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

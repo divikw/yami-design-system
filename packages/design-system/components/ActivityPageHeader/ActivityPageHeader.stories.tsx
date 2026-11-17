@@ -3,7 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ActivityPageHeader } from "./ActivityPageHeader";
 
 const meta = {
-  title: "YAMI/Components/Navigation/Activity Page Header",
+  id: "yami-components-navigation-activity-page-header",
+  title: "YAMI/Modules/Activity Page Header",
   component: ActivityPageHeader,
   tags: ["!dev", "!autodocs"],
   parameters: {
@@ -110,3 +111,20 @@ export const ChineseLocaleUsesEnglishLogo: Story = {
     }
   },
 };
+
+export const PCPreview: Story = {
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  render: (_, { globals }) => <p>{globals.locale === "en" ? "Activity Page Header is available on mobile only." : "活动页头仅用于移动端。"}</p>,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

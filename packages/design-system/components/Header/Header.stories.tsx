@@ -13,7 +13,8 @@ function localeFromGlobals(value: unknown): HeaderLocale {
 }
 
 const meta = {
-  title: 'YAMI/Components/Navigation/Header',
+  id: 'yami-components-navigation-header',
+  title: 'YAMI/Components/Header',
   component: Header,
   subcomponents: { HeaderSearch, HeaderCategoryRail, ActivityPageHeader },
   decorators: [
@@ -797,3 +798,19 @@ export const DarkTheme: Story = {
 export const Playground: Story = {
   tags: ['!dev', '!autodocs'],
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

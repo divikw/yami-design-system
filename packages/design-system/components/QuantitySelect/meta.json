@@ -4,7 +4,7 @@
   "category": "form",
   "status": "experimental",
   "version": "0.3.1",
-  "description": "Controlled cart quantity select with a 60×24px pill, a 44px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
+  "description": "Controlled cart quantity select with a 60×32px pill, a 32px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -14,7 +14,9 @@
     "QuantitySelect",
     "QuantitySelectProps"
   ],
-  "composes": [],
+  "composes": [
+    "Select"
+  ],
   "props": {
     "value": {
       "type": "number",
@@ -84,11 +86,12 @@
     "--stroke-default",
     "--stroke-thick",
     "--space-200",
-    "--space-300"
+    "--space-300",
+    "--space-400"
   ],
   "accessibility": {
     "wcagLevel": "AA",
-    "tapTargetMin": 44,
+    "tapTargetMin": 28,
     "keyboardNav": [
       "tab",
       "shift+tab",
@@ -100,8 +103,7 @@
   "dependencies": {
     "runtime": [
       "react",
-      "react-dom",
-      "@base-ui/react/select"
+      "react-dom"
     ],
     "peer": [],
     "devOnly": []
@@ -146,6 +148,10 @@
     "--radius-button-primary": {
       "property": "border-radius",
       "selector": ".display"
+    },
+    "--space-400": {
+      "property": "height / min-height",
+      "selector": ".display, .input, .control, .select, .inputTarget, .option"
     }
   }
 }

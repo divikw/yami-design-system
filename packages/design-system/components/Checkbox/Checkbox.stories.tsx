@@ -5,11 +5,47 @@ import { userEvent } from "storybook/test"
 import { Checkbox } from "./Checkbox"
 
 const meta = {
-  title: "YAMI/Components/Forms/Checkbox",
+  id: "yami-components-forms-checkbox",
+  title: "YAMI/Components/Checkbox",
   component: Checkbox,
   parameters: {
     layout: "padded",
+    controls: { localizeDescriptions: true },
     docs: {
+      translations: {
+        zh: {
+          description: "YAMI 复选框：40px 点击区域、20px 可见控件，支持选中、半选、禁用和键盘操作。",
+          argDescriptions: {
+            disabled: "禁用控件，阻止操作和聚焦，且不参与表单提交。",
+            required: "启用浏览器原生必填校验。",
+            name: "提交表单时使用的字段名称。",
+            readOnly: "只读：允许聚焦和提交，但不允许更改。",
+            form: "关联的表单元素 ID，可用于表单外的控件。",
+            "aria-label": "无可见标签时提供的无障碍名称。",
+            checked: "受控选中状态；与 onCheckedChange 配合使用。",
+            defaultChecked: "非受控模式的初始选中状态，默认为 false。",
+            indeterminate: "半选状态，用于表示分组中仅部分选项被选中。",
+            onCheckedChange: "选中状态变化时触发，返回布尔值和 Base UI 事件详情；可调用 details.cancel() 取消变更。",
+            value: "选中时随表单提交的值，默认为 on。",
+          },
+        },
+        en: {
+          description: "YAMI checkbox with a 40px target and 20px visible control. Supports checked, mixed, disabled and keyboard states.",
+          argDescriptions: {
+            disabled: "Disables interaction and focus; excludes the control from form submission.",
+            required: "Enables native required-field validation.",
+            name: "Field name used when submitting a form.",
+            readOnly: "Allows focus and form submission while preventing changes.",
+            form: "ID of the owning form, including controls outside that form.",
+            "aria-label": "Accessible name when no visible label is present.",
+            checked: "Controlled checked state; use with onCheckedChange.",
+            defaultChecked: "Initial checked state in uncontrolled mode; defaults to false.",
+            indeterminate: "Mixed state indicating that only some items in a group are selected.",
+            onCheckedChange: "Receives the boolean checked value and Base UI event details; call details.cancel() to cancel the change.",
+            value: "Value submitted while checked; defaults to on.",
+          },
+        },
+      },
       description: {
         component:
           "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 40px pointer target, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
@@ -17,6 +53,12 @@ const meta = {
     },
   },
   argTypes: {
+    value: { control: "text" },
+    onCheckedChange: { control: false },
+    "aria-label": { control: "text" },
+    form: { control: "text" },
+    readOnly: { control: "boolean" },
+    name: { control: "text" },
     checked: { control: "boolean" },
     defaultChecked: { control: "boolean" },
     disabled: { control: "boolean" },
@@ -50,7 +92,7 @@ const rowStyle: CSSProperties = {
 
 const optionStyle: CSSProperties = {
   display: "inline-flex",
-  gap: "var(--space-100)",
+  gap: 0,
   alignItems: "center",
   minHeight: "var(--space-600)",
   color: "var(--text-primary)",
@@ -161,3 +203,19 @@ export const Playground: Story = {
 export const Selected: Story = { args: { defaultChecked: true } }
 export const DisabledSelected: Story = { args: { defaultChecked: true, disabled: true } }
 export const Indeterminate: Story = { args: { indeterminate: true } }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

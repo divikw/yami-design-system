@@ -130,7 +130,7 @@ const principlesData = [
     title: '触摸区域',
     severity: 'warning',
     description:
-      'iOS ≥ 44×44pt, Android ≥ 48×48dp；用 padding 扩大而非放大可见元素。Phase 6.5 static warn; Phase 8.5 visual enforcer (needs rendered bounding box).',
+      'Web 目标至少 24×24 CSS px 或满足间距等例外；重要触控操作建议 44×44px，不强制布局尺寸。静态不按 size 判定；运行时小于 24px 提示核对实际热区和例外。',
     validator: tapTarget,
   },
 
