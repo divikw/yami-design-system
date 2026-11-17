@@ -13,7 +13,7 @@ function NestedPopover() {
   return <Sheet open title="Outer sheet" closeLabel="Close sheet" onClose={() => { throw new Error("Inner Escape must not close the sheet"); }}>
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger ref={trigger}>Open details</PopoverTrigger>
-      <PopoverContent container={trigger.current?.closest("dialog")}><PopoverTitle>Inner details</PopoverTitle><Button variant="secondary">Inner action</Button></PopoverContent>
+      <PopoverContent><PopoverTitle>Inner details</PopoverTitle><Button variant="secondary">Inner action</Button></PopoverContent>
     </Popover>
   </Sheet>;
 }
@@ -57,7 +57,7 @@ test("Select preserves cancellation, external form ownership and controlled rese
   } finally { root.unmount(); container.remove(); }
 });
 
-test("Escape dismisses a nested popover before its native sheet", async () => {
+test("Escape dismisses a nested popover before its parent sheet", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);

@@ -1,0 +1,4 @@
+interface:
+  display_name: "YAMI 组件维护"
+  short_description: "新增或编辑 YAMI 组件，同步 Base UI、Docs、契约与验收"
+  default_prompt: "使用 $yami-maintain-component，按 YAMI 规范新增或编辑指定组件，对齐当前 Base UI 与共享 Docs 模板，并完成影响分析、契约同步和 PC/Mobile 验收。"

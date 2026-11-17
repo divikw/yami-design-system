@@ -20,6 +20,7 @@ for (const width of [320, 375, 733, 768]) {
     await expect(dialog.getByRole("img", { name: "YAMI", exact: true })).toHaveCSS("height", "24px");
     const close = dialog.getByRole("button", { name: "关闭", exact: true });
     await expect(close).toHaveCSS("height", "32px");
+    await expect(close).toBeFocused();
     await expect(dialog.getByRole("link", { name: "首页", exact: true })).toHaveCSS("height", "32px");
     const docs = dialog.getByRole("navigation", { name: "YAMI 文档", exact: true });
     await expect(docs.getByRole("link", { name: "查看组件与页面", exact: true })).toHaveAttribute("aria-current", "page");
@@ -30,8 +31,7 @@ for (const width of [320, 375, 733, 768]) {
     await group.click();
     await expect(docs.getByRole("link", { name: "开始创建", exact: true })).toBeVisible();
 
-    const backdrop = await dialog.evaluate(e => getComputedStyle(e, "::backdrop").backdropFilter);
-    expect(backdrop).toBe("blur(2px)");
+    await expect(page.locator("[data-sheet-backdrop]")).toHaveCSS("backdrop-filter", "blur(2px)");
     await page.mouse.move(0, 400);
     await page.screenshot({ path: testInfo.outputPath("navigation-drawer.png") });
     const scrollBefore = await page.evaluate(() => scrollY);
@@ -42,7 +42,7 @@ for (const width of [320, 375, 733, 768]) {
     await expect(dialog).not.toBeAttached();
     await expect(trigger).toBeFocused();
     expect(await page.evaluate(() => scrollY)).toBe(scrollBefore);
-    await expect(page.locator("html")).not.toHaveCSS("overflow", "hidden");
+    await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
   });
 }
 
@@ -74,7 +74,7 @@ test("drawer enters and exits from the right before releasing its modal lock", a
   await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
   await dialog.getByRole("button", { name: "Close", exact: true }).click();
   await expect(dialog).toHaveAttribute("data-state", "closing");
-  await expect(page.locator("html")).toHaveCSS("overflow", "hidden");
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
   const frames = await panel.evaluate(e => (e.getAnimations()[0].effect as KeyframeEffect).getKeyframes());
   expect(["translateX(0px)", "translate(0px)"]).toContain(frames[0].transform);
   expect(["translateX(100%)", "translate(100%)"]).toContain(frames.at(-1)!.transform);
@@ -101,7 +101,7 @@ test("drawer traps keyboard focus, closes from the backdrop, and dismisses on de
   await expect(dialog).toBeVisible();
   await page.setViewportSize({ width: 769, height: 700 });
   await expect(dialog).not.toBeAttached();
-  await expect(page.locator("html")).not.toHaveCSS("overflow", "hidden");
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
   await page.setViewportSize({ width: 733, height: 700 });
   await trigger.click();
   await dialog.getByRole("link", { name: "创建页面", exact: true }).click();

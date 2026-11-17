@@ -14,6 +14,9 @@ import { useContext, useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import type { PreparedStory } from "storybook/internal/types";
+import { AlertDialogDocsPage } from "./alert-dialog-docs";
+import { SheetDocsPage } from "./sheet-docs";
+import { DialogDocsPage } from "./dialog-docs";
 import { AccordionDocsPage } from "./accordion-docs";
 import { AspectRatioDocsPage } from "./aspect-ratio-docs";
 import { AvatarDocsPage } from "./avatar-docs";
@@ -178,7 +181,7 @@ export function ComponentDocsPage() {
     </p>
   ) : null;
 
-  const customDocsPages = { accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage };
+  const customDocsPages = { sheet: SheetDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage };
   const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
   const DocsPage = customDocsPages[componentKey as keyof typeof customDocsPages];
   if (DocsPage) return <DocsPage locale={language} />;

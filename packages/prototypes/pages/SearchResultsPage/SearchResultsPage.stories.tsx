@@ -825,14 +825,14 @@ export const MobileInteractions: Story = {
         const popupRect = nextPopup.getBoundingClientRect();
         if (
           !viewport ||
-          !nextPopup.matches("dialog:modal[data-sheet]") ||
+          !nextPopup.matches('[data-sheet][aria-modal="true"]') ||
           !title ||
           !closeButton ||
           !heading ||
           title.textContent?.trim() !== expectedTitle ||
           getComputedStyle(title).display === "none" ||
           getComputedStyle(heading).fontSize !== "24px" ||
-          getComputedStyle(nextPopup, "::backdrop").backgroundColor !== "rgba(0, 0, 0, 0.68)" ||
+          getComputedStyle(document.querySelector("[data-sheet-backdrop]")!).backgroundColor !== "rgba(0, 0, 0, 0.68)" ||
           Math.abs(popupRect.width - viewport.innerWidth) > 1 ||
           Math.abs(popupRect.bottom - viewport.innerHeight) > 1 ||
           getComputedStyle(nextPopup).borderBottomLeftRadius !== "0px" ||
@@ -909,7 +909,7 @@ export const MobileInteractions: Story = {
     await userEvent.hover(firstMobileSectionAction);
     if (
       !viewport ||
-      !allFiltersDialog.matches("dialog:modal[data-sheet]") ||
+      !allFiltersDialog.matches('[data-sheet][aria-modal="true"]') ||
       allFiltersDialog.querySelector("h2")?.textContent?.trim() !== "Filters" ||
       getComputedStyle(allFiltersDialog.querySelector("h2")!).fontSize !== "24px" ||
       Math.abs(dialogRect.width - viewport.innerWidth) > 1 ||
@@ -992,7 +992,7 @@ export const MobileInteractions: Story = {
       if (
         allFiltersDialog.querySelector("h2")?.textContent?.trim() !== label ||
         !subdialogHeader ||
-        !allFiltersDialog.matches("dialog:modal[data-sheet]") ||
+        !allFiltersDialog.matches('[data-sheet][aria-modal="true"]') ||
         subdialogCloseButton ||
         allFiltersDialog.getBoundingClientRect().height + 1 <
           viewport.innerHeight * 0.5 ||

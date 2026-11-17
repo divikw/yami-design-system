@@ -7,7 +7,16 @@ const widths = { PC: 1024, Mobile: 375 } as const;
 const devices = ["PC", "Mobile"] as const;
 const frameMarkup = "<!doctype html><html><head></head><body></body></html>";
 
-export function ComponentDocsPreview({ children, name, locale }: { children: ReactNode; name?: string; locale: "zh" | "en" }) {
+type PreviewProps = { children: ReactNode; name?: string; locale: "zh" | "en"; mode?: "viewport" | "document" };
+
+export function ComponentDocsPreview({ mode = "viewport", ...props }: PreviewProps) {
+  if (mode === "document") return <div className={styles.preview}>
+    <div className={`${styles.page} ${styles.frameContent}`}><div className={styles.demo}>{props.children}</div></div>
+  </div>;
+  return <ViewportPreview {...props} />;
+}
+
+function ViewportPreview({ children, name, locale }: PreviewProps) {
   const [device, setDevice] = useState<keyof typeof widths>("PC");
   const [frameDocument, setFrameDocument] = useState<Document | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);

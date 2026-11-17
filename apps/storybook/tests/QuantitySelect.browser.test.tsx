@@ -110,7 +110,7 @@ test.each([375, 1440])("QuantitySelect opens a source-styled list with selection
   }
 });
 
-test("QuantitySelect keeps its popup and 10+ editor inside a native drawer and dismisses only the inner control", async () => {
+test("QuantitySelect keeps its popup and 10+ editor inside a drawer and dismisses only the inner control", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -118,7 +118,7 @@ test("QuantitySelect keeps its popup and 10+ editor inside a native drawer and d
     flushSync(() => root.render(<Drawer open title="Quantity test" closeLabel="Close" onClose={() => { throw new Error("Inner escape must not close the drawer"); }}><QuantitySelect value={1} max={25} label="Drawer quantity" locale="en" onValueChange={() => {}} /></Drawer>));
     const trigger = page.getByRole("combobox", { name: "Drawer quantity", exact: true });
     await trigger.click();
-    expect(page.getByRole("option", { name: "10+", exact: true }).element().closest("dialog")).not.toBeNull();
+    expect(page.getByRole("option", { name: "10+", exact: true }).element().closest('[role="dialog"]')).toBe(page.getByRole("dialog", { name: "Quantity test", exact: true }).element());
     await userEvent.keyboard("{Escape}");
     await expect.element(page.getByRole("dialog", { name: "Quantity test", exact: true })).toBeVisible();
     await trigger.click();
@@ -293,7 +293,7 @@ test("QuantitySelect restarts its transient limit toast in a drawer without movi
     await input.fill("26");
     await outside.click();
     const firstToast = page.getByRole("alert").element();
-    expect(firstToast.closest("dialog")).not.toBeNull();
+    expect(firstToast.closest('[role="dialog"]')).toBe(page.getByRole("dialog", { name: "Quantity toast test", exact: true }).element());
     await expect.element(outside).toHaveFocus();
     await new Promise((resolve) => setTimeout(resolve, 1400));
     await input.fill("27");

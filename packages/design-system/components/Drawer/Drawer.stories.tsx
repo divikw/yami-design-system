@@ -63,14 +63,14 @@ export const Interaction: Story = {
     const opener = canvas.getByRole("button", { name: "Open coupons" });
     await userEvent.click(opener);
     const dialog = within(canvasElement.ownerDocument.body).getByRole("dialog", { name: "Coupons" });
-    await expect(dialog).toHaveAttribute("open");
+    await expect(dialog).toHaveAttribute("aria-modal", "true");
     await userEvent.click(within(dialog).getByRole("button", { name: "View conditions" }));
     await expect(within(dialog).getByRole("button", { name: "Back to coupons" })).toHaveFocus();
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(within(dialog).getByRole("button", { name: "View conditions" })).toHaveFocus());
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(opener).toHaveFocus());
-    await expect(canvasElement.ownerDocument.querySelector("dialog[open]")).toBeNull();
+    await expect(canvasElement.ownerDocument.querySelector("[data-sheet]")).toBeNull();
   },
 };
 

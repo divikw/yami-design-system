@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
+  "description": "Base UI modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a right-aligned full-height desktop panel with square corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
   "source": "components/Sheet",
   "files": [
     {
@@ -35,7 +35,8 @@
   ],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -76,7 +77,7 @@
       },
       "--overlay-scrim": {
         "property": "background",
-        "selector": ".sheet::backdrop"
+        "selector": ".backdrop"
       },
       "--radius-surface-default": {
         "property": "border-radius",
@@ -104,10 +105,10 @@
         "enter",
         "space"
       ],
-      "ariaPattern": "Native modal dialog labelled by its visible h2",
-      "interaction": "showModal makes the background inert. Close restores the opener; child views focus Back and use Escape to return."
+      "ariaPattern": "Base UI modal dialog labelled by its visible h2 and optional fixed description",
+      "interaction": "Base UI manages background isolation, focus trapping/restoration, outside dismissal, Escape and scroll locking. Child views focus Back, reset body scroll and intercept Escape to return to the parent."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "386e6fc1fac8563e5dac63afc7d825f814b9c210fa323515783fe6e1688d88e2"
+  "contentDigest": "78b9a428fa2ba53b4d8d0519e7cedc9ab7196cc79e04927c7ed715846c391723"
 }

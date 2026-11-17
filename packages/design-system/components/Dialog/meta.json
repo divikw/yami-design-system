@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Centered modal for confirmation, alerts, and short tasks on mobile and desktop.",
+  "description": "Base UI modal for short forms, editing and general information, with the existing YAMI controlled interface.",
   "figma": { "nodeId": null, "componentKey": null, "notes": "No standalone Figma binding is assigned yet." },
   "exports": ["Dialog", "DialogProps"],
   "composes": ["Button"],
@@ -24,20 +24,21 @@
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
     "tapTarget": { "ruleId": "tap-target", "note": "The visual close control is 32px with a centered 24px icon and Button's 44px hit-area extender." }
   },
-  "tokens": ["--surface-primary", "--text-primary", "--text-secondary", "--overlay-scrim", "--divider-default", "--radius-surface-default", "--font-size-heading-sm", "--font-weight-emphasize", "--space-100", "--space-150", "--space-200", "--space-400", "--space-600"],
+  "tokens": ["--surface-primary", "--text-primary", "--text-secondary", "--overlay-scrim", "--radius-surface-default", "--font-size-heading-sm", "--font-size-heading-xl", "--line-height-heading-xl", "--space-050", "--font-weight-emphasize", "--space-100", "--space-150", "--space-200", "--space-400", "--space-600", "--space-300", "--radius-button-primary", "--font-size-heading-2xl", "--line-height-heading-2xl", "--font-size-body-xl", "--line-height-body-xl"],
   "tokenBindings": {
     "--surface-primary": { "property": "background", "selector": ".dialog" },
-    "--overlay-scrim": { "property": "background", "selector": ".dialog::backdrop" },
+    "--overlay-scrim": { "property": "background", "selector": ".backdrop" },
     "--radius-surface-default": { "property": "border-radius", "selector": ".dialog" },
     "--font-size-heading-sm": { "property": "font-size", "selector": ".title" }
   },
   "accessibility": {
     "role": "dialog", "wcagLevel": "AA", "tapTargetMin": 44,
     "keyboardNav": ["tab", "shift+tab", "escape", "enter", "space"],
-    "ariaPattern": "Native modal dialog labelled by its visible h2; alertdialog is an explicit variant.",
-    "interaction": "showModal makes the background inert. Focus starts on Close for default dialogs or the first control for confirmation dialogs, remains inside, and returns to the opener."
+    "ariaPattern": "Base UI modal dialog labelled by its visible h2; legacy alertdialog semantics remain available.",
+    "interaction": "Base UI handles modal isolation, focus trapping, Escape, outside presses, scroll locking and focus restoration. Default dialogs focus Close; confirmation dialogs focus the first control."
   },
-  "dependencies": { "runtime": ["react"], "peer": [], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
+  "testing": { "interaction": "covered", "rationale": "Showcase and browser tests cover focus containment and restoration, controlled closing, outside dismissal, nested modals and responsive layout." },
   "usageRef": "./usage.md",
   "examples": ["./examples.tsx#DialogExample"]
 }

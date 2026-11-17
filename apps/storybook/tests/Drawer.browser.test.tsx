@@ -29,7 +29,7 @@ test("Drawer keeps right-edge desktop and safe mobile geometry, fixed footer and
     for (const width of [375, 768, 1024, 1440]) {
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Open drawer" }).click();
-      const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+      const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
       await expect.poll(() => dialog.dataset.drawerState).toBe("open");
       const content = dialog.querySelector<HTMLElement>("[data-sheet-content]")!;
       const footer = dialog.querySelector<HTMLElement>('[data-slot="sheet-footer"]')!;
@@ -42,34 +42,34 @@ test("Drawer keeps right-edge desktop and safe mobile geometry, fixed footer and
       expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);
       content.scrollTop = content.scrollHeight;
       expect(footer.getBoundingClientRect().bottom).toBeLessThanOrEqual(rect.bottom);
-      expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+      expect(getComputedStyle(document.body).overflow).toBe("hidden");
       const close = dialog.querySelector<HTMLButtonElement>('button[aria-label="Close coupons"]')!;
       const closeBounds = close.getBoundingClientRect();
       expect([closeBounds.width, closeBounds.height]).toEqual([32, 32]);
-      expect(closeBounds.top - rect.top).toBe(16);
-      expect(rect.right - closeBounds.right).toBe(16);
+      expect(closeBounds.top - rect.top).toBe(width < 1024 ? 8 : 16);
+      expect(rect.right - closeBounds.right).toBe(width < 1024 ? 8 : 16);
       expect(close.querySelector("img")!.getBoundingClientRect().width).toBe(24);
       const apply = footer.querySelector<HTMLButtonElement>("button")!;
       apply.focus();
       await userEvent.tab();
-      expect(document.activeElement).toBe(close);
+      await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab({ shift: true });
       expect(document.activeElement).toBe(apply);
       await userEvent.keyboard("{Escape}");
       await expect.element(page.getByRole("button", { name: "Open drawer" })).toHaveFocus();
-      expect(container.querySelector("dialog[open]")).toBeNull();
-      expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+      await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+      await expect.poll(() => getComputedStyle(document.body).overflow).not.toBe("hidden");
     }
     await page.getByRole("button", { name: "Open drawer" }).click();
     await page.getByRole("combobox", { name: "Mask quantity", exact: true }).click();
     await page.getByRole("option", { name: "10+", exact: true }).click();
     await expect.element(page.getByRole("textbox", { name: "Mask quantity: enter quantity" })).toBeVisible();
     await userEvent.keyboard("{Escape}");
-    expect(container.querySelector("dialog[open]")).not.toBeNull();
-    expect(container.querySelector('[data-slot="quantity-select-display"]')!.textContent).toBe("1");
+    expect(document.querySelector("[data-sheet]")).not.toBeNull();
+    expect(document.querySelector('[data-slot="quantity-select-display"]')!.textContent).toBe("1");
     await expect.element(page.getByRole("combobox", { name: "Mask quantity" })).toHaveFocus();
     await userEvent.keyboard("{Escape}");
-    await expect.poll(() => container.querySelector("dialog[open]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
@@ -91,32 +91,32 @@ test.each([375, 1440])("Drawer animates its entry axis and retains content, focu
   try {
     await page.viewport(width, 812);
     render(false);
-    const opener = container.querySelector("button")!;
+    const opener = document.querySelector("button")!;
     opener.focus();
     render(true);
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
     const enter = dialog.getAnimations().find((animation) => (animation as CSSAnimation).animationName.includes("drawer-enter"))!;
     expect(enter).toBeDefined();
     expect(enter.effect!.getTiming().duration).toBe(200);
-    expect(getComputedStyle(dialog, "::backdrop").animationDuration).toBe("0.15s");
+    expect(getComputedStyle(document.querySelector("[data-sheet-backdrop]")!).animationDuration).toBe("0.15s");
     enter.pause();
     enter.currentTime = 100;
     const transform = new DOMMatrix(getComputedStyle(dialog).transform);
     expect(width < 1024 ? transform.m42 : transform.m41).toBeGreaterThan(0);
     expect(width < 1024 ? transform.m41 : transform.m42).toBe(0);
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close details");
+    await expect.poll(() => document.activeElement?.getAttribute("aria-label")).toBe("Close details");
     enter.finish();
     await expect.poll(() => dialog.dataset.drawerState).toBe("open");
     render(false);
     expect(dialog.dataset.drawerState).toBe("exiting");
-    expect(dialog.matches(":modal")).toBe(true);
+    expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
     expect(dialog.textContent).toContain("Motion details");
     expect(dialog.textContent).toContain("Content stays visible until exit completes");
-    expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close details");
-    await expect.poll(() => container.querySelector("dialog")).toBeNull();
-    expect(document.activeElement).toBe(opener);
-    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+    expect(getComputedStyle(document.body).overflow).toBe("hidden");
+    await expect.poll(() => document.activeElement?.getAttribute("aria-label")).toBe("Close details");
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.activeElement).toBe(opener);
+    await expect.poll(() => getComputedStyle(document.body).overflow).not.toBe("hidden");
     expect(afterClose).toHaveBeenCalledTimes(1);
   } finally {
     root.unmount(); container.remove();
@@ -135,13 +135,13 @@ test("Drawer cancels a pending exit when reopened and releases the modal on unmo
     render(false);
     render(true);
     await new Promise((resolve) => setTimeout(resolve, 250));
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
-    expect(dialog.matches(":modal")).toBe(true);
+    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+    expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
     expect(dialog.dataset.drawerState).toBe("open");
     expect(afterClose).not.toHaveBeenCalled();
     flushSync(() => root.render(null));
-    expect(document.querySelector("dialog:modal[data-sheet]")).toBeNull();
-    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => getComputedStyle(document.body).overflow).not.toBe("hidden");
   } finally {
     root.unmount(); container.remove();
   }
@@ -157,11 +157,11 @@ test("Drawer skips motion and closes immediately for reduced-motion users", asyn
   try {
     await session.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
     render(true);
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
     expect(getComputedStyle(dialog).animationDuration).toBe("0s");
-    expect(getComputedStyle(dialog, "::backdrop").animationDuration).toBe("0s");
+    expect(getComputedStyle(document.querySelector("[data-sheet-backdrop]")!).animationDuration).toBe("0s");
     render(false);
-    expect(container.querySelector("dialog")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     expect(afterClose).toHaveBeenCalledTimes(1);
   } finally {
     root.unmount(); container.remove();

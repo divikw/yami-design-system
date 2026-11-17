@@ -72,11 +72,11 @@ async function verifyDetailDisclosures(
       await expect(modules[index].querySelector('[data-slot="product-detail-disclosure-content"]')).toBeNull();
       await expect(modules[index].querySelector('[data-slot="product-detail-disclosure-arrow"]')).toHaveAttribute("data-direction", "right");
       await userEvent.click(trigger);
-      const sheet = modules[index].querySelector("dialog")!;
+      const sheet = details.ownerDocument.querySelector("[data-sheet]")!;
       await expect(sheet).toBeVisible();
       await expect(sheet.querySelector("h2")).toHaveTextContent(trigger.textContent!);
       await userEvent.keyboard("{Escape}");
-      await expect(modules[index].querySelector("dialog")).toBeNull();
+      await expect(details.ownerDocument.querySelector("[data-sheet]")).toBeNull();
       await expect(trigger).toHaveFocus();
     }
     return;

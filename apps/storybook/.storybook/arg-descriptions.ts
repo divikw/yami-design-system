@@ -49,6 +49,8 @@ const common: Record<string, Copy> = {
   back: ["返回按钮配置，包含名称与返回操作。", "Back-button configuration with its label and action."],
   contentPadding: ["是否保留正文区域的默认内边距。", "Whether to retain the default content padding."],
   desktopPlacement: ["PC 端浮层位置：居中或右侧。", "Desktop overlay placement: centered or on the right."],
+  initialFocus: ["浮层打开时的初始焦点目标。", "Initial focus target when the overlay opens."],
+  finalFocus: ["浮层关闭后的返回焦点目标。", "Return focus target when the overlay closes."],
   role: ["组件的 ARIA 语义角色。", "ARIA semantic role of the component."],
   size: ["组件的预设尺寸档位。", "Preset component size."],
   variant: ["组件的视觉或内容变体。", "Visual or content variant of the component."],
@@ -285,7 +287,7 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select Sheet ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
+const componentNames = "Accordion AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select Sheet ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");

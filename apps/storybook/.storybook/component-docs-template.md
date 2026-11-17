@@ -1,6 +1,6 @@
 # 组件说明模板
 
-Accordion、AspectRatio、Avatar、Badge、Button、ButtonGroup 共用当前 Docs 模板。
+Accordion、AlertDialog、AspectRatio、Avatar、Badge、Button、ButtonGroup、Dialog、Sheet 共用当前 Docs 模板。
 此模板仅用于 Storybook 文档，不修改 `@yami/design-system` 的真实组件。
 
 ## 文件职责
@@ -28,3 +28,4 @@ Accordion、AspectRatio、Avatar、Badge、Button、ButtonGroup 共用当前 Doc
 - 复制代码按钮使用代码背景的 80% 半透明底色，hover 叠加现有交互色。
 - 沿用模板的 600px 文档布局断点；这是文档排版断点，不改变组件本身的 PC / Mobile 规则。
 - 每张示例卡片左上角常驻设备切换，沿用安装方式的下划线样式。标签行和展示区之间使用全宽分隔线。默认使用 PC（1024px），可切换到 Mobile（375px）。设备选择只作用于当前示例的视口。
+- AlertDialog、Dialog、Sheet 使用 `previewMode="document"`，直接在文档中渲染触发器，弹层挂载在文档 body 并覆盖整个预览区，不受示例卡片高度限制。这类示例不展示局部设备切换；PC / Mobile 效果通过各自的 Story 验收。

@@ -1,0 +1,118 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--overlay-scrim);
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: max(var(--space-600), env(safe-area-inset-top)) var(--space-200) max(var(--space-600), env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(400px, 100%);
+  max-height: 100%;
+  min-height: 0;
+  border-radius: var(--radius-surface-default);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  outline: none;
+}
+
+.content:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-100);
+  min-height: 0;
+  padding: var(--space-200) var(--space-150) var(--space-100);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-heading-sm);
+  line-height: var(--line-height-heading-sm);
+  font-weight: var(--font-weight-emphasize);
+}
+
+.description {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: var(--space-150);
+}
+
+.footer .actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+.content .actions > button {
+  border-radius: var(--radius-button-primary);
+}
+
+/* Keep the action hit area within its visible button bounds. */
+.content .actions > .action::before {
+  content: none;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    width: min(480px, 100%);
+    /* Combined with Header padding, keep 24px above the title. */
+    padding-block-start: var(--space-200);
+  }
+
+  .header {
+    gap: var(--space-150);
+    padding: var(--space-100) var(--space-300);
+    text-align: start;
+  }
+
+  .title {
+    font-size: var(--font-size-heading-2xl);
+    line-height: var(--line-height-heading-2xl);
+  }
+
+  .description {
+    font-size: var(--font-size-body-xl);
+    line-height: var(--line-height-body-xl);
+  }
+
+  .footer {
+    padding: var(--space-300);
+  }
+
+  .footer .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .content .actions > button {
+    width: auto;
+  }
+
+}

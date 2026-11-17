@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "75f9a4ef135704da93b140296c85ecd281c59f931d3f67d37d7bcac76eb95bba"
+      "digest": "e380677e57c2b41f8a96435a7d6a3f3951e5c9c254cf30a29530f846914c79f8"
     },
     {
       "name": "accordion",
@@ -37,6 +37,15 @@
       "version": "0.1.0",
       "path": "registry-items/activity-page-header.json",
       "digest": "5361544bdcaee769ba0893533ba10cab62c0c3c013ef25dacd88eb25b96a73ba"
+    },
+    {
+      "name": "alert-dialog",
+      "title": "AlertDialog",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/alert-dialog.json",
+      "digest": "f5dae80b1ce1ff0e3bb1caeef0eff50f6337bea4507265021f0716384ace0141"
     },
     {
       "name": "aspect-ratio",
@@ -144,7 +153,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/dialog.json",
-      "digest": "9c9e48727267f1bcf56c1a7cf21e29c823b81847079d05ef537b753c1316a555"
+      "digest": "995a3f6577b9a5895703e0e8e829ecf9f44a00267f7d2f33ca6f5d2c5409d03d"
     },
     {
       "name": "divider",
@@ -162,7 +171,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "3b78ed8a2afa42fe145909846e9440c8b6524a7f0f9cd1895ae230ba1edf9e10"
+      "digest": "a6326330bd3dca3abc53cec9fd925b1638ae0e73abb94cd67d4dd38678d74641"
     },
     {
       "name": "filter-chip",
@@ -297,7 +306,7 @@
       "status": "experimental",
       "version": "0.3.1",
       "path": "registry-items/quantity-select.json",
-      "digest": "24438c6847613a0a93d291624ef37c3e3a12e26f37ebf79b6d054b61809c86c1"
+      "digest": "cd92a1a3aacd445d77ecc2520c78d6187b0b7969ef17e178ba1e6404ca04691e"
     },
     {
       "name": "radio-group",
@@ -342,7 +351,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "386e6fc1fac8563e5dac63afc7d825f814b9c210fa323515783fe6e1688d88e2"
+      "digest": "78b9a428fa2ba53b4d8d0519e7cedc9ab7196cc79e04927c7ed715846c391723"
     },
     {
       "name": "shortcut-rail",

@@ -345,6 +345,161 @@
       }
     },
     {
+      "id": "AlertDialog",
+      "source": "components/AlertDialog",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "AlertDialog",
+        "category": "layout",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Modal confirmation for decisions requiring a response. Base UI manages focus, Escape dismissal and scroll locking; outside presses do not dismiss.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+        },
+        "exports": [
+          "AlertDialog",
+          "AlertDialogProps",
+          "AlertDialogTrigger",
+          "AlertDialogContent",
+          "AlertDialogContentProps",
+          "AlertDialogHeader",
+          "AlertDialogTitle",
+          "AlertDialogDescription",
+          "AlertDialogFooter",
+          "AlertDialogAction",
+          "AlertDialogCancel",
+          "AlertDialogActionProps"
+        ],
+        "props": {
+          "open": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state."
+          },
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false,
+            "description": "Initial uncontrolled open state.",
+            "default": false
+          },
+          "onOpenChange": {
+            "type": "function",
+            "required": false,
+            "description": "Called when opening or closing is requested."
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "Compose trigger, labelled content, description and explicit cancel/confirm actions."
+          }
+        },
+        "variants": {
+          "state": [
+            "closed",
+            "open"
+          ]
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Keyboard controls use semantic focus-ring outlines."
+          },
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Uses existing semantic surface, text and border tokens."
+          }
+        },
+        "tokens": [
+          "--overlay-scrim",
+          "--space-600",
+          "--space-200",
+          "--radius-surface-default",
+          "--surface-primary",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--focus-ring",
+          "--space-100",
+          "--space-150",
+          "--font-size-heading-sm",
+          "--line-height-heading-sm",
+          "--font-weight-emphasize",
+          "--text-secondary",
+          "--space-300",
+          "--radius-button-primary",
+          "--font-size-heading-2xl",
+          "--line-height-heading-2xl",
+          "--font-size-body-xl",
+          "--line-height-body-xl"
+        ],
+        "tokenBindings": {
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".content"
+          },
+          "--overlay-scrim": {
+            "property": "background",
+            "selector": ".backdrop"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".content"
+          },
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".content:focus-visible"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          },
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".title"
+          }
+        },
+        "accessibility": {
+          "role": "alertdialog",
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "space",
+            "enter",
+            "escape"
+          ],
+          "tapTargetMin": 40,
+          "notes": "Always modal. Title and Description supply the accessible name and description. Put Cancel before the confirmation action for safe initial keyboard/mouse focus; touch uses Base UI popup focus. Tab is contained, Escape cancels, outside presses do not dismiss, and closing restores focus. Use initialFocus/finalFocus for explicit focus targets."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase and browser tests cover modal semantics, focus containment/restoration, dismissal, controlled state, disabled actions and responsive geometry."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#AlertDialogExample"
+        ],
+        "composes": [
+          "Button",
+          "ButtonGroup"
+        ]
+      }
+    },
+    {
       "id": "AspectRatio",
       "source": "components/AspectRatio",
       "meta": {
@@ -2564,7 +2719,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Centered modal for confirmation, alerts, and short tasks on mobile and desktop.",
+        "description": "Base UI modal for short forms, editing and general information, with the existing YAMI controlled interface.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -2658,15 +2813,23 @@
           "--text-primary",
           "--text-secondary",
           "--overlay-scrim",
-          "--divider-default",
           "--radius-surface-default",
           "--font-size-heading-sm",
+          "--font-size-heading-xl",
+          "--line-height-heading-xl",
+          "--space-050",
           "--font-weight-emphasize",
           "--space-100",
           "--space-150",
           "--space-200",
           "--space-400",
-          "--space-600"
+          "--space-600",
+          "--space-300",
+          "--radius-button-primary",
+          "--font-size-heading-2xl",
+          "--line-height-heading-2xl",
+          "--font-size-body-xl",
+          "--line-height-body-xl"
         ],
         "tokenBindings": {
           "--surface-primary": {
@@ -2675,7 +2838,7 @@
           },
           "--overlay-scrim": {
             "property": "background",
-            "selector": ".dialog::backdrop"
+            "selector": ".backdrop"
           },
           "--radius-surface-default": {
             "property": "border-radius",
@@ -2697,15 +2860,20 @@
             "enter",
             "space"
           ],
-          "ariaPattern": "Native modal dialog labelled by its visible h2; alertdialog is an explicit variant.",
-          "interaction": "showModal makes the background inert. Focus starts on Close for default dialogs or the first control for confirmation dialogs, remains inside, and returns to the opener."
+          "ariaPattern": "Base UI modal dialog labelled by its visible h2; legacy alertdialog semantics remain available.",
+          "interaction": "Base UI handles modal isolation, focus trapping, Escape, outside presses, scroll locking and focus restoration. Default dialogs focus Close; confirmation dialogs focus the first control."
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase and browser tests cover focus containment and restoration, controlled closing, outside dismissal, nested modals and responsive layout."
         },
         "usageRef": "./usage.md",
         "examples": [
@@ -6822,7 +6990,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
+        "description": "Base UI modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a right-aligned full-height desktop panel with square corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -6885,7 +7053,7 @@
             ],
             "default": "content",
             "required": false,
-            "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop is centered at 560px."
+            "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop defaults to a 480px full-height panel at the right edge."
           },
           "contentPadding": {
             "type": "enum",
@@ -6904,9 +7072,19 @@
               "center",
               "right"
             ],
-            "default": "center",
+            "default": "right",
             "required": false,
-            "description": "Desktop presentation; right is consumed by Drawer. Mobile geometry is unchanged."
+            "description": "Desktop presentation defaults to right; center remains for existing callers. Mobile geometry is unchanged."
+          },
+          "initialFocus": {
+            "type": "Base UI Popup initialFocus",
+            "required": false,
+            "description": "Overrides the default close/back focus target for a custom header."
+          },
+          "finalFocus": {
+            "type": "Base UI Popup finalFocus",
+            "required": false,
+            "description": "Explicit return target for shortcut-driven or custom navigation flows."
           },
           "footer": {
             "type": "ReactNode",
@@ -6922,7 +7100,7 @@
         "rules": {
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes."
+            "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, the default right-edge panel has square corners; explicit center uses --radius-surface-default (12px). Applies to both content and full sizes."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -6954,7 +7132,7 @@
           },
           "--overlay-scrim": {
             "property": "background",
-            "selector": ".sheet::backdrop"
+            "selector": ".backdrop"
           },
           "--radius-surface-default": {
             "property": "border-radius",
@@ -6980,12 +7158,13 @@
             "enter",
             "space"
           ],
-          "ariaPattern": "Native modal dialog labelled by its visible h2",
-          "interaction": "showModal makes the background inert. Close restores the opener; child views focus Back and use Escape to return."
+          "ariaPattern": "Base UI modal dialog labelled by its visible h2 and optional fixed description",
+          "interaction": "Base UI manages background isolation, focus trapping/restoration, outside dismissal, Escape and scroll locking. Child views focus Back, reset body scroll and intercept Escape to return to the parent."
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -6993,7 +7172,11 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#SheetExample"
-        ]
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase and browser tests cover focus, scrolling, backdrop dismissal, child navigation, Drawer motion, nested popovers and responsive consumers."
+        }
       }
     },
     {

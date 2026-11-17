@@ -8,6 +8,8 @@ test("opens search with the keyboard and supports full keyboard selection", asyn
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "搜索" });
   await expect(dialog).toBeVisible();
+  const bounds = await dialog.boundingBox();
+  expect(Math.abs(bounds!.x - (page.viewportSize()!.width - bounds!.width) / 2)).toBeLessThan(1);
 
   const input = dialog.getByRole("combobox", { name: "搜索" });
   await expect(input).toBeFocused();

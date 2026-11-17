@@ -9,6 +9,8 @@ const directory = path.dirname(fileURLToPath(import.meta.url));
 
 const storybookDependencies = [
   "@yami/design-system > @base-ui/react/accordion",
+  "@yami/design-system > @base-ui/react/alert-dialog",
+  "@yami/design-system > @base-ui/react/dialog",
   "@yami/design-system > @base-ui/react/avatar",
   "@yami/design-system > @base-ui/react/button",
   "@yami/design-system > @base-ui/react/checkbox",

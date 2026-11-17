@@ -35,11 +35,11 @@ test("Mobile highlights stay expanded and other details open sheets; PC remains 
           await expect.element(trigger).toHaveAttribute("aria-haspopup", "dialog");
           await expect.element(trigger).not.toHaveAttribute("aria-expanded");
           await trigger.click();
-          const sheet = container.querySelector<HTMLDialogElement>("dialog")!;
-          expect(sheet.matches(":modal")).toBe(true);
+          const sheet = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+          expect(sheet.getAttribute("aria-modal") === "true").toBe(true);
           expect(sheet.querySelector("h2")!.textContent).toBe(sheetTitle);
           expect(sheet.getBoundingClientRect().top).toBe(48);
-          expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+          expect(getComputedStyle(document.body).overflow).toBe("hidden");
           const close = sheet.querySelector("button")!;
           const last = sheet.querySelector("a") ?? close;
           expect(document.activeElement).toBe(close);
@@ -48,9 +48,9 @@ test("Mobile highlights stay expanded and other details open sheets; PC remains 
           await userEvent.tab();
           expect(document.activeElement).toBe(close);
           await userEvent.keyboard("{Escape}");
-          await expect.poll(() => container.querySelector("dialog")).toBeNull();
+          await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
           expect(document.activeElement?.textContent).toBe(sheetTitle);
-          expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+          expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
         }
 
         await page.viewport(1024, 900);

@@ -98,18 +98,18 @@
 .item:not(:has(.itemCheck)) .itemInfo { grid-column: 1; }
 .item:not(:has(.itemCheck)) .rowActions { grid-column: 1; grid-row: 3; }
 .rowActions { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; column-gap: var(--space-100); row-gap: var(--space-150); }
-.page .rowActions .actionLink { padding-inline: 0; justify-content: flex-start; }
+:is(.page, .unavailableDrawer) .rowActions .actionLink { padding-inline: 0; justify-content: flex-start; }
 .page .merchant .rowActions .actionLink { min-width: 0; }
-.page .actionLink { font-size: var(--font-size-link-md); line-height: var(--line-height-link-md); font-weight: var(--font-weight-normal); text-decoration: underline; text-underline-offset: var(--space-025); }
-.page :is(.actionLink, .learnLink) { text-decoration-thickness: var(--stroke-default); }
-.page button[data-slot="button"]:is(.actionLink, .learnLink, .protectionHeading) { border-radius: 0; }
+:is(.page, .unavailableDrawer) .actionLink { font-size: var(--font-size-link-md); line-height: var(--line-height-link-md); font-weight: var(--font-weight-normal); text-decoration: underline; text-underline-offset: var(--space-025); }
+:is(.page, .unavailableDrawer) :is(.actionLink, .learnLink) { text-decoration-thickness: var(--stroke-default); }
+:is(.page, .unavailableDrawer) button[data-slot="button"]:is(.actionLink, .learnLink, .protectionHeading) { border-radius: 0; }
 .unavailable .actionLink { padding-inline: 0; }
-.page :is(.actionLink, .learnLink):not([aria-disabled="true"]):active { background-color: transparent; }
+:is(.page, .unavailableDrawer) :is(.actionLink, .learnLink):not([aria-disabled="true"]):active { background-color: transparent; }
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .securityCarousel:hover .securityTrack { animation-play-state: paused; }
   .merchantName:hover { text-decoration: underline; }
   .page .guaranteeAction:hover { background: transparent; }
-  .page :is(.actionLink, .learnLink, .protectionHeading, .checkoutTotal):not([aria-disabled="true"]):hover { background-color: transparent; }
+  :is(.page, .unavailableDrawer) :is(.actionLink, .learnLink, .protectionHeading, .checkoutTotal):not([aria-disabled="true"]):hover { background-color: transparent; }
 }
 .stockQuantity { display: none; }
 .quantity { grid-column: 2; grid-row: 1 / 3; min-width: 0; }

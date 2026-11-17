@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, waitFor, within } from "storybook/test";
+import { SheetExample } from "./examples";
 import { Button } from "../Button";
 import { Checkbox } from "../Checkbox";
 import { Sheet, type SheetProps } from "./Sheet";
@@ -68,9 +70,9 @@ const meta = {
   component: Sheet,
   parameters: {
     layout: "fullscreen",
-    docs: { description: { component: "移动端（小于 1024px）顶部两角使用 16px 的 --radius-surface-sheet，底部保持直角；桌面端居中形态四角使用 12px 的 --radius-surface-default。内容高度、全高和子页面共用此规则。" } },
+    docs: { description: { component: "移动端（小于 1024px）顶部两角使用 16px 的 --radius-surface-sheet，底部保持直角；桌面端默认贴右满高，宽 480px，四角为直角。内容高度、全高和子页面共用此规则。" } },
   },
-  globals: { locale: "zh", viewport: { value: "yamiMobile", isRotated: false } },
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
   args: { open: false, title: "底部弹窗", closeLabel: "关闭底部弹窗", onClose: () => {} },
   argTypes: {
     size: { control: "select", options: ["content", "full"] },
@@ -82,7 +84,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Showcase: Story = { name: "Mobile — Content" };
+export const Showcase: Story = {
+  render: (_args, { globals }) => <div className={styles.screen}><SheetExample locale={globals.locale === "en" ? "en" : "zh"} /></div>,
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", { name: /查看说明|View details/ });
+    await userEvent.click(trigger);
+    const body = within(canvasElement.ownerDocument.body);
+    const sheet = await body.findByRole("dialog", { name: /配送说明|Delivery details/ });
+    await expect(sheet).toHaveAttribute("aria-modal", "true");
+    await userEvent.click(within(sheet).getByRole("button", { name: /知道了|Got it/ }));
+    await waitFor(() => expect(body.queryByRole("dialog")).not.toBeInTheDocument());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
 
 export const FullHeight: Story = { name: "Mobile — Full Height", args: { size: "full" } };
 
@@ -98,12 +112,12 @@ export const ChildView: Story = {
 };
 
 export const Desktop: Story = {
-  name: "PC — Centered",
+  name: "PC — Right Edge",
   globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
 };
 
 export const PCPreview: Story = {
-  ...Desktop,
+  ...Showcase,
   name: "PC",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },

@@ -494,6 +494,7 @@ export function AllFiltersDialog({
 
   return (
     <Sheet
+      desktopPlacement="center"
       open={open}
       id="all-filters"
       data-slot="all-filters-dialog"
