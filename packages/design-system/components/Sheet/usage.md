@@ -65,6 +65,6 @@ Pass `back={{ label, onClick }}` to replace Close with Back. The same sheet and 
 
 ## Accessibility and migration
 
-Base UI Dialog manages modal isolation, Tab confinement, Escape, outside dismissal, scroll locking and focus restoration. A controlled host can ignore a premature close request. The popup is a div portalled to body, so native showModal/close/method=dialog no longer apply; event targets are HTMLDivElement. Query by role or data-sheet, and use explicit form IDs for forms submitted from the footer. Drawer inherits this behavior. Nested Base UI controls dismiss before their parent sheet.
+Base UI Dialog manages modal isolation, Tab confinement, Escape, outside dismissal, scroll locking and focus restoration. Use `initialFocus` and `finalFocus` to supply Base UI focus targets when replacing the built-in header or opening from a keyboard shortcut. A controlled host can ignore a premature close request. The popup is a div portalled to body, so native showModal/close/method=dialog no longer apply; event targets are HTMLDivElement. Query by role or data-sheet, and use explicit form IDs for forms submitted from the footer. Drawer inherits this behavior. Nested Base UI controls dismiss before their parent sheet.
 
 Theme comes from global semantic tokens; pass the actual content language through lang. Examples are in examples.tsx; no independent Figma binding is assigned.

@@ -7076,6 +7076,16 @@
             "required": false,
             "description": "Desktop presentation defaults to right; center remains for existing callers. Mobile geometry is unchanged."
           },
+          "initialFocus": {
+            "type": "Base UI Popup initialFocus",
+            "required": false,
+            "description": "Overrides the default close/back focus target for a custom header."
+          },
+          "finalFocus": {
+            "type": "Base UI Popup finalFocus",
+            "required": false,
+            "description": "Explicit return target for shortcut-driven or custom navigation flows."
+          },
           "footer": {
             "type": "ReactNode",
             "required": false,

@@ -351,7 +351,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "a2d856dfaefb19f5d2e67b702687e3516cbb1f1ecdd6c03fa38c95acb73dc127"
+      "digest": "78b9a428fa2ba53b4d8d0519e7cedc9ab7196cc79e04927c7ed715846c391723"
     },
     {
       "name": "shortcut-rail",

@@ -10,7 +10,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@yami/design-system";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import type { SiteCopy } from "../content/site";
 import type { Locale } from "../lib/locales";
@@ -42,6 +42,8 @@ function activeNav(pathname: string, locale: Locale): "home" | "docs" | "blog" {
 
 export function SiteHeader({ locale, copy, searchEntries, docNavigation }: SiteHeaderProps) {
   const pathname = usePathname();
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuReady, setMenuReady] = useState(false);
@@ -153,6 +155,7 @@ export function SiteHeader({ locale, copy, searchEntries, docNavigation }: SiteH
               variant="tertiary"
               form="icon"
               size="sm"
+              ref={searchTriggerRef}
               aria-label={copy.utilities.search}
               title={copy.utilities.search}
               onClick={() => setSearchOpen(true)}
@@ -204,6 +207,7 @@ export function SiteHeader({ locale, copy, searchEntries, docNavigation }: SiteH
               />
             </a>
             <Button
+              ref={menuTriggerRef}
               className={styles.menuButton}
               variant="tertiary"
               form="icon"
@@ -227,6 +231,7 @@ export function SiteHeader({ locale, copy, searchEntries, docNavigation }: SiteH
       </header>
 
       <SearchPanel
+        finalFocus={searchTriggerRef}
         open={searchOpen}
         onClose={() => setSearchOpen(false)}
         entries={searchEntries}
@@ -243,6 +248,7 @@ export function SiteHeader({ locale, copy, searchEntries, docNavigation }: SiteH
       />
 
       <NavigationDrawer
+        finalFocus={menuTriggerRef}
         open={menuOpen}
         title={copy.utilities.menu}
         closeLabel={copy.utilities.close}

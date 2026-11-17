@@ -2,14 +2,15 @@
 
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Sheet } from "@yami/design-system";
+import { Button, Sheet, type SheetProps } from "@yami/design-system";
 import Link from "next/link";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { brandIcon } from "./assets";
 import styles from "./NavigationDrawer.module.css";
 
-export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, children }: {
+export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, children, finalFocus }: {
+  finalFocus: SheetProps["finalFocus"];
   open: boolean;
   onClose: () => void;
   title: string;
@@ -17,6 +18,7 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
   homeHref: string;
   children: ReactNode;
 }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
   // Sheet owns modal focus and scroll locking; retain it until the exit finishes.
   const [present, setPresent] = useState(open);
   useEffect(() => {
@@ -25,6 +27,8 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
 
   return (
     <Sheet
+      initialFocus={closeRef}
+      finalFocus={finalFocus}
       open={open || present}
       onClose={onClose}
       title={title}
@@ -56,7 +60,7 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
             form="icon"
             size="sm"
             aria-label={closeLabel}
-            autoFocus
+            ref={closeRef}
             onClick={onClose}
           >
             <HugeiconsIcon icon={Cancel01Icon} size={20} strokeWidth={1.5} aria-hidden="true" />

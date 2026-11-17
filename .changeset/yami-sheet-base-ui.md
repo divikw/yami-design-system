@@ -1,6 +1,7 @@
 ---
 "@yami/design-system": minor
 "@yami/prototypes": patch
+"@yami/docsite": patch
 ---
 
 Migrate Sheet modal behavior to Base UI Dialog, keeping its controlled API, responsive geometry, descriptions, footer, and child-view Back/Escape behavior. Desktop now defaults to a 480px full-height right-edge panel; explicit desktopPlacement="center" retains the prior centered layout. Mobile presentation is unchanged. Add bilingual shared-template Docs and localized PC/Mobile previews.
@@ -14,3 +15,5 @@ Reduce mobile Close top/right button insets to 8px (12px to the icon); keep desk
 Keep mobile Header bottom padding at 12px with no extra bottom padding on the inner heading container; desktop spacing is preserved.
 
 Keep the existing search filters centered with an explicit desktopPlacement.
+
+Expose Base UI initialFocus/finalFocus targets for custom headers and shortcut openers. Adapt docsite navigation and search to restore their triggers reliably, preserve the navigation backdrop blur/motion on the real backdrop element, and retain centered desktop search.

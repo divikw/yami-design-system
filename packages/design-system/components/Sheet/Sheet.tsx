@@ -9,6 +9,9 @@ const closeIcon = new URL("../../assets/icons/action/close.svg", import.meta.url
 const backIcon = new URL("../../assets/icons/action/arrow-left.svg", import.meta.url).href;
 
 export interface SheetProps extends Omit<ComponentPropsWithoutRef<"div">, "open" | "title" | "onClose" | "onCancel"> {
+  /** Override focus targets when a consumer replaces the built-in header or uses a shortcut. */
+  initialFocus?: DialogPrimitive.Popup.Props["initialFocus"];
+  finalFocus?: DialogPrimitive.Popup.Props["finalFocus"];
   open: boolean;
   title: string;
   /** Supporting copy stays with the title above the scrolling body. */
@@ -28,7 +31,7 @@ export interface SheetProps extends Omit<ComponentPropsWithoutRef<"div">, "open"
 
 export function Sheet({
   open, title, description, closeLabel, onClose, back, size = "content", contentPadding = "default", desktopPlacement = "right",
-  footer, id: providedId, className, children, onClick, onKeyDown, "aria-describedby": ariaDescribedBy, "data-slot": slot = "sheet", ...rest
+  initialFocus, finalFocus, footer, id: providedId, className, children, onClick, onKeyDown, "aria-describedby": ariaDescribedBy, "data-slot": slot = "sheet", ...rest
 }: SheetProps) {
   const generatedId = useId();
   const id = providedId ?? `sheet-${generatedId}`;
@@ -58,7 +61,8 @@ export function Sheet({
             {...rest}
             id={id}
             className={[styles.sheet, className].filter(Boolean).join(" ")}
-            initialFocus={navigationRef}
+            initialFocus={initialFocus ?? navigationRef}
+            finalFocus={finalFocus}
             aria-modal="true"
             aria-describedby={[ariaDescribedBy, description ? `${id}-description` : undefined].filter(Boolean).join(" ") || undefined}
             data-slot={slot}

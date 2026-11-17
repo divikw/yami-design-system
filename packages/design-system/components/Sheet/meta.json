@@ -19,6 +19,8 @@
     "size": { "type": "enum", "values": ["content", "full"], "default": "content", "required": false, "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop defaults to a 480px full-height panel at the right edge." },
     "contentPadding": { "type": "enum", "values": ["default", "compact", "none"], "default": "default", "required": false, "description": "Use compact for 8px content insets or none for lists that own their row padding." },
     "desktopPlacement": { "type": "enum", "values": ["center", "right"], "default": "right", "required": false, "description": "Desktop presentation defaults to right; center remains for existing callers. Mobile geometry is unchanged." },
+    "initialFocus": { "type": "Base UI Popup initialFocus", "required": false, "description": "Overrides the default close/back focus target for a custom header." },
+    "finalFocus": { "type": "Base UI Popup finalFocus", "required": false, "description": "Explicit return target for shortcut-driven or custom navigation flows." },
     "footer": { "type": "ReactNode", "required": false, "description": "Caller-owned actions outside the scrolling content, with bottom safe-area protection." },
     "children": { "type": "ReactNode", "required": true, "description": "Business content. Sheet does not own selection or draft state." }
   },

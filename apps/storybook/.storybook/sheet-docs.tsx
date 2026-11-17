@@ -73,6 +73,7 @@ function Filters() {
     examples={examples}
     apiNote={zh ? "保持 YAMI 的受控接口，内部使用 Base UI Dialog。根节点为 Portal 中的 div，原生 showModal、close 和 method=dialog 不再适用。Sheet 不管理筛选草稿、保存或业务导航；简单短任务使用 Dialog，重要确认使用 AlertDialog。" : "Preserves the YAMI controlled API, backed by Base UI Dialog. The root is a portalled div; native showModal, close and method=dialog no longer apply. Hosts own drafts, saving and navigation. Use Dialog for short tasks and AlertDialog for critical confirmation."}
     api={[
+      ["initialFocus / finalFocus", zh ? "覆盖默认初始和返回焦点；用于自定义标题区或快捷键入口。" : "Override initial/return focus targets for custom headers or shortcut openers."],
       ["open / onClose", zh ? "必填；受控可见性与关闭请求，宿主设置 open=false 完成关闭。" : "Required controlled visibility and close request; set open=false to close."],
       ["title / closeLabel / description", zh ? "可见标题、关闭按钮名称及可选的固定标题说明。" : "Visible heading, localized Close name and optional fixed supporting description."],
       ["size", zh ? "content（默认）：至少 50dvh；full：填满安全高度。PC 贴右满高，宽度 480px。" : "content (default): at least 50dvh; full: fills safe height. Desktop is right-aligned, full-height and 480px wide."],

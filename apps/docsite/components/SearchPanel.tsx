@@ -1,6 +1,6 @@
 "use client";
 
-import { Sheet } from "@yami/design-system";
+import { Sheet, type SheetProps } from "@yami/design-system";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
@@ -22,6 +22,7 @@ interface SearchPanelCopy {
 }
 
 interface SearchPanelProps {
+  finalFocus: SheetProps["finalFocus"];
   open: boolean;
   onClose: () => void;
   entries: SearchEntry[];
@@ -33,7 +34,7 @@ function resultHref(result: SearchResult): string {
   return heading ? `${result.href}#${heading.id}` : result.href;
 }
 
-export function SearchPanel({ open, onClose, entries, copy }: SearchPanelProps) {
+export function SearchPanel({ open, onClose, entries, copy, finalFocus }: SearchPanelProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -51,11 +52,6 @@ export function SearchPanel({ open, onClose, entries, copy }: SearchPanelProps) 
   useEffect(() => setActiveIndex(0), [query]);
   useEffect(() => {
     if (!open) setQuery("");
-  }, [open]);
-  useEffect(() => {
-    if (!open) return undefined;
-    const frame = window.requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
-    return () => window.cancelAnimationFrame(frame);
   }, [open]);
 
   const grouped = useMemo(() => {
@@ -91,6 +87,9 @@ export function SearchPanel({ open, onClose, entries, copy }: SearchPanelProps) 
 
   return (
     <Sheet
+      initialFocus={inputRef}
+      finalFocus={finalFocus}
+      desktopPlacement="center"
       open={open}
       title={copy.title}
       closeLabel={copy.close}
