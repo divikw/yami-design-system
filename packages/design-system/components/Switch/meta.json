@@ -1,0 +1,151 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Switch",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+  },
+  "exports": [
+    "Switch",
+    "SwitchProps"
+  ],
+  "props": {
+    "checked": {
+      "type": "boolean",
+      "required": false,
+      "description": "Controlled on/off state."
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "required": false,
+      "description": "Initial uncontrolled state; defaults to off."
+    },
+    "onCheckedChange": {
+      "type": "function",
+      "required": false,
+      "description": "State change callback; details.cancel() cancels the change."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "description": "Prevents focus, changes and form submission."
+    },
+    "readOnly": {
+      "type": "boolean",
+      "required": false,
+      "description": "Allows focus and submission while preventing changes."
+    },
+    "name": {
+      "type": "string",
+      "required": false,
+      "description": "Native form field name."
+    },
+    "children": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Optional inline label; do not nest other interactive controls."
+    }
+  },
+  "variants": {
+    "state": [
+      "default",
+      "focus-visible",
+      "disabled"
+    ]
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Keyboard controls use semantic focus-ring outlines."
+    },
+    "color": {
+      "ruleId": "semantic-color-only",
+      "note": "Uses existing semantic surface, text and border tokens."
+    }
+  },
+  "tokens": [
+    "--background-secondary",
+    "--border-default",
+    "--fill-disabled",
+    "--fill-inverse",
+    "--fill-primary",
+    "--focus-ring",
+    "--radius-full",
+    "--radius-component-default",
+    "--space-025",
+    "--space-100",
+    "--stroke-thick",
+    "--text-disabled",
+    "--text-primary",
+    "--space-400"
+  ],
+  "tokenBindings": {
+    "--fill-disabled": {
+      "property": "background",
+      "selector": ".track"
+    },
+    "--fill-inverse": {
+      "property": "background",
+      "selector": ".root[data-checked] .track"
+    },
+    "--fill-primary": {
+      "property": "background",
+      "selector": ".thumb"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".thumb"
+    },
+    "--radius-full": {
+      "property": "border-radius",
+      "selector": ".track, .thumb"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".root"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".root:focus-visible"
+    },
+    "--space-400": {
+      "property": "min-width/min-height",
+      "selector": ".root"
+    }
+  },
+  "accessibility": {
+    "role": "switch",
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "space",
+      "enter"
+    ],
+    "tapTargetMin": 32,
+    "notes": "Provide a visible label or aria-label; optional children label the entire clickable switch row."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#BasicSwitch"
+  ]
+}

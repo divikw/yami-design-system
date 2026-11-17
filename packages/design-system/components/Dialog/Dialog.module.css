@@ -80,6 +80,7 @@
 }
 
 .dialog .closeButton {
+  align-self: start;
   width: var(--space-400);
   height: var(--space-400);
   background-color: transparent;

@@ -18,6 +18,8 @@ Use `ratio={1}` for a square:
 
 ## Responsibility
 
+The container uses Base UI's rendering utility and CSS `aspect-ratio` for geometry.
+
 AspectRatio controls geometry only. The consumer remains responsible for:
 
 - image or video semantics

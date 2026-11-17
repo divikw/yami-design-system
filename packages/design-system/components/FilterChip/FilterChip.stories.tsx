@@ -22,7 +22,8 @@ const yamiLogoUrl = new URL(
 ).href;
 
 const meta = {
-  title: "YAMI/Components/Forms/FilterChip",
+  id: "yami-components-forms-filterchip",
+  title: "YAMI/Components/FilterChip",
   component: FilterChip,
   parameters: {
     layout: "padded",
@@ -369,4 +370,20 @@ export const PopupMenus: Story = {
       }
     });
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

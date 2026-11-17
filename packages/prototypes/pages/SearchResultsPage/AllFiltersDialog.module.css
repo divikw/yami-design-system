@@ -181,38 +181,6 @@
   gap: var(--space-050);
 }
 
-.switch {
-  position: relative;
-  width: 32px;
-  height: 20px;
-  flex: 0 0 auto;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--fill-disabled);
-}
-
-.switch span {
-  position: absolute;
-  top: 0;
-  left: 0;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-default);
-  border-radius: var(--radius-full);
-  background: var(--fill-primary);
-  transition: transform 120ms ease-out;
-}
-
-.switchRow[aria-checked="true"] .switch {
-  background: var(--fill-inverse);
-}
-
-.switchRow[aria-checked="true"] .switch span {
-  transform: translateX(12px);
-}
-
 .priceFields {
   display: flex;
   align-items: center;

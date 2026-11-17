@@ -31,9 +31,7 @@
       "react",
       "@base-ui/react"
     ],
-    "peer": [
-      "@base-ui/react"
-    ],
+    "peer": [],
     "devOnly": []
   },
   "documentation": {
@@ -121,5 +119,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "6f8bae7e9c44f658d6a82a98e3021ececb1cc6d38927ca88e4efea724514c7c1"
+  "contentDigest": "36387bb471a8c77b354546c1d749a518bd5af24153a3c614a8957d21a5454b04"
 }

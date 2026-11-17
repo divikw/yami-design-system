@@ -67,7 +67,7 @@ Price format: `$12.99` (USD-leading). Discount: `$12.99  $19.99` (current red, o
 | **Tabs** | primary / secondary / tertiary | Responsive tab navigation; Theme and inverse surface polarity remain independent. |
 | **Pagination** | controlled updates / native links × default / inverse | PC numbered pagination from 1024px; 32px controls, bilingual labels, blue keyboard focus. Hidden on mobile. |
 | **Breadcrumb** | sm / md × default / inverse | Hierarchical native links, explicit current page, wrapping labels and blue focus. Pages own visibility. |
-| **Card** | padding × surface primary/secondary/inverse | Independent content items, not ordinary page sections. Default padding 16px, surface radius 12px; ProductCard owns its 8px geometry. **No border or shadow by default.** Native link/button interactions; 44px interactive target. |
+| **Card** | padding × surface primary/secondary/inverse | Independent content items, not ordinary page sections. Default padding 16px, surface radius 12px; ProductCard owns its 8px geometry. **No border or shadow by default.** Native link/button interactions; 32px minimum interactive target. |
 | **Badge** | 6 colors × primary (solid) / secondary (tinted) × sm/md | Uses semantic badge colors; keyboard focus has separate blue aliases. Max 2 badges per ProductCard. |
 | **Input** | default / focus / error / disabled | Keep state borders; separate 2px blue `--focus-ring` keyboard outline at 2px offset. |
 | **Checkbox** | default / hover / selected / disabled / mixed | Neutral multi-select control. Selected state is ink, never red. |
@@ -94,7 +94,7 @@ These have validators; error-level violations fail `validateDesign`. Full reason
 9. **border-strength** — 3 strengths only (default 8% / focus 87% / attention red).
 10. **emphasis-limit** — 1 emphasis button per screen.
 11. **card-no-border** — opt-in border only for dense grids.
-12. **tap-target** — iOS 44pt / Android 48dp minimum.
+12. **tap-target** — Web targets ≥24×24 CSS px or applicable WCAG 2.2 spacing/other exceptions. Prefer 44×44px for important touch actions; do not force layout height or overlap/clip expanded hit areas.
 13. **no-emoji** — none in product UI (UGC excepted).
 14. **no-decorative-media** — no glassmorphism, hand-drawn illustration, unregistered serif/decorative fonts, pastels, alert-bar cards; approved serif typography uses optical `Source Serif 4 Variable` + `Noto Serif SC` through `--font-family-serif`.
 15. **token-exists** — every `var(--x)` reference must exist in `tokens.css`.

@@ -74,6 +74,24 @@ for (const component of componentDocs) {
   if (!draftStoryPaths.has(component.storyPath) && !hasOwningDocsEntry(component.name)) {
     throw new Error(`${component.name} is missing its Storybook docs entry`);
   }
+  const visible = entries.filter((entry) => entry.tags?.includes("dev") &&
+    path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath);
+  if (visible.map((entry) => entry.name).join(",") !== "docs,PC,Mobile" ||
+      visible[0].type !== "docs" || visible.slice(1).some((entry) => entry.type !== "story" || entry.tags.includes("play-fn"))) {
+    throw new Error(`${component.name} must show only Docs, PC, and Mobile, with no autoplay in the device previews`);
+  }
+}
+
+const componentTitles = [...new Set(entries
+  .filter((entry) => entry.tags?.includes("dev") && /^YAMI\/components\//i.test(entry.title))
+  .map((entry) => entry.title))];
+const sortedComponentTitles = [...componentTitles].sort((left, right) => (
+  left.localeCompare(right, "en", { numeric: true, sensitivity: "base" })
+));
+if (!componentTitles.length || componentTitles.some((title, index) => (
+  title.split("/").length !== 3 || title !== sortedComponentTitles[index]
+))) {
+  throw new Error("Components must appear directly under Components in alphabetical order");
 }
 
 const staticAssets = await walk(

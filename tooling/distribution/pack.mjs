@@ -69,8 +69,13 @@ for (const [name, status] of [
   entries.push({ name, version: meta.version, status: meta.status });
   await visit(path.join(components, name, "index.ts"));
 }
+const dependencies = Object.fromEntries(Object.entries(workspacePackage.dependencies).filter(([name]) => name.startsWith("@fontsource")));
 for (const specifier of external) {
-  if (specifier !== "react") throw new Error(`Undeclared candidate dependency: ${specifier}`);
+  if (specifier === "react") continue;
+  if (specifier !== "@base-ui/react/use-render" || !workspacePackage.dependencies["@base-ui/react"]) {
+    throw new Error(`Undeclared candidate dependency: ${specifier}`);
+  }
+  dependencies["@base-ui/react"] = workspacePackage.dependencies["@base-ui/react"];
 }
 
 // Preserve the module tree and CSS Modules. Resolve directory imports before
@@ -180,7 +185,7 @@ await fs.writeFile(path.join(output, "package.json"), `${JSON.stringify({
   sideEffects: ["**/*.css"],
   exports,
   peerDependencies: { react: policy.react, "react-dom": policy.react },
-  dependencies: Object.fromEntries(Object.entries(workspacePackage.dependencies).filter(([name]) => name.startsWith("@fontsource"))),
+  dependencies,
 }, null, 2)}\n`);
 
 async function inventory(directory, prefix = "") {

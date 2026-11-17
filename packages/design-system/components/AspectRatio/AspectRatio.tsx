@@ -1,3 +1,4 @@
+import { useRender } from '@base-ui/react/use-render'
 import type { CSSProperties, HTMLAttributes } from 'react'
 
 import styles from './AspectRatio.module.css'
@@ -20,12 +21,13 @@ export function AspectRatio({
   'data-slot': dataSlot = 'aspect-ratio',
   ...props
 }: AspectRatioProps) {
-  return (
-    <div
-      {...props}
-      className={[styles.root, className].filter(Boolean).join(' ')}
-      style={{ ...style, '--aspect-ratio': ratio } as AspectRatioStyle}
-      data-slot={dataSlot}
-    />
-  )
+  return useRender({
+    defaultTagName: 'div',
+    props: {
+      ...props,
+      className: [styles.root, className].filter(Boolean).join(' '),
+      style: { ...style, '--aspect-ratio': ratio } as AspectRatioStyle,
+      'data-slot': dataSlot,
+    },
+  })
 }

@@ -27,6 +27,7 @@
 }
 
 .portrait {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
@@ -87,4 +88,11 @@
   height: 100%;
   object-fit: cover;
   object-position: inherit;
+}
+
+.image[data-loading],
+.image[data-error] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }

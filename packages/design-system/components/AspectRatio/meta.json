@@ -35,7 +35,7 @@
     "notes": "Layout-only wrapper. Accessibility semantics belong to its children."
   },
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": ["react", "@base-ui/react"],
     "peer": [],
     "devOnly": []
   },

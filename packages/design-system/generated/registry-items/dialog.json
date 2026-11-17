@@ -104,7 +104,7 @@
       "ariaPattern": "Native modal dialog labelled by its visible h2; alertdialog is an explicit variant.",
       "interaction": "showModal makes the background inert. Focus starts on Close for default dialogs or the first control for confirmation dialogs, remains inside, and returns to the opener."
     },
-    "interactionCoverage": "missing"
+    "interactionCoverage": "covered"
   },
-  "contentDigest": "31a1084110ec9ec2f609442ac41ccd347c8b117d2610d280ba15df8e0d1466cf"
+  "contentDigest": "9c9e48727267f1bcf56c1a7cf21e29c823b81847079d05ef537b753c1316a555"
 }

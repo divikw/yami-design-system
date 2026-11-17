@@ -1,0 +1,76 @@
+.page { color: var(--text-primary); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: 1.65; min-width: 0; }
+.page h1 { font-size: var(--font-size-heading-2xl); line-height: 1.2; margin: 0 0 var(--space-150); font-weight: var(--font-weight-emphasize); }
+.page h2 { margin: 0 0 var(--space-200); padding: 0; border: 0; font-size: var(--font-size-heading-md); line-height: 1.4; font-weight: var(--font-weight-emphasize); scroll-margin-top: var(--space-400); }
+.page p { margin: 0 0 var(--space-200); }
+.page section { margin-top: var(--space-600); }
+.page a { color: inherit; text-underline-offset: 4px; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-300); margin-bottom: var(--space-400); }
+.header p { color: var(--text-secondary); max-width: 480px; font-size: var(--font-size-heading-sm); margin: 0; }
+.actions { display: flex; align-items: center; gap: var(--space-100); flex-shrink: 0; }
+.actions a { display: grid; place-items: center; width: var(--space-400); height: var(--space-400); background: var(--surface-secondary); border-radius: var(--radius-full); text-decoration: none; }
+.example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
+.preview { display: grid; place-items: center; min-height: 300px; padding: var(--space-600) var(--space-400); background: var(--surface-primary); }
+.demo { width: 100%; max-width: 400px; }
+.demo h3 { margin: 0; }
+.codeBlock { position: relative; background: var(--surface-secondary); border-radius: var(--radius-surface-default); margin-top: var(--space-200); overflow: hidden; }
+.example > .codeBlock { margin: 0; border-radius: 0; border-top: var(--stroke-default) solid var(--border-default); }
+.codeBlock + p { margin-top: var(--space-200); }
+.codeScroll { overflow: auto; border-radius: inherit; scrollbar-width: none; }
+.codeScroll::-webkit-scrollbar { display: none; }
+.codeScroll [data-orientation="horizontal"] { display: none; }
+/* Keep the highlighter's scroll viewport aligned with the outer code surface. */
+.codeScroll > div, .codeScroll > div > div,
+.codeScroll [data-radix-scroll-area-viewport] { border-radius: inherit; }
+.codeScroll [data-radix-scroll-area-viewport]:focus:not(:focus-visible) { outline: none; }
+.codeScroll [data-radix-scroll-area-viewport]:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
+}
+.codeScroll pre { color: var(--text-primary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding-inline-end: var(--space-600) !important; }
+.codeScroll pre:has(:global(.linenumber)) { padding-inline-start: var(--space-150) !important; }
+.codeScroll :global(.linenumber) {
+  position: sticky;
+  inset-inline-start: var(--space-150);
+  z-index: 1;
+  background: var(--surface-secondary);
+  box-shadow: calc(-1 * var(--space-150)) 0 0 var(--surface-secondary);
+}
+.codeBlock[data-expanded="false"] .codeScroll { max-height: 120px; overflow: hidden; mask-image: linear-gradient(to bottom, black 35%, transparent 100%); }
+.copy { --button-tertiary: color-mix(in srgb, var(--surface-secondary) 80%, transparent); position: absolute; inset-block-start: var(--space-100); inset-inline-end: var(--space-100); }
+.codeBlock .copy button:not([aria-disabled="true"]):active {
+  background-color: var(--button-tertiary);
+  background-image: linear-gradient(var(--button-tertiary-active), var(--button-tertiary-active));
+}
+@media (hover: hover) and (pointer: fine) {
+  .codeBlock .copy button:not([aria-disabled="true"]):hover {
+    background-color: var(--button-tertiary);
+    background-image: linear-gradient(var(--button-tertiary-active), var(--button-tertiary-active));
+  }
+}
+.expand { display: flex; justify-content: center; padding: var(--space-150); }
+.codeBlock[data-expanded="false"] .expand { position: absolute; inset-inline: 0; bottom: var(--space-100); }
+.tabs { display: flex; gap: var(--space-300); margin-bottom: var(--space-150); }
+.tabs button { border: 0; border-bottom: var(--stroke-thick) solid transparent; padding: var(--space-100) 0; background: transparent; color: var(--text-secondary); font: inherit; cursor: pointer; }
+.tabs button[aria-pressed="true"] { border-bottom-color: var(--text-primary); color: var(--text-primary); }
+.page :is(a, button):focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
+.tableScroll { overflow: auto; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); margin-bottom: var(--space-200); }
+.page table { border-collapse: collapse; width: 100%; text-align: start; margin: 0; }
+.page th, .page td { padding: var(--space-150); border-bottom: var(--stroke-default) solid var(--border-default); vertical-align: top; text-align: start; }
+.page tbody tr:last-child td { border-bottom: 0; }
+.page td code { overflow-wrap: anywhere; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:global(.sbdocs-wrapper):has(.page) { background: var(--background-primary); }
+:global(.sbdocs-content):has(.page) { max-width: 720px; min-width: 0; }
+@media (max-width: 600px) {
+  .header { flex-direction: column; gap: var(--space-200); }
+  .preview { padding: var(--space-300) var(--space-200); min-height: 260px; }
+  .page section { margin-top: var(--space-400); }
+}
+
+.codeScroll :global(.token) { color: var(--text-primary) !important; }
+.codeScroll :global(.token.keyword), .codeScroll :global(.token.tag) { color: var(--text-info) !important; }
+.codeScroll :global(.token.string), .codeScroll :global(.token.attr-value) { color: var(--text-success) !important; }
+.codeScroll :global(.token.attr-name), .codeScroll :global(.token.function) { color: var(--text-emphasis) !important; }
+.codeScroll :global(.token.comment), .codeScroll :global(.linenumber) { color: var(--text-secondary) !important; }
+:global(.sbdocs-wrapper):has(.page) :global(.toc-link) { color: var(--text-secondary); }
+:global(.sbdocs-wrapper):has(.page) :global(.is-active-link) { color: var(--text-info); }

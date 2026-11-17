@@ -5,8 +5,8 @@
   "title": "Accordion",
   "type": "component",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Inline disclosure extracted from ProductDetailPage: independent panels with plus/minus icons, controlled or uncontrolled expansion, native keyboard activation and theme-aware semantic tokens.",
+  "version": "0.2.0",
+  "description": "Base UI-backed accordion with shadcn/ui composition: Accordion, AccordionItem, AccordionTrigger and AccordionContent. Supports single or multiple expansion and controlled or uncontrolled values.",
   "source": "components/Accordion",
   "files": [
     {
@@ -24,11 +24,18 @@
   ],
   "exports": [
     "Accordion",
-    "AccordionProps"
+    "AccordionContent",
+    "AccordionContentProps",
+    "AccordionItem",
+    "AccordionItemProps",
+    "AccordionProps",
+    "AccordionTrigger",
+    "AccordionTriggerProps"
   ],
   "composes": [],
   "dependencies": {
     "runtime": [
+      "@base-ui/react",
       "react"
     ],
     "peer": [],
@@ -46,8 +53,6 @@
   },
   "design": {
     "tokens": [
-      "--button-disabled",
-      "--button-tertiary-active",
       "--divider-default",
       "--focus-ring",
       "--font-family-ios",
@@ -115,14 +120,6 @@
         "property": "width / height",
         "selector": ".icon"
       },
-      "--button-tertiary-active": {
-        "property": "background",
-        "selector": ".trigger:active:not(:disabled)"
-      },
-      "--button-disabled": {
-        "property": "background",
-        "selector": ".trigger:disabled"
-      },
       "--text-disabled": {
         "property": "color",
         "selector": ".trigger:disabled"
@@ -168,9 +165,9 @@
       ],
       "tapTargetMin": 44,
       "ariaPattern": "aria-expanded and aria-controls on the native button; aria-labelledby and hidden on the panel.",
-      "notes": "Disabled buttons use native disabled. Collapsed children retain state but leave the focus order and accessibility tree. Choose the heading level to match the document; labels must not contain interactive children."
+      "notes": "Disabled triggers use native disabled with transparent backgrounds. Closed panels leave the focus order and accessibility tree. Set keepMounted to retain child state. Trigger includes an h3 Header; labels must not contain interactive children."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "515171ac3ac253d26bb079142f513db75575285a28849e9dc9553217a89f84d6"
+  "contentDigest": "743bb55bc125052c3147a3784379310d4fec3b41c63d68c3cbc2330d087c5a9f"
 }

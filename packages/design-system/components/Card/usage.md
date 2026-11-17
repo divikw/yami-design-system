@@ -23,7 +23,7 @@ Card 默认使用：
 
 - `--surface-primary` 背景（浅色主题下为白色，深色主题下随主题变化）。
 - `--radius-surface-default` 圆角（12px）。
-- `padding='md'` 内边距（16px）。
+- `padding='md'` 响应式内边距：PC 16px、Mobile/Tablet 8px。
 - **无边框**（规则 `card-no-border`）。
 - **默认无阴影**。Figma 的 E100–E500 层级已同步为 `--elevation-*` token，仅在明确需要静态层级时使用，不自动改变 Card 默认外观。
 
@@ -31,14 +31,12 @@ Card 默认使用：
 
 ### 内边距选择
 
-| 档位 | 当前值 | 选择依据 |
+| 模式 | PC（≥1024px） | Mobile/Tablet（<1024px） |
 |---|---|---|
-| `none` | 0 | 图片等媒体贴边，内部内容区由组合组件管理留白 |
-| `sm` | 12px | 内容简短的紧凑条目 |
-| `md` | 16px | 默认的独立内容卡片 |
-| `lg` | 24px | 需要更宽松留白的内容项 |
+| `md`（默认） | 16px | 8px |
+| `none` | 0 | 0 |
 
-16px 是当前默认值，不是所有业务卡片的固定要求。Card 不会根据屏幕宽度自动切换内边距；同一列表或网格中的同类卡片应保持一致。首页 ProductCard 显式使用 `padding="none"`，再按自身规范设置图片和文字区的间距。
+所有内容 Card 统一使用上述响应式内边距；`sm`、`lg` 仅保留为兼容别名，尺寸与 `md` 相同。ProductCard 等贴边媒体容器继续使用 `padding="none"`，其内部内容间距由组合组件管理。
 
 ### 圆角归属
 
@@ -56,7 +54,7 @@ Card 默认使用：
 | 键盘焦点 | 2px 的 `--focus-ring` 轮廓，偏移 2px；跟随周围页面的主题，与卡片自身的明暗极性无关 |
 | 禁用按钮 | 原生 `disabled` 阻止激活；保留表面，使用禁用文字颜色和 `not-allowed` 光标，不显示悬浮或按下反馈 |
 
-交互卡片至少提供 44×44px 的点击区域，不向相邻内容扩展。开启减少动态效果偏好时，关闭背景过渡。`interactive={false}` 会关闭悬浮、按下反馈和最小点击尺寸；可聚焦元素仍会显示焦点轮廓，禁用状态的文字颜色和光标也会保留。
+交互卡片至少提供 32×32px 的点击区域，不向相邻内容扩展。开启减少动态效果偏好时，关闭背景过渡。`interactive={false}` 会关闭悬浮、按下反馈和最小点击尺寸；可聚焦元素仍会显示焦点轮廓，禁用状态的文字颜色和光标也会保留。
 
 正确示例：
 
@@ -141,7 +139,7 @@ Card 默认使用：
 ### 列表条目卡片（密集网格，带边框）
 
 ```tsx
-<Card bordered padding="sm">
+<Card bordered padding="md">
   <OrderSummary order={order} />
 </Card>
 ```
@@ -157,7 +155,7 @@ Card 默认使用：
 ### 反色表面：与当前主题相反的明暗极性
 
 ```tsx
-<Card surface="inverse" padding="lg">
+<Card surface="inverse" padding="md">
   <h2>反色内容区</h2>
 </Card>
 ```
@@ -248,7 +246,7 @@ First ask whether this is an independently understandable, actionable item. For 
 Cards ship with:
 - `--surface-primary` background (white in Light; theme-aware in Dark)
 - `--radius-surface-default` (12px)
-- `padding='md'` (16px interior)
+- `padding='md'`: PC 16px, Mobile/Tablet 8px
 - **No border** (rule `card-no-border`)
 - **No shadow by default**. Figma E100–E500 tokens are available for explicitly requested static depth; they do not change Card defaults.
 
@@ -256,14 +254,12 @@ Opt into `bordered` only in dense listing grids where cards are tightly packed a
 
 ### Choosing padding
 
-| Tier | Current value | Use |
+| Mode | PC (≥1024px) | Mobile/Tablet (<1024px) |
 |---|---|---|
-| `none` | 0 | Edge-to-edge media; the composite owns internal content spacing |
-| `sm` | 12px | Compact items with brief content |
-| `md` | 16px | Default self-contained content cards |
-| `lg` | 24px | Items that need more generous spacing |
+| `md` (default) | 16px | 8px |
+| `none` | 0 | 0 |
 
-16px is the current default, not a requirement for every business card. Card does not change padding automatically at breakpoints. Keep peer cards consistent within a list or grid. Homepage ProductCard explicitly uses `padding="none"` and owns its media and text spacing.
+All content Cards use this responsive spacing. `sm` and `lg` remain compatibility aliases with the same sizes as `md`. Edge-to-edge media containers such as ProductCard keep `padding="none"` and own their internal content spacing.
 
 ### Radius ownership
 
@@ -281,7 +277,7 @@ Interaction is inferred for `as="button"` and `as="a"` with `href`. An empty `hr
 | Keyboard focus | 2px `--focus-ring` outline with 2px offset, following the surrounding theme's canvas rather than the card's own surface polarity |
 | Disabled button | Native `disabled` prevents activation; preserve surface, use disabled text color and `not-allowed` cursor, suppress hover/press |
 
-Interactive cards reserve at least 44×44px without extending the hit area over adjacent content. Reduced motion disables the background transition. `interactive={false}` suppresses hover/press styling and the minimum target; a focusable host still receives a focus outline, and disabled text color and cursor remain available.
+Interactive cards reserve at least 32×32px without extending the hit area over adjacent content. Reduced motion disables the background transition. `interactive={false}` suppresses hover/press styling and the minimum target; a focusable host still receives a focus outline, and disabled text color and cursor remain available.
 
 Right:
 ```tsx
@@ -364,7 +360,7 @@ For an existing receipt file, use `<a href="…" download>` instead. Prefer Butt
 ### List item card (dense grid, bordered)
 
 ```tsx
-<Card bordered padding="sm">
+<Card bordered padding="md">
   <OrderSummary order={order} />
 </Card>
 ```
@@ -380,7 +376,7 @@ For an existing receipt file, use `<a href="…" download>` instead. Prefer Butt
 ### Inverse surface — opposite polarity within either theme
 
 ```tsx
-<Card surface="inverse" padding="lg">
+<Card surface="inverse" padding="md">
   <h2>On-dark hero</h2>
 </Card>
 ```

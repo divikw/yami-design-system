@@ -18,6 +18,7 @@
  * Rule no-emoji: badge text must be plain ("NEW", "SALE", "–10%").
  */
 
+import { useRender } from '@base-ui/react/use-render'
 import { forwardRef, type HTMLAttributes } from 'react'
 
 import styles from './Badge.module.css'
@@ -127,23 +128,20 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
   const flag = type ? TYPE_FLAGS[type] : undefined
 
   const classes = [styles.badge, className].filter(Boolean).join(' ')
-  return (
-    <span
-      // Spread consumer rest first so component-controlled data-* + className
-      // always win — keeps the variant-selector contract stable.
-      {...rest}
-      ref={ref}
-      className={classes}
-      data-slot="badge"
-      data-color={resolvedColor}
-      data-emphasis={resolvedEmphasis}
-      data-size={size}
-      data-tone={tone}
-      data-type={type}
-      data-flag={flag}
-    >
-      {flag && <FlagPrefix color={flag} />}
-      {children}
-    </span>
-  )
+  return useRender({
+    defaultTagName: 'span',
+    ref,
+    props: {
+      ...rest,
+      className: classes,
+      'data-slot': 'badge',
+      'data-color': resolvedColor,
+      'data-emphasis': resolvedEmphasis,
+      'data-size': size,
+      'data-tone': tone,
+      'data-type': type,
+      'data-flag': flag,
+      children: <>{flag && <FlagPrefix color={flag} />}{children}</>,
+    },
+  })
 })

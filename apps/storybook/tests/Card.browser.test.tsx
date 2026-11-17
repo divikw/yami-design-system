@@ -82,7 +82,8 @@ test("an empty href retains native link interaction while an absent href stays s
   </>));
   const [link, staticCard, feedbackOff] = container.querySelectorAll("a");
   expect(link).toHaveRole("link");
-  expect(getComputedStyle(link).minHeight).toBe("44px");
+  expect(getComputedStyle(link).minHeight).toBe("32px");
+  expect(link.getBoundingClientRect().height).toBe(32);
   expect(getComputedStyle(link).cursor).toBe("pointer");
   expect(staticCard).not.toHaveRole("link");
   expect(getComputedStyle(staticCard).minHeight).toBe("0px");
@@ -131,10 +132,10 @@ test.each([240, 375, 1024])("link cards and long content fit a %ipx container wi
   for (const [index, link] of links.entries()) {
     expect(link).toHaveRole("link");
     expect(getComputedStyle(link).display).toBe("flow-root");
-    expect(getComputedStyle(link).paddingTop).toBe(["0px", "12px", "16px", "24px"][index]);
+    expect(getComputedStyle(link).paddingTop).toBe(index === 0 ? "0px" : innerWidth >= 1024 ? "16px" : "8px");
     expect(getComputedStyle(link).textDecorationLine).toBe("none");
     expect(link.getBoundingClientRect().width).toBe(width);
-    expect(link.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
+    expect(link.getBoundingClientRect().height).toBeGreaterThanOrEqual(32);
     expect(link.scrollWidth).toBeLessThanOrEqual(link.clientWidth);
   }
   const staticCard = container.querySelector<HTMLElement>('div[data-slot="card"]')!;
@@ -260,4 +261,24 @@ test("ProductCard keeps its media crop and compact radius independent of Card ov
   expect(getComputedStyle(media).borderRadius).toBe("8px");
   expect(media.getBoundingClientRect().width).toBe(media.getBoundingClientRect().height);
   expect(card.scrollWidth).toBeLessThanOrEqual(card.clientWidth);
+});
+
+
+test.each([375, 1023, 1024, 1440])("all content Card padding aliases use the shared responsive spacing at %ipx", async (width) => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  try {
+    await page.viewport(width, 900);
+    flushSync(() => root.render(<>
+      <Card>Default</Card>
+      {(["sm", "md", "lg", "none"] as const).map((padding) => <Card key={padding} padding={padding}>{padding}</Card>)}
+    </>));
+    const cards = container.querySelectorAll('[data-slot="card"]');
+    cards.forEach((card, index) => {
+      const expected = index === 4 ? "0px" : width >= 1024 ? "16px" : "8px";
+      const style = getComputedStyle(card);
+      expect([style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft]).toEqual([expected, expected, expected, expected]);
+    });
+  } finally {
+    await page.viewport(viewport.width, viewport.height);
+  }
 });

@@ -75,7 +75,7 @@ function Proposal() {
 
 const meta = {
   id: "yami-components-actions-button-group",
-  title: "YAMI/Components/Actions/ButtonGroup",
+  title: "YAMI/Components/ButtonGroup",
   component: ButtonGroup,
   parameters: {
     layout: "centered",
@@ -173,4 +173,20 @@ export const Interaction: Story = {
     await expect(save).toHaveFocus();
 
   },
+};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
 };

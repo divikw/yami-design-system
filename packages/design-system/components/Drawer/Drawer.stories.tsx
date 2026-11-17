@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button";
 import { Input } from "../Input";
-import { Drawer } from "./Drawer";
+import { Drawer, type DrawerProps } from "./Drawer";
 
 type Mode = "default" | "empty" | "loading" | "error" | "long" | "child";
 function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?: boolean }) {
@@ -39,7 +39,8 @@ function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?
 }
 
 const meta = {
-  title: "YAMI/Components/Layout/Drawer",
+  id: "yami-components-layout-drawer",
+  title: "YAMI/Components/Drawer",
   component: Drawer,
   globals: { theme: "light" },
   parameters: { layout: "fullscreen", controls: { disable: true }, docs: { showStories: false, translations: {
@@ -71,4 +72,37 @@ export const Interaction: Story = {
     await waitFor(() => expect(opener).toHaveFocus());
     await expect(canvasElement.ownerDocument.querySelector("dialog[open]")).toBeNull();
   },
+};
+
+export const PCPreview: Story = {
+  ...PC,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+function DrawerPlayground(args: DrawerProps & { opener: string }) {
+  const [open, setOpen] = useState(args.open);
+  return <>
+    <Button onClick={() => setOpen(true)}>{args.opener}</Button>
+    <Drawer {...args} open={open} onClose={() => setOpen(false)}>
+      {args.children ?? args.title}
+    </Drawer>
+  </>;
+}
+
+export const Playground: Story = {
+  tags: ["!dev", "!test"],
+  render: (args, { globals }) => (
+    <DrawerPlayground key={String(args.open)} {...args} opener={globals.locale === "en" ? "Open drawer" : "打开抽屉"} />
+  ),
 };

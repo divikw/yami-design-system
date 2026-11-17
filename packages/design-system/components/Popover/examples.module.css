@@ -1,0 +1,4 @@
+.body { padding: var(--space-200); display: grid; gap: var(--space-100); }
+.header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-100); }
+.header .close { align-self: start; width: var(--space-400); height: var(--space-400); }
+.closeIcon { display: block; width: var(--space-300); height: var(--space-300); background: currentColor; mask-position: center; mask-size: contain; mask-repeat: no-repeat; }

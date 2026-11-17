@@ -1,4 +1,5 @@
 import { composeStories } from "@storybook/react-vite";
+import { createRef } from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
@@ -8,6 +9,29 @@ import { Badge } from "../../../packages/design-system/components/Badge";
 import "@yami/design-system/tokens.css";
 
 const { Showcase, Sale, New, Hot, Discount, BestSellers, TypeWithOverride } = composeStories(stories);
+
+test("forwards the ref and native attributes to the badge span", () => {
+  const container = document.createElement("div");
+  const root = createRoot(container);
+  const ref = createRef<HTMLSpanElement>();
+  try {
+    flushSync(() => root.render(
+      <Badge ref={ref} className="custom-badge" aria-label="Store exclusive" data-slot="custom" type="exclusive">
+        Exclusive
+      </Badge>,
+    ));
+
+    const badge = container.querySelector('span[data-slot="badge"]');
+    expect(badge).not.toBeNull();
+    expect(ref.current).toBe(badge);
+    expect(badge?.classList.contains("custom-badge")).toBe(true);
+    expect(badge?.getAttribute("aria-label")).toBe("Store exclusive");
+    expect(badge?.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(badge?.textContent).toBe("Exclusive");
+  } finally {
+    root.unmount();
+  }
+});
 
 test("named stories retain semantic presets and intentional overrides", () => {
   const container = document.createElement("div");

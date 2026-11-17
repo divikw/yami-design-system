@@ -1,0 +1,147 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Popover",
+  "category": "layout",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+  },
+  "exports": [
+    "Popover",
+    "PopoverProps",
+    "PopoverTrigger",
+    "PopoverContent",
+    "PopoverContentProps",
+    "PopoverTitle",
+    "PopoverDescription",
+    "PopoverClose"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "required": false,
+      "description": "Initial uncontrolled open state."
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "description": "Called when opening or closing is requested."
+    },
+    "children": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Compose trigger and content; give the panel an accessible name."
+    }
+  },
+  "variants": {
+    "state": [
+      "closed",
+      "open"
+    ]
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Keyboard controls use semantic focus-ring outlines."
+    },
+    "color": {
+      "ruleId": "semantic-color-only",
+      "note": "Uses existing semantic surface, text and border tokens."
+    }
+  },
+  "tokens": [
+    "--border-default",
+    "--fill-primary",
+    "--radius-surface-default",
+    "--stroke-default",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-heading-sm",
+    "--font-weight-emphasize",
+    "--line-height-heading-sm",
+    "--font-size-body-md",
+    "--line-height-body-md"
+  ],
+  "tokenBindings": {
+    "--fill-primary": {
+      "property": "background",
+      "selector": ".content"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".content"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".content"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".content"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".title, .description"
+    },
+    "--font-size-heading-sm": {
+      "property": "font-size",
+      "selector": ".title"
+    },
+    "--font-weight-emphasize": {
+      "property": "font-weight",
+      "selector": ".title"
+    },
+    "--line-height-heading-sm": {
+      "property": "line-height",
+      "selector": ".title"
+    },
+    "--font-size-body-md": {
+      "property": "font-size",
+      "selector": ".description"
+    },
+    "--line-height-body-md": {
+      "property": "line-height",
+      "selector": ".description"
+    }
+  },
+  "accessibility": {
+    "role": "dialog",
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "space",
+      "enter",
+      "escape"
+    ],
+    "tapTargetMin": 44,
+    "notes": "Name content with PopoverTitle or aria-label and provide a named trigger. Escape dismisses the inner layer and restores focus."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#BasicPopover"
+  ]
+}

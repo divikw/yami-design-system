@@ -102,7 +102,7 @@ export function Dialog({
           <h2 className={styles.title} id={`${id}-title`}>{title}</h2>
           {variant !== "confirmation" && (
             <Button ref={closeRef} className={styles.closeButton} variant="tertiary" form="icon" size="sm" aria-label={closeLabel} onClick={onClose}>
-              <img src={closeIcon} alt="" width={20} height={20} />
+              <img src={closeIcon} alt="" width={24} height={24} />
             </Button>
           )}
         </header>

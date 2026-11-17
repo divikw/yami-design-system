@@ -581,3 +581,21 @@ export const Mobile: Story = {
     : {},
   play: import.meta.env.MODE === "test" ? PC.play : undefined,
 };
+
+export const PCPreview: Story = {
+  ...PC,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

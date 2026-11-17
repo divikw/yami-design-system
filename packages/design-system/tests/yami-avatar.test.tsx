@@ -8,7 +8,8 @@ describe("YAMI Avatar", () => {
     const markup = renderToStaticMarkup(<Avatar src="/portrait.jpg" alt="Alex Morgan" />);
     expect(markup).toContain('role="img"');
     expect(markup).toContain('aria-label="Alex Morgan"');
-    expect(markup).not.toContain("avatar-fallback");
+    expect(markup).toContain('data-slot="avatar-default"');
+    expect(markup).toContain("default-avatar.png");
     expect(markup).not.toContain(">AM<");
   });
 

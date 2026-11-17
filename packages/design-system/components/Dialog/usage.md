@@ -17,7 +17,7 @@
 - footer 统一提供 16px 四周留白并兼容底部安全区；业务传入的操作布局只负责按钮排列和间距。
 - `confirmation` 使用更紧凑的间距：message 左右 12px，footer 四周 12px，message 底部保持 8px。
 - 默认 `role="dialog"`；需要立即宣读的关键提醒可使用 `role="alertdialog"`。
-- 关闭按钮为 32 × 32px、图标为 20 × 20px，并由 Button 保留 44 × 44px 点击热区。
+- 关闭按钮为 32 × 32px、图标为 24 × 24px，并由 Button 保留 44 × 44px 点击热区。
 
 原生 `dialog.showModal()` 提供背景 inert。组件统一处理焦点循环、Esc、遮罩关闭、关闭后的焦点归还和页面滚动锁定。业务层负责操作按钮、确认逻辑和异步状态。
 

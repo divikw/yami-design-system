@@ -37,14 +37,14 @@
 .pad-none {
   padding: 0;
 }
-.pad-sm {
-  padding: var(--space-150);
+.pad-sm, .pad-md, .pad-lg {
+  padding: var(--space-100);
 }
-.pad-md {
-  padding: var(--space-200);
-}
-.pad-lg {
-  padding: var(--space-300);
+
+@media (min-width: 1024px) {
+  .pad-sm, .pad-md, .pad-lg {
+    padding: var(--space-200);
+  }
 }
 
 /* ─── Surfaces ──────────────────────────────────────────────────── */
@@ -74,8 +74,8 @@
 /* Interaction changes background color only. */
 
 .interactive {
-  min-width: 44px;
-  min-height: 44px;
+  min-width: var(--space-400);
+  min-height: var(--space-400);
   cursor: pointer;
   transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1);
 }

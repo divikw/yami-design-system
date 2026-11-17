@@ -63,7 +63,8 @@ function SheetDemo({ childView = false, ...args }: SheetProps & { childView?: bo
 }
 
 const meta = {
-  title: "YAMI/Components/Layout/Sheet",
+  id: "yami-components-layout-sheet",
+  title: "YAMI/Components/Sheet",
   component: Sheet,
   parameters: {
     layout: "fullscreen",
@@ -100,3 +101,21 @@ export const Desktop: Story = {
   name: "PC — Centered",
   globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
 };
+
+export const PCPreview: Story = {
+  ...Desktop,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

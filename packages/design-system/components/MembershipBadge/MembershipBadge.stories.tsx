@@ -6,7 +6,8 @@ import { MembershipBadge, type MembershipBadgeTier } from "./MembershipBadge";
 const tiers: MembershipBadgeTier[] = ["ruby-0", "ruby", "silver", "gold"];
 
 const meta = {
-  title: "YAMI/Components/Data Display/MembershipBadge",
+  id: "yami-components-data-display-membershipbadge",
+  title: "YAMI/Components/MembershipBadge",
   component: MembershipBadge,
   parameters: { layout: "padded" },
   argTypes: {
@@ -33,3 +34,19 @@ export const Showcase: Story = {
 };
 
 export const Playground: Story = {};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

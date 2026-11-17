@@ -11,8 +11,15 @@ import {
   useOf,
 } from "@storybook/addon-docs/blocks";
 import { useContext, useEffect, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import type { PreparedStory } from "storybook/internal/types";
+import { AccordionDocsPage } from "./accordion-docs";
+import { AspectRatioDocsPage } from "./aspect-ratio-docs";
+import { AvatarDocsPage } from "./avatar-docs";
+import { BadgeDocsPage } from "./badge-docs";
+import { localizeArgTypes, type DescriptionTranslations } from "./arg-descriptions";
+import styles from "./component-docs.module.css";
 
 const usageModules = import.meta.glob(
   "../../../packages/design-system/components/*/usage.md",
@@ -71,11 +78,43 @@ export function UsageMarkdown({ children }: { children: string }) {
   } }}>{formatUsageMarkdown(children)}</Markdown>;
 }
 
+const additionalStateExports: Record<string, readonly string[]> = {
+  Accordion: ["SingleExpansion", "Controlled", "Disabled", "LongContent"],
+  ActivityPageHeader: ["ChineseLocaleUsesEnglishLogo"],
+  BrandProductRail: ["Centered", "MobilePlainCoverage", "BlackBottomDivider"],
+  Header: ["HallSwitcher", "PromotionBadges", "CategoryRail"],
+  HeroBanner: ["ContentVariants", "MobileDividerDisabled"],
+  HorizontalScrollList: ["WithBackground", "WithoutBackground", "Disabled", "PCSideNavigation"],
+  ProductCard: ["PresentationMatrix", "LongContent", "Horizontal", "DisabledAddButton"],
+  ProductList: ["StandardRailExample", "ThemedRailExample", "WaterfallExample", "LoadingExample"],
+  ReviewList: ["MobilePlain", "WithoutProduct"],
+  SectionBanner: ["Centered"],
+  SocialMediaGallery: ["SingleProduct", "MultipleProducts", "Centered"],
+  Tabs: ["DesktopSecondary", "PrimaryStyleA", "PrimaryStyleB", "Secondary", "Tertiary", "Skeleton"],
+  ThemeHero: ["MobileWithActions"],
+  ThemeProductList: ["MobilePlain"],
+  TrendingSearches: ["Centered"],
+};
+
+function StateExample({ story }: { story: PreparedStory }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <details onToggle={(event) => setOpen(event.currentTarget.open)}>
+      <summary className={styles.stateSummary}><ChevronRight size={16} strokeWidth={2} aria-hidden="true" />{story.name}</summary>
+      {open && <>
+        <Description of={story.moduleExport} />
+        <Canvas of={story.moduleExport} story={{ autoplay: false }} />
+      </>}
+    </details>
+  );
+}
+
 export function ComponentDocsPage() {
   const context = useContext(DocsContext);
   const { csfFile, preparedMeta } = useOf("meta", ["meta"]);
   const sourceTitle = csfFile.moduleExports.default.title ?? preparedMeta.title;
-  const primaryStory = context.componentStories()[0];
+  const componentStories = context.componentStories();
+  const primaryStory = componentStories[0];
   const [locale, setLocale] = useState(context.getStoryContext(primaryStory).globals.locale);
   useEffect(() => {
     const onGlobalsUpdated = ({ globals }: { globals: Record<string, unknown> }) => setLocale(globals.locale);
@@ -83,16 +122,12 @@ export function ComponentDocsPage() {
     return () => context.channel.off(GLOBALS_UPDATED, onGlobalsUpdated);
   }, [context.channel]);
   const language = locale === "en" ? "en" : "zh";
-  const translation = preparedMeta.parameters.docs?.translations?.[language] as {
-    description: string;
-    argDescriptions: Record<string, string>;
-  } | undefined;
-  const localizeStory = (story: PreparedStory): PreparedStory => translation ? {
+  const translations = preparedMeta.parameters.docs?.translations as DescriptionTranslations | undefined;
+  const translation = translations?.[language];
+  const localizeStory = (story: PreparedStory): PreparedStory => ({
     ...story,
-    argTypes: Object.fromEntries(Object.entries(story.argTypes).map(([name, argType]) => [
-      name, { ...argType, description: translation.argDescriptions[name] ?? argType.description },
-    ])),
-  } : story;
+    argTypes: localizeArgTypes(story.title, story.argTypes, language, story.parameters.docs?.translations ?? translations),
+  });
   const localizedContext = {
     ...context,
     // Storybook exposes project annotations through a getter, not an own property.
@@ -105,8 +140,19 @@ export function ComponentDocsPage() {
   };
   const usageLoader = getUsageLoaderForTitle(preparedMeta.title);
   const [usage, setUsage] = useState<string>();
-  const playgroundExport = preparedMeta.parameters.docs?.playground;
+  const hasDevicePreviews = componentStories.some((story) => story.tags.includes("component-device"));
+  const playgroundExport = preparedMeta.parameters.docs?.playground ?? (hasDevicePreviews ? "Playground" : undefined);
   const playground = playgroundExport ? csfFile.moduleExports[playgroundExport] : undefined;
+  const showcase = hasDevicePreviews ? csfFile.moduleExports.Showcase : undefined;
+  const titleSegments = sourceTitle.split("/").map(normalizeComponentName);
+  const stateComponent = Object.keys(additionalStateExports).find((name) => titleSegments.includes(normalizeComponentName(name)));
+  const extraExamples = (stateComponent ? additionalStateExports[stateComponent] : [])
+    .map((exportName) => csfFile.moduleExports[exportName]);
+  const stateExamples = hasDevicePreviews ? componentStories.filter((story) => (
+    !story.usesMount && !story.tags.includes("component-device") &&
+    story.moduleExport !== playground && story.moduleExport !== showcase &&
+    (extraExamples.includes(story.moduleExport) || (story.tags.includes("dev") && !/^(pc|mobile)$/i.test(story.name)))
+  )) : [];
   const isSingleStory = Object.keys(csfFile.stories).length === 1;
 
   useEffect(() => {
@@ -122,36 +168,42 @@ export function ComponentDocsPage() {
     };
   }, [preparedMeta.title, language]);
 
+  const usageContent = usage ? (
+    <section data-yami-docs="usage"><UsageMarkdown>{usage}</UsageMarkdown></section>
+  ) : usageLoader ? (
+    <p aria-live="polite" data-yami-docs="loading">
+      {language === "zh" ? "正在加载使用说明…" : "Loading usage guide…"}
+    </p>
+  ) : null;
+
+  const customDocsPages = { accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage };
+  const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
+  const DocsPage = customDocsPages[componentKey as keyof typeof customDocsPages];
+  if (DocsPage) return <DocsPage locale={language} />;
+
   return (
-    <DocsContext.Provider value={translation ? localizedContext : context}>
+    <DocsContext.Provider value={localizedContext}>
       <Title>{sourceTitle.trim().split(/\s*\/\s*/).at(-1)}</Title>
       <Subtitle />
-      {translation ? <Markdown>{translation.description}</Markdown> : <Description of="meta" />}
+      {translation?.description ? <Markdown>{translation.description}</Markdown> : <Description of="meta" />}
       {isSingleStory ? <Description of="story" /> : null}
       {playground ? (
         <>
           <h2 id="component-playground">{language === "zh" ? "交互试用" : "Playground"}</h2>
-          {preparedMeta.parameters.docs?.interactionStory ? (
+          {!hasDevicePreviews && preparedMeta.parameters.docs?.interactionStory ? (
             <p><a href={`/?path=/story/${preparedMeta.parameters.docs.interactionStory}`} target="_top">{language === "zh" ? "体验保存、加载与完成反馈" : "Try saving, loading, and completion feedback"}</a></p>
           ) : null}
-          <Canvas of={playground} />
+          <Canvas of={playground} story={{ autoplay: false }} />
           <Controls of={playground} />
           <h2 id="component-specifications">{language === "zh" ? "规格与状态对照" : "Specifications and states"}</h2>
-          <Primary />
+          {showcase ? <Canvas of={showcase} story={{ autoplay: false }} /> : <Primary />}
+          {stateExamples.map((story) => <StateExample key={story.id} story={story} />)}
         </>
       ) : (
         <><Primary /><Controls /></>
       )}
-      {usage ? (
-        <section data-yami-docs="usage">
-          <UsageMarkdown>{usage}</UsageMarkdown>
-        </section>
-      ) : usageLoader ? (
-        <p aria-live="polite" data-yami-docs="loading">
-          {language === "zh" ? "正在加载使用说明…" : "Loading usage guide…"}
-        </p>
-      ) : null}
-      {isSingleStory || preparedMeta.parameters.docs?.showStories === false ? null : <Stories />}
+      {usageContent}
+      {hasDevicePreviews || isSingleStory || preparedMeta.parameters.docs?.showStories === false ? null : <Stories />}
     </DocsContext.Provider>
   );
 }

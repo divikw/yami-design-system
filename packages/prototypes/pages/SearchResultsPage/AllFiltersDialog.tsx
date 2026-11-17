@@ -6,6 +6,7 @@ import {
   Button,
   Sheet,
   Checkbox,
+  Switch,
   RadioGroup,
   RadioGroupItem,
 } from "@yami/design-system";
@@ -587,48 +588,23 @@ export function AllFiltersDialog({
         )}
 
         <section className={styles.section}>
-          <button
-            className={styles.switchRow}
-            type="button"
-            role="switch"
-            aria-checked={draftFulfilled}
-            onClick={() => setDraftFulfilled((current) => !current)}
-          >
+          <Switch className={styles.switchRow} checked={draftFulfilled} onCheckedChange={setDraftFulfilled}>
             <strong className={styles.fulfilledLabel}>
               <img src={fulfilledIcon} alt="" width={24} height={24} />
               {copy.fulfilledByYami}
             </strong>
-            <span className={styles.switch} aria-hidden="true">
-              <span />
-            </span>
-          </button>
+          </Switch>
         </section>
 
         <section className={styles.section}>
-          <button
-            className={styles.switchRow}
-            type="button"
-            role="switch"
-            aria-checked={
-              draftMenuValues[labels.inStock]?.includes("in-stock") ??
-              false
-            }
-            onClick={() =>
-              setDraftMenuValues((current) => ({
-                ...current,
-                [labels.inStock]: current[labels.inStock]?.includes(
-                  "in-stock"
-                )
-                  ? []
-                  : ["in-stock"],
-              }))
-            }
+          <Switch className={styles.switchRow}
+            checked={draftMenuValues[labels.inStock]?.includes("in-stock") ?? false}
+            onCheckedChange={(checked) => setDraftMenuValues((current) => ({
+              ...current, [labels.inStock]: checked ? ["in-stock"] : [],
+            }))}
           >
             <strong>{labels.inStock}</strong>
-            <span className={styles.switch} aria-hidden="true">
-              <span />
-            </span>
-          </button>
+          </Switch>
         </section>
 
         {(

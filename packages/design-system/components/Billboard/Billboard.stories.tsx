@@ -220,3 +220,21 @@ export const EnglishMobileArtworkContract: Story = {
   render: MobileCard.render,
   play: MobileCard.play,
 };
+
+export const PCPreview: Story = {
+  ...Pc,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...MobileCard,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

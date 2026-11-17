@@ -10,8 +10,8 @@
         "name": "Accordion",
         "category": "layout",
         "status": "experimental",
-        "version": "0.1.0",
-        "description": "Inline disclosure extracted from ProductDetailPage: independent panels with plus/minus icons, controlled or uncontrolled expansion, native keyboard activation and theme-aware semantic tokens.",
+        "version": "0.2.0",
+        "description": "Base UI-backed accordion with shadcn/ui composition: Accordion, AccordionItem, AccordionTrigger and AccordionContent. Supports single or multiple expansion and controlled or uncontrolled values.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -19,51 +19,59 @@
         },
         "exports": [
           "Accordion",
-          "AccordionProps"
+          "AccordionItem",
+          "AccordionTrigger",
+          "AccordionContent",
+          "AccordionProps",
+          "AccordionItemProps",
+          "AccordionTriggerProps",
+          "AccordionContentProps"
         ],
         "props": {
-          "label": {
-            "type": "ReactNode",
-            "required": true,
-            "description": "Visible heading and accessible trigger name. Static inline content only."
-          },
           "children": {
             "type": "ReactNode",
-            "required": true,
-            "description": "Panel content; stays mounted while hidden."
-          },
-          "expanded": {
-            "type": "boolean",
             "required": false,
-            "description": "Controlled expansion state."
+            "description": "AccordionItem children composed with AccordionTrigger and AccordionContent."
           },
-          "defaultExpanded": {
+          "multiple": {
             "type": "boolean",
             "required": false,
             "default": false,
-            "description": "Initial uncontrolled expansion."
+            "description": "Allows multiple items to remain open."
           },
-          "onExpandedChange": {
-            "type": "(expanded: boolean) => void",
+          "value": {
+            "type": "Value[]",
             "required": false,
-            "description": "Requests expansion changes. Controlled callers update expanded."
+            "description": "Controlled values of the expanded items."
+          },
+          "defaultValue": {
+            "type": "Value[]",
+            "required": false,
+            "default": [],
+            "description": "Initially expanded items in uncontrolled mode."
+          },
+          "onValueChange": {
+            "type": "(value: Value[], details: AccordionRootChangeEventDetails) => void",
+            "required": false,
+            "description": "Requests expansion changes; update value when controlled. details.cancel() cancels the change."
           },
           "disabled": {
             "type": "boolean",
             "required": false,
             "default": false,
-            "description": "Disables the trigger without changing expansion."
+            "description": "Disables interaction for the entire group."
           },
-          "headingLevel": {
-            "type": "2 | 3 | 4 | 5 | 6",
+          "keepMounted": {
+            "type": "boolean",
             "required": false,
-            "default": 2,
-            "description": "Heading level chosen for the surrounding document."
+            "default": false,
+            "description": "Keeps closed panel content mounted to retain child state."
           },
-          "id": {
-            "type": "string",
+          "hiddenUntilFound": {
+            "type": "boolean",
             "required": false,
-            "description": "Optional unique root ID; also prefixes trigger/content IDs."
+            "default": false,
+            "description": "Allows browser find-in-page to find and expand collapsed content."
           }
         },
         "variants": {
@@ -81,7 +89,7 @@
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
-            "note": "Uses button-disabled and text-disabled without opacity."
+            "note": "Transparent background with text-disabled for text and icons; no opacity."
           },
           "color": {
             "ruleId": "semantic-color-only",
@@ -107,11 +115,9 @@
           "--line-height-heading-sm",
           "--space-600",
           "--space-150",
-          "--button-tertiary-active",
           "--stroke-thick",
           "--focus-ring",
           "--space-025",
-          "--button-disabled",
           "--text-disabled",
           "--space-200",
           "--font-weight-normal",
@@ -159,14 +165,6 @@
             "property": "width / height",
             "selector": ".icon"
           },
-          "--button-tertiary-active": {
-            "property": "background",
-            "selector": ".trigger:active:not(:disabled)"
-          },
-          "--button-disabled": {
-            "property": "background",
-            "selector": ".trigger:disabled"
-          },
           "--text-disabled": {
             "property": "color",
             "selector": ".trigger:disabled"
@@ -210,14 +208,15 @@
           ],
           "tapTargetMin": 44,
           "ariaPattern": "aria-expanded and aria-controls on the native button; aria-labelledby and hidden on the panel.",
-          "notes": "Disabled buttons use native disabled. Collapsed children retain state but leave the focus order and accessibility tree. Choose the heading level to match the document; labels must not contain interactive children."
+          "notes": "Disabled triggers use native disabled with transparent backgrounds. Closed panels leave the focus order and accessibility tree. Set keepMounted to retain child state. Trigger includes an h3 Header; labels must not contain interactive children."
         },
         "testing": {
           "interaction": "covered",
-          "rationale": "Story play tests exercise independent expansion, Enter/Space/Tab, focus styles, ID associations, controlled updates/refused updates, disabled activation, hidden-content focus and narrow content."
+          "rationale": "Story play tests exercise single and multiple expansion, Enter/Space/Tab, focus styles, ID associations, controlled updates/refused updates, disabled activation, hidden-content focus and narrow content."
         },
         "dependencies": {
           "runtime": [
+            "@base-ui/react",
             "react"
           ],
           "peer": [],
@@ -392,7 +391,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -953,7 +953,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -1999,7 +2000,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -2044,7 +2045,7 @@
             ],
             "required": false,
             "default": "md",
-            "description": "Inner padding: none=0, sm=12px, md=16px (default), lg=24px. Use none for edge-to-edge media with composite-owned content spacing; keep peer cards consistent. No automatic breakpoint changes."
+            "description": "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg remain compatibility aliases with the same sizes. Use none=0 for edge-to-edge media with composite-owned content spacing."
           },
           "surface": {
             "type": "enum",
@@ -2065,7 +2066,7 @@
           "interactive": {
             "type": "boolean",
             "required": false,
-            "description": "Adds hover/press styling and a 44px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
+            "description": "Adds hover/press styling and a 32px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
           },
           "href": {
             "type": "string",
@@ -2120,9 +2121,9 @@
           "--border-default-inverse",
           "--focus-ring",
           "--radius-surface-default",
-          "--space-150",
           "--space-200",
-          "--space-300"
+          "--space-400",
+          "--space-100"
         ],
         "tokenBindings": {
           "--surface-primary": {
@@ -2169,30 +2170,30 @@
             "property": "border-radius",
             "selector": ".card"
           },
-          "--space-150": {
-            "property": "padding",
-            "selector": ".pad-sm"
-          },
           "--space-200": {
-            "property": "padding",
-            "selector": ".pad-md"
+            "property": "padding (min-width 1024px)",
+            "selector": ".pad-sm, .pad-md, .pad-lg"
           },
-          "--space-300": {
-            "property": "padding",
-            "selector": ".pad-lg"
+          "--space-400": {
+            "property": "min-width / min-height",
+            "selector": ".interactive"
+          },
+          "--space-100": {
+            "property": "padding (below 1024px)",
+            "selector": ".pad-sm, .pad-md, .pad-lg"
           }
         },
         "accessibility": {
           "role": "none (div); native button or link when as selects those hosts",
           "wcagLevel": "AA",
-          "tapTargetMin": 44,
+          "tapTargetMin": 32,
           "keyboardNav": [
             "tab",
             "enter",
             "space"
           ],
           "ariaPattern": "none (default) | native button | native link",
-          "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
+          "notes": "The 32px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
         },
         "dependencies": {
           "runtime": [
@@ -2374,9 +2375,7 @@
             "react",
             "@base-ui/react"
           ],
-          "peer": [
-            "@base-ui/react"
-          ],
+          "peer": [],
           "devOnly": []
         },
         "usageRef": "./usage.md",
@@ -2625,7 +2624,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "The visual close control is 32px with a centered 20px icon and Button's 44px hit-area extender."
+            "note": "The visual close control is 32px with a centered 24px icon and Button's 44px hit-area extender."
           }
         },
         "tokens": [
@@ -2953,7 +2952,8 @@
           "Button",
           "Checkbox",
           "RadioGroup",
-          "Sheet"
+          "Sheet",
+          "Popover"
         ],
         "variants": {
           "variant": [
@@ -3092,12 +3092,9 @@
         },
         "dependencies": {
           "runtime": [
-            "react",
-            "@base-ui/react"
+            "react"
           ],
-          "peer": [
-            "@base-ui/react"
-          ],
+          "peer": [],
           "devOnly": [
             "@storybook/react-vite",
             "storybook"
@@ -4769,6 +4766,157 @@
       }
     },
     {
+      "id": "Popover",
+      "source": "components/Popover",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Popover",
+        "category": "layout",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+        },
+        "exports": [
+          "Popover",
+          "PopoverProps",
+          "PopoverTrigger",
+          "PopoverContent",
+          "PopoverContentProps",
+          "PopoverTitle",
+          "PopoverDescription",
+          "PopoverClose"
+        ],
+        "props": {
+          "open": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state."
+          },
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false,
+            "description": "Initial uncontrolled open state."
+          },
+          "onOpenChange": {
+            "type": "function",
+            "required": false,
+            "description": "Called when opening or closing is requested."
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "Compose trigger and content; give the panel an accessible name."
+          }
+        },
+        "variants": {
+          "state": [
+            "closed",
+            "open"
+          ]
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Keyboard controls use semantic focus-ring outlines."
+          },
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Uses existing semantic surface, text and border tokens."
+          }
+        },
+        "tokens": [
+          "--border-default",
+          "--fill-primary",
+          "--radius-surface-default",
+          "--stroke-default",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-heading-sm",
+          "--font-weight-emphasize",
+          "--line-height-heading-sm",
+          "--font-size-body-md",
+          "--line-height-body-md"
+        ],
+        "tokenBindings": {
+          "--fill-primary": {
+            "property": "background",
+            "selector": ".content"
+          },
+          "--border-default": {
+            "property": "border-color",
+            "selector": ".content"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".content"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".content"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".title, .description"
+          },
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".title"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".title"
+          },
+          "--line-height-heading-sm": {
+            "property": "line-height",
+            "selector": ".title"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".description"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".description"
+          }
+        },
+        "accessibility": {
+          "role": "dialog",
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "space",
+            "enter",
+            "escape"
+          ],
+          "tapTargetMin": 44,
+          "notes": "Name content with PopoverTitle or aria-label and provide a named trigger. Escape dismisses the inner layer and restores focus."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#BasicPopover"
+        ]
+      }
+    },
+    {
       "id": "ProductCard",
       "source": "components/ProductCard",
       "meta": {
@@ -5871,7 +6019,7 @@
         "category": "form",
         "status": "experimental",
         "version": "0.3.1",
-        "description": "Controlled cart quantity select with a 60×24px pill, a 44px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
+        "description": "Controlled cart quantity select with a 60×32px pill, a 32px target, accessible popup and inline 10+ input that commits on blur or Enter with limit normalization, transient over-limit toast and async feedback.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -5881,7 +6029,9 @@
           "QuantitySelect",
           "QuantitySelectProps"
         ],
-        "composes": [],
+        "composes": [
+          "Select"
+        ],
         "props": {
           "value": {
             "type": "number",
@@ -5951,11 +6101,12 @@
           "--stroke-default",
           "--stroke-thick",
           "--space-200",
-          "--space-300"
+          "--space-300",
+          "--space-400"
         ],
         "accessibility": {
           "wcagLevel": "AA",
-          "tapTargetMin": 44,
+          "tapTargetMin": 28,
           "keyboardNav": [
             "tab",
             "shift+tab",
@@ -5967,8 +6118,7 @@
         "dependencies": {
           "runtime": [
             "react",
-            "react-dom",
-            "@base-ui/react/select"
+            "react-dom"
           ],
           "peer": [],
           "devOnly": []
@@ -6013,6 +6163,10 @@
           "--radius-button-primary": {
             "property": "border-radius",
             "selector": ".display"
+          },
+          "--space-400": {
+            "property": "height / min-height",
+            "selector": ".display, .input, .control, .select, .inputTarget, .option"
           }
         }
       }
@@ -6197,9 +6351,7 @@
             "react",
             "@base-ui/react"
           ],
-          "peer": [
-            "@base-ui/react"
-          ],
+          "peer": [],
           "devOnly": []
         },
         "usageRef": "./usage.md",
@@ -6463,6 +6615,179 @@
       }
     },
     {
+      "id": "Select",
+      "source": "components/Select",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Select",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+        },
+        "exports": [
+          "Select",
+          "SelectProps",
+          "SelectTrigger",
+          "SelectTriggerProps",
+          "SelectContent",
+          "SelectContentProps",
+          "SelectItem",
+          "SelectItemProps",
+          "SelectValue",
+          "SelectLabel",
+          "SelectList"
+        ],
+        "props": {
+          "value": {
+            "type": "string | null",
+            "required": false,
+            "description": "Controlled selected value; null means no selection."
+          },
+          "defaultValue": {
+            "type": "string",
+            "required": false,
+            "description": "Initially selected value in uncontrolled mode."
+          },
+          "onValueChange": {
+            "type": "function",
+            "required": false,
+            "description": "Called when the selected value changes."
+          },
+          "items": {
+            "type": "array",
+            "required": false,
+            "description": "Option data for labels and typeahead while closed."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "description": "Disables the entire select."
+          },
+          "name": {
+            "type": "string",
+            "required": false,
+            "description": "Native form field name."
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "description": "Enables native required validation."
+          }
+        },
+        "variants": {
+          "state": [
+            "default",
+            "focus-visible",
+            "disabled"
+          ]
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Keyboard controls use semantic focus-ring outlines."
+          },
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Uses existing semantic surface, text and border tokens."
+          }
+        },
+        "tokens": [
+          "--border-default",
+          "--button-disabled",
+          "--focus-ring",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--radius-button-primary",
+          "--radius-component-default",
+          "--space-025",
+          "--space-050",
+          "--space-100",
+          "--space-150",
+          "--stroke-default",
+          "--stroke-thick",
+          "--surface-primary",
+          "--surface-secondary",
+          "--text-disabled",
+          "--text-primary",
+          "--space-400",
+          "--space-500"
+        ],
+        "tokenBindings": {
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".trigger, .content"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".item[data-highlighted]"
+          },
+          "--border-default": {
+            "property": "border-color",
+            "selector": ".trigger, .content"
+          },
+          "--radius-button-primary": {
+            "property": "border-radius",
+            "selector": ".trigger"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".content"
+          },
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".trigger:focus-visible"
+          },
+          "--space-400": {
+            "property": "min-height",
+            "selector": ".item"
+          },
+          "--space-500": {
+            "property": "min-height",
+            "selector": ".trigger"
+          }
+        },
+        "accessibility": {
+          "role": "combobox / listbox / option",
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "space",
+            "enter",
+            "escape",
+            "arrow-down",
+            "arrow-up"
+          ],
+          "tapTargetMin": 32,
+          "notes": "Label the trigger with SelectLabel or aria-label. Arrow keys skip disabled items; Escape closes and restores trigger focus."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#BasicSelect"
+        ]
+      }
+    },
+    {
       "id": "Sheet",
       "source": "components/Sheet",
       "meta": {
@@ -6579,7 +6904,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "Close/back controls are visually 32px with centered 20px icons and Button's 44px hit-area extender."
+            "note": "Close/back controls are visually 32px with centered 24px close icons and 20px back arrows and Button's 44px hit-area extender."
           }
         },
         "tokens": [
@@ -7071,6 +7396,161 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#SocialMediaGalleryExample"
+        ]
+      }
+    },
+    {
+      "id": "Switch",
+      "source": "components/Switch",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Switch",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null,
+          "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+        },
+        "exports": [
+          "Switch",
+          "SwitchProps"
+        ],
+        "props": {
+          "checked": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled on/off state."
+          },
+          "defaultChecked": {
+            "type": "boolean",
+            "required": false,
+            "description": "Initial uncontrolled state; defaults to off."
+          },
+          "onCheckedChange": {
+            "type": "function",
+            "required": false,
+            "description": "State change callback; details.cancel() cancels the change."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "description": "Prevents focus, changes and form submission."
+          },
+          "readOnly": {
+            "type": "boolean",
+            "required": false,
+            "description": "Allows focus and submission while preventing changes."
+          },
+          "name": {
+            "type": "string",
+            "required": false,
+            "description": "Native form field name."
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional inline label; do not nest other interactive controls."
+          }
+        },
+        "variants": {
+          "state": [
+            "default",
+            "focus-visible",
+            "disabled"
+          ]
+        },
+        "rules": {
+          "focus": {
+            "ruleId": "focus-style",
+            "note": "Keyboard controls use semantic focus-ring outlines."
+          },
+          "color": {
+            "ruleId": "semantic-color-only",
+            "note": "Uses existing semantic surface, text and border tokens."
+          }
+        },
+        "tokens": [
+          "--background-secondary",
+          "--border-default",
+          "--fill-disabled",
+          "--fill-inverse",
+          "--fill-primary",
+          "--focus-ring",
+          "--radius-full",
+          "--radius-component-default",
+          "--space-025",
+          "--space-100",
+          "--stroke-thick",
+          "--text-disabled",
+          "--text-primary",
+          "--space-400"
+        ],
+        "tokenBindings": {
+          "--fill-disabled": {
+            "property": "background",
+            "selector": ".track"
+          },
+          "--fill-inverse": {
+            "property": "background",
+            "selector": ".root[data-checked] .track"
+          },
+          "--fill-primary": {
+            "property": "background",
+            "selector": ".thumb"
+          },
+          "--border-default": {
+            "property": "border-color",
+            "selector": ".thumb"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".track, .thumb"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".root"
+          },
+          "--focus-ring": {
+            "property": "outline-color",
+            "selector": ".root:focus-visible"
+          },
+          "--space-400": {
+            "property": "min-width/min-height",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "switch",
+          "keyboardNav": [
+            "tab",
+            "shift+tab",
+            "space",
+            "enter"
+          ],
+          "tapTargetMin": 32,
+          "notes": "Provide a visible label or aria-label; optional children label the entire clickable switch row."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#BasicSwitch"
         ]
       }
     },

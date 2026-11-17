@@ -274,3 +274,14 @@ New decisions are appended below. Each gets a unique `decision-id` and timestamp
 - **Trade-offs**: Adds two semantic aliases and requires migration of keyboard outlines. Inputs gain a separate blue outline while retaining their original neutral/error inset border. Fixed-polarity bands select the token for their actual background. Keep 2px indicators and existing offsets; verify at least 3:1 contrast and clipping in real browsers.
 - **Related rule-id(s)**: `focus-style`, `semantic-color-only`, `border-strength`
 - **Related ADR(s)**: ADR-010 (DTCG-only token consumption)
+
+
+<!-- decision-id: 2026-11-web-target-baseline -->
+## Web target sizes separate minimum usability from layout geometry
+
+- **Date**: 2026-11-17
+- **Decision**: Use WCAG 2.2 SC 2.5.8's 24×24 CSS px baseline and its spacing/other exceptions for Web. Treat 44×44px as an enhanced recommendation for important touch actions, not a global layout minimum. Keep existing component-specific expanded hit areas where useful.
+- **Context**: A 44px minimum applied directly to Switch's root made compact rows unnecessarily tall. Native pt/dp guidance had been conflated with Web layout requirements.
+- **Validation**: Do not warn solely because an icon Button uses `size="sm"`. Runtime bounds below 24px request review of actual targets and exceptions; bounds alone are not a complete WCAG conformance test. Expanded areas must not overlap adjacent controls or be clipped.
+- **Scope**: Switch uses a 32px minimum outer control and its existing 32×20px track. Other components retain their current geometry. This supersedes the temporary compact-icon warning policy in `2026-04-tap-target-self-contradiction`.
+- **Sources**: [WCAG 2.5.8 AA](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html), [WCAG 2.5.5 AAA](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html).

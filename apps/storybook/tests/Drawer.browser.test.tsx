@@ -44,6 +44,11 @@ test("Drawer keeps right-edge desktop and safe mobile geometry, fixed footer and
       expect(footer.getBoundingClientRect().bottom).toBeLessThanOrEqual(rect.bottom);
       expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
       const close = dialog.querySelector<HTMLButtonElement>('button[aria-label="Close coupons"]')!;
+      const closeBounds = close.getBoundingClientRect();
+      expect([closeBounds.width, closeBounds.height]).toEqual([32, 32]);
+      expect(closeBounds.top - rect.top).toBe(16);
+      expect(rect.right - closeBounds.right).toBe(16);
+      expect(close.querySelector("img")!.getBoundingClientRect().width).toBe(24);
       const apply = footer.querySelector<HTMLButtonElement>("button")!;
       apply.focus();
       await userEvent.tab();

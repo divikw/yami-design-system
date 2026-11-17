@@ -10,7 +10,7 @@
     "componentKey": null,
     "notes": "Filter popup geometry and selection patterns follow English Site Optimization 2026 nodes 1123:65336 and 1252:78302. Distinct from the non-interactive Tag component."
   },
-  "composes": ["Button", "Checkbox", "RadioGroup", "Sheet"],
+  "composes": ["Button", "Checkbox", "RadioGroup", "Sheet", "Popover"],
   "variants": {
     "variant": ["filled", "outlined"],
     "selected": ["false", "true"]
@@ -129,8 +129,8 @@
     "notes": "Provide accessible labels for chip groups and popup menus."
   },
   "dependencies": {
-    "runtime": ["react", "@base-ui/react"],
-    "peer": ["@base-ui/react"],
+    "runtime": ["react"],
+    "peer": [],
     "devOnly": ["@storybook/react-vite", "storybook"]
   },
   "usageRef": "./usage.md",

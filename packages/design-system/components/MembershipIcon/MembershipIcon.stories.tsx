@@ -6,7 +6,8 @@ import { MembershipIcon, type MembershipIconTier } from "./MembershipIcon";
 const tiers: MembershipIconTier[] = ["ruby-0", "ruby", "silver", "gold"];
 
 const meta = {
-  title: "YAMI/Components/Data Display/MembershipIcon",
+  id: "yami-components-data-display-membershipicon",
+  title: "YAMI/Components/MembershipIcon",
   component: MembershipIcon,
   parameters: { layout: "padded" },
   argTypes: {
@@ -33,3 +34,19 @@ export const Showcase: Story = {
 };
 
 export const Playground: Story = {};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

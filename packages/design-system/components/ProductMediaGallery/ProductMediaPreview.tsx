@@ -116,7 +116,7 @@ export function ProductMediaPreview({
         className={styles.previewClose}
         variant="tertiary"
         form="icon"
-        size="lg"
+        size="sm"
         aria-label={closeLabel}
         onClick={() => dialogRef.current?.close()}
       >

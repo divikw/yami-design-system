@@ -88,6 +88,8 @@ export function Sheet({
       }}
       onKeyDown={(event) => {
         onKeyDown?.(event);
+        // Native top-layer popovers own their keyboard handling before the outer sheet.
+        if (!event.defaultPrevented && event.target instanceof Element && event.target.closest("[popover]:popover-open")) return;
         event.stopPropagation();
         if (event.defaultPrevented) return;
         if (event.key === "Escape") {
@@ -112,7 +114,7 @@ export function Sheet({
       <header className={styles.header} data-slot="sheet-header">
         <div className={styles.actions} data-back={hasBack || undefined}>
           <Button ref={navigationRef} className={styles.navigationButton} variant="tertiary" form="icon" size="sm" aria-label={back?.label ?? closeLabel} onClick={back?.onClick ?? onClose}>
-            <img src={back ? backIcon : closeIcon} alt="" width={20} height={20} />
+            <img src={back ? backIcon : closeIcon} alt="" width={back ? 20 : 24} height={back ? 20 : 24} />
           </Button>
         </div>
         <h2 className={styles.title} id={`${id}-title`}>{title}</h2>

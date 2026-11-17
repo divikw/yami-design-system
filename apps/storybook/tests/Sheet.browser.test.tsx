@@ -73,6 +73,14 @@ test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobil
         expect(style.borderTopRightRadius).toBe(width < 1024 ? "16px" : "12px");
         expect(style.borderBottomLeftRadius).toBe(width < 1024 ? "0px" : "12px");
         expect(style.borderBottomRightRadius).toBe(width < 1024 ? "0px" : "12px");
+        const close = page.getByRole("button", { name: "Close details", exact: true }).element();
+        const button = close.getBoundingClientRect();
+        const surface = dialog.getBoundingClientRect();
+        expect([button.width, button.height]).toEqual([32, 32]);
+        expect(button.top - surface.top).toBe(16);
+        expect(surface.right - button.right).toBe(16);
+        expect(close.querySelector("img")!.getBoundingClientRect().width).toBe(24);
+        expect(getComputedStyle(close, "::before").width).toBe("44px");
       }
     }
   } finally {
@@ -157,10 +165,10 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       expect(closeBounds.height).toBe(32);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       expect(getComputedStyle(close, "::before").height).toBe("44px");
-      expect(closeIconBounds.width).toBe(20);
-      expect(closeIconBounds.height).toBe(20);
-      expect(bounds.right - closeIconBounds.right).toBe(18);
-      expect(closeIconBounds.top - bounds.top).toBe(14);
+      expect(closeIconBounds.width).toBe(24);
+      expect(closeIconBounds.height).toBe(24);
+      expect(bounds.right - closeIconBounds.right).toBe(20);
+      expect(closeIconBounds.top - bounds.top).toBe(20);
       expect(document.activeElement).toBe(close);
       await userEvent.tab();
       expect(document.activeElement?.getAttribute("aria-label")).toBe("Search");

@@ -1,0 +1,143 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "select",
+  "title": "Select",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms.",
+  "source": "components/Select",
+  "files": [
+    {
+      "source": "components/Select/index.ts",
+      "target": "components/Select/index.ts"
+    },
+    {
+      "source": "components/Select/Select.module.css",
+      "target": "components/Select/Select.module.css"
+    },
+    {
+      "source": "components/Select/Select.tsx",
+      "target": "components/Select/Select.tsx"
+    },
+    {
+      "source": "components/Select/story-translations.ts",
+      "target": "components/Select/story-translations.ts"
+    }
+  ],
+  "exports": [
+    "Select",
+    "SelectContent",
+    "SelectContentProps",
+    "SelectItem",
+    "SelectItemProps",
+    "SelectLabel",
+    "SelectList",
+    "SelectProps",
+    "SelectTrigger",
+    "SelectTriggerProps",
+    "SelectValue"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Select/usage.md",
+    "stories": [
+      "components/Select/Select.stories.tsx"
+    ],
+    "examples": [
+      "components/Select/examples.tsx#BasicSelect"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--button-disabled",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--line-height-body-md",
+      "--radius-button-primary",
+      "--radius-component-default",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-400",
+      "--space-500",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-disabled",
+      "--text-primary"
+    ],
+    "rules": [
+      "focus-style",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".trigger, .content"
+      },
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".item[data-highlighted]"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".trigger, .content"
+      },
+      "--radius-button-primary": {
+        "property": "border-radius",
+        "selector": ".trigger"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".content"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".trigger:focus-visible"
+      },
+      "--space-400": {
+        "property": "min-height",
+        "selector": ".item"
+      },
+      "--space-500": {
+        "property": "min-height",
+        "selector": ".trigger"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "combobox / listbox / option",
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "space",
+        "enter",
+        "escape",
+        "arrow-down",
+        "arrow-up"
+      ],
+      "tapTargetMin": 32,
+      "notes": "Label the trigger with SelectLabel or aria-label. Arrow keys skip disabled items; Escape closes and restores trigger focus."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "10307290d54000095c1e43972c1456545ea45166d0df4ede5f4882113f199ca8"
+}

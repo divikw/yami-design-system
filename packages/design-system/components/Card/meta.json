@@ -4,23 +4,34 @@
   "category": "layout",
   "status": "stable",
   "version": "0.1.0",
-
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default 16px padding, 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
-
-  "figma": { "nodeId": null, "componentKey": null },
-
-  "exports": ["Card", "CardPadding", "CardProps", "CardSurface"],
-
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "Card",
+    "CardPadding",
+    "CardProps",
+    "CardSurface"
+  ],
   "testing": {
     "interaction": "covered",
     "rationale": "Storybook verifies button activation, independent actions with progress/completion feedback and repeated-activation prevention inside static cards, and narrow two-column geometry. Browser tests cover surface feedback, disabled states including interactive=false, native keyboard behavior, empty-href link inference, form submission, theme-aware focus, responsive link geometry, unclipped SM/MD text/link/icon hit areas at all padding levels, media cropping, margin/float containment, keyboard scrolling of wide content, coarse pointers, and reduced motion."
   },
-
   "variants": {
-    "padding": ["none", "sm", "md", "lg"],
-    "surface": ["primary", "secondary", "inverse"]
+    "padding": [
+      "none",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "surface": [
+      "primary",
+      "secondary",
+      "inverse"
+    ]
   },
-
   "props": {
     "as": {
       "type": "ElementType",
@@ -30,14 +41,23 @@
     },
     "padding": {
       "type": "enum",
-      "values": ["none", "sm", "md", "lg"],
+      "values": [
+        "none",
+        "sm",
+        "md",
+        "lg"
+      ],
       "required": false,
       "default": "md",
-      "description": "Inner padding: none=0, sm=12px, md=16px (default), lg=24px. Use none for edge-to-edge media with composite-owned content spacing; keep peer cards consistent. No automatic breakpoint changes."
+      "description": "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg remain compatibility aliases with the same sizes. Use none=0 for edge-to-edge media with composite-owned content spacing."
     },
     "surface": {
       "type": "enum",
-      "values": ["primary", "secondary", "inverse"],
+      "values": [
+        "primary",
+        "secondary",
+        "inverse"
+      ],
       "required": false,
       "default": "primary"
     },
@@ -50,7 +70,7 @@
     "interactive": {
       "type": "boolean",
       "required": false,
-      "description": "Adds hover/press styling and a 44px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
+      "description": "Adds hover/press styling and a 32px minimum target. Inferred for as='button' or as='a' with href, including an empty href. Does not add semantics or keyboard handlers to custom hosts. Focus-visible and disabled styling remain available when false."
     },
     "href": {
       "type": "string",
@@ -59,7 +79,11 @@
     },
     "type": {
       "type": "enum",
-      "values": ["button", "submit", "reset"],
+      "values": [
+        "button",
+        "submit",
+        "reset"
+      ],
       "required": false,
       "default": "button",
       "description": "Native type for as='button'. Defaults to button to avoid implicit form submission."
@@ -71,13 +95,15 @@
       "description": "Native disabled state for as='button'. Stops activation and hover/press feedback while preserving the selected surface."
     }
   },
-
   "rules": {
     "border": {
       "ruleId": "card-no-border",
       "note": "Default border: none. `bordered` only in dense grids."
     },
-    "radii": { "ruleId": "no-custom-radii", "note": "Base Card uses --radius-surface-default (12px). ProductCard owns its geometry via --radius-component-default (8px); do not use arbitrary numeric overrides." },
+    "radii": {
+      "ruleId": "no-custom-radii",
+      "note": "Base Card uses --radius-surface-default (12px). ProductCard owns its geometry via --radius-component-default (8px); do not use arbitrary numeric overrides."
+    },
     "elevationOnPress": {
       "ruleId": "elevation-on-press",
       "note": "Enabled interactive cards mix the surface's reading color into the background on hover (8%) and press (16%), preserving polarity and geometry without shadow."
@@ -87,7 +113,6 @@
       "note": "Focusable cards show a 2px --focus-ring outline with 2px offset. The outer outline follows the surrounding canvas theme, including when the card itself uses an inverse surface."
     }
   },
-
   "tokens": [
     "--surface-primary",
     "--surface-secondary",
@@ -100,46 +125,87 @@
     "--border-default-inverse",
     "--focus-ring",
     "--radius-surface-default",
-    "--space-150",
     "--space-200",
-    "--space-300"
+    "--space-400",
+    "--space-100"
   ],
-
   "tokenBindings": {
-    "--surface-primary": { "property": "background-color", "selector": ".card, .surface-primary" },
+    "--surface-primary": {
+      "property": "background-color",
+      "selector": ".card, .surface-primary"
+    },
     "--surface-secondary": {
       "property": "background-color",
       "selector": ".surface-secondary"
     },
-    "--surface-inverse": { "property": "background-color", "selector": ".surface-inverse" },
-    "--text-primary": { "property": "color / background-color", "selector": ".card, .interactive:hover, .interactive:active" },
-    "--text-primary-inverse": { "property": "color", "selector": ".surface-inverse" },
-    "--text-disabled": { "property": "color", "selector": ".card:is(:disabled, [aria-disabled='true'])" },
-    "--text-disabled-inverse": { "property": "color", "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])" },
-    "--border-default": { "property": "border-color", "selector": ".bordered" },
-    "--border-default-inverse": { "property": "border-color", "selector": ".bordered.surface-inverse" },
-    "--focus-ring": { "property": "outline-color", "selector": ".card:focus-visible" },
-    "--radius-surface-default": { "property": "border-radius", "selector": ".card" },
-    "--space-150": { "property": "padding", "selector": ".pad-sm" },
-    "--space-200": { "property": "padding", "selector": ".pad-md" },
-    "--space-300": { "property": "padding", "selector": ".pad-lg" }
+    "--surface-inverse": {
+      "property": "background-color",
+      "selector": ".surface-inverse"
+    },
+    "--text-primary": {
+      "property": "color / background-color",
+      "selector": ".card, .interactive:hover, .interactive:active"
+    },
+    "--text-primary-inverse": {
+      "property": "color",
+      "selector": ".surface-inverse"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".card:is(:disabled, [aria-disabled='true'])"
+    },
+    "--text-disabled-inverse": {
+      "property": "color",
+      "selector": ".card.surface-inverse:is(:disabled, [aria-disabled='true'])"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".bordered"
+    },
+    "--border-default-inverse": {
+      "property": "border-color",
+      "selector": ".bordered.surface-inverse"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".card:focus-visible"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".card"
+    },
+    "--space-200": {
+      "property": "padding (min-width 1024px)",
+      "selector": ".pad-sm, .pad-md, .pad-lg"
+    },
+    "--space-400": {
+      "property": "min-width / min-height",
+      "selector": ".interactive"
+    },
+    "--space-100": {
+      "property": "padding (below 1024px)",
+      "selector": ".pad-sm, .pad-md, .pad-lg"
+    }
   },
-
   "accessibility": {
     "role": "none (div); native button or link when as selects those hosts",
     "wcagLevel": "AA",
-    "tapTargetMin": 44,
-    "keyboardNav": ["tab", "enter", "space"],
+    "tapTargetMin": 32,
+    "keyboardNav": [
+      "tab",
+      "enter",
+      "space"
+    ],
     "ariaPattern": "none (default) | native button | native link",
-    "notes": "The 44px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
+    "notes": "The 32px minimum applies only with interactive styling. Static divs have no implicit group role or tab stop. Buttons support Enter/Space and native disabled; links support Enter. Custom hosts own semantics and activation, including aria-disabled behavior. Focusable hosts retain a theme-aware focus outline even when interactive=false; disabled text and cursor styling also remain available."
   },
-
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": [
+      "react"
+    ],
     "peer": [],
     "devOnly": []
   },
-
   "usageRef": "./usage.md",
   "examples": [
     "./examples.tsx#BasicCard",

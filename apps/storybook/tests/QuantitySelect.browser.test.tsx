@@ -24,8 +24,8 @@ test("QuantitySelect matches the source cart pill while preserving its accessibl
       const rect = display.getBoundingClientRect();
       const target = select.getBoundingClientRect();
       expect(rect.width).toBe(60);
-      expect(rect.height).toBe(24);
-      expect(target.height).toBeGreaterThanOrEqual(44);
+      expect(rect.height).toBe(32);
+      expect(target.height).toBe(32);
       expect(Math.abs(rect.top + rect.height / 2 - target.top - target.height / 2)).toBeLessThan(1);
       expect(document.elementFromPoint(target.left + 2, target.top + 2)).toBe(select);
       expect(document.elementFromPoint(target.right - 2, target.bottom - 2)).toBe(select);
@@ -71,11 +71,18 @@ test.each([375, 1440])("QuantitySelect opens a source-styled list with selection
     expect(getComputedStyle(popup).borderRadius).toBe("0px");
     expect(getComputedStyle(display).borderTopWidth).toBe("2px");
     expect(getComputedStyle(display.lastElementChild!).transform).toBe("matrix(-1, 0, 0, -1, 0, 0)");
+    const pill = display.getBoundingClientRect();
+    // Side strokes join at the pill midpoint; the center remains clickable underneath.
+    expect(popup.getBoundingClientRect().top).toBe(pill.top + pill.height / 2);
+    for (const x of [popup.getBoundingClientRect().left + 1, popup.getBoundingClientRect().right - 1]) {
+      expect(document.elementFromPoint(x, pill.bottom - 4)).toBe(popup);
+    }
+    expect(trigger.element().contains(document.elementFromPoint(pill.left + pill.width / 2, pill.bottom - 4))).toBe(true);
     const first = page.getByRole("option", { name: "1", exact: true });
     await expect.element(first).toHaveAttribute("aria-selected", "true");
     expect(first.element().querySelector('svg')).not.toBeNull();
     expect(page.getByRole("option").elements()).toHaveLength(2);
-    expect(first.element().getBoundingClientRect().height).toBe(width === 375 ? 44 : 28);
+    expect(first.element().getBoundingClientRect().height).toBe(width === 375 ? 32 : 28);
     await expect.element(first).toHaveFocus();
     await userEvent.keyboard("{ArrowDown}");
     await expect.element(page.getByRole("option", { name: "2", exact: true })).toHaveFocus();
@@ -132,7 +139,7 @@ test("QuantitySelect flips and scrolls within a short viewport", async () => {
   document.body.append(container);
   const root = createRoot(container);
   try {
-    await page.viewport(375, 360);
+    await page.viewport(375, 280);
     flushSync(() => root.render(<QuantitySelect value={1} max={25} label="Edge quantity" locale="en" onValueChange={() => {}} />));
     const trigger = page.getByRole("combobox", { name: "Edge quantity", exact: true });
     await trigger.click();
@@ -140,8 +147,14 @@ test("QuantitySelect flips and scrolls within a short viewport", async () => {
     const popup = document.querySelector<HTMLElement>('[data-slot="quantity-select-popup"]')!;
     await expect.poll(() => popup.dataset.side).toBe("top");
     expect(popup.getBoundingClientRect().top).toBeGreaterThanOrEqual(0);
-    expect(popup.getBoundingClientRect().bottom).toBeLessThanOrEqual(360);
+    expect(popup.getBoundingClientRect().bottom).toBeLessThanOrEqual(280);
     expect(list.scrollHeight).toBeGreaterThan(list.clientHeight);
+    const pill = container.querySelector('[data-slot="quantity-select-display"]')!.getBoundingClientRect();
+    expect(popup.getBoundingClientRect().bottom).toBe(pill.top + pill.height / 2);
+    for (const x of [popup.getBoundingClientRect().left + 1, popup.getBoundingClientRect().right - 1]) {
+      expect(document.elementFromPoint(x, pill.top + 4)).toBe(popup);
+    }
+    expect(trigger.element().contains(document.elementFromPoint(pill.left + pill.width / 2, pill.top + 4))).toBe(true);
     expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(375);
     await userEvent.keyboard("{Escape}");
     await expect.element(trigger).toHaveFocus();
@@ -210,7 +223,7 @@ test.each([375, 1440])("QuantitySelect replaces 10+ in place and commits once on
     expect(container.querySelector<HTMLButtonElement>('[role="combobox"]')!.hidden).toBe(true);
     const after = input.element().getBoundingClientRect();
     expect({ width: after.width, height: after.height, left: after.left, top: after.top }).toEqual({ width: before.width, height: before.height, left: before.left, top: before.top });
-    expect(input.element().closest("label")!.getBoundingClientRect().height).toBe(44);
+    expect(input.element().closest("label")!.getBoundingClientRect().height).toBe(32);
     expect(getComputedStyle(input.element()).textAlign).toBe("center");
     expect(page.getByRole("button").elements()).toHaveLength(1);
     await input.fill("12");

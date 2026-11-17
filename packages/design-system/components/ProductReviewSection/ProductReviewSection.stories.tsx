@@ -127,7 +127,7 @@ const baseArgs: ProductReviewSectionProps = {
 
 const meta = {
   id: "yami-components-commerce-product-review-section",
-  title: "YAMI/Modules/Commerce/Product Review Section/Draft",
+  title: "YAMI/Modules/Commerce/Product Review Section",
   tags: ["draft"],
   component: ProductReviewSection,
   parameters: {
@@ -855,3 +855,21 @@ export const MultipleCardPhotosMobile: Story = {
     : {},
   play: import.meta.env.MODE === "test" ? MultipleCardPhotos.play : undefined,
 };
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Mobile,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

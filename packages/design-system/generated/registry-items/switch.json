@@ -1,0 +1,125 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "switch",
+  "title": "Switch",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+  "source": "components/Switch",
+  "files": [
+    {
+      "source": "components/Switch/index.ts",
+      "target": "components/Switch/index.ts"
+    },
+    {
+      "source": "components/Switch/story-translations.ts",
+      "target": "components/Switch/story-translations.ts"
+    },
+    {
+      "source": "components/Switch/Switch.module.css",
+      "target": "components/Switch/Switch.module.css"
+    },
+    {
+      "source": "components/Switch/Switch.tsx",
+      "target": "components/Switch/Switch.tsx"
+    }
+  ],
+  "exports": [
+    "Switch",
+    "SwitchProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Switch/usage.md",
+    "stories": [
+      "components/Switch/Switch.stories.tsx"
+    ],
+    "examples": [
+      "components/Switch/examples.tsx#BasicSwitch"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--background-secondary",
+      "--border-default",
+      "--fill-disabled",
+      "--fill-inverse",
+      "--fill-primary",
+      "--focus-ring",
+      "--radius-component-default",
+      "--radius-full",
+      "--space-025",
+      "--space-100",
+      "--space-400",
+      "--stroke-thick",
+      "--text-disabled",
+      "--text-primary"
+    ],
+    "rules": [
+      "focus-style",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--fill-disabled": {
+        "property": "background",
+        "selector": ".track"
+      },
+      "--fill-inverse": {
+        "property": "background",
+        "selector": ".root[data-checked] .track"
+      },
+      "--fill-primary": {
+        "property": "background",
+        "selector": ".thumb"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".thumb"
+      },
+      "--radius-full": {
+        "property": "border-radius",
+        "selector": ".track, .thumb"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".root"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".root:focus-visible"
+      },
+      "--space-400": {
+        "property": "min-width/min-height",
+        "selector": ".root"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "switch",
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "space",
+        "enter"
+      ],
+      "tapTargetMin": 32,
+      "notes": "Provide a visible label or aria-label; optional children label the entire clickable switch row."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "8348f268f95bf49dc58cfe8851600554b12b11c08ea87060b18219bc2a199959"
+}

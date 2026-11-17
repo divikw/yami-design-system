@@ -18,16 +18,16 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "a9b5ca36893cb4793a5c4738d6e1f67e0bd9eb287b6bed310222dc6d651333c0"
+      "digest": "75f9a4ef135704da93b140296c85ecd281c59f931d3f67d37d7bcac76eb95bba"
     },
     {
       "name": "accordion",
       "title": "Accordion",
       "type": "component",
       "status": "experimental",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "path": "registry-items/accordion.json",
-      "digest": "515171ac3ac253d26bb079142f513db75575285a28849e9dc9553217a89f84d6"
+      "digest": "743bb55bc125052c3147a3784379310d4fec3b41c63d68c3cbc2330d087c5a9f"
     },
     {
       "name": "activity-page-header",
@@ -36,7 +36,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/activity-page-header.json",
-      "digest": "6ed6114e4d58bbdce3647443bb4c4750b079e44d341746adf8b88b5cdaf41eb3"
+      "digest": "5361544bdcaee769ba0893533ba10cab62c0c3c013ef25dacd88eb25b96a73ba"
     },
     {
       "name": "aspect-ratio",
@@ -45,7 +45,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/aspect-ratio.json",
-      "digest": "adb60cddec99a79aadead121b523e3c2cc840d0801b285b95db32fc0c7a93d8f"
+      "digest": "1a2f100c829501a1a77ea0b11e3e9c55d78e9338301f04d73eecaad3229bfc24"
     },
     {
       "name": "avatar",
@@ -54,7 +54,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/avatar.json",
-      "digest": "dd0028c19c83b90df4a6c13ecb11eb0831a345c040739935de8c98c7b35a1575"
+      "digest": "96649f54d37c3ad3e5106cea71aa030718376a6ea5a60a981a9a4ae1385c543b"
     },
     {
       "name": "badge",
@@ -63,7 +63,7 @@
       "status": "stable",
       "version": "0.5.0",
       "path": "registry-items/badge.json",
-      "digest": "857325f9dacf9c5d0b8e81011b995db216575e121f9fe369f03756a589727976"
+      "digest": "02b3fb0e8636daed9b52f6a1a173038aeef31083226a7f677edf0be4f7838213"
     },
     {
       "name": "billboard",
@@ -72,7 +72,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/billboard.json",
-      "digest": "590c17e1cca7a6194cc491be6cec9a9596f8ab28cb85a4d682bbc6895c7e42bc"
+      "digest": "19b5e6278dd1d26bcde3ea5d9b5199b498b65716156761caab9682ecb5a12ddb"
     },
     {
       "name": "brand-product-rail",
@@ -81,7 +81,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/brand-product-rail.json",
-      "digest": "8ab04561c803c828907d7464a194d5185706974f4c210f3151f29f3e3c1cc21b"
+      "digest": "de463061a28bf7e01b82b2f5fb7500c272e01fa58af9e3b4bbb4c8f94f568ccd"
     },
     {
       "name": "breadcrumb",
@@ -90,7 +90,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/breadcrumb.json",
-      "digest": "d81462be2380b15dffb0003e82a6ffc44b58af7377330d72547809905b777d76"
+      "digest": "08fe86bf77f8821610f95da27a0aac53aba9794134f06d6fd293f82fd1b500de"
     },
     {
       "name": "button",
@@ -99,7 +99,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "0a877082053add7ba08b1afc9b214aea962d7b2f4ec13a85a35a3365272bb02f"
+      "digest": "053153e0c2e5a60941cfc0fe739ee9cc6c52e4e9c53b947a4255f3fbf5133524"
     },
     {
       "name": "button-group",
@@ -108,7 +108,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/button-group.json",
-      "digest": "afa17f17ef449021d4e93cef7bd53f7737af22d1b24af760911dfacde2d3521f"
+      "digest": "f4005df0fafc272e3491b598016ac950d8b0808db91668451034dff0e0a5ef37"
     },
     {
       "name": "card",
@@ -117,7 +117,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/card.json",
-      "digest": "aebbda639a6dadcd2c70a9f4ae94c987f8166b0d8ffd74bc10e8cd3cc0ccd7e8"
+      "digest": "7d08c9f8919165b0069c9cf6fd4d9a587a8ef2c19755a4c5f9a8b3e733d5de49"
     },
     {
       "name": "checkbox",
@@ -126,7 +126,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
-      "digest": "2ed44483bfe3b9c00450bacd8964d81f0210581ef86071dfaf05eec0f2ef10d2"
+      "digest": "f2ff700d09ddd07ad19afa4f905106d030c55a19eab630b8591d6e1b712f7f8a"
     },
     {
       "name": "coupon",
@@ -135,7 +135,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/coupon.json",
-      "digest": "894fe68bda3e880ffef9487bf14b6c5f017b161fce61bf363b95d4093b46e9c8"
+      "digest": "3c6ed456d2aba36280d3b1cc35f6eeeaddedfd9872f401903872469e70b50282"
     },
     {
       "name": "dialog",
@@ -144,7 +144,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/dialog.json",
-      "digest": "31a1084110ec9ec2f609442ac41ccd347c8b117d2610d280ba15df8e0d1466cf"
+      "digest": "9c9e48727267f1bcf56c1a7cf21e29c823b81847079d05ef537b753c1316a555"
     },
     {
       "name": "divider",
@@ -153,7 +153,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/divider.json",
-      "digest": "75c55436c7de8623013278f414621fd1c3ce33cb231e37d39e91db8657dce148"
+      "digest": "9923080aa2496208f21711f704f223706d3781b87e0e24e29e02c8ae02e04e16"
     },
     {
       "name": "drawer",
@@ -162,7 +162,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "6f177301e658a666de1759a04534d4cf531dc83d437d1634cd6640f2e9edafa5"
+      "digest": "3b78ed8a2afa42fe145909846e9440c8b6524a7f0f9cd1895ae230ba1edf9e10"
     },
     {
       "name": "filter-chip",
@@ -171,7 +171,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/filter-chip.json",
-      "digest": "ed2fd552b4002043a9dd0d1bf9368b04bcd9ca6b94369d492b3f2f424b41e0d5"
+      "digest": "0aaa2107868953e790479975081abcf044b5e7b71cd284ef2e7f022b8b8c582f"
     },
     {
       "name": "footer",
@@ -180,7 +180,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/footer.json",
-      "digest": "3a9b80ef756848799e589327cff470f39be7dcec3275b1e62e92558d474e1519"
+      "digest": "c9dc8a39f138c52fff3632704b43ea7b45153cf744d7e80ef139638ec269c410"
     },
     {
       "name": "header",
@@ -189,7 +189,7 @@
       "status": "beta",
       "version": "0.3.0",
       "path": "registry-items/header.json",
-      "digest": "5f292fed3c5b3d653d2cda7ef982df574b32e435ed9fb49ab83abb1cb0c52754"
+      "digest": "6732535ec8b8fecd551901ed1215e41f6a9c27234b48079055a33f920dbfaacb"
     },
     {
       "name": "hero-banner",
@@ -198,7 +198,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "dabeda9e86caf99914e096e4e7a953abe9455063dee0f6439f9c40feca428ccc"
+      "digest": "4342e56b11f27a5b3b5b16a2f8cf9cc80f4f1de0de310b17ff757d87e5e16ec1"
     },
     {
       "name": "horizontal-scroll-list",
@@ -207,7 +207,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/horizontal-scroll-list.json",
-      "digest": "1cf2e4cde8248e01bdf11bd401f4da5153d4b512e9c0f48a226561d60fa90c2f"
+      "digest": "0aa136a7e07b1973a8f25cecebe4138c012b07d61807cfdd9260c2c22e397b91"
     },
     {
       "name": "input",
@@ -216,7 +216,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "2a3de8c4fc6af6d4e9c46bb6386ac1596343260f5188333c861a4702682ddece"
+      "digest": "22144a63fc677b74ba8398a4ff0cb8c01a0d11f8c54e7dafaf5a3c8034064b24"
     },
     {
       "name": "membership-badge",
@@ -225,7 +225,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/membership-badge.json",
-      "digest": "1e73a4c7a24fe70f43478e8721bc681eea495bc20cb85fc84f514c9bbe47c6fd"
+      "digest": "b62caa40465ee3df100461041a2da981e0c4426358e0c0fb4e5e7f84725cc4bf"
     },
     {
       "name": "membership-icon",
@@ -234,7 +234,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/membership-icon.json",
-      "digest": "a56ddf83aca9c4a4b208e9fc26f6425d70ae372265499de1415de17e4fdd7f56"
+      "digest": "ae786258056cf9c1f40b471eac71cf2af260cc86eb475508b6a50dbc8dc66799"
     },
     {
       "name": "pagination",
@@ -243,7 +243,16 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/pagination.json",
-      "digest": "6d1c628504f55545047a127bafbb4a86e1da4e10cc0307fa461eacdc3ffa3a12"
+      "digest": "cdd2d2d8b658459e504d977a54ae21cc9916a4e10fa27705183b966ee18eebec"
+    },
+    {
+      "name": "popover",
+      "title": "Popover",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/popover.json",
+      "digest": "b1f51ae2c0661283f7313002931d79082e7f3abd4c50d57a27491dc09c65aaa3"
     },
     {
       "name": "product-card",
@@ -252,7 +261,7 @@
       "status": "stable",
       "version": "0.3.2",
       "path": "registry-items/product-card.json",
-      "digest": "6c91bddc048dcbe6399d946f313d8f0a6c327f7d907df2541f46ddf6dfdde7a4"
+      "digest": "d6ec8313359d2c4a15179a4aa27b9ce0e7e9575ee8ea4a1ccae2b63e39823412"
     },
     {
       "name": "product-list",
@@ -261,7 +270,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "0bdf5551902554f5a3fc1cdbfb8bd25b356be897a3a5d4df83ca9d51fc57c448"
+      "digest": "f41603128175dc3941e66c2fa0d23403cbeb94bd0fa6a44d54b0f96e94448fa9"
     },
     {
       "name": "product-media-gallery",
@@ -270,7 +279,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-media-gallery.json",
-      "digest": "ef342d8290af2b9df118ac970ceed22e986becde27dd57df650f54f228f496f0"
+      "digest": "3afe844e65415365b222dd7f496d2f64825c33e55c446ddef2e3612acbb2333b"
     },
     {
       "name": "product-review-section",
@@ -279,7 +288,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
-      "digest": "049c271d2dd16b035ca796dcec48e588a563bb1e5527787badd323611c497432"
+      "digest": "ff5267419a0ac88c144f2efd8c23c66c47fac46d91f2855b2bea48f61a431595"
     },
     {
       "name": "quantity-select",
@@ -288,7 +297,7 @@
       "status": "experimental",
       "version": "0.3.1",
       "path": "registry-items/quantity-select.json",
-      "digest": "3cd053e99abb902a0b7cbc39adfe0b8790c0b2908989cea4d23db6a42678a23c"
+      "digest": "24438c6847613a0a93d291624ef37c3e3a12e26f37ebf79b6d054b61809c86c1"
     },
     {
       "name": "radio-group",
@@ -297,7 +306,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/radio-group.json",
-      "digest": "6f8bae7e9c44f658d6a82a98e3021ececb1cc6d38927ca88e4efea724514c7c1"
+      "digest": "36387bb471a8c77b354546c1d749a518bd5af24153a3c614a8957d21a5454b04"
     },
     {
       "name": "review-list",
@@ -306,7 +315,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "09b436ada6020dca611d87d9edf37a23b5b99afcf6a3f303e603e35b860db95f"
+      "digest": "d7d493e2652390019023d3b6e1a6af0fa47fd27c7e3770c6c4fb7453fbb8ea32"
     },
     {
       "name": "section-banner",
@@ -315,7 +324,16 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/section-banner.json",
-      "digest": "d07590f3ba0d19de759cfb037b68f0ce338d66b7f03419c7907baf76c2646ef1"
+      "digest": "8614e174e3e0fb2b385a5cc42948afac952fc294147a548783cfc19896143e85"
+    },
+    {
+      "name": "select",
+      "title": "Select",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/select.json",
+      "digest": "10307290d54000095c1e43972c1456545ea45166d0df4ede5f4882113f199ca8"
     },
     {
       "name": "sheet",
@@ -324,7 +342,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/sheet.json",
-      "digest": "4241909abf9349ad1a07c9d1d2671dad8ca1a7a33fa2d39e92d735f6e69516c9"
+      "digest": "386e6fc1fac8563e5dac63afc7d825f814b9c210fa323515783fe6e1688d88e2"
     },
     {
       "name": "shortcut-rail",
@@ -333,7 +351,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/shortcut-rail.json",
-      "digest": "5f93f824c8e59f7b0d7845774e402a79503175042273b68a24054aaca6e182e9"
+      "digest": "bdf9aa411b950d3c9b47db84e317ee48a10633db1046de249fc71b333bc025f4"
     },
     {
       "name": "social-media-gallery",
@@ -342,7 +360,16 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/social-media-gallery.json",
-      "digest": "c9dbf6cf57b086c76dd804c7c7d254f9d1a3fff33fbb310bdd4cb9d374001c30"
+      "digest": "8983985edb0a4be43e6d436d8b148ed03a340b99fa2ebc98214e3d3a8a1fe317"
+    },
+    {
+      "name": "switch",
+      "title": "Switch",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/switch.json",
+      "digest": "8348f268f95bf49dc58cfe8851600554b12b11c08ea87060b18219bc2a199959"
     },
     {
       "name": "tab-bar",
@@ -351,7 +378,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/tab-bar.json",
-      "digest": "39ebe15b77e7c87f0722a91d1b18091d84c71343fc4ee05db481b59e8f2732a8"
+      "digest": "7b6b23ed41ce86e8dc87a5b3e85532a77903605482ff5bf07036024c133ccda4"
     },
     {
       "name": "tabs",
@@ -360,7 +387,7 @@
       "status": "stable",
       "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "3437048560f1bc929c67a498b12dc787d7400153dafbb736c933fded421bfe9b"
+      "digest": "9145456a8a439815365dd0c2af5daca4a1172d807d98963cb847404244476ddc"
     },
     {
       "name": "tag",
@@ -369,7 +396,7 @@
       "status": "experimental",
       "version": "0.4.0",
       "path": "registry-items/tag.json",
-      "digest": "a2b78b97cb51823c32adb3116496aadc9b8c9a5f96a789f1979e39ae677ae835"
+      "digest": "f986a6fa704bed46051cbf578eb2ea4a21696081af01ae84ff383094c7665914"
     },
     {
       "name": "theme-hero",
@@ -378,7 +405,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "ffddd92a4313a8058c12d221d7d70c4dcf3a29f244988a083d315c3a23e805de"
+      "digest": "ae3f4a30f5df3b950aaabbf04017a1bb8a3885a02beabbbf2c4c7659e3792e59"
     },
     {
       "name": "theme-product-list",
@@ -387,7 +414,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/theme-product-list.json",
-      "digest": "4f7e92d7a4b259cda21a17d849880134548b5511c4fb1276856befe7319293c3"
+      "digest": "6e61b6b94ff9b1ce52ef35b1e920afcbf1fed2397ab9f4edeb84c9e952148e95"
     },
     {
       "name": "trending-searches",
@@ -396,7 +423,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/trending-searches.json",
-      "digest": "ec673e58e9da4c15396cde4a3c289b66d2128e54d8093a3ab18870580d1a12f5"
+      "digest": "a6456a0d743973432ed65bbda921cae90282f3e60c7ffd1983875256ba2d04d7"
     }
   ]
 }

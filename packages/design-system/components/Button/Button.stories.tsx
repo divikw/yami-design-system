@@ -33,7 +33,8 @@ function HeartIcon({ size = 20 }: { size?: number }) {
 }
 
 const meta = {
-  title: "YAMI/Components/Actions/Button",
+  id: "yami-components-actions-button",
+  title: "YAMI/Components/Button",
   component: Button,
   parameters: {
     layout: "centered",
@@ -395,3 +396,19 @@ export const Navigation: Story = {
     </ButtonGroup>
   ),
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

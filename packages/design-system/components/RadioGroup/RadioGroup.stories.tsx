@@ -4,11 +4,45 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { RadioGroup, RadioGroupItem } from "./RadioGroup"
 
 const meta = {
-  title: "YAMI/Components/Forms/Radio Group",
+  id: "yami-components-forms-radio-group",
+  title: "YAMI/Components/Radio Group",
   component: RadioGroup,
   parameters: {
     layout: "padded",
+    controls: { localizeDescriptions: true },
     docs: {
+      translations: {
+        zh: {
+          description: "YAMI 单选组：同组仅允许选中一项，支持方向键切换、禁用和原生表单提交。",
+          argDescriptions: {
+            disabled: "禁用控件，阻止操作和聚焦，且不参与表单提交。",
+            required: "启用浏览器原生必填校验。",
+            name: "提交表单时使用的字段名称。",
+            readOnly: "只读：允许聚焦和提交，但不允许更改。",
+            form: "关联的表单元素 ID，可用于表单外的控件。",
+            "aria-label": "无可见标签时提供的无障碍名称。",
+            value: "受控选中项的字符串值；null 表示未选择。",
+            defaultValue: "非受控模式的初始选中项。",
+            onValueChange: "选中项变化时触发；返回字符串或 null，以及 Base UI 事件详情。",
+            loop: "方向键到达首尾时是否循环，默认为 true。",
+          },
+        },
+        en: {
+          description: "YAMI radio group with exclusive selection, arrow-key navigation, disabled states and native form submission.",
+          argDescriptions: {
+            disabled: "Disables interaction and focus; excludes the control from form submission.",
+            required: "Enables native required-field validation.",
+            name: "Field name used when submitting a form.",
+            readOnly: "Allows focus and form submission while preventing changes.",
+            form: "ID of the owning form, including controls outside that form.",
+            "aria-label": "Accessible name when no visible label is present.",
+            value: "Controlled selected string value; null means no selection.",
+            defaultValue: "Initially selected value in uncontrolled mode.",
+            onValueChange: "Receives the selected string or null and Base UI event details.",
+            loop: "Whether arrow-key navigation wraps at either end; defaults to true.",
+          },
+        },
+      },
       description: {
         component:
           "YAMI Radio Button from Figma `↪ 表单输入 Forms`, composed as an accessible Base UI RadioGroup for exclusive selection and arrow-key navigation.",
@@ -16,6 +50,14 @@ const meta = {
     },
   },
   argTypes: {
+    loop: { control: "boolean" },
+    onValueChange: { control: false },
+    defaultValue: { control: "text" },
+    value: { control: "text" },
+    "aria-label": { control: "text" },
+    form: { control: "text" },
+    readOnly: { control: "boolean" },
+    name: { control: "text" },
     disabled: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -43,7 +85,7 @@ const optionStyle: CSSProperties = {
   display: "inline-flex",
   minHeight: "var(--space-600)",
   alignItems: "center",
-  gap: "var(--space-100)",
+  gap: 0,
   color: "var(--text-primary)",
   fontSize: "var(--font-size-body-md)",
   lineHeight: "var(--line-height-body-md)",
@@ -145,3 +187,19 @@ export const Disabled: Story = {
     </RadioGroup>
   ),
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

@@ -5,7 +5,8 @@ import { expect, userEvent, within } from "storybook/test"
 import { Tabs, TabsContent, TabsList, TabsTrigger, type TabsVariant } from "./Tabs"
 
 const meta = {
-  title: "YAMI/Components/Navigation/Tabs",
+  id: "yami-components-navigation-tabs",
+  title: "YAMI/Components/Tabs",
   component: Tabs,
   parameters: {
     layout: "padded",
@@ -834,3 +835,19 @@ export const CenteredScrolling: Story = {
     if (getComputedStyle(list).paddingInlineStart !== "16px") throw new Error("List must retain edge padding")
   } : undefined,
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...PrimaryStyleA,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

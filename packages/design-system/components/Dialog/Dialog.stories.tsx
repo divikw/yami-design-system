@@ -64,7 +64,7 @@ function LongTitleDialogDemo(args: DialogProps) {
 
 const meta = {
   id: "yami-components-layout-dialog",
-  title: "YAMI/Components/Layout/Dialog/Draft/V1",
+  title: "YAMI/Components/Dialog",
   component: Dialog,
   tags: ["!autodocs", "draft"],
   parameters: {
@@ -108,3 +108,21 @@ export const Desktop: Story = {
   name: "PC — Confirmation",
   globals: { viewport: { value: "yamiDesktopLg", isRotated: false } },
 };
+
+export const PCPreview: Story = {
+  ...Desktop,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

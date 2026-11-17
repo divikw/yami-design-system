@@ -7,7 +7,7 @@
   "react": "~19.3.1",
   "verification": {
     "node": "24.18.0",
-    "next": "16.4.3",
+    "next": "16.4.6",
     "vite": "8.3.5",
     "typescript": "6.0.2"
   }

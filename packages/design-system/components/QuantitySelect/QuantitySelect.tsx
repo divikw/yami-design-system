@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Select } from "@base-ui/react/select";
+import { Select, SelectTrigger, SelectContent, SelectList, SelectItem } from "../Select";
 import styles from "./QuantitySelect.module.css";
 
 const warningIcon = new URL("../../assets/icons/base/warning-fill.svg", import.meta.url).href;
@@ -86,7 +86,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
 
   return <div className={styles.root} lang={locale} data-slot="quantity-select" data-keyboard-focus={keyboardFocus || undefined} aria-busy={loading || undefined}>
     <span className={styles.control} hidden={showInput} data-slot="quantity-select-control">
-      <Select.Root value={value >= 10 ? "custom" : String(value)} open={open && !unavailable} onOpenChange={setOpen} disabled={unavailable} modal={false}
+      <Select value={value >= 10 ? "custom" : String(value)} open={open && !unavailable} onOpenChange={setOpen} disabled={unavailable} modal={false}
         onValueChange={(next) => {
           if (next === null) return;
           setOpen(false);
@@ -98,28 +98,20 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
             onValueChange(Number(next));
           }
         }}>
-        <Select.Trigger ref={selectRef} hidden={showInput} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
+        <SelectTrigger ref={selectRef} hidden={showInput} className={styles.select} aria-label={label} aria-describedby={message ? `${id}-error` : loading ? `${id}-status` : undefined}
           aria-invalid={!editing && Boolean(message) || undefined}>
           <span ref={displayRef} className={styles.display} data-slot="quantity-select-display" aria-hidden="true">
             <span className={styles.value}>{value}</span><span className={styles.arrow} style={{ maskImage: `url("${arrowIcon}")` }} />
           </span>
-        </Select.Trigger>
-        <Select.Portal container={selectRef.current?.closest("dialog") ?? undefined}>
-          <Select.Positioner className={styles.positioner} anchor={displayRef} align="start" alignItemWithTrigger={false} sideOffset={-12} collisionPadding={8}>
-            <Select.Popup className={styles.popup} data-slot="quantity-select-popup" finalFocus={editing ? inputRef : true}>
-              <Select.List className={styles.list}>
-                {[...Array.from({ length: Math.min(9, max) }, (_, index) => ({ value: String(index + 1), label: String(index + 1) })), ...(max >= 10 ? [{ value: "custom", label: value >= 10 ? String(value) : "10+" }] : [])].map((option) =>
-                  <Select.Item className={styles.option} key={option.value} value={option.value}>
-                    <Select.ItemText>{option.label}</Select.ItemText>
-                    <Select.ItemIndicator className={styles.check}>
-                      <svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true"><path d="m3 8 3 3 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    </Select.ItemIndicator>
-                  </Select.Item>)}
-              </Select.List>
-            </Select.Popup>
-          </Select.Positioner>
-        </Select.Portal>
-      </Select.Root>
+        </SelectTrigger>
+        <SelectContent className={styles.popup} anchor={displayRef} align="start" sideOffset={-16} collisionPadding={8}
+          container={selectRef.current?.closest("dialog")} finalFocus={editing ? inputRef : undefined} render={<div data-slot="quantity-select-popup" />}>
+          <SelectList className={styles.list}>
+            {[...Array.from({ length: Math.min(9, max) }, (_, index) => ({ value: String(index + 1), label: String(index + 1) })), ...(max >= 10 ? [{ value: "custom", label: value >= 10 ? String(value) : "10+" }] : [])].map((option) =>
+              <SelectItem className={styles.option} key={option.value} value={option.value}>{option.label}</SelectItem>)}
+          </SelectList>
+        </SelectContent>
+      </Select>
     </span>
     {showInput && <label className={styles.inputTarget} htmlFor={`${id}-input`}>
       <input ref={inputRef} id={`${id}-input`} className={styles.input} data-slot="quantity-select-input" type="text" inputMode="numeric" autoComplete="off"

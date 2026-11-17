@@ -27,7 +27,8 @@ function getProps(locale: ShortcutLocale): ShortcutRailProps {
 }
 
 const meta = {
-  title: "YAMI/Components/Navigation/Shortcut Rail",
+  id: "yami-components-navigation-shortcut-rail",
+  title: "YAMI/Components/Shortcut Rail",
   component: ShortcutRail,
   decorators: [
     (Story) => (
@@ -775,3 +776,21 @@ export const MobileImageCardsSeven: Story = {
   tags: ["!dev", "!autodocs"],
   args: ImageCardsSeven.args,
 };
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...FullBleedImages,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};
+
+export const Playground: Story = { tags: ["!dev", "!test"] };

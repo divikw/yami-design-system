@@ -4,7 +4,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Divider } from "./Divider"
 
 const meta = {
-  title: "YAMI/Components/Layout/Divider",
+  id: "yami-components-layout-divider",
+  title: "YAMI/Components/Divider",
   component: Divider,
   parameters: {
     layout: "padded",
@@ -204,3 +205,19 @@ export const Vertical: Story = {
     </div>
   ),
 }
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

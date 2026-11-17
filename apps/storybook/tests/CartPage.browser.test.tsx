@@ -159,7 +159,7 @@ test.each([375, 940])("CartPage keeps bare product titles clickable beside cente
     expect(title.contains(document.elementFromPoint(titleBounds.right - 15, titleBounds.bottom - 2))).toBe(true);
     const quantity = row.querySelector('[role="combobox"]')!.getBoundingClientRect();
     const price = row.querySelector('[class*="price"]')!.getBoundingClientRect();
-    expect(quantity.height).toBeGreaterThanOrEqual(44);
+    expect(quantity.height).toBe(32);
     expect(Math.abs(quantity.top + quantity.height / 2 - price.top - price.height / 2)).toBeLessThan(1);
   } finally {
     root.unmount(); container.remove();
@@ -856,7 +856,7 @@ for (const locale of ["zh", "en"] as const) {
         expect(getComputedStyle(heading).fontSize).toBe("32px");
         expect(getComputedStyle(heading).fontWeight).toBe("400");
         expect(getComputedStyle(heading).paddingBottom).toBe("32px");
-        expect(heading.previousElementSibling!.getBoundingClientRect().height).toBe(72);
+        expect(heading.previousElementSibling!.getBoundingClientRect().height).toBe(48);
         expect(getComputedStyle(body).paddingLeft).toBe("32px");
         expect(image.getBoundingClientRect().width).toBeCloseTo(104, 2);
         expect(getComputedStyle(row).columnGap).toBe("24px");

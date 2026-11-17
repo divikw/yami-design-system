@@ -9,7 +9,8 @@ const matchaImage = new URL(
 ).href;
 
 const meta = {
-  title: "YAMI/Components/Data Display/Tag",
+  id: "yami-components-data-display-tag",
+  title: "YAMI/Components/Tag",
   component: Tag,
   parameters: {
     layout: "centered",
@@ -282,3 +283,19 @@ export const Showcase: Story = {
 };
 
 export const Playground: Story = {};
+
+export const PCPreview: Story = {
+  ...Showcase,
+  name: "PC",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  play: undefined,
+};
+
+export const MobilePreview: Story = {
+  ...Showcase,
+  name: "Mobile",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  play: undefined,
+};

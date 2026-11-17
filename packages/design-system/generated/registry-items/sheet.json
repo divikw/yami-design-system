@@ -107,7 +107,7 @@
       "ariaPattern": "Native modal dialog labelled by its visible h2",
       "interaction": "showModal makes the background inert. Close restores the opener; child views focus Back and use Escape to return."
     },
-    "interactionCoverage": "missing"
+    "interactionCoverage": "covered"
   },
-  "contentDigest": "4241909abf9349ad1a07c9d1d2671dad8ca1a7a33fa2d39e92d735f6e69516c9"
+  "contentDigest": "386e6fc1fac8563e5dac63afc7d825f814b9c210fa323515783fe6e1688d88e2"
 }

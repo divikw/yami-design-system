@@ -40,17 +40,15 @@
   "composes": [
     "Button",
     "Checkbox",
+    "Popover",
     "RadioGroup",
     "Sheet"
   ],
   "dependencies": {
     "runtime": [
-      "react",
-      "@base-ui/react"
+      "react"
     ],
-    "peer": [
-      "@base-ui/react"
-    ],
+    "peer": [],
     "devOnly": [
       "@storybook/react-vite",
       "storybook"
@@ -140,5 +138,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "ed2fd552b4002043a9dd0d1bf9368b04bcd9ca6b94369d492b3f2f424b41e0d5"
+  "contentDigest": "0aaa2107868953e790479975081abcf044b5e7b71cd284ef2e7f022b8b8c582f"
 }

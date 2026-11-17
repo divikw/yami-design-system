@@ -40,7 +40,7 @@ The unavailable drawer has no footer action. Desktop retains the shared 480px wi
 
 ## Quantity popup alignment — 2026-10-14
 
-QuantitySelect now uses a shared accessible combobox/listbox rather than the browser-native menu. The 60×24px pill retains its 44px trigger target, centers the number, turns its arrow upward when expanded, and opens a same-width neutral list with a selected checkmark. Desktop options follow the compact source; mobile options retain 44px targets. Selecting 10+ replaces the pill in place with a centered inline input; blur or Enter commits once. Non-digits are filtered, empty/zero becomes 1, and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. There are no Apply/Cancel or Edit buttons.
+QuantitySelect now uses a shared accessible combobox/listbox rather than the browser-native menu. The 60×32px pill uses a 32px trigger target, centers the number, turns its arrow upward when expanded, and opens a same-width neutral list with a selected checkmark. Desktop options follow the compact source; mobile options use 32px targets. Selecting 10+ replaces the pill in place with a centered inline input; blur or Enter commits once. Non-digits are filtered, empty/zero becomes 1, and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. There are no Apply/Cancel or Edit buttons.
 
 ## Narrow merchant headers — 2026-10-14
 
@@ -70,7 +70,7 @@ The calculator tests shipping boundaries, selected/ineligible items, quantity ch
 
 ## Comparison review — 2026-10-13
 
-Observed the live PC cart without changing selections, quantities or customer data. The source uses a 480px right drawer, 60×24px quantity pills, 16px product titles, 12px underlined row actions, a 4px rounded shipping track, a dark add-more action with a right arrow, and an email/social footer band. The local page now follows these details through maintained components and semantic tokens; button radii and heading sizes follow the design-system contract.
+Observed the live PC cart without changing selections, quantities or customer data. The source uses a 480px right drawer, 60×32px quantity pills, 16px product titles, 12px underlined row actions, a 4px rounded shipping track, a dark add-more action with a right arrow, and an email/social footer band. The local page now follows these details through maintained components and semantic tokens; button radii and heading sizes follow the design-system contract.
 
 The coupon drawer shows only coupons eligible for the selected merchandise. Its shared Coupon cards include scope and a fixture validity date. Selecting or redeeming inside the drawer changes a draft; Save commits zero or one coupon and closes, while Close, Escape and backdrop dismissal discard the draft. Reopening starts from the saved selection. Desktop retains the 480px drawer and fixed Save footer using the shared Button defaults; Below 1024px, Mobile uses the shared Sheet description in its fixed header above the divider and the shared Input action inside the field border (14px value and action text). Desktop keeps its existing body hint and separate redeem button. Sidebar redemption still applies directly. Clearing unavailable items shows an empty state; closing that empty drawer returns focus to the cart title when its original opener has disappeared. Browser regressions cover these paths.
 
@@ -101,7 +101,7 @@ Each row groups the image and text column inside `cart-product-group`, with the 
 
 Below 1024px, each merchant row places product information, price and row actions in a natural text-column flow with 4px above and below the price and an 8px horizontal gap. The image stays top-aligned, and the quantity target is vertically centered beside the price without increasing its row height or gaps. Desktop retains separate information, quantity and price columns; unavailable drawer rows retain their existing layout.
 
-Title-only items reserve 44px in the price row so the centered quantity target cannot cover the product-title link.
+Title-only items reserve 32px in the price row so the centered quantity target cannot cover the product-title link.
 
 ## Sticky PC navigation — 2026-10-15
 

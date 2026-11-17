@@ -1,0 +1,169 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Select",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+  },
+  "exports": [
+    "Select",
+    "SelectProps",
+    "SelectTrigger",
+    "SelectTriggerProps",
+    "SelectContent",
+    "SelectContentProps",
+    "SelectItem",
+    "SelectItemProps",
+    "SelectValue",
+    "SelectLabel",
+    "SelectList"
+  ],
+  "props": {
+    "value": {
+      "type": "string | null",
+      "required": false,
+      "description": "Controlled selected value; null means no selection."
+    },
+    "defaultValue": {
+      "type": "string",
+      "required": false,
+      "description": "Initially selected value in uncontrolled mode."
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false,
+      "description": "Called when the selected value changes."
+    },
+    "items": {
+      "type": "array",
+      "required": false,
+      "description": "Option data for labels and typeahead while closed."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "description": "Disables the entire select."
+    },
+    "name": {
+      "type": "string",
+      "required": false,
+      "description": "Native form field name."
+    },
+    "required": {
+      "type": "boolean",
+      "required": false,
+      "description": "Enables native required validation."
+    }
+  },
+  "variants": {
+    "state": [
+      "default",
+      "focus-visible",
+      "disabled"
+    ]
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Keyboard controls use semantic focus-ring outlines."
+    },
+    "color": {
+      "ruleId": "semantic-color-only",
+      "note": "Uses existing semantic surface, text and border tokens."
+    }
+  },
+  "tokens": [
+    "--border-default",
+    "--button-disabled",
+    "--focus-ring",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--radius-button-primary",
+    "--radius-component-default",
+    "--space-025",
+    "--space-050",
+    "--space-100",
+    "--space-150",
+    "--stroke-default",
+    "--stroke-thick",
+    "--surface-primary",
+    "--surface-secondary",
+    "--text-disabled",
+    "--text-primary",
+    "--space-400",
+    "--space-500"
+  ],
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".trigger, .content"
+    },
+    "--surface-secondary": {
+      "property": "background",
+      "selector": ".item[data-highlighted]"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".trigger, .content"
+    },
+    "--radius-button-primary": {
+      "property": "border-radius",
+      "selector": ".trigger"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".content"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".trigger:focus-visible"
+    },
+    "--space-400": {
+      "property": "min-height",
+      "selector": ".item"
+    },
+    "--space-500": {
+      "property": "min-height",
+      "selector": ".trigger"
+    }
+  },
+  "accessibility": {
+    "role": "combobox / listbox / option",
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "space",
+      "enter",
+      "escape",
+      "arrow-down",
+      "arrow-up"
+    ],
+    "tapTargetMin": 32,
+    "notes": "Label the trigger with SelectLabel or aria-label. Arrow keys skip disabled items; Escape closes and restores trigger focus."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Story play and browser tests verify state, keyboard interaction, forms and popup dismissal."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#BasicSelect"
+  ]
+}

@@ -14,18 +14,18 @@
   display: grid;
   align-items: center;
   min-width: 60px;
-  min-height: 44px;
+  min-height: var(--space-400);
   flex: 0 0 auto;
 }
 
-/* Keep the source 24px pill inside a 44px button target. */
+/* Keep the visible pill and button target at the same 32px height. */
 .select {
   position: relative;
   box-sizing: border-box;
   display: grid;
   align-items: center;
   min-width: 60px;
-  min-height: 44px;
+  min-height: var(--space-400);
   margin: 0;
   padding: 0;
   border: 0;
@@ -43,7 +43,7 @@
   justify-content: space-between;
   gap: 0;
   min-width: 60px;
-  height: var(--space-300);
+  height: var(--space-400);
   padding-inline: var(--space-100);
   border: var(--stroke-default) solid var(--border-default);
   border-radius: var(--radius-button-primary);
@@ -88,14 +88,14 @@
   display: grid;
   align-items: center;
   min-width: 60px;
-  min-height: 44px;
+  min-height: var(--space-400);
   cursor: text;
 }
 
 .input {
   box-sizing: border-box;
   width: 60px;
-  height: var(--space-300);
+  height: var(--space-400);
   margin: 0;
   padding: 0 var(--space-100);
   border: var(--stroke-default) solid var(--border-default);
@@ -132,15 +132,16 @@
 
 .select[data-popup-open] .display { position: relative; z-index: 51; pointer-events: auto; border: var(--stroke-thick) solid var(--border-focus); }
 .select[data-popup-open] .arrow { transform: rotate(180deg); }
-.positioner { z-index: 50; }
-.popup { box-sizing: border-box; width: var(--anchor-width); min-width: 60px; background: var(--surface-primary); color: var(--text-primary); border: var(--stroke-thick) solid var(--border-focus); border-top: 0; padding-top: var(--space-150); outline: none; font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
-.list { max-height: calc(var(--available-height) - var(--stroke-thick) - var(--space-150)); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-.option { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: 0; min-height: 44px; padding-inline: var(--space-200) var(--space-050); cursor: pointer; outline: none; }
+[data-slot="select-positioner"]:has(> .popup) { z-index: 52; pointer-events: none; }
+.popup { margin: 0; box-sizing: border-box; width: var(--anchor-width); min-width: 60px; background: var(--surface-primary); color: var(--text-primary); border: var(--stroke-thick) solid var(--border-focus); border-top: 0; padding-block: var(--space-200) var(--space-050); outline: none; font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); }
+.popup { display: flex; flex-direction: column; pointer-events: auto; max-height: var(--available-height); clip-path: polygon(0 0, var(--stroke-thick) 0, var(--stroke-thick) var(--space-200), calc(100% - var(--stroke-thick)) var(--space-200), calc(100% - var(--stroke-thick)) 0, 100% 0, 100% 100%, 0 100%); }
+.list { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.option { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: 0; min-height: var(--space-400); padding-inline: var(--space-200) var(--space-050); cursor: pointer; outline: none; }
 .option[data-highlighted] { background: var(--surface-secondary); }
-.check { display: flex; }
 @media (min-width: 1024px) { .option { min-height: 28px; } }
 
-.popup[data-side="top"] { border-top: var(--stroke-thick) solid var(--border-focus); border-bottom: 0; padding-top: 0; padding-bottom: var(--space-150); }
+/* Keep the side strokes connected while the overlapping pill remains clickable. */
+.popup[data-side="top"] { border-top: var(--stroke-thick) solid var(--border-focus); border-bottom: 0; padding-block: var(--space-050) var(--space-200); clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - var(--stroke-thick)) 100%, calc(100% - var(--stroke-thick)) calc(100% - var(--space-200)), var(--stroke-thick) calc(100% - var(--space-200)), var(--stroke-thick) 100%, 0 100%); }
 
 .toast {
   position: fixed;

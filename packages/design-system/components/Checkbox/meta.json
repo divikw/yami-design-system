@@ -67,7 +67,7 @@
     "ariaPattern": "checkbox",
     "notes": "Base UI renders role=checkbox plus a hidden native form input. Provide a visible label or aria-label."
   },
-  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": ["@base-ui/react"], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
   "usageRef": "./usage.md",
   "examples": [
     "./examples.tsx#BasicCheckbox",
