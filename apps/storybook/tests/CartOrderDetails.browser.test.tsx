@@ -46,7 +46,7 @@ for (const locale of ["zh", "en"] as const) {
       await dialog.getByRole("checkbox", { name: locale === "zh" ? "全选" : "All", exact: true }).click();
       expect(details.textContent).toContain("$42.65");
       await userEvent.keyboard("{Escape}");
-      await expect.poll(() => container.querySelector("dialog[open]")).toBeNull();
+      await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
       await expect.element(opener).toHaveFocus();
     } finally {
       root.unmount(); container.remove();
@@ -90,7 +90,7 @@ test("guest checkout from mobile order details requests sign-in and releases the
     flushSync(() => root.render(<CartPage {...fixture} signedIn={false} initialDrawer="summary" />));
     await page.getByRole("dialog", { name: "Order details", exact: true }).getByRole("button", { name: "Checkout", exact: true }).click();
     await expect.element(page.getByRole("dialog", { name: "Sign in / Register", exact: true })).toBeVisible();
-    await expect.poll(() => container.querySelector('[data-slot="cart-order-details"]')).toBeNull();
+    await expect.poll(() => document.querySelector('[data-slot="cart-order-details"]')).toBeNull();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);
@@ -110,7 +110,7 @@ test("mobile order details keeps per-seller shipping and the saved coupon in the
     const coupons = page.getByRole("dialog", { name: "Coupons", exact: true });
     await coupons.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await coupons.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => container.querySelector("dialog[open]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     await page.getByRole("button", { name: "Details $283.67", exact: true }).click();
     const details = page.getByRole("dialog", { name: "Order details", exact: true }).element().querySelector('[data-slot="cart-order-details"]')!;
     expect(details.textContent).toContain("4 sellers, 6 items");

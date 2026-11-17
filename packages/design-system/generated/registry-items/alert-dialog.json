@@ -1,0 +1,135 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "alert-dialog",
+  "title": "AlertDialog",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Modal confirmation for decisions requiring a response. Base UI manages focus, Escape dismissal and scroll locking; outside presses do not dismiss.",
+  "source": "components/AlertDialog",
+  "files": [
+    {
+      "source": "components/AlertDialog/AlertDialog.module.css",
+      "target": "components/AlertDialog/AlertDialog.module.css"
+    },
+    {
+      "source": "components/AlertDialog/AlertDialog.tsx",
+      "target": "components/AlertDialog/AlertDialog.tsx"
+    },
+    {
+      "source": "components/AlertDialog/index.ts",
+      "target": "components/AlertDialog/index.ts"
+    }
+  ],
+  "exports": [
+    "AlertDialog",
+    "AlertDialogAction",
+    "AlertDialogActionProps",
+    "AlertDialogCancel",
+    "AlertDialogContent",
+    "AlertDialogContentProps",
+    "AlertDialogDescription",
+    "AlertDialogFooter",
+    "AlertDialogHeader",
+    "AlertDialogProps",
+    "AlertDialogTitle",
+    "AlertDialogTrigger"
+  ],
+  "composes": [
+    "Button",
+    "ButtonGroup"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/AlertDialog/usage.md",
+    "stories": [
+      "components/AlertDialog/AlertDialog.stories.tsx"
+    ],
+    "examples": [
+      "components/AlertDialog/examples.tsx#AlertDialogExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-body-xl",
+      "--font-size-heading-2xl",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--line-height-body-xl",
+      "--line-height-heading-2xl",
+      "--line-height-heading-sm",
+      "--overlay-scrim",
+      "--radius-button-primary",
+      "--radius-surface-default",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--space-300",
+      "--space-600",
+      "--surface-primary",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "focus-style",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".content"
+      },
+      "--overlay-scrim": {
+        "property": "background",
+        "selector": ".backdrop"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".content"
+      },
+      "--focus-ring": {
+        "property": "outline-color",
+        "selector": ".content:focus-visible"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      },
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".title"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "alertdialog",
+      "keyboardNav": [
+        "tab",
+        "shift+tab",
+        "space",
+        "enter",
+        "escape"
+      ],
+      "tapTargetMin": 40,
+      "notes": "Always modal. Title and Description supply the accessible name and description. Put Cancel before the confirmation action for safe initial keyboard/mouse focus; touch uses Base UI popup focus. Tab is contained, Escape cancels, outside presses do not dismiss, and closing restores focus. Use initialFocus/finalFocus for explicit focus targets."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "f5dae80b1ce1ff0e3bb1caeef0eff50f6337bea4507265021f0716384ace0141"
+}

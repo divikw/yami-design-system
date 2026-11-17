@@ -1,24 +1,46 @@
-# Dialog
+<!-- locale:zh -->
+# Dialog — 使用说明
 
-居中模态弹窗，适用于确认、提醒和短表单。移动端与桌面端都保持居中；筛选、详情、子页面和长内容使用 `Sheet`。
+基于 Base UI 的居中模态弹窗，用于短表单、编辑和一般信息。重要确认与不可撤销操作使用 `AlertDialog`；长篇移动端详情、筛选和子页面使用 `Sheet`。
 
-## 基本使用
+## 接口与职责
 
-从 `@yami/design-system` 导入 `Dialog`。传入受控的 `open`、可见标题 `title` 和 `onClose`；默认变体还需传入本地化 `closeLabel`。正文通过 `children` 传入，底部操作通过 `footer` 传入。
+从 `@yami/design-system` 导入 `Dialog`。保留受控 `open`、可见标题 `title`、关闭请求 `onClose`、正文 `children` 和固定操作区 `footer`；默认变体必填本地化 `closeLabel`。宿主负责保存、校验和异步状态，并设置 `open=false` 完成关闭。异步期间可暂不响应关闭请求。
 
-确认类弹窗使用 `variant="confirmation"`：标题使用 16px `heading-sm`，标题和短说明共用一个 message 容器并居中显示，不显示关闭按钮，也不使用信息区与 footer 之间的分隔线；用户通过 footer 中的明确操作完成或取消。普通提醒和短任务保持默认变体，并提供 `closeLabel`。
+关闭按钮、Escape 和点击遮罩请求关闭。Base UI 负责 Portal、焦点循环、背景隔离、页面滚动锁定与关闭后焦点归还；默认聚焦关闭按钮。弹窗在 body 中渲染为 `div`，原生 `showModal()`、`close()`、`method="dialog"` 不再适用。自定义事件目标类型为 HTMLDivElement；保留 `data-dialog`、`data-variant`、`data-slot` 钩子。跨 Portal 提交表单时，给表单设置 id，并在 Button 使用 `htmlType="submit"`、`htmlForm={formId}`。
 
-删除、清空等不可恢复操作使用 `role="alertdialog"`，并将唯一的确认操作设为红色 `Button variant="emphasis"`。普通确认和可撤销操作继续使用黑色 `primary`；非破坏性的注意事项不使用红色按钮。
+## 兼容变体
 
-移动端双操作使用等宽双列。出现三个及以上操作时，由 footer 内容改为单列竖排，顺序为主要操作、次要操作、取消；视觉上只保留两个层级，一个 `primary`，其余均使用 `secondary`。不要继续压缩横向按钮。长标题允许自然换行并保持居中。
+`variant="confirmation"` 保留居中标题、紧凑信息区域和无关闭按钮的旧布局。默认聚焦第一个可聚焦控件。`role="alertdialog"` 保留语义，但不会阻止遮罩关闭；新确认流程应直接使用 `AlertDialog`。
 
-- 移动端左右保留 16px，弹窗最大宽度为 400px。
-- 上下至少保留 48px 及安全区，正文超出后独立滚动，header 与 footer 保持固定。
-- footer 统一提供 16px 四周留白并兼容底部安全区；业务传入的操作布局只负责按钮排列和间距。
-- `confirmation` 使用更紧凑的间距：message 左右 12px，footer 四周 12px，message 底部保持 8px。
-- 默认 `role="dialog"`；需要立即宣读的关键提醒可使用 `role="alertdialog"`。
-- 关闭按钮为 32 × 32px、图标为 24 × 24px，并由 Button 保留 44 × 44px 点击热区。
+## 响应式与样式
 
-原生 `dialog.showModal()` 提供背景 inert。组件统一处理焦点循环、Esc、遮罩关闭、关闭后的焦点归还和页面滚动锁定。业务层负责操作按钮、确认逻辑和异步状态。
+- PC / Mobile 都居中，最大宽度 400px，移动端左右至少 16px。
+- 上下至少 48px 并兼容安全区；内容超高后正文独立滚动，标题与 footer 固定。
+- 默认关闭按钮独占顶部一行，标题位于下一行。Mobile 使用 20px 标题、正文上内边距 4px，关闭图标距顶部和右侧均为 12px；PC ≥1024px 使用 24px 标题、16px 正文、顶部 16px、左右及底部 24px，关闭按钮与标题间隔 12px，标题与正文相隔 12px；surface 圆角为 12px。
+- confirmation 信息左右 12px、底部 8px、footer 12px，保留旧布局。
+- 关闭按钮视觉 32px、图标 24px，使用 YAMI 关闭资源与 Button 44px 热区。
+- footer 无分隔线。操作由宿主组合 Button / ButtonGroup，示例使用 md（40px）全圆角按钮，PC 靠右、Mobile 两列等宽；普通保存使用黑色 primary，取消使用 secondary。表单字段使用 Input fullWidth 撑满内容区。
 
-Standalone Figma mapping is not assigned; do not publish a placeholder Code Connect node.
+示例见 `examples.tsx#DialogExample`；无独立 Figma 绑定。
+
+<!-- locale:en -->
+# Dialog — Usage
+
+A centered Base UI modal for short forms, editing and general information. Use `AlertDialog` for important or irreversible confirmations and `Sheet` for lengthy mobile details, filters and child views.
+
+## Contract and ownership
+
+Import `Dialog` from `@yami/design-system`. The existing controlled `open`, visible `title`, close request `onClose`, body `children` and fixed `footer` remain. The default variant requires a localized `closeLabel`. The host owns validation, submission and async state, closing with `open=false`; it may ignore premature close requests during async work.
+
+Close, Escape and outside presses request dismissal. Base UI owns the portal, focus trap, modal isolation, scroll lock and focus restoration; default initial focus goes to Close. The popup is a `div` portalled to body, not a native dialog. `showModal()`, `close()` and `method="dialog"` no longer apply. Custom event targets are HTMLDivElement; data-dialog, data-variant and data-slot hooks remain. Use an explicit form id with Button `htmlType="submit"` and `htmlForm={formId}` when submitting across a portal.
+
+## Compatibility
+
+Legacy `variant="confirmation"` keeps its centered heading, compact spacing and no Close button, focusing the first control. `role="alertdialog"` preserves semantics but still allows outside dismissal. New confirmation flows should use `AlertDialog`.
+
+## Layout
+
+PC and Mobile stay centered with a 400px maximum width, at least 16px side margins and 48px vertical safe clearance. Overflowing body content scrolls between the fixed header and footer. Close occupies its own top row above the heading. Mobile uses a 20px heading, 4px content top padding and 12px top/right Close icon insets; PC (≥1024px) uses a 24px heading, 16px body, 16px top spacing, 24px side/footer spacing and 12px close-to-title and title-to-content gaps. Surface radius remains 12px using YAMI tokens. Confirmation retains 12px side/footer padding and 8px body-bottom spacing. Close is visually 32px with a 24px YAMI icon and Button's 44px target. The footer has no divider. Hosts compose Button / ButtonGroup actions; examples use md (40px) pills, right-aligned on PC and equal-width on Mobile, primary black for Save and secondary for Cancel. Input fullWidth fills the content area.
+
+See `examples.tsx#DialogExample`. No standalone Figma binding is assigned.

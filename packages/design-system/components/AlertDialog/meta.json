@@ -1,0 +1,151 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "AlertDialog",
+  "category": "layout",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Modal confirmation for decisions requiring a response. Base UI manages focus, Escape dismissal and scroll locking; outside presses do not dismiss.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null,
+    "notes": "Adapted from maintained YAMI page/component styles. No independently verified Figma binding."
+  },
+  "exports": [
+    "AlertDialog",
+    "AlertDialogProps",
+    "AlertDialogTrigger",
+    "AlertDialogContent",
+    "AlertDialogContentProps",
+    "AlertDialogHeader",
+    "AlertDialogTitle",
+    "AlertDialogDescription",
+    "AlertDialogFooter",
+    "AlertDialogAction",
+    "AlertDialogCancel",
+    "AlertDialogActionProps"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "required": false,
+      "description": "Initial uncontrolled open state.",
+      "default": false
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "description": "Called when opening or closing is requested."
+    },
+    "children": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Compose trigger, labelled content, description and explicit cancel/confirm actions."
+    }
+  },
+  "variants": {
+    "state": [
+      "closed",
+      "open"
+    ]
+  },
+  "rules": {
+    "focus": {
+      "ruleId": "focus-style",
+      "note": "Keyboard controls use semantic focus-ring outlines."
+    },
+    "color": {
+      "ruleId": "semantic-color-only",
+      "note": "Uses existing semantic surface, text and border tokens."
+    }
+  },
+  "tokens": [
+    "--overlay-scrim",
+    "--space-600",
+    "--space-200",
+    "--radius-surface-default",
+    "--surface-primary",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--focus-ring",
+    "--space-100",
+    "--space-150",
+    "--font-size-heading-sm",
+    "--line-height-heading-sm",
+    "--font-weight-emphasize",
+    "--text-secondary",
+    "--space-300",
+    "--radius-button-primary",
+    "--font-size-heading-2xl",
+    "--line-height-heading-2xl",
+    "--font-size-body-xl",
+    "--line-height-body-xl"
+  ],
+  "tokenBindings": {
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".content"
+    },
+    "--overlay-scrim": {
+      "property": "background",
+      "selector": ".backdrop"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".content"
+    },
+    "--focus-ring": {
+      "property": "outline-color",
+      "selector": ".content:focus-visible"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".description"
+    },
+    "--font-size-heading-sm": {
+      "property": "font-size",
+      "selector": ".title"
+    }
+  },
+  "accessibility": {
+    "role": "alertdialog",
+    "keyboardNav": [
+      "tab",
+      "shift+tab",
+      "space",
+      "enter",
+      "escape"
+    ],
+    "tapTargetMin": 40,
+    "notes": "Always modal. Title and Description supply the accessible name and description. Put Cancel before the confirmation action for safe initial keyboard/mouse focus; touch uses Base UI popup focus. Tab is contained, Escape cancels, outside presses do not dismiss, and closing restores focus. Use initialFocus/finalFocus for explicit focus targets."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Showcase and browser tests cover modal semantics, focus containment/restoration, dismissal, controlled state, disabled actions and responsive geometry."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#AlertDialogExample"
+  ],
+  "composes": [
+    "Button",
+    "ButtonGroup"
+  ]
+}

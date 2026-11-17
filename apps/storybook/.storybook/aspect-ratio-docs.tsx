@@ -21,7 +21,7 @@ export function AspectRatioDocsPage({ locale }: { locale: DocsLocale }) {
   ];
   return <ComponentGuide name="AspectRatio" slug="aspectratio" locale={locale}
     intro={zh ? "按指定宽高比约束内容，适用于商品图片和媒体展示区域。" : "Constrain content to a width-to-height ratio for product images and media."}
-    previous={{ name: "Accordion", path: "yami-components-layout-accordion" }}
+    previous={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}
     next={{ name: "Avatar", path: "yami-components-data-display-avatar" }} composition={"AspectRatio\n└── children"} examples={examples}
     apiNote={zh ? "YAMI 使用 Base UI useRender 渲染 div，比例由 CSS 管理。以下是当前公开接口。" : "YAMI uses Base UI useRender to render a div; CSS manages the ratio. The public API is listed below."}
     api={[["ratio", zh ? "必填 number；宽度 / 高度，例如 1、16 / 9。" : "Required number: width / height, such as 1 or 16 / 9."], ["children", zh ? "容器中的内容。" : "Content inside the container."], ["className, style", zh ? "设置布局与视觉样式；比例由 ratio 决定。" : "Layout and visual styles; ratio controls the aspect ratio."], ["data-slot", zh ? "默认 aspect-ratio，可覆盖。支持其他原生 div 属性。" : "Defaults to aspect-ratio and can be overridden. Native div attributes are supported."]]}

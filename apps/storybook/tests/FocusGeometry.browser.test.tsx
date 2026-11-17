@@ -76,13 +76,16 @@ for (const theme of ["light", "dark"]) {
         container.style.boxSizing = "border-box";
         document.body.append(container);
         const root = createRoot(container);
+        const wasDark = document.documentElement.classList.contains("dark");
+        if (fixture.name === "Sheet") document.documentElement.classList.toggle("dark", theme === "dark");
         try {
           await page.viewport(width, 900);
           flushSync(() => root.render(<fixture.Story />));
           await document.fonts.ready;
           await userEvent.keyboard("{Tab}");
           const groups = new Map<string, HTMLElement[]>();
-          for (const el of container.querySelectorAll<HTMLElement>('a[href],button,input,[tabindex="0"],[role="checkbox"],[role="radio"]')) {
+          const scope = fixture.name === "Sheet" ? document.querySelector<HTMLElement>("[data-sheet]")! : container;
+          for (const el of scope.querySelectorAll<HTMLElement>('a[href],button,input,[tabindex="0"],[role="checkbox"],[role="radio"]')) {
             const rect = el.getBoundingClientRect();
             if (!rect.width || !rect.height || el.matches(':disabled,[aria-disabled="true"],[aria-hidden="true"]')) continue;
             const key = el.dataset.slot ?? el.className ?? el.tagName;
@@ -157,6 +160,7 @@ for (const theme of ["light", "dark"]) {
         } finally {
           root.unmount();
           container.remove();
+          if (fixture.name === "Sheet") document.documentElement.classList.toggle("dark", wasDark);
           await page.viewport(viewport.width, viewport.height);
         }
       }, 15000);

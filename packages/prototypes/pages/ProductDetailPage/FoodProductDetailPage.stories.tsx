@@ -140,9 +140,10 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   await userEvent.click(disclosure);
   if (mobile) {
     await expect(disclosure).toHaveAttribute("aria-haspopup", "dialog");
-    await expect(canvas.getByRole("dialog", { name: fixture.copy.specifications })).toBeVisible();
+    const body = within(canvasElement.ownerDocument.body);
+    await expect(body.getByRole("dialog", { name: fixture.copy.specifications })).toBeVisible();
     await userEvent.keyboard("{Escape}");
-    await expect(canvas.queryByRole("dialog")).toBeNull();
+    await expect(body.queryByRole("dialog", { name: fixture.copy.specifications })).toBeNull();
     await expect(disclosure).toHaveFocus();
   } else {
     await expect(disclosure).toHaveAttribute("aria-expanded", "false");

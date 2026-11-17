@@ -40,7 +40,7 @@ describe("Canvas typography rules", () => {
   });
 
   it("uses locale-aware emphasis for the sans-serif Nutrition Facts title", () => {
-    const titleRules = productDetailCss.matchAll(/\.details \.nutritionTitle\s*\{([^}]*)\}/gs);
+    const titleRules = productDetailCss.matchAll(/\.nutritionLabel \.nutritionTitle\s*\{([^}]*)\}/gs);
     const declarations = [...titleRules].map((match) => match[1]).join("\n");
 
     expect(declarations).toContain("font-weight: var(--font-weight-emphasize);");

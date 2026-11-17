@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Centered modal for confirmation, alerts, and short tasks on mobile and desktop.",
+  "description": "Base UI modal for short forms, editing and general information, with the existing YAMI controlled interface.",
   "source": "components/Dialog",
   "files": [
     {
@@ -35,7 +35,8 @@
   ],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -51,14 +52,22 @@
   },
   "design": {
     "tokens": [
-      "--divider-default",
+      "--font-size-body-xl",
+      "--font-size-heading-2xl",
       "--font-size-heading-sm",
+      "--font-size-heading-xl",
       "--font-weight-emphasize",
+      "--line-height-body-xl",
+      "--line-height-heading-2xl",
+      "--line-height-heading-xl",
       "--overlay-scrim",
+      "--radius-button-primary",
       "--radius-surface-default",
+      "--space-050",
       "--space-100",
       "--space-150",
       "--space-200",
+      "--space-300",
       "--space-400",
       "--space-600",
       "--surface-primary",
@@ -77,7 +86,7 @@
       },
       "--overlay-scrim": {
         "property": "background",
-        "selector": ".dialog::backdrop"
+        "selector": ".backdrop"
       },
       "--radius-surface-default": {
         "property": "border-radius",
@@ -101,10 +110,10 @@
         "enter",
         "space"
       ],
-      "ariaPattern": "Native modal dialog labelled by its visible h2; alertdialog is an explicit variant.",
-      "interaction": "showModal makes the background inert. Focus starts on Close for default dialogs or the first control for confirmation dialogs, remains inside, and returns to the opener."
+      "ariaPattern": "Base UI modal dialog labelled by its visible h2; legacy alertdialog semantics remain available.",
+      "interaction": "Base UI handles modal isolation, focus trapping, Escape, outside presses, scroll locking and focus restoration. Default dialogs focus Close; confirmation dialogs focus the first control."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "9c9e48727267f1bcf56c1a7cf21e29c823b81847079d05ef537b753c1316a555"
+  "contentDigest": "995a3f6577b9a5895703e0e8e829ecf9f44a00267f7d2f33ca6f5d2c5409d03d"
 }

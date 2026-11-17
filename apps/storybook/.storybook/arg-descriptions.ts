@@ -285,7 +285,7 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select Sheet ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
+const componentNames = "Accordion AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select Sheet ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");

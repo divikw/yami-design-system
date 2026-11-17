@@ -1,9 +1,19 @@
-/* Do not overwrite inline locks held by another modal, such as media preview. */
-:global(html:has([data-sheet][open])) {
-  overflow: hidden;
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--overlay-scrim);
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
 }
 
 .sheet {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   inset: auto 0 0;
   box-sizing: border-box;
@@ -23,30 +33,26 @@
   line-height: var(--line-height-body-md);
 }
 
-.sheet[open] {
-  display: flex;
-  flex-direction: column;
-}
-
 .sheet[data-size="full"] {
   height: calc(100dvh - max(env(safe-area-inset-top), var(--space-600)));
   max-height: none;
 }
 
-.sheet::backdrop {
-  background: var(--overlay-scrim);
-}
-
 .header {
   flex: 0 0 auto;
   padding-inline: var(--space-200);
+  padding-block-end: var(--space-150);
   border-block-end: var(--stroke-default) solid var(--divider-default);
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  padding-block: var(--space-200) 0;
+  padding-block: var(--space-100) 0;
+}
+
+.actions:not([data-back]) {
+  margin-inline-end: calc(var(--space-100) * -1);
 }
 
 .actions[data-back] {
@@ -84,21 +90,23 @@
   filter: invert(1);
 }
 
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-050);
+}
+
 .sheet .title {
   margin: 0;
-  padding-block-end: var(--space-150);
+  padding: 0;
   font-size: var(--font-size-heading-2xl);
   font-weight: var(--font-weight-emphasize);
   line-height: var(--line-height-heading-2xl);
 }
 
-.header:has(.description) .title {
-  padding-block-end: var(--space-050);
-}
-
 .description {
   margin: 0;
-  padding-block-end: var(--space-200);
+  padding: 0;
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
 }
@@ -129,6 +137,15 @@
 }
 
 @media (min-width: 1024px) {
+  .header:has(.description) {
+    padding-block-end: var(--space-200);
+  }
+
+  .actions:not([data-back]) {
+    padding-block-start: var(--space-200);
+    margin-inline-end: 0;
+  }
+
   .sheet,
   .sheet[data-size="full"] {
     inset: 0;

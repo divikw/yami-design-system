@@ -19,8 +19,8 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
     for (const width of [360, 375, 402]) {
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Nutrition Facts", exact: true }).click();
-      const sheet = container.querySelector<HTMLDialogElement>('[data-slot="product-nutrition-sheet"]')!;
-      expect(sheet.matches(":modal")).toBe(true);
+      const sheet = document.querySelector<HTMLDivElement>('[data-slot="product-nutrition-sheet"]')!;
+      expect(sheet.getAttribute("aria-modal") === "true").toBe(true);
       expect(sheet.getBoundingClientRect().width).toBe(width);
       expect(sheet.getBoundingClientRect().top).toBe(48);
       expect(sheet.getBoundingClientRect().bottom).toBe(innerHeight);
@@ -36,12 +36,12 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
       expect(closeRect.height).toBe(32);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       expect(getComputedStyle(close, "::before").height).toBe("44px");
-      expect(sheet.getBoundingClientRect().right - closeRect.right).toBe(16);
-      expect(closeRect.top - sheet.getBoundingClientRect().top).toBe(16);
+      expect(sheet.getBoundingClientRect().right - closeRect.right).toBe(8);
+      expect(closeRect.top - sheet.getBoundingClientRect().top).toBe(8);
       expect(closeIconRect.width).toBe(24);
       expect(closeIconRect.height).toBe(24);
-      expect(sheet.getBoundingClientRect().right - closeIconRect.right).toBe(20);
-      expect(closeIconRect.top - sheet.getBoundingClientRect().top).toBe(20);
+      expect(sheet.getBoundingClientRect().right - closeIconRect.right).toBe(12);
+      expect(closeIconRect.top - sheet.getBoundingClientRect().top).toBe(12);
       await page.getByRole("button", { name: "Close nutrition facts" }).hover();
       await expect.poll(() => getComputedStyle(close).backgroundColor).toBe("rgba(0, 0, 0, 0)");
       const language = sheet.querySelector("select")!;
@@ -72,13 +72,13 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
       await expect.poll(() => content.scrollTop).toBeGreaterThan(100);
       expect(window.scrollY).toBe(pageScroll);
       expect(heading.getBoundingClientRect().top).toBe(top);
-      expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+      expect(getComputedStyle(document.body).overflow).toBe("hidden");
       await page.getByRole("button", { name: "Close nutrition facts" }).click();
-      await expect.poll(() => container.querySelector('[data-slot="product-nutrition-sheet"]')).toBeNull();
+      await expect.poll(() => document.querySelector('[data-slot="product-nutrition-sheet"]')).toBeNull();
       expect(document.activeElement?.textContent).toBe("Nutrition Facts");
       expect(window.scrollY).toBe(pageScroll);
       expect(document.documentElement.style.overflow).toBe(originalOverflow);
-      expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+      expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
     }
 
     await page.getByRole("button", { name: "Nutrition Facts", exact: true }).click();
@@ -88,11 +88,11 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
     expect(gallery.querySelector('[data-slot="product-media-preview-image"]')?.getAttribute("src")).toBe(fixture.nutrition!.sourceHref);
     // Resizing while the gallery is above the sheet must not leave the page locked.
     await page.viewport(1024, 900);
-    await expect.poll(() => container.querySelector('[data-slot="product-nutrition-sheet"]')).toBeNull();
+    await expect.poll(() => document.querySelector('[data-slot="product-nutrition-sheet"]')).toBeNull();
     await page.getByRole("button", { name: fixture.copy.closeImagePreview }).click();
     await expect.poll(() => container.querySelector("dialog")).toBeNull();
     expect(document.documentElement.style.overflow).toBe(originalOverflow);
-    expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+    expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
     const desktopTrigger = page.getByRole("button", { name: "Nutrition Facts", exact: true });
     await expect.element(desktopTrigger).toHaveAttribute("aria-expanded", "true");
     await desktopTrigger.click();

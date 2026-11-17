@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { Dialog } from "../../../packages/design-system/components/Dialog";
+import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import "@yami/design-system/tokens.css";
 
 function Demo() {
@@ -51,8 +52,8 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
     for (const width of [375, 768, 1440]) {
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Open dialog" }).click();
-      const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
-      expect(dialog.matches(":modal")).toBe(true);
+      const dialog = document.querySelector<HTMLElement>("[data-dialog]")!;
+      expect(dialog.getAttribute("aria-modal")).toBe("true");
       const bounds = dialog.getBoundingClientRect();
       expect(bounds.width).toBe(width === 375 ? 343 : 400);
       expect(Math.abs(bounds.left - (innerWidth - bounds.width) / 2)).toBeLessThan(1);
@@ -60,7 +61,7 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       expect(bounds.top).toBeGreaterThanOrEqual(48);
       const header = dialog.querySelector<HTMLElement>('[data-slot="dialog-header"]')!;
       const title = dialog.querySelector<HTMLHeadingElement>("h2")!;
-      expect(getComputedStyle(title).fontSize).toBe("16px");
+      expect(getComputedStyle(title).fontSize).toBe(width >= 1024 ? "24px" : "20px");
       expect(getComputedStyle(header).borderBottomWidth).toBe("0px");
       const close = dialog.querySelector<HTMLButtonElement>("button")!;
       const icon = close.querySelector<HTMLImageElement>("img")!;
@@ -68,8 +69,14 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       expect(close.getBoundingClientRect().height).toBe(32);
       expect(icon.getBoundingClientRect().width).toBe(24);
       expect(icon.getBoundingClientRect().height).toBe(24);
+      expect(title.getBoundingClientRect().top).toBeGreaterThan(close.getBoundingClientRect().bottom);
+      if (width >= 1024) {
+        expect(getComputedStyle(header).paddingLeft).toBe("24px");
+        expect(icon.getBoundingClientRect().top - bounds.top).toBe(16);
+        expect(bounds.right - icon.getBoundingClientRect().right).toBe(24);
+      }
       expect(getComputedStyle(close, "::before").width).toBe("44px");
-      expect(document.activeElement).toBe(close);
+      await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab();
       expect(document.activeElement?.getAttribute("aria-label")).toBe("Name");
       await userEvent.tab();
@@ -77,17 +84,17 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       await userEvent.tab();
       expect(document.activeElement?.textContent).toBe("Confirm");
       await userEvent.tab();
-      expect(document.activeElement).toBe(close);
+      await expect.poll(() => document.activeElement).toBe(close);
       const content = dialog.querySelector<HTMLElement>("[data-dialog-content]")!;
       const footer = dialog.querySelector<HTMLElement>('[data-slot="dialog-footer"]')!;
       const footerTop = footer.getBoundingClientRect().top;
       content.scrollTop = content.scrollHeight;
       expect(content.scrollTop).toBeGreaterThan(100);
       expect(footer.getBoundingClientRect().top).toBe(footerTop);
-      expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+      expect(getComputedStyle(document.body).overflow).toBe("hidden");
       await userEvent.keyboard("{Escape}");
-      await expect.poll(() => container.querySelector("dialog")).toBeNull();
-      expect(document.activeElement?.textContent).toBe("Open dialog");
+      await expect.poll(() => document.querySelector("[data-dialog]")).toBeNull();
+      await expect.poll(() => document.activeElement?.textContent).toBe("Open dialog");
       expect(document.documentElement.style.overflow).toBe(originalOverflow);
     }
   } finally {
@@ -108,24 +115,23 @@ test("Dialog dismisses the backdrop and supports alertdialog semantics", async (
         This action cannot be undone.
       </Dialog>
     ));
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    const dialog = document.querySelector<HTMLElement>("[data-dialog]")!;
     expect(dialog.getAttribute("role")).toBe("alertdialog");
-    const bounds = dialog.getBoundingClientRect();
-    dialog.dispatchEvent(new MouseEvent("click", { bubbles: true, clientX: bounds.left - 1, clientY: bounds.top - 1 }));
-    await expect.poll(() => container.querySelector("dialog")).toBeNull();
+    await userEvent.click(dialog.parentElement!, { position: { x: 4, y: 4 } });
+    await expect.poll(() => document.querySelector("[data-dialog]")).toBeNull();
   } finally {
     root.unmount();
     container.remove();
   }
 });
 
-test("Confirmation dialog centers its title, omits Close and focuses the first action", () => {
+test("Confirmation dialog centers its title, omits Close and focuses the first action", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   try {
     flushSync(() => root.render(<ConfirmationDemo />));
-    const dialog = container.querySelector<HTMLDialogElement>('dialog[data-variant="confirmation"]')!;
+    const dialog = document.querySelector<HTMLElement>('[data-dialog][data-variant="confirmation"]')!;
     const body = dialog.querySelector<HTMLElement>('[data-slot="dialog-body"]')!;
     const content = body.querySelector<HTMLElement>("[data-dialog-content]")!;
     const footer = dialog.querySelector<HTMLElement>('[data-slot="dialog-footer"]')!;
@@ -144,9 +150,82 @@ test("Confirmation dialog centers its title, omits Close and focuses the first a
     expect(getComputedStyle(footer).paddingBottom).toBe("12px");
     expect(getComputedStyle(footer).paddingLeft).toBe("12px");
     expect(dialog.querySelector('[data-slot="dialog-header"] button')).toBeNull();
-    expect(document.activeElement?.textContent).toBe("Cancel");
+    await expect.poll(() => document.activeElement?.textContent).toBe("Cancel");
   } finally {
     root.unmount();
     container.remove();
   }
+});
+
+test("controlled close requests do not dismiss until the host updates open", async () => {
+  const container = document.createElement("div"); document.body.append(container);
+  const root = createRoot(container);
+  let requests = 0;
+  try {
+    flushSync(() => root.render(<Dialog open title="Pending save" closeLabel="Close" onClose={() => { requests += 1; }}>Saving</Dialog>));
+    await page.getByRole("button", { name: "Close", exact: true }).click();
+    expect(requests).toBe(1);
+    await expect.element(page.getByRole("dialog", { name: "Pending save" })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+    expect(requests).toBe(2);
+    await expect.element(page.getByRole("dialog", { name: "Pending save" })).toBeVisible();
+  } finally { root.unmount(); container.remove(); }
+});
+
+function NestedDialogs() {
+  const [outer, setOuter] = useState(false);
+  const [inner, setInner] = useState(false);
+  return <>
+    <button onClick={() => setOuter(true)}>Open outer</button>
+    <Dialog open={outer} title="Outer" closeLabel="Close outer" onClose={() => setOuter(false)}>
+      <button onClick={() => setInner(true)}>Open inner</button>
+      <Dialog open={inner} title="Inner" closeLabel="Close inner" onClose={() => setInner(false)}>Nested content</Dialog>
+    </Dialog>
+  </>;
+}
+
+test("nested dialogs dismiss only the top layer and restore focus through both layers", async () => {
+  const container = document.createElement("div"); document.body.append(container);
+  const root = createRoot(container);
+  try {
+    flushSync(() => root.render(<NestedDialogs />));
+    await page.getByRole("button", { name: "Open outer", exact: true }).click();
+    await page.getByRole("button", { name: "Open inner", exact: true }).click();
+    await expect.element(page.getByRole("dialog", { name: "Inner", exact: true })).toBeVisible();
+    await userEvent.keyboard("{Escape}");
+    await expect.poll(() => document.querySelectorAll('[data-dialog]').length).toBe(1);
+    await expect.poll(() => document.activeElement?.textContent).toBe("Open inner");
+    expect(getComputedStyle(document.body).overflow).toBe("hidden");
+    await userEvent.keyboard("{Escape}");
+    await expect.poll(() => document.querySelector('[data-dialog]')).toBeNull();
+    await expect.poll(() => document.activeElement?.textContent).toBe("Open outer");
+  } finally { root.unmount(); container.remove(); }
+});
+
+
+test("Dialog example uses 40px pill actions with equal mobile widths and right-aligned desktop actions", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div"); document.body.append(container);
+  const root = createRoot(container);
+  try {
+    flushSync(() => root.render(<DialogExample locale="en" />));
+    for (const width of [375, 1024]) {
+      await page.viewport(width, 812);
+      await page.getByRole("button", { name: "Edit nickname", exact: true }).click();
+      const popup = document.querySelector<HTMLElement>("[data-dialog]")!;
+      const group = popup.querySelector<HTMLElement>('[data-slot="button-group"]')!;
+      const buttons = [...group.querySelectorAll<HTMLButtonElement>("button")];
+      for (const button of buttons) {
+        expect(button.getBoundingClientRect().height).toBe(40);
+        expect(parseFloat(getComputedStyle(button).borderRadius)).toBeGreaterThanOrEqual(20);
+      }
+      const first = buttons[0].getBoundingClientRect();
+      const last = buttons[1].getBoundingClientRect();
+      expect(Math.abs(group.getBoundingClientRect().right - last.right)).toBeLessThan(1);
+      if (width === 375) expect(Math.abs(first.width - last.width)).toBeLessThan(1);
+      else expect(first.left).toBeGreaterThan(group.getBoundingClientRect().left);
+      await page.getByRole("button", { name: "Cancel", exact: true }).click();
+      await expect.poll(() => document.querySelector("[data-dialog]")).toBeNull();
+    }
+  } finally { root.unmount(); container.remove(); await page.viewport(viewport.width, viewport.height); }
 });

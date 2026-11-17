@@ -68,6 +68,7 @@
   "composes": [
     "accordion",
     "activity-page-header",
+    "alert-dialog",
     "aspect-ratio",
     "avatar",
     "badge",
@@ -586,5 +587,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "75f9a4ef135704da93b140296c85ecd281c59f931d3f67d37d7bcac76eb95bba"
+  "contentDigest": "e380677e57c2b41f8a96435a7d6a3f3951e5c9c254cf30a29530f846914c79f8"
 }

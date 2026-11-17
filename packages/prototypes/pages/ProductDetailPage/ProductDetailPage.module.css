@@ -812,7 +812,7 @@
   text-align: start;
 }
 
-.details .nutritionTitle {
+.nutritionLabel .nutritionTitle {
   margin: 0;
   padding-block: var(--space-150);
   border-block-end: var(--stroke-thick) solid var(--text-primary);
@@ -986,7 +986,7 @@
     padding-inline: var(--space-150);
   }
 
-  .details .nutritionTitle {
+  .nutritionLabel .nutritionTitle {
     padding-block: var(--space-100);
   }
 
@@ -1117,7 +1117,7 @@
     padding: var(--space-050) var(--space-100);
   }
 
-  .details .nutritionTitle {
+  .nutritionLabel .nutritionTitle {
     padding-block: var(--space-100);
     font-size: var(--font-size-heading-2xl);
     line-height: var(--line-height-heading-2xl);

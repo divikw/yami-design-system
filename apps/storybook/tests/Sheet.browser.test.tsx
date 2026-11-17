@@ -38,7 +38,7 @@ test("Sheet keeps its accessible description and divider in the fixed header whi
       {Array.from({ length: 40 }, (_, index) => <p key={index}>Coupon {index + 1}</p>)}
       <button>Last coupon</button>
     </Sheet>));
-    const dialog = container.querySelector("dialog")!;
+    const dialog = document.querySelector("[data-sheet]")!;
     const description = dialog.querySelector('[data-slot="sheet-description"]')!;
     const header = dialog.querySelector('[data-slot="sheet-header"]')!;
     expect(dialog.getAttribute("aria-describedby")).toContain(description.id);
@@ -55,36 +55,37 @@ test("Sheet keeps its accessible description and divider in the fixed header whi
   }
 });
 
-test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobile and 12px all around on desktop", async (size) => {
+test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobile and square corners on desktop", async (size) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   try {
     for (const theme of ["light", "dark"]) {
-      container.className = theme === "dark" ? "dark" : "";
+      document.documentElement.classList.toggle("dark", theme === "dark");
       flushSync(() => root.render(<Sheet open title="Details" closeLabel="Close details" onClose={() => {}} size={size}>Details</Sheet>));
       for (const width of [375, 1023, 1024, 1440]) {
         await page.viewport(width, 812);
-        const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+        const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
         const style = getComputedStyle(dialog);
         expect(style.getPropertyValue("--radius-surface-sheet").trim()).toBe("16px");
-        expect(style.borderTopLeftRadius).toBe(width < 1024 ? "16px" : "12px");
-        expect(style.borderTopRightRadius).toBe(width < 1024 ? "16px" : "12px");
-        expect(style.borderBottomLeftRadius).toBe(width < 1024 ? "0px" : "12px");
-        expect(style.borderBottomRightRadius).toBe(width < 1024 ? "0px" : "12px");
+        expect(style.borderTopLeftRadius).toBe(width < 1024 ? "16px" : "0px");
+        expect(style.borderTopRightRadius).toBe(width < 1024 ? "16px" : "0px");
+        expect(style.borderBottomLeftRadius).toBe("0px");
+        expect(style.borderBottomRightRadius).toBe("0px");
         const close = page.getByRole("button", { name: "Close details", exact: true }).element();
         const button = close.getBoundingClientRect();
         const surface = dialog.getBoundingClientRect();
         expect([button.width, button.height]).toEqual([32, 32]);
-        expect(button.top - surface.top).toBe(16);
-        expect(surface.right - button.right).toBe(16);
+        expect(button.top - surface.top).toBe(width < 1024 ? 8 : 16);
+        expect(surface.right - button.right).toBe(width < 1024 ? 8 : 16);
         expect(close.querySelector("img")!.getBoundingClientRect().width).toBe(24);
         expect(getComputedStyle(close, "::before").width).toBe("44px");
       }
     }
   } finally {
     root.unmount();
+    document.documentElement.classList.remove("dark");
     container.remove();
     await page.viewport(viewport.width, viewport.height);
   }
@@ -148,15 +149,19 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
     for (const width of [375, 768, 1440]) {
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Open sheet" }).click();
-      const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
-      expect(dialog.matches(":modal")).toBe(true);
+      const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+      expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
       const bounds = dialog.getBoundingClientRect();
-      expect(bounds.width).toBe(width < 1024 ? width : 560);
+      expect(bounds.width).toBe(width < 1024 ? width : 480);
       if (width < 1024) {
         expect(bounds.bottom).toBe(innerHeight);
         expect(bounds.height).toBe(innerHeight - 48);
-      } else expect(Math.abs(bounds.top - (innerHeight - bounds.height) / 2)).toBeLessThan(1);
-      expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
+      } else {
+        expect(bounds.top).toBe(0);
+        expect(bounds.right).toBe(innerWidth);
+        expect(bounds.height).toBe(innerHeight);
+      }
+      expect(getComputedStyle(document.body).overflow).toBe("hidden");
       const close = dialog.querySelector<HTMLButtonElement>("button")!;
       const closeBounds = close.getBoundingClientRect();
       const closeIcon = close.querySelector<HTMLImageElement>("img")!;
@@ -167,9 +172,9 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       expect(getComputedStyle(close, "::before").height).toBe("44px");
       expect(closeIconBounds.width).toBe(24);
       expect(closeIconBounds.height).toBe(24);
-      expect(bounds.right - closeIconBounds.right).toBe(20);
-      expect(closeIconBounds.top - bounds.top).toBe(20);
-      expect(document.activeElement).toBe(close);
+      expect(bounds.right - closeIconBounds.right).toBe(width < 1024 ? 12 : 20);
+      expect(closeIconBounds.top - bounds.top).toBe(width < 1024 ? 12 : 20);
+      await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab();
       expect(document.activeElement?.getAttribute("aria-label")).toBe("Search");
       await userEvent.tab();
@@ -177,7 +182,7 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       await userEvent.tab();
       expect(document.activeElement?.textContent).toBe("Apply");
       await userEvent.tab();
-      expect(document.activeElement).toBe(close);
+      await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab({ shift: true });
       expect(document.activeElement?.textContent).toBe("Apply");
       const content = dialog.querySelector<HTMLElement>("[data-sheet-content]")!;
@@ -187,13 +192,14 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       expect(content.scrollTop).toBeGreaterThan(100);
       expect(footer.getBoundingClientRect().top).toBe(footerTop);
       await userEvent.keyboard("{Escape}");
-      await expect.poll(() => container.querySelector("dialog")).toBeNull();
-      expect(document.activeElement?.textContent).toBe("Open sheet");
+      await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+      await expect.poll(() => document.activeElement?.textContent).toBe("Open sheet");
       expect(document.documentElement.style.overflow).toBe(originalOverflow);
-      expect(getComputedStyle(document.documentElement).overflow).not.toBe("hidden");
+      expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
     }
   } finally {
     root.unmount();
+    document.documentElement.classList.remove("dark");
     container.remove();
     await page.viewport(viewport.width, viewport.height);
   }
@@ -210,18 +216,19 @@ test("Sheet keeps content clicks open, dismisses the backdrop, and preserves an 
     document.documentElement.style.overflow = "hidden";
     flushSync(() => root.render(<Demo />));
     await page.getByRole("button", { name: "Open sheet" }).click();
-    const dialog = container.querySelector<HTMLDialogElement>("dialog")!;
+    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
     await page.getByRole("textbox", { name: "Search" }).click();
-    expect(dialog.matches(":modal")).toBe(true);
-    dialog.dispatchEvent(new MouseEvent("click", { bubbles: true, clientX: 1, clientY: 1 }));
-    await expect.poll(() => container.querySelector("dialog")).toBeNull();
+    expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
+    await userEvent.click(dialog.parentElement!, { position: { x: 4, y: 4 } });
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     expect(document.documentElement.style.overflow).toBe("hidden");
     await page.getByRole("button", { name: "Open sheet" }).click();
     flushSync(() => root.render(null));
-    expect(document.querySelector("dialog:modal[data-sheet]")).toBeNull();
+    expect(document.querySelector("[data-sheet]")).toBeNull();
     expect(document.documentElement.style.overflow).toBe("hidden");
   } finally {
     root.unmount();
+    document.documentElement.classList.remove("dark");
     container.remove();
     document.documentElement.style.overflow = originalOverflow;
     await page.viewport(viewport.width, viewport.height);
@@ -235,7 +242,7 @@ test("Sheet child view returns to its parent without closing the dialog and keep
   try {
     flushSync(() => root.render(<ChildDemo />));
     await page.getByRole("button", { name: "Open filters" }).click();
-    expect(getComputedStyle(container.querySelector<HTMLElement>("[data-sheet-content]")!).padding).toBe("8px");
+    expect(getComputedStyle(document.querySelector<HTMLElement>("[data-sheet-content]")!).padding).toBe("8px");
     await page.getByRole("button", { name: "Brand" }).click();
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Back to filters");
     expect(page.getByRole("checkbox").elements()).toHaveLength(3);
@@ -246,9 +253,10 @@ test("Sheet child view returns to its parent without closing the dialog and keep
     expect(page.getByRole("button", { name: "Brand 2 selected" })).toBeVisible();
     expect(document.activeElement?.textContent).toContain("Brand 2 selected");
     await page.getByRole("button", { name: "View results" }).click();
-    await expect.poll(() => container.querySelector("dialog")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
   } finally {
     root.unmount();
+    document.documentElement.classList.remove("dark");
     container.remove();
   }
 });

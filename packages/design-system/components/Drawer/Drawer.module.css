@@ -10,11 +10,11 @@
   animation: drawer-exit 200ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-.drawer[data-drawer-state="entering"]::backdrop {
+:global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state="entering"]) {
   animation: drawer-scrim-enter 150ms cubic-bezier(0, 0, 0.2, 1) both;
 }
 
-.drawer[data-drawer-state="exiting"]::backdrop {
+:global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state="exiting"]) {
   animation: drawer-scrim-exit 150ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
@@ -44,5 +44,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .drawer[data-drawer-state] { animation-duration: 0ms; }
-  .drawer[data-drawer-state]::backdrop { animation-duration: 0ms; }
+  :global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state]) { animation-duration: 0ms; }
 }

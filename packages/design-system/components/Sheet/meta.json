@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Shared modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a centered desktop dialog with 12px corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
+  "description": "Base UI modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a right-aligned full-height desktop panel with square corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
   "figma": { "nodeId": null, "componentKey": null, "notes": "Extracted from maintained PDP and search filter implementations. No standalone Figma binding is assigned yet." },
   "exports": ["Sheet", "SheetProps"],
   "composes": ["Button"],
@@ -16,14 +16,14 @@
     "closeLabel": { "type": "string", "required": true, "description": "Localized accessible label for the close action." },
     "onClose": { "type": "() => void", "required": true, "description": "Request to close; the consumer must set open to false." },
     "back": { "type": "{ label: string; onClick: () => void }", "required": false, "description": "Replaces Close with Back in a child view. Escape also goes back; the backdrop closes the whole sheet." },
-    "size": { "type": "enum", "values": ["content", "full"], "default": "content", "required": false, "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop is centered at 560px." },
+    "size": { "type": "enum", "values": ["content", "full"], "default": "content", "required": false, "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop defaults to a 480px full-height panel at the right edge." },
     "contentPadding": { "type": "enum", "values": ["default", "compact", "none"], "default": "default", "required": false, "description": "Use compact for 8px content insets or none for lists that own their row padding." },
-    "desktopPlacement": { "type": "enum", "values": ["center", "right"], "default": "center", "required": false, "description": "Desktop presentation; right is consumed by Drawer. Mobile geometry is unchanged." },
+    "desktopPlacement": { "type": "enum", "values": ["center", "right"], "default": "right", "required": false, "description": "Desktop presentation defaults to right; center remains for existing callers. Mobile geometry is unchanged." },
     "footer": { "type": "ReactNode", "required": false, "description": "Caller-owned actions outside the scrolling content, with bottom safe-area protection." },
     "children": { "type": "ReactNode", "required": true, "description": "Business content. Sheet does not own selection or draft state." }
   },
   "rules": {
-    "radii": { "ruleId": "no-custom-radii", "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, all corners use --radius-surface-default (12px). Applies to both content and full sizes." },
+    "radii": { "ruleId": "no-custom-radii", "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, the default right-edge panel has square corners; explicit center uses --radius-surface-default (12px). Applies to both content and full sizes." },
     "focus": { "ruleId": "focus-style", "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close." },
     "tapTarget": { "ruleId": "tap-target", "note": "Close/back controls are visually 32px with centered 24px close icons and 20px back arrows and Button's 44px hit-area extender." }
   },
@@ -32,7 +32,7 @@
   ],
   "tokenBindings": {
     "--surface-primary": { "property": "background", "selector": ".sheet" },
-    "--overlay-scrim": { "property": "background", "selector": ".sheet::backdrop" },
+    "--overlay-scrim": { "property": "background", "selector": ".backdrop" },
     "--radius-surface-default": { "property": "border-radius", "selector": ".sheet" },
     "--radius-surface-sheet": { "property": "border-radius", "selector": ".sheet" },
     "--font-size-heading-2xl": { "property": "font-size", "selector": ".title" }
@@ -40,10 +40,11 @@
   "accessibility": {
     "role": "dialog", "wcagLevel": "AA", "tapTargetMin": 44,
     "keyboardNav": ["tab", "shift+tab", "escape", "enter", "space"],
-    "ariaPattern": "Native modal dialog labelled by its visible h2",
-    "interaction": "showModal makes the background inert. Close restores the opener; child views focus Back and use Escape to return."
+    "ariaPattern": "Base UI modal dialog labelled by its visible h2 and optional fixed description",
+    "interaction": "Base UI manages background isolation, focus trapping/restoration, outside dismissal, Escape and scroll locking. Child views focus Back, reset body scroll and intercept Escape to return to the parent."
   },
-  "dependencies": { "runtime": ["react"], "peer": [], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
   "usageRef": "./usage.md",
-  "examples": ["./examples.tsx#SheetExample"]
+  "examples": ["./examples.tsx#SheetExample"],
+  "testing": {"interaction": "covered", "rationale": "Showcase and browser tests cover focus, scrolling, backdrop dismissal, child navigation, Drawer motion, nested popovers and responsive consumers."}
 }

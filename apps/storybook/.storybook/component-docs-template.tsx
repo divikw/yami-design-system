@@ -48,9 +48,9 @@ export function Installation({ locale }: { locale: Locale }) {
   </>;
 }
 
-export function DocsExample({ code, locale, children, name }: { code: string; locale: Locale; children: ReactNode; name?: string }) {
+export function DocsExample({ code, locale, children, name, previewMode }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: "viewport" | "document" }) {
   return <div className={styles.example} data-example={name}>
-    <ComponentDocsPreview locale={locale} name={name}>{children}</ComponentDocsPreview>
+    <ComponentDocsPreview locale={locale} name={name} mode={previewMode}>{children}</ComponentDocsPreview>
     <CodeBlock code={code} locale={locale} collapsible />
   </div>;
 }

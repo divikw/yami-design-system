@@ -5,10 +5,15 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
-import { Button } from "@yami/design-system";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogCancel, Button } from "@yami/design-system";
+import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
+import { SheetExample } from "../../../packages/design-system/components/Sheet/examples";
+import { AlertDialogDocsPage } from "../.storybook/alert-dialog-docs";
 import { AccordionDocsPage } from "../.storybook/accordion-docs";
 import { AspectRatioDocsPage } from "../.storybook/aspect-ratio-docs";
 import { AvatarDocsPage } from "../.storybook/avatar-docs";
+import { SheetDocsPage } from "../.storybook/sheet-docs";
+import { DialogDocsPage } from "../.storybook/dialog-docs";
 import { BadgeDocsPage } from "../.storybook/badge-docs";
 import { ButtonDocsPage } from "../.storybook/button-docs";
 import { ButtonGroupDocsPage } from "../.storybook/button-group-docs";
@@ -17,8 +22,8 @@ import { CodeBlock } from "../.storybook/component-docs-template";
 import "@yami/design-system/tokens.css";
 
 const guides = [
-  ["Accordion", AccordionDocsPage], ["AspectRatio", AspectRatioDocsPage],
-  ["Avatar", AvatarDocsPage], ["Badge", BadgeDocsPage],
+  ["Accordion", AccordionDocsPage], ["AlertDialog", AlertDialogDocsPage], ["AspectRatio", AspectRatioDocsPage],
+  ["Avatar", AvatarDocsPage], ["Badge", BadgeDocsPage], ["Dialog", DialogDocsPage], ["Sheet", SheetDocsPage],
   ["Button", ButtonDocsPage], ["ButtonGroup", ButtonGroupDocsPage],
 ] as const;
 
@@ -35,13 +40,7 @@ for (const locale of ["zh", "en"] as const) {
       flushSync(() => root.render(<ThemeProvider theme={convert(themes.light)}><DocsContext.Provider value={context}><Guide locale={locale} /></DocsContext.Provider></ThemeProvider>));
       expect(host.querySelector("h1")?.textContent).toBe(name);
       const previous = host.querySelector('header a[aria-label^="上一个"], header a[aria-label^="Previous"]');
-      const previousPaths = {
-        AspectRatio: "yami-components-layout-accordion",
-        Avatar: "yami-components-layout-aspectratio",
-        Badge: "yami-components-data-display-avatar",
-        Button: "yami-components-navigation-breadcrumb",
-        ButtonGroup: "yami-components-actions-button",
-      };
+      const previousPaths = { Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Sheet: "yami-components-forms-select", Dialog: "yami-components-commerce-coupon", AlertDialog: "yami-components-layout-accordion", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
       if (name === "Accordion") expect(previous).toBeNull();
       else expect(previous?.getAttribute("href")).toBe(`/?path=/docs/${previousPaths[name]}--docs`);
       const headings = [...host.querySelectorAll("h2")];
@@ -114,4 +113,33 @@ test("switching a preview changes its viewport and keeps the docs and other prev
     root.unmount();
     host.remove();
   }
+});
+
+test.each(["AlertDialog", "Dialog", "Sheet"] as const)("%s opens outside the docs example without clipping its content", async (name) => {
+  const host = document.createElement("div");
+  document.body.append(host);
+  const root = createRoot(host);
+  const example = name === "Dialog" ? <DialogExample locale="en" /> : name === "Sheet" ? <SheetExample locale="en" /> :
+    <AlertDialog><AlertDialogTrigger render={<Button />}>Open</AlertDialogTrigger><AlertDialogContent><AlertDialogTitle>Confirm</AlertDialogTitle><AlertDialogCancel>Cancel</AlertDialogCancel></AlertDialogContent></AlertDialog>;
+  try {
+    flushSync(() => root.render(<ComponentDocsPreview mode="document" locale="en">{example}</ComponentDocsPreview>));
+    expect(host.querySelector("iframe")).toBeNull();
+    const trigger = host.querySelector<HTMLButtonElement>("button")!;
+    trigger.focus();
+    trigger.click();
+    const selector = name === "AlertDialog" ? '[role="alertdialog"]' : '[role="dialog"]';
+    await expect.poll(() => document.querySelector(selector)).not.toBeNull();
+    const popup = document.querySelector<HTMLElement>(selector)!;
+    expect(host.contains(popup)).toBe(false);
+    if (name === "Dialog") {
+      const input = popup.querySelector("input")!;
+      const rect = input.getBoundingClientRect();
+      const footer = popup.querySelector('[data-slot="dialog-footer"]')!.getBoundingClientRect();
+      expect(rect.height).toBeGreaterThan(0);
+      expect(rect.bottom).toBeLessThanOrEqual(footer.top);
+    }
+    popup.querySelector<HTMLButtonElement>(name === "AlertDialog" ? "button" : 'button[aria-label="Close"]')!.click();
+    await expect.poll(() => document.querySelector(selector)).toBeNull();
+    await expect.poll(() => document.activeElement).toBe(trigger);
+  } finally { root.unmount(); host.remove(); }
 });

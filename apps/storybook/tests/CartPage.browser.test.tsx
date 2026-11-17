@@ -76,7 +76,7 @@ test.each([375, 1440])("CartPage keeps checkout red and validates an empty selec
     expect(container.textContent).not.toContain("请至少选择1件商品去结算");
     await checkout.click();
     await expect.element(page.getByRole("alert")).toHaveTextContent("请至少选择1件商品去结算");
-    expect(container.querySelector('dialog[open]')).toBeNull();
+    expect(document.querySelector("[data-sheet]")).toBeNull();
     await page.getByRole("checkbox", { name: `选择 ${fixture.initialItems[0].title}`, exact: true }).click();
     expect(container.querySelector('[data-slot="cart-checkout-bar"] [role="alert"]')).toBeNull();
     await page.getByRole("button", { name: /^去结算 \(/ }).click();
@@ -99,7 +99,7 @@ for (const locale of ["zh", "en"] as const) {
       await page.viewport(width, 812);
       flushSync(() => root.render(<CartPage {...createCartPageFixture(locale)} />));
       if (width < 1024) await page.getByRole("button", { name: locale === "zh" ? "编辑 优惠券" : "Edit Coupons", exact: true }).click();
-      const form = container.querySelector<HTMLInputElement>(width < 1024 ? 'dialog[open] input[data-slot="input-control"]' : 'aside input[data-slot="input-control"]')!.form!;
+      const form = document.querySelector<HTMLInputElement>(width < 1024 ? '[data-sheet] input[data-slot="input-control"]' : 'aside input[data-slot="input-control"]')!.form!;
       const input = form.querySelector("input")!;
       const field = form.querySelector<HTMLElement>('div[class*="field"]')!;
       const redeem = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
@@ -262,7 +262,7 @@ test("CartPage invalidates coupons and keeps removal feedback inline", async () 
     await page.viewport(1440, 812);
     flushSync(() => root.render(<CartPage {...fixture} />));
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
-    const unavailableDialog = container.querySelector('dialog[open]')!;
+    const unavailableDialog = document.querySelector("[data-sheet]")!;
     expect(unavailableDialog.scrollWidth).toBeLessThanOrEqual(unavailableDialog.clientWidth);
     const itemDescription = unavailableDialog.querySelector('[data-slot="cart-item"] p')!;
     expect(getComputedStyle(itemDescription).marginTop).toBe("0px");
@@ -273,7 +273,7 @@ test("CartPage invalidates coupons and keeps removal feedback inline", async () 
     await expect.element(page.getByRole("dialog", { name: "Coupons", exact: true })).toBeVisible();
     await page.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await page.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     const totals = container.querySelector('[data-slot="cart-totals"]')!;
     expect(totals.textContent).toContain("Discount");
     await page.getByRole("checkbox", { name: /^Select all/ }).click();
@@ -512,7 +512,7 @@ test.each([375, 1440])("CartPage protection drawer includes source artwork and p
     flushSync(() => root.render(<CartPage {...createCartPageFixture("zh")} />));
     const opener = page.getByRole("button", { name: "了解更多", exact: true });
     await opener.click();
-    const dialog = container.querySelector<HTMLDialogElement>('dialog[open]')!;
+    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
     await expect.element(page.elementLocator(dialog)).toHaveAccessibleName("服务保障");
     expect(dialog.querySelectorAll('h3 img')).toHaveLength(4);
     const payments = dialog.querySelector('ul[aria-label="支付方式"]')!;
@@ -675,14 +675,14 @@ test("CartPage reports coupon changes and focuses the empty unavailable drawer a
     let dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
     await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).toContain("Discount");
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
     await expect.element(dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true })).toBeChecked();
     await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => container.querySelector('dialog[open]')).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).not.toContain("Discount");
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
     dialog = page.getByRole("dialog", { name: "Unavailable items", exact: true });
@@ -828,7 +828,7 @@ for (const locale of ["zh", "en"] as const) {
       flushSync(() => root.render(<CartPage {...fixture} />));
       const opener = page.getByRole("button", { name: openerName, exact: true });
       await opener.click();
-      const dialog = container.querySelector<HTMLDialogElement>('dialog[open]')!;
+      const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
       const body = dialog.querySelector<HTMLElement>('[data-sheet-content]')!;
       const heading = dialog.querySelector('header h2')!;
       const row = dialog.querySelector<HTMLElement>('[data-slot="cart-item"]')!;
@@ -856,7 +856,7 @@ for (const locale of ["zh", "en"] as const) {
         expect(getComputedStyle(heading).fontSize).toBe("32px");
         expect(getComputedStyle(heading).fontWeight).toBe("400");
         expect(getComputedStyle(heading).paddingBottom).toBe("32px");
-        expect(heading.previousElementSibling!.getBoundingClientRect().height).toBe(48);
+        expect(heading.parentElement!.previousElementSibling!.getBoundingClientRect().height).toBe(48);
         expect(getComputedStyle(body).paddingLeft).toBe("32px");
         expect(image.getBoundingClientRect().width).toBeCloseTo(104, 2);
         expect(getComputedStyle(row).columnGap).toBe("24px");
@@ -1169,7 +1169,7 @@ test.each([1024, 1280, 1440])("CartPage keeps PC navigation pinned and the summa
     await expect.element(dialog).toBeVisible();
     await expect.poll(() => dialog.element().contains(document.elementFromPoint(width - 32, 32))).toBe(true);
     await userEvent.keyboard("{Escape}");
-    await expect.poll(() => document.querySelector("dialog[open]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);

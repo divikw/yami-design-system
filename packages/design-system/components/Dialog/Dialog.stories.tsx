@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, waitFor, within } from "storybook/test";
+import { DialogExample } from "./examples";
 import { Button } from "../Button";
 import { Dialog, type DialogProps } from "./Dialog";
 import styles from "./Dialog.stories.module.css";
@@ -69,9 +71,9 @@ const meta = {
   tags: ["!autodocs", "draft"],
   parameters: {
     layout: "fullscreen",
-    docs: { description: { component: "**Draft · 草稿**：当前弹窗及全部预览内容尚未定稿或完成 review。" } },
+    docs: { description: { component: "Base UI Dialog with YAMI styling and a controlled API." } },
   },
-  globals: { locale: "zh", viewport: { value: "yamiMobile", isRotated: false } },
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
   args: { open: false, title: "确认操作", onClose: () => {}, role: "dialog", variant: "confirmation" },
   argTypes: {
     role: { control: "select", options: ["dialog", "alertdialog"] },
@@ -83,7 +85,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Showcase: Story = { name: "Mobile — Confirmation" };
+export const Showcase: Story = {
+  render: (_args, { globals }) => <div className={styles.screen}><DialogExample locale={globals.locale === "en" ? "en" : "zh"} /></div>,
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", { name: /编辑昵称|Edit nickname/ });
+    await userEvent.click(trigger);
+    const body = within(canvasElement.ownerDocument.body);
+    const dialog = await body.findByRole("dialog");
+    await expect(dialog).toHaveAccessibleName(/编辑昵称|Edit nickname/);
+    const close = within(dialog).getByRole("button", { name: /关闭|Close/ });
+    await waitFor(() => expect(close).toHaveFocus());
+    await userEvent.click(within(dialog).getByRole("button", { name: /保存|Save/ }));
+    await waitFor(() => expect(body.queryByRole("dialog")).not.toBeInTheDocument());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
 
 export const Destructive: Story = {
   name: "Mobile — Destructive Confirmation",
@@ -110,7 +126,7 @@ export const Desktop: Story = {
 };
 
 export const PCPreview: Story = {
-  ...Desktop,
+  ...Showcase,
   name: "PC",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },

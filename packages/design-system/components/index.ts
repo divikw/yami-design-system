@@ -63,3 +63,5 @@ export * from './Coupon'
 export * from "./Switch";
 export * from "./Select";
 export * from "./Popover";
+
+export * from "./AlertDialog";

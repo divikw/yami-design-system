@@ -105,7 +105,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
           </span>
         </SelectTrigger>
         <SelectContent className={styles.popup} anchor={displayRef} align="start" sideOffset={-16} collisionPadding={8}
-          container={selectRef.current?.closest("dialog")} finalFocus={editing ? inputRef : undefined} render={<div data-slot="quantity-select-popup" />}>
+          container={selectRef.current?.closest("dialog, [data-sheet], [data-dialog]")} finalFocus={editing ? inputRef : undefined} render={<div data-slot="quantity-select-popup" />}>
           <SelectList className={styles.list}>
             {[...Array.from({ length: Math.min(9, max) }, (_, index) => ({ value: String(index + 1), label: String(index + 1) })), ...(max >= 10 ? [{ value: "custom", label: value >= 10 ? String(value) : "10+" }] : [])].map((option) =>
               <SelectItem className={styles.option} key={option.value} value={option.value}>{option.label}</SelectItem>)}
@@ -138,7 +138,7 @@ export function QuantitySelect({ value, max, onValueChange, label, locale = "zh"
     {limitToast > 0 && createPortal(<div key={limitToast} className={styles.toast} data-slot="quantity-limit-toast" role="alert" lang={locale}>
       <span className={styles.toastIcon} style={{ maskImage: `url("${warningIcon}")` }} aria-hidden="true" />
       <p>{limitMessage}</p>
-    </div>, inputRef.current?.closest("dialog") ?? document.body)}
+    </div>, inputRef.current?.closest("dialog, [data-sheet], [data-dialog]") ?? document.body)}
     {message && <p id={`${id}-error`} className={styles.error} role="alert">{message}</p>}
     {loading && <span id={`${id}-status`} className={styles.hint} role="status">{zh ? "正在更新数量…" : "Updating quantity…"}</span>}
   </div>;
