@@ -1514,7 +1514,7 @@
         "category": "action",
         "status": "stable",
         "version": "0.3.0",
-        "description": "YAMI action button, not page navigation. Use ButtonLink for navigation or direct file downloads with button appearance; it renders a native anchor and shares Button styles. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
+        "description": "YAMI action button with five variants, three form modes, three sizes and default and inverse surfaces. Use destructive for actions such as deleting data. ButtonLink provides the same appearance on a native anchor for navigation or direct downloads.",
         "figma": {
           "fileKey": "6oOAy72DBff4P6NzJYc2hi",
           "nodeId": "5587:127256",
@@ -1538,7 +1538,7 @@
               "iconInverse": "5587:127965"
             }
           },
-          "sizeDelta": "Per-form size coverage in Figma: Full + Inline ship Size=Medium (40) and Size=Large (Mobile 48 / PC 56). Icon ships Size=Small (32) / Medium (40) / Large (48 on both Mobile + PC — does NOT bump to 56). Code unifies the size axis to sm/md/lg across all forms; Full/Inline 'sm' is a YAMI-product extension beyond Figma. CSS scopes the lg→56 desktop bump to :not(.iconOnly) so Icon Large stays 48×48.",
+          "sizeDelta": "In the linked Figma reference, full and inline ship md = 40px and lg = 48px mobile / 56px PC. The implementation keeps inline lg at 48px on PC and raises full md to 48px on PC. Icon sm / md / lg remain 32 / 40 / 48px. The sm size for full and inline is a product extension.",
           "stateMapping": "Figma 'Hover / Active' collapses to two CSS states (:hover + :active) which already share the same `-active` token. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
         },
         "exports": [
@@ -1555,7 +1555,8 @@
             "emphasis",
             "primary",
             "secondary",
-            "tertiary"
+            "tertiary",
+            "destructive"
           ],
           "form": [
             "full",
@@ -1587,11 +1588,12 @@
               "emphasis",
               "primary",
               "secondary",
-              "tertiary"
+              "tertiary",
+              "destructive"
             ],
             "required": false,
             "default": "primary",
-            "description": "Visual role. 'emphasis' is rate-limited to 1 per screen (see rules.emphasis)."
+            "description": "Visual role. Use destructive for actions such as deleting data. Emphasis is limited to one per screen."
           },
           "size": {
             "type": "enum",
@@ -1601,7 +1603,8 @@
               "lg"
             ],
             "required": false,
-            "default": "md"
+            "default": "md",
+            "description": "Heights for sm / md / lg are 32 / 40 / 48px. Full form uses 32 / 48 / 56px from 1024px."
           },
           "leftIcon": {
             "type": "ReactNode",
@@ -1621,7 +1624,7 @@
             ],
             "required": false,
             "default": "inline",
-            "description": "Layout mode mirroring Figma's Form axis. 'full' stretches to container width (replaces legacy fullWidth=true). 'inline' is content-width (default). 'icon' is square, no label (replaces legacy iconOnly=true, requires aria-label). When omitted, derived from legacy iconOnly / fullWidth for backward compat."
+            "description": "Layout mode. 'full' stretches to container width (replaces legacy fullWidth=true). 'inline' is content-width (default). 'icon' is circular and requires aria-label (replaces legacy iconOnly=true). When omitted, derived from legacy iconOnly / fullWidth for backward compat."
           },
           "inverse": {
             "type": "boolean",
@@ -1703,7 +1706,7 @@
             "ruleId": "tap-target",
             "minIosPt": 44,
             "minAndroidDp": 48,
-            "note": "Web SM/MD use pseudo-elements to extend targets to at least 44px, without reserving layout space. Avoid clipping or overlapping targets. LG text is 48px mobile / 56px desktop; LG icon stays 48px. Native iOS 44pt / Android 48dp are separate requirements."
+            "note": "Web SM/MD use pseudo-elements to extend compact targets to at least 44px without reserving layout space. Avoid clipping or overlapping targets. Full MD/LG already have 48/56px of height on PC. Native iOS 44pt / Android 48dp are separate requirements."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -1715,7 +1718,7 @@
           },
           "radii": {
             "ruleId": "no-custom-radii",
-            "note": "All full-form buttons → --radius-component-default (8px). Inline buttons → --radius-button-primary (pill) across every hierarchy. Icon form keeps its hierarchy-specific radius."
+            "note": "Full buttons use --radius-component-default (8px). Inline and icon buttons use --radius-button-primary for pill and circular shapes across every hierarchy."
           }
         },
         "tokens": [
@@ -1738,13 +1741,16 @@
           "--button-tertiary-active-inverse",
           "--button-disabled-inverse",
           "--text-on-emphasis",
+          "--text-error",
+          "--text-emphasis-inverse",
+          "--surface-primary",
+          "--surface-inverse",
           "--text-primary",
           "--text-primary-inverse",
           "--text-disabled",
           "--text-disabled-inverse",
           "--focus-ring",
           "--focus-ring-inverse",
-          "--radius-button-emphasis",
           "--radius-button-primary",
           "--radius-component-default",
           "--font-family-ios",
@@ -1757,7 +1763,8 @@
           "--space-050",
           "--space-150",
           "--space-200",
-          "--space-250"
+          "--space-250",
+          "--space-600"
         ],
         "tokenBindings": {
           "--button-emphasis": {
@@ -1804,6 +1811,22 @@
             "property": "color",
             "selector": ".emphasis"
           },
+          "--text-error": {
+            "property": "color",
+            "selector": ".destructive"
+          },
+          "--text-emphasis-inverse": {
+            "property": "color",
+            "selector": ".destructive.inverse"
+          },
+          "--surface-primary": {
+            "property": "color",
+            "selector": ".destructive.inverse"
+          },
+          "--surface-inverse": {
+            "property": "color",
+            "selector": ".destructive"
+          },
           "--text-primary-inverse": {
             "property": "color",
             "selector": ".primary"
@@ -1816,13 +1839,9 @@
             "property": "outline-color",
             "selector": ".button:focus-visible"
           },
-          "--radius-button-emphasis": {
-            "property": "border-radius",
-            "selector": ".emphasis.iconOnly"
-          },
           "--radius-button-primary": {
             "property": "border-radius",
-            "selector": ".button:not(.fullWidth):not(.iconOnly), .primary.iconOnly, .secondary.iconOnly, .tertiary.iconOnly"
+            "selector": ".button"
           },
           "--radius-component-default": {
             "property": "border-radius",
@@ -1872,6 +1891,11 @@
           "--space-250": {
             "property": "padding-inline",
             "selector": ".lg"
+          },
+          "--space-600": {
+            "property": "height",
+            "selector": ".md.fullWidth",
+            "media": "(min-width: 1024px)"
           }
         },
         "accessibility": {
@@ -1894,7 +1918,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -1906,6 +1931,7 @@
           "./examples.tsx#NavigationExample",
           "./examples.tsx#SecondaryExample",
           "./examples.tsx#TertiaryExample",
+          "./examples.tsx#DestructiveExample",
           "./examples.tsx#WithLeftIconExample",
           "./examples.tsx#IconOnlyExample",
           "./examples.tsx#LoadingExample",

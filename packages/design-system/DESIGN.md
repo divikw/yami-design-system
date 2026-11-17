@@ -426,12 +426,12 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 
 |                |                                                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------ |
-| **Variants**   | `emphasis` · `primary` · `secondary` · `tertiary`                                                |
-| **Sizes**      | `sm` (32) · `md` (40) · `lg` (48 mobile; 56 desktop text at ≥1024px; icon stays 48)                                                                |
+| **Variants**   | `emphasis` · `primary` · `secondary` · `tertiary` · `destructive` (subtle red fill and red text for actions such as deleting data) |
+| **Sizes**      | `sm` / `md` / `lg`: 32 / 40 / 48px. Full form at ≥1024px: 32 / 48 / 56px. |
 | **States**     | default · hover · active · disabled · loading · focus-visible                                    |
-| **Radius**     | `form=full` → `--radius-component-default` (8px) · `form=inline` → `--radius-button-primary` (pill) · `form=icon` keeps hierarchy-specific radius |
+| **Radius**     | `form=full` → `--radius-component-default` (8px). Inline and icon use `--radius-button-primary` for pill and circular shapes. |
 | **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN and KO 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
-| **Tap target** | Web: SM/MD use pseudo-elements to extend the hit area to ≥44px without reserving layout space; avoid clipping/overlap. This is Button behavior, not a global layout minimum. Web targets follow the 24px baseline and applicable exceptions.                                    |
+| **Tap target** | Web: compact SM/MD targets use pseudo-elements to reach ≥44px without reserving layout space. Avoid clipping or overlap. Web targets follow the 24px baseline and applicable exceptions. |
 | **Rate limit** | **`emphasis` = 1 per screen.** No exceptions. (rule `emphasis-limit`)                            |
 | **Disabled**   | `--button-disabled` bg + `--text-disabled` fg. **Never `opacity`.** (rule `no-opacity-disabled`) |
 | **Focus**      | 2px `--focus-ring` outline, 2px offset. (rule `focus-style`)                                   |

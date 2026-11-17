@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.3.0",
-  "description": "YAMI action button, not page navigation. Use ButtonLink for navigation or direct file downloads with button appearance; it renders a native anchor and shares Button styles. 4 hierarchies (emphasis / primary / secondary / tertiary) × 3 form modes (full / inline / icon) × 3 sizes (sm / md / lg) × default & inverse surfaces. Mirrors the YAMI UI/UX Guidelines Figma file (Mobile v2 + PC v2).",
+  "description": "YAMI action button with five variants, three form modes, three sizes and default and inverse surfaces. Use destructive for actions such as deleting data. ButtonLink provides the same appearance on a native anchor for navigation or direct downloads.",
   "source": "components/Button",
   "files": [
     {
@@ -50,7 +50,8 @@
   "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -66,6 +67,7 @@
       "components/Button/examples.tsx#NavigationExample",
       "components/Button/examples.tsx#SecondaryExample",
       "components/Button/examples.tsx#TertiaryExample",
+      "components/Button/examples.tsx#DestructiveExample",
       "components/Button/examples.tsx#WithLeftIconExample",
       "components/Button/examples.tsx#IconOnlyExample",
       "components/Button/examples.tsx#LoadingExample",
@@ -104,15 +106,19 @@
       "--font-weight-emphasize",
       "--line-height-body-md",
       "--line-height-body-xl",
-      "--radius-button-emphasis",
       "--radius-button-primary",
       "--radius-component-default",
       "--space-050",
       "--space-150",
       "--space-200",
       "--space-250",
+      "--space-600",
+      "--surface-inverse",
+      "--surface-primary",
       "--text-disabled",
       "--text-disabled-inverse",
+      "--text-emphasis-inverse",
+      "--text-error",
       "--text-on-emphasis",
       "--text-primary",
       "--text-primary-inverse"
@@ -169,6 +175,22 @@
         "property": "color",
         "selector": ".emphasis"
       },
+      "--text-error": {
+        "property": "color",
+        "selector": ".destructive"
+      },
+      "--text-emphasis-inverse": {
+        "property": "color",
+        "selector": ".destructive.inverse"
+      },
+      "--surface-primary": {
+        "property": "color",
+        "selector": ".destructive.inverse"
+      },
+      "--surface-inverse": {
+        "property": "color",
+        "selector": ".destructive"
+      },
       "--text-primary-inverse": {
         "property": "color",
         "selector": ".primary"
@@ -181,13 +203,9 @@
         "property": "outline-color",
         "selector": ".button:focus-visible"
       },
-      "--radius-button-emphasis": {
-        "property": "border-radius",
-        "selector": ".emphasis.iconOnly"
-      },
       "--radius-button-primary": {
         "property": "border-radius",
-        "selector": ".button:not(.fullWidth):not(.iconOnly), .primary.iconOnly, .secondary.iconOnly, .tertiary.iconOnly"
+        "selector": ".button"
       },
       "--radius-component-default": {
         "property": "border-radius",
@@ -237,6 +255,11 @@
       "--space-250": {
         "property": "padding-inline",
         "selector": ".lg"
+      },
+      "--space-600": {
+        "property": "height",
+        "selector": ".md.fullWidth",
+        "media": "(min-width: 1024px)"
       }
     }
   },
@@ -261,5 +284,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "053153e0c2e5a60941cfc0fe739ee9cc6c52e4e9c53b947a4255f3fbf5133524"
+  "contentDigest": "134b5551d7f4c65bf7b2df1a5ab62146c7b4cc45596f5ac20ba7c51719a0b915"
 }

@@ -42,6 +42,12 @@ export const TertiaryExample = () => (
   </section>
 )
 
+export const DestructiveExample = () => (
+  <section data-example="DestructiveExample">
+    <Button variant="destructive">Delete address</Button>
+  </section>
+)
+
 export const WithLeftIconExample = () => (
   <section data-example="WithLeftIconExample">
     <Button variant="emphasis" leftIcon={<CartIcon />}>

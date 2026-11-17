@@ -22,7 +22,7 @@
 .centeredCard { min-height: 224px; display: flex; align-items: center; justify-content: center; }
 .sectionHead { margin-bottom: var(--space-150); }
 .sectionHead h2 { margin: 0; font-size: var(--font-size-heading-xl); line-height: var(--line-height-heading-xl); }
-.hierarchy { display: grid; grid-template-columns: repeat(4, max-content); gap: var(--space-300); }
+.hierarchy { display: grid; grid-template-columns: repeat(5, max-content); gap: var(--space-300); }
 .item { text-align: center; }
 .formRow h3 { font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); margin: 0; }
 .item p, .formRow p { margin: var(--space-100) 0 0; color: var(--text-secondary); }
@@ -48,6 +48,7 @@
 .iconStrip h3 { margin: 0; font-size: var(--font-size-body-md); }
 .formRow { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: var(--space-300); padding: var(--space-200) 0; align-items: center; }
 .formSample, .fullSample { box-sizing: border-box; width: 100%; max-width: 480px; min-height: 56px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+.fullSample { flex-direction: column; gap: var(--space-200); }
 .constrainedSample { width: 200px; max-width: 100%; }
 .interactionExamples { display: grid; text-align: center; gap: var(--space-400); font-family: var(--font-family-ios); }
 .interactionExamples > div > p { margin: 0 0 var(--space-200); color: var(--text-secondary); font-size: var(--font-size-body-md); }

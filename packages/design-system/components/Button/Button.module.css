@@ -8,11 +8,10 @@
  *   - focus-style (2px var(--focus-ring) ring, not browser default)
  *   - no-custom-radii (uses --radius-button-* tokens)
  *
- * Sizes (mobile baseline / ≥1024px desktop, per Figma Mobile v2 + PC v2):
- *   sm  → 32 / 32         — product-only step (Icon form has it in Figma)
- *   md  → 40 / 40
- *   lg  → 48 / 56          — Full + Inline only
- *   lg  → 48 / 48 (icon)   — Icon form stays 48 even on desktop
+ * Heights (sm / md / lg):
+ *   Inline and icon, all viewports: 32 / 40 / 48px
+ *   Full below 1024px:              32 / 40 / 48px
+ *   Full from 1024px:               32 / 48 / 56px
  */
 
 .button {
@@ -29,6 +28,7 @@
   text-decoration: none;
 
   border: 0;
+  border-radius: var(--radius-button-primary);
   cursor: pointer;
   user-select: none;
 
@@ -74,16 +74,16 @@
   line-height: var(--line-height-body-xl);
 }
 
-/* Responsive lg — PC Full/Inline Large bumps to 56px (Figma 5587:127257).
-   Mobile baseline stays 48px (Figma 5579:113094).
-   Icon form is excluded: Figma's PC Icon Large (5587:127576) is 48×48 even
-   on desktop — bumping it would also break the .iconOnly aspect-ratio:1
-   square contract (would render 56×56).
-   Raw 56px: no --space-700 token exists in tokens.css yet — track in
-   decisions.md and introduce when the token-syncer next runs. */
 @media (min-width: 1024px) {
-  .lg:not(.iconOnly) {
+  .md.fullWidth {
+    height: var(--space-600);
+  }
+
+  .lg.fullWidth {
     height: 56px;
+  }
+
+  .lg:not(.iconOnly) {
     font-size: var(--font-size-button-lg-desktop);
   }
 }
@@ -140,7 +140,8 @@
    in tight horizontal rows (filter chips, cart qty rows, inline CTAs)
    where horizontal overflow would steal clicks from siblings. Vertical
    space above/below is dead space — extending there is safe.
-   sm (32 → 44): top/bottom 6px. md (40 → 44): top/bottom 2px. */
+   sm (32 → 44): top/bottom 6px. md (40 → 44): top/bottom 2px
+   where rendered at 40px. */
 .button.sm:not(.iconOnly)::before,
 .button.md:not(.iconOnly)::before {
   content: "";
@@ -166,13 +167,11 @@
 
 /*
  * emphasis — Buy Now / Add to Cart / primary CTAs.
- * Icon form keeps the squarish emphasis radius; inline form overrides to pill.
  * Rule emphasis-limit: max 1 per screen.
  */
 .emphasis {
   background-color: var(--button-emphasis);
   color: var(--text-on-emphasis);
-  border-radius: var(--radius-button-emphasis);
 }
 .emphasis:not([aria-disabled="true"]):active {
   background-color: var(--button-emphasis-active);
@@ -188,7 +187,6 @@
 .primary {
   background-color: var(--button-primary);
   color: var(--text-primary-inverse);
-  border-radius: var(--radius-button-primary);
 }
 .primary:not([aria-disabled="true"]):active {
   background-color: var(--button-primary-active);
@@ -204,7 +202,6 @@
 .secondary {
   background-color: var(--button-secondary);
   color: var(--text-primary);
-  border-radius: var(--radius-button-primary);
 }
 .secondary:not([aria-disabled="true"]):active {
   background-color: var(--button-secondary-active);
@@ -221,7 +218,6 @@
 .tertiary {
   background-color: var(--button-tertiary);
   color: var(--text-primary);
-  border-radius: var(--radius-button-primary);
 }
 .tertiary:not([aria-disabled="true"]):active {
   background-color: var(--button-tertiary-active);
@@ -231,11 +227,17 @@
   color: var(--text-disabled);
 }
 
-/* inline: content-width buttons use the pill radius across all hierarchies.
-   The selector excludes full and icon forms so those form-specific rules stay
-   explicit without adding another runtime class. */
-.button:not(.fullWidth):not(.iconOnly) {
-  border-radius: var(--radius-button-primary);
+.destructive {
+  --destructive-surface: var(--surface-primary);
+  color: color-mix(in srgb, var(--text-error) 80%, var(--surface-inverse));
+  background-color: color-mix(in srgb, currentColor 8%, var(--destructive-surface));
+}
+.destructive:not([aria-disabled="true"]):active {
+  background-color: color-mix(in srgb, currentColor 16%, var(--destructive-surface));
+}
+.destructive[aria-disabled="true"] {
+  background-color: var(--button-disabled);
+  color: var(--text-disabled);
 }
 
 /* ─── Inverse surface modifier ──────────────────────────────────── */
@@ -243,8 +245,7 @@
 /*
  * inverse=true — for buttons placed on the active theme's opposite-polarity
  * surface (--surface-inverse). This is dark in Light and light in Dark.
- * Mirrors Figma's "<Form> - Inverse" component sets. All four hierarchies
- * swap to their *-inverse token aliases. Focus ring follows the inverse polarity.
+ * Focus ring and variant colors follow the inverse polarity.
  *
  * Layered after the base variants so it wins on specificity without !important.
  */
@@ -284,6 +285,11 @@
   background-color: var(--button-tertiary-active-inverse);
 }
 
+.destructive.inverse {
+  --destructive-surface: var(--surface-inverse);
+  color: color-mix(in srgb, var(--text-emphasis-inverse) 80%, var(--surface-primary));
+}
+
 .inverse[aria-disabled="true"] {
   background-color: var(--button-disabled-inverse);
   color: var(--text-disabled-inverse);
@@ -304,6 +310,10 @@
 
   .tertiary:not([aria-disabled="true"]):hover {
     background-color: var(--button-tertiary-active);
+  }
+
+  .destructive:not([aria-disabled="true"]):hover {
+    background-color: color-mix(in srgb, currentColor 16%, var(--destructive-surface));
   }
 
   .emphasis.inverse:not([aria-disabled="true"]):hover {
