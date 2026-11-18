@@ -54,7 +54,7 @@ export function SelectContent({
   alignOffset, collisionPadding, arrowPadding, anchor, alignItemWithTrigger = false, ...props
 }: SelectContentProps) {
   return (
-    <SelectPrimitive.Portal container={container ?? undefined}>
+    <SelectPrimitive.Portal container={container ?? undefined} data-base-ui-swipe-ignore="">
       <SelectPrimitive.Positioner
         className={styles.positioner} data-slot="select-positioner" side={side} align={align} sideOffset={sideOffset}
         alignOffset={alignOffset} collisionPadding={collisionPadding} arrowPadding={arrowPadding} anchor={anchor}

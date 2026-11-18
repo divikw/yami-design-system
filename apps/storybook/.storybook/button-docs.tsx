@@ -7,7 +7,6 @@ const importButton = 'import { Button } from "@yami/design-system";';
 const importArrowUp = `${importButton}\nimport { ArrowUp } from "lucide-react";`;
 const rowStyle = { display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "var(--space-200)" } as const;
 const pairStyle = { display: "grid", justifyItems: "center", gap: "var(--space-100)" } as const;
-const inverseStyle = { display: "grid", placeItems: "center", boxSizing: "border-box", minHeight: 200, background: "var(--surface-inverse)", padding: "var(--space-200)", borderRadius: "var(--radius-component-default)" } as const;
 const iconSizes = { sm: 16, md: 20, lg: 24 } as const;
 const mediumArrow = <ArrowUp size={iconSizes.md} strokeWidth={2} aria-hidden="true" />;
 const legacyAnchors = {
@@ -135,8 +134,9 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
       id: "inverse",
       title: zh ? "反色" : "Inverse",
       description: zh ? "用于当前主题中明暗相反的背景。浅色和深色主题均可使用。" : "Use inverse on a surface with the opposite polarity within either theme.",
-      code: `${importButton}\n\n<div style={{ display: "grid", placeItems: "center", boxSizing: "border-box", minHeight: 200, background: "var(--surface-inverse)", padding: "var(--space-200)", borderRadius: "var(--radius-component-default)" }}>\n  <Button size="lg" inverse>${continueLabel}</Button>\n</div>`,
-      preview: <div style={inverseStyle}><Button size="lg" inverse>{continueLabel}</Button></div>,
+      code: `${importButton}\n\n<div style={{ display: "grid", placeItems: "center", padding: "var(--space-200)", background: "var(--surface-inverse)" }}>\n  <Button size="lg" inverse>${continueLabel}</Button>\n</div>`,
+      previewBackground: "var(--surface-inverse)",
+      preview: <div style={rowStyle}><Button size="lg" inverse>{continueLabel}</Button></div>,
     },
     {
       id: "navigation",
@@ -149,6 +149,7 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
 
   return <div id="component-playground">
     <ComponentGuide name="Button" slug="button" locale={locale}
+    usageCode={`${importButton}\n\n<Button>${continueLabel}</Button>`}
       intro={zh ? "用于保存、提交和打开弹层等操作。支持视觉层级、响应式尺寸和加载反馈。" : "Perform actions such as saving, submitting or opening an overlay, with visual variants, responsive sizes and loading feedback."}
       previous={{ name: "Breadcrumb", path: "yami-components-navigation-breadcrumb" }}
       next={{ name: "ButtonGroup", path: "yami-components-actions-button-group" }}

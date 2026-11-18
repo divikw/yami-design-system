@@ -8,7 +8,7 @@ How YAMI animates specific UI interactions. Combining easing + duration from `ea
 - Entry and exit: 200ms, enter `cubic-bezier(0, 0, 0.2, 1)` and exit `cubic-bezier(0.4, 0, 1, 1)`.
 - Scrim: opacity 0 → 1 on entry, reversed on exit, 150ms using the corresponding curve.
 - Content moves together. Preserve the native modal, focus confinement and scroll lock until exit finishes; then unmount and restore focus.
-- Reduced motion: 0ms, with immediate dismissal. Drawer uses native CSS; centered Sheet behavior is unchanged.
+- Reduced motion: 0ms, with immediate dismissal. Drawer uses native CSS.
 
 ## Core principles
 

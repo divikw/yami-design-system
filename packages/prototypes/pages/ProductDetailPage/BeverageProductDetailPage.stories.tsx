@@ -164,7 +164,7 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(getComputedStyle(sheet).borderBottomLeftRadius).toBe("0px");
     await expect(getComputedStyle(sheet).borderBottomRightRadius).toBe("0px");
     await expect(getComputedStyle(canvasElement.ownerDocument.body).overflow).toBe("hidden");
-    await expect(sheet.getBoundingClientRect().bottom).toBeCloseTo(root.clientHeight, 0);
+    await waitFor(() => expect(sheet.getBoundingClientRect().bottom).toBeCloseTo(root.clientHeight, 0));
     const sheetCanvas = within(sheet);
     const close = sheetCanvas.getByRole("button", { name: locale === "zh" ? "关闭营养成分表" : "Close nutrition facts" });
     await expect(close).toHaveFocus();
@@ -176,7 +176,7 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
     await expect(within(otherTable).getByText("160", { exact: true })).toBeVisible();
     await expect(otherTable.closest("[lang]")).toHaveAttribute("lang", otherLocale);
     await userEvent.selectOptions(language, locale);
-    const content = sheet.querySelector<HTMLElement>('[data-slot="product-nutrition-sheet-content"]')!;
+    const content = sheet.querySelector<HTMLElement>('[data-drawer-content]')!;
     const heading = sheetCanvas.getByRole("heading", { level: 2 });
     const headingTop = heading.getBoundingClientRect().top;
     await expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);

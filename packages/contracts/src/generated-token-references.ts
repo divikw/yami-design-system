@@ -54,6 +54,8 @@ export const registeredTokenReferenceTypes = {
   "button.primary": "color",
   "button.primary-active": "color",
   "button.primary-active-inverse": "color",
+  "button.primary-hover": "color",
+  "button.primary-hover-inverse": "color",
   "button.primary-inverse": "color",
   "button.secondary": "color",
   "button.secondary-active": "color",

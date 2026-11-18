@@ -35,3 +35,20 @@ The icon has an opaque circular backing with a 1px tier-colored border to separa
 Membership ring and icon colors stay consistent in both themes. The Ruby ring follows the [live YAMI account avatar](https://www.yami.com/us/zh). Other tiers use their original icon colors; their corresponding live account states have not yet been verified. This composition does not yet have a verified Figma avatar binding.
 
 Assistive technology announces the person's name and membership tier once. The native `lang` prop controls the tier suffix: English by default (for example, “Alex Morgan, Gold member”), or Chinese with `lang="zh"` / `lang="zh-CN"`. Storybook follows its language toolbar unless `lang` is explicitly selected. Use `alt=""` to make the entire avatar and icon decorative when adjacent text already provides the name and tier.
+
+## Avatar Group
+
+Use `AvatarGroup` to display an overlapping row of related `Avatar` children. Name the group with `aria-label` and name each visible person with `alt`. Use the same size for avatars and the optional `AvatarGroupCount`. Both group parts are display-only, with native `span` props and refs.
+
+```tsx
+import { Avatar, AvatarGroup, AvatarGroupCount } from "@yami/design-system";
+
+<AvatarGroup aria-label="Team members">
+  <Avatar src="/images/yue.jpg" alt="Yue Lin" />
+  <Avatar src="/images/jordan.jpg" alt="Jordan Davis" />
+  <Avatar src="/images/yu.jpg" alt="Yu Chen" />
+  <AvatarGroupCount aria-label="3 more members">+3</AvatarGroupCount>
+</AvatarGroup>
+```
+
+The caller decides how many people to show and supplies the remaining count as children. Omit the count when all members are visible. The count defaults to `md` and expands horizontally for longer values. Localize its accessible label to explain what the number represents.

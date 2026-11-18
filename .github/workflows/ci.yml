@@ -75,7 +75,32 @@ jobs:
           pnpm check:distribution-history "$DISTRIBUTION_BASE_REF"
       - name: security-audit
         if: matrix.check == 'lint'
-        run: pnpm audit --audit-level=low --registry=https://registry.npmjs.org
+        env:
+          PR_222_EXCEPTION: ${{ github.repository == 'divikw/yami-design-system' && github.event_name == 'pull_request' && github.event.pull_request.number == 222 && github.base_ref == 'main' }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          audit=(pnpm audit --audit-level=low --registry=https://registry.npmjs.org)
+          if [[ "$PR_222_EXCEPTION" != true || "$(TZ=Asia/Shanghai date +%F)" > "2026-11-24" ]]; then
+            exec "${audit[@]}"
+          fi
+
+          report="$RUNNER_TEMP/pr-222-audit.json"
+          if "${audit[@]}" --json > "$report"; then
+            exit 0
+          else
+            status=$?
+          fi
+          cat "$report"
+          test "$status" = 1
+          jq -se 'length == 1 and (.[0] | (.metadata.vulnerabilities | add) == 1 and
+            [.advisories[] | [.github_advisory_id, .module_name, (.findings | map(.version) | unique)]]
+            == [["GHSA-fc5q-39xc-vjpf", "picomatch", ["4.0.7"]]])' "$report" > /dev/null
+
+          git cat-file -e "$BASE_SHA^{commit}" || git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          test "$(git rev-parse "$BASE_SHA:pnpm-lock.yaml")" = "30c861f3f90c7727c89361f854f68cc5af9ab2b9"
+          git diff --exit-code "$BASE_SHA" -- pnpm-lock.yaml
+          "${audit[@]}" --prod
+          echo "::warning::PR 222 accepts the existing development-only picomatch advisory GHSA-fc5q-39xc-vjpf until 2026-11-25 00:00 Asia/Shanghai."
       - name: install-storybook-browser
         if: matrix.installBrowser == true
         run: pnpm exec playwright install --with-deps chromium

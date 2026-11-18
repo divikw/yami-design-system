@@ -56,6 +56,7 @@
       "--space-100",
       "--space-250",
       "--space-300",
+      "--space-400",
       "--space-500",
       "--stroke-thick",
       "--surface-secondary",
@@ -104,7 +105,7 @@
     "accessibility": {
       "role": "checkbox",
       "wcagLevel": "AA",
-      "tapTargetMin": 40,
+      "tapTargetMin": 32,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -115,5 +116,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f2ff700d09ddd07ad19afa4f905106d030c55a19eab630b8591d6e1b712f7f8a"
+  "contentDigest": "12fdddeaeca8a8ee00a66af100733cd45685e25747864b403ff78350054770f4"
 }

@@ -18,7 +18,7 @@ type PreviewArgs = ComponentProps<typeof HorizontalScrollList> & {
 
 const meta = {
   id: "yami-components-commerce-product-list-horizontal-scroll-list",
-  title: "YAMI/Components/Horizontal Scroll List",
+  title: "YAMI/Modules/Commerce/Horizontal Scroll List",
   component: HorizontalScrollList,
   decorators: [
     (Story, context) => (

@@ -54,6 +54,8 @@ ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态�
 | `tertiary` | 透明 / 主要文字 | 低强调的轻量操作 |
 | `destructive` | 红色淡底 / 红色文字 | 删除地址、移除成员等可能造成数据丢失或不可逆后果的操作 |
 
+桌面悬停时，黑色主按钮变为深灰色，按下时变为纯黑色。白色主按钮在悬停和按下时逐级变暗。
+
 每个实际页面最多一个 `emphasis` 入口，ButtonLink 也计入限制。形态由 `form` 决定，不由视觉层级决定。Tertiary 默认无填充和描边，悬浮 / 按下添加背景反馈，键盘聚焦保留焦点框。
 
 ## 尺寸
@@ -226,6 +228,8 @@ Links and buttons may appear together. Keep navigation as a real link and the ac
 | `secondary` | `--button-secondary` (grey) | Depends on `form` | Secondary actions paired with a primary (Cancel / Back / Skip) |
 | `tertiary` | `--button-tertiary` (transparent) | Depends on `form` | Low-emphasis actions; lightweight card-level actions |
 | `destructive` | Subtle red tint with red text | Depends on `form` | Actions that can remove data or have irreversible effects, such as deleting an address |
+
+On desktop, a black primary button turns dark grey on hover and solid black on press. A white primary button darkens progressively on hover and press.
 
 ### ⚠️ `emphasis-limit` rule (design.md)
 

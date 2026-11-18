@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "source": "components/Card",
   "files": [
     {
@@ -59,8 +59,11 @@
       "--border-default-inverse",
       "--focus-ring",
       "--radius-surface-default",
+      "--space-0",
+      "--space-050",
       "--space-100",
       "--space-200",
+      "--space-300",
       "--space-400",
       "--surface-inverse",
       "--surface-primary",
@@ -122,16 +125,28 @@
         "selector": ".card"
       },
       "--space-200": {
-        "property": "padding (min-width 1024px)",
-        "selector": ".pad-sm, .pad-md, .pad-lg"
+        "property": "--card-spacing (padding and section gap)",
+        "selector": ".pad-md"
       },
       "--space-400": {
         "property": "min-width / min-height",
         "selector": ".interactive"
       },
       "--space-100": {
-        "property": "padding (below 1024px)",
-        "selector": ".pad-sm, .pad-md, .pad-lg"
+        "property": "--card-spacing (padding and section gap)",
+        "selector": ".pad-sm"
+      },
+      "--space-0": {
+        "property": "--card-spacing (padding and section gap)",
+        "selector": ".pad-none"
+      },
+      "--space-300": {
+        "property": "--card-spacing (padding and section gap)",
+        "selector": ".pad-lg"
+      },
+      "--space-050": {
+        "property": "margin-block-end",
+        "selector": ".content > :is(h1, h2, h3, h4, h5, h6):has(+ p)"
       }
     }
   },
@@ -150,5 +165,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "7d08c9f8919165b0069c9cf6fd4d9a587a8ef2c19755a4c5f9a8b3e733d5de49"
+  "contentDigest": "309810aa77044f198eeaeb1c0b6e3496afa6e3549b71683c9cba2862030a7f07"
 }

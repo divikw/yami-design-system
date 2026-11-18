@@ -102,7 +102,6 @@
     "review-list",
     "section-banner",
     "select",
-    "sheet",
     "shortcut-rail",
     "social-media-gallery",
     "switch",
@@ -188,6 +187,8 @@
       "--button-primary",
       "--button-primary-active",
       "--button-primary-active-inverse",
+      "--button-primary-hover",
+      "--button-primary-hover-inverse",
       "--button-primary-inverse",
       "--button-secondary",
       "--button-secondary-active",
@@ -587,5 +588,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "e380677e57c2b41f8a96435a7d6a3f3951e5c9c254cf30a29530f846914c79f8"
+  "contentDigest": "1316e4e3a2d98462d2686be27118f8a3018580984a2377200f16dbff1ee95fd3"
 }

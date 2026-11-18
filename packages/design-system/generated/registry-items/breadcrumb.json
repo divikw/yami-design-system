@@ -24,6 +24,7 @@
   ],
   "exports": [
     "Breadcrumb",
+    "BreadcrumbEllipsis",
     "BreadcrumbItem",
     "BreadcrumbLinkProps",
     "BreadcrumbProps"
@@ -43,7 +44,8 @@
     ],
     "examples": [
       "components/Breadcrumb/examples.tsx#ProductBreadcrumb",
-      "components/Breadcrumb/examples.tsx#CurrentPageBreadcrumb"
+      "components/Breadcrumb/examples.tsx#CurrentPageBreadcrumb",
+      "components/Breadcrumb/examples.tsx#CollapsedBreadcrumb"
     ]
   },
   "design": {
@@ -78,12 +80,12 @@
         "selector": ".root[data-inverse=\"true\"]"
       },
       "--space-100": {
-        "property": "gap",
-        "selector": ".list, .item"
+        "property": "padding-inline",
+        "selector": ".label, .link"
       },
       "--space-050": {
         "property": "padding",
-        "selector": ".root, .link"
+        "selector": ".root"
       },
       "--space-300": {
         "property": "min-width / min-height",
@@ -114,5 +116,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "08fe86bf77f8821610f95da27a0aac53aba9794134f06d6fd293f82fd1b500de"
+  "contentDigest": "ee90c6f739ddc240de709968196d25fb79a26840719817958907b1d50c560d72"
 }

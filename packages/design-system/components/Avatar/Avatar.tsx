@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
-import { forwardRef, type HTMLAttributes } from "react";
+import { forwardRef, type ComponentPropsWithRef, type HTMLAttributes } from "react";
 
 import { MembershipIcon, type MembershipIconTier } from "../MembershipIcon";
 import styles from "./Avatar.module.css";
@@ -77,3 +77,26 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
     </AvatarPrimitive.Root>
   );
 });
+
+export interface AvatarGroupProps extends ComponentPropsWithRef<"span"> {
+  /** Accessible name for the group of people. */
+  "aria-label": string;
+}
+
+/** Overlapping row of related avatars, with an optional count at the end. */
+export function AvatarGroup({ className, ...props }: AvatarGroupProps) {
+  return <span {...props} role="group" data-slot="avatar-group"
+    className={[styles.group, className].filter(Boolean).join(" ")} />;
+}
+
+export interface AvatarGroupCountProps extends ComponentPropsWithRef<"span"> {
+  /** Match the size of the avatars in the group. */
+  size?: AvatarSize;
+}
+
+/** Display-only marker for additional people, such as +3. */
+export function AvatarGroupCount({ className, size = "md", ...props }: AvatarGroupCountProps) {
+  return <span role={props["aria-label"] || props["aria-labelledby"] ? "img" : undefined} {...props}
+    data-slot="avatar-group-count" data-size={size}
+    className={[styles.groupCount, className].filter(Boolean).join(" ")} />;
+}

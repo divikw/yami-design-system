@@ -7,7 +7,7 @@ const tiers: MembershipBadgeTier[] = ["ruby-0", "ruby", "silver", "gold"];
 
 const meta = {
   id: "yami-components-data-display-membershipbadge",
-  title: "YAMI/Components/MembershipBadge",
+  title: "YAMI/Assets/Membership/MembershipBadge",
   component: MembershipBadge,
   parameters: { layout: "padded" },
   argTypes: {

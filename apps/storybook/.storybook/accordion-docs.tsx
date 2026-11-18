@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, Card } from "@yami/design-system";
-import { CodeBlock, ComponentDocsTemplate, DocsExample, Installation, type DocsLocale as Locale } from "./component-docs-template";
+import { CodeBlock, ComponentDocsTemplate, DocsExample, Installation, installationMarkdown, type DocsLocale as Locale } from "./component-docs-template";
 import styles from "./accordion-docs.module.css";
 import docsStyles from "./component-docs-template.module.css";
 
@@ -23,9 +23,10 @@ const questions = {
 };
 const borderStyle = '{ border: "var(--stroke-default) solid var(--border-default)", borderRadius: "var(--radius-surface-default)", paddingInline: "var(--space-200)" }';
 
-function exampleCode(locale: Locale, kind: ExampleKind = "basic") {
-  const props = `defaultValue={["specifications"]}${kind === "multiple" ? " multiple" : ""}${kind === "borders" ? ` style={${borderStyle}}` : ""}`;
-  const group = `<Accordion ${props}>\n${questions[locale].map(([value, label, body], index) => `  <AccordionItem value="${value}"${kind === "disabled" && index === 1 ? " disabled" : ""}>\n    <AccordionTrigger>${label}</AccordionTrigger>\n    <AccordionContent>${body}</AccordionContent>\n  </AccordionItem>`).join("\n")}\n</Accordion>`;
+function exampleCode(locale: Locale, kind: ExampleKind | "usage" = "basic") {
+  const items = kind === "usage" ? questions[locale].slice(0, 1) : questions[locale];
+  const props = kind === "usage" ? "" : ` defaultValue={["specifications"]}${kind === "multiple" ? " multiple" : ""}${kind === "borders" ? ` style={${borderStyle}}` : ""}`;
+  const group = `<Accordion${props}>\n${items.map(([value, label, body], index) => `  <AccordionItem value="${value}"${kind === "disabled" && index === 1 ? " disabled" : ""}>\n    <AccordionTrigger>${label}</AccordionTrigger>\n    <AccordionContent>${body}</AccordionContent>\n  </AccordionItem>`).join("\n")}\n</Accordion>`;
   return `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent${kind === "card" ? ", Card" : ""} } from "@yami/design-system";\n\n${kind === "card" ? `<Card surface="secondary" padding="md" style={{ paddingBlock: 0 }}>\n${group.split("\n").map((line) => `  ${line}`).join("\n")}\n</Card>` : group}`;
 }
 
@@ -59,16 +60,19 @@ export function AccordionDocsPage({ locale }: { locale: Locale }) {
     card: "Wrap Accordion in a YAMI Card with horizontal padding only; the accordion items provide vertical spacing.",
   };
   const composition = "Accordion\n├── AccordionItem\n│   ├── AccordionTrigger\n│   └── AccordionContent\n└── AccordionItem\n    ├── AccordionTrigger\n    └── AccordionContent";
-  const pageText = [`# Accordion`, intro, ...sections.map((section, index) => `## ${headings[locale][index]}\n${section in descriptions ? descriptions[section as ExampleKind] + "\n\n```tsx\n" + exampleCode(locale, section as ExampleKind) + "\n```" : section === "composition" ? composition : section === "usage" ? exampleCode(locale) : section === "installation" ? 'pnpm add "@yami/design-system@workspace:*"' : "https://base-ui.com/react/components/accordion"}`)].join("\n\n");
+  const usageCode = exampleCode(locale, "usage");
+  const [imports, usage] = usageCode.split("\n\n");
+  const apiRows = [["Accordion", "multiple, value, defaultValue, onValueChange, disabled, keepMounted, hiddenUntilFound"], ["AccordionItem", "value, disabled, onOpenChange"], ["AccordionTrigger", "render, nativeButton"], ["AccordionContent", "render"]];
+  const pageText = [`# Accordion`, intro, ...sections.map((section, index) => `## ${headings[locale][index]}\n${section in descriptions ? descriptions[section as ExampleKind] + "\n\n```tsx\n" + exampleCode(locale, section as ExampleKind) + "\n```" : section === "composition" ? composition : section === "usage" ? "\n```tsx\n" + usageCode + "\n```" : section === "installation" ? installationMarkdown(locale) : apiRows.map(([part, props]) => `- ${part}: ${props}`).join("\n") + "\n\nhttps://base-ui.com/react/components/accordion"}`)].join("\n\n");
   const heading = (id: typeof sections[number]) => <h2 id={`accordion-${id}`}>{headings[locale][sections.indexOf(id)]}</h2>;
   return <ComponentDocsTemplate name="Accordion" slug="accordion" intro={intro} locale={locale} pageText={pageText} next={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}>
     <Example key={locale} locale={locale} />
     <section>{heading("installation")}<Installation locale={locale} /></section>
-    <section>{heading("usage")}<CodeBlock locale={locale} code={'import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@yami/design-system";'} /><CodeBlock locale={locale} code={exampleCode(locale).split("\n\n")[1]} /></section>
+    <section>{heading("usage")}<CodeBlock locale={locale} code={imports} /><CodeBlock locale={locale} code={usage} /></section>
     <section>{heading("composition")}<p>{locale === "zh" ? "使用以下结构组合面板，属性和状态由 Base UI 管理。" : "Compose panels using these parts. Base UI manages their properties and state."}</p><CodeBlock locale={locale} code={composition} language="text" /></section>
     {(["basic", "multiple", "disabled", "borders", "card"] as const).map((kind) => <section key={kind}>{heading(kind)}<p>{descriptions[kind]}</p><Example key={`${kind}-${locale}`} locale={locale} kind={kind} /></section>)}
     <section>{heading("api")}<p>{locale === "zh" ? "组件命名与组合方式遵循 shadcn/ui，行为由 Base UI 提供。完整属性、事件与数据属性请查看 " : "Component names and composition follow shadcn/ui, with behavior provided by Base UI. See all props, events and data attributes in the "}<a href="https://base-ui.com/react/components/accordion" target="_blank" rel="noreferrer">Base UI Accordion {locale === "zh" ? "文档" : "documentation"}</a>{locale === "zh" ? "。" : "."}</p>
-      <div className={docsStyles.tableScroll}><table><thead><tr><th>{locale === "zh" ? "部件" : "Part"}</th><th>{locale === "zh" ? "常用属性" : "Common props"}</th></tr></thead><tbody>{[["Accordion", "multiple, value, defaultValue, onValueChange, disabled, keepMounted, hiddenUntilFound"], ["AccordionItem", "value, disabled, onOpenChange"], ["AccordionTrigger", "render, nativeButton"], ["AccordionContent", "render"]].map(([part, props]) => <tr key={part}><td><code>{part}</code></td><td><code>{props}</code></td></tr>)}</tbody></table></div>
+      <div className={docsStyles.tableScroll}><table><thead><tr><th>{locale === "zh" ? "部件" : "Part"}</th><th>{locale === "zh" ? "常用属性" : "Common props"}</th></tr></thead><tbody>{apiRows.map(([part, props]) => <tr key={part}><td><code>{part}</code></td><td><code>{props}</code></td></tr>)}</tbody></table></div>
       <p>{locale === "zh" ? "AccordionTrigger 内部包含语义标题 Header，无需额外包裹。单面板也采用相同组合结构。" : "AccordionTrigger includes the semantic Header internally. Use the same composition for a single panel."}</p>
     </section>
   </ComponentDocsTemplate>;

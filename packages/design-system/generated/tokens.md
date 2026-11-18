@@ -99,6 +99,10 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `button.primary-active` | dark | color | `var(--color-white-800)` |
 | `button.primary-active-inverse` | root | color | `var(--color-white-800)` |
 | `button.primary-active-inverse` | dark | color | `var(--color-black-1000)` |
+| `button.primary-hover` | root | color | `var(--color-neutral-800)` |
+| `button.primary-hover` | dark | color | `var(--color-white-900)` |
+| `button.primary-hover-inverse` | root | color | `var(--color-white-900)` |
+| `button.primary-hover-inverse` | dark | color | `var(--color-neutral-800)` |
 | `button.primary-inverse` | root | color | `var(--color-white-1000)` |
 | `button.primary-inverse` | dark | color | `var(--color-black-900)` |
 | `button.secondary` | root | color | `var(--color-black-100)` |

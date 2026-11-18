@@ -17,7 +17,7 @@ for (const pathname of corePages) {
   });
 }
 
-test("search Sheet and mobile menu have no automatically detectable violations", async ({ page }) => {
+test("search dialog and mobile menu have no automatically detectable violations", async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh");

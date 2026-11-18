@@ -20,12 +20,16 @@ PDP 的末项可能只是商品所属分类，博客路径也可能止于文章�
 
 使用命名的 `nav` 和有序列表 `ol`；当前页标记 `aria-current="page"`，斜杠通过 `aria-hidden` 排除。空数组不渲染导航，单层路径不显示分隔符。
 
+## 折叠路径
+
+要省略中间层级，把一个静态项放在对应位置，例如 `{ label: <BreadcrumbEllipsis aria-label="已省略中间层级" /> }`。从 `@yami/design-system` 导入 `BreadcrumbEllipsis`。保留首页、最近的上级和当前页，省略号本身不进入 Tab 顺序。
+
 ## 样式与响应式
 
 - `size="sm"`（默认）沿用 PDP 的 caption-md 文字；`size="md"` 沿用文档站的 body-md 文字。
-- `underline` 默认开启，保持 PDP 链接下划线；文档站使用 `underline={false}`。
-- PC 链接至少 24×24px；小于 1024px 时至少 44×44px，沿用博客移动端交互。文字过长时换行，不裁切或折叠层级。
-- 链接间距为 8px；导航四周保留 4px 焦点空间，并以负外边距保持现有页面内容对齐。外层不要裁切这部分空间。
+- `underline` 默认开启，链接只在鼠标悬停时显示下划线；要关闭悬停下划线，使用 `underline={false}`。
+- PC 链接至少 24×24px；小于 1024px 时至少 44×44px，沿用博客移动端交互。路径宽度随内容收缩，达到父容器宽度后换行。
+- 链接与静态文字在分隔符两侧使用相同的 8px 内边距；导航四周保留 4px 焦点空间，并以负外边距保持现有页面内容对齐。外层不要裁切这部分空间。
 - PDP 和文档页在移动端隐藏面包屑，博客保持显示；这些显示规则继续由页面布局控制，组件自身不会按断点隐藏。
 - `inverse` 表示当前主题中的反色表面，浅色主题为深色表面，深色主题为浅色表面；组件使用已有语义 token。
 
@@ -70,12 +74,16 @@ A PDP path may end at a product category; a blog path may end at an article cate
 
 A named `nav` contains an ordered list. Current items use `aria-current="page"`; slash separators are hidden from assistive technology. An empty array renders nothing; a single item has no separator.
 
+## Collapsed paths
+
+To omit intermediate levels, insert a static item at their position, such as `{ label: <BreadcrumbEllipsis aria-label="Omitted levels" /> }`. Import `BreadcrumbEllipsis` from `@yami/design-system`. Keep the home, nearest parent and current page visible. The ellipsis is outside the tab order.
+
 ## Appearance and responsiveness
 
 - `size="sm"` (default) uses PDP caption-md typography; `size="md"` uses docsite body-md typography.
-- `underline` defaults to true for PDP links; use false for the docsite treatment.
-- PC links are at least 24×24px. Below 1024px, links are at least 44×44px, preserving the mobile blog targets. Long labels wrap without truncating or collapsing the hierarchy.
-- An 8px gap separates items. A 4px navigation gutter protects focus outlines; negative outer margins preserve content alignment. Avoid clipping this gutter in a parent.
+- `underline` defaults to true and underlines links on mouse hover. Use false to disable hover underlines.
+- PC links are at least 24×24px. Below 1024px, links are at least 44×44px, preserving the mobile blog targets. The trail fits its content and wraps when it reaches the available width.
+- Links and static labels use the same 8px padding on either side of each separator. A 4px navigation gutter protects focus outlines; negative outer margins preserve content alignment. Avoid clipping this gutter in a parent.
 - PDP and documentation pages hide breadcrumbs on mobile; blog articles keep them visible. The page owns these rules; the component does not hide itself at a breakpoint.
 - `inverse` means the active theme's opposite surface polarity: dark in Light, light in Dark. Existing semantic tokens handle both axes.
 

@@ -14,7 +14,7 @@ function localeFromGlobals(value: unknown): HeaderLocale {
 
 const meta = {
   id: 'yami-components-navigation-header',
-  title: 'YAMI/Components/Header',
+  title: 'YAMI/Modules/Header',
   component: Header,
   subcomponents: { HeaderSearch, HeaderCategoryRail, ActivityPageHeader },
   decorators: [

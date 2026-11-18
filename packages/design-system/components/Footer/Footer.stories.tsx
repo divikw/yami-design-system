@@ -41,7 +41,7 @@ function getProps(locale: FooterLocale): FooterProps {
 
 const meta = {
   id: 'yami-components-navigation-footer',
-  title: 'YAMI/Components/Footer',
+  title: 'YAMI/Modules/Footer',
   component: Footer,
   parameters: {
     layout: 'fullscreen',

@@ -58,7 +58,7 @@ export const noCustomRadii: Validator = {
         severity: 'error',
         locations: [hit.location],
         suggestion:
-          'Replace with a semantic alias: 4px→--radius-tag-primary, 8px→--radius-component-default, 12px→--radius-surface-default, 16px mobile Sheet top corners→--radius-surface-sheet, pill→--radius-button-primary.',
+          'Replace with a semantic alias: 4px→--radius-tag-primary, 8px→--radius-component-default, 12px→--radius-surface-default, 16px mobile Drawer top corners→--radius-surface-sheet, pill→--radius-button-primary.',
       })
     }
     return result(violations)

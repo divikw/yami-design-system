@@ -75,9 +75,11 @@ async function expectPhoneFrame(page: Page, selector: string) {
     };
   })).toEqual({ height: 36.7, top: 14 });
   await expect.poll(() => page.locator(selector).evaluate((frame) => {
-    const host = frame.parentElement!.getBoundingClientRect();
+    const host = frame.parentElement;
+    if (!host) return null;
+    const bounds = host.getBoundingClientRect();
     const content = frame.getBoundingClientRect();
-    return { top: Math.round(content.top - host.top - frame.parentElement!.clientTop), bottom: Math.round(host.bottom - content.bottom - frame.parentElement!.clientTop) };
+    return { top: Math.round(content.top - bounds.top - host.clientTop), bottom: Math.round(bounds.bottom - content.bottom - host.clientTop) };
   })).toEqual({ top: 0, bottom: 0 });
 }
 
@@ -90,7 +92,8 @@ async function expectSafariFrame(page: Page) {
   await expect(page.locator('[data-phone-preview-status]')).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(page.locator('[data-phone-preview-host]')).toHaveCSS("border-radius", "40px");
   await expect.poll(() => page.locator('#canvas-preview').evaluate((frame) => {
-    const host = frame.parentElement!;
+    const host = frame.parentElement;
+    if (!host) return null;
     const content = frame.getBoundingClientRect();
     const bounds = host.getBoundingClientRect();
     return { top: Math.round(content.top - bounds.top - host.clientTop), bottom: Math.round(bounds.bottom - content.bottom - host.clientTop) };
@@ -119,8 +122,13 @@ for (const theme of ["light", "dark"]) test(`Safari has fixed controls, native i
   await checkoutBar.getByRole('button', { name: /^Details/ }).click();
   const details = frame.getByRole('dialog', { name: /order details/i });
   await expect(details).toBeVisible();
+  await expect.poll(async () => {
+    const panel = await details.boundingBox();
+    const chrome = await toolbar.boundingBox();
+    return Math.round(panel!.y + panel!.height - chrome!.y);
+  }).toBe(0);
   await expect.poll(() => details.locator('[data-slot="cart-checkout-bar"]').evaluate((bar) => {
-    const footer = bar.closest('[data-slot="sheet-footer"]')!;
+    const footer = bar.closest('[data-slot="drawer-footer"]')!;
     return Math.round(footer.getBoundingClientRect().bottom - bar.getBoundingClientRect().bottom);
   })).toBe(0);
   await expect(details.getByRole('button', { name: /^Checkout/ })).toBeInViewport();

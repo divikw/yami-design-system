@@ -3,6 +3,26 @@ import { ComponentGuide, type GuideExample } from "./component-guide";
 import type { DocsLocale } from "./component-docs-template";
 import styles from "./component-guide.module.css";
 
+function AlertDialogPreview({ locale, trigger, title, description, cancel, action, variant }: {
+  locale: DocsLocale;
+  trigger: string;
+  title: string;
+  description: string;
+  cancel: string;
+  action: string;
+  variant: "primary" | "emphasis";
+}) {
+  return <div className={styles.row}>
+    <AlertDialog>
+      <AlertDialogTrigger render={<Button variant="secondary" />}>{trigger}</AlertDialogTrigger>
+      <AlertDialogContent lang={locale}>
+        <AlertDialogHeader><AlertDialogTitle>{title}</AlertDialogTitle><AlertDialogDescription>{description}</AlertDialogDescription></AlertDialogHeader>
+        <AlertDialogFooter><AlertDialogCancel>{cancel}</AlertDialogCancel><AlertDialogAction variant={variant}>{action}</AlertDialogAction></AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </div>;
+}
+
 export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
   const examples: GuideExample[] = [false, true].map((destructive) => {
@@ -17,13 +37,7 @@ export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
       title: destructive ? (zh ? "危险操作" : "Destructive action") : (zh ? "基础用法" : "Basic"),
       description: destructive ? (zh ? "不可撤销的操作使用一个 emphasis 按钮。示例只演示确认交互，不会删除实际地址。" : "Use one emphasis action for irreversible changes. This demo does not delete a real address.") : (zh ? "取消按钮排在确认之前。点击遮罩不会关闭；Escape、取消或确认可以关闭并恢复触发器焦点。" : "Cancel precedes confirmation. Outside presses do not dismiss; Escape, Cancel and confirmation close the dialog and restore trigger focus."),
       code: `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, Button } from "@yami/design-system";\n\n<AlertDialog>\n  <AlertDialogTrigger render={<Button variant="secondary" />}>${trigger}</AlertDialogTrigger>\n  <AlertDialogContent lang="${locale}">\n    <AlertDialogHeader>\n      <AlertDialogTitle>${title}</AlertDialogTitle>\n      <AlertDialogDescription>${description}</AlertDialogDescription>\n    </AlertDialogHeader>\n    <AlertDialogFooter>\n      <AlertDialogCancel>${cancel}</AlertDialogCancel>\n      <AlertDialogAction variant="${variant}">${action}</AlertDialogAction>\n    </AlertDialogFooter>\n  </AlertDialogContent>\n</AlertDialog>`,
-      preview: <div className={styles.row}><AlertDialog>
-        <AlertDialogTrigger render={<Button variant="secondary" />}>{trigger}</AlertDialogTrigger>
-        <AlertDialogContent lang={locale}>
-          <AlertDialogHeader><AlertDialogTitle>{title}</AlertDialogTitle><AlertDialogDescription>{description}</AlertDialogDescription></AlertDialogHeader>
-          <AlertDialogFooter><AlertDialogCancel>{cancel}</AlertDialogCancel><AlertDialogAction variant={variant}>{action}</AlertDialogAction></AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog></div>,
+      preview: <AlertDialogPreview {...{ locale, trigger, title, description, cancel, action, variant }} />,
     };
   });
   return <ComponentGuide previewMode="document" name="AlertDialog" slug="alert-dialog" locale={locale}

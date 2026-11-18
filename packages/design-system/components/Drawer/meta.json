@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Right-side desktop drawer with a responsive mobile bottom sheet. Native 200ms slide and 150ms scrim animations retain Sheet modal/focus behavior through exit and respect reduced motion.",
+  "description": "Responsive Base UI Drawer with four edges, configurable snap points, nested panels and non-modal interaction.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -12,12 +12,15 @@
   },
   "exports": [
     "Drawer",
-    "DrawerProps"
+    "DrawerProps",
+    "useDesktopViewport"
   ],
   "composes": [
-    "Sheet"
+    "Button"
   ],
   "props": {
+    "initialFocus": { "type": "Base UI Popup initialFocus", "required": false, "description": "Override focus on entry." },
+    "finalFocus": { "type": "Base UI Popup finalFocus", "required": false, "description": "Override the return target on dismissal." },
     "description": { "type": "string", "required": false, "description": "Optional supporting copy below the title, inside the fixed header above its divider. Linked with aria-describedby. Omission preserves the original header." },
     "open": {
       "type": "boolean",
@@ -45,11 +48,20 @@
       "required": true
     },
     "size": {
-      "type": "\"content\" | \"full\"",
+      "type": "\"content\" | \"full\" | \"half\"",
       "required": false,
       "default": "full",
-      "description": "Mobile bottom-sheet height; desktop is always full height."
+      "description": "Mobile starts at content, full (default), or half height. Half can snap to full. Desktop fills the right edge."
     },
+    "swipeDirection": { "type": "\"up\" | \"right\" | \"down\" | \"left\"", "required": false, "description": "Defaults to right on desktop and down on mobile." },
+    "showSwipeHandle": { "type": "boolean", "required": false, "description": "Show a drag handle. Defaults on for drawers with snap points." },
+    "modal": { "type": "boolean | \"trap-focus\"", "required": false, "default": "true" },
+    "disablePointerDismissal": { "type": "boolean", "required": false, "default": "false" },
+    "snapPoints": { "type": "(number | string)[]", "required": false, "description": "Ascending vertical stops in viewport fractions, pixels or rem." },
+    "snapPoint": { "type": "number | string | null", "required": false, "description": "Controlled active stop." },
+    "defaultSnapPoint": { "type": "number | string | null", "required": false, "description": "Initial stop when uncontrolled." },
+    "onSnapPointChange": { "type": "(point, details) => void", "required": false },
+    "snapToSequentialPoints": { "type": "boolean", "required": false, "default": "true" },
     "contentPadding": {
       "type": "\"default\" | \"compact\" | \"none\"",
       "required": false,
@@ -84,13 +96,15 @@
     "keyboardNav": [
       "tab",
       "shift+tab",
+      "arrow keys",
       "escape",
       "enter"
     ],
-    "ariaPattern": "Named native modal dialog"
+    "ariaPattern": "Named dialog with optional modal isolation and vertical height slider"
   },
   "dependencies": {
     "runtime": [
+      "@base-ui/react",
       "react"
     ],
     "peer": [],
@@ -102,6 +116,6 @@
   ],
   "testing": {
     "interaction": "covered",
-    "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
+    "rationale": "Storybook covers child-view navigation. Browser tests cover touch snap points, keyboard resizing, footer geometry, focus restoration and reduced motion."
   }
 }

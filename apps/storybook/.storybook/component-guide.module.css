@@ -1,4 +1,4 @@
 .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-200); }
 .item { display: grid; justify-items: center; gap: var(--space-100); }
 .ratios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-200); align-items: start; }
-.tones { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-200); padding: var(--space-200); background: color-mix(in srgb, var(--surface-primary) 50%, var(--surface-inverse)); border-radius: var(--radius-surface-default); }
+.tones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; row-gap: var(--space-200); padding-block: var(--space-200); }

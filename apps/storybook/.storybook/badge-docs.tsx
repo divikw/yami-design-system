@@ -12,6 +12,7 @@ export function BadgeDocsPage({ locale }: { locale: DocsLocale }) {
   const labels = zh ? ["价格", "促销", "低价", "折扣", "新品", "热门", "独家", "精选", "畅销"] : ["PRICE", "SALE", "LOW PRICE", "DISCOUNT", "NEW", "HOT", "EXCLUSIVE", "CHOICE", "BEST SELLERS"];
   const colors = ["neutral", "red", "blue", "green", "purple", "yellow"] as const;
   const tones = ["dark", "light", "dark-outline", "light-outline"] as const;
+  const toneBackground = "linear-gradient(to right, var(--color-white-1000) 50%, var(--color-neutral-900) 50%)";
   const examples: GuideExample[] = [
     { id: "basic", title: zh ? "基础用法" : "Basic", description: zh ? "用于简短状态与促销信息，默认高度 20px。Badge 是展示标签，不提供按钮交互。" : "Use for short status and promotion labels. The default height is 20px. Badge is a display label without button behavior.",
       code: codeRow(['<Badge>Badge</Badge>', '<Badge type="sale">SALE</Badge>', '<Badge type="new">NEW</Badge>', '<Badge type="choice">CHOICE</Badge>']),
@@ -25,11 +26,13 @@ export function BadgeDocsPage({ locale }: { locale: DocsLocale }) {
     { id: "sizes", title: zh ? "尺寸" : "Sizes", description: zh ? "sm：20px 高 / 12px 字号；md：24px 高 / 14px 字号。PC 与 Mobile 保持一致。" : "sm: 20px height / 12px type. md: 24px height / 14px type. Sizes are identical on desktop and mobile.",
       code: codeRow(['<Badge size="sm">Small</Badge>', '<Badge size="md">Medium</Badge>']),
       preview: <div className={styles.row}><Badge size="sm">Small</Badge><Badge size="md">Medium</Badge></div> },
-    { id: "tones", title: zh ? "背景适配" : "Surface tones", description: zh ? "tone 优先控制视觉样式，同时保留 Badge 的尺寸和圆角；选择与承载背景有足够对比的样式。" : "tone takes visual priority while preserving size and radius. Choose a tone with sufficient contrast against its background.",
-      code: `${importCode}\n\n<div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "var(--space-200)", padding: "var(--space-200)", background: "color-mix(in srgb, var(--surface-primary) 50%, var(--surface-inverse))", borderRadius: "var(--radius-surface-default)" }}>\n${tones.map((tone) => `  <Badge tone="${tone}">${tone}</Badge>`).join("\n")}\n</div>`,
+    { id: "tones", title: zh ? "背景适配" : "Surface tones", description: zh ? "左侧浅底展示 dark 和 dark-outline，右侧深底展示 light 和 light-outline。" : "Compare dark and dark-outline on the light surface at left with light and light-outline on the dark surface at right.",
+      code: `${importCode}\n\n<div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", justifyItems: "center", rowGap: "var(--space-200)", paddingBlock: "var(--space-200)", background: "${toneBackground}" }}>\n${tones.map((tone) => `  <Badge tone="${tone}">${tone}</Badge>`).join("\n")}\n</div>`,
+      previewBackground: toneBackground,
       preview: <div className={styles.tones}>{tones.map((tone) => <Badge key={tone} tone={tone}>{tone}</Badge>)}</div> },
   ];
   return <ComponentGuide name="Badge" slug="badge" locale={locale}
+    usageCode={`${importCode}\n\n<Badge type="sale">${zh ? "促销" : "Sale"}</Badge>`}
     intro={zh ? "用于商品状态、促销和计数的小型标签，支持语义变体、颜色与尺寸。" : "A compact label for product status, promotions and counts, with semantic variants, colors and sizes."}
     previous={{ name: "Avatar", path: "yami-components-data-display-avatar" }}
     next={{ name: "Breadcrumb", path: "yami-components-navigation-breadcrumb" }} composition={"Badge\n├── FlagPrefix (optional, internal)\n└── children"} examples={examples}

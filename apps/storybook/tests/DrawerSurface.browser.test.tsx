@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Sheet } from "../../../packages/design-system/components/Sheet";
+import { Drawer } from "../../../packages/design-system/components/Drawer";
 import { Checkbox } from "../../../packages/design-system/components/Checkbox";
 import "@yami/design-system/tokens.css";
 
@@ -11,43 +11,44 @@ function Demo() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button onClick={() => setOpen(true)}>Open sheet</button>
-      <Sheet open={open} title="Details" closeLabel="Close details" onClose={() => setOpen(false)} footer={<button>Apply</button>}>
+      <button onClick={() => setOpen(true)}>Open drawer</button>
+      <Drawer open={open} title="Details" closeLabel="Close details" onClose={() => setOpen(false)} footer={<button>Apply</button>}>
         <input aria-label="Search" />
         <button disabled>Disabled</button>
         <div hidden><button>Hidden</button></div>
         <textarea aria-label="Notes" />
         {Array.from({ length: 30 }, (_, index) => <p key={index}>Content {index}</p>)}
-      </Sheet>
+      </Drawer>
     </>
   );
 }
 
 const brands = ["SKIN1004", "COSRX", "Anua"];
 
-test("Sheet keeps its accessible description and divider in the fixed header while content scrolls", async () => {
+test("Drawer keeps its accessible description and divider in the fixed header while content scrolls", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   try {
     await page.viewport(375, 812);
-    flushSync(() => root.render(<Sheet open size="full" title="Coupons" description="Only applicable coupons are shown."
+    flushSync(() => root.render(<Drawer open size="full" title="Coupons" description="Only applicable coupons are shown."
       closeLabel="Close coupons" onClose={() => {}} aria-describedby="extra-description">
       <p id="extra-description">Select one coupon.</p>
       {Array.from({ length: 40 }, (_, index) => <p key={index}>Coupon {index + 1}</p>)}
       <button>Last coupon</button>
-    </Sheet>));
-    const dialog = document.querySelector("[data-sheet]")!;
-    const description = dialog.querySelector('[data-slot="sheet-description"]')!;
-    const header = dialog.querySelector('[data-slot="sheet-header"]')!;
+    </Drawer>));
+    const dialog = document.querySelector("[data-drawer]")!;
+    const description = dialog.querySelector('[data-slot="drawer-description"]')!;
+    const header = dialog.querySelector('[data-slot="drawer-header"]')!;
     expect(dialog.getAttribute("aria-describedby")).toContain(description.id);
     expect(dialog.getAttribute("aria-describedby")).toContain("extra-description");
     expect(header.contains(description)).toBe(true);
     expect(getComputedStyle(header).borderBottomWidth).toBe("1px");
+    await expect.poll(() => dialog.getAttribute("data-drawer-state")).toBe("open");
     const top = description.getBoundingClientRect().top;
     await page.getByRole("button", { name: "Last coupon", exact: true }).click();
-    expect(dialog.querySelector('[data-sheet-content]')!.scrollTop).toBeGreaterThan(0);
+    expect(dialog.querySelector('[data-drawer-content]')!.scrollTop).toBeGreaterThan(0);
     expect(description.getBoundingClientRect().top).toBe(top);
   } finally {
     root.unmount(); container.remove();
@@ -55,7 +56,7 @@ test("Sheet keeps its accessible description and divider in the fixed header whi
   }
 });
 
-test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobile and square corners on desktop", async (size) => {
+test.each(["content", "full"] as const)("Drawer %s uses 16px top corners on mobile and square corners on desktop", async (size) => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -63,10 +64,12 @@ test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobil
   try {
     for (const theme of ["light", "dark"]) {
       document.documentElement.classList.toggle("dark", theme === "dark");
-      flushSync(() => root.render(<Sheet open title="Details" closeLabel="Close details" onClose={() => {}} size={size}>Details</Sheet>));
+      flushSync(() => root.render(<Drawer open title="Details" closeLabel="Close details" onClose={() => {}} size={size}>Details</Drawer>));
       for (const width of [375, 1023, 1024, 1440]) {
         await page.viewport(width, 812);
-        const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+        const dialog = document.querySelector<HTMLDivElement>("[data-drawer]")!;
+        await expect.poll(() => dialog.dataset.swipeDirection).toBe(width < 1024 ? "down" : "right");
+        await expect.poll(() => dialog.dataset.drawerState).toBe("open");
         const style = getComputedStyle(dialog);
         expect(style.getPropertyValue("--radius-surface-sheet").trim()).toBe("16px");
         expect(style.borderTopLeftRadius).toBe(width < 1024 ? "16px" : "0px");
@@ -76,9 +79,9 @@ test.each(["content", "full"] as const)("Sheet %s uses 16px top corners on mobil
         const close = page.getByRole("button", { name: "Close details", exact: true }).element();
         const button = close.getBoundingClientRect();
         const surface = dialog.getBoundingClientRect();
-        expect([button.width, button.height]).toEqual([32, 32]);
-        expect(button.top - surface.top).toBe(width < 1024 ? 8 : 16);
-        expect(surface.right - button.right).toBe(width < 1024 ? 8 : 16);
+        expect([button.width, button.height]).toEqual([24, 24]);
+        expect(button.top - surface.top).toBeCloseTo(width < 1024 ? 16 : 24, 2);
+        expect(surface.right - button.right).toBeCloseTo(width < 1024 ? 16 : 24, 2);
         expect(close.querySelector("img")!.getBoundingClientRect().width).toBe(24);
         expect(getComputedStyle(close, "::before").width).toBe("44px");
       }
@@ -104,7 +107,7 @@ function ChildDemo() {
   return (
     <>
       <button onClick={() => { setChild(false); setOpen(true); }}>Open filters</button>
-      <Sheet
+      <Drawer
         open={open}
         title={child ? "Brand" : "All filters"}
         closeLabel="Close filters"
@@ -133,12 +136,12 @@ function ChildDemo() {
             ))}
           </div>
         )}
-      </Sheet>
+      </Drawer>
     </>
   );
 }
 
-test("Sheet confines focus, keeps its footer fixed and releases its modal lock across breakpoints", async () => {
+test("Drawer confines focus, keeps its footer fixed and releases its modal lock across breakpoints", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -148,9 +151,10 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
     flushSync(() => root.render(<StrictMode><Demo /></StrictMode>));
     for (const width of [375, 768, 1440]) {
       await page.viewport(width, 812);
-      await page.getByRole("button", { name: "Open sheet" }).click();
-      const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+      await page.getByRole("button", { name: "Open drawer" }).click();
+      const dialog = document.querySelector<HTMLDivElement>("[data-drawer]")!;
       expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
+      await expect.poll(() => dialog.dataset.drawerState).toBe("open");
       const bounds = dialog.getBoundingClientRect();
       expect(bounds.width).toBe(width < 1024 ? width : 480);
       if (width < 1024) {
@@ -166,14 +170,14 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       const closeBounds = close.getBoundingClientRect();
       const closeIcon = close.querySelector<HTMLImageElement>("img")!;
       const closeIconBounds = closeIcon.getBoundingClientRect();
-      expect(closeBounds.width).toBe(32);
-      expect(closeBounds.height).toBe(32);
+      expect(closeBounds.width).toBe(24);
+      expect(closeBounds.height).toBe(24);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       expect(getComputedStyle(close, "::before").height).toBe("44px");
       expect(closeIconBounds.width).toBe(24);
       expect(closeIconBounds.height).toBe(24);
-      expect(bounds.right - closeIconBounds.right).toBe(width < 1024 ? 12 : 20);
-      expect(closeIconBounds.top - bounds.top).toBe(width < 1024 ? 12 : 20);
+      expect(bounds.right - closeIconBounds.right).toBe(width < 1024 ? 16 : 24);
+      expect(closeIconBounds.top - bounds.top).toBe(width < 1024 ? 16 : 24);
       await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab();
       expect(document.activeElement?.getAttribute("aria-label")).toBe("Search");
@@ -185,15 +189,15 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
       await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab({ shift: true });
       expect(document.activeElement?.textContent).toBe("Apply");
-      const content = dialog.querySelector<HTMLElement>("[data-sheet-content]")!;
-      const footer = dialog.querySelector<HTMLElement>('[data-slot="sheet-footer"]')!;
+      const content = dialog.querySelector<HTMLElement>("[data-drawer-content]")!;
+      const footer = dialog.querySelector<HTMLElement>('[data-slot="drawer-footer"]')!;
       const footerTop = footer.getBoundingClientRect().top;
       content.scrollTop = content.scrollHeight;
       expect(content.scrollTop).toBeGreaterThan(100);
       expect(footer.getBoundingClientRect().top).toBe(footerTop);
       await userEvent.keyboard("{Escape}");
-      await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
-      await expect.poll(() => document.activeElement?.textContent).toBe("Open sheet");
+      await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
+      await expect.poll(() => document.activeElement?.textContent).toBe("Open drawer");
       expect(document.documentElement.style.overflow).toBe(originalOverflow);
       expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
     }
@@ -205,7 +209,7 @@ test("Sheet confines focus, keeps its footer fixed and releases its modal lock a
   }
 });
 
-test("Sheet keeps content clicks open, dismisses the backdrop, and preserves an existing scroll lock", async () => {
+test("Drawer keeps content clicks open, dismisses the backdrop, and preserves an existing scroll lock", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -215,16 +219,16 @@ test("Sheet keeps content clicks open, dismisses the backdrop, and preserves an 
     await page.viewport(375, 812);
     document.documentElement.style.overflow = "hidden";
     flushSync(() => root.render(<Demo />));
-    await page.getByRole("button", { name: "Open sheet" }).click();
-    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+    await page.getByRole("button", { name: "Open drawer" }).click();
+    const dialog = document.querySelector<HTMLDivElement>("[data-drawer]")!;
     await page.getByRole("textbox", { name: "Search" }).click();
     expect(dialog.getAttribute("aria-modal") === "true").toBe(true);
     await userEvent.click(dialog.parentElement!, { position: { x: 4, y: 4 } });
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(document.documentElement.style.overflow).toBe("hidden");
-    await page.getByRole("button", { name: "Open sheet" }).click();
+    await page.getByRole("button", { name: "Open drawer" }).click();
     flushSync(() => root.render(null));
-    expect(document.querySelector("[data-sheet]")).toBeNull();
+    expect(document.querySelector("[data-drawer]")).toBeNull();
     expect(document.documentElement.style.overflow).toBe("hidden");
   } finally {
     root.unmount();
@@ -235,14 +239,14 @@ test("Sheet keeps content clicks open, dismisses the backdrop, and preserves an 
   }
 });
 
-test("Sheet child view returns to its parent without closing the dialog and keeps selections", async () => {
+test("Drawer child view returns to its parent without closing the dialog and keeps selections", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
   try {
     flushSync(() => root.render(<ChildDemo />));
     await page.getByRole("button", { name: "Open filters" }).click();
-    expect(getComputedStyle(document.querySelector<HTMLElement>("[data-sheet-content]")!).padding).toBe("8px");
+    expect(getComputedStyle(document.querySelector<HTMLElement>("[data-drawer-content]")!).padding).toBe("8px");
     await page.getByRole("button", { name: "Brand" }).click();
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Back to filters");
     expect(page.getByRole("checkbox").elements()).toHaveLength(3);
@@ -253,7 +257,7 @@ test("Sheet child view returns to its parent without closing the dialog and keep
     expect(page.getByRole("button", { name: "Brand 2 selected" })).toBeVisible();
     expect(document.activeElement?.textContent).toContain("Brand 2 selected");
     await page.getByRole("button", { name: "View results" }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
   } finally {
     root.unmount();
     document.documentElement.classList.remove("dark");

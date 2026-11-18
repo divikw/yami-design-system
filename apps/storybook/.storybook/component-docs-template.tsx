@@ -4,7 +4,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { SyntaxHighlighter } from "storybook/internal/components";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import { Button } from "@yami/design-system";
-import { ComponentDocsPreview } from "./component-docs-preview";
+import { ComponentDocsPreview, type DocsPreviewMode } from "./component-docs-preview";
 import styles from "./component-docs-template.module.css";
 
 export type DocsLocale = "zh" | "en";
@@ -36,21 +36,42 @@ export function CodeBlock({ code, locale, collapsible = false, language = "tsx" 
   </div>;
 }
 
+const installCommand = 'pnpm add "@yami/design-system@workspace:*"';
+const installDependency = '{\n  "dependencies": {\n    "@yami/design-system": "workspace:*"\n  }\n}';
+const installStyles = 'import "@yami/design-system/styles/fonts.css";\nimport "@yami/design-system/tokens.css";\nimport "@yami/design-system/styles/base.css";';
+
+function installationText(locale: Locale) {
+  return {
+    intro: locale === "zh" ? "当前组件通过 YAMI 工作区包提供。在同一 monorepo 的消费应用中添加依赖。" : "This component is provided by the YAMI workspace package. Add the dependency in a consuming app within the same monorepo.",
+    tabs: locale === "zh" ? ["命令", "手动"] : ["Command", "Manual"],
+    styles: locale === "zh" ? "在应用入口引入一次字体、令牌和基础样式。" : "Import fonts, tokens and base styles once in your application entry point.",
+  };
+}
+
+export function installationMarkdown(locale: Locale) {
+  const { intro, tabs, styles } = installationText(locale);
+  return [
+    intro, tabs[0], "```bash\n" + installCommand + "\n```",
+    tabs[1], "```json\n" + installDependency + "\n```",
+    styles, "```tsx\n" + installStyles + "\n```",
+  ].join("\n\n");
+}
+
 export function Installation({ locale }: { locale: Locale }) {
   const [manual, setManual] = useState(false);
-  const tabs = locale === "zh" ? ["命令", "手动"] : ["Command", "Manual"];
+  const { intro, tabs, styles: stylesIntro } = installationText(locale);
   return <>
-    <p>{locale === "zh" ? "当前组件通过 YAMI 工作区包提供。在同一 monorepo 的消费应用中添加依赖。" : "This component is provided by the YAMI workspace package. Add the dependency in a consuming app within the same monorepo."}</p>
+    <p>{intro}</p>
     <div className={styles.tabs} role="group" aria-label={locale === "zh" ? "安装方式" : "Installation method"}>{tabs.map((label, index) => <button key={label} type="button" aria-pressed={manual === Boolean(index)} onClick={() => setManual(Boolean(index))}>{label}</button>)}</div>
-    <CodeBlock code={manual ? '{\n  "dependencies": {\n    "@yami/design-system": "workspace:*"\n  }\n}' : 'pnpm add "@yami/design-system@workspace:*"'} language={manual ? "json" : "bash"} locale={locale} />
-    <p>{locale === "zh" ? "在应用入口引入一次字体、令牌和基础样式。" : "Import fonts, tokens and base styles once in your application entry point."}</p>
-    <CodeBlock locale={locale} code={'import "@yami/design-system/styles/fonts.css";\nimport "@yami/design-system/tokens.css";\nimport "@yami/design-system/styles/base.css";'} />
+    <CodeBlock code={manual ? installDependency : installCommand} language={manual ? "json" : "bash"} locale={locale} />
+    <p>{stylesIntro}</p>
+    <CodeBlock locale={locale} code={installStyles} />
   </>;
 }
 
-export function DocsExample({ code, locale, children, name, previewMode }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: "viewport" | "document" }) {
+export function DocsExample({ code, locale, children, name, previewMode, previewBackground }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: DocsPreviewMode; previewBackground?: string }) {
   return <div className={styles.example} data-example={name}>
-    <ComponentDocsPreview locale={locale} name={name} mode={previewMode}>{children}</ComponentDocsPreview>
+    <ComponentDocsPreview locale={locale} name={name} mode={previewMode} previewBackground={previewBackground}>{children}</ComponentDocsPreview>
     <CodeBlock code={code} locale={locale} collapsible />
   </div>;
 }

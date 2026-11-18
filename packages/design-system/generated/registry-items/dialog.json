@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Base UI modal for short forms, editing and general information, with the existing YAMI controlled interface.",
+  "description": "Base UI modal for short forms, editing and general information, with composable parts and a controlled shorthand interface.",
   "source": "components/Dialog",
   "files": [
     {
@@ -28,7 +28,19 @@
   ],
   "exports": [
     "Dialog",
-    "DialogProps"
+    "DialogBody",
+    "DialogClose",
+    "DialogContent",
+    "DialogContentProps",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogOverlay",
+    "DialogPortal",
+    "DialogProps",
+    "DialogRootProps",
+    "DialogTitle",
+    "DialogTrigger"
   ],
   "composes": [
     "Button"
@@ -63,10 +75,10 @@
       "--overlay-scrim",
       "--radius-button-primary",
       "--radius-surface-default",
-      "--space-050",
       "--space-100",
       "--space-150",
       "--space-200",
+      "--space-250",
       "--space-300",
       "--space-400",
       "--space-600",
@@ -115,5 +127,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "995a3f6577b9a5895703e0e8e829ecf9f44a00267f7d2f33ca6f5d2c5409d03d"
+  "contentDigest": "474999631c5c20d7ea5e4e5ed57135bd0e8a705e2246a90b90115eb8c03d3c7c"
 }

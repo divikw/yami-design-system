@@ -1,5 +1,63 @@
 .drawer {
+  --drawer-padding: var(--space-200);
   --drawer-enter-from: translateY(100%);
+  --drawer-position: translateY(calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y, 0px)));
+  transform: var(--drawer-position);
+  pointer-events: auto;
+}
+
+.drawer > [data-drawer-content] {
+  font-size: var(--font-size-body-xl);
+  line-height: var(--line-height-body-xl);
+}
+
+/* Ordinary body paragraphs follow the drawer's typography; named text styles can override it. */
+.drawer > :where([data-drawer-content]) > p:where(:not([class])) {
+  font-size: inherit;
+  line-height: inherit;
+  margin-block: 0;
+}
+
+/* The translated portion is below the viewport. Reserve it so the footer stays visible. */
+.drawer[data-snap-points] {
+  padding-bottom: max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y, 0px)));
+}
+
+.drawer[data-drawer-state="open"]:not([data-swiping]) {
+  transition: transform 200ms ease-out, padding-bottom 200ms ease-out, padding-top 200ms ease-out;
+}
+
+.handle {
+  --grip-length: 100px;
+  --grip-thickness: 6px;
+  --grip-inset: 6px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: var(--grip-length);
+  height: 44px;
+  touch-action: none;
+  cursor: grab;
+}
+
+.handle::before {
+  content: "";
+  position: absolute;
+  top: var(--grip-inset);
+  width: var(--grip-length);
+  height: var(--grip-thickness);
+  border-radius: var(--radius-full);
+  background: var(--surface-secondary);
+}
+
+.handle:active { cursor: grabbing; }
+
+.handle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
 }
 
 .drawer[data-drawer-state="entering"] {
@@ -10,21 +68,21 @@
   animation: drawer-exit 200ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-:global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state="entering"]) {
+:global([data-drawer-backdrop]):has(+ :global([data-drawer-viewport]) > .drawer[data-drawer-state="entering"]) {
   animation: drawer-scrim-enter 150ms cubic-bezier(0, 0, 0.2, 1) both;
 }
 
-:global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state="exiting"]) {
+:global([data-drawer-backdrop]):has(+ :global([data-drawer-viewport]) > .drawer[data-drawer-state="exiting"]) {
   animation: drawer-scrim-exit 150ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
 @keyframes drawer-enter {
   from { transform: var(--drawer-enter-from); }
-  to { transform: translate(0, 0); }
+  to { transform: var(--drawer-position); }
 }
 
 @keyframes drawer-exit {
-  from { transform: translate(0, 0); }
+  from { transform: var(--drawer-position); }
   to { transform: var(--drawer-enter-from); }
 }
 
@@ -38,11 +96,80 @@
   to { opacity: 0; }
 }
 
+.drawer[data-drawer][data-swipe-direction] {
+  margin: 0;
+}
+
+.drawer[data-drawer]:is([data-swipe-direction="left"], [data-swipe-direction="right"]) {
+  inset: 0 0 0 auto;
+  width: min(480px, 85vw);
+  height: 100dvh;
+  max-height: none;
+  min-height: 0;
+  border-radius: 0;
+  --drawer-enter-from: translateX(100%);
+  --drawer-position: translateX(var(--drawer-swipe-movement-x, 0px));
+}
+
+.drawer[data-drawer][data-swipe-direction="left"] {
+  inset: 0 auto 0 0;
+  --drawer-enter-from: translateX(-100%);
+}
+
+.drawer[data-drawer]:is([data-swipe-direction="up"], [data-swipe-direction="down"]) {
+  inset: auto 0 0;
+  width: 100%;
+  height: auto;
+  min-height: 50dvh;
+  max-height: calc(100dvh - max(env(safe-area-inset-top), var(--space-600)));
+  border-radius: var(--radius-surface-sheet) var(--radius-surface-sheet) 0 0;
+  --drawer-enter-from: translateY(100%);
+  --drawer-position: translateY(calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y, 0px)));
+}
+
+.drawer[data-drawer][data-size="full"]:is([data-swipe-direction="up"], [data-swipe-direction="down"]) {
+  height: calc(100dvh - max(env(safe-area-inset-top), var(--space-600)));
+}
+
+.drawer[data-drawer][data-swipe-direction="up"] {
+  inset: 0 0 auto;
+  border-radius: 0 0 var(--radius-surface-sheet) var(--radius-surface-sheet);
+  --drawer-enter-from: translateY(-100%);
+}
+
+.drawer[data-swipe-direction="up"][data-snap-points] {
+  padding-bottom: 0;
+  padding-top: max(0px, calc(-1 * (var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y, 0px))));
+}
+
+.drawer[data-swipe-direction="up"] .handle { top: auto; bottom: 0; }
+.drawer[data-swipe-direction="up"] .handle::before { top: auto; bottom: var(--grip-inset); }
+.drawer[data-swipe-direction="up"]:has(.handle) { padding-bottom: 44px; }
+.drawer:is([data-swipe-direction="left"], [data-swipe-direction="right"]) .handle {
+  top: 50%;
+  left: 0;
+  width: 44px;
+  height: var(--grip-length);
+  transform: translateY(-50%);
+}
+.drawer[data-swipe-direction="left"] .handle { left: auto; right: 0; }
+.drawer:is([data-swipe-direction="left"], [data-swipe-direction="right"]) .handle::before {
+  top: auto;
+  width: var(--grip-thickness);
+  height: var(--grip-length);
+}
+
+.drawer[data-swipe-direction="right"] .handle::before { left: var(--grip-inset); }
+.drawer[data-swipe-direction="left"] .handle::before { right: var(--grip-inset); }
+
+.drawer[data-nested-drawer-open] { filter: brightness(.95); }
+
 @media (min-width: 1024px) {
-  .drawer { --drawer-enter-from: translateX(100%); }
+  .drawer { --drawer-padding: var(--space-300); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .drawer[data-drawer-state] { animation-duration: 0ms; }
-  :global([data-sheet-backdrop]):has(+ :global([data-sheet-viewport]) > .drawer[data-drawer-state]) { animation-duration: 0ms; }
+  .drawer[data-drawer-state="open"]:not([data-swiping]) { transition: none; }
+  :global([data-drawer-backdrop]):has(+ :global([data-drawer-viewport]) > .drawer[data-drawer-state]) { animation-duration: 0ms; }
 }

@@ -31,7 +31,7 @@ Open [`DESIGN.compact.md`](./DESIGN.compact.md) (~120 lines).
 
 It tells you in one screen:
 - The two reds (`#FF0000` brand vs `#E00000` operational), what each is allowed on.
-- The 6 semantic radius slots (including 16px mobile Sheet top corners), the 8px spacing grid.
+- The 6 semantic radius slots (including 16px mobile Drawer top corners), the 8px spacing grid.
 - The font story (GT Walsheim for numerals, PingFang SC for CN body).
 - The maintained component families and what they do.
 - The 15 hard rules as one-liners.

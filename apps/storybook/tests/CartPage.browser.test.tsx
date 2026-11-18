@@ -76,7 +76,7 @@ test.each([375, 1440])("CartPage keeps checkout red and validates an empty selec
     expect(container.textContent).not.toContain("请至少选择1件商品去结算");
     await checkout.click();
     await expect.element(page.getByRole("alert")).toHaveTextContent("请至少选择1件商品去结算");
-    expect(document.querySelector("[data-sheet]")).toBeNull();
+    expect(document.querySelector("[data-drawer]")).toBeNull();
     await page.getByRole("checkbox", { name: `选择 ${fixture.initialItems[0].title}`, exact: true }).click();
     expect(container.querySelector('[data-slot="cart-checkout-bar"] [role="alert"]')).toBeNull();
     await page.getByRole("button", { name: /^去结算 \(/ }).click();
@@ -99,7 +99,7 @@ for (const locale of ["zh", "en"] as const) {
       await page.viewport(width, 812);
       flushSync(() => root.render(<CartPage {...createCartPageFixture(locale)} />));
       if (width < 1024) await page.getByRole("button", { name: locale === "zh" ? "编辑 优惠券" : "Edit Coupons", exact: true }).click();
-      const form = document.querySelector<HTMLInputElement>(width < 1024 ? '[data-sheet] input[data-slot="input-control"]' : 'aside input[data-slot="input-control"]')!.form!;
+      const form = document.querySelector<HTMLInputElement>(width < 1024 ? '[data-drawer] input[data-slot="input-control"]' : 'aside input[data-slot="input-control"]')!.form!;
       const input = form.querySelector("input")!;
       const field = form.querySelector<HTMLElement>('div[class*="field"]')!;
       const redeem = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
@@ -262,7 +262,7 @@ test("CartPage invalidates coupons and keeps removal feedback inline", async () 
     await page.viewport(1440, 812);
     flushSync(() => root.render(<CartPage {...fixture} />));
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
-    const unavailableDialog = document.querySelector("[data-sheet]")!;
+    const unavailableDialog = document.querySelector("[data-drawer]")!;
     expect(unavailableDialog.scrollWidth).toBeLessThanOrEqual(unavailableDialog.clientWidth);
     const itemDescription = unavailableDialog.querySelector('[data-slot="cart-item"] p')!;
     expect(getComputedStyle(itemDescription).marginTop).toBe("0px");
@@ -273,7 +273,7 @@ test("CartPage invalidates coupons and keeps removal feedback inline", async () 
     await expect.element(page.getByRole("dialog", { name: "Coupons", exact: true })).toBeVisible();
     await page.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await page.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     const totals = container.querySelector('[data-slot="cart-totals"]')!;
     expect(totals.textContent).toContain("Discount");
     await page.getByRole("checkbox", { name: /^Select all/ }).click();
@@ -403,8 +403,8 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
     expect(Math.abs(glyph.getBoundingClientRect().top + glyph.getBoundingClientRect().height / 2 - merchant.getBoundingClientRect().top - merchant.getBoundingClientRect().height / 2)).toBeLessThan(1);
     const target = merchant.parentElement!;
     for (const checkbox of [all, merchant, item]) {
-      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().width).toBe(40);
-      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(40);
+      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().width).toBe(width >= 1024 ? 32 : 40);
+      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(width >= 1024 ? 32 : 40);
     }
     await page.getByRole("checkbox", { name: `Select ${fixture.initialItems[0].title}`, exact: true }).click();
     expect(merchant.getAttribute("aria-checked")).toBe("false");
@@ -512,7 +512,7 @@ test.each([375, 1440])("CartPage protection drawer includes source artwork and p
     flushSync(() => root.render(<CartPage {...createCartPageFixture("zh")} />));
     const opener = page.getByRole("button", { name: "了解更多", exact: true });
     await opener.click();
-    const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
+    const dialog = document.querySelector<HTMLDivElement>("[data-drawer]")!;
     await expect.element(page.elementLocator(dialog)).toHaveAccessibleName("服务保障");
     expect(dialog.querySelectorAll('h3 img')).toHaveLength(4);
     const payments = dialog.querySelector('ul[aria-label="支付方式"]')!;
@@ -523,14 +523,14 @@ test.each([375, 1440])("CartPage protection drawer includes source artwork and p
     expect(dialog.textContent).toContain("绝不出售、出租或以任何方式从您的个人信息中获利");
     expect(dialog.textContent).toContain("运输丢失可退款");
     expect(dialog.textContent).toContain("FedEx、Amazon、DHL、OnTrac、UPS");
-    expect(dialog.querySelector('[data-slot="sheet-footer"]')).toBeNull();
+    expect(dialog.querySelector('[data-slot="drawer-footer"]')).toBeNull();
     const images = [...dialog.querySelectorAll<HTMLImageElement>('ul[aria-label] img')];
     await expect.poll(() => images.every((image) => image.complete && image.naturalWidth > 0)).toBe(true);
     expect([...payments.children].every((item) => item.getBoundingClientRect().height === 32)).toBe(true);
     expect([...certifications.children].every((item) => item.getBoundingClientRect().height === 32)).toBe(true);
     if (width === 1440) {
       expect(dialog.getBoundingClientRect().width).toBe(480);
-      const body = dialog.querySelector('[data-sheet-content]')!;
+      const body = dialog.querySelector('[data-drawer-content]')!;
       expect(getComputedStyle(body).paddingTop).toBe("24px");
       expect(getComputedStyle(body).paddingLeft).toBe("32px");
       expect(getComputedStyle(dialog.querySelector('header h2')!).fontSize).toBe("32px");
@@ -675,14 +675,14 @@ test("CartPage reports coupon changes and focuses the empty unavailable drawer a
     let dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
     await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).toContain("Discount");
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
     await expect.element(dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true })).toBeChecked();
     await dialog.getByRole("checkbox", { name: fixture.coupons[0].title, exact: true }).click();
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).not.toContain("Discount");
     await page.getByRole("button", { name: "View all Unavailable items", exact: true }).click();
     dialog = page.getByRole("dialog", { name: "Unavailable items", exact: true });
@@ -828,8 +828,8 @@ for (const locale of ["zh", "en"] as const) {
       flushSync(() => root.render(<CartPage {...fixture} />));
       const opener = page.getByRole("button", { name: openerName, exact: true });
       await opener.click();
-      const dialog = document.querySelector<HTMLDivElement>("[data-sheet]")!;
-      const body = dialog.querySelector<HTMLElement>('[data-sheet-content]')!;
+      const dialog = document.querySelector<HTMLDivElement>("[data-drawer]")!;
+      const body = dialog.querySelector<HTMLElement>('[data-drawer-content]')!;
       const heading = dialog.querySelector('header h2')!;
       const row = dialog.querySelector<HTMLElement>('[data-slot="cart-item"]')!;
       const itemTitle = row.querySelector('h3')!;
@@ -838,7 +838,7 @@ for (const locale of ["zh", "en"] as const) {
       const price = row.querySelector('strong')!;
       const priceRow = price.parentElement!.parentElement!;
       const status = priceRow.querySelector('p')!;
-      expect(dialog.querySelector('[data-slot="sheet-footer"]')).toBeNull();
+      expect(dialog.querySelector('[data-slot="drawer-footer"]')).toBeNull();
       expect(body.scrollHeight).toBeGreaterThan(body.clientHeight);
       expect(dialog.scrollWidth).toBeLessThanOrEqual(dialog.clientWidth);
       expect(getComputedStyle(body).paddingTop).toBe("0px");
@@ -911,8 +911,8 @@ for (const locale of ["zh", "en"] as const) {
             expect(actions.getBoundingClientRect().top - identity.getBoundingClientRect().bottom).toBe(width < 1024 ? 4 : 0);
             expect(header.getBoundingClientRect().bottom - actions.getBoundingClientRect().bottom).toBe(width < 1024 ? 8 : 12);
             const checkbox = identity.querySelector('[data-slot="checkbox"]')!;
-            expect(checkbox.getBoundingClientRect().width).toBe(40);
-            expect(checkbox.getBoundingClientRect().height).toBe(40);
+            expect(checkbox.getBoundingClientRect().width).toBe(width >= 1024 ? 32 : 40);
+            expect(checkbox.getBoundingClientRect().height).toBe(width >= 1024 ? 32 : 40);
             expect(identity.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
             expect(Math.abs(actions.getBoundingClientRect().right - identity.getBoundingClientRect().right)).toBeLessThan(1);
             if (width >= 1024) {
@@ -1169,7 +1169,7 @@ test.each([1024, 1280, 1440])("CartPage keeps PC navigation pinned and the summa
     await expect.element(dialog).toBeVisible();
     await expect.poll(() => dialog.element().contains(document.elementFromPoint(width - 32, 32))).toBe(true);
     await userEvent.keyboard("{Escape}");
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
   } finally {
     root.unmount(); container.remove();
     await page.viewport(viewport.width, viewport.height);

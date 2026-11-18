@@ -88,6 +88,8 @@
       "--button-primary",
       "--button-primary-active",
       "--button-primary-active-inverse",
+      "--button-primary-hover",
+      "--button-primary-hover-inverse",
       "--button-primary-inverse",
       "--button-secondary",
       "--button-secondary-active",
@@ -143,9 +145,17 @@
         "property": "background-color",
         "selector": ".primary"
       },
+      "--button-primary-hover": {
+        "property": "background-color",
+        "selector": ".primary:hover:not(:active)"
+      },
+      "--button-primary-hover-inverse": {
+        "property": "background-color",
+        "selector": ".primary.inverse:hover:not(:active)"
+      },
       "--button-primary-active": {
         "property": "background-color",
-        "selector": ".primary:hover, .primary:active"
+        "selector": ".primary:active"
       },
       "--button-secondary": {
         "property": "background-color",
@@ -284,5 +294,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "134b5551d7f4c65bf7b2df1a5ab62146c7b4cc45596f5ac20ba7c51719a0b915"
+  "contentDigest": "b4554fc57dd77719a09296da9b3f19fc2452fa7b7ecf49804d994bf4307202b7"
 }

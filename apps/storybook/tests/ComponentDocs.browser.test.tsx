@@ -24,7 +24,7 @@ describe("component docs usage content", () => {
 
   test("resolves a spaced Storybook title to its component usage guide", async () => {
     const usage = await loadUsageForTitle(
-      "YAMI/Components/Commerce/Product Card",
+      "YAMI/Modules/Commerce/Product Card",
     );
 
     expect(usage).toContain("# ProductCard — 使用说明");
@@ -67,7 +67,7 @@ describe("component docs usage content", () => {
   });
 
   test("keeps existing single-language guides available in either locale", async () => {
-    const title = "YAMI/Components/Commerce/Product Card";
+    const title = "YAMI/Modules/Commerce/Product Card";
     expect(await loadUsageForTitle(title, "en")).toBe(await loadUsageForTitle(title, "zh"));
   });
 
@@ -88,12 +88,12 @@ describe("component docs usage content", () => {
   test("resolves renamed modules and draft groups to their source usage guides", async () => {
     expect(await loadUsageForTitle("YAMI/Modules/Commerce/Floating Bars")).toContain("# ");
     expect(await loadUsageForTitle("YAMI/Modules/Commerce/Product Review Section/Draft")).toContain("# ProductReviewSection");
-    expect(await loadUsageForTitle("YAMI/Components/Commerce/Product Media Gallery/Draft")).toContain("# ProductMediaGallery");
+    expect(await loadUsageForTitle("YAMI/Modules/Commerce/Product Media Gallery/Draft")).toContain("# ProductMediaGallery");
   });
 
   test.each([
     "YAMI/Modules/Commerce/Product Review Section/Draft",
-    "YAMI/Components/Commerce/Product Media Gallery/Draft",
+    "YAMI/Modules/Commerce/Product Media Gallery/Draft",
   ])("preserves the full usage content for lowercase index title %s", async (title) => {
     const original = await loadUsageForTitle(title);
     expect(original).toContain("# ");

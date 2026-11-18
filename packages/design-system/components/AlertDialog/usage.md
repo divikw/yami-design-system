@@ -1,7 +1,7 @@
 <!-- locale:zh -->
 # AlertDialog — 使用说明
 
-重要更改和不可撤销操作的确认弹窗。使用 Base UI Alert Dialog 管理模态、焦点、滚动锁定与关闭行为，YAMI 提供居中表面、文字和按钮样式。长任务、筛选和复杂表单优先使用 Dialog / Sheet；不要把普通提示都做成阻断弹窗。此组件尚无独立核验的 Figma 绑定，状态为 experimental。
+重要更改和不可撤销操作的确认弹窗。使用 Base UI Alert Dialog 管理模态、焦点、滚动锁定与关闭行为，YAMI 提供居中表面、文字和按钮样式。长任务、筛选和复杂表单优先使用 Dialog / Drawer；不要把普通提示都做成阻断弹窗。此组件尚无独立核验的 Figma 绑定，状态为 experimental。
 
 ## 用法
 
@@ -41,7 +41,7 @@ PC 和 Mobile 都居中，侧边至少保留 16px。1024px 起 PC 最大宽度 4
 <!-- locale:en -->
 # AlertDialog — Usage
 
-A modal confirmation for important or irreversible changes. Base UI owns modal behavior, focus, scroll locking and dismissal; YAMI owns the centered surface, typography and buttons. Prefer Dialog / Sheet for longer tasks, filters and complex forms. Experimental, with no independently verified Figma binding.
+A modal confirmation for important or irreversible changes. Base UI owns modal behavior, focus, scroll locking and dismissal; YAMI owns the centered surface, typography and buttons. Prefer Dialog / Drawer for longer tasks, filters and complex forms. Experimental, with no independently verified Figma binding.
 
 ## Composition
 

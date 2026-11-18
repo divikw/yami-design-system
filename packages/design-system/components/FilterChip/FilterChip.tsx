@@ -2,7 +2,6 @@ import {
   forwardRef,
   useState,
   useId,
-  useLayoutEffect,
   type ButtonHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
@@ -10,7 +9,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 
 import { Button } from "../Button";
-import { Sheet } from "../Sheet";
+import { Drawer, useDesktopViewport } from "../Drawer";
 import { Checkbox } from "../Checkbox";
 import { RadioGroup, RadioGroupItem } from "../RadioGroup";
 
@@ -152,24 +151,17 @@ function FilterChipPopup({
   children: ReactNode;
   footer?: ReactNode;
 }) {
-  const [mobile, setMobile] = useState(false);
+  const desktop = useDesktopViewport();
   const id = useId();
-  useLayoutEffect(() => {
-    const viewport = window.matchMedia("(max-width: 1023.98px)");
-    const update = () => setMobile(viewport.matches);
-    update();
-    viewport.addEventListener("change", update);
-    return () => viewport.removeEventListener("change", update);
-  }, []);
   const slot = category ? "filter-chip-category-menu" : "filter-chip-menu";
 
-  if (mobile) {
+  if (!desktop) {
     return (
       <>
         <FilterChip {...trigger.props} aria-haspopup="dialog" aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => onOpenChange(!open)} />
-        <Sheet open={open} id={id} title={title} closeLabel={closeLabel} onClose={() => onOpenChange(false)} contentPadding="none" footer={footer} data-slot={slot} data-selection-mode={selectionMode}>
+        <Drawer size="content" open={open} id={id} title={title} closeLabel={closeLabel} onClose={() => onOpenChange(false)} contentPadding="none" footer={footer} data-slot={slot} data-selection-mode={selectionMode}>
           {children}
-        </Sheet>
+        </Drawer>
       </>
     );
   }

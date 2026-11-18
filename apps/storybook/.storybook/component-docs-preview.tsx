@@ -2,22 +2,21 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styles from "./component-docs-template.module.css";
 
-// Match the yamiDesktop and yamiMobile Storybook viewports.
-const widths = { PC: 1024, Mobile: 375 } as const;
-const devices = ["PC", "Mobile"] as const;
 const frameMarkup = "<!doctype html><html><head></head><body></body></html>";
 
-type PreviewProps = { children: ReactNode; name?: string; locale: "zh" | "en"; mode?: "viewport" | "document" };
+export type DocsPreviewMode = "viewport" | "document";
+type PreviewProps = { children: ReactNode; name?: string; locale: "zh" | "en"; mode?: DocsPreviewMode; previewBackground?: string };
 
-export function ComponentDocsPreview({ mode = "viewport", ...props }: PreviewProps) {
-  if (mode === "document") return <div className={styles.preview}>
-    <div className={`${styles.page} ${styles.frameContent}`}><div className={styles.demo}>{props.children}</div></div>
+export function ComponentDocsPreview({ mode = "viewport", children, name, locale, previewBackground }: PreviewProps) {
+  return <div className={styles.preview}>
+    {mode === "viewport" ? <ViewportPreview name={name} locale={locale} previewBackground={previewBackground}>{children}</ViewportPreview> :
+      <div className={`${styles.page} ${styles.frameContent}`} style={{ background: previewBackground }}>
+        <div className={styles.demo}>{children}</div>
+      </div>}
   </div>;
-  return <ViewportPreview {...props} />;
 }
 
-function ViewportPreview({ children, name, locale }: PreviewProps) {
-  const [device, setDevice] = useState<keyof typeof widths>("PC");
+function ViewportPreview({ children, name, locale, previewBackground }: PreviewProps) {
   const [frameDocument, setFrameDocument] = useState<Document | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -53,6 +52,7 @@ function ViewportPreview({ children, name, locale }: PreviewProps) {
     };
 
     frameDocument.body.classList.add(styles.frameBody);
+    frameDocument.body.style.background = previewBackground ?? "";
     syncTheme();
     syncStyles();
     resize();
@@ -69,19 +69,15 @@ function ViewportPreview({ children, name, locale }: PreviewProps) {
       themeObserver.disconnect();
       resizeObserver.disconnect();
     };
-  }, [frameDocument]);
+  }, [frameDocument, previewBackground]);
 
   const label = locale === "zh" ? "示例预览" : "Example preview";
-  return <div className={styles.preview}>
-    <div className={`${styles.tabs} ${styles.previewDevices}`} role="group" aria-label={locale === "zh" ? "预览设备" : "Preview device"}>
-      {devices.map((option) => <button key={option} type="button" aria-pressed={device === option} onClick={() => setDevice(option)}>{option}</button>)}
-    </div>
-    <div className={styles.previewViewport} ref={viewportRef}>
+  return <>
+    <div className={styles.previewViewport} ref={viewportRef} style={{ background: previewBackground }}>
       <iframe
         className={styles.previewFrame}
         ref={frameRef}
-        title={`${label}${name ? ` · ${name}` : ""} · ${device}`}
-        width={widths[device]}
+        title={`${label}${name ? ` · ${name}` : ""}`}
         height={252}
         srcDoc={frameMarkup}
         loading="lazy"
@@ -92,5 +88,5 @@ function ViewportPreview({ children, name, locale }: PreviewProps) {
       <div ref={contentRef} className={`${styles.page} ${styles.frameContent}`}><div className={styles.demo}>{children}</div></div>,
       frameDocument.body,
     )}
-  </div>;
+  </>;
 }

@@ -67,12 +67,12 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
 
   useLayoutEffect(() => {
     if (!enabled || !active || mode !== "h5") return;
-    // Only page-owned fixed bars extend beneath Safari; inline tabs and sheet
+    // Only page-owned fixed bars extend beneath Safari; inline tabs and drawer
     // controls keep their ordinary backgrounds and positioning.
     const selector = '[data-slot="tab-bar"], [data-slot="cart-app-navigation"], [data-slot="cart-checkout-bar"], [data-slot="product-detail-purchase-checkout"]';
     const update = () => {
       document.querySelectorAll<HTMLElement>(selector).forEach((bar) => {
-        const fixed = getComputedStyle(bar).position === "fixed" && !bar.closest("[data-sheet]");
+        const fixed = getComputedStyle(bar).position === "fixed" && !bar.closest("[data-drawer]");
         if (bar.hasAttribute("data-phone-preview-bottom-bar") !== fixed) {
           bar.toggleAttribute("data-phone-preview-bottom-bar", fixed);
         }
@@ -95,7 +95,7 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
       html[data-prototype-preview-mode="h5"] [data-slot="cart-app-navigation"] { display: none; }
       html[data-prototype-preview-mode="h5"] [data-slot="cart-page"] { padding-bottom: calc(var(--space-800) + env(safe-area-inset-bottom)); }
       html[data-prototype-preview-mode="h5"] [data-slot="cart-page"][data-page-tab="reorder"] { padding-bottom: env(safe-area-inset-bottom); }
-      html[data-prototype-preview-mode="h5"] [data-slot="cart-checkout-bar"]:not([data-sheet] *) { bottom: ${active ? 86 : 0}px; }
+      html[data-prototype-preview-mode="h5"] [data-slot="cart-checkout-bar"]:not([data-drawer] *) { bottom: ${active ? 86 : 0}px; }
     }
   `}</style> : null;
   if (!active) return h5Styles;
@@ -111,10 +111,12 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
     html[data-phone-preview-content] [data-slot="topic-landing-tabs"] { top: calc(62px + var(--topic-landing-header-height, 0px)); }
     html[data-phone-preview-content] [data-slot="campaign-section-nav"] { top: calc(62px + var(--campaign-header-height)); }
     html[data-phone-preview-content] [data-slot="cart-discovery"] > [data-slot="tabs"] > [role="tablist"] { top: 118px; }
-    html[data-phone-preview-content] :is([data-slot="cart-app-navigation"], [data-slot="product-detail-purchase-checkout"]):not([data-sheet] *) { bottom: ${bottomInset}px; }
-    html[data-phone-preview-content] [data-slot="cart-checkout-bar"]:not([data-sheet] *) { bottom: 83px; }
+    html[data-phone-preview-content] :is([data-slot="cart-app-navigation"], [data-slot="product-detail-purchase-checkout"]):not([data-drawer] *) { bottom: ${bottomInset}px; }
+    html[data-phone-preview-content] [data-slot="cart-checkout-bar"]:not([data-drawer] *) { bottom: 83px; }
     html[data-phone-preview-content] [data-slot="campaign-sticky-cta"] { bottom: max(var(--space-300), ${bottomInset}px); }
-    html[data-phone-preview-content] [data-sheet] { bottom: ${bottomInset}px; max-height: calc(100dvh - ${62 + bottomInset}px); }
+    html[data-phone-preview-content] [data-drawer][data-swipe-direction] { max-height: calc(100dvh - ${62 + bottomInset}px); }
+    html[data-phone-preview-content] [data-drawer][data-swipe-direction="down"] { bottom: ${bottomInset}px; }
+    html[data-phone-preview-content] [data-drawer][data-swipe-direction]:not([data-swipe-direction="down"]) { top: 62px; }
     html[data-phone-preview-content][data-prototype-preview-mode="h5"] [data-phone-preview-bottom-bar] { bottom: 86px; }
     html[data-phone-preview-content][data-prototype-preview-mode="h5"] [data-phone-preview-bottom-bar]::after {
       content: ""; position: absolute; inset: 100% 0 auto; height: 86px;

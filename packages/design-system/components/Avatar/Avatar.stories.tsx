@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor } from "storybook/test";
 
 import { Avatar, type AvatarSize } from "./Avatar";
+import { AvatarGroupExample } from "./examples";
 import type { MembershipIconTier } from "../MembershipIcon";
 
 const meta = {
@@ -60,20 +61,23 @@ type Story = StoryObj<typeof meta>;
 
 export const Showcase: Story = {
   parameters: { layout: "padded" },
-  render: (args) => (
-    <div style={{ display: "flex", alignItems: "end", gap: "var(--space-300)", fontFamily: "var(--font-family-ios)" }}>
-      {(["sm", "md", "lg"] as AvatarSize[]).map((size, index) => (
-        <div key={size} style={{ display: "grid", justifyItems: "center", gap: "var(--space-100)" }}>
-          <Avatar {...args} size={size} />
-          <span style={{ color: "var(--text-secondary)", fontSize: "var(--font-size-caption-md)" }}>
-            {size} · {[32, 40, 48][index]}px
-          </span>
-        </div>
-      ))}
+  render: (args, { globals }) => (
+    <div style={{ display: "grid", justifyItems: "start", gap: "var(--space-300)", fontFamily: "var(--font-family-ios)" }}>
+      <div style={{ display: "flex", alignItems: "end", gap: "var(--space-300)" }}>
+        {(["sm", "md", "lg"] as AvatarSize[]).map((size, index) => (
+          <div key={size} style={{ display: "grid", justifyItems: "center", gap: "var(--space-100)" }}>
+            <Avatar {...args} size={size} />
+            <span style={{ color: "var(--text-secondary)", fontSize: "var(--font-size-caption-md)" }}>
+              {size} · {[32, 40, 48][index]}px
+            </span>
+          </div>
+        ))}
+      </div>
+      <AvatarGroupExample locale={globals.locale === "zh" ? "zh" : "en"} withCount />
     </div>
   ),
   play: async ({ canvasElement }) => {
-    await waitFor(() => expect(canvasElement.querySelectorAll('[data-slot="avatar-image"]')).toHaveLength(3));
+    await waitFor(() => expect(canvasElement.querySelectorAll('[data-slot="avatar-image"]')).toHaveLength(6));
     await waitFor(() => expect(canvasElement.querySelectorAll('[data-slot="avatar-default"]')).toHaveLength(0));
   },
 };

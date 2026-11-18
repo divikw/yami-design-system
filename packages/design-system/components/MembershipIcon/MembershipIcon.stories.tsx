@@ -7,7 +7,7 @@ const tiers: MembershipIconTier[] = ["ruby-0", "ruby", "silver", "gold"];
 
 const meta = {
   id: "yami-components-data-display-membershipicon",
-  title: "YAMI/Components/MembershipIcon",
+  title: "YAMI/Assets/Membership/MembershipIcon",
   component: MembershipIcon,
   parameters: { layout: "padded" },
   argTypes: {

@@ -14,8 +14,9 @@ const meta = {
     docs: {
       translations: {
         zh: {
-          description: "YAMI 复选框：40px 点击区域、20px 可见控件，支持选中、半选、禁用和键盘操作。",
+          description: "YAMI 复选框：PC 32px、Mobile 40px 点击区域、20px 可见控件，支持选中、半选、禁用和键盘操作。",
           argDescriptions: {
+            density: "两种密度的点击区域均为 PC 32px、Mobile 40px。",
             disabled: "禁用控件，阻止操作和聚焦，且不参与表单提交。",
             required: "启用浏览器原生必填校验。",
             name: "提交表单时使用的字段名称。",
@@ -30,8 +31,9 @@ const meta = {
           },
         },
         en: {
-          description: "YAMI checkbox with a 40px target and 20px visible control. Supports checked, mixed, disabled and keyboard states.",
+          description: "YAMI checkbox with a 32px desktop or 40px mobile target and 20px visible control. Supports checked, mixed, disabled and keyboard states.",
           argDescriptions: {
+            density: "Both densities use a 32px target from 1024px and 40px below.",
             disabled: "Disables interaction and focus; excludes the control from form submission.",
             required: "Enables native required-field validation.",
             name: "Field name used when submitting a form.",
@@ -48,11 +50,12 @@ const meta = {
       },
       description: {
         component:
-          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 40px pointer target, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
+          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 32px desktop or 40px mobile pointer target, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
       },
     },
   },
   argTypes: {
+    density: { control: "select", options: ["default", "compact"] },
     value: { control: "text" },
     onCheckedChange: { control: false },
     "aria-label": { control: "text" },
@@ -147,6 +150,7 @@ export const Showcase: Story = {
     const checkbox = canvasElement.querySelector<HTMLElement>('[data-demo="interactive"]')
     if (!checkbox) throw new Error("Checkbox interaction specimen did not render")
 
+    const targetSize = window.matchMedia("(min-width: 1024px)").matches ? 32 : 40
     const rootStyle = getComputedStyle(checkbox)
     const visibleStyle = getComputedStyle(checkbox, "::before")
     const uncheckedCheckbox = canvasElement.querySelector<HTMLElement>(
@@ -156,14 +160,14 @@ export const Showcase: Story = {
       '[data-slot="checkbox-indicator"]',
     )
     if (
-      rootStyle.width !== "40px" ||
-      rootStyle.height !== "40px" ||
+      rootStyle.width !== `${targetSize}px` ||
+      rootStyle.height !== `${targetSize}px` ||
       visibleStyle.width !== "20px" ||
       visibleStyle.height !== "20px" ||
       visibleStyle.borderRadius !== "4px" ||
-      visibleStyle.inset !== "10px"
+      visibleStyle.inset !== `${(targetSize - 20) / 2}px`
     ) {
-      throw new Error("Checkbox must retain its 20px control, 40px pointer target, and 4px radius")
+      throw new Error("Checkbox must retain its 20px control, responsive pointer target, and 4px radius")
     }
     if (visibleStyle.borderColor !== "rgba(0, 0, 0, 0.08)") {
       throw new Error("Unchecked Checkbox must use the subtle default border token")

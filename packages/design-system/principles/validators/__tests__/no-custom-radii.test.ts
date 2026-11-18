@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { noCustomRadii } from '../no-custom-radii'
 
-describe('Sheet radius contract', () => {
-  it('accepts the mobile Sheet alias with flush bottom corners', () => {
+describe('Drawer radius contract', () => {
+  it('accepts the mobile Drawer alias with flush bottom corners', () => {
     expect(noCustomRadii.check('.sheet { border-radius: var(--radius-surface-sheet) var(--radius-surface-sheet) 0 0; }').pass).toBe(true)
   })
 

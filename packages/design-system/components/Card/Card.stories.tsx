@@ -83,9 +83,9 @@ const meta = {
       playground: "Playground",
       translations: {
         zh: {
-          description: "用于呈现订单、商品摘要等独立内容项的基础表面。普通页面分区使用标题、间距和布局容器。统一内边距 PC 16px、Mobile/Tablet 8px，圆角 12px，无边框和阴影；支持静态、链接和按钮卡片。",
+          description: "用于呈现订单、商品摘要等独立内容项的基础表面。普通页面分区使用标题、间距和布局容器。默认内边距 16px，圆角 12px，无边框和阴影；支持静态、链接和按钮卡片。",
           argDescriptions: {
-            padding: "统一响应式内边距：PC（≥1024px）16px、Mobile/Tablet 8px。默认 md，sm/lg 为同尺寸兼容别名。none=0 用于贴边媒体。",
+            padding: "各设备均为 sm 8px、md（默认）16px、lg 24px、none 0。",
             surface: "背景表面令牌。默认为 'primary'（--surface-primary）。",
             bordered: "是否显示细边框。默认不显示，按设计规范仅用于密集列表或网格。",
             interactive: '启用悬浮和按下反馈，并提供至少 32×32px 的点击区域。as="button" 或 as="a" 且提供 href（含空字符串）时自动启用。自定义元素需自行提供语义和键盘行为。关闭交互反馈后，键盘焦点及禁用样式仍然可用。',
@@ -97,9 +97,9 @@ const meta = {
           },
         },
         en: {
-          description: "Surface for independent items such as orders or product summaries. Ordinary page sections use headings, spacing, and layout containers. Defaults to 16px padding on PC (≥1024px), 8px on Mobile/Tablet, and 12px radius, no border or shadow; supports static, link, and button cards.",
+          description: "Surface for independent items such as orders or product summaries. Ordinary page sections use headings, spacing, and layout containers. Defaults to 16px padding on every device, and 12px radius, no border or shadow; supports static, link, and button cards.",
           argDescriptions: {
-            padding: "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg are compatibility aliases with the same sizes. Use none=0 for edge-to-edge media.",
+            padding: "Inset on every device: sm 8px, md (default) 16px, lg 24px, none 0.",
             surface: "Background surface token. Default: 'primary' (--surface-primary).",
             bordered: "Opt-in hairline border. Off by default; only use in dense lists or grids per the design specification.",
             interactive: 'Adds hover/press styling and a 32×32px minimum target. Inferred for as="button" or as="a" with href, including an empty string. Custom hosts retain responsibility for semantics and keyboard behavior. Focus-visible and disabled styling remain available when interaction feedback is off.',
@@ -113,7 +113,7 @@ const meta = {
       },
       description: {
         component:
-          "Surface for independent content items, not ordinary page sections. Default padding: PC 16px, Mobile/Tablet 8px; 12px radius, no border or shadow; supports static, link, and button cards.",
+          "Surface for independent content items, not ordinary page sections. Default padding: 16px on every device; 12px radius, no border or shadow; supports static, link, and button cards.",
       },
     },
   },
@@ -134,7 +134,7 @@ const meta = {
     type: { control: "select", options: ["button", "submit", "reset"], if: { arg: "as", eq: "button" } },
     disabled: { control: "boolean", if: { arg: "as", eq: "button" } },
     children: { control: "text" },
-    padding: { control: "select", options: ["none", "md"] },
+    padding: { control: "select", options: ["none", "sm", "md", "lg"] },
     surface: {
       control: "select",
       options: ["primary", "secondary", "inverse"],
@@ -159,23 +159,23 @@ export const Showcase: Story = {
       <div style={showcaseStyle}>
         <Card>
           <strong>{text.surfaces.primary}</strong>
-          <p style={{ marginBottom: 0, color: "var(--text-secondary)" }}>
+          <p style={{ margin: "var(--space-050) 0 0", color: "var(--text-secondary)" }}>
             {text.primaryDescription}
           </p>
         </Card>
         <Card surface="secondary">
           <strong>{text.surfaces.secondary}</strong>
-          <p style={{ marginBottom: 0, color: "var(--text-secondary)" }}>
+          <p style={{ margin: "var(--space-050) 0 0", color: "var(--text-secondary)" }}>
             {text.secondaryDescription}
           </p>
         </Card>
         <Card surface="inverse">
           <strong>{text.surfaces.inverse}</strong>
-          <p style={{ marginBottom: 0 }}>{text.inverseDescription}</p>
+          <p style={{ margin: "var(--space-050) 0 0" }}>{text.inverseDescription}</p>
         </Card>
         <Card bordered padding="md">
           <strong>{text.borderedTitle}</strong>
-          <p style={{ marginBottom: 0, color: "var(--text-secondary)" }}>
+          <p style={{ margin: "var(--space-050) 0 0", color: "var(--text-secondary)" }}>
             {text.borderedDescription}
           </p>
         </Card>
@@ -227,9 +227,9 @@ export const Padding: Story = {
     const text = copy[globals.locale === "en" ? "en" : "zh"];
     return (
       <div style={showcaseStyle}>
-        {(["none", "md"] as const).map((padding) => (
+        {(["none", "sm", "md", "lg"] as const).map((padding) => (
           <Card key={padding} padding={padding} surface="secondary">
-            <strong>{text.padding}: {padding} ({padding === "none" ? "0px" : "PC 16px / Mobile 8px"})</strong>
+            <strong>{text.padding}: {padding} ({{ none: "0px", sm: "8px", md: "16px", lg: "24px" }[padding]})</strong>
             <p style={{ marginBottom: 0 }}>{text.paddingUses[padding]}</p>
           </Card>
         ))}
@@ -271,19 +271,21 @@ function OrderActionsDemo({ locale, onReceipt }: { locale: "zh" | "en"; onReceip
       <Card as="article" surface="secondary">
         <h3 style={{ marginTop: 0 }}>{text.order}</h3>
         <p>{text.delivery}</p>
-        <ButtonGroup aria-label={text.orderActions}>
-          <ButtonLink href="/orders/Y20261011-1234" variant="primary" size="md">{text.viewOrder}</ButtonLink>
-          <Button variant="secondary" size="md" loading={state === "generating"} loadingDelay={150} onClick={(event) => {
-            if (timer.current !== undefined) return;
-            setState("generating");
-            onReceipt?.(event);
-            timer.current = setTimeout(() => {
-              timer.current = undefined;
-              setState("ready");
-            }, 700);
-          }}>{text.receipt}</Button>
-        </ButtonGroup>
-        <p role="status" style={{ marginBottom: 0, color: "var(--text-secondary)" }}>
+        <footer>
+          <ButtonGroup aria-label={text.orderActions}>
+            <ButtonLink href="/orders/Y20261011-1234" variant="primary" size="md">{text.viewOrder}</ButtonLink>
+            <Button variant="secondary" size="md" loading={state === "generating"} loadingDelay={150} onClick={(event) => {
+              if (timer.current !== undefined) return;
+              setState("generating");
+              onReceipt?.(event);
+              timer.current = setTimeout(() => {
+                timer.current = undefined;
+                setState("ready");
+              }, 700);
+            }}>{text.receipt}</Button>
+          </ButtonGroup>
+        </footer>
+        <p role="status" style={{ margin: "var(--space-050) 0 0", color: "var(--text-secondary)" }}>
           {state === "generating" ? text.receiptGenerating : state === "ready" ? text.receiptReady : text.receiptIdle}
         </p>
       </Card>

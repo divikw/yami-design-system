@@ -300,8 +300,8 @@
     background-color: var(--button-emphasis-active);
   }
 
-  .primary:not([aria-disabled="true"]):hover {
-    background-color: var(--button-primary-active);
+  .primary:not([aria-disabled="true"]):hover:not(:active) {
+    background-color: var(--button-primary-hover);
   }
 
   .secondary:not([aria-disabled="true"]):hover {
@@ -320,8 +320,8 @@
     background-color: var(--button-emphasis-active-inverse);
   }
 
-  .primary.inverse:not([aria-disabled="true"]):hover {
-    background-color: var(--button-primary-active-inverse);
+  .primary.inverse:not([aria-disabled="true"]):hover:not(:active) {
+    background-color: var(--button-primary-hover-inverse);
   }
 
   .secondary.inverse:not([aria-disabled="true"]):hover {

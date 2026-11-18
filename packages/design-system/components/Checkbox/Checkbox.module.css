@@ -1,8 +1,9 @@
 .root {
+  --checkbox-target-size: var(--space-500);
   position: relative;
   display: inline-flex;
-  width: var(--space-500);
-  height: var(--space-500);
+  width: var(--checkbox-target-size);
+  height: var(--checkbox-target-size);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -14,9 +15,15 @@
   cursor: pointer;
 }
 
+@media (min-width: 1024px) {
+  .root {
+    --checkbox-target-size: var(--space-400);
+  }
+}
+
 .root::before {
   position: absolute;
-  inset: calc(var(--space-250) / 2);
+  inset: calc((var(--checkbox-target-size) - var(--space-250)) / 2);
   box-sizing: border-box;
   content: "";
   border: 1.5px solid var(--border-default);

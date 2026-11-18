@@ -17,6 +17,7 @@
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
+  padding: var(--card-spacing);
   font: inherit;
   text-align: inherit;
   text-decoration: none;
@@ -32,20 +33,23 @@
   display: block;
 }
 
-/* ─── Padding variants ──────────────────────────────────────────── */
-
-.pad-none {
-  padding: 0;
+.content > :is(h1, h2, h3, h4, h5, h6):has(+ p) {
+  margin-block: 0 var(--space-050);
 }
-.pad-sm, .pad-md, .pad-lg {
-  padding: var(--space-100);
+.content > :is(h1, h2, h3, h4, h5, h6) + p {
+  margin-block: 0;
 }
 
-@media (min-width: 1024px) {
-  .pad-sm, .pad-md, .pad-lg {
-    padding: var(--space-200);
-  }
+/* Semantic sections share the card inset; other children keep their own layout. */
+.content > header + *,
+.content > footer:not(:first-child) {
+  margin-block-start: var(--card-spacing);
 }
+
+.pad-none { --card-spacing: var(--space-0); }
+.pad-sm { --card-spacing: var(--space-100); }
+.pad-md { --card-spacing: var(--space-200); }
+.pad-lg { --card-spacing: var(--space-300); }
 
 /* ─── Surfaces ──────────────────────────────────────────────────── */
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useLayoutEffect } from "react";
-import { Sheet } from "@yami/design-system";
+import { Drawer } from "@yami/design-system";
 
 export function ProductDetailSheet({ id, title, closeLabel, onClose, children }: {
   id: string;
@@ -19,8 +19,8 @@ export function ProductDetailSheet({ id, title, closeLabel, onClose, children }:
   }, [onClose]);
 
   return (
-    <Sheet open id={`product-${id}-sheet`} title={title} closeLabel={closeLabel} onClose={onClose} size="full" data-slot={`product-${id}-sheet`}>
+    <Drawer open id={`product-${id}-sheet`} title={title} closeLabel={closeLabel} onClose={onClose} size="full" data-slot={`product-${id}-sheet`}>
       {children}
-    </Sheet>
+    </Drawer>
   );
 }

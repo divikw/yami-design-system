@@ -4,7 +4,7 @@
   "category": "layout",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "figma": {
     "nodeId": null,
     "componentKey": null
@@ -49,7 +49,7 @@
       ],
       "required": false,
       "default": "md",
-      "description": "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg remain compatibility aliases with the same sizes. Use none=0 for edge-to-edge media with composite-owned content spacing."
+      "description": "Card inset on every device: sm 8px, md (default) 16px, lg 24px, none 0. Override --card-spacing on the card to adjust its inset and section spacing."
     },
     "surface": {
       "type": "enum",
@@ -127,7 +127,10 @@
     "--radius-surface-default",
     "--space-200",
     "--space-400",
-    "--space-100"
+    "--space-100",
+    "--space-0",
+    "--space-050",
+    "--space-300"
   ],
   "tokenBindings": {
     "--surface-primary": {
@@ -175,16 +178,28 @@
       "selector": ".card"
     },
     "--space-200": {
-      "property": "padding (min-width 1024px)",
-      "selector": ".pad-sm, .pad-md, .pad-lg"
+      "property": "--card-spacing (padding and section gap)",
+      "selector": ".pad-md"
     },
     "--space-400": {
       "property": "min-width / min-height",
       "selector": ".interactive"
     },
     "--space-100": {
-      "property": "padding (below 1024px)",
-      "selector": ".pad-sm, .pad-md, .pad-lg"
+      "property": "--card-spacing (padding and section gap)",
+      "selector": ".pad-sm"
+    },
+    "--space-0": {
+      "property": "--card-spacing (padding and section gap)",
+      "selector": ".pad-none"
+    },
+    "--space-300": {
+      "property": "--card-spacing (padding and section gap)",
+      "selector": ".pad-lg"
+    },
+    "--space-050": {
+      "property": "margin-block-end",
+      "selector": ".content > :is(h1, h2, h3, h4, h5, h6):has(+ p)"
     }
   },
   "accessibility": {

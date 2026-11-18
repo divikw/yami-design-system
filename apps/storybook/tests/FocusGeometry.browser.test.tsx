@@ -31,7 +31,7 @@ import * as HorizontalScrollListStories from "../../../packages/design-system/co
 import * as ActivityPageHeaderStories from "../../../packages/design-system/components/ActivityPageHeader/ActivityPageHeader.stories";
 import * as SectionBannerStories from "../../../packages/design-system/components/SectionBanner/SectionBanner.stories";
 import * as DialogStories from "../../../packages/design-system/components/Dialog/Dialog.stories";
-import * as SheetStories from "../../../packages/design-system/components/Sheet/Sheet.stories";
+import { Drawer } from "@yami/design-system";
 
 const fixtures = [
   { name: "ButtonGroup", Story: composeStory(ButtonGroupStories.Showcase, ButtonGroupStories.default) },
@@ -39,7 +39,7 @@ const fixtures = [
   { name: "ActivityPageHeader", Story: composeStory(ActivityPageHeaderStories.Showcase, ActivityPageHeaderStories.default) },
   { name: "SectionBanner", Story: composeStory(SectionBannerStories.Showcase, SectionBannerStories.default) },
   { name: "Dialog", Story: composeStory(DialogStories.Showcase, { ...DialogStories.default, args: { ...DialogStories.default.args, open: true } }) },
-  { name: "Sheet", Story: composeStory(SheetStories.ChildView, { ...SheetStories.default, args: { ...SheetStories.default.args, open: true } }) },
+  { name: "Drawer", Story: () => <Drawer open title="Details" closeLabel="Close" onClose={() => {}} back={{ label: "Back", onClick: () => {} }} /> },
   { name: "Button", Story: composeStory(ButtonStories.Showcase, ButtonStories.default) },
   { name: "Input", Story: composeStory(InputStories.Showcase, InputStories.default) },
   { name: "Checkbox", Story: composeStory(CheckboxStories.Showcase, CheckboxStories.default) },
@@ -77,14 +77,14 @@ for (const theme of ["light", "dark"]) {
         document.body.append(container);
         const root = createRoot(container);
         const wasDark = document.documentElement.classList.contains("dark");
-        if (fixture.name === "Sheet") document.documentElement.classList.toggle("dark", theme === "dark");
+        if (fixture.name === "Drawer") document.documentElement.classList.toggle("dark", theme === "dark");
         try {
           await page.viewport(width, 900);
           flushSync(() => root.render(<fixture.Story />));
           await document.fonts.ready;
           await userEvent.keyboard("{Tab}");
           const groups = new Map<string, HTMLElement[]>();
-          const scope = fixture.name === "Sheet" ? document.querySelector<HTMLElement>("[data-sheet]")! : container;
+          const scope = fixture.name === "Drawer" ? document.querySelector<HTMLElement>("[data-drawer]")! : container;
           for (const el of scope.querySelectorAll<HTMLElement>('a[href],button,input,[tabindex="0"],[role="checkbox"],[role="radio"]')) {
             const rect = el.getBoundingClientRect();
             if (!rect.width || !rect.height || el.matches(':disabled,[aria-disabled="true"],[aria-hidden="true"]')) continue;
@@ -160,7 +160,7 @@ for (const theme of ["light", "dark"]) {
         } finally {
           root.unmount();
           container.remove();
-          if (fixture.name === "Sheet") document.documentElement.classList.toggle("dark", wasDark);
+          if (fixture.name === "Drawer") document.documentElement.classList.toggle("dark", wasDark);
           await page.viewport(viewport.width, viewport.height);
         }
       }, 15000);

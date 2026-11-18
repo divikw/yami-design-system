@@ -79,6 +79,8 @@
 
 .table {
   min-width: 0;
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
 }
 
 .table > div {

@@ -240,7 +240,7 @@ container instead of the global viewport.
 | `--space-0`    | `0`    | Edge-aligned layouts                                                   |
 | `--space-025`  | `2px`  | Icon-to-text micro gap                                                 |
 | `--space-050`  | `4px`  | Tight inline gap, badge padding-inline in both sizes                    |
-| `--space-100`  | `8px`  | Default tight padding, button label↔icon gap                           |
+| `--space-100`  | `8px`  | Card padding sm, button label↔icon gap                           |
 | `--space-150`  | `12px` | Form item gap, sm button padding-inline                                |
 | `--space-200`  | `16px` | **Default content padding**, md button padding-inline, Card padding md |
 | `--space-250`  | `20px` | Comfortable section gap, lg button padding-inline                      |
@@ -258,8 +258,8 @@ container instead of the global viewport.
 | `--radius-tag-primary`       | `4px`    | Badges, tags, status chips                                    |
 | `--radius-component-default` | `8px`    | Inputs, selects, search bar                                   |
 | `--radius-button-emphasis`   | `8px`    | Emphasis CTA (Buy Now / Submit) — square-ish for high gravity |
-| `--radius-surface-default`   | `12px`   | Cards, centered Dialogs, desktop Sheets, floating panels      |
-| `--radius-surface-sheet`     | `16px`   | Mobile bottom Sheet: top corners only, bottom corners square |
+| `--radius-surface-default`   | `12px`   | Cards, centered Dialogs, desktop Drawers, floating panels      |
+| `--radius-surface-sheet`     | `16px`   | Mobile bottom Drawer: top corners only, bottom corners square |
 | `--radius-button-primary`    | `9999px` | Primary / secondary / tertiary pill buttons                   |
 
 > **Hard rule:** the 6 semantic slots above are the **only** sanctioned consumption surface. Never raw values like `8.5px` / `16px` / `50%`, and **never** primitive tokens like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl` (they exist in tokens.css as building blocks for the semantic slots but components must reach for the semantic name).
@@ -387,7 +387,8 @@ Focus geometry follows the visible control boundary and its corner radius, not a
 | `--button-emphasis-active`  | `--color-red-600`               | Hover / pressed                                                |
 | `--text-on-emphasis`        | `--color-white-1000`            | Label / icon on operational-red CTAs                           |
 | `--button-primary`          | `--color-black-900`             | Dark default button                                            |
-| `--button-primary-active`   | `--color-black-1000`            | Hover / pressed                                                |
+| `--button-primary-hover`    | `--color-neutral-800`           | Desktop hover                                                  |
+| `--button-primary-active`   | `--color-black-1000`            | Pressed                                                        |
 | `--button-secondary`        | `--color-black-100` (8% black)  | Soft secondary                                                 |
 | `--button-secondary-active` | `--color-black-200` (17% black) | Hover / pressed                                                |
 | `--button-tertiary`         | `--color-white-0`               | Transparent low-emphasis button                                 |
@@ -453,7 +454,7 @@ Hierarchical navigation extracted from PDP, documentation and blog pages. / 从�
 
 - A named `nav` contains an ordered list with slash separators hidden from assistive technology. Native links retain browser behavior; `renderLink` lets applications retain framework navigation without a framework dependency in the component.
 - `items` provide labels, optional URLs and an explicit `current` flag. Only the actual page receives `aria-current="page"`; a static parent category is not automatically current. Empty paths render nothing.
-- `sm` preserves PDP caption-md typography; `md` preserves docsite body-md typography. `underline` defaults to true; the docsite disables it. Long labels wrap without collapsing the hierarchy.
+- `sm` preserves PDP caption-md typography; `md` preserves docsite body-md typography. Links are underlined on mouse hover by default; the docsite disables this with `underline={false}`. Long labels wrap. For a collapsed path, the host can replace intermediate levels with a static `BreadcrumbEllipsis` label.
 - Preserve 24px PC links and 44px links below 1024px. A 4px root gutter with compensating outer margins keeps the existing page alignment and protects the 2px blue focus outline at a 2px offset. Use default/inverse semantic aliases.
 - Pages own visibility: PDP and documentation hide mobile breadcrumbs; blog articles keep them visible. Labels, navigation names and usage guidance support Chinese and English. No independently verified Figma component mapping. See [usage](./components/Breadcrumb/usage.md).
 
@@ -498,7 +499,7 @@ Inline disclosure extracted from ProductDetailPage's DetailDisclosure. / 从商�
 - Panels use shadcn/ui composition: `Accordion`, `AccordionItem`, `AccordionTrigger` and `AccordionContent`. The root uses Base UI's single expansion by default, `multiple` for simultaneous expansion, and `defaultValue` or controlled `value` / `onValueChange`.
 - `AccordionTrigger` includes Base UI Header (h3) internally. `disabled` on the root disables the group; on an item it disables that item. Disabled triggers keep a transparent background and use `--text-disabled` for text and icons.
 - Preserves the existing 16px title, 16px plus/minus icon, minimum 44px Web trigger and adjacent-panel separators. Semantic text/divider/disabled tokens adapt to Light and Dark; keyboard focus uses a 2px `--focus-ring` outline at 2px offset. No height animation or hover treatment.
-- A native button controls a labelled content region. Long labels wrap and collapsed content leaves the focus order. Set `keepMounted` on Accordion to retain child state when collapsed. Page-specific mobile Sheet behavior remains host-owned.
+- A native button controls a labelled content region. Long labels wrap and collapsed content leaves the focus order. Set `keepMounted` on Accordion to retain child state when collapsed. Page-specific mobile Drawer behavior remains host-owned.
 - Public exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` and their Props types. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
 
 ### Card — `components/Card/`
@@ -507,7 +508,8 @@ Use Card for a discrete, self-contained content item (an order, product summary,
 
 |                 |                                                                                                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Padding**     | `md` (default): PC ≥1024px = 16px, Mobile/Tablet <1024px = 8px. `sm`/`lg` are same-size compatibility aliases. `none` remains 0 for edge-to-edge media with composite-owned content spacing. |
+| **Padding**     | `none` 0, `sm` 8px, `md` (default) 16px, `lg` 24px on every device. The mobile homepage uses an 8px inset for the card surfaces of ProductList and BrandProductRail. Use `padding="sm"` for that density on a base Card. The component-local CSS property --card-spacing overrides the inset and section spacing together. See the [Card spacing example](./components/Card/usage.md#choosing-padding). |
+| **Content and actions** | Leave 4px between a title and description. Use the card spacing (default 16px) after a header and before a footer. Place auxiliary actions at the trailing edge of the header and group card-level actions in the footer. Allow actions to wrap on narrow cards. |
 | **Surface**     | `primary` · `secondary` · `inverse`                                                                                                                                |
 | **Border**      | **none by default** (rule `card-no-border`). `bordered={true}` only for dense listing grids.                                                                       |
 | **Radius**      | `--radius-surface-default` (12px). ProductCard owns its compact geometry via `--radius-component-default` (8px); no arbitrary numeric overrides. |
@@ -540,6 +542,8 @@ Static full-pill label for short descriptive keywords. Its three independent col
 
 Non-interactive circular image-only avatar, built on Base UI Avatar. Sizes are `sm` 32px, `md` 40px (default), and `lg` 48px on both mobile and desktop. Supply `alt` and an optional `src`; images use cover cropping. Omitting `src`, loading, or failed custom images display the built-in YAMI mascot avatar. The component only renders images, with `--surface-secondary` behind them. The root exposes one accessible name; use `alt=""` beside a visible name. This code-defined component has no verified Figma binding yet.
 
+`AvatarGroup` places named avatars in an overlapping row. It uses an 8px overlap and a theme-aware surface outline to separate each face. Add `AvatarGroupCount` with the same size as the avatars to show additional members. The caller supplies the display value and can give it a localized accessible label.
+
 Optional `membershipTier="ruby-0" | "ruby" | "silver" | "gold"` adds a 2px membership ring and an original MembershipIcon at the bottom-right. A 2px white separator sits between the ring and portrait in both themes; outer diameters stay unchanged and portrait diameters become 24/32/40px. The image clips separately so the icon remains visible; its backing content area is 12/16/20px for sm/md/lg and extends 2px beyond the avatar border edge using -4px right/bottom offsets. The icon has an opaque circular membership-colored pale backing (gray/red/blue/gold) that stays consistent in both themes, plus a 1px tier-colored border (outer diameter 14/18/22px); its artwork canvas is centered at 10/14/18px. The accessible name includes the tier once; the native `lang` prop selects an English suffix by default or Chinese for `zh` / `zh-CN`. Storybook follows the language toolbar unless overridden. Membership ring tokens `--membership-ring-ruby-0`, `--membership-ring-ruby`, `--membership-ring-silver`, and `--membership-ring-gold` preserve identity colors in both themes. Ruby's ring comes from the live YAMI account avatar; the other rings use original icon colors, pending verification of those live account states.
 
 ### MembershipIcon — `components/MembershipIcon/`
@@ -568,19 +572,13 @@ Opt-in `action` composes a shared tertiary Button inside the field border, with 
 
 Interactive filter-pill family with filled and outlined treatments, selected state, optional icons, and single-, multiple-, or hierarchical selection. Groups retain native horizontal overflow on narrow surfaces and expose selection through accessible pressed-state controls.
 
-### Sheet — `components/Sheet/`
-
-Optional `description` keeps supporting copy beneath the title in the fixed header, above its divider, linked with `aria-describedby`. Omission preserves the existing header; Drawer inherits the same capability.
-
-Base UI Dialog modal shell for PDP details and search filters. The root is a portalled div; native dialog methods are not supported. Below 1024px, mobile uses a bottom sheet with content or full-height sizing, 16px top corners (`--radius-surface-sheet`), and square bottom corners. From 1024px, desktop defaults to a 480px right-edge panel, full viewport height with square corners. Explicit `desktopPlacement="center"` remains for existing callers; new centered tasks use Dialog. Both sizes and child views share this rule in Light and Dark. The token-backed header, close/back action, modal focus behavior, scroll lock, independent content scrolling, and optional fixed footer are shared. Child views reuse one shell and backdrop; callers retain business state and restore the parent entry on return. Desktop quick-filter menus remain anchored Popovers.
-
 ### QuantitySelect — `components/QuantitySelect/`
 
 Controlled cart quantity input with a 60×32px visible pill and a minimum 32px trigger target: accessible popup options 1–9 and an inline 10+ input that commits on blur or Enter. Non-digits are filtered; empty/zero becomes 1 and over-limit values are clamped with an accessible, centered 2.5-second toast that does not change row height. Escape preserves the last committed quantity. The host supplies a positive stock/purchase limit and owns asynchronous updates. Includes busy, disabled and error states with semantic tokens and bilingual labels. See [usage](./components/QuantitySelect/usage.md).
 
 ### Drawer — `components/Drawer/`
 
-Contextual modal for coupons and unavailable items. Composes Sheet's Base UI Dialog, keyboard, focus restoration and scroll locking. PC is flush right, 480px wide and full viewport height with square edge-attached corners; Mobile uses Sheet's full bottom presentation and existing semantic top radii. Header and optional footer stay outside the scrolling body. See [usage](./components/Drawer/usage.md).
+Contextual modal for coupons and unavailable items. Uses Base UI Drawer with modal focus and scroll locking. PC is flush right, 480px wide and full viewport height with square edge-attached corners; Mobile opens from the bottom at full height by default. Use size="half" for a 50% starting height that snaps to the available full height, leaving at least 48px above the panel. The handle supports dragging and keyboard arrows. Explicit swipeDirection selects any edge. Vertical panels support custom snap points. Nested drawers and non-modal panels are available for secondary tasks. The header and default scrolling body use the same padding on all four sides: 24px from 1024px wide and 16px below. Body text is 16px, with mobile bottom safe-area clearance. Header and optional footer stay outside the scrolling body. See [usage](./components/Drawer/usage.md).
 
 ### Coupon — `components/Coupon/`
 
@@ -592,18 +590,18 @@ Base UI modal confirmation with YAMI centered surface, semantic typography and B
 
 ### Dialog — `components/Dialog/`
 
-Base UI modal for short forms, editing and general information on mobile and desktop. Keeps the controlled open/title/onClose/footer API. Default Close occupies a separate row above the title. Mobile uses a 20px heading, 4px content top padding and 12px top/right Close icon insets. PC (≥1024px) uses 16px top spacing, 24px side/footer spacing and title, 16px body, and 12px close-to-title and title-to-content gaps. Footer has no divider; ButtonGroup actions use md pills, right-aligned on PC and equal-width on Mobile. Base UI manages focus trapping, Escape, outside dismissal, scroll locking and focus restoration. Popup is a portalled div rather than a native dialog; native showModal/close/method=dialog are not supported. New critical confirmations use AlertDialog. The legacy confirmation variant centers its title and uses explicit footer actions without a close button; the default variant keeps a close action. The legacy `role="alertdialog"` only changes semantics and still permits outside dismissal; use AlertDialog for new irreversible confirmations. Mobile keeps 16px side margins, content height is intrinsic up to the safe viewport limit, and overflowing body content scrolls between a fixed header and optional footer. Use `Sheet` for filters, details, child views, and long mobile content.
+Base UI modal for short forms, editing and general information on mobile and desktop. Use DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter and DialogClose for uncontrolled or controlled composition. DialogContent and DialogFooter accept independent showCloseButton settings. The shorthand open/title/onClose/footer API remains available. Default Close occupies a separate row above the title. In the default layout, leave 12px above the corner close icon, or 20px above the heading when the corner icon is hidden. Side insets are 24px from 1024px and 16px below. The header has 8px of bottom padding. The body has 8px of vertical padding. Footer actions have 16px above them. Bottom padding is 20px on desktop and 16px on mobile, with extra clearance for the safe area. The 24px Close icon aligns to the top and right header insets, with a 4px focus-ring radius and a centered 44px hit area. Headings are 24px on desktop and 20px on mobile. Footer has no divider; ButtonGroup actions use md pills, right-aligned on PC and equal-width on Mobile. Base UI manages focus trapping, Escape, outside dismissal, scroll locking and focus restoration. Popup is a portalled div rather than a native dialog; native showModal/close/method=dialog are not supported. New critical confirmations use AlertDialog. The legacy confirmation variant centers its title and uses explicit footer actions without a close button; the default variant keeps a close action. The legacy `role="alertdialog"` only changes semantics and still permits outside dismissal; use AlertDialog for new irreversible confirmations. Mobile keeps 16px side margins, content height is intrinsic up to the safe viewport limit, and overflowing body content scrolls between a fixed header and optional footer. Use `Drawer` for filters, details, child views, and long mobile content.
 
 ### Checkbox — `components/Checkbox/`
 
 |                |                                                                                                                                |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | **States**     | default · hover · selected · disabled-selected · disabled-unselected · focus-visible · indeterminate (code-only)               |
-| **Geometry**   | 40px frame · 20px visible square · 4px `--radius-tag-primary`                                                                  |
+| **Geometry**   | 32px desktop / 40px mobile frame · 20px visible square · 4px `--radius-tag-primary`                                                                  |
 | **Color**      | Neutral selection: `--text-primary`, never brand or operational red.                                                           |
 | **Disabled**   | `--fill-disabled`; never CSS opacity.                                                                                          |
 | **Behavior**   | Base UI checkbox with controlled/uncontrolled state, hidden native form input, Space-key toggle, and ARIA checked/mixed state. |
-| **Tap target** | 40×40px layout and pointer target at every breakpoint; focus outline follows the visible square.                                                |
+| **Tap target** | All checkboxes use 32×32px from 1024px and 40×40px below. The focus outline follows the visible square.                                                |
 
 ### RadioGroup — `components/RadioGroup/`
 
@@ -817,7 +815,7 @@ YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and 
 
 ### Popover — `components/Popover/`
 
-YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Popover/usage.md) for composition, state and accessibility.
+YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Drawer on mobile. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Popover/usage.md) for composition, state and accessibility.
 
 ## Motion System
 
@@ -901,7 +899,7 @@ For the **why** behind each rule (trade-offs, history, edge cases), see [`decisi
 | **`semantic-color-only`** | Blue / green / purple / yellow serve semantic status and the Badge palette; blue also identifies keyboard focus through `--focus-ring` / `--focus-ring-inverse`. No decorative use.                                           | 蓝/绿/紫/黄用于语义状态和徽章；蓝色还可通过 `--focus-ring` / `--focus-ring-inverse` 表达键盘焦点。禁止装饰用途。                                            |
 | **`numerals-font`**       | Every digit renders in GT Walsheim, including inside mixed CN strings.                                                                                                                    | 所有数字一律 GT Walsheim——包括中文字符串中嵌入的数字与拉丁字符。                                                                           |
 | **`type-hierarchy`**      | Max 4 type levels per page. If you need a 5th, the page has a hierarchy problem.                                                                                                          | 每页最多 4 个字号层级。若需要第 5 级，是页面层级有问题，不是字号问题。                                                                     |
-| **`no-custom-radii`**     | Only the 6 semantic radius tokens, including mobile Sheet top corners at 16px. Never raw `8.5px` / `16px` / `50%`, never primitives like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl`.                               | 仅 6 个语义圆角槽位，含移动端 Sheet 的 16px 顶部圆角。不得用 `8.5px` / `16px` / `50%` 等裸值，也不得用 `--radius-sm` / `-md` / `-lg` / `-xl` 这类原子 token。               |
+| **`no-custom-radii`**     | Only the 6 semantic radius tokens, including mobile Drawer top corners at 16px. Never raw `8.5px` / `16px` / `50%`, never primitives like `--radius-sm` / `--radius-md` / `--radius-lg` / `--radius-xl`.                               | 仅 6 个语义圆角槽位，含移动端 Drawer 的 16px 顶部圆角。不得用 `8.5px` / `16px` / `50%` 等裸值，也不得用 `--radius-sm` / `-md` / `-lg` / `-xl` 这类原子 token。               |
 | **`elevation-on-press`**  | Hover / press changes `background-color` (the `-active` token). **Never `box-shadow`.**                                                                                                   | 悬浮/按压用 `background-color`（`-active` token）变化反馈，**绝不**修改 `box-shadow`。                                                     |
 | **`no-opacity-disabled`** | Disabled states use `--button-disabled` + `--text-disabled`. Never CSS `opacity`.                                                                                                         | 禁用态用 `--button-disabled` + `--text-disabled` 一对 token，不得用 CSS `opacity` 降透明度。                                               |
 | **`focus-style`**         | 2px blue `--focus-ring` outline, normally 2px offset. Use `--focus-ring-inverse` on opposite-polarity backgrounds; keep component borders and selection separate.                                                                                                                                 | 2px 蓝色 `--focus-ring` 键盘外描边，通常偏移 2px；反色背景使用 `--focus-ring-inverse`。与组件边框和选中状态分开。                                                                         |

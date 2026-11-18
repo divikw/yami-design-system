@@ -4,16 +4,15 @@
 .legacyAnchor { display: block; scroll-margin-top: var(--space-400); }
 .page p { margin: 0 0 var(--space-200); }
 .page section { margin-top: var(--space-600); }
-.page a { color: inherit; text-underline-offset: 4px; }
+:where(.page) a { color: inherit; text-underline-offset: 4px; }
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-300); margin-bottom: var(--space-400); }
 .header p { color: var(--text-secondary); max-width: 480px; font-size: var(--font-size-heading-sm); margin: 0; }
 .actions { display: flex; align-items: center; gap: var(--space-100); flex-shrink: 0; }
 .actions a { display: grid; place-items: center; width: var(--space-400); height: var(--space-400); background: var(--surface-secondary); border-radius: var(--radius-full); text-decoration: none; }
 .example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
 .preview { display: flow-root; background: var(--surface-primary); }
-.tabs.previewDevices { width: fit-content; margin-block: 0; margin-inline: var(--space-200) auto; }
-.previewViewport { display: flex; justify-content: center; overflow: clip; border-block-start: var(--stroke-default) solid var(--border-default); }
-.previewFrame { display: block; flex: none; max-width: none; border: 0; }
+.previewViewport { display: flex; justify-content: center; overflow: clip; }
+.previewFrame { display: block; flex: none; width: 100vw; max-width: none; border: 0; }
 .frameBody { margin: 0; overflow: hidden; background: var(--surface-primary); }
 .frameContent { display: grid; place-items: center; width: 100%; min-height: 252px; margin-inline: auto; padding: var(--space-400) var(--space-200); }
 .demo { width: 100%; max-width: 400px; }

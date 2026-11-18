@@ -28,7 +28,7 @@ function getProps(locale: ShortcutLocale): ShortcutRailProps {
 
 const meta = {
   id: "yami-components-navigation-shortcut-rail",
-  title: "YAMI/Components/Shortcut Rail",
+  title: "YAMI/Modules/Commerce/Shortcut Rail",
   component: ShortcutRail,
   decorators: [
     (Story) => (

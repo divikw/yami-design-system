@@ -462,7 +462,7 @@ export const ResultsInteractions: Story = {
       return dialog;
     });
     const allFiltersBody =
-      allFiltersDialog.querySelector<HTMLElement>('[data-sheet-content]');
+      allFiltersDialog.querySelector<HTMLElement>('[data-dialog-content]');
     if (
       !allFiltersBody ||
       getComputedStyle(allFiltersBody).paddingLeft !== "0px" ||
@@ -818,21 +818,21 @@ export const MobileInteractions: Story = {
         );
         if (!nextPopup) throw new Error(`${slot} did not open`);
         const title = nextPopup.querySelector<HTMLElement>(
-          '[data-slot="sheet-header"]'
+          '[data-slot="drawer-header"]'
         );
         const closeButton = title?.querySelector<HTMLButtonElement>("button");
         const heading = title?.querySelector<HTMLElement>("h2");
         const popupRect = nextPopup.getBoundingClientRect();
         if (
           !viewport ||
-          !nextPopup.matches('[data-sheet][aria-modal="true"]') ||
+          !nextPopup.matches('[data-drawer][aria-modal="true"]') ||
           !title ||
           !closeButton ||
           !heading ||
           title.textContent?.trim() !== expectedTitle ||
           getComputedStyle(title).display === "none" ||
           getComputedStyle(heading).fontSize !== "24px" ||
-          getComputedStyle(document.querySelector("[data-sheet-backdrop]")!).backgroundColor !== "rgba(0, 0, 0, 0.68)" ||
+          getComputedStyle(document.querySelector("[data-drawer-backdrop]")!).backgroundColor !== "rgba(0, 0, 0, 0.68)" ||
           Math.abs(popupRect.width - viewport.innerWidth) > 1 ||
           Math.abs(popupRect.bottom - viewport.innerHeight) > 1 ||
           getComputedStyle(nextPopup).borderBottomLeftRadius !== "0px" ||
@@ -890,7 +890,7 @@ export const MobileInteractions: Story = {
       const dialog = document.querySelector<HTMLElement>(
         '[data-slot="all-filters-dialog"]'
       );
-      if (!dialog) throw new Error("All filters dialog did not open");
+      if (dialog?.dataset.drawerState !== "open") throw new Error("All filters drawer did not finish opening");
       return dialog;
     });
     const dialogRect = allFiltersDialog.getBoundingClientRect();
@@ -909,7 +909,7 @@ export const MobileInteractions: Story = {
     await userEvent.hover(firstMobileSectionAction);
     if (
       !viewport ||
-      !allFiltersDialog.matches('[data-sheet][aria-modal="true"]') ||
+      !allFiltersDialog.matches('[data-drawer][aria-modal="true"]') ||
       allFiltersDialog.querySelector("h2")?.textContent?.trim() !== "Filters" ||
       getComputedStyle(allFiltersDialog.querySelector("h2")!).fontSize !== "24px" ||
       Math.abs(dialogRect.width - viewport.innerWidth) > 1 ||
@@ -992,7 +992,7 @@ export const MobileInteractions: Story = {
       if (
         allFiltersDialog.querySelector("h2")?.textContent?.trim() !== label ||
         !subdialogHeader ||
-        !allFiltersDialog.matches('[data-sheet][aria-modal="true"]') ||
+        !allFiltersDialog.matches('[data-drawer][aria-modal="true"]') ||
         subdialogCloseButton ||
         allFiltersDialog.getBoundingClientRect().height + 1 <
           viewport.innerHeight * 0.5 ||

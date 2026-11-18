@@ -2,15 +2,15 @@
 
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button, Sheet, type SheetProps } from "@yami/design-system";
+import { Button, Drawer, type DrawerProps } from "@yami/design-system";
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 import { brandIcon } from "./assets";
 import styles from "./NavigationDrawer.module.css";
 
 export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, children, finalFocus }: {
-  finalFocus: SheetProps["finalFocus"];
+  finalFocus: DrawerProps["finalFocus"];
   open: boolean;
   onClose: () => void;
   title: string;
@@ -19,17 +19,12 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
   children: ReactNode;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
-  // Sheet owns modal focus and scroll locking; retain it until the exit finishes.
-  const [present, setPresent] = useState(open);
-  useEffect(() => {
-    if (open) setPresent(true);
-  }, [open]);
-
   return (
-    <Sheet
+    <Drawer
       initialFocus={closeRef}
       finalFocus={finalFocus}
-      open={open || present}
+      open={open}
+      swipeDirection="right"
       onClose={onClose}
       title={title}
       closeLabel={closeLabel}
@@ -37,19 +32,8 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
       contentPadding="none"
       className={styles.drawer}
       data-slot="docsite-menu"
-      data-state={open ? "open" : "closing"}
-      onClick={(event) => {
-        // The transparent dialog fills the viewport; only the panel is content.
-        if (event.target === event.currentTarget) onClose();
-      }}
     >
-      <div
-        className={styles.panel}
-        data-navigation-panel
-        onAnimationEnd={(event) => {
-          if (event.target === event.currentTarget && !open) setPresent(false);
-        }}
-      >
+      <div className={styles.panel} data-navigation-panel>
         <div className={styles.header}>
           <Link className={styles.brand} href={homeHref} aria-label="YAMI Design System" onClick={onClose}>
             <img src={brandIcon} width={24} height={24} alt="YAMI" />
@@ -68,6 +52,6 @@ export function NavigationDrawer({ open, onClose, title, closeLabel, homeHref, c
         </div>
         <div className={styles.content} data-navigation-content>{children}</div>
       </div>
-    </Sheet>
+    </Drawer>
   );
 }
