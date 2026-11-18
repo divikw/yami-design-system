@@ -59,9 +59,9 @@ test("Mobile nutrition reuses the table, traps focus, scrolls independently and 
       close.focus();
       expect(document.activeElement).toBe(close);
       await userEvent.tab({ shift: true });
-      expect(document.activeElement).toBe(language);
+      await expect.poll(() => document.activeElement).toBe(language);
       await userEvent.tab();
-      expect(document.activeElement).toBe(close);
+      await expect.poll(() => document.activeElement).toBe(close);
       expect(close.matches(":focus-visible")).toBe(true);
       expect(getComputedStyle(close).outlineStyle).toBe("solid");
       const content = sheet.querySelector<HTMLElement>('[data-slot="product-nutrition-sheet-content"]')!;

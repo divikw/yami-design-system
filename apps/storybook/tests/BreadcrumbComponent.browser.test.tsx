@@ -122,15 +122,15 @@ test("links show an underline only on mouse hover when enabled", async () => {
     const current = container.querySelector('[aria-current="page"]')!;
     const decoration = () => getComputedStyle(link).textDecorationLine;
     await page.elementLocator(current).hover();
-    expect(decoration()).toBe("none");
+    await expect.poll(decoration).toBe("none");
     await page.elementLocator(link).hover();
-    expect(decoration()).toBe("underline");
+    await expect.poll(decoration).toBe("underline");
     await page.elementLocator(current).hover();
-    expect(decoration()).toBe("none");
+    await expect.poll(decoration).toBe("none");
     expect(getComputedStyle(current).textDecorationLine).toBe("none");
     flushSync(() => root.render(<Breadcrumb items={items} underline={false} />));
     await page.elementLocator(link).hover();
-    expect(decoration()).toBe("none");
+    await expect.poll(decoration).toBe("none");
   } finally {
     root.unmount();
     container.remove();
