@@ -1,9 +1,9 @@
 "use client";
 
-import { Sheet, type SheetProps } from "@yami/design-system";
+import { Dialog, Drawer, useDesktopViewport } from "@yami/design-system";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 
 import type { SearchEntry, SearchEntryType, SearchResult } from "../lib/search";
 import { rankSearchEntries } from "../lib/search";
@@ -22,7 +22,7 @@ interface SearchPanelCopy {
 }
 
 interface SearchPanelProps {
-  finalFocus: SheetProps["finalFocus"];
+  finalFocus: RefObject<HTMLButtonElement | null>;
   open: boolean;
   onClose: () => void;
   entries: SearchEntry[];
@@ -35,6 +35,8 @@ function resultHref(result: SearchResult): string {
 }
 
 export function SearchPanel({ open, onClose, entries, copy, finalFocus }: SearchPanelProps) {
+  const desktop = useDesktopViewport();
+  const Panel = desktop ? Dialog : Drawer;
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -85,17 +87,16 @@ export function SearchPanel({ open, onClose, entries, copy, finalFocus }: Search
     }
   }
 
+  // A breakpoint change transfers focus to the new panel while search stays open.
   return (
-    <Sheet
+    <Panel
       initialFocus={inputRef}
-      finalFocus={finalFocus}
-      desktopPlacement="center"
+      finalFocus={() => window.matchMedia("(min-width: 1024px)").matches === desktop ? finalFocus.current : false}
       open={open}
       title={copy.title}
       closeLabel={copy.close}
       onClose={onClose}
-      size="full"
-      contentPadding="none"
+      {...(!desktop && { contentPadding: "none" as const })}
       data-slot="docsite-search"
       className={styles.panel}
       footer={(
@@ -158,6 +159,6 @@ export function SearchPanel({ open, onClose, entries, copy, finalFocus }: Search
           ))
         )}
       </div>
-    </Sheet>
+    </Panel>
   );
 }

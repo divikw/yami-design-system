@@ -476,10 +476,13 @@
   display: block;
 }
 
-.previewClose {
+.preview .previewClose {
+  border-radius: var(--radius-sm);
   position: absolute;
-  top: var(--space-200);
-  right: var(--space-200);
+  top: var(--space-300);
+  right: var(--space-300);
+  width: var(--space-300);
+  height: var(--space-300);
   z-index: 1;
 }
 
@@ -559,8 +562,9 @@
     scroll-snap-stop: always;
   }
 
-  .previewClose {
+  .preview .previewClose {
     top: calc(var(--space-200) + env(safe-area-inset-top, 0px));
+    right: var(--space-200);
   }
 
   .previewSidebar {

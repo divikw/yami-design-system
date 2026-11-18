@@ -48,7 +48,6 @@ const common: Record<string, Copy> = {
   footer: ["底部操作或补充内容。", "Footer actions or supplementary content."],
   back: ["返回按钮配置，包含名称与返回操作。", "Back-button configuration with its label and action."],
   contentPadding: ["是否保留正文区域的默认内边距。", "Whether to retain the default content padding."],
-  desktopPlacement: ["PC 端浮层位置：居中或右侧。", "Desktop overlay placement: centered or on the right."],
   initialFocus: ["浮层打开时的初始焦点目标。", "Initial focus target when the overlay opens."],
   finalFocus: ["浮层关闭后的返回焦点目标。", "Return focus target when the overlay closes."],
   role: ["组件的 ARIA 语义角色。", "ARIA semantic role of the component."],
@@ -185,7 +184,7 @@ const common: Record<string, Copy> = {
   pageCount: ["总页数；为 0 时不显示分页。", "Total page count; zero hides pagination."],
   onPageChange: ["页码变化回调，与链接导航模式互斥。", "Page-change callback, mutually exclusive with link navigation."],
   getPageHref: ["根据页码返回真实跳转地址，与回调分页模式互斥。", "Returns a destination URL for a page, mutually exclusive with callback pagination."],
-  underline: ["是否显示链接下划线。", "Whether links show an underline."],
+  underline: ["鼠标悬停时是否显示链接下划线。", "Whether links show an underline on mouse hover."],
   renderLink: ["自定义链接渲染，保留原生导航和无障碍属性。", "Custom link renderer preserving native navigation and accessible attributes."],
   enabled: ["启用横向滚动及相应键盘交互。", "Enables horizontal scrolling and its keyboard interaction."],
   activationMode: ["标签激活方式：自动随焦点切换或手动确认。", "Tab activation: automatic on focus or manual confirmation."],
@@ -287,7 +286,7 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select Sheet ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
+const componentNames = "Accordion AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");
@@ -317,13 +316,27 @@ const overrides: Record<string, Record<string, Copy>> = {
   Select: { className: ["替换对应部分的默认样式；传入时需提供完整样式。", "Replaces the part's default styles; supply complete styling when used."] },
   Checkbox: { value: ["选中时提交到原生表单的值。", "Value submitted with the native form when checked."] },
   HorizontalScrollList: { children: ["列表项目；调用方负责项目宽度和滚动吸附对齐。", "List items; the host owns item width and scroll-snap alignment."] },
-  Dialog: { variant: ["弹窗内容形式：默认内容或确认操作。", "Dialog form: default content or confirmation action."] },
-  Sheet: { size: ["浮层高度形式：按内容或全高。", "Overlay height: content-sized or full height."] },
-  Drawer: { size: ["抽屉高度形式：按内容或全高。", "Drawer height: content-sized or full height."] },
+  Dialog: {
+    variant: ["弹窗内容形式：默认内容或确认操作。", "Dialog form: default content or confirmation action."],
+    onOpenChangeComplete: ["弹窗完成打开或关闭后触发。", "Called once the dialog finishes opening or closing."],
+    showCloseButton: ["显示对应区域的关闭按钮。正文容器默认显示，操作区默认隐藏。", "Shows the close button in this part. Defaults to visible in DialogContent and hidden in DialogFooter."],
+  },
+  Drawer: {
+    size: ["移动端可选内容高度、全屏或半屏拖动。", "Mobile height: content, full, or draggable from half height."],
+    swipeDirection: ["滑动关闭的方向，默认桌面向右、移动端向下。", "Direction of the dismiss gesture. Defaults to right on desktop and down on mobile."],
+    showSwipeHandle: ["显示拖动手柄。配置停靠点时默认显示。", "Shows the swipe handle. Visible by default when snap points are set."],
+    modal: ["控制背景页面的交互和焦点限制。", "Controls background interaction and focus trapping."],
+    disablePointerDismissal: ["阻止点击抽屉外部关闭。", "Prevents dismissal when pressing outside the drawer."],
+    snapPoints: ["垂直抽屉可停靠的高度，按从低到高排列。", "Available heights for a vertical drawer, ordered from lowest to highest."],
+    snapPoint: ["受控模式下的当前停靠点。", "Current snap point in controlled mode."],
+    defaultSnapPoint: ["非受控模式下的初始停靠点。", "Initial snap point in uncontrolled mode."],
+    onSnapPointChange: ["停靠点切换时接收新值和事件详情。", "Receives the new snap point and event details when the active stop changes."],
+    snapToSequentialPoints: ["拖动时逐个切换相邻的停靠点。", "Moves through adjacent snap points in order when dragging."],
+  },
 };
 
 export function componentForTitle(title: string) {
-  if (!/^YAMI\/(components|modules)\//i.test(title)) return undefined;
+  if (!/^YAMI\/(components|modules|assets\/membership)\//i.test(title)) return undefined;
   return title.split("/").map(segment => names.get(normalize(segment))).reverse().find(Boolean);
 }
 

@@ -46,7 +46,7 @@ Docsite 第一期包含系统概览、基础规范、协作指南和 Blog。它�
 2. 新应用如何正确接入设计系统？
 3. 一项设计或代码变更如何被验证与发布？
 
-Storybook 继续承担组件目录。Button 的变体、Input 的状态、Sheet 的焦点行为或新组件的成熟度都以 Storybook 和生成 Catalog 为准。Docsite 只提供入口，不复制 API，从结构上避免双重事实来源。
+Storybook 继续承担组件目录。Button 的变体、Input 的状态、Drawer 的焦点行为或新组件的成熟度都以 Storybook 和生成 Catalog 为准。Docsite 只提供入口，不复制 API，从结构上避免双重事实来源。
 
 ## 双语与主题是一等能力
 

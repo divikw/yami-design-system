@@ -60,7 +60,7 @@ test("Base UI adapters preserve mixed selection, cancellation, form values and r
 });
 
 for (const theme of ["light", "dark"]) {
-  test.each([375, 1280])(`${theme} selection controls reserve 40px targets and accept edge clicks at %ipx`, async (width) => {
+  test.each([375, 1280])(`${theme} selection controls reserve default and compact targets and accept edge clicks at %ipx`, async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
     const container = document.createElement("div");
     container.className = theme === "dark" ? "dark" : "";
@@ -74,14 +74,16 @@ for (const theme of ["light", "dark"]) {
           <RadioGroupItem value="standard" aria-label="Standard" />
           <RadioGroupItem value="express" aria-label="Express" />
         </RadioGroup>
+        <Checkbox density="compact" aria-label="Select table row" />
       </>));
       const controls = Array.from(container.querySelectorAll<HTMLElement>('[role="checkbox"], [role="radio"]'));
       for (const control of controls) {
         const bounds = control.getBoundingClientRect();
         const surface = getComputedStyle(control, "::before");
-        expect([bounds.width, bounds.height]).toEqual([40, 40]);
-        expect([surface.width, surface.height, surface.inset]).toEqual(["20px", "20px", "10px"]);
-        for (const [x, y] of [[2, 2], [38, 2], [2, 38], [38, 38]]) {
+        const target = control.getAttribute("role") === "checkbox" && width >= 1024 ? 32 : 40;
+        expect([bounds.width, bounds.height]).toEqual([target, target]);
+        expect([surface.width, surface.height, surface.inset]).toEqual(["20px", "20px", `${(target - 20) / 2}px`]);
+        for (const [x, y] of [[2, 2], [target - 2, 2], [2, target - 2], [target - 2, target - 2]]) {
           expect(document.elementFromPoint(bounds.left + x, bounds.top + y)).toBe(control);
         }
         control.focus();

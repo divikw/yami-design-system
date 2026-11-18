@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile.",
+  "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Drawer on mobile.",
   "source": "components/Popover",
   "files": [
     {
@@ -137,5 +137,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "b1f51ae2c0661283f7313002931d79082e7f3abd4c50d57a27491dc09c65aaa3"
+  "contentDigest": "21d6739d510307c16a423eeea04e9a26b26732c51e4dbbf7a8fd5e8adea0f96b"
 }

@@ -11,7 +11,7 @@
   z-index: 100;
 }
 
-.sheet {
+.surface {
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -33,51 +33,44 @@
   line-height: var(--line-height-body-md);
 }
 
-.sheet[data-size="full"] {
+.surface[data-size="full"] {
   height: calc(100dvh - max(env(safe-area-inset-top), var(--space-600)));
   max-height: none;
 }
 
 .header {
   flex: 0 0 auto;
-  padding-inline: var(--space-200);
-  padding-block-end: var(--space-150);
+  padding: var(--drawer-padding);
   border-block-end: var(--stroke-default) solid var(--divider-default);
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  padding-block: var(--space-100) 0;
-}
-
-.actions:not([data-back]) {
-  margin-inline-end: calc(var(--space-100) * -1);
 }
 
 .actions[data-back] {
   justify-content: flex-start;
-  padding-block-start: var(--space-100);
 }
 
-/* The visible control is 32px; Button's sm icon extender keeps a 44px hit area. */
-.sheet .navigationButton {
+.actions[data-back] .navigationButton {
   width: var(--space-400);
   height: var(--space-400);
 }
 
-.actions[data-back] .navigationButton {
-  margin-inline-start: calc(var(--space-050) * -1);
-  margin-inline-end: 0;
+.actions:not([data-back]) .navigationButton {
+  border-radius: var(--radius-sm);
+  width: var(--space-300);
+  height: var(--space-300);
 }
 
-.sheet .navigationButton,
-.sheet .navigationButton:not([aria-disabled="true"]):active {
+.surface .navigationButton,
+.surface .navigationButton:not([aria-disabled="true"]):active {
   background-color: transparent;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .sheet .navigationButton:not([aria-disabled="true"]):hover {
+  .surface .navigationButton:not([aria-disabled="true"]):hover {
     background-color: transparent;
   }
 }
@@ -96,7 +89,7 @@
   gap: var(--space-050);
 }
 
-.sheet .title {
+.surface .title {
   margin: 0;
   padding: 0;
   font-size: var(--font-size-heading-2xl);
@@ -117,7 +110,7 @@
   flex: 1 1 auto;
   flex-direction: column;
   gap: var(--space-150);
-  padding: var(--space-200) var(--space-200) max(var(--space-800), env(safe-area-inset-bottom));
+  padding: var(--drawer-padding) var(--drawer-padding) max(var(--drawer-padding), env(safe-area-inset-bottom));
   overflow-y: auto;
   overscroll-behavior-y: contain;
 }
@@ -134,48 +127,4 @@
 .footer {
   flex: 0 0 auto;
   padding-bottom: env(safe-area-inset-bottom);
-}
-
-@media (min-width: 1024px) {
-  .header:has(.description) {
-    padding-block-end: var(--space-200);
-  }
-
-  .actions:not([data-back]) {
-    padding-block-start: var(--space-200);
-    margin-inline-end: 0;
-  }
-
-  .sheet,
-  .sheet[data-size="full"] {
-    inset: 0;
-    width: min(560px, calc(100vw - 2 * var(--space-200)));
-    height: fit-content;
-    min-height: 0;
-    max-height: calc(100dvh - 2 * var(--space-600));
-    margin: auto;
-    border-radius: var(--radius-surface-default);
-  }
-
-  .sheet[data-desktop-placement="right"] {
-    inset: 0 0 0 auto;
-    width: min(480px, 100vw);
-    height: 100dvh;
-    min-height: 0;
-    max-height: none;
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .sheet[data-desktop-placement="right"] .header {
-    padding-inline: var(--space-400);
-  }
-
-  .sheet[data-desktop-placement="right"] .actions:not([data-back]) {
-    margin-inline-end: calc(var(--space-200) * -1);
-  }
-
-  .sheet[data-desktop-placement="right"] .content[data-padding="default"] {
-    padding: var(--space-400);
-  }
 }

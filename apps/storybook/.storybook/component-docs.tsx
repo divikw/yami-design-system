@@ -15,14 +15,17 @@ import { ChevronRight } from "lucide-react";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import type { PreparedStory } from "storybook/internal/types";
 import { AlertDialogDocsPage } from "./alert-dialog-docs";
-import { SheetDocsPage } from "./sheet-docs";
+import { DrawerDocsPage } from "./drawer-docs";
 import { DialogDocsPage } from "./dialog-docs";
 import { AccordionDocsPage } from "./accordion-docs";
 import { AspectRatioDocsPage } from "./aspect-ratio-docs";
 import { AvatarDocsPage } from "./avatar-docs";
 import { BadgeDocsPage } from "./badge-docs";
+import { BreadcrumbDocsPage } from "./breadcrumb-docs";
 import { ButtonDocsPage } from "./button-docs";
 import { ButtonGroupDocsPage } from "./button-group-docs";
+import { CardDocsPage } from "./card-docs";
+import { CheckboxDocsPage } from "./checkbox-docs";
 import { localizeArgTypes, type DescriptionTranslations } from "./arg-descriptions";
 import styles from "./component-docs.module.css";
 
@@ -181,7 +184,7 @@ export function ComponentDocsPage() {
     </p>
   ) : null;
 
-  const customDocsPages = { sheet: SheetDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage };
+  const customDocsPages = { drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage };
   const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
   const DocsPage = customDocsPages[componentKey as keyof typeof customDocsPages];
   if (DocsPage) return <DocsPage locale={language} />;

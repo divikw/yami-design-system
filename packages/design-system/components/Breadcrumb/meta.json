@@ -10,18 +10,18 @@
     "componentKey": null,
     "notes": "Extracted from the maintained PDP, DocPage and BlogArticle implementations; no independently verified Figma component mapping."
   },
-  "exports": ["Breadcrumb", "BreadcrumbProps", "BreadcrumbItem", "BreadcrumbLinkProps"],
+  "exports": ["Breadcrumb", "BreadcrumbEllipsis", "BreadcrumbProps", "BreadcrumbItem", "BreadcrumbLinkProps"],
   "variants": {
     "size": ["sm", "md"],
     "surface": ["default", "inverse"],
-    "state": ["link", "static", "current", "focus-visible", "empty"]
+    "state": ["link", "static", "current", "collapsed", "focus-visible", "empty"]
   },
   "props": {
     "items": { "type": "readonly BreadcrumbItem[]", "required": true, "description": "Ordered labels with optional href and explicit current flag. Empty arrays render nothing." },
     "locale": { "type": "enum", "values": ["zh", "en"], "required": false, "default": "en", "description": "Accessible navigation name and lang. The host supplies translated labels and URLs." },
     "size": { "type": "enum", "values": ["sm", "md"], "required": false, "default": "sm", "description": "PDP caption-md or docsite body-md typography." },
     "inverse": { "type": "boolean", "required": false, "default": false },
-    "underline": { "type": "boolean", "required": false, "default": true, "description": "Preserve PDP link underlines; false matches the docsite." },
+    "underline": { "type": "boolean", "required": false, "default": true, "description": "Show link underlines on mouse hover. Set false to disable." },
     "renderLink": { "type": "(props: BreadcrumbLinkProps) => ReactNode", "required": false, "description": "Optional framework link adapter. Preserve native anchor props and semantics." }
   },
   "rules": {
@@ -37,8 +37,8 @@
   "tokenBindings": {
     "--text-secondary": { "property": "color", "selector": ".root" },
     "--text-secondary-inverse": { "property": "color", "selector": ".root[data-inverse=\"true\"]" },
-    "--space-100": { "property": "gap", "selector": ".list, .item" },
-    "--space-050": { "property": "padding", "selector": ".root, .link" },
+    "--space-100": { "property": "padding-inline", "selector": ".label, .link" },
+    "--space-050": { "property": "padding", "selector": ".root" },
     "--space-300": { "property": "min-width / min-height", "selector": ".link" },
     "--focus-ring": { "property": "outline-color", "selector": ".link:focus-visible" },
     "--focus-ring-inverse": { "property": "outline-color", "selector": ".root[data-inverse=\"true\"] .link:focus-visible" }
@@ -53,7 +53,7 @@
   },
   "dependencies": { "runtime": ["react"], "peer": [], "devOnly": [] },
   "usageRef": "./usage.md",
-  "examples": ["./examples.tsx#ProductBreadcrumb", "./examples.tsx#CurrentPageBreadcrumb"],
+  "examples": ["./examples.tsx#ProductBreadcrumb", "./examples.tsx#CurrentPageBreadcrumb", "./examples.tsx#CollapsedBreadcrumb"],
   "testing": {
     "interaction": "covered",
     "rationale": "Storybook checks native keyboard activation; browser coverage verifies locale, current semantics, long paths, focus geometry and existing PDP/docsite integrations."

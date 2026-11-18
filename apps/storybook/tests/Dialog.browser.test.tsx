@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Dialog } from "../../../packages/design-system/components/Dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@yami/design-system";
 import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import "@yami/design-system/tokens.css";
 
@@ -49,7 +49,7 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
   const originalOverflow = document.documentElement.style.overflow;
   try {
     flushSync(() => root.render(<StrictMode><Demo /></StrictMode>));
-    for (const width of [375, 768, 1440]) {
+    for (const width of [375, 1023, 1024, 1440]) {
       await page.viewport(width, 812);
       await page.getByRole("button", { name: "Open dialog" }).click();
       const dialog = document.querySelector<HTMLElement>("[data-dialog]")!;
@@ -65,16 +65,14 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       expect(getComputedStyle(header).borderBottomWidth).toBe("0px");
       const close = dialog.querySelector<HTMLButtonElement>("button")!;
       const icon = close.querySelector<HTMLImageElement>("img")!;
-      expect(close.getBoundingClientRect().width).toBe(32);
-      expect(close.getBoundingClientRect().height).toBe(32);
+      expect(close.getBoundingClientRect().width).toBe(24);
+      expect(close.getBoundingClientRect().height).toBe(24);
       expect(icon.getBoundingClientRect().width).toBe(24);
       expect(icon.getBoundingClientRect().height).toBe(24);
       expect(title.getBoundingClientRect().top).toBeGreaterThan(close.getBoundingClientRect().bottom);
-      if (width >= 1024) {
-        expect(getComputedStyle(header).paddingLeft).toBe("24px");
-        expect(icon.getBoundingClientRect().top - bounds.top).toBe(16);
-        expect(bounds.right - icon.getBoundingClientRect().right).toBe(24);
-      }
+      expect(getComputedStyle(header).paddingTop).toBe("12px");
+      expect(icon.getBoundingClientRect().top - bounds.top).toBe(12);
+      expect(bounds.right - icon.getBoundingClientRect().right).toBe(width < 1024 ? 16 : 24);
       expect(getComputedStyle(close, "::before").width).toBe("44px");
       await expect.poll(() => document.activeElement).toBe(close);
       await userEvent.tab();
@@ -87,6 +85,13 @@ test("Dialog stays centered, scrolls its body, traps focus and restores the open
       await expect.poll(() => document.activeElement).toBe(close);
       const content = dialog.querySelector<HTMLElement>("[data-dialog-content]")!;
       const footer = dialog.querySelector<HTMLElement>('[data-slot="dialog-footer"]')!;
+      const inset = width >= 1024 ? "24px" : "16px";
+      expect(getComputedStyle(header).paddingLeft).toBe(inset);
+      expect(getComputedStyle(content).paddingInline).toBe(inset);
+      expect(getComputedStyle(header).paddingBottom).toBe("8px");
+      expect(getComputedStyle(content).paddingBlock).toBe("8px");
+      expect(getComputedStyle(footer).paddingTop).toBe("16px");
+      expect(getComputedStyle(footer).paddingBottom).toBe(width >= 1024 ? "20px" : "16px");
       const footerTop = footer.getBoundingClientRect().top;
       content.scrollTop = content.scrollHeight;
       expect(content.scrollTop).toBeGreaterThan(100);
@@ -228,4 +233,48 @@ test("Dialog example uses 40px pill actions with equal mobile widths and right-a
       await expect.poll(() => document.querySelector("[data-dialog]")).toBeNull();
     }
   } finally { root.unmount(); container.remove(); await page.viewport(viewport.width, viewport.height); }
+});
+
+test("a composed dialog names and describes the popup, focuses the custom close action and restores its trigger", async () => {
+  const host = document.body.appendChild(document.createElement("div"));
+  const root = createRoot(host);
+  const changes: boolean[] = [];
+  try {
+    flushSync(() => root.render(
+      <Dialog onOpenChange={(open) => changes.push(open)}>
+        <DialogTrigger>Pickup information</DialogTrigger>
+        <DialogContent showCloseButton={false}>
+          <DialogHeader><DialogTitle>Pickup</DialogTitle><DialogDescription>Bring your order number.</DialogDescription></DialogHeader>
+          <DialogFooter><DialogClose render={<button />}>Done</DialogClose></DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    ));
+    const trigger = page.getByRole("button", { name: "Pickup information" });
+    await trigger.click();
+    const popup = page.getByRole("dialog", { name: "Pickup" });
+    await expect.element(popup).toHaveAccessibleDescription("Bring your order number.");
+    expect(popup.element().querySelectorAll("button")).toHaveLength(1);
+    expect(getComputedStyle(popup.element().querySelector("header")!).paddingTop).toBe("20px");
+    const done = page.getByRole("button", { name: "Done" });
+    await expect.element(done).toHaveFocus();
+    await done.click();
+    await expect.element(trigger).toHaveFocus();
+    expect(changes).toEqual([true, false]);
+  } finally { root.unmount(); host.remove(); }
+});
+
+test("defaultOpen and footer Close work without a state owner", async () => {
+  const host = document.body.appendChild(document.createElement("div"));
+  const root = createRoot(host);
+  try {
+    flushSync(() => root.render(<Dialog defaultOpen>
+      <DialogContent closeLabel="Dismiss">
+        <DialogHeader><DialogTitle>Delivery</DialogTitle></DialogHeader>
+        <DialogFooter showCloseButton closeLabel="Return" />
+      </DialogContent>
+    </Dialog>));
+    await expect.element(page.getByRole("button", { name: "Dismiss" })).toHaveFocus();
+    await page.getByRole("button", { name: "Return" }).click();
+    await expect.poll(() => document.querySelector("[data-dialog]")).toBeNull();
+  } finally { root.unmount(); host.remove(); }
 });

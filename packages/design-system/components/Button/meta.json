@@ -31,7 +31,7 @@
       }
     },
     "sizeDelta": "In the linked Figma reference, full and inline ship md = 40px and lg = 48px mobile / 56px PC. The implementation keeps inline lg at 48px on PC and raises full md to 48px on PC. Icon sm / md / lg remain 32 / 40 / 48px. The sm size for full and inline is a product extension.",
-    "stateMapping": "Figma 'Hover / Active' collapses to two CSS states (:hover + :active) which already share the same `-active` token. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
+    "stateMapping": "Primary uses separate hover and pressed colors on both surfaces. Other variants share their hover and pressed fill. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
   },
 
   "exports": ["Button", "ButtonLink", "ButtonLinkProps", "ButtonForm", "ButtonProps", "ButtonSize", "ButtonVariant"],
@@ -172,6 +172,7 @@
     "--button-emphasis",
     "--button-emphasis-active",
     "--button-primary",
+    "--button-primary-hover",
     "--button-primary-active",
     "--button-secondary",
     "--button-secondary-active",
@@ -181,6 +182,7 @@
     "--button-emphasis-inverse",
     "--button-emphasis-active-inverse",
     "--button-primary-inverse",
+    "--button-primary-hover-inverse",
     "--button-primary-active-inverse",
     "--button-secondary-inverse",
     "--button-secondary-active-inverse",
@@ -221,9 +223,11 @@
       "selector": ".emphasis:hover, .emphasis:active"
     },
     "--button-primary": { "property": "background-color", "selector": ".primary" },
+    "--button-primary-hover": { "property": "background-color", "selector": ".primary:hover:not(:active)" },
+    "--button-primary-hover-inverse": { "property": "background-color", "selector": ".primary.inverse:hover:not(:active)" },
     "--button-primary-active": {
       "property": "background-color",
-      "selector": ".primary:hover, .primary:active"
+      "selector": ".primary:active"
     },
     "--button-secondary": { "property": "background-color", "selector": ".secondary" },
     "--button-secondary-active": {

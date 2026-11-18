@@ -5,14 +5,16 @@ import { forwardRef, useEffect, useState } from "react"
 
 import styles from "./Checkbox.module.css"
 
-export type CheckboxProps = CheckboxPrimitive.Root.Props
+export type CheckboxProps = CheckboxPrimitive.Root.Props & {
+  density?: "default" | "compact"
+}
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
 }
 
 export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Checkbox(
-  { className, ...props },
+  { className, density = "default", ...props },
   ref,
 ) {
   const [keyboardFocus, setKeyboardFocus] = useState(true)
@@ -44,6 +46,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Ch
       ref={ref}
       className={mergedClassName}
       data-slot="checkbox"
+      data-density={density}
       data-keyboard-focus={keyboardFocus || undefined}
     >
       <CheckboxPrimitive.Indicator

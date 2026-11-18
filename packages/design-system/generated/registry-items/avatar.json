@@ -6,12 +6,16 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, optional membership indicators, and an overlapping group with optional overflow count.",
   "source": "components/Avatar",
   "files": [
     {
       "source": "components/Avatar/assets/default-avatar.png",
       "target": "components/Avatar/assets/default-avatar.png"
+    },
+    {
+      "source": "components/Avatar/assets/group-portraits.webp",
+      "target": "components/Avatar/assets/group-portraits.webp"
     },
     {
       "source": "components/Avatar/Avatar.module.css",
@@ -28,6 +32,10 @@
   ],
   "exports": [
     "Avatar",
+    "AvatarGroup",
+    "AvatarGroupCount",
+    "AvatarGroupCountProps",
+    "AvatarGroupProps",
     "AvatarProps",
     "AvatarSize"
   ],
@@ -52,11 +60,15 @@
     "examples": [
       "components/Avatar/examples.tsx#AvatarImageExample",
       "components/Avatar/examples.tsx#AvatarSizesExample",
-      "components/Avatar/examples.tsx#AvatarMembershipExample"
+      "components/Avatar/examples.tsx#AvatarMembershipExample",
+      "components/Avatar/examples.tsx#AvatarGroupExample"
     ]
   },
   "design": {
     "tokens": [
+      "--font-family-ios",
+      "--font-size-caption-md",
+      "--line-height-caption-md",
       "--membership-background-gold",
       "--membership-background-ruby",
       "--membership-background-ruby-0",
@@ -69,13 +81,17 @@
       "--radius-full",
       "--space-025",
       "--space-050",
+      "--space-100",
       "--space-150",
       "--space-200",
       "--space-250",
       "--space-400",
       "--space-500",
       "--space-600",
-      "--surface-secondary"
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-secondary"
     ],
     "rules": [
       "no-custom-radii",
@@ -157,6 +173,18 @@
       "--membership-background-gold": {
         "property": "--avatar-membership-background",
         "selector": ".avatar[data-membership-tier=\"gold\"]"
+      },
+      "--space-100": {
+        "property": "margin-inline-start",
+        "selector": ".group > :is(.avatar, .groupCount) + :is(.avatar, .groupCount)"
+      },
+      "--surface-primary": {
+        "property": "outline-color",
+        "selector": ".group > :is(.avatar, .groupCount)"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".groupCount"
       }
     }
   },
@@ -167,9 +195,9 @@
       "tapTargetMin": 0,
       "keyboardNav": [],
       "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
-      "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+      "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier. AvatarGroup has a required accessible name, and AvatarGroupCount accepts a localized accessible label. Both are display-only."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "96649f54d37c3ad3e5106cea71aa030718376a6ea5a60a981a9a4ae1385c543b"
+  "contentDigest": "dadf05f2a2dc7d9d04bd734b4581e5bc1344cc36c4d4fc1b18eaff77db44ae96"
 }

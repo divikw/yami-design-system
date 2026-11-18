@@ -10,7 +10,7 @@ function Controlled(props: QuantitySelectProps) {
 
 const meta = {
   id: "yami-components-form-quantityselect",
-  title: "YAMI/Components/QuantitySelect",
+  title: "YAMI/Modules/Commerce/QuantitySelect",
   component: QuantitySelect,
   globals: { theme: "light" },
   parameters: { layout: "padded", controls: { localizeDescriptions: true }, docs: { playground: "Playground", showStories: false,

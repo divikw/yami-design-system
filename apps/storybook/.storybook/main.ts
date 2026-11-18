@@ -48,7 +48,7 @@ const config: StorybookConfig = {
   typescript: { reactDocgen: "react-docgen" },
   viteFinal: async (viteConfig) => ({
     ...viteConfig,
-    optimizeDeps: { ...viteConfig.optimizeDeps, include: [...(viteConfig.optimizeDeps?.include ?? []), "@yami/design-system > @base-ui/react/accordion", "@yami/design-system > @base-ui/react/alert-dialog", "@yami/design-system > @base-ui/react/dialog", "@yami/design-system > @base-ui/react/button", "@yami/design-system > @base-ui/react/select", "@yami/design-system > @base-ui/react/popover", "@yami/design-system > @base-ui/react/switch"] },
+    optimizeDeps: { ...viteConfig.optimizeDeps, include: [...(viteConfig.optimizeDeps?.include ?? []), "@yami/design-system > @base-ui/react/accordion", "@yami/design-system > @base-ui/react/alert-dialog", "@yami/design-system > @base-ui/react/dialog", "@yami/design-system > @base-ui/react/drawer", "@yami/design-system > @base-ui/react/internals/createBaseUIEventDetails", "@yami/design-system > @base-ui/react/button", "@yami/design-system > @base-ui/react/select", "@yami/design-system > @base-ui/react/popover", "@yami/design-system > @base-ui/react/switch"] },
     resolve: { ...viteConfig.resolve, preserveSymlinks: false }
   })
 };

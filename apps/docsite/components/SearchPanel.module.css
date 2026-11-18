@@ -1,8 +1,13 @@
-.panel :global([data-slot="sheet-header"]) {
+.panel :global([data-slot="drawer-header"]),
+.panel :global([data-slot="dialog-header"]) {
   display: none;
 }
 
-.panel :global([data-sheet-content]) {
+.panel[data-dialog][data-variant] :global([data-slot="dialog-footer"]) { padding: 0; }
+
+.panel[data-dialog][data-variant] :global([data-dialog-content]),
+.panel :global([data-drawer-content]) {
+  flex: 1;
   display: flex;
   padding: 0;
   overflow: hidden;
@@ -159,7 +164,7 @@
 
 @media (min-width: 1024px) {
   .panel,
-  .panel[data-size="full"] {
+  .panel[data-dialog] {
     width: min(calc(var(--space-1000) * 8), calc(100vw - 2 * var(--space-200)));
     height: min(calc(var(--space-1000) * 6), calc(100dvh - 2 * var(--space-600)));
     max-height: min(calc(var(--space-1000) * 6), calc(100dvh - 2 * var(--space-600)));

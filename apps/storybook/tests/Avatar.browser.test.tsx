@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page } from "vitest/browser";
-import { Avatar } from "../../../packages/design-system/components/Avatar";
+import { Avatar, AvatarGroup, AvatarGroupCount } from "@yami/design-system";
 import "@yami/design-system/tokens.css";
 
 const validImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6C7sAAAAASUVORK5CYII=";
@@ -127,6 +127,45 @@ test.each([375, 1280])("image crops and circular sizes stay consistent in both t
         expect(getComputedStyle(avatar.querySelector("img")!).objectFit).toBe("cover");
       }
     }
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test.each([375, 1024])("avatar group overlaps its named members and count at %ipx", async (width) => {
+  const viewport = { width: window.innerWidth, height: window.innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await page.viewport(width, 900);
+    flushSync(() => root.render(
+      <AvatarGroup aria-label="Team members">
+        <Avatar alt="Yue Lin" src={validImage} />
+        <Avatar alt="Jordan Davis" src={validImage} />
+        <Avatar alt="Yu Chen" src={validImage} />
+        <AvatarGroupCount aria-label="3 more members">+3</AvatarGroupCount>
+      </AvatarGroup>,
+    ));
+    const group = page.getByRole("group", { name: "Team members" });
+    const count = group.getByRole("img", { name: "3 more members" });
+    await expect.element(count).toHaveTextContent("+3");
+    await expect.element(group.getByRole("img", { name: "Yue Lin" })).toBeVisible();
+
+    const items = Array.from(group.element().children);
+    const bounds = items.map((item) => item.getBoundingClientRect());
+    expect(bounds.map((box) => [box.width, box.height])).toEqual(Array.from({ length: 4 }, () => [40, 40]));
+    expect(bounds.slice(1).map((box, index) => bounds[index].right - box.left)).toEqual([8, 8, 8]);
+    const light = getComputedStyle(count.element());
+    const lightSurface = light.backgroundColor;
+    const lightOutline = light.outlineColor;
+    expect(light.outlineWidth).toBe("2px");
+    container.className = "dark";
+    const dark = getComputedStyle(count.element());
+    expect(dark.backgroundColor).not.toBe(lightSurface);
+    expect(dark.outlineColor).not.toBe(lightOutline);
   } finally {
     root.unmount();
     container.remove();

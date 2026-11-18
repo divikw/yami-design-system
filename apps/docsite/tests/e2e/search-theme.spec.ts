@@ -25,6 +25,25 @@ test("opens search with the keyboard and supports full keyboard selection", asyn
   await expect(page.getByRole("button", { name: "搜索" })).toBeFocused();
 });
 
+test("search keeps its query when switching between the mobile Drawer and desktop Dialog", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/en");
+  const trigger = page.getByRole("button", { name: "Search", exact: true });
+  await trigger.click();
+  const panel = page.getByRole("dialog", { name: "Search" });
+  const input = panel.getByRole("combobox");
+  await expect(panel).toHaveAttribute("data-swipe-direction", "down");
+  await expect(input).toBeFocused();
+  await input.fill("docs");
+  await page.setViewportSize({ width: 1024, height: 812 });
+  await expect(panel).toHaveAttribute("data-dialog", "");
+  await expect(panel).toHaveCSS("width", "640px");
+  await expect(input).toHaveValue("docs");
+  await expect(input).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(trigger).toBeFocused();
+});
+
 test("follows the system initially and persists an explicit theme choice", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
   await page.goto("/zh");

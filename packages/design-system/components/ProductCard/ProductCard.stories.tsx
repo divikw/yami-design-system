@@ -9,7 +9,7 @@ type ProductLocale = "zh" | "en";
 
 const meta = {
   id: "yami-components-commerce-productcard",
-  title: "YAMI/Components/Product Card",
+  title: "YAMI/Modules/Commerce/Product Card",
   component: ProductCard,
   decorators: [
     (Story, { args }) => (

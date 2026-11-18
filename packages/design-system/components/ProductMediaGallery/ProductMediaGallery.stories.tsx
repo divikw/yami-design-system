@@ -42,7 +42,7 @@ const overflowPinnedImages = Array.from({ length: 8 }, (_, index) => ({
 
 const meta = {
   id: "yami-components-commerce-product-media-gallery",
-  title: "YAMI/Components/Product Media Gallery",
+  title: "YAMI/Modules/Commerce/Product Media Gallery",
   tags: ["draft"],
   component: ProductMediaGallery,
   parameters: {

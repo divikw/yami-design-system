@@ -10,7 +10,7 @@ export const BasicCard = () => (
       <h3
         style={{
           margin: 0,
-          marginBottom: 'var(--space-100)',
+          marginBottom: 'var(--space-050)',
           fontSize: 'var(--font-size-heading-sm)',
         }}
       >

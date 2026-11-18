@@ -1,6 +1,6 @@
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
-import type { FormEvent } from "react";
+import type { CSSProperties, FormEvent } from "react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { cdp, page, userEvent } from "vitest/browser";
 import { Button, ButtonGroup, ButtonLink, Card, ProductCard } from "@yami/design-system";
@@ -132,7 +132,7 @@ test.each([240, 375, 1024])("link cards and long content fit a %ipx container wi
   for (const [index, link] of links.entries()) {
     expect(link).toHaveRole("link");
     expect(getComputedStyle(link).display).toBe("flow-root");
-    expect(getComputedStyle(link).paddingTop).toBe(index === 0 ? "0px" : innerWidth >= 1024 ? "16px" : "8px");
+    expect(getComputedStyle(link).paddingTop).toBe(["0px", "8px", "16px", "24px"][index]);
     expect(getComputedStyle(link).textDecorationLine).toBe("none");
     expect(link.getBoundingClientRect().width).toBe(width);
     expect(link.getBoundingClientRect().height).toBeGreaterThanOrEqual(32);
@@ -264,17 +264,25 @@ test("ProductCard keeps its media crop and compact radius independent of Card ov
 });
 
 
-test.each([375, 1023, 1024, 1440])("all content Card padding aliases use the shared responsive spacing at %ipx", async (width) => {
+test.each([375, 1023, 1024, 1440])("Card uses the selected padding on every side at %ipx", async (width) => {
   const viewport = { width: innerWidth, height: innerHeight };
   try {
     await page.viewport(width, 900);
     flushSync(() => root.render(<>
-      <Card>Default</Card>
+      <Card><h3>Delivery</h3><p>Expected Tuesday</p></Card>
       {(["sm", "md", "lg", "none"] as const).map((padding) => <Card key={padding} padding={padding}>{padding}</Card>)}
+      <Card style={{ "--card-spacing": "20px" } as CSSProperties}><header>Title</header><p>Body</p><footer>Actions</footer></Card>
     </>));
+    const heading = container.querySelector("h3")!;
+    expect(heading.nextElementSibling!.getBoundingClientRect().top - heading.getBoundingClientRect().bottom).toBe(4);
+    const header = container.querySelector("header")!;
+    const body = header.nextElementSibling!;
+    const footer = body.nextElementSibling!;
+    expect(body.getBoundingClientRect().top - header.getBoundingClientRect().bottom).toBe(20);
+    expect(footer.getBoundingClientRect().top - body.getBoundingClientRect().bottom).toBe(20);
     const cards = container.querySelectorAll('[data-slot="card"]');
     cards.forEach((card, index) => {
-      const expected = index === 4 ? "0px" : width >= 1024 ? "16px" : "8px";
+      const expected = ["16px", "8px", "16px", "24px", "0px", "20px"][index];
       const style = getComputedStyle(card);
       expect([style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft]).toEqual([expected, expected, expected, expected]);
     });

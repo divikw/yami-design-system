@@ -4,7 +4,7 @@
   "category": "display",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+  "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, optional membership indicators, and an overlapping group with optional overflow count.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -13,7 +13,11 @@
   "exports": [
     "Avatar",
     "AvatarProps",
-    "AvatarSize"
+    "AvatarSize",
+    "AvatarGroup",
+    "AvatarGroupProps",
+    "AvatarGroupCount",
+    "AvatarGroupCountProps"
   ],
   "variants": {
     "size": [
@@ -101,7 +105,14 @@
     "--membership-background-ruby",
     "--membership-background-silver",
     "--membership-background-gold",
-    "--membership-separator"
+    "--membership-separator",
+    "--space-100",
+    "--stroke-thick",
+    "--surface-primary",
+    "--text-secondary",
+    "--font-size-caption-md",
+    "--line-height-caption-md",
+    "--font-family-ios"
   ],
   "tokenBindings": {
     "--space-400": {
@@ -179,6 +190,18 @@
     "--membership-background-gold": {
       "property": "--avatar-membership-background",
       "selector": ".avatar[data-membership-tier=\"gold\"]"
+    },
+    "--space-100": {
+      "property": "margin-inline-start",
+      "selector": ".group > :is(.avatar, .groupCount) + :is(.avatar, .groupCount)"
+    },
+    "--surface-primary": {
+      "property": "outline-color",
+      "selector": ".group > :is(.avatar, .groupCount)"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".groupCount"
     }
   },
   "accessibility": {
@@ -187,7 +210,7 @@
     "tapTargetMin": 0,
     "keyboardNav": [],
     "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
-    "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+    "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier. AvatarGroup has a required accessible name, and AvatarGroupCount accepts a localized accessible label. Both are display-only."
   },
   "dependencies": {
     "runtime": [
@@ -203,11 +226,12 @@
   "examples": [
     "./examples.tsx#AvatarImageExample",
     "./examples.tsx#AvatarSizesExample",
-    "./examples.tsx#AvatarMembershipExample"
+    "./examples.tsx#AvatarMembershipExample",
+    "./examples.tsx#AvatarGroupExample"
   ],
   "testing": {
     "interaction": "covered",
-    "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, and membership ring/icon geometry in both themes and mobile/desktop widths."
+    "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, membership ring/icon geometry, and avatar group overlap in both themes and mobile/desktop widths."
   },
   "composes": [
     "MembershipIcon"

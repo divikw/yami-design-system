@@ -16,10 +16,16 @@ export type BreadcrumbProps = Omit<ComponentPropsWithRef<"nav">, "children"> & {
   locale?: "zh" | "en";
   size?: "sm" | "md";
   inverse?: boolean;
+  /** Show an underline on mouse hover. */
   underline?: boolean;
   /** Preserve the supplied anchor props when using a framework link. */
   renderLink?: (props: BreadcrumbLinkProps) => ReactNode;
 };
+
+/** A static marker for levels omitted by the host. Use as an item's label. */
+export function BreadcrumbEllipsis({ "aria-label": label }: { "aria-label": string }) {
+  return <span data-slot="breadcrumb-ellipsis" role="img" aria-label={label}>…</span>;
+}
 
 export function Breadcrumb({
   items,

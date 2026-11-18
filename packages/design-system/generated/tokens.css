@@ -54,6 +54,8 @@
   --button-primary: var(--color-black-900);
   --button-primary-active: var(--color-black-1000);
   --button-primary-active-inverse: var(--color-white-800);
+  --button-primary-hover: var(--color-neutral-800);
+  --button-primary-hover-inverse: var(--color-white-900);
   --button-primary-inverse: var(--color-white-1000);
   --button-secondary: var(--color-black-100);
   --button-secondary-active: var(--color-black-200);
@@ -463,6 +465,8 @@
   --button-primary: var(--color-white-1000);
   --button-primary-active: var(--color-white-800);
   --button-primary-active-inverse: var(--color-black-1000);
+  --button-primary-hover: var(--color-white-900);
+  --button-primary-hover-inverse: var(--color-neutral-800);
   --button-primary-inverse: var(--color-black-900);
   --button-secondary: var(--color-white-200);
   --button-secondary-active: var(--color-white-300);

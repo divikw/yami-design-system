@@ -117,7 +117,7 @@ export const Interaction: Story = { tags: ["!dev", "!autodocs"], render: () => <
     await userEvent.click(within(dialog).getByRole("button", { name: /^Notify me/ }));
     await expect(within(dialog).getByRole("button", { name: /^Notification set/ })).toHaveAttribute("aria-disabled", "true");
     await userEvent.keyboard("{Escape}");
-    await waitFor(() => expect(canvasElement.ownerDocument.querySelector("[data-sheet]")).toBeNull());
+    await waitFor(() => expect(canvasElement.ownerDocument.querySelector("[data-drawer]")).toBeNull());
   },
 };
 

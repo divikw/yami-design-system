@@ -479,10 +479,10 @@ test("mobile preview opens the selected image and supports a single touch-scroll
     expect(desktopStageRect.right).toBeLessThanOrEqual(desktopSidebarRect.left);
     expect(desktopSidebarRect.right).toBeLessThan(closeButton.getBoundingClientRect().left);
     const closeRect = closeButton.getBoundingClientRect();
-    expect(closeRect.width).toBe(32);
-    expect(closeRect.height).toBe(32);
-    expect(closeRect.top - dialog.getBoundingClientRect().top).toBe(16);
-    expect(dialog.getBoundingClientRect().right - closeRect.right).toBe(16);
+    expect(closeRect.width).toBe(24);
+    expect(closeRect.height).toBe(24);
+    expect(closeRect.top - dialog.getBoundingClientRect().top).toBe(24);
+    expect(dialog.getBoundingClientRect().right - closeRect.right).toBe(24);
     expect(closeButton.querySelector("img")!.getBoundingClientRect().width).toBe(24);
     expect(getComputedStyle(closeButton, "::before").width).toBe("44px");
     await page.viewport(375, 812);

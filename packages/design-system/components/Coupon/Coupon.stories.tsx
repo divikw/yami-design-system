@@ -10,7 +10,7 @@ function Controlled(props: CouponProps) {
 
 const meta = {
   id: "yami-components-commerce-coupon",
-  title: "YAMI/Components/Coupon",
+  title: "YAMI/Modules/Commerce/Coupon",
   component: Coupon,
   parameters: { layout: "padded", docs: { playground: "Playground", showStories: false, translations: {
     zh: { description: "受控优惠券卡片。业务方维护可用性、单选或多选，以及保存后的应用逻辑。" },

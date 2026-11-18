@@ -18,22 +18,22 @@ function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?
     setChild(false);
     requestAnimationFrame(() => entry.current?.focus());
   }
-  return <div lang={locale} style={{ padding: "var(--space-300)" }}>
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-200)" }}>
-      {(states ? Object.keys(labels) as Mode[] : ["default" as const]).map((value) => <Button key={value} onClick={() => { setMode(value); setChild(value === "child"); }}>{states ? labels[value] : zh ? "打开优惠券" : "Open coupons"}</Button>)}
+  return <div lang={locale} style={{ display: "grid", minHeight: "100dvh", boxSizing: "border-box", placeItems: "center", padding: "var(--space-300)" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "var(--space-200)" }}>
+      {(states ? Object.keys(labels) as Mode[] : ["default" as const]).map((value) => <Button key={value} onClick={() => { setMode(value); setChild(value === "child"); }}>{states ? labels[value] : zh ? "打开" : "Open"}</Button>)}
     </div>
-    <Drawer open={mode !== null} title={child ? zh ? "使用条件" : "Conditions" : zh ? "优惠券" : "Coupons"} closeLabel={zh ? "关闭优惠券" : "Close coupons"} onClose={() => setMode(null)}
-      back={child ? { label: zh ? "返回优惠券" : "Back to coupons", onClick: back } : undefined}
+    <Drawer size="half" lang={locale} open={mode !== null} title={child ? zh ? "详情" : "Details" : zh ? "抽屉" : "Drawer"} closeLabel={zh ? "关闭" : "Close"} onClose={() => setMode(null)}
+      back={child ? { label: zh ? "返回" : "Back", onClick: back } : undefined}
       footer={<div style={{ padding: "var(--space-200)" }}><Button size="lg" form="full" onClick={() => setMode(null)}>{zh ? "完成" : "Done"}</Button></div>}>
       <div hidden={child}>
-        {mode === "empty" ? <p>{zh ? "暂无可用优惠券" : "No available coupons"}</p>
-          : mode === "loading" ? <p role="status">{zh ? "正在加载优惠券…" : "Loading coupons…"}</p>
-            : mode === "error" ? <><p role="alert">{zh ? "优惠券加载失败" : "Could not load coupons"}</p><Button onClick={() => setMode("default")}>{zh ? "重试" : "Retry"}</Button></>
-              : <><p>{zh ? "这里仅显示可用于当前购物车中商品的优惠券" : "Only coupons applicable to your cart are shown here."}</p><Input label={zh ? "折扣码" : "Promo code"} />
-                <Button ref={entry} onClick={() => setChild(true)}>{zh ? "查看使用条件" : "View conditions"}</Button>
-                {mode === "long" && Array.from({ length: 24 }, (_, index) => <p key={index}>{zh ? `优惠券 ${index + 1} · 使用前请核对适用商家和商品。` : `Coupon ${index + 1} · Check eligible sellers and items before applying.`}</p>)}</>}
+        {mode === "empty" ? <p>{zh ? "暂无内容" : "No content available"}</p>
+          : mode === "loading" ? <p role="status">{zh ? "正在加载…" : "Loading…"}</p>
+            : mode === "error" ? <><p role="alert">{zh ? "内容加载失败" : "Could not load content"}</p><Button onClick={() => setMode("default")}>{zh ? "重试" : "Retry"}</Button></>
+              : <><p>{zh ? "填写备注，或打开详情查看补充说明。" : "Add a note or open the details for more information."}</p><Input fullWidth label={zh ? "备注" : "Note"} />
+                <Button ref={entry} onClick={() => setChild(true)}>{zh ? "查看详情" : "View details"}</Button>
+                {mode === "long" && Array.from({ length: 24 }, (_, index) => <p key={index}>{zh ? `第 ${index + 1} 项` : `Item ${index + 1}`}</p>)}</>}
       </div>
-      {child && <p>{zh ? "优惠不与其他折扣码叠加。具体条件由业务内容提供。" : "Cannot be combined with other promo codes. The host supplies offer conditions."}</p>}
+      {child && <p>{zh ? "使用返回按钮回到上一级。" : "Use Back to return to the previous view."}</p>}
     </Drawer>
   </div>;
 }
@@ -44,10 +44,10 @@ const meta = {
   component: Drawer,
   globals: { theme: "light" },
   parameters: { layout: "fullscreen", controls: { disable: true }, docs: { showStories: false, translations: {
-    zh: { description: "PC 右侧贴边抽屉，Mobile 底部弹层。复用 Sheet 的模态、独立滚动、固定操作栏、焦点管理和子页面返回。" },
-    en: { description: "Right-edge desktop drawer and mobile bottom sheet. Shares Sheet modal behavior, scrolling, fixed footer, focus management and child-view navigation." },
+    zh: { description: "PC 右侧贴边抽屉，Mobile 底部弹层。移动端可从半屏拖到全屏，正文独立滚动，底部操作保持可见。" },
+    en: { description: "Right-edge desktop drawer and mobile bottom sheet. Drag from half to full height on mobile. Content scrolls independently above the fixed footer." },
   } } },
-  args: { open: false, title: "优惠券", closeLabel: "关闭", onClose: () => {} },
+  args: { size: "half", open: false, title: "抽屉", closeLabel: "关闭", onClose: () => {} },
 } satisfies Meta<typeof Drawer>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -60,17 +60,17 @@ export const Interaction: Story = {
   render: () => <Demo locale="en" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const opener = canvas.getByRole("button", { name: "Open coupons" });
+    const opener = canvas.getByRole("button", { name: "Open" });
     await userEvent.click(opener);
-    const dialog = within(canvasElement.ownerDocument.body).getByRole("dialog", { name: "Coupons" });
+    const dialog = within(canvasElement.ownerDocument.body).getByRole("dialog", { name: "Drawer" });
     await expect(dialog).toHaveAttribute("aria-modal", "true");
-    await userEvent.click(within(dialog).getByRole("button", { name: "View conditions" }));
-    await expect(within(dialog).getByRole("button", { name: "Back to coupons" })).toHaveFocus();
+    await userEvent.click(within(dialog).getByRole("button", { name: "View details" }));
+    await expect(within(dialog).getByRole("button", { name: "Back" })).toHaveFocus();
     await userEvent.keyboard("{Escape}");
-    await waitFor(() => expect(within(dialog).getByRole("button", { name: "View conditions" })).toHaveFocus());
+    await waitFor(() => expect(within(dialog).getByRole("button", { name: "View details" })).toHaveFocus());
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(opener).toHaveFocus());
-    await expect(canvasElement.ownerDocument.querySelector("[data-sheet]")).toBeNull();
+    await expect(canvasElement.ownerDocument.querySelector("[data-drawer]")).toBeNull();
   },
 };
 
@@ -103,6 +103,6 @@ function DrawerPlayground(args: DrawerProps & { opener: string }) {
 export const Playground: Story = {
   tags: ["!dev", "!test"],
   render: (args, { globals }) => (
-    <DrawerPlayground key={String(args.open)} {...args} opener={globals.locale === "en" ? "Open drawer" : "打开抽屉"} />
+    <DrawerPlayground lang={globals.locale === "en" ? "en" : "zh"} key={String(args.open)} {...args} opener={globals.locale === "en" ? "Open" : "打开"} />
   ),
 };

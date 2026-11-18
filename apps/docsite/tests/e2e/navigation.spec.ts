@@ -28,7 +28,7 @@ test("switches language without losing the document or stable anchor", async ({ 
   await expect(page.locator("#design-standards")).toContainText("Design standards");
 });
 
-test("mobile menu uses a Sheet, has three primary links, and restores focus", async ({ page }) => {
+test("mobile menu uses a Drawer, has three primary links, and restores focus", async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 844 });
   await page.goto("/zh");
 

@@ -20,6 +20,7 @@ export function AspectRatioDocsPage({ locale }: { locale: DocsLocale }) {
       preview: <AspectRatio ratio={1} style={surfaceStyle}><span>{zh ? "商品展示区域" : "Product media area"}</span></AspectRatio> },
   ];
   return <ComponentGuide name="AspectRatio" slug="aspectratio" locale={locale}
+    usageCode={`${importCode}\n\n<AspectRatio ratio={16 / 9}>\n  ${zh ? "商品展示区域" : "Product media area"}\n</AspectRatio>`}
     intro={zh ? "按指定宽高比约束内容，适用于商品图片和媒体展示区域。" : "Constrain content to a width-to-height ratio for product images and media."}
     previous={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}
     next={{ name: "Avatar", path: "yami-components-data-display-avatar" }} composition={"AspectRatio\n└── children"} examples={examples}

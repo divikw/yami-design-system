@@ -46,7 +46,7 @@ Docsite phase one includes the system overview, foundations, collaboration guide
 2. How does a new application integrate correctly?
 3. How is a design or code change verified and released?
 
-Storybook continues to own the component catalog. Button variants, Input states, Sheet focus behavior, and component maturity are authoritative there and in the generated Catalog. Docsite links to those sources instead of copying APIs and creating a second truth.
+Storybook continues to own the component catalog. Button variants, Input states, Drawer focus behavior, and component maturity are authoritative there and in the generated Catalog. Docsite links to those sources instead of copying APIs and creating a second truth.
 
 ## Bilingual content and themes are first-class
 

@@ -11,7 +11,7 @@ for (const width of [320, 375, 733, 768]) {
     const dialog = page.getByRole("dialog", { name: "菜单", exact: true });
     const panel = dialog.locator("[data-navigation-panel]");
     await expect(panel).toBeVisible();
-    await expect(panel).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
+    await expect(dialog).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
     const box = await panel.boundingBox();
     expect(box!.x).toBe(width - 320);
     expect(box!.width).toBe(320);
@@ -31,7 +31,7 @@ for (const width of [320, 375, 733, 768]) {
     await group.click();
     await expect(docs.getByRole("link", { name: "开始创建", exact: true })).toBeVisible();
 
-    await expect(page.locator("[data-sheet-backdrop]")).toHaveCSS("backdrop-filter", "blur(2px)");
+    await expect(page.locator("[data-drawer-backdrop]")).toHaveCSS("backdrop-filter", "blur(2px)");
     await page.mouse.move(0, 400);
     await page.screenshot({ path: testInfo.outputPath("navigation-drawer.png") });
     const scrollBefore = await page.evaluate(() => scrollY);
@@ -53,31 +53,12 @@ test("drawer enters and exits from the right before releasing its modal lock", a
   const trigger = page.getByRole("button", { name: "Menu", exact: true });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Menu", exact: true });
-  const panel = dialog.locator("[data-navigation-panel]");
-  await expect(panel).toHaveCSS("animation-duration", "0.41s");
-  await expect(panel).toHaveCSS("animation-timing-function", "cubic-bezier(0.24, 1, 0.4, 1)");
-  const entry = await panel.evaluate(async element => {
-    const animation = element.getAnimations()[0];
-    animation.pause();
-    animation.currentTime = 0;
-    await new Promise(requestAnimationFrame);
-    const start = element.getBoundingClientRect().x;
-    animation.currentTime = 205;
-    await new Promise(requestAnimationFrame);
-    const middle = element.getBoundingClientRect().x;
-    animation.finish();
-    return { start, middle };
-  });
-  expect(entry.start).toBe(733);
-  expect(entry.middle).toBeGreaterThan(413);
-  expect(entry.middle).toBeLessThan(733);
-  await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
-  await dialog.getByRole("button", { name: "Close", exact: true }).click();
-  await expect(dialog).toHaveAttribute("data-state", "closing");
+  await expect(dialog).toHaveAttribute("data-swipe-direction", "right");
+  await expect(dialog).toHaveAttribute("data-drawer-state", "open");
   await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
-  const frames = await panel.evaluate(e => (e.getAnimations()[0].effect as KeyframeEffect).getKeyframes());
-  expect(["translateX(0px)", "translate(0px)"]).toContain(frames[0].transform);
-  expect(["translateX(100%)", "translate(100%)"]).toContain(frames.at(-1)!.transform);
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  await expect(dialog).toHaveAttribute("data-drawer-state", "exiting");
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
   await expect(dialog).not.toBeAttached();
   await expect(trigger).toBeFocused();
 });
@@ -116,7 +97,7 @@ for (const colorScheme of ["light", "dark"] as const) {
     await page.goto("/en/docs/browse-components");
     await page.getByRole("button", { name: "Menu", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Menu", exact: true });
-    await expect(dialog.locator("[data-navigation-panel]")).toHaveCSS("animation-duration", "0s");
+    await expect(dialog).toHaveCSS("animation-duration", "0s");
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeAttached();

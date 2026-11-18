@@ -138,7 +138,7 @@
 .savedItem:has([data-slot="product-card-availability"] button) .savedActions .actionLink::before { top: 0; height: 100%; transform: none; }
 @media (min-width: 560px) { .page { --cart-product-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 768px) { .page { --cart-product-columns: repeat(4, minmax(0, 1fr)); } }
-@media (min-width: 1024px) { .page { --cart-product-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+@media (min-width: 1024px) { .page { --cart-selection-size: var(--space-400); --cart-product-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
 .sidebar { position: sticky; top: var(--space-300); display: grid; gap: var(--space-200); min-width: 0; }
 .protection { min-width: 0; margin-top: var(--space-150); }
 .protectionIntro { display: grid; gap: var(--space-050); }
@@ -199,11 +199,11 @@
 .certificationMarks img { height: 30px; width: auto; }
 .guaranteeItems { display: grid; gap: var(--space-050); list-style: none; margin: 0; padding: 0; }
 .guaranteeItems li { display: flex; align-items: flex-start; gap: var(--space-050); }
-.protectionDrawer [data-slot="sheet-header"] { border-bottom: 0; }
+.protectionDrawer [data-slot="drawer-header"] { border-bottom: 0; }
 
 @media (min-width: 1024px) {
-  .protectionDrawer [data-slot="sheet-header"] h2 { padding-bottom: 0; font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
-  .protectionDrawer[data-desktop-placement="right"] [data-sheet-content][data-padding="default"] { padding: var(--space-300) var(--space-400) calc(var(--space-600) + var(--space-100)); }
+  .protectionDrawer [data-slot="drawer-header"] h2 { padding-bottom: 0; font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
+  .protectionDrawer[data-swipe-direction="right"] [data-drawer-content][data-padding="default"] { padding: var(--space-300) var(--space-400) calc(var(--space-600) + var(--space-100)); }
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
@@ -292,8 +292,8 @@
   .shippingActions { margin-inline-start: calc(var(--cart-selection-size) + var(--space-050)); }
 }
 
-.unavailableDrawer [data-slot="sheet-header"] h2 { font-weight: var(--font-weight-normal); }
-.unavailableDrawer [data-sheet-content][data-padding="default"] { padding: 0 var(--space-200) var(--space-400); }
+.unavailableDrawer [data-slot="drawer-header"] h2 { font-weight: var(--font-weight-normal); }
+.unavailableDrawer [data-drawer-content][data-padding="default"] { padding: 0 var(--space-200) var(--space-400); }
 .unavailableDrawer .item { grid-template-columns: 72px minmax(0, 1fr); column-gap: var(--space-200); row-gap: var(--space-100); padding: var(--space-300) 0; border-bottom: var(--stroke-default) solid var(--divider-default); }
 .unavailableDrawer .item .itemImage { grid-column: 1; grid-row: 1 / 4; align-self: center; }
 .unavailableDrawer .item .itemInfo { grid-column: 1; grid-row: 1; }
@@ -306,8 +306,9 @@
 .unavailableDrawer .item .rowActions { grid-column: 1; grid-row: 3; }
 
 @media (min-width: 1024px) {
-  .unavailableDrawer [data-slot="sheet-header"] h2 { padding-bottom: var(--space-400); font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
-  .unavailableDrawer[data-desktop-placement="right"] [data-sheet-content][data-padding="default"] { padding: 0 var(--space-400) var(--space-400); }
+  .unavailableDrawer [data-slot="drawer-header"] > :first-child { min-height: var(--space-600); }
+  .unavailableDrawer [data-slot="drawer-header"] h2 { padding-bottom: var(--space-400); font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); }
+  .unavailableDrawer[data-swipe-direction="right"] [data-drawer-content][data-padding="default"] { padding: 0 var(--space-400) var(--space-400); }
   .unavailableDrawer .item { grid-template-columns: 104px minmax(0, 1fr); column-gap: var(--space-300); }
   .unavailableDrawer .itemInfo h3 { font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-xl); }
 }
@@ -462,7 +463,18 @@
 .addNoticePrice { display: flex; align-items: center; gap: var(--space-050); white-space: nowrap; }
 .addNoticePrice strong { color: var(--text-emphasis); font-size: var(--font-size-heading-xl); line-height: var(--line-height-heading-xl); }
 .addNoticePrice del { color: var(--text-secondary); font-size: var(--font-size-strike-md); line-height: var(--line-height-strike-md); }
-.page .addNoticeClose { position: absolute; top: var(--space-200); inset-inline-end: var(--space-200); }
+.addNotice .addNoticeClose {
+  border-radius: var(--radius-sm);
+  --close-inset: var(--space-200);
+  position: absolute;
+  top: calc(var(--close-inset) - var(--stroke-default));
+  inset-inline-end: calc(var(--close-inset) - var(--stroke-default));
+  width: var(--space-300);
+  height: var(--space-300);
+}
+@media (min-width: 1024px) {
+  .addNotice .addNoticeClose { --close-inset: var(--space-300); }
+}
 .closeIcon { display: block; width: var(--space-300); height: var(--space-300); background: currentColor; mask: url("../../../design-system/assets/icons/system/close.svg") center / contain no-repeat; }
 
 .couponContent { display: grid; gap: var(--space-200); }
@@ -491,8 +503,8 @@
 @media (max-width: 1023px) {
   .checkoutBar[hidden], .appNavigation[hidden] { display: none; }
   .summaryDrawer::backdrop { clip-path: inset(calc(var(--space-600) + var(--space-100)) 0 0); }
-  .summaryDrawer [data-sheet-content][data-padding="default"] { padding: var(--space-200) var(--space-200) var(--space-400); }
-  .summaryDrawer [data-slot="sheet-footer"] { padding-bottom: 0; }
+  .summaryDrawer [data-drawer-content][data-padding="default"] { padding: var(--space-200) var(--space-200) var(--space-400); }
+  .summaryDrawer [data-slot="drawer-footer"] { padding-bottom: 0; }
   .summaryDrawer .checkoutBar, .summaryDrawer .appNavigation { position: relative; inset: auto; }
   .summaryDrawer .checkoutTotal .totalChevron { transform: rotate(90deg); }
 }
@@ -500,8 +512,8 @@
 @media (min-width: 1024px) {
   .couponContent { gap: var(--space-400); }
   .couponContent .couponAction { height: var(--space-500); }
-  .couponDrawer [data-slot="sheet-header"] { border-bottom: 0; }
-  .couponDrawer [data-slot="sheet-header"] h2 { font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); font-weight: var(--font-weight-normal); padding-bottom: var(--space-100); }
-  .couponDrawer[data-desktop-placement="right"] [data-sheet-content][data-padding="default"] { padding: 0 var(--space-400) var(--space-300); }
+  .couponDrawer [data-slot="drawer-header"] { border-bottom: 0; }
+  .couponDrawer [data-slot="drawer-header"] h2 { font-size: var(--font-size-heading-3xl); line-height: var(--line-height-heading-3xl); font-weight: var(--font-weight-normal); padding-bottom: var(--space-100); }
+  .couponDrawer[data-swipe-direction="right"] [data-drawer-content][data-padding="default"] { padding: 0 var(--space-400) var(--space-300); }
   .couponFooter { padding: var(--space-300) var(--space-400); }
 }

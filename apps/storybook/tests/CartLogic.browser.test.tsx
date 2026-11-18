@@ -26,8 +26,8 @@ test.each([375, 1440])("coupon changes are staged until Save and discarded by Cl
     const field = dialog.getByRole("textbox", { name: "Promo code", exact: true }).element().closest('[data-slot="input"]')!;
     const redeem = dialog.getByRole("button", { name: "Redeem", exact: true }).element();
     expect(field.contains(redeem)).toBe(width < 1024);
-    expect(Boolean(dialog.element().querySelector('[data-slot="sheet-description"]'))).toBe(width < 1024);
-    expect(getComputedStyle(dialog.element().querySelector('[data-slot="sheet-header"]')!).borderBottomWidth).toBe(width < 1024 ? "1px" : "0px");
+    expect(Boolean(dialog.element().querySelector('[data-slot="drawer-description"]'))).toBe(width < 1024);
+    expect(getComputedStyle(dialog.element().querySelector('[data-slot="drawer-header"]')!).borderBottomWidth).toBe(width < 1024 ? "1px" : "0px");
     const card = option.element().closest('[data-slot="coupon"]')!;
     expect(card.scrollWidth).toBeLessThanOrEqual(card.clientWidth);
     await expect.poll(() => dialog.getByRole("button", { name: "Save", exact: true }).element().getBoundingClientRect().bottom).toBeLessThanOrEqual(innerHeight);
@@ -35,7 +35,7 @@ test.each([375, 1440])("coupon changes are staged until Save and discarded by Cl
     await expect.element(option).toBeChecked();
     expect(totals.textContent).not.toContain("Discount");
     await dialog.getByRole("button", { name: "Close", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     await open();
     await expect.element(option).not.toBeChecked();
     await dialog.getByRole("textbox", { name: "Promo code", exact: true }).fill("DEMO10");
@@ -43,18 +43,18 @@ test.each([375, 1440])("coupon changes are staged until Save and discarded by Cl
     await expect.element(option).toBeChecked();
     expect(totals.textContent).not.toContain("Discount");
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(totals.textContent).toContain("Discount");
     await open();
     await expect.element(option).toBeChecked();
     await option.click();
     await userEvent.keyboard("{Escape}");
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     await open();
     await expect.element(option).toBeChecked();
     await option.click();
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(totals.textContent).not.toContain("Discount");
   } finally {
     root.unmount(); container.remove();
@@ -80,7 +80,7 @@ test("coupon drawer keeps one selection and hides coupons that do not meet the c
     expect(dialog.getByRole("checkbox").elements()).toHaveLength(2);
     expect(dialog.element().textContent).not.toContain("$100 off $1000");
     await dialog.getByRole("button", { name: "Save", exact: true }).click();
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     expect(container.querySelector('[data-slot="cart-totals"]')!.textContent).toContain("−$5.00");
   } finally {
     root.unmount(); container.remove();
@@ -134,7 +134,7 @@ test("switching to a guest account stops applying the signed-in coupon", async (
     await page.getByRole("button", { name: /^Checkout \(/ }).click();
     await expect.element(page.getByRole("dialog", { name: "Sign in / Register", exact: true })).toBeVisible();
     flushSync(() => root.render(<CartPage {...fixture} signedIn />));
-    expect(document.querySelector("[data-sheet]")).toBeNull();
+    expect(document.querySelector("[data-drawer]")).toBeNull();
     expect(totals.textContent).not.toContain("Discount");
   } finally {
     root.unmount(); container.remove();
@@ -183,9 +183,9 @@ test("signing out closes the coupon drawer and signing back in does not reopen i
     flushSync(() => root.render(<CartPage {...fixture} signedIn initialDrawer="coupons" />));
     await expect.element(page.getByRole("dialog", { name: "Coupons", exact: true })).toBeVisible();
     flushSync(() => root.render(<CartPage {...fixture} signedIn={false} initialDrawer="coupons" />));
-    await expect.poll(() => document.querySelector("[data-sheet]")).toBeNull();
+    await expect.poll(() => document.querySelector("[data-drawer]")).toBeNull();
     flushSync(() => root.render(<CartPage {...fixture} signedIn initialDrawer="coupons" />));
-    expect(document.querySelector("[data-sheet]")).toBeNull();
+    expect(document.querySelector("[data-drawer]")).toBeNull();
   } finally { root.unmount(); container.remove(); }
 });
 

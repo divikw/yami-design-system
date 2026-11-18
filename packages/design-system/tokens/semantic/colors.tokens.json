@@ -236,6 +236,11 @@
       "$value": "{color.black.900}",
       "$description": "用于页面中的主要操作按钮，优先级低于强调型按钮。"
     },
+    "primary-hover": {
+      "$type": "color",
+      "$value": "{color.neutral.800}",
+      "$description": "主按钮悬停背景色。"
+    },
     "primary-active": {
       "$type": "color",
       "$value": "{color.black.1000}",
@@ -245,6 +250,11 @@
       "$type": "color",
       "$value": "{color.white.1000}",
       "$description": "用于反向极性表面上的主要操作按钮，确保对比度与可读性。"
+    },
+    "primary-hover-inverse": {
+      "$type": "color",
+      "$value": "{color.white.900}",
+      "$description": "反色表面上的主按钮悬停背景色。"
     },
     "primary-active-inverse": {
       "$type": "color",

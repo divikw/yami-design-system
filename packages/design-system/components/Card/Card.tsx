@@ -26,7 +26,7 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg'
 export type CardSurface = 'primary' | 'secondary' | 'inverse'
 
 export interface CardBaseProps {
-  /** 统一响应式内边距：PC（≥1024px）16px、Mobile/Tablet 8px；none=0 用于贴边媒体。默认 md，sm/lg 作为兼容别名使用相同尺寸。 */
+  /** 各设备内边距一致：sm 8px、md（默认）16px、lg 24px、none 0。 */
   padding?: CardPadding
   /** 背景表面令牌。默认为 'primary'（--surface-primary）。 */
   surface?: CardSurface

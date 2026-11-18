@@ -569,7 +569,7 @@
         "category": "display",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, and optional membership ring and tier icon.",
+        "description": "Circular image avatar with a built-in YAMI default, three fixed sizes, optional membership indicators, and an overlapping group with optional overflow count.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -578,7 +578,11 @@
         "exports": [
           "Avatar",
           "AvatarProps",
-          "AvatarSize"
+          "AvatarSize",
+          "AvatarGroup",
+          "AvatarGroupProps",
+          "AvatarGroupCount",
+          "AvatarGroupCountProps"
         ],
         "variants": {
           "size": [
@@ -666,7 +670,14 @@
           "--membership-background-ruby",
           "--membership-background-silver",
           "--membership-background-gold",
-          "--membership-separator"
+          "--membership-separator",
+          "--space-100",
+          "--stroke-thick",
+          "--surface-primary",
+          "--text-secondary",
+          "--font-size-caption-md",
+          "--line-height-caption-md",
+          "--font-family-ios"
         ],
         "tokenBindings": {
           "--space-400": {
@@ -744,6 +755,18 @@
           "--membership-background-gold": {
             "property": "--avatar-membership-background",
             "selector": ".avatar[data-membership-tier=\"gold\"]"
+          },
+          "--space-100": {
+            "property": "margin-inline-start",
+            "selector": ".group > :is(.avatar, .groupCount) + :is(.avatar, .groupCount)"
+          },
+          "--surface-primary": {
+            "property": "outline-color",
+            "selector": ".group > :is(.avatar, .groupCount)"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".groupCount"
           }
         },
         "accessibility": {
@@ -752,7 +775,7 @@
           "tapTargetMin": 0,
           "keyboardNav": [],
           "ariaPattern": "One accessible name on the root, including the optional membership tier; the image and overlaid icon are hidden from assistive technology.",
-          "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier."
+          "notes": "Supply a meaningful alt; use alt=\"\" when adjacent text already names the person and membership tier. AvatarGroup has a required accessible name, and AvatarGroupCount accepts a localized accessible label. Both are display-only."
         },
         "dependencies": {
           "runtime": [
@@ -768,11 +791,12 @@
         "examples": [
           "./examples.tsx#AvatarImageExample",
           "./examples.tsx#AvatarSizesExample",
-          "./examples.tsx#AvatarMembershipExample"
+          "./examples.tsx#AvatarMembershipExample",
+          "./examples.tsx#AvatarGroupExample"
         ],
         "testing": {
           "interaction": "covered",
-          "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, and membership ring/icon geometry in both themes and mobile/desktop widths."
+          "rationale": "Browser tests cover default and failed images, source replacement, accessible naming, fixed sizes, membership ring/icon geometry, and avatar group overlap in both themes and mobile/desktop widths."
         },
         "composes": [
           "MembershipIcon"
@@ -1509,6 +1533,7 @@
         },
         "exports": [
           "Breadcrumb",
+          "BreadcrumbEllipsis",
           "BreadcrumbProps",
           "BreadcrumbItem",
           "BreadcrumbLinkProps"
@@ -1526,6 +1551,7 @@
             "link",
             "static",
             "current",
+            "collapsed",
             "focus-visible",
             "empty"
           ]
@@ -1565,7 +1591,7 @@
             "type": "boolean",
             "required": false,
             "default": true,
-            "description": "Preserve PDP link underlines; false matches the docsite."
+            "description": "Show link underlines on mouse hover. Set false to disable."
           },
           "renderLink": {
             "type": "(props: BreadcrumbLinkProps) => ReactNode",
@@ -1610,12 +1636,12 @@
             "selector": ".root[data-inverse=\"true\"]"
           },
           "--space-100": {
-            "property": "gap",
-            "selector": ".list, .item"
+            "property": "padding-inline",
+            "selector": ".label, .link"
           },
           "--space-050": {
             "property": "padding",
-            "selector": ".root, .link"
+            "selector": ".root"
           },
           "--space-300": {
             "property": "min-width / min-height",
@@ -1652,7 +1678,8 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#ProductBreadcrumb",
-          "./examples.tsx#CurrentPageBreadcrumb"
+          "./examples.tsx#CurrentPageBreadcrumb",
+          "./examples.tsx#CollapsedBreadcrumb"
         ],
         "testing": {
           "interaction": "covered",
@@ -1694,7 +1721,7 @@
             }
           },
           "sizeDelta": "In the linked Figma reference, full and inline ship md = 40px and lg = 48px mobile / 56px PC. The implementation keeps inline lg at 48px on PC and raises full md to 48px on PC. Icon sm / md / lg remain 32 / 40 / 48px. The sm size for full and inline is a product extension.",
-          "stateMapping": "Figma 'Hover / Active' collapses to two CSS states (:hover + :active) which already share the same `-active` token. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
+          "stateMapping": "Primary uses separate hover and pressed colors on both surfaces. Other variants share their hover and pressed fill. Mouse hover additionally requires a viewport of at least 1024px, hover capability and a fine pointer; :active remains available on mobile. Figma omits :focus-visible (a11y-only) and code adds it per rule `focus-style`."
         },
         "exports": [
           "Button",
@@ -1880,6 +1907,7 @@
           "--button-emphasis",
           "--button-emphasis-active",
           "--button-primary",
+          "--button-primary-hover",
           "--button-primary-active",
           "--button-secondary",
           "--button-secondary-active",
@@ -1889,6 +1917,7 @@
           "--button-emphasis-inverse",
           "--button-emphasis-active-inverse",
           "--button-primary-inverse",
+          "--button-primary-hover-inverse",
           "--button-primary-active-inverse",
           "--button-secondary-inverse",
           "--button-secondary-active-inverse",
@@ -1934,9 +1963,17 @@
             "property": "background-color",
             "selector": ".primary"
           },
+          "--button-primary-hover": {
+            "property": "background-color",
+            "selector": ".primary:hover:not(:active)"
+          },
+          "--button-primary-hover-inverse": {
+            "property": "background-color",
+            "selector": ".primary.inverse:hover:not(:active)"
+          },
           "--button-primary-active": {
             "property": "background-color",
-            "selector": ".primary:hover, .primary:active"
+            "selector": ".primary:active"
           },
           "--button-secondary": {
             "property": "background-color",
@@ -2181,7 +2218,7 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: PC (≥1024px) 16px, Mobile/Tablet 8px; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
         "figma": {
           "nodeId": null,
           "componentKey": null
@@ -2226,7 +2263,7 @@
             ],
             "required": false,
             "default": "md",
-            "description": "Responsive padding: PC (≥1024px) 16px, Mobile/Tablet 8px. Default md; sm/lg remain compatibility aliases with the same sizes. Use none=0 for edge-to-edge media with composite-owned content spacing."
+            "description": "Card inset on every device: sm 8px, md (default) 16px, lg 24px, none 0. Override --card-spacing on the card to adjust its inset and section spacing."
           },
           "surface": {
             "type": "enum",
@@ -2304,7 +2341,10 @@
           "--radius-surface-default",
           "--space-200",
           "--space-400",
-          "--space-100"
+          "--space-100",
+          "--space-0",
+          "--space-050",
+          "--space-300"
         ],
         "tokenBindings": {
           "--surface-primary": {
@@ -2352,16 +2392,28 @@
             "selector": ".card"
           },
           "--space-200": {
-            "property": "padding (min-width 1024px)",
-            "selector": ".pad-sm, .pad-md, .pad-lg"
+            "property": "--card-spacing (padding and section gap)",
+            "selector": ".pad-md"
           },
           "--space-400": {
             "property": "min-width / min-height",
             "selector": ".interactive"
           },
           "--space-100": {
-            "property": "padding (below 1024px)",
-            "selector": ".pad-sm, .pad-md, .pad-lg"
+            "property": "--card-spacing (padding and section gap)",
+            "selector": ".pad-sm"
+          },
+          "--space-0": {
+            "property": "--card-spacing (padding and section gap)",
+            "selector": ".pad-none"
+          },
+          "--space-300": {
+            "property": "--card-spacing (padding and section gap)",
+            "selector": ".pad-lg"
+          },
+          "--space-050": {
+            "property": "margin-block-end",
+            "selector": ".content > :is(h1, h2, h3, h4, h5, h6):has(+ p)"
           }
         },
         "accessibility": {
@@ -2412,10 +2464,14 @@
           "nodeId": "4795:90512",
           "componentKey": "f0a1bb4e8c7540460de93a68de180508560150a3",
           "pageNodeId": "2857:32277",
-          "notes": "Figma defines the 20x20 visible control; code reserves a 40x40 layout and pointer target.",
+          "notes": "Figma defines the 20x20 visible control; the layout and pointer target is 32x32 on desktop and 40x40 on mobile.",
           "stateMapping": "Status=Default/Hover/Selected/Disable_Selected/Disable_Unselected maps to unchecked hover, checked, checked+disabled, and unchecked+disabled. Indeterminate is code-only."
         },
         "variants": {
+          "density": [
+            "default",
+            "compact"
+          ],
           "state": [
             "default",
             "hover",
@@ -2427,6 +2483,16 @@
           ]
         },
         "props": {
+          "density": {
+            "type": "enum",
+            "values": [
+              "default",
+              "compact"
+            ],
+            "required": false,
+            "default": "default",
+            "description": "Both values use the responsive target size: 32px square from 1024px, 40px square below."
+          },
           "checked": {
             "type": "boolean",
             "required": false,
@@ -2485,7 +2551,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "40x40px layout and pointer target at every breakpoint, with a centered 20px visible control. Parent labels may provide a larger target."
+            "note": "All targets are 32x32px from 1024px and 40x40px below. The visible control is centered at 20px. Parent labels may provide a larger target."
           },
           "color": {
             "ruleId": "semantic-color-only",
@@ -2504,6 +2570,7 @@
           "--radius-tag-primary",
           "--space-025",
           "--space-250",
+          "--space-400",
           "--space-500",
           "--space-100",
           "--space-300",
@@ -2542,7 +2609,7 @@
         "accessibility": {
           "role": "checkbox",
           "wcagLevel": "AA",
-          "tapTargetMin": 40,
+          "tapTargetMin": 32,
           "keyboardNav": [
             "tab",
             "shift+tab",
@@ -2719,7 +2786,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Base UI modal for short forms, editing and general information, with the existing YAMI controlled interface.",
+        "description": "Base UI modal for short forms, editing and general information, with composable parts and a controlled shorthand interface.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -2727,7 +2794,19 @@
         },
         "exports": [
           "Dialog",
-          "DialogProps"
+          "DialogProps",
+          "DialogRootProps",
+          "DialogTrigger",
+          "DialogPortal",
+          "DialogOverlay",
+          "DialogContent",
+          "DialogContentProps",
+          "DialogHeader",
+          "DialogTitle",
+          "DialogDescription",
+          "DialogBody",
+          "DialogFooter",
+          "DialogClose"
         ],
         "composes": [
           "Button"
@@ -2745,13 +2824,34 @@
         "props": {
           "open": {
             "type": "boolean",
-            "required": true,
-            "description": "Controlled visibility. Closed dialogs unmount their content."
+            "required": false,
+            "description": "Required in shorthand mode. Controlled visibility. Closed dialogs unmount their content."
+          },
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Initial uncontrolled visibility for a composed Dialog."
+          },
+          "onOpenChange": {
+            "type": "function",
+            "required": false,
+            "description": "Receives the next visibility and Base UI event details in composition mode."
+          },
+          "onOpenChangeComplete": {
+            "type": "function",
+            "required": false,
+            "description": "Reports completion of opening or closing in composition mode."
+          },
+          "showCloseButton": {
+            "type": "boolean",
+            "required": false,
+            "description": "Defaults to true on DialogContent and default shorthand, false on DialogFooter."
           },
           "title": {
             "type": "string",
-            "required": true,
-            "description": "Visible heading and accessible dialog name."
+            "required": false,
+            "description": "Required in shorthand mode. Visible heading and accessible dialog name."
           },
           "closeLabel": {
             "type": "string",
@@ -2760,8 +2860,18 @@
           },
           "onClose": {
             "type": "() => void",
-            "required": true,
-            "description": "Request to close; the consumer must set open to false."
+            "required": false,
+            "description": "Shorthand request to close; the consumer must set open to false."
+          },
+          "initialFocus": {
+            "type": "DialogPrimitive.Popup.Props[\"initialFocus\"]",
+            "required": false,
+            "description": "Override the initial focus target, such as a search input."
+          },
+          "finalFocus": {
+            "type": "DialogPrimitive.Popup.Props[\"finalFocus\"]",
+            "required": false,
+            "description": "Override the focus target after dismissal."
           },
           "role": {
             "type": "enum",
@@ -2805,7 +2915,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "The visual close control is 32px with a centered 24px icon and Button's 44px hit-area extender."
+            "note": "The visual close control fits the 24px icon with a 4px radius and Button's 44px hit-area extender."
           }
         },
         "tokens": [
@@ -2817,11 +2927,11 @@
           "--font-size-heading-sm",
           "--font-size-heading-xl",
           "--line-height-heading-xl",
-          "--space-050",
           "--font-weight-emphasize",
           "--space-100",
           "--space-150",
           "--space-200",
+          "--space-250",
           "--space-400",
           "--space-600",
           "--space-300",
@@ -3021,7 +3131,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Right-side desktop drawer with a responsive mobile bottom sheet. Native 200ms slide and 150ms scrim animations retain Sheet modal/focus behavior through exit and respect reduced motion.",
+        "description": "Responsive Base UI Drawer with four edges, configurable snap points, nested panels and non-modal interaction.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -3029,12 +3139,23 @@
         },
         "exports": [
           "Drawer",
-          "DrawerProps"
+          "DrawerProps",
+          "useDesktopViewport"
         ],
         "composes": [
-          "Sheet"
+          "Button"
         ],
         "props": {
+          "initialFocus": {
+            "type": "Base UI Popup initialFocus",
+            "required": false,
+            "description": "Override focus on entry."
+          },
+          "finalFocus": {
+            "type": "Base UI Popup finalFocus",
+            "required": false,
+            "description": "Override the return target on dismissal."
+          },
           "description": {
             "type": "string",
             "required": false,
@@ -3066,10 +3187,54 @@
             "required": true
           },
           "size": {
-            "type": "\"content\" | \"full\"",
+            "type": "\"content\" | \"full\" | \"half\"",
             "required": false,
             "default": "full",
-            "description": "Mobile bottom-sheet height; desktop is always full height."
+            "description": "Mobile starts at content, full (default), or half height. Half can snap to full. Desktop fills the right edge."
+          },
+          "swipeDirection": {
+            "type": "\"up\" | \"right\" | \"down\" | \"left\"",
+            "required": false,
+            "description": "Defaults to right on desktop and down on mobile."
+          },
+          "showSwipeHandle": {
+            "type": "boolean",
+            "required": false,
+            "description": "Show a drag handle. Defaults on for drawers with snap points."
+          },
+          "modal": {
+            "type": "boolean | \"trap-focus\"",
+            "required": false,
+            "default": "true"
+          },
+          "disablePointerDismissal": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "snapPoints": {
+            "type": "(number | string)[]",
+            "required": false,
+            "description": "Ascending vertical stops in viewport fractions, pixels or rem."
+          },
+          "snapPoint": {
+            "type": "number | string | null",
+            "required": false,
+            "description": "Controlled active stop."
+          },
+          "defaultSnapPoint": {
+            "type": "number | string | null",
+            "required": false,
+            "description": "Initial stop when uncontrolled."
+          },
+          "onSnapPointChange": {
+            "type": "(point, details) => void",
+            "required": false
+          },
+          "snapToSequentialPoints": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
           },
           "contentPadding": {
             "type": "\"default\" | \"compact\" | \"none\"",
@@ -3105,13 +3270,15 @@
           "keyboardNav": [
             "tab",
             "shift+tab",
+            "arrow keys",
             "escape",
             "enter"
           ],
-          "ariaPattern": "Named native modal dialog"
+          "ariaPattern": "Named dialog with optional modal isolation and vertical height slider"
         },
         "dependencies": {
           "runtime": [
+            "@base-ui/react",
             "react"
           ],
           "peer": [],
@@ -3123,7 +3290,7 @@
         ],
         "testing": {
           "interaction": "covered",
-          "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
+          "rationale": "Storybook covers child-view navigation. Browser tests cover touch snap points, keyboard resizing, footer geometry, focus restoration and reduced motion."
         }
       }
     },
@@ -3136,7 +3303,7 @@
         "category": "form",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Interactive 36px filter-pill family with filled and outlined variants, optional icons, single-, multiple-, and hierarchical category popovers on desktop and shared mobile Sheets, and horizontally scrollable grouping.",
+        "description": "Interactive 36px filter-pill family with filled and outlined variants, optional icons, single-, multiple-, and hierarchical category popovers on desktop and mobile Drawers, and horizontally scrollable grouping.",
         "figma": {
           "nodeId": "1123:65336",
           "componentKey": null,
@@ -3146,7 +3313,7 @@
           "Button",
           "Checkbox",
           "RadioGroup",
-          "Sheet",
+          "Drawer",
           "Popover"
         ],
         "variants": {
@@ -4968,7 +5135,7 @@
         "category": "layout",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Sheet on mobile.",
+        "description": "YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Drawer on mobile.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -6979,204 +7146,6 @@
         "examples": [
           "./examples.tsx#BasicSelect"
         ]
-      }
-    },
-    {
-      "id": "Sheet",
-      "source": "components/Sheet",
-      "meta": {
-        "$schema": "../../schema/component.json",
-        "name": "Sheet",
-        "category": "layout",
-        "status": "experimental",
-        "version": "0.1.0",
-        "description": "Base UI modal shell: a mobile bottom sheet with 16px top corners and square bottom corners, and a right-aligned full-height desktop panel with square corners. Includes a fixed header, scrolling content, optional footer, and child-view back navigation.",
-        "figma": {
-          "nodeId": null,
-          "componentKey": null,
-          "notes": "Extracted from maintained PDP and search filter implementations. No standalone Figma binding is assigned yet."
-        },
-        "exports": [
-          "Sheet",
-          "SheetProps"
-        ],
-        "composes": [
-          "Button"
-        ],
-        "variants": {
-          "size": [
-            "content",
-            "full"
-          ],
-          "contentPadding": [
-            "default",
-            "compact",
-            "none"
-          ]
-        },
-        "props": {
-          "description": {
-            "type": "string",
-            "required": false,
-            "description": "Optional supporting copy below the title, inside the fixed header above its divider. Linked with aria-describedby. Omission preserves the original header."
-          },
-          "open": {
-            "type": "boolean",
-            "required": true,
-            "description": "Controlled visibility. Closed sheets unmount their content."
-          },
-          "title": {
-            "type": "string",
-            "required": true,
-            "description": "Visible heading and accessible dialog name."
-          },
-          "closeLabel": {
-            "type": "string",
-            "required": true,
-            "description": "Localized accessible label for the close action."
-          },
-          "onClose": {
-            "type": "() => void",
-            "required": true,
-            "description": "Request to close; the consumer must set open to false."
-          },
-          "back": {
-            "type": "{ label: string; onClick: () => void }",
-            "required": false,
-            "description": "Replaces Close with Back in a child view. Escape also goes back; the backdrop closes the whole sheet."
-          },
-          "size": {
-            "type": "enum",
-            "values": [
-              "content",
-              "full"
-            ],
-            "default": "content",
-            "required": false,
-            "description": "Mobile content height starts at 50dvh and grows to the visible viewport minus its top safe area, with at least 48px reserved. Full height fills that maximum. Desktop defaults to a 480px full-height panel at the right edge."
-          },
-          "contentPadding": {
-            "type": "enum",
-            "values": [
-              "default",
-              "compact",
-              "none"
-            ],
-            "default": "default",
-            "required": false,
-            "description": "Use compact for 8px content insets or none for lists that own their row padding."
-          },
-          "desktopPlacement": {
-            "type": "enum",
-            "values": [
-              "center",
-              "right"
-            ],
-            "default": "right",
-            "required": false,
-            "description": "Desktop presentation defaults to right; center remains for existing callers. Mobile geometry is unchanged."
-          },
-          "initialFocus": {
-            "type": "Base UI Popup initialFocus",
-            "required": false,
-            "description": "Overrides the default close/back focus target for a custom header."
-          },
-          "finalFocus": {
-            "type": "Base UI Popup finalFocus",
-            "required": false,
-            "description": "Explicit return target for shortcut-driven or custom navigation flows."
-          },
-          "footer": {
-            "type": "ReactNode",
-            "required": false,
-            "description": "Caller-owned actions outside the scrolling content, with bottom safe-area protection."
-          },
-          "children": {
-            "type": "ReactNode",
-            "required": true,
-            "description": "Business content. Sheet does not own selection or draft state."
-          }
-        },
-        "rules": {
-          "radii": {
-            "ruleId": "no-custom-radii",
-            "note": "Below 1024px, top corners use --radius-surface-sheet (16px) and bottom corners are square. From 1024px, the default right-edge panel has square corners; explicit center uses --radius-surface-default (12px). Applies to both content and full sizes."
-          },
-          "focus": {
-            "ruleId": "focus-style",
-            "note": "Uses Button focus rings, confines Tab navigation, and restores the opener on close."
-          },
-          "tapTarget": {
-            "ruleId": "tap-target",
-            "note": "Close/back controls are visually 32px with centered 24px close icons and 20px back arrows and Button's 44px hit-area extender."
-          }
-        },
-        "tokens": [
-          "--surface-primary",
-          "--text-primary",
-          "--overlay-scrim",
-          "--divider-default",
-          "--radius-surface-sheet",
-          "--radius-surface-default",
-          "--font-size-heading-2xl",
-          "--font-weight-emphasize",
-          "--space-100",
-          "--space-200",
-          "--space-600",
-          "--focus-ring"
-        ],
-        "tokenBindings": {
-          "--surface-primary": {
-            "property": "background",
-            "selector": ".sheet"
-          },
-          "--overlay-scrim": {
-            "property": "background",
-            "selector": ".backdrop"
-          },
-          "--radius-surface-default": {
-            "property": "border-radius",
-            "selector": ".sheet"
-          },
-          "--radius-surface-sheet": {
-            "property": "border-radius",
-            "selector": ".sheet"
-          },
-          "--font-size-heading-2xl": {
-            "property": "font-size",
-            "selector": ".title"
-          }
-        },
-        "accessibility": {
-          "role": "dialog",
-          "wcagLevel": "AA",
-          "tapTargetMin": 44,
-          "keyboardNav": [
-            "tab",
-            "shift+tab",
-            "escape",
-            "enter",
-            "space"
-          ],
-          "ariaPattern": "Base UI modal dialog labelled by its visible h2 and optional fixed description",
-          "interaction": "Base UI manages background isolation, focus trapping/restoration, outside dismissal, Escape and scroll locking. Child views focus Back, reset body scroll and intercept Escape to return to the parent."
-        },
-        "dependencies": {
-          "runtime": [
-            "react",
-            "@base-ui/react"
-          ],
-          "peer": [],
-          "devOnly": []
-        },
-        "usageRef": "./usage.md",
-        "examples": [
-          "./examples.tsx#SheetExample"
-        ],
-        "testing": {
-          "interaction": "covered",
-          "rationale": "Showcase and browser tests cover focus, scrolling, backdrop dismissal, child navigation, Drawer motion, nested popovers and responsive consumers."
-        }
       }
     },
     {

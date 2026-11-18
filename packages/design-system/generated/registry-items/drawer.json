@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Right-side desktop drawer with a responsive mobile bottom sheet. Native 200ms slide and 150ms scrim animations retain Sheet modal/focus behavior through exit and respect reduced motion.",
+  "description": "Responsive Base UI Drawer with four edges, configurable snap points, nested panels and non-modal interaction.",
   "source": "components/Drawer",
   "files": [
     {
@@ -18,19 +18,33 @@
       "target": "components/Drawer/Drawer.tsx"
     },
     {
+      "source": "components/Drawer/DrawerSurface.module.css",
+      "target": "components/Drawer/DrawerSurface.module.css"
+    },
+    {
+      "source": "components/Drawer/DrawerSurface.tsx",
+      "target": "components/Drawer/DrawerSurface.tsx"
+    },
+    {
       "source": "components/Drawer/index.ts",
       "target": "components/Drawer/index.ts"
+    },
+    {
+      "source": "components/Drawer/useDesktopViewport.ts",
+      "target": "components/Drawer/useDesktopViewport.ts"
     }
   ],
   "exports": [
     "Drawer",
-    "DrawerProps"
+    "DrawerProps",
+    "useDesktopViewport"
   ],
   "composes": [
-    "Sheet"
+    "Button"
   ],
   "dependencies": {
     "runtime": [
+      "@base-ui/react",
       "react"
     ],
     "peer": [],
@@ -60,12 +74,13 @@
       "keyboardNav": [
         "tab",
         "shift+tab",
+        "arrow keys",
         "escape",
         "enter"
       ],
-      "ariaPattern": "Named native modal dialog"
+      "ariaPattern": "Named dialog with optional modal isolation and vertical height slider"
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "a6326330bd3dca3abc53cec9fd925b1638ae0e73abb94cd67d4dd38678d74641"
+  "contentDigest": "6556bae902600e9974c1ae97586b2976c2b8875eda17e2cb15a3c1c0d7239c60"
 }

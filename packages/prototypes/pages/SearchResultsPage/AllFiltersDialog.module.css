@@ -1,3 +1,6 @@
+.panel[data-dialog] { width: min(560px, 100%); }
+.panel[data-dialog][data-variant] :is([data-dialog-content], [data-slot="dialog-footer"]) { padding: 0; }
+
 .section {
   position: relative;
   display: flex;

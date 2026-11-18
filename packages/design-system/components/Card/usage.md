@@ -23,7 +23,7 @@ Card 默认使用：
 
 - `--surface-primary` 背景（浅色主题下为白色，深色主题下随主题变化）。
 - `--radius-surface-default` 圆角（12px）。
-- `padding='md'` 响应式内边距：PC 16px、Mobile/Tablet 8px。
+- `padding='md'` 在所有设备上均为 16px。
 - **无边框**（规则 `card-no-border`）。
 - **默认无阴影**。Figma 的 E100–E500 层级已同步为 `--elevation-*` token，仅在明确需要静态层级时使用，不自动改变 Card 默认外观。
 
@@ -31,12 +31,16 @@ Card 默认使用：
 
 ### 内边距选择
 
-| 模式 | PC（≥1024px） | Mobile/Tablet（<1024px） |
-|---|---|---|
-| `md`（默认） | 16px | 8px |
-| `none` | 0 | 0 |
+| 模式 | 各设备内边距 |
+|---|---|
+| `sm` | 8px |
+| `md`（默认） | 16px |
+| `lg` | 24px |
+| `none` | 0 |
 
-所有内容 Card 统一使用上述响应式内边距；`sm`、`lg` 仅保留为兼容别名，尺寸与 `md` 相同。ProductCard 等贴边媒体容器继续使用 `padding="none"`，其内部内容间距由组合组件管理。
+在 Card 的 CSS 类上设置 `--card-spacing: var(--space-250)` 可将内边距和分区间距一起调整为 20px。紧邻的标题和说明留 4px。把辅助按钮放在标题行末端，窄屏允许换行。把整卡操作放在正文后的 `footer` 中，由 `ButtonGroup` 排列。直接子元素 `header` 后和 `footer` 前默认留一个卡片间距。
+
+ProductCard 等贴边媒体容器继续使用 `padding="none"`，其内部内容间距由组合组件管理。
 
 ### 圆角归属
 
@@ -125,10 +129,12 @@ Card 默认使用：
 <Card as="article">
   <h3>订单 Y20261011-1234</h3>
   <p>预计周二送达</p>
-  <ButtonGroup aria-label="订单操作">
-    <ButtonLink href="/orders/Y20261011-1234" size="md">查看订单</ButtonLink>
-    <Button variant="secondary" size="md" onClick={generateAndDownloadReceipt}>下载收据</Button>
-  </ButtonGroup>
+  <footer>
+    <ButtonGroup aria-label="订单操作">
+      <ButtonLink href="/orders/Y20261011-1234" size="md">查看订单</ButtonLink>
+      <Button variant="secondary" size="md" onClick={generateAndDownloadReceipt}>下载收据</Button>
+    </ButtonGroup>
+  </footer>
 </Card>
 ```
 
@@ -246,7 +252,7 @@ First ask whether this is an independently understandable, actionable item. For 
 Cards ship with:
 - `--surface-primary` background (white in Light; theme-aware in Dark)
 - `--radius-surface-default` (12px)
-- `padding='md'`: PC 16px, Mobile/Tablet 8px
+- `padding='md'`: 16px on every device
 - **No border** (rule `card-no-border`)
 - **No shadow by default**. Figma E100–E500 tokens are available for explicitly requested static depth; they do not change Card defaults.
 
@@ -254,12 +260,16 @@ Opt into `bordered` only in dense listing grids where cards are tightly packed a
 
 ### Choosing padding
 
-| Mode | PC (≥1024px) | Mobile/Tablet (<1024px) |
-|---|---|---|
-| `md` (default) | 16px | 8px |
-| `none` | 0 | 0 |
+| Mode | Inset on every device |
+|---|---|
+| `sm` | 8px |
+| `md` (default) | 16px |
+| `lg` | 24px |
+| `none` | 0 |
 
-All content Cards use this responsive spacing. `sm` and `lg` remain compatibility aliases with the same sizes as `md`. Edge-to-edge media containers such as ProductCard keep `padding="none"` and own their internal content spacing.
+Set `--card-spacing: var(--space-250)` in the Card’s CSS class for a 20px inset and section gap. Leave 4px between the title and description. Place auxiliary actions at the trailing edge of the title row and allow wrapping. Group card-level actions with `ButtonGroup` in a footer after the body. A direct header is followed by one card spacing and a direct footer gets the same space above it.
+
+Edge-to-edge media containers such as ProductCard keep `padding="none"` and own their internal content spacing.
 
 ### Radius ownership
 
@@ -346,10 +356,12 @@ Use `padding="none"` for edge-to-edge media. Crop top corners only within the me
 <Card as="article">
   <h3>Order Y20261011-1234</h3>
   <p>Expected Tuesday</p>
-  <ButtonGroup aria-label="Order actions">
-    <ButtonLink href="/orders/Y20261011-1234" size="md">View order</ButtonLink>
-    <Button variant="secondary" size="md" onClick={generateAndDownloadReceipt}>Download receipt</Button>
-  </ButtonGroup>
+  <footer>
+    <ButtonGroup aria-label="Order actions">
+      <ButtonLink href="/orders/Y20261011-1234" size="md">View order</ButtonLink>
+      <Button variant="secondary" size="md" onClick={generateAndDownloadReceipt}>Download receipt</Button>
+    </ButtonGroup>
+  </footer>
 </Card>
 ```
 

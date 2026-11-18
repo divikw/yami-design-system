@@ -64,7 +64,7 @@ function ComponentDemo({ component, locale, state }: { component: ComponentName;
     {component === "coupons" || component === "unavailable" || component === "protection" ? <>
       <Button onClick={() => { setDraftCouponId(couponId); setOpen(true); }}>{title}</Button>
       <Drawer className={`${styles.cartDrawer} ${component === "protection" ? styles.protectionDrawer : component === "unavailable" ? styles.unavailableDrawer : styles.couponDrawer}`}
-        open={open} title={title} closeLabel={t.close} onClose={() => setOpen(false)}
+        lang={locale} size={component === "coupons" ? "half" : "full"} open={open} title={title} closeLabel={t.close} onClose={() => setOpen(false)}
         description={mobile && component === "coupons" ? t.couponHint : undefined}
         footer={component === "coupons" ? <CartCouponActions locale={locale} onSave={() => { applyCoupon(draftCouponId); setOpen(false); }} /> : undefined}>
         {notice ? <div className={styles.drawerNotice}><p role="status">{notice}</p></div> : null}

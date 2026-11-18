@@ -3,19 +3,19 @@ import { createRoot } from "react-dom/client";
 import { createRef, useRef, useState } from "react";
 import { expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Button, Sheet, Switch, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Popover, PopoverTrigger, PopoverContent, PopoverTitle } from "@yami/design-system";
+import { Button, Drawer, Switch, Select, SelectTrigger, SelectValue, SelectContent, SelectItem, Popover, PopoverTrigger, PopoverContent, PopoverTitle } from "@yami/design-system";
 import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/base.css";
 
 function NestedPopover() {
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
-  return <Sheet open title="Outer sheet" closeLabel="Close sheet" onClose={() => { throw new Error("Inner Escape must not close the sheet"); }}>
+  return <Drawer open title="Outer drawer" closeLabel="Close drawer" onClose={() => { throw new Error("Inner Escape must not close the drawer"); }}>
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger ref={trigger}>Open details</PopoverTrigger>
       <PopoverContent><PopoverTitle>Inner details</PopoverTitle><Button variant="secondary">Inner action</Button></PopoverContent>
     </Popover>
-  </Sheet>;
+  </Drawer>;
 }
 
 test("Select preserves cancellation, external form ownership and controlled reset behavior", async () => {
@@ -57,7 +57,7 @@ test("Select preserves cancellation, external form ownership and controlled rese
   } finally { root.unmount(); container.remove(); }
 });
 
-test("Escape dismisses a nested popover before its parent sheet", async () => {
+test("Escape dismisses a nested popover before its parent drawer", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -70,7 +70,7 @@ test("Escape dismisses a nested popover before its parent sheet", async () => {
     await userEvent.keyboard("{Escape}");
     await expect.element(trigger).toHaveFocus();
     await expect.element(trigger).toHaveAttribute("aria-expanded", "false");
-    await expect.element(page.getByRole("dialog", { name: "Outer sheet", exact: true })).toBeVisible();
+    await expect.element(page.getByRole("dialog", { name: "Outer drawer", exact: true })).toBeVisible();
   } finally { root.unmount(); container.remove(); }
 });
 

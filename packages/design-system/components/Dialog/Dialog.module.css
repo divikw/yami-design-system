@@ -16,6 +16,7 @@
 }
 
 .dialog {
+  --dialog-inset: var(--space-200);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -47,7 +48,7 @@
   align-items: center;
   gap: var(--space-100);
   grid-template-columns: minmax(0, 1fr);
-  padding: var(--space-200);
+  padding: var(--space-250) var(--dialog-inset) var(--space-100);
 }
 
 .title {
@@ -55,10 +56,6 @@
   font-size: var(--font-size-heading-sm);
   font-weight: var(--font-weight-emphasize);
   line-height: var(--line-height-heading-sm);
-}
-
-.dialog[data-variant="default"] .header {
-  padding-top: var(--space-100);
 }
 
 .dialog[data-variant="default"] .title {
@@ -92,11 +89,15 @@
 }
 
 .dialog .closeButton {
+  border-radius: var(--radius-sm);
   justify-self: end;
   align-self: start;
-  width: var(--space-400);
-  height: var(--space-400);
-  margin-inline-end: calc(-1 * var(--space-100));
+  width: var(--space-300);
+  height: var(--space-300);
+}
+
+.dialog .closeButton,
+.dialog .closeButton:not([aria-disabled="true"]):active {
   background-color: transparent;
 }
 
@@ -116,19 +117,14 @@
 
 .content {
   min-height: 0;
-  padding: var(--space-200);
+  padding: var(--space-100) var(--dialog-inset);
   overflow-y: auto;
   overscroll-behavior-y: contain;
 }
 
-.dialog[data-variant="default"] .content {
-  padding-top: var(--space-050);
-}
-
 .footer {
   flex: 0 0 auto;
-  padding: var(--space-200);
-  padding-bottom: max(var(--space-200), env(safe-area-inset-bottom));
+  padding: var(--space-200) var(--dialog-inset) max(var(--dialog-inset), env(safe-area-inset-bottom));
   border-block-start: 0;
 }
 
@@ -148,15 +144,16 @@
 }
 
 @media (min-width: 1024px) {
-  /* Align the 24px icon, excluding its 4px button inset, to the outer spacing. */
-  .dialog .closeButton {
-    margin-block-start: calc(-1 * var(--space-050));
-    margin-inline-end: calc(-1 * var(--space-050));
+  .dialog {
+    --dialog-inset: var(--space-300);
+  }
+
+  .footer {
+    padding-bottom: max(var(--space-250), env(safe-area-inset-bottom));
   }
 
   .dialog[data-variant="default"] .header {
     gap: var(--space-150);
-    padding: var(--space-200) var(--space-300) var(--space-150);
   }
 
   .dialog[data-variant="default"] .title {
@@ -165,13 +162,8 @@
   }
 
   .dialog[data-variant="default"] .content {
-    padding: 0 var(--space-300) var(--space-100);
     font-size: var(--font-size-body-xl);
     line-height: var(--line-height-body-xl);
-  }
-
-  .dialog[data-variant="default"] .footer {
-    padding: var(--space-300);
   }
 
   .dialog .footer > [data-slot="button-group"] {
@@ -183,4 +175,34 @@
     flex: 0 0 auto;
     width: auto;
   }
+}
+
+.closeRow {
+  display: grid;
+  flex: none;
+  padding: 0 var(--dialog-inset);
+}
+
+.header:has(> .closeButton),
+.closeRow {
+  padding-top: var(--space-150);
+}
+
+.closeRow + .header {
+  padding-top: var(--space-100);
+}
+
+.footer:has(> [data-slot="button"]) {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-100);
+}
+
+.description {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 1024px) {
+  .closeRow + .header { padding-top: var(--space-150); }
 }

@@ -4,7 +4,9 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import {
   Button,
-  Sheet,
+  Dialog,
+  Drawer,
+  useDesktopViewport,
   Checkbox,
   Switch,
   RadioGroup,
@@ -185,6 +187,8 @@ export function AllFiltersDialog({
   onApply,
   onClear,
 }: AllFiltersDialogProps) {
+  const desktop = useDesktopViewport();
+  const Panel = desktop ? Dialog : Drawer;
   const mainRef = useRef<HTMLDivElement>(null);
   const sectionTrigger = useRef<HTMLButtonElement | null>(null);
   const mainScroll = useRef(0);
@@ -262,11 +266,8 @@ export function AllFiltersDialog({
   }, [mobileSection]);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)");
-    const returnToFilters = () => { if (desktop.matches) setMobileSection(null); };
-    desktop.addEventListener("change", returnToFilters);
-    return () => desktop.removeEventListener("change", returnToFilters);
-  }, []);
+    if (desktop) setMobileSection(null);
+  }, [desktop]);
 
   if (!open) return null;
 
@@ -463,10 +464,7 @@ export function AllFiltersDialog({
           type="button"
           aria-expanded={isExpanded}
           onClick={(event) => {
-            if (
-              typeof window !== "undefined" &&
-              window.matchMedia("(max-width: 1023.98px)").matches
-            ) {
+            if (!desktop) {
               sectionTrigger.current = event.currentTarget;
               mainScroll.current = mainRef.current?.parentElement?.scrollTop ?? 0;
               setMobileSection(section);
@@ -493,19 +491,18 @@ export function AllFiltersDialog({
   }
 
   return (
-    <Sheet
-      desktopPlacement="center"
+    <Panel
+      className={styles.panel}
       open={open}
       id="all-filters"
       data-slot="all-filters-dialog"
       title={mobileSection ? getSectionLabel(mobileSection) : copy.filtersButton}
       closeLabel={locale === "zh" ? "关闭筛选" : "Close filters"}
       onClose={onClose}
-      back={mobileSection ? {
+      {...(!desktop && { size: "content" as const, contentPadding: "none" as const, back: mobileSection ? {
         label: locale === "zh" ? "返回全部筛选" : "Back to all filters",
         onClick: () => setMobileSection(null),
-      } : undefined}
-      contentPadding="none"
+      } : undefined })}
       footer={
         <>
           {selectedTags.length > 0 && (
@@ -629,6 +626,6 @@ export function AllFiltersDialog({
           )
         )}
       </div>
-    </Sheet>
+    </Panel>
   );
 }

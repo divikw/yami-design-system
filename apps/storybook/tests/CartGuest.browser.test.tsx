@@ -33,7 +33,7 @@ for (const locale of ["zh", "en"] as const) {
         const dialog = page.getByRole("dialog", { name: title, exact: true });
         await expect.element(dialog).toBeVisible();
         expect(dialog.element().querySelector('a')!.getAttribute("href")).toBe(fixture.header.account.href);
-        expect(container.querySelector('dialog[data-sheet]')).toBeNull();
+        expect(container.querySelector('dialog[data-drawer]')).toBeNull();
         await userEvent.keyboard("{Escape}");
         await expect.element(page.elementLocator(opener)).toHaveFocus();
       }
@@ -89,7 +89,7 @@ test.each(["coupons", "summary"] as const)("guest %s preview distinguishes accou
   try {
     flushSync(() => root.render(<CartPage {...createCartPageFixture("en")} signedIn={false} initialDrawer={initialDrawer} />));
     await expect.element(page.getByRole("dialog", { name: initialDrawer === "coupons" ? "Sign in / Register" : innerWidth < 1024 ? "Order details" : "Order summary", exact: true })).toBeVisible();
-    if (initialDrawer === "coupons") expect(container.querySelector('dialog[data-sheet]')).toBeNull();
+    if (initialDrawer === "coupons") expect(container.querySelector('dialog[data-drawer]')).toBeNull();
   } finally { root.unmount(); container.remove(); }
 });
 

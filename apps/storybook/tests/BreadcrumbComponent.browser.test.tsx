@@ -5,6 +5,7 @@ import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 
 import { Breadcrumb } from "../../../packages/design-system/components/Breadcrumb";
+import { CollapsedBreadcrumb } from "../../../packages/design-system/components/Breadcrumb/examples";
 import * as stories from "../../../packages/design-system/components/Breadcrumb/Breadcrumb.stories";
 import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/fonts.css";
@@ -30,6 +31,10 @@ for (const locale of ["zh", "en"] as const) for (const dark of [false, true]) fo
       expect(nav).toHaveAccessibleName(locale === "zh" ? "面包屑导航" : "Breadcrumb");
       expect(nav).toHaveAttribute("lang", locale);
       expect(nav.querySelectorAll("ol > li")).toHaveLength(3);
+      const list = nav.querySelector("ol")!;
+      const first = list.firstElementChild!.getBoundingClientRect();
+      const last = list.lastElementChild!.getBoundingClientRect();
+      expect(list.getBoundingClientRect().width).toBeCloseTo(last.right - first.left, 0);
       expect(nav.querySelectorAll('[aria-hidden="true"]')).toHaveLength(2);
       expect(nav.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
       expect(nav.querySelector('[aria-current="page"]')).not.toHaveAttribute("tabindex");
@@ -71,6 +76,87 @@ for (const locale of ["zh", "en"] as const) for (const dark of [false, true]) fo
     }
   });
 }
+
+test("separators have equal space to adjacent link and current-page text on desktop and mobile", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const host = document.createElement("div");
+  document.body.append(host);
+  const root = createRoot(host);
+  const textBounds = (element: Element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return range.getBoundingClientRect();
+  };
+  try {
+    flushSync(() => root.render(<Breadcrumb locale="zh" items={[
+      { label: "美妆护肤", href: "/beauty" },
+      { label: "面膜", href: "/masks" },
+      { label: "贴片面膜", current: true },
+    ]} />));
+    await document.fonts.ready;
+    for (const width of [1024, 375]) {
+      await page.viewport(width, 800);
+      for (const item of [...host.querySelectorAll("li")].slice(1)) {
+        const before = textBounds(item.previousElementSibling!.lastElementChild!);
+        const slash = textBounds(item.firstElementChild!);
+        const after = textBounds(item.lastElementChild!);
+        expect(slash.left - before.right).toBeCloseTo(8, 1);
+        expect(after.left - slash.right).toBeCloseTo(8, 1);
+      }
+    }
+  } finally {
+    root.unmount();
+    host.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("links show an underline only on mouse hover when enabled", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  const items = [{ label: "Beauty", href: "/beauty" }, { label: "Masks", current: true }];
+  try {
+    flushSync(() => root.render(<Breadcrumb items={items} />));
+    const link = container.querySelector("a")!;
+    const current = container.querySelector('[aria-current="page"]')!;
+    const decoration = () => getComputedStyle(link).textDecorationLine;
+    await page.elementLocator(current).hover();
+    expect(decoration()).toBe("none");
+    await page.elementLocator(link).hover();
+    expect(decoration()).toBe("underline");
+    await page.elementLocator(current).hover();
+    expect(decoration()).toBe("none");
+    expect(getComputedStyle(current).textDecorationLine).toBe("none");
+    flushSync(() => root.render(<Breadcrumb items={items} underline={false} />));
+    await page.elementLocator(link).hover();
+    expect(decoration()).toBe("none");
+  } finally {
+    root.unmount();
+    container.remove();
+  }
+});
+
+test.each(["zh", "en"] as const)("collapsed %s trail exposes the omitted levels and tabs between the remaining links", async (locale) => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    flushSync(() => root.render(<CollapsedBreadcrumb locale={locale} />));
+    const items = container.querySelectorAll("li");
+    expect(items).toHaveLength(4);
+    const marker = items[1].querySelector('[role="img"]')!;
+    expect(marker).toHaveAccessibleName(locale === "zh" ? "已省略中间层级" : "Omitted levels");
+    expect(items[3].querySelector('[aria-current="page"]')).not.toBeNull();
+    await userEvent.tab();
+    expect(items[0].querySelector("a")).toHaveFocus();
+    await userEvent.tab();
+    expect(items[2].querySelector("a")).toHaveFocus();
+  } finally {
+    root.unmount();
+    container.remove();
+  }
+});
 
 test("static categories are not current pages; empty and single paths expose no extra controls", () => {
   const container = document.createElement("div");
