@@ -15,6 +15,8 @@ test("English PC PDP uses the new share popover and moves favorites out of the p
 
   try {
     await page.viewport(1440, 900);
+    // Start outside the category rail so a previous pointer position cannot open it on mount.
+    await page.elementLocator(document.documentElement).hover({ position: { x: 1, y: 1 } });
     const fixture = createFoodProductDetailPageFixture("en");
     flushSync(() => root.render(<ProductDetailPage {...fixture} />));
 
