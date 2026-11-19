@@ -1165,6 +1165,10 @@ test.each([1024, 1280, 1440])("CartPage keeps PC navigation pinned and the summa
     expect(header.getBoundingClientRect().top).toBe(0);
     expect(header.getBoundingClientRect().height).toBeGreaterThan(100);
     await expect.poll(() => summary.getBoundingClientRect().top).toBeCloseTo(header.getBoundingClientRect().bottom + 24, 1);
+
+    // Clear any category hover left by a previous viewport or test before clicking below the header.
+    await page.elementLocator(header).hover({ position: { x: header.getBoundingClientRect().width - 1, y: 1 } });
+    await expect.poll(() => header.querySelector('[data-slot="header-category-scrim"]')).toBeNull();
     await page.getByRole("button", { name: "Edit Coupons", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Coupons", exact: true });
     await expect.element(dialog).toBeVisible();
