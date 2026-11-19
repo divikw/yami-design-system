@@ -67,7 +67,7 @@ export function SliderDocsPage({ locale }: { locale: DocsLocale }) {
     intro={zh ? "在给定范围内选择一个值或一组值。" : "Select a value or a range on a scale."}
     previous={{ name: "Skeleton", path: "yami-components-data-display-skeleton" }} next={{ name: "Spinner", path: "yami-components-data-display-spinner" }}
     composition={"Slider\n└── Control → Track → Indicator + Thumb(s)"} usageCode={usageCode} examples={examples}
-    leadExample={{ title: zh ? "基础示例" : "Example", code: usageCode, preview: <Slider aria-label={zh ? "音量" : "Volume"} defaultValue={50} /> }}
+    leadExample={{ code: usageCode, preview: <Slider aria-label={zh ? "音量" : "Volume"} defaultValue={50} /> }}
     apiNote={zh ? "在给定范围内选择一个值或一组值。" : "Select a value or a range on a scale."}
     api={[
       ["value / defaultValue", zh ? "受控值或初始值。数组中每个数字对应一个滑块。" : "A controlled or initial value. Each number in an array creates one thumb."],

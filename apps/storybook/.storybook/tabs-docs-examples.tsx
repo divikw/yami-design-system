@@ -45,7 +45,7 @@ ${items.map(item => `    <TabsContent value="${item.value}" />`).join("\n")}
     { id: "primary-b", title: zh ? "一级 B · 分段" : "Primary B · Segmented",
       description: zh ? "选中项在分段底板上高亮。variant=\"default\" 也可使用此样式。" : 'Highlight the selected segment on a shared track. You can also use variant="default".', ...sample({ variant: "primary", styleVariant: "b" }) },
     { id: "secondary", title: zh ? "二级标签页" : "Secondary",
-      description: zh ? "在商品模块内切换子分区。" : "Switch between sections within a product module.", ...sample({ variant: "secondary" }) },
+      description: zh ? "标签栏和底线随标签内容定宽，列表默认无左右内边距。" : "The tab list and its divider size to the labels, with no default side padding.", ...sample({ variant: "secondary" }) },
     { id: "tertiary", title: zh ? "三级标签页" : "Tertiary",
       description: zh ? "用紧凑的胶囊标签切换内容。" : "Use compact pills to switch content.", ...sample({ variant: "tertiary" }) },
     { id: "vertical", title: zh ? "纵向排列" : "Vertical",

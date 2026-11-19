@@ -172,7 +172,13 @@ test.each([false, true])("secondary underlines match primary without clipping (i
         const underline = getComputedStyle(active, "::after");
         const bottom = active.getBoundingClientRect().bottom - Number.parseFloat(underline.bottom);
         if (list.dataset.variant === "secondary") {
-          expect(bottom).toBe(list.getBoundingClientRect().bottom);
+          const bounds = list.getBoundingClientRect();
+          const last = Array.from(list.querySelectorAll('[role="tab"]')).at(-1)!;
+          expect(bounds.width).toBeLessThan(list.parentElement!.getBoundingClientRect().width);
+          expect(getComputedStyle(list).paddingInline).toBe("0px");
+          expect(active.getBoundingClientRect().left).toBe(bounds.left);
+          expect(last.getBoundingClientRect().right).toBeCloseTo(bounds.right, 1);
+          expect(bottom).toBe(bounds.bottom);
         }
         const top = bottom - Number.parseFloat(underline.height);
         const clipTop = list.getBoundingClientRect().top + list.clientTop;

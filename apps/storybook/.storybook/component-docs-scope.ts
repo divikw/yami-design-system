@@ -1,4 +1,5 @@
 import { getArgDescription, type DescriptionTranslations } from "./arg-descriptions";
+import { normalizeComponentName } from "./component-docs-names";
 
 interface PropContract {
   type: string;
@@ -17,10 +18,6 @@ const props = import.meta.glob<Record<string, PropContract>>(
   "../../../packages/design-system/components/*/meta.json",
   { eager: true, import: "props" },
 );
-
-export function normalizeComponentName(value: string) {
-  return value.replace(/[^a-z0-9]/gi, "").toLowerCase();
-}
 
 const components = new Map(Object.entries(dependencies).map(([path, deps]) => [
   normalizeComponentName(path.split("/").at(-2) ?? ""),

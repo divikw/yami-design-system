@@ -48,6 +48,8 @@
 
 以上为当前维护的 Web 尺寸。Secondary 和 Tertiary 保持紧凑布局，不通过不可见区域扩大点击范围，因此不满足原生 iOS 44pt / Android 48dp 的最小点击区域要求。
 
+横向 Secondary 的标签栏和底线默认随标签内容定宽，列表无左右内边距。需要左右留白时可启用 `edgePadding`。
+
 使用 `fullWidth` 可在标签文字放得下时均匀分配宽度；长标签仍保留原生溢出滚动。`orientation="vertical"` 会将所有变体（包括 Primary B 分段轨道）纵向排列，并改用上/下方向键导航。
 
 纵向 Primary A 使用 44px 行高、16/20 文字，选中下划线距文字 4px；纵向 Secondary 行高为 40px，右侧选中线高 32px，上下各留 4px。两者的标签项间距均为 4px，适用于所有断点。
@@ -185,6 +187,8 @@ The horizontal Primary B background fills the track, with 2px of padding on each
 | Tertiary trigger / fill | 32px | 36px |
 
 These are the maintained web dimensions. Secondary and Tertiary preserve compact geometry without invisible hit-area extensions; they do not provide the native iOS 44pt / Android 48dp target minimum.
+
+The horizontal Secondary list and divider size to the labels by default, with no side padding. Enable `edgePadding` to add side gutters.
 
 Use `fullWidth` to distribute triggers evenly while their labels fit; long labels retain native overflow. `orientation="vertical"` stacks every variant, including the segmented Primary B track, and changes navigation to Up/Down.
 

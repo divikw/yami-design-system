@@ -56,11 +56,15 @@ test.each([375, 1024])("ButtonLink shares Button geometry, typography, and color
     await page.viewport(width, 900);
     flushSync(() => root.render(<>
       {[false, true].flatMap((dark) => (["primary", "secondary", "tertiary", "emphasis", "destructive"] as const).flatMap((variant) =>
-        (["sm", "md", "lg"] as const).flatMap((size) => (["inline", "full"] as const).flatMap((form) =>
+        (["sm", "md", "lg"] as const).flatMap((size) => (["inline", "full", "icon"] as const).flatMap((form) =>
           [false, true].map((inverse) => <div key={`${dark}-${variant}-${size}-${form}-${inverse}`} className={dark ? "dark" : undefined}>
             <ButtonGroup full={form === "full"} aria-label="Order actions">
-              <ButtonLink href="/orders/123" variant={variant} size={size} form={form} inverse={inverse}>View order</ButtonLink>
-              <Button variant={variant} size={size} form={form} inverse={inverse}>View order</Button>
+              <ButtonLink href="/orders/123" variant={variant} size={size} form={form} inverse={inverse} aria-label="View order">
+                {form === "icon" ? <svg width="16" height="16" aria-hidden="true" /> : "View order"}
+              </ButtonLink>
+              <Button variant={variant} size={size} form={form} inverse={inverse} aria-label="View order">
+                {form === "icon" ? <svg width="16" height="16" aria-hidden="true" /> : "View order"}
+              </Button>
             </ButtonGroup>
           </div>),
         )),
@@ -75,6 +79,10 @@ test.each([375, 1024])("ButtonLink shares Button geometry, typography, and color
         expect(linkStyle.getPropertyValue(property)).toBe(buttonStyle.getPropertyValue(property));
       }
       expect(link.getBoundingClientRect().width).toBeCloseTo(button.getBoundingClientRect().width, 1);
+      if (link.querySelector("svg")) {
+        expect(link.getBoundingClientRect().width).toBeCloseTo(link.getBoundingClientRect().height, 1);
+        expect(link).toHaveAccessibleName("View order");
+      }
       expect(getComputedStyle(group).gap).toBe("8px");
       expect(linkStyle.textDecorationLine).toBe("none");
       if (linkStyle.height !== "48px" && linkStyle.height !== "56px") {

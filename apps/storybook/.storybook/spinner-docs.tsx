@@ -98,7 +98,7 @@ export function SpinnerDocsPage({ locale }: { locale: DocsLocale }) {
     intro={zh ? "表示正在处理、完成时间未知的操作。" : "Indicate that work is in progress when its duration is unknown."}
     previous={{ name: "Slider", path: "yami-components-forms-slider" }} next={{ name: "Switch", path: "yami-components-forms-switch" }}
     composition={"Spinner\nButton[loading] → Spinner"} usageCode={usageCode} examples={examples}
-    leadExample={{ title: zh ? "基础示例" : "Example", code: exampleSource, preview: <div style={{ textAlign: "center" }}><LoadingOrders en={!zh} /></div> }}
+    leadExample={{ code: exampleSource, preview: <div style={{ textAlign: "center" }}><LoadingOrders en={!zh} /></div> }}
     apiNote={zh ? "表示正在处理、完成时间未知的操作。" : "Indicate that work is in progress when its duration is unknown."}
     api={[
       ["aria-label / aria-labelledby", zh ? "独立使用时提供本地化名称以启用 status 语义。旁边已有加载文案时，Spinner 默认对读屏隐藏。" : "Give a standalone spinner a localized name to expose a status. Beside loading text, the unnamed spinner is decorative."],

@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.3.0",
-  "description": "YAMI action button with five variants, three form modes, three sizes and default and inverse surfaces. Use destructive for actions such as deleting data. ButtonLink provides the same appearance on a native anchor for navigation or direct downloads.",
+  "description": "YAMI action button with five variants, three form modes, three sizes and default and inverse surfaces. Use destructive for actions such as deleting data. ButtonLink shares the inline, full, and icon forms on native anchors for navigation or direct downloads.",
   "source": "components/Button",
   "files": [
     {
@@ -302,5 +302,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "bd29d21afbe66d10060c7ca4449b39954f9d7fd85c4066ac84ff036da1f3b389"
+  "contentDigest": "20a3d535af76c554147121bbbf2866cf31e3e64c71b39fd4ec8c1c97bce37b24"
 }

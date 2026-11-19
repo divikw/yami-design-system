@@ -36,7 +36,7 @@ export function ProgressDocsPage({ locale }: { locale: DocsLocale }) {
     previous={{ name: "Popover", path: "yami-components-layout-popover" }} next={{ name: "Radio Group", path: "yami-components-forms-radio-group" }}
     intro={en ? "Show how much of a task has finished. Pass a new value as work completes." : "显示任务的完成进度，随实际工作进展更新数值。"}
     composition={"Progress\n├── ProgressLabel\n├── ProgressValue\n└── ProgressTrack → ProgressIndicator"}
-    leadExample={{ title: en ? "Upload progress" : "上传进度", code: demoCode + `\n<ProgressDemo en={${en}} />`, preview: <ProgressDemo en={en} /> }}
+    leadExample={{ code: demoCode + `\n<ProgressDemo en={${en}} />`, preview: <ProgressDemo en={en} /> }}
     usageCode={`import { Progress } from "@yami/design-system";\n\n<Progress value={33} aria-label="${label}" />`}
     examples={examples}
     apiNote={en ? "Progress is read-only. Give it a ProgressLabel or an accessible name. The host supplies the task state." : "Progress 只读。用 ProgressLabel 或 aria-label 提供名称，由宿主传入任务进度。"}

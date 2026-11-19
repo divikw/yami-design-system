@@ -63,7 +63,7 @@ export function PositionExample() {
     ${en ? "Show notification" : "显示通知"}
   </Button>
 </Toaster>`}
-      leadExample={{ title: en ? "Save an item" : "收藏商品", preview: savePreview,
+      leadExample={{ preview: savePreview,
         code: actionSource + `\n<SaveForLater en={${en}} />` }}
       examples={[
         { id: "types", title: en ? "Types" : "状态类型",

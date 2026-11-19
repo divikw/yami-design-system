@@ -135,7 +135,7 @@ export function ReminderCard() {
     intro={zh ? "用 Card 承载订单、配送进度等独立内容。通过 children 放入标题、正文和操作，外层元素决定整张卡片的交互方式。" : "Use Card for a self-contained item such as an order or delivery update. Pass a heading, body and actions as children. The root element determines how the card behaves."}
     previous={{ name: "ButtonGroup", path: "yami-components-actions-button-group" }}
     next={{ name: "Checkbox", path: "yami-components-forms-checkbox" }}
-    leadExample={{ title: zh ? "登录表单" : "Sign-in form", preview: <LoginCard locale={locale} />,
+    leadExample={{ preview: <LoginCard locale={locale} />,
       code: loginSource.trim() + `\n\n<LoginCard locale="${locale}" />` }}
     usageCode={`import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@yami/design-system";
 

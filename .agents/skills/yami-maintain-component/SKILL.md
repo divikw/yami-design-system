@@ -87,7 +87,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 
 - 常规页面复用 [ComponentGuide](../../../apps/storybook/.storybook/component-guide.tsx)，参考 [AspectRatio Docs](../../../apps/storybook/.storybook/aspect-ratio-docs.tsx)。特殊组合内容参考 [Accordion Docs](../../../apps/storybook/.storybook/accordion-docs.tsx)，仍使用 [ComponentDocsTemplate](../../../apps/storybook/.storybook/component-docs-template.tsx) 及其 `DocsExample`、`CodeBlock`、`Installation`、`DocsApiTable`。
 - 新增或明确重做 Docs 时接入共享模板，并在 [Docs 路由](../../../apps/storybook/.storybook/component-docs.tsx) 注册。局部组件修复不顺带迁移其他文档。章节采用简介与主示例、安装、用法、组合结构、必要示例、API；只展示真实支持的能力。
-- 使用公开导出的 YAMI 组件，确保示例代码与预览、API 表格、复制页面内容一致。文案提供中英文并复用全局 locale/theme；需要更新属性说明时同步 [属性说明字典](../../../apps/storybook/.storybook/arg-descriptions.ts)。
+- 使用公开导出的 YAMI 组件，确保示例代码与预览、API 表格一致。文案提供中英文并复用全局 locale/theme；需要更新属性说明时同步 [属性说明字典](../../../apps/storybook/.storybook/arg-descriptions.ts)。
 - 演示组件在反色表面上的效果时，在示例的 `previewBackground` 设置 `var(--surface-inverse)`，由模板铺满代码块上方的展示区。组件按自身布局显示，可复制代码展示调用方如何设置同一背景。参考 [Button 的反色示例](../../../apps/storybook/.storybook/button-docs.tsx)。
 - 同时比较多种背景适配样式时，按组件契约配对前景与底色。例如 Badge 的深色款放在浅底，浅色款放在深底，描边款沿用对应底色。参考 [Badge 的背景适配示例](../../../apps/storybook/.storybook/badge-docs.tsx)。
 - 按侧栏顺序配置上一/下一组件和真实 Story ID；首尾仅省略不存在的方向。保留已有 URL、锚点及入口。
@@ -142,7 +142,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 | 新增组件 | 公共包导入、契约/注册、Docs/PC/Mobile 入口、核心状态与边界 |
 | 样式/尺寸 | PC/Mobile 实际页面、长文本与窄容器、明暗主题、受影响消费者；对比原基线 |
 | 行为/API/底层迁移 | 受控与非受控、默认值/事件、禁用与只读、键盘和焦点；表单组件检查提交值、校验及 reset；浮层检查 Portal、碰撞、滚动锁定、Escape 层级与焦点恢复；只检查组件实际支持的行为 |
-| Docs/模板 | 中英文、明暗主题和窄屏；代码展开/收起、复制代码/页面、安装切换、上一/下一导航、API 表格；涉及模态和设备预览时执行[打开态验收](../../../apps/storybook/.storybook/component-docs-template.md#模态示例验收)；共享模板修改检查所有已接入页面 |
+| Docs/模板 | 中英文、明暗主题和窄屏；代码展开/收起、复制代码、安装切换、上一/下一导航、API 表格；涉及模态和设备预览时执行[打开态验收](../../../apps/storybook/.storybook/component-docs-template.md#模态示例验收)；共享模板修改检查所有已接入页面 |
 | 仅技能说明 | 技能格式、入口引用和本地链接、规则与当前源码的一致性；不要求组件构建、生成或 Changeset |
 
 涉及示例背景时，在宽屏和窄屏的 Docs 中分别检查浅色和深色主题。检查背景是否从展示区边缘连续覆盖到 iframe 内，内容是否因额外容器而挤压或换行，以及各款文字和描边在对应底色上是否清晰。

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { DocsPreviewMode } from "./component-docs-preview";
-import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, Installation, installationMarkdown, type DocsLocale } from "./component-docs-template";
+import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, Installation, type DocsLocale } from "./component-docs-template";
 import styles from "./component-docs-template.module.css";
 
 export interface GuideExample {
@@ -23,7 +23,7 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   locale: DocsLocale;
   composition: string;
   examples: GuideExample[];
-  leadExample?: Pick<GuideExample, "title" | "code" | "preview" | "previewBackground">;
+  leadExample?: Pick<GuideExample, "code" | "preview" | "previewBackground">;
   usageCode?: string;
   api: [string, string][];
   apiNote: string;
@@ -35,16 +35,7 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   const lead = leadExample ?? examples[0];
   const anchors = (section: string) => legacyAnchors?.[section]?.map((id) => <span className={styles.legacyAnchor} id={id} key={id} aria-hidden="true" />);
   const [imports, ...usage] = usageCode.split("\n\n");
-  const pageText = [
-    `# ${name}`, intro,
-    ...(leadExample ? [`## ${leadExample.title}\n\n\`\`\`tsx\n${leadExample.code}\n\`\`\``] : []),
-    `## ${labels[0]}\n\n${installationMarkdown(locale)}`,
-    `## ${labels[1]}\n\n\`\`\`tsx\n${usageCode}\n\`\`\``,
-    `## ${labels[2]}\n\n\`\`\`text\n${composition}\n\`\`\``,
-    ...examples.map((example) => `## ${example.title}\n\n${example.description}\n\n\`\`\`tsx\n${example.code}\n\`\`\``),
-    `## ${labels[3]}\n\n${apiNote}\n\n${api.map(([prop, description]) => `- ${prop}: ${description}`).join("\n")}\n\n[${reference.label}](${reference.href})`,
-  ].join("\n\n");
-  return <ComponentDocsTemplate name={name} slug={slug} intro={intro} previous={previous} next={next} locale={locale} pageText={pageText}>
+  return <ComponentDocsTemplate name={name} slug={slug} intro={intro} previous={previous} next={next} locale={locale}>
     <DocsExample key={`lead-${locale}`} locale={locale} code={lead.code} name="lead" previewMode={previewMode} previewBackground={lead.previewBackground}>{lead.preview}</DocsExample>
     <section><h2 id={`${slug}-installation`}>{labels[0]}</h2><Installation locale={locale} /></section>
     <section>{anchors("usage")}<h2 id={`${slug}-usage`}>{labels[1]}</h2><CodeBlock locale={locale} code={imports} /><CodeBlock locale={locale} code={usage.join("\n\n")} /></section>

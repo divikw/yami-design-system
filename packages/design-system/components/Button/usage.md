@@ -22,7 +22,7 @@ ButtonLink 渲染原生 `a`，共享 Button 的尺寸、层级、圆角和焦点
 | `href` | `string` | 必填 | 真实导航或文件地址 |
 | `variant` | `emphasis / primary / secondary / tertiary / destructive` | `primary` | 与 Button 相同的视觉变体 |
 | `size` | `sm / md / lg` | `md` | 与 Button 相同的响应式尺寸 |
-| `form` | `inline / full` | `inline` | 内容宽度或填满父容器；不支持 icon 形态 |
+| `form` | `inline / full / icon` | `inline` | 内容宽度、填满父容器或圆形纯图标。纯图标通过子节点传入，并设置 `aria-label` |
 | `inverse` | `boolean` | `false` | 使用相反明暗表面的令牌 |
 | `leftIcon / rightIcon` | `ReactNode` | — | 标签前后的图标 |
 | 原生链接属性 | `target / rel / download / ref` 等 | — | 透传给原生 `a`；ref 指向 `HTMLAnchorElement` |
@@ -35,6 +35,8 @@ import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
   <Button variant="secondary" onClick={generateAndDownloadReceipt}>下载收据</Button>
 </ButtonGroup>
 ```
+
+纯图标导航使用 `<ButtonLink href="/orders" form="icon" aria-label="返回订单"><ArrowLeft /></ButtonLink>`。
 
 ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态说明。普通文字链接仍使用 `a`；不要在业务页面导入私有 CSS 或复制 Button 样式。
 
@@ -66,7 +68,7 @@ ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态�
 | `md` | 40px | 通栏 48px，行内与图标 40px | 默认尺寸 |
 | `lg` | 48px | 通栏 56px，行内与图标 48px | 主要行动入口、页面底部操作 |
 
-SM / MD 标签为 14px，LG 标签在移动端为 16px、桌面端为 18px，行高均为 20px；1440px 不再次改变字号。ButtonLink 沿用文字按钮尺寸。
+SM / MD 标签为 14px，LG 标签在移动端为 16px、桌面端为 18px，行高均为 20px；1440px 不再次改变字号。ButtonLink 沿用对应形态的按钮尺寸。
 
 SM / MD 文字按钮最小宽度为 44px，实际高度不足 44px 时通过伪元素扩展纵向点击区域；SM / MD 图标按钮扩展到 44×44px。扩展区域不占布局空间，需避免祖先裁切或相邻目标重叠。需要可见的 48px 移动端按钮时使用 LG。Web 扩展区域与原生 iOS / Android 的平台要求分别处理。
 
@@ -188,14 +190,14 @@ Use `<Button>` to perform an action: submit a form, add to cart, save, download 
 
 ## Navigation with button appearance
 
-`ButtonLink` renders a native `<a>` and shares Button's styles. It requires `href` and supports `variant`, `size`, `inverse`, `leftIcon`, `rightIcon`, and `form="inline" | "full"`. Defaults are `primary`, `md`, and `inline`.
+`ButtonLink` renders a native `<a>` and shares Button's styles. It requires `href` and supports `variant`, `size`, `inverse`, `leftIcon`, `rightIcon`, and `form="inline" | "full" | "icon"`. Defaults are `primary`, `md`, and `inline`.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `href` | `string` | Required | Real navigation or file destination |
 | `variant` | `emphasis / primary / secondary / tertiary / destructive` | `primary` | Same variants as Button |
 | `size` | `sm / md / lg` | `md` | Same responsive text-button sizes |
-| `form` | `inline / full` | `inline` | Content-width or full-width; no icon form |
+| `form` | `inline / full / icon` | `inline` | Content-width, full-width, or circular icon-only. Pass the icon as children and provide an `aria-label` |
 | `inverse` | `boolean` | `false` | Opposite-polarity surface tokens |
 | `leftIcon / rightIcon` | `ReactNode` | — | Icons before or after the label |
 | Native anchor props | `target / rel / download / ref`, etc. | — | Forwarded to the anchor; ref points to `HTMLAnchorElement` |
@@ -210,6 +212,8 @@ import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
   <Button variant="secondary" onClick={generateAndDownloadReceipt}>Download receipt</Button>
 </ButtonGroup>
 ```
+
+For an icon-only destination, use `<ButtonLink href="/orders" form="icon" aria-label="Back to orders"><ArrowLeft /></ButtonLink>`.
 
 ButtonLink has no `loading` or `disabled` API. If a destination is unavailable, render explanatory static content instead. Use a plain anchor for a text link. Do not import private CSS or copy Button styles into individual pages.
 
