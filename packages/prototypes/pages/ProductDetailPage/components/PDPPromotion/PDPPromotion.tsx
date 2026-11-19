@@ -12,11 +12,11 @@ const giftCardIcon = new URL(
   import.meta.url,
 ).href;
 const codeIcon = new URL(
-  "../../../../../design-system/assets/icons/base/promotion.svg",
+  "../../../../../design-system/assets/icons/discount/code.svg",
   import.meta.url,
 ).href;
 const giftIcon = new URL(
-  "../../../../../design-system/assets/icons/base/gift-line.svg",
+  "../../../../../design-system/assets/icons/discount/gift.svg",
   import.meta.url,
 ).href;
 

@@ -408,9 +408,8 @@ export const DesktopRegression: Story = {
       '[data-slot="product-detail-purchase-layout"]'
     );
     const purchaseFavorite = canvasElement.querySelector<HTMLButtonElement>(
-      '[data-pdp-purchase-action="favorite"]'
+      '[data-pdp-header-action="favorite"]'
     );
-    const purchaseActions = purchaseFavorite?.parentElement;
     const purchaseShareButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
       "[data-pdp-share-action]"
     );
@@ -872,7 +871,7 @@ export const DesktopRegression: Story = {
       Math.round(purchaseTagToggle.getBoundingClientRect().height) !== 20 ||
       canvasElement.textContent?.includes("Clip coupon") ||
       canvasElement.textContent?.includes("20% off") ||
-      !purchaseLayout.contains(purchaseFavorite) ||
+      !shareGroup.contains(purchaseFavorite) ||
       Array.from(purchaseShareButtons).some(
         (button) =>
           !shareGroup.contains(button) || purchaseLayout.contains(button)
@@ -884,11 +883,10 @@ export const DesktopRegression: Story = {
       shareGroup.getBoundingClientRect().left ||
       purchasePrimary.parentElement !== purchaseLayout ||
       getComputedStyle(purchasePrimary).display !== "contents" ||
-      !purchasePrimary.contains(purchaseFavorite) ||
+      purchasePrimary.contains(purchaseFavorite) ||
       purchaseSticky.parentElement !== purchasePrimary ||
       purchaseCheckout.parentElement !== purchaseSticky ||
       purchaseSecondary.parentElement !== purchaseSticky ||
-      purchaseSticky.previousElementSibling !== purchaseActions ||
       !purchaseCheckout.contains(quantity) ||
       !purchaseCheckout.contains(addToCart) ||
       getComputedStyle(purchaseCheckout).borderTopWidth !== "0px" ||
@@ -1665,10 +1663,9 @@ export const MobileRegression: Story = {
     const mobileSummaryButtons = mobileSummaryActions?.querySelectorAll(
       "[data-pdp-mobile-action]"
     );
-    const purchaseFavorite = purchasePanel?.querySelector<HTMLElement>(
-      '[data-pdp-purchase-action="favorite"]'
+    const purchaseFavorite = canvasElement.querySelector<HTMLElement>(
+      '[data-pdp-header-action="favorite"]'
     );
-    const purchaseActions = purchaseFavorite?.parentElement;
     const quantityLabel = purchaseCheckout?.querySelector<HTMLElement>(
       '[data-slot="product-detail-quantity-row"] > span'
     );
@@ -2017,8 +2014,7 @@ export const MobileRegression: Story = {
       getComputedStyle(mobileSummaryActions).columnGap !== "8px" ||
       mobileSummaryButtons?.length !== 2 ||
       !purchaseFavorite ||
-      !purchaseActions ||
-      getComputedStyle(purchaseActions).display !== "none" ||
+      !shareGroup.contains(purchaseFavorite) ||
       !quantityLabel ||
       getComputedStyle(quantityLabel).display !== "none" ||
       !title ||
