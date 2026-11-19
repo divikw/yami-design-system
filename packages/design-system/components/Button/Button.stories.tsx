@@ -48,7 +48,7 @@ const meta = {
           argDescriptions: {
             variant: "视觉变体：强调、主要、次要、低强调或危险操作。默认 primary，同屏最多一个 emphasis 入口。",
             form: "形态：inline 内容宽度、full 填满父容器、icon 仅图标。默认 inline，icon 必须提供 aria-label。",
-            size: "尺寸：sm、md、lg 分别为 32、40、48px；PC 通栏中号和大号为 48、56px。默认 md。",
+            size: "尺寸：sm、md、lg 分别为 32、40、48px；PC 通栏分别为 40、48、56px。默认 md。",
             inverse: "使用当前主题内相反明暗表面的令牌，默认 false。",
             children: "按钮标签；icon 形态下为图标。",
             leftIcon: "标签前的图标，优先使用继承 currentColor 的规范 SVG。",
@@ -67,7 +67,7 @@ const meta = {
           argDescriptions: {
             variant: "Visual variant: emphasis, primary, secondary, tertiary, or destructive. Defaults to primary. Use at most one emphasis entry per screen.",
             form: "Layout: inline content width, full parent width, or icon-only. Default inline; icon requires aria-label.",
-            size: "sm, md and lg are 32, 40 and 48px. Desktop full-width md and lg are 48 and 56px. Default md.",
+            size: "sm, md and lg are 32, 40 and 48px. Desktop full-width heights are 40, 48 and 56px. Default md.",
             inverse: "Use opposite-polarity tokens within the current theme. Default false.",
             children: "Button label, or an icon for icon form.",
             leftIcon: "Icon before the label; prefer canonical currentColor SVGs.",
@@ -275,8 +275,9 @@ export const Showcase: Story = {
             <div className={showcaseStyles.formSample}><Button form="icon" aria-label="收藏"><HeartIcon /></Button></div>
           </div>
           <div className={showcaseStyles.formRow}>
-            <div><h3>填满容器 <span className={showcaseStyles.api}>full</span></h3><p>中号／大号：PC 48／56px，Mobile 40／48px</p></div>
+            <div><h3>填满容器 <span className={showcaseStyles.api}>full</span></h3><p>小号／中号／大号：PC 40／48／56px，Mobile 32／40／48px</p></div>
             <div className={showcaseStyles.fullSample}>
+              <Button form="full" size="sm">小号</Button>
               <Button form="full" size="md">中号</Button>
               <Button form="full" size="lg">大号</Button>
             </div>

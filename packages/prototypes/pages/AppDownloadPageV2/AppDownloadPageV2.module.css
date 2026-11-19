@@ -134,7 +134,7 @@
 .selectionProduct { cursor: pointer; outline: var(--stroke-default) solid var(--border-default); outline-offset: calc(-1 * var(--stroke-default)); position: relative; flex: 0 0 128px; min-width: 0; scroll-snap-align: start; border-radius: var(--radius-component-default); }
 .selectionProduct[data-selected="true"] { outline: var(--stroke-thick) solid var(--border-focus); outline-offset: calc(-1 * var(--stroke-thick)); }
 .selectionProduct:focus-within { outline: var(--stroke-thick) solid var(--border-focus); outline-offset: calc(-1 * var(--stroke-thick)); }
-.selectionCheck { display: flex; position: absolute; top: var(--space-025); right: var(--space-025); z-index: 1; }
+.selectionCheck { display: flex; position: absolute; top: var(--space-150); right: var(--space-150); z-index: 1; }
 .bottom { background: var(--surface-primary); }
 .bottom h2 { margin: 0; font-size: var(--font-size-heading-4xl); line-height: var(--line-height-heading-4xl); }
 .root .stickyCta { position: fixed; z-index: 40; bottom: max(var(--space-300), env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(480px, calc(100% - 32px)); min-height: 64px; border-radius: var(--radius-component-default); background: var(--button-emphasis); color: var(--text-on-emphasis); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); text-align: center; }

@@ -1,5 +1,6 @@
 "use client"
 
+import { Tabs as BaseTabs } from "@base-ui/react/tabs"
 import {
   createContext,
   forwardRef,
@@ -11,7 +12,6 @@ import {
   useState,
   type ButtonHTMLAttributes,
   type HTMLAttributes,
-  type KeyboardEvent,
   type ReactNode,
 } from "react"
 
@@ -33,10 +33,12 @@ export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
+  activateOnFocus?: boolean
+  loopFocus?: boolean
   centerActiveTab?: boolean
   align?: "start" | "center"
   edgePadding?: boolean
-  variant?: TabsVariant
+  variant?: TabsVariant | "default" | "line"
   styleVariant?: TabsStyleVariant
   inverse?: boolean
   fullWidth?: boolean
@@ -55,6 +57,7 @@ export interface TabsTriggerProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 
 export interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
   value: TabsValue
+  keepMounted?: boolean
   children?: ReactNode
 }
 
@@ -92,25 +95,6 @@ function getTabId(baseId: string, value: TabsValue) {
 
 function getPanelId(baseId: string, value: TabsValue) {
   return `${baseId}-panel-${toIdPart(value)}`
-}
-
-function getEnabledTabs(list: HTMLElement) {
-  return Array.from(list.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([aria-disabled="true"])'))
-}
-
-function syncTabStops(list: HTMLElement, focusedTab?: HTMLElement | null) {
-  const enabledTabs = getEnabledTabs(list)
-  const entryTab = enabledTabs.find((tab) => tab === focusedTab)
-    ?? enabledTabs.find((tab) => tab.getAttribute("aria-selected") === "true")
-    ?? enabledTabs[0]
-
-  for (const tab of list.querySelectorAll<HTMLButtonElement>('[role="tab"]')) {
-    tab.tabIndex = tab === entryTab ? 0 : -1
-  }
-}
-
-function getNextIndex(currentIndex: number, tabCount: number, direction: 1 | -1) {
-  return (currentIndex + direction + tabCount) % tabCount
 }
 
 function revealTab(tab: HTMLButtonElement, orientation: TabsOrientation) {
@@ -181,49 +165,48 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
 
   return (
     <TabsContext.Provider value={context}>
-      <div
+      <BaseTabs.Root
         {...rest}
         ref={ref}
         id={id}
         className={cx(styles.root, className)}
         data-slot="tabs"
         data-orientation={orientation}
+        orientation={orientation}
+        value={selectedValue ?? null}
+        onValueChange={(next) => context.setValue(next)}
       >
         {children}
-      </div>
+      </BaseTabs.Root>
     </TabsContext.Provider>
   )
 })
 
 export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsList(
   {
-    variant = "primary",
-    styleVariant = "a",
+    variant: variantProp = "primary",
+    styleVariant: styleVariantProp,
     inverse = false,
     fullWidth = false,
     skeleton = false,
     skeletonCount = 4,
     centerActiveTab = false,
+    activateOnFocus,
+    loopFocus,
     align = "start",
     edgePadding = false,
     className,
     children,
     onKeyDown,
-    onFocusCapture,
     ...rest
   },
   ref,
 ) {
   const context = useTabsContext("TabsList")
+  const variant = variantProp === "default" || variantProp === "line" ? "primary" : variantProp
+  const styleVariant = styleVariantProp ?? (variantProp === "default" ? "b" : "a")
   const isSegmented = variant === "primary" && styleVariant === "b"
   const listRef = useRef<HTMLDivElement | null>(null)
-  useLayoutEffect(() => {
-    const list = listRef.current
-    if (!list || skeleton) return
-    const focused = list.ownerDocument.activeElement
-    syncTabStops(list, focused instanceof HTMLElement ? focused : null)
-  }, [context.value, children, skeleton])
-
   useLayoutEffect(() => {
     if (!centerActiveTab || skeleton) return
     const frame = requestAnimationFrame(() => {
@@ -234,50 +217,29 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
   }, [centerActiveTab, skeleton, context.value, context.orientation])
 
 
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(event: Parameters<NonNullable<BaseTabs.List.Props["onKeyDown"]>>[0]) {
     onKeyDown?.(event)
-
-    if (event.defaultPrevented || skeleton) return
-
-    const isHorizontal = context.orientation === "horizontal"
-    const forwardKey = isHorizontal ? "ArrowRight" : "ArrowDown"
-    const backwardKey = isHorizontal ? "ArrowLeft" : "ArrowUp"
-    const isForward = event.key === forwardKey
-    const isBackward = event.key === backwardKey
-    const isHome = event.key === "Home"
-    const isEnd = event.key === "End"
-
-    if (!isForward && !isBackward && !isHome && !isEnd) return
-
-    const tabs = getEnabledTabs(event.currentTarget)
-    if (tabs.length === 0) return
-
-    const activeElement = event.currentTarget.ownerDocument.activeElement
-    let currentIndex = tabs.indexOf(activeElement as HTMLButtonElement)
-
-    if (currentIndex === -1) {
-      currentIndex = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true")
+    if (event.defaultPrevented) {
+      event.preventBaseUIHandler()
+      return
     }
 
-    if (currentIndex === -1) {
-      currentIndex = 0
-    }
+    const navigationKeys = context.orientation === "horizontal"
+      ? ["ArrowLeft", "ArrowRight", "Home", "End"]
+      : ["ArrowUp", "ArrowDown", "Home", "End"]
+    if (!navigationKeys.includes(event.key)) return
 
-    let nextIndex = currentIndex
-    if (isHome) nextIndex = 0
-    if (isEnd) nextIndex = tabs.length - 1
-    if (isForward) nextIndex = getNextIndex(currentIndex, tabs.length, 1)
-    if (isBackward) nextIndex = getNextIndex(currentIndex, tabs.length, -1)
-
-    const nextTab = tabs[nextIndex]
-    event.preventDefault()
-    nextTab.focus({ preventScroll: true })
-
-    if (context.activationMode === "automatic") {
-      nextTab.click()
-    } else {
-      revealTab(nextTab, context.orientation)
-    }
+    // The composite schedules focus in a microtask after this handler.
+    const list = event.currentTarget
+    queueMicrotask(() => {
+      if (!event.defaultPrevented) return
+      queueMicrotask(() => {
+        const focused = list.ownerDocument.activeElement as HTMLButtonElement | null
+        if (focused?.closest('[role="tablist"]') !== list || focused.getAttribute("role") !== "tab") return
+        if (activateOnFocus === undefined && context.activationMode === "automatic") focused.click()
+        else revealTab(focused, context.orientation)
+      })
+    })
   }
 
   const listClassName = cx(styles.list, className)
@@ -309,7 +271,7 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
   }
 
   return (
-    <div
+    <BaseTabs.List
       {...rest}
       ref={(node) => {
         listRef.current = node
@@ -321,20 +283,17 @@ export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(function TabsL
       role="tablist"
       aria-orientation={context.orientation}
       className={listClassName}
+      activateOnFocus={activateOnFocus}
+      loopFocus={loopFocus}
       data-slot="tabs-list"
       data-variant={variant}
       data-style={styleVariant}
       data-inverse={inverse || undefined}
       data-full-width={fullWidth || undefined}
       onKeyDown={handleKeyDown}
-      onFocusCapture={(event) => {
-        onFocusCapture?.(event)
-        if (event.defaultPrevented) return
-        syncTabStops(event.currentTarget, event.target as HTMLElement)
-      }}
     >
       {isSegmented ? <div className={styles.track}>{children}</div> : children}
-    </div>
+    </BaseTabs.List>
   )
 })
 
@@ -348,47 +307,24 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
     className,
     children,
     onClick,
+    onPointerDown,
     ...rest
   },
   ref,
 ) {
   const context = useTabsContext("TabsTrigger")
+  const selectedOnPress = useRef<boolean | undefined>(undefined)
   const selected = context.value === value
   const tabId = getTabId(context.baseId, value)
   const panelId = getPanelId(context.baseId, value)
-
-  return (
-    <button
-      {...rest}
-      ref={ref}
-      id={tabId}
-      type="button"
-      role="tab"
-      className={cx(styles.trigger, className)}
-      data-slot="tabs-trigger"
-      aria-selected={selected}
-      aria-controls={controls ?? panelId}
-      aria-disabled={disabled || undefined}
-      tabIndex={!disabled && selected ? 0 : -1}
-      data-state={selected ? "active" : "inactive"}
-      data-disabled={disabled || undefined}
-      onClick={(event) => {
-        if (disabled) {
-          event.preventDefault()
-          return
-        }
-
-        onClick?.(event)
-
-        if (!event.defaultPrevented) {
-          const tab = event.currentTarget
-          context.setValue(value)
-          tab.ownerDocument.defaultView?.requestAnimationFrame(() => {
-            revealTab(tab, context.orientation)
-          })
-        }
-      }}
-    >
+  const props = {
+    ...rest,
+    id: tabId,
+    role: "tab",
+    className: cx(styles.trigger, className),
+    "data-slot": "tabs-trigger",
+    "data-state": selected ? "active" : "inactive",
+    children: <>
       {leftIcon && (
         <span className={styles.icon} data-position="start" aria-hidden="true">
           {leftIcon}
@@ -400,12 +336,48 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
           {rightIcon}
         </span>
       )}
-    </button>
+    </>,
+  }
+
+  // Base UI includes disabled tabs in its roving focus order. YAMI skips them.
+  if (disabled) {
+    return <button {...props} ref={ref} type="button" aria-disabled="true" aria-selected={selected} aria-controls={controls ?? panelId} onPointerDown={onPointerDown}
+      tabIndex={-1} data-disabled="true" onClick={(event) => event.preventDefault()} />
+  }
+
+  return (
+    <BaseTabs.Tab
+      {...props}
+      ref={ref}
+      type="button"
+      value={value}
+      render={(props) => (
+        <button {...props} aria-controls={controls ?? (props["aria-controls"] ? panelId : undefined)} />
+      )}
+      onPointerDown={(event) => {
+        selectedOnPress.current = selected
+        onPointerDown?.(event)
+      }}
+      onClick={(event) => {
+        onClick?.(event)
+
+        if (event.defaultPrevented) {
+          event.preventBaseUIHandler()
+          return
+        }
+        // Base UI skips reselecting an active tab; YAMI consumers can use it to reveal a section again.
+        // Focus can activate a new tab between pointerdown and click.
+        if (selected && (event.detail === 0 || selectedOnPress.current !== false)) context.setValue(value)
+        selectedOnPress.current = undefined
+        const tab = event.currentTarget
+        tab.ownerDocument.defaultView?.requestAnimationFrame(() => revealTab(tab, context.orientation))
+      }}
+    />
   )
 })
 
 export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(function TabsContent(
-  { value, className, children, ...rest },
+  { value, className, children, keepMounted = true, ...rest },
   ref,
 ) {
   const context = useTabsContext("TabsContent")
@@ -414,9 +386,11 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(function
   const panelId = getPanelId(context.baseId, value)
 
   return (
-    <div
+    <BaseTabs.Panel
       {...rest}
       ref={ref}
+      value={value}
+      keepMounted={keepMounted}
       id={panelId}
       role="tabpanel"
       aria-labelledby={tabId}
@@ -427,6 +401,6 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(function
       data-state={selected ? "active" : "inactive"}
     >
       {children}
-    </div>
+    </BaseTabs.Panel>
   )
 })

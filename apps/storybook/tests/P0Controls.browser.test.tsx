@@ -128,6 +128,7 @@ for (const theme of ["light", "dark"]) {
       await details.click();
       const panel = page.getByRole("dialog", { name: "Delivery details" });
       await expect.element(panel).toBeVisible();
+      expect(getComputedStyle(panel.element()).padding).toBe("12px");
       const box = panel.element().getBoundingClientRect();
       expect(box.left).toBeGreaterThanOrEqual(0);
       expect(box.right).toBeLessThanOrEqual(width);

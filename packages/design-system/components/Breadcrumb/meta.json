@@ -51,7 +51,7 @@
     "ariaPattern": "Named breadcrumb navigation; explicit aria-current=page; decorative separators hidden.",
     "notes": "No automatic focus or inferred current page. Static parent categories do not receive aria-current. Empty paths render nothing. Long labels wrap; focus gutters remain visible. Mobile links are 44px; hosts retain existing visibility rules."
   },
-  "dependencies": { "runtime": ["react"], "peer": [], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
   "usageRef": "./usage.md",
   "examples": ["./examples.tsx#ProductBreadcrumb", "./examples.tsx#CurrentPageBreadcrumb", "./examples.tsx#CollapsedBreadcrumb"],
   "testing": {

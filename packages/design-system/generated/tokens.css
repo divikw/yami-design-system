@@ -409,6 +409,7 @@
   --surface-inverse: var(--color-neutral-900);
   --surface-primary: var(--color-white-1000);
   --surface-secondary: var(--color-neutral-100);
+  --switch-track-off: var(--color-neutral-200);
   --text-disabled: var(--color-black-400);
   --text-disabled-inverse: var(--color-white-400);
   --text-emphasis: var(--color-red-500);
@@ -514,6 +515,7 @@
   --surface-inverse: var(--color-white-1000);
   --surface-primary: var(--color-neutral-900);
   --surface-secondary: var(--color-neutral-800);
+  --switch-track-off: var(--fill-secondary);
   --text-disabled: var(--color-white-400);
   --text-disabled-inverse: var(--color-black-400);
   --text-emphasis: var(--color-red-200);

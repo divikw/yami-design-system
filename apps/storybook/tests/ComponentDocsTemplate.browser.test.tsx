@@ -19,6 +19,7 @@ import { BreadcrumbDocsPage } from "../.storybook/breadcrumb-docs";
 import { ButtonDocsPage } from "../.storybook/button-docs";
 import { ButtonGroupDocsPage } from "../.storybook/button-group-docs";
 import { CardDocsPage } from "../.storybook/card-docs";
+import { RadioGroupDocsPage } from "../.storybook/radio-group-docs";
 import { CheckboxDocsPage } from "../.storybook/checkbox-docs";
 import { ComponentDocsPreview } from "../.storybook/component-docs-preview";
 import { CodeBlock } from "../.storybook/component-docs-template";
@@ -27,7 +28,7 @@ import "@yami/design-system/tokens.css";
 const guides = [
   ["Accordion", AccordionDocsPage], ["AlertDialog", AlertDialogDocsPage], ["AspectRatio", AspectRatioDocsPage],
   ["Avatar", AvatarDocsPage], ["Badge", BadgeDocsPage], ["Dialog", DialogDocsPage], ["Drawer", DrawerDocsPage],
-  ["Breadcrumb", BreadcrumbDocsPage], ["Button", ButtonDocsPage], ["ButtonGroup", ButtonGroupDocsPage], ["Card", CardDocsPage], ["Checkbox", CheckboxDocsPage],
+  ["Breadcrumb", BreadcrumbDocsPage], ["Button", ButtonDocsPage], ["ButtonGroup", ButtonGroupDocsPage], ["Card", CardDocsPage], ["Checkbox", CheckboxDocsPage], ["Radio Group", RadioGroupDocsPage],
 ] as const;
 
 for (const locale of ["zh", "en"] as const) {
@@ -41,9 +42,11 @@ for (const locale of ["zh", "en"] as const) {
     } as unknown as ContextType<typeof DocsContext>;
     try {
       flushSync(() => root.render(<ThemeProvider theme={convert(themes.light)}><DocsContext.Provider value={context}><Guide locale={locale} /></DocsContext.Provider></ThemeProvider>));
-      expect(host.querySelector("h1")?.textContent).toBe(name);
+      const title = host.querySelector("h1")!;
+      expect(title.textContent).toBe(name);
+      expect(getComputedStyle(title).fontSize).toBe("32px");
       const previous = host.querySelector('header a[aria-label^="上一个"], header a[aria-label^="Previous"]');
-      const previousPaths = { Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-checkbox", AlertDialog: "yami-components-layout-accordion", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
+      const previousPaths = { "Radio Group": "yami-components-layout-popover", Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-checkbox", AlertDialog: "yami-components-layout-accordion", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
       if (name === "Accordion") expect(previous).toBeNull();
       else expect(previous?.getAttribute("href")).toBe(`/?path=/docs/${previousPaths[name]}--docs`);
       const headings = [...host.querySelectorAll("h2")];

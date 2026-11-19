@@ -21,7 +21,10 @@
     "SelectItemProps",
     "SelectValue",
     "SelectLabel",
-    "SelectList"
+    "SelectList",
+    "SelectGroup",
+    "SelectGroupLabel",
+    "SelectSeparator"
   ],
   "props": {
     "value": {
@@ -64,6 +67,7 @@
     "state": [
       "default",
       "focus-visible",
+      "invalid",
       "disabled"
     ]
   },
@@ -86,6 +90,11 @@
     "--line-height-body-md",
     "--radius-button-primary",
     "--radius-component-default",
+    "--radius-surface-default",
+    "--border-attention",
+    "--text-secondary",
+    "--divider-default",
+    "--font-size-caption-sm",
     "--space-025",
     "--space-050",
     "--space-100",
@@ -117,6 +126,10 @@
       "selector": ".trigger"
     },
     "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".item"
+    },
+    "--radius-surface-default": {
       "property": "border-radius",
       "selector": ".content"
     },

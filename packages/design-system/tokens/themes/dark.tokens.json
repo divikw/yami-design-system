@@ -50,6 +50,9 @@
     "promotion-secondary": { "$type": "color", "$value": "{color.red.950}" },
     "highlight": { "$type": "color", "$value": "{color.yellow.400}" }
   },
+  "switch": {
+    "track-off": { "$type": "color", "$value": "{fill.secondary}" }
+  },
   "button": {
     "emphasis": { "$type": "color", "$value": "{color.red.500}" },
     "emphasis-active": { "$type": "color", "$value": "{color.red.600}" },

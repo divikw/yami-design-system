@@ -1,3 +1,4 @@
+import { Toggle } from "@base-ui/react/toggle";
 import {
   forwardRef,
   useState,
@@ -21,6 +22,9 @@ export interface FilterChipProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: FilterChipVariant;
   selected?: boolean;
+  pressed?: boolean;
+  defaultPressed?: boolean;
+  onPressedChange?: Toggle.Props["onPressedChange"];
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
 }
@@ -30,25 +34,36 @@ export const FilterChip = forwardRef<HTMLButtonElement, FilterChipProps>(
     {
       variant = "outlined",
       selected,
+      pressed,
+      defaultPressed,
+      onPressedChange,
+      type = "button",
+      form,
+      value,
       leftIcon,
       rightIcon,
       className,
       children,
+      "aria-pressed": ariaPressed,
       ...rest
     },
     ref,
   ) {
+    const toggles = selected !== undefined || pressed !== undefined || defaultPressed !== undefined || onPressedChange !== undefined;
     return (
-      <button
+      <Toggle
         {...rest}
+        {...(!toggles && { "aria-pressed": ariaPressed })}
         ref={ref}
-        type={rest.type ?? "button"}
+        render={<button type={type} form={form} value={value} />}
+        pressed={toggles ? selected ?? pressed : false}
+        defaultPressed={defaultPressed}
+        onPressedChange={onPressedChange}
         className={[styles.chip, styles[variant], className]
           .filter(Boolean)
           .join(" ")}
         data-slot="filter-chip"
         data-variant={variant}
-        aria-pressed={selected}
       >
         {leftIcon && (
           <span className={styles.icon} data-slot="filter-chip-left-icon">
@@ -61,7 +76,7 @@ export const FilterChip = forwardRef<HTMLButtonElement, FilterChipProps>(
             {rightIcon}
           </span>
         )}
-      </button>
+      </Toggle>
     );
   },
 );
@@ -169,7 +184,7 @@ function FilterChipPopup({
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger render={trigger} />
-      <PopoverContent className={category ? styles.categoryPopup : undefined} aria-label={ariaLabel}
+      <PopoverContent style={{ padding: 0 }} className={category ? styles.categoryPopup : undefined} aria-label={ariaLabel}
         collisionAvoidance={category ? { side: "none", align: "shift", fallbackAxisSide: "none" } : undefined}
         render={<div data-slot={slot} />} data-selection-mode={selectionMode}>
         {children}
@@ -207,17 +222,18 @@ export function FilterChipMenu(props: FilterChipMenuProps) {
           className={styles.menuFooter}
           data-filter-chip-menu-footer="true"
         >
-          <button
-            className={styles.clearButton}
-            type="button"
+          <Button
+            className={styles.clearAction}
+            variant="tertiary"
+            size="sm"
             onClick={() => setDraftValue([])}
           >
             {props.clearLabel}
-          </button>
+          </Button>
           <Button
             className={styles.applyButton}
             variant="primary"
-            size="md"
+            size="sm"
             onClick={() => {
               props.onValueChange(draftValue);
               setOpen(false);

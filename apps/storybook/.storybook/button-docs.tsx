@@ -51,7 +51,6 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
     ["md", zh ? "中号" : "Medium"],
     ["lg", zh ? "大号" : "Large"],
   ] as const;
-  const fullSizes = sizes.slice(1);
 
   const examples: GuideExample[] = [
     {
@@ -104,10 +103,10 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
     {
       id: "forms",
       title: zh ? "通栏按钮" : "Full-width buttons",
-      description: zh ? "通栏按钮填满父容器，使用 8px 圆角。中号和大号在 PC（≥1024px）高 48、56px，在 Mobile 高 40、48px。" : "Full-width buttons fill their container with an 8px radius. Medium and large are 48 and 56px high on desktop (≥1024px), and 40 and 48px on mobile.",
-      code: `${importButton}\n\n<div style={{ display: "grid", width: "100%", maxWidth: 320, marginInline: "auto", justifyItems: "center", gap: "var(--space-200)" }}>\n${fullSizes.map(([size, label]) => `  <Button form="full" size="${size}">${label}</Button>`).join("\n")}\n</div>`,
+      description: zh ? "通栏按钮填满父容器，使用 8px 圆角。小号、中号、大号在 PC（≥1024px）分别高 40、48、56px，在 Mobile 分别高 32、40、48px。" : "Full-width buttons fill their container with an 8px radius. Small, medium and large are 40, 48 and 56px high on desktop (≥1024px), and 32, 40 and 48px on mobile.",
+      code: `${importButton}\n\n<div style={{ display: "grid", width: "100%", maxWidth: 320, marginInline: "auto", justifyItems: "center", gap: "var(--space-200)" }}>\n${sizes.map(([size, label]) => `  <Button form="full" size="${size}">${label}</Button>`).join("\n")}\n</div>`,
       preview: <div style={{ display: "grid", width: "100%", maxWidth: 320, marginInline: "auto", justifyItems: "center", gap: "var(--space-200)" }}>
-        {fullSizes.map(([size, label]) => <Button key={size} form="full" size={size}>{label}</Button>)}
+        {sizes.map(([size, label]) => <Button key={size} form="full" size={size}>{label}</Button>)}
       </div>,
     },
     {

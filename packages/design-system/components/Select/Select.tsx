@@ -7,6 +7,15 @@ import styles from "./Select.module.css";
 export const SelectValue = SelectPrimitive.Value;
 export const SelectLabel = SelectPrimitive.Label;
 export const SelectList = SelectPrimitive.List;
+export const SelectGroup = SelectPrimitive.Group;
+
+export function SelectGroupLabel({ className = styles.groupLabel, ...props }: SelectPrimitive.GroupLabel.Props) {
+  return <SelectPrimitive.GroupLabel {...props} className={className} />;
+}
+
+export function SelectSeparator({ className = styles.separator, ...props }: SelectPrimitive.Separator.Props) {
+  return <SelectPrimitive.Separator {...props} className={className} />;
+}
 
 export type SelectProps = Omit<SelectPrimitive.Root.Props<string>, "multiple">;
 

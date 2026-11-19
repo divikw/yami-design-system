@@ -1,15 +1,4 @@
 .body {
-  --close-inset: var(--space-200);
   display: grid;
   gap: var(--space-100);
-  padding: var(--space-200);
-  padding-block-start: calc(var(--close-inset) - var(--stroke-default));
-  padding-inline-end: calc(var(--close-inset) - var(--stroke-default));
-}
-.header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-100); }
-.header .close { align-self: start; border-radius: var(--radius-sm); width: var(--space-300); height: var(--space-300); }
-.closeIcon { display: block; width: var(--space-300); height: var(--space-300); background: currentColor; mask-position: center; mask-size: contain; mask-repeat: no-repeat; }
-
-@media (min-width: 1024px) {
-  .body { --close-inset: var(--space-300); }
 }

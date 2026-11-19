@@ -74,7 +74,7 @@ export function BreadcrumbDocsPage({ locale }: { locale: DocsLocale }) {
     composition={`Breadcrumb (nav)\n└── ol\n    └── li\n        ├── / (aria-hidden)\n        └── a | span`}
     legacyAnchors={legacyAnchors}
     examples={examples.map(example => ({ ...example, preview: <div className={styles.row}>{example.preview}</div> }))}
-    apiNote={zh ? "PC 链接最小为 24 × 24px，低于 1024px 时为 44 × 44px。由宿主页面决定是否显示整条路径。" : "Links have a minimum target of 24 × 24px on desktop and 44 × 44px below 1024px. The host page controls visibility."}
+    apiNote={zh ? "Breadcrumb 用 Base UI 的 useRender 渲染导航容器。PC 链接最小为 24 × 24px，低于 1024px 时为 44 × 44px。由宿主页面决定是否显示整条路径。" : "Breadcrumb uses Base UI’s useRender for the navigation container. Links have a minimum target of 24 × 24px on desktop and 44 × 44px below 1024px. The host page controls visibility."}
     api={[
       ["items", zh ? "必填，按从上级到下级传入 BreadcrumbItem[]。空数组不渲染，单项省略分隔符。" : "Required ordered array of BreadcrumbItem, from parent to child. An empty array renders nothing. A single item has no separator."],
       ["label / href / current", zh ? "label 为必填的 ReactNode。提供 href 时渲染链接。仅对实际当前页设置 current: true，每条路径最多一项。" : "label is a required ReactNode. Supply href to render a link. Set current: true on at most one item, the actual current page."],

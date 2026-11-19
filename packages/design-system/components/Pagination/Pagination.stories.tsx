@@ -14,8 +14,8 @@ const descriptions = {
       inverse: "在当前主题的反色背景上使用。",
       disabled: "禁用全部分页操作。",
       locale: "控件和无障碍名称的语言；示例跟随工具栏语言。",
-      onPageChange: "报告目标页；页面负责加载结果和更新 page。",
-      getPageHref: "返回真实页面地址，与 onPageChange 互斥。",
+      onPageChange: "回调模式必填。接收目标页，由页面加载结果并更新 page。",
+      getPageHref: "链接模式必填。返回真实页面地址，与 onPageChange 互斥。",
     },
   },
   en: {
@@ -26,8 +26,8 @@ const descriptions = {
       inverse: "Use on the active theme's opposite-polarity surface.",
       disabled: "Disable all pagination actions.",
       locale: "Language of controls and accessible names; examples follow the toolbar.",
-      onPageChange: "Report the destination; the host loads results and updates page.",
-      getPageHref: "Return a real destination; mutually exclusive with onPageChange.",
+      onPageChange: "Required in callback mode. Receives the destination page so the host can load results and update page.",
+      getPageHref: "Required in link mode. Returns the destination URL. Mutually exclusive with onPageChange.",
     },
   },
 };
@@ -65,7 +65,6 @@ function Demo({ page: initialPage, pageCount, inverse, disabled, locale, onPageC
   const [page, setPage] = useState(initialPage);
   return (
     <section style={{ padding: "var(--space-200)", background: inverse ? "var(--surface-inverse)" : "var(--surface-primary)", color: inverse ? "var(--text-primary-inverse)" : "var(--text-primary)" }}>
-      <p aria-live="polite">{locale === "zh" ? `第 ${page} 页的结果` : `Results for page ${page}`}</p>
       <Pagination page={page} pageCount={pageCount} inverse={inverse} disabled={disabled} locale={locale}
         onPageChange={(next) => { setPage(next); onPageChange?.(next); }} />
     </section>
@@ -101,7 +100,6 @@ export const Playground: Story = {
     await expect(within(nav).queryByRole("button", { name: zh ? "下一页" : "Next page" })).toBeNull();
     await expect(nav.querySelector(":focus-visible")).toBeNull();
     await userEvent.click(within(nav).getByRole("button", { name: zh ? "第 2 页" : "Page 2", exact: true }));
-    await expect(canvas.getByText(zh ? "第 2 页的结果" : "Results for page 2")).toBeVisible();
     await expect(within(nav).getByRole("button", { name: zh ? "第 2 页" : "Page 2", exact: true })).toHaveAttribute("aria-current", "page");
   },
 };

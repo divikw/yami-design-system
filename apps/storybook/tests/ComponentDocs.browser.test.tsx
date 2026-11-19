@@ -2,6 +2,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { describe, expect, test } from "vitest";
+import { componentApiRows } from "../.storybook/component-docs-scope";
 
 import {
   formatUsageMarkdown,
@@ -10,6 +11,21 @@ import {
 } from "../.storybook/component-docs";
 
 describe("component docs usage content", () => {
+  test("uses the public Pagination contract without marking mutually exclusive props as always required", () => {
+    const rows = new Map(componentApiRows("pagination", "YAMI/Components/Pagination", "en"));
+    expect(rows.get("page")).toContain(" · Required · ");
+    expect(rows.get("onPageChange")).not.toContain(" · Required · ");
+    expect(rows.get("getPageHref")).not.toContain(" · Required · ");
+    expect(rows.get("disabled")).toContain("Default false");
+    expect(rows.has("opener")).toBe(false);
+  });
+
+  test("loads Radio Group usage in the selected language", async () => {
+    const title = "YAMI/Components/Radio Group";
+    expect(await loadUsageForTitle(title, "zh")).toContain("## 键盘与无障碍");
+    expect(await loadUsageForTitle(title, "en")).toContain("## Accessibility");
+  });
+
   test("loads Pagination guidance in Chinese and English", async () => {
     const title = "YAMI/Components/Navigation/Pagination";
     const chinese = await loadUsageForTitle(title, "zh");
@@ -100,9 +116,10 @@ describe("component docs usage content", () => {
     expect(await loadUsageForTitle(title.toLowerCase())).toBe(original);
   });
 
-  test("demotes the usage title below the component page title", () => {
-    expect(formatUsageMarkdown("# Button — Usage\n\n## When to use")).toBe(
-      "## Button — Usage\n\n## When to use",
+  test("nests usage headings below the component title and preserves fenced samples", () => {
+    const code = "\n\n```sh\n# Example comment\n```";
+    expect(formatUsageMarkdown("# Button — Usage\n\n## When to use" + code)).toBe(
+      "## Button — Usage\n\n### When to use" + code,
     );
   });
 
@@ -117,7 +134,7 @@ describe("component docs usage content", () => {
       const markdown = `# Card\n\n## ${title}\n\n## ${title}\n\n### Default behavior (rule: \`card-no-border\`)\n\n## !!!`;
       const render = () => flushSync(() => root.render(<ThemeProvider theme={convert(themes.light)}><UsageMarkdown>{markdown}</UsageMarkdown></ThemeProvider>));
       render();
-      const headings = [...container.querySelectorAll("h2, h3")];
+      const headings = [...container.querySelectorAll("h2, h3, h4")];
       const ids = headings.map((heading) => heading.id);
       expect(ids.every(Boolean)).toBe(true);
       expect(new Set(ids).size).toBe(ids.length);
@@ -127,7 +144,7 @@ describe("component docs usage content", () => {
         expect(heading.querySelector("a")?.getAttribute("href")).toBe(`#${heading.id}`);
       }
       render();
-      expect([...container.querySelectorAll("h2, h3")].map((heading) => heading.id)).toEqual(ids);
+      expect([...container.querySelectorAll("h2, h3, h4")].map((heading) => heading.id)).toEqual(ids);
     } finally {
       root.unmount();
       container.remove();

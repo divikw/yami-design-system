@@ -37,12 +37,12 @@
 | `secondary` | 移动端 Secondary / WEB Secondary | 子分区导航，移动端与 PC 使用相同的下划线样式 |
 | `tertiary` | 移动端 Tertiary | 紧凑的分类或筛选胶囊标签 |
 
-Primary B 的选中底色在小于 1024px 时高 32px，桌面端高 36px，标签页点击区域的高度保持不变。横向分段底板在选中底色的四周外缘保留 2px 留白；底板在小于 1024px 时高 36px，桌面端高 40px。
+横向 Primary B 的底色贴合轨道外缘，四边内距均为 2px。小于 1024px 时，按钮与选中底色均高 32px，轨道高 36px；从 1024px 起分别为 36px 和 40px。
 
 | 尺寸 | 小于 1024px | 从 1024px 起 |
 |---|---|---|
 | 横向 Primary A 点击区域 | 56px，文字 16/20 | 56px，文字 16/20 |
-| Primary B 点击区域 / 选中底色 | 44px / 32px | 44px / 36px |
+| 横向 Primary B 点击区域 / 选中底色 | 32px / 32px | 36px / 36px |
 | Secondary 点击区域 | 40px，文字 14/20 | 40px，文字 14/20 |
 | Tertiary 点击区域 / 底色 | 32px | 36px |
 
@@ -50,7 +50,7 @@ Primary B 的选中底色在小于 1024px 时高 32px，桌面端高 36px，标�
 
 使用 `fullWidth` 可在标签文字放得下时均匀分配宽度；长标签仍保留原生溢出滚动。`orientation="vertical"` 会将所有变体（包括 Primary B 分段轨道）纵向排列，并改用上/下方向键导航。
 
-纵向 Primary A 使用 44px 行高、16/20 文字，选中下划线距文字 4px；纵向 Secondary 保持 40px 行高。两者的标签项间距均为 4px，适用于所有断点。
+纵向 Primary A 使用 44px 行高、16/20 文字，选中下划线距文字 4px；纵向 Secondary 行高为 40px，右侧选中线高 32px，上下各留 4px。两者的标签项间距均为 4px，适用于所有断点。
 
 Tertiary 胶囊标签的视觉、布局和点击区域高度保持一致：小于 1024px 时为 32px，PC 为 36px。透明点击区域不向相邻控件扩展；横向溢出时保留滚动。
 
@@ -71,8 +71,12 @@ Tertiary 胶囊标签的视觉、布局和点击区域高度保持一致：小�
 
 ## 键盘与 ARIA
 
+Base UI 管理标签之间的焦点移动。YAMI 默认保留方向键激活，可用 `activationMode="manual"` 将移动和选中分开。需要在任何焦点进入时激活，可在 TabsList 显式传入 `activateOnFocus`。用 `loopFocus={false}` 关闭首尾循环。
+
+TabsList 的 `variant="default"`、`variant="line"` 分别映射到 YAMI 的 Primary B 分段样式和 Primary A 下划线样式。显式 `styleVariant` 优先。面板默认保留挂载，用 `keepMounted={false}` 允许非活动面板卸载。
+
 - 根组件组合呈现 WAI-ARIA 标签页模式：`tablist`、`tab`、`tabpanel`。
-- 键盘焦点使用独立的 2px 蓝色 `--focus-ring` 外框；反色背景使用 `--focus-ring-inverse`。选中下划线和底色保持原样。无留白的滚动列表使用 2px 内偏移，避免焦点框被裁切；Primary B 沿可见胶囊绘制焦点框，保留 2px 外偏移，不沿 44px 点击区域绘制。
+- 键盘焦点使用独立的 2px 蓝色 `--focus-ring` 外框；反色背景使用 `--focus-ring-inverse`。选中下划线和底色保持原样。无留白的滚动列表使用 2px 内偏移，避免焦点框被裁切；Primary B 沿可见胶囊绘制焦点框，横向焦点框位于底板的 2px 留白内。
 - 方向键移动焦点。默认的 `activationMode="automatic"` 模式下，也会选中获得焦点的标签页。
 - 横向列表使用左/右方向键，纵向列表使用上/下方向键；到达两端后循环导航。
 - 使用 `activationMode="manual"` 时，方向键只移动焦点，按 Enter/空格或点击才会激活标签页。面板加载有延迟时使用手动激活。
@@ -171,12 +175,12 @@ Name every `TabsList` with `aria-label` or `aria-labelledby`. Use one list per T
 | `secondary` | Mobile Secondary / WEB Secondary | Sub-section navigation with the same underline treatment on mobile and PC |
 | `tertiary` | Mobile Tertiary | Compact category or filter pills |
 
-Primary Style B keeps its 32px selected surface below 1024px and 36px desktop surface without changing its trigger height. The horizontal segmented background leaves 2px around the selected surface on every outer edge (36px background below 1024px, 40px on desktop).
+The horizontal Primary B background fills the track, with 2px of padding on each side. Below 1024px, the trigger and selected fill are 32px tall inside a 36px track. From 1024px, they are 36px tall inside a 40px track.
 
 | Geometry | Below 1024px | From 1024px |
 |---|---|---|
 | Horizontal Primary A trigger | 56px, 16/20 text | 56px, 16/20 text |
-| Primary B trigger / selected fill | 44px / 32px | 44px / 36px |
+| Horizontal Primary B trigger / selected fill | 32px / 32px | 36px / 36px |
 | Secondary trigger | 40px, 14/20 text | 40px, 14/20 text |
 | Tertiary trigger / fill | 32px | 36px |
 
@@ -184,7 +188,7 @@ These are the maintained web dimensions. Secondary and Tertiary preserve compact
 
 Use `fullWidth` to distribute triggers evenly while their labels fit; long labels retain native overflow. `orientation="vertical"` stacks every variant, including the segmented Primary B track, and changes navigation to Up/Down.
 
-Vertical Primary A uses 44px rows with 16/20 text and a selected underline 4px below the label; vertical Secondary keeps 40px rows. Both use 4px gaps between items at every breakpoint.
+Vertical Primary A uses 44px rows with 16/20 text and a selected underline 4px below the label; vertical Secondary uses 40px rows with a 32px indicator inset 4px from each end. Both use 4px gaps between items at every breakpoint.
 
 Tertiary pills keep their visual, layout, and hit-area heights aligned: 32px below 1024px and 36px on desktop. Transparent hit areas do not extend into adjacent controls; horizontal overflow remains scrollable.
 
@@ -205,8 +209,12 @@ Use `TabsList inverse` only on `--surface-inverse` or another opposite-polarity 
 
 ## Keyboard and ARIA
 
+Base UI manages focus movement. YAMI keeps arrow-key activation by default. Set `activationMode="manual"` to move focus without selecting, or explicitly pass `activateOnFocus` to TabsList to select whenever a tab receives focus. Set `loopFocus={false}` to stop at the ends.
+
+On TabsList, `variant="default"` maps to YAMI's segmented Primary B style, and `variant="line"` maps to underlined Primary A. An explicit `styleVariant` takes precedence. Panels stay mounted by default. Set `keepMounted={false}` to unmount inactive panels.
+
 - Root renders a compound WAI-ARIA tabs pattern: `tablist`, `tab`, `tabpanel`.
-- Keyboard focus uses a separate 2px blue `--focus-ring` outline, or `--focus-ring-inverse` on inverse backgrounds. Selected underlines and fills retain their original colors. Scrolling lists without gutters use a 2px inset to avoid clipping; Primary B outlines its visible capsule with a 2px outer offset, independently of the 44px hit area.
+- Keyboard focus uses a separate 2px blue `--focus-ring` outline, or `--focus-ring-inverse` on inverse backgrounds. Selected underlines and fills retain their original colors. Scrolling lists without gutters use a 2px inset to avoid clipping; Primary B outlines its visible capsule. On horizontal tabs the outline fits within the 2px track padding.
 - Arrow keys move focus. With the default `activationMode="automatic"`, arrow keys also select the focused tab.
 - Horizontal lists use Left/Right; vertical lists use Up/Down. Navigation wraps at either end.
 - With `activationMode="manual"`, arrows only move focus; Enter/Space or a click activates the focused tab. Use manual activation when panel loading is delayed.

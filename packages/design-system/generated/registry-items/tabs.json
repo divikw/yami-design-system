@@ -30,7 +30,8 @@
   "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -180,9 +181,9 @@
       "disabled": "Disabled triggers set aria-disabled=true, tabIndex=-1, and are skipped by arrow navigation.",
       "labelling": "Require aria-label or aria-labelledby on each TabsList. Trigger and panel IDs use useId + losslessly encoded value; controls may reference an existing external content region.",
       "focusManagement": "One enabled roving Tab stop; manual activation moves focus without selection until Enter/Space or click.",
-      "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 44px, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
+      "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 32px mobile / 36px desktop horizontally and 44px vertically, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "9145456a8a439815365dd0c2af5daca4a1172d807d98963cb847404244476ddc"
+  "contentDigest": "67484bacd950375fdc8719d0b4854d4e496ea2cf3de49edf0634018959f9bc68"
 }

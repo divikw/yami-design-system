@@ -49,6 +49,7 @@
     "tokens": [
       "--background-primary",
       "--background-secondary",
+      "--border-attention",
       "--border-default",
       "--fill-disabled",
       "--focus-ring",
@@ -58,7 +59,9 @@
       "--space-150",
       "--space-250",
       "--space-300",
+      "--space-400",
       "--space-500",
+      "--stroke-default",
       "--stroke-thick",
       "--surface-secondary",
       "--text-primary"
@@ -83,6 +86,10 @@
         "property": "border-color/background",
         "selector": ".item[data-checked]::before, .dot"
       },
+      "--border-attention": {
+        "property": "border-color",
+        "selector": ".item[aria-invalid=true]::before"
+      },
       "--border-default": {
         "property": "border-color",
         "selector": ".item::before"
@@ -105,7 +112,7 @@
     "accessibility": {
       "role": "radiogroup with radio children",
       "wcagLevel": "AA",
-      "tapTargetMin": 40,
+      "tapTargetMin": 32,
       "keyboardNav": [
         "tab",
         "shift+tab",
@@ -119,5 +126,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "36387bb471a8c77b354546c1d749a518bd5af24153a3c614a8957d21a5454b04"
+  "contentDigest": "c8b03124622ea1a27fee77ae1ed3557e6c02f9b0c2e2e6333a6db2dfae390e93"
 }

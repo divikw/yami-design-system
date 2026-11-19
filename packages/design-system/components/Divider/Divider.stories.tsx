@@ -10,6 +10,10 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
+      playground: "StrengthComparison",
+      translations: {
+        zh: { description: "横向或纵向分隔线，支持 1px 常规、2px 加强，以及反色表面。" },
+      },
       description: {
         component:
           "YAMI Divider has two strengths: Default is 1px and Emphasis is 2px. Both strengths support inverse rendering on the current theme's opposite-polarity surface.",
@@ -173,12 +177,28 @@ export const Showcase: Story = {
   ),
 }
 
+export const StrengthComparison: Story = {
+  parameters: {
+    docs: { source: { code: 'import { Divider } from "@yami/design-system"\n\n<>\n  <Divider />\n  <Divider strength="emphasis" />\n</>' } },
+  },
+  render: (_args, { globals }) => (
+    <div style={{ ...stackStyle, width: "min(320px, 100%)", marginInline: "auto" }}>
+      <DividerSpecRow label={globals.locale === "en" ? "Default" : "常规"} thickness="1px" />
+      <DividerSpecRow label={globals.locale === "en" ? "Emphasis" : "加强"} thickness="2px" strength="emphasis" />
+    </div>
+  ),
+}
+
 export const Playground: Story = {
   render: (args) => (
     <div
       style={{
         display: args.orientation === "vertical" ? "flex" : undefined,
+        justifyContent: args.orientation === "vertical" ? "center" : undefined,
         width: args.orientation === "vertical" ? 120 : 320,
+        maxWidth: "100%",
+        marginInline: "auto",
+        boxSizing: "border-box",
         height: args.orientation === "vertical" ? 80 : undefined,
         background: args.inverse ? "var(--surface-inverse)" : undefined,
         padding: args.inverse ? "var(--space-200)" : undefined,

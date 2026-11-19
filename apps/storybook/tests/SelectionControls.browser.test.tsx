@@ -60,9 +60,10 @@ test("Base UI adapters preserve mixed selection, cancellation, form values and r
 });
 
 for (const theme of ["light", "dark"]) {
-  test.each([375, 1280])(`${theme} selection controls reserve default and compact targets and accept edge clicks at %ipx`, async (width) => {
+  test.each([375, 1280])(`${theme} selection controls keep default and compact pointer targets and accept edge clicks at %ipx`, async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
     const container = document.createElement("div");
+    container.style.cssText = "display:grid; justify-items:start; padding:24px; gap:24px";
     container.className = theme === "dark" ? "dark" : "";
     document.body.append(container);
     const root = createRoot(container);
@@ -80,11 +81,14 @@ for (const theme of ["light", "dark"]) {
       for (const control of controls) {
         const bounds = control.getBoundingClientRect();
         const surface = getComputedStyle(control, "::before");
-        const target = control.getAttribute("role") === "checkbox" && width >= 1024 ? 32 : 40;
-        expect([bounds.width, bounds.height]).toEqual([target, target]);
-        expect([surface.width, surface.height, surface.inset]).toEqual(["20px", "20px", `${(target - 20) / 2}px`]);
+        const target = width >= 1024 ? 32 : 40;
+        const extension = (target - 20) / 2;
+        expect([bounds.width, bounds.height]).toEqual([20, 20]);
+        expect([surface.width, surface.height, surface.inset]).toEqual(["18px", "18px", "1px"]);
+        const hit = getComputedStyle(control, "::after");
+        expect([hit.width, hit.height]).toEqual([`${target}px`, `${target}px`]);
         for (const [x, y] of [[2, 2], [target - 2, 2], [2, target - 2], [target - 2, target - 2]]) {
-          expect(document.elementFromPoint(bounds.left + x, bounds.top + y)).toBe(control);
+          expect(document.elementFromPoint(bounds.left - extension + x, bounds.top - extension + y)).toBe(control);
         }
         control.focus();
         await userEvent.keyboard("{Shift}");
@@ -93,7 +97,11 @@ for (const theme of ["light", "dark"]) {
       }
       const [checkbox, standard, express] = controls;
       expect(standard.getBoundingClientRect().bottom).toBeLessThanOrEqual(express.getBoundingClientRect().top);
-      await page.elementLocator(checkbox).click({ position: { x: 2, y: 2 } });
+      const bounds = checkbox.getBoundingClientRect();
+      await page.elementLocator(container).click({ position: {
+        x: bounds.left - container.getBoundingClientRect().left - 4,
+        y: bounds.top - container.getBoundingClientRect().top - 4,
+      } });
       expect(checkbox.getAttribute("aria-checked")).toBe("true");
       expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("none");
       await userEvent.keyboard("{Space}");
@@ -107,7 +115,11 @@ for (const theme of ["light", "dark"]) {
       await page.getByText("Select item label", { exact: true }).click();
       expect(checkbox.getAttribute("aria-checked")).toBe("true");
       expect(getComputedStyle(checkbox, "::before").outlineStyle).toBe("none");
-      await page.elementLocator(express).click({ position: { x: 38, y: 38 } });
+      const radioBounds = express.getBoundingClientRect();
+      await page.elementLocator(container).click({ position: {
+        x: radioBounds.right - container.getBoundingClientRect().left + 3,
+        y: radioBounds.bottom - container.getBoundingClientRect().top + 3,
+      } });
       expect(express.getAttribute("aria-checked")).toBe("true");
       expect(standard.getAttribute("aria-checked")).toBe("false");
       await userEvent.keyboard("{ArrowUp}");

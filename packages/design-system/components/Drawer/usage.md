@@ -16,7 +16,7 @@
 
 可选 `description` 显示在固定标题区内的分隔线上方，并关联弹层的 `aria-describedby`。不传此属性时保持原来的头部。
 
-Drawer 使用 [shadcn 的 Base UI Drawer](https://ui.shadcn.com/docs/components/base/drawer) 结构，支持 Tab 循环、Esc、遮罩关闭、关闭后的焦点归还和背景滚动锁定。子页面用 back，Esc 返回上层。业务方维护 loading、error、empty 和选中内容；关闭会卸载正文。本次 Storybook 示例与验收仅覆盖浅色模式。
+Drawer 使用 [shadcn 的 Base UI Drawer](https://ui.shadcn.com/docs/components/base/drawer) 结构，支持 Tab 循环、Esc、遮罩关闭、关闭后的焦点归还和背景滚动锁定。子页面用 back，Esc 返回上层。业务方维护 loading、error、empty 和选中内容；关闭会卸载正文。Storybook 示例跟随工具栏选择的浅色或深色主题。
 
 打开和关闭均为 200ms：PC 从右侧滑入/滑出，Mobile 从底部滑入/滑出；遮罩同时进行 150ms 淡入/淡出。使用原生 CSS 动画与现有 enter/exit 曲线，不依赖 Motion 运行时。退场期间保留最后一次打开的内容、模态锁和焦点，动画完成后才卸载并归还焦点；重新打开会取消待完成的关闭。`prefers-reduced-motion: reduce` 下取消动画并立即关闭。
 
@@ -40,6 +40,6 @@ Use `swipeDirection` to select up, right, down or left. Override the side panel 
 
 Nested drawers own their open state separately. Close the child to resume the parent. Use `modal={false}` for background interaction, with `disablePointerDismissal` to keep the panel open. Use `modal="trap-focus"` to confine only keyboard focus.
 
-Adapted from the [shadcn Base UI Drawer](https://ui.shadcn.com/docs/components/base/drawer), Drawer supports focus confinement and restoration, Escape, backdrop dismissal and scroll locking. A child view uses back and Escape returns to its parent. The host owns loading, errors, empty content and selection. Closing unmounts content. This delivery targets light mode. No independent Figma binding is assigned.
+Adapted from the [shadcn Base UI Drawer](https://ui.shadcn.com/docs/components/base/drawer), Drawer supports focus confinement and restoration, Escape, backdrop dismissal and scroll locking. A child view uses back and Escape returns to its parent. The host owns loading, errors, empty content and selection. Closing unmounts content. Storybook examples follow the light or dark theme selected in the toolbar. No independent Figma binding is assigned.
 
 Entry and exit take 200ms, from the right on desktop and from the bottom on mobile, with a simultaneous 150ms scrim fade. Native CSS uses the documented enter/exit curves without a Motion runtime dependency. Content, modal lock and focus remain until exit completes; reopening cancels a pending close. Reduced-motion users get no animation and immediate dismissal. Optional `onAfterClose` runs after the modal is released, allowing a stable focus fallback when its original opener was removed.

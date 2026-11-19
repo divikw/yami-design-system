@@ -30,11 +30,14 @@
     "Select",
     "SelectContent",
     "SelectContentProps",
+    "SelectGroup",
+    "SelectGroupLabel",
     "SelectItem",
     "SelectItemProps",
     "SelectLabel",
     "SelectList",
     "SelectProps",
+    "SelectSeparator",
     "SelectTrigger",
     "SelectTriggerProps",
     "SelectValue"
@@ -62,14 +65,18 @@
   },
   "design": {
     "tokens": [
+      "--border-attention",
       "--border-default",
       "--button-disabled",
+      "--divider-default",
       "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
+      "--font-size-caption-sm",
       "--line-height-body-md",
       "--radius-button-primary",
       "--radius-component-default",
+      "--radius-surface-default",
       "--space-025",
       "--space-050",
       "--space-100",
@@ -81,7 +88,8 @@
       "--surface-primary",
       "--surface-secondary",
       "--text-disabled",
-      "--text-primary"
+      "--text-primary",
+      "--text-secondary"
     ],
     "rules": [
       "focus-style",
@@ -105,6 +113,10 @@
         "selector": ".trigger"
       },
       "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".item"
+      },
+      "--radius-surface-default": {
         "property": "border-radius",
         "selector": ".content"
       },
@@ -139,5 +151,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "5623d0e5cebe7a7f98a1afaba0fc3a3afeefd666b608db79f2bfae0c78b861b5"
+  "contentDigest": "3052234e82a1d76d83b609cd580c0af81047250e1e666ab888cfcfb97d99ac83"
 }

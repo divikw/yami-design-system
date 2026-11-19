@@ -14,7 +14,7 @@ export interface GuideExample {
 }
 
 /** Content for the shared component documentation layout; demos use real YAMI components. */
-export function ComponentGuide({ name, slug, intro, previous, next, locale, composition, examples, usageCode = examples[0].code, api, apiNote, reference, legacyAnchors, previewMode }: {
+export function ComponentGuide({ name, slug, intro, previous, next, locale, composition, examples, leadExample, usageCode = examples[0].code, api, apiNote, reference, legacyAnchors, previewMode }: {
   name: string;
   slug: string;
   intro: string;
@@ -23,6 +23,7 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   locale: DocsLocale;
   composition: string;
   examples: GuideExample[];
+  leadExample?: Pick<GuideExample, "title" | "code" | "preview" | "previewBackground">;
   usageCode?: string;
   api: [string, string][];
   apiNote: string;
@@ -31,11 +32,12 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   previewMode?: DocsPreviewMode;
 }) {
   const labels = locale === "zh" ? ["安装", "用法", "组合结构", "API 参考"] : ["Installation", "Usage", "Composition", "API Reference"];
-  const lead = examples[0];
+  const lead = leadExample ?? examples[0];
   const anchors = (section: string) => legacyAnchors?.[section]?.map((id) => <span className={styles.legacyAnchor} id={id} key={id} aria-hidden="true" />);
   const [imports, ...usage] = usageCode.split("\n\n");
   const pageText = [
     `# ${name}`, intro,
+    ...(leadExample ? [`## ${leadExample.title}\n\n\`\`\`tsx\n${leadExample.code}\n\`\`\``] : []),
     `## ${labels[0]}\n\n${installationMarkdown(locale)}`,
     `## ${labels[1]}\n\n\`\`\`tsx\n${usageCode}\n\`\`\``,
     `## ${labels[2]}\n\n\`\`\`text\n${composition}\n\`\`\``,

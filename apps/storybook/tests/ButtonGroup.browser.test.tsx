@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
 import { expect, test } from "vitest";
@@ -47,13 +48,15 @@ test("content-width groups wrap without changing Button height or touch targets"
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
+  const groupRef = createRef<HTMLDivElement>();
   try {
     flushSync(() => root.render(<div style={{ width: 180 }}>
-      <ButtonGroup aria-label="设置操作">
+      <ButtonGroup aria-label="设置操作" ref={groupRef}>
         <Button>保存设置</Button><Button>另存为草稿</Button><Button>取消</Button>
       </ButtonGroup>
     </div>));
     const group = container.querySelector('[role="group"]')!;
+    expect(groupRef.current).toBe(group);
     expect(group).toHaveAccessibleName("设置操作");
     expect(group).not.toHaveAttribute("tabindex");
     const buttons = [...group.querySelectorAll("button")];

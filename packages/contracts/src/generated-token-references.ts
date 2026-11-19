@@ -409,6 +409,7 @@ export const registeredTokenReferenceTypes = {
   "surface.inverse": "color",
   "surface.primary": "color",
   "surface.secondary": "color",
+  "switch.track-off": "color",
   "text.disabled": "color",
   "text.disabled-inverse": "color",
   "text.emphasis": "color",

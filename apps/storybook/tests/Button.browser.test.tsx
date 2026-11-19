@@ -202,7 +202,7 @@ test.each([375, 1023, 1024, 1440, 1920])(
         const desktopFull = button.dataset.form === "full" && width >= 1024;
         const desktopTextLarge = large && button.dataset.form !== "icon" && width >= 1024;
         const styles = getComputedStyle(button);
-        const heights = desktopFull ? { sm: "32px", md: "48px", lg: "56px" } : { sm: "32px", md: "40px", lg: "48px" };
+        const heights = desktopFull ? { sm: "40px", md: "48px", lg: "56px" } : { sm: "32px", md: "40px", lg: "48px" };
         expect(styles.height).toBe(heights[size]);
         expect(styles.fontSize).toBe(large ? (desktopTextLarge ? "18px" : "16px") : "14px");
         expect(styles.lineHeight).toBe("20px");

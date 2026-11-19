@@ -62,4 +62,10 @@ describe("YAMI Tag", () => {
     expect(markup).toContain('src="/matcha.png"');
     expect(markup).toContain('alt=""');
   });
+
+  it("passes label styling and content to a custom text element", () => {
+    const markup = renderToStaticMarkup(<Tag render={<strong />} variant="outline">Matcha</Tag>);
+    expect(markup).toMatch(/^<strong[^>]+data-slot="tag"[^>]+>Matcha<\/strong>$/);
+    expect(markup).toContain('data-variant="outline"');
+  });
 });

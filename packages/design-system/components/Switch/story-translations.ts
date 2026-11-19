@@ -1,7 +1,8 @@
 export const translations = {
   "zh": {
-    "description": "YAMI 开关，沿用搜索筛选的 32×20px 轨道与 32px 最小控件高度。支持受控、非受控、只读、禁用和表单提交。",
+    "description": "YAMI 开关，轨道尺寸为 36×20px，控件最小高度为 32px。支持受控、非受控、只读、禁用和表单提交。",
     "argDescriptions": {
+      "size": "轨道尺寸：默认 36×20px，小号 28×16px。",
       "checked": "受控开关状态。",
       "defaultChecked": "非受控初始状态，默认关闭。",
       "onCheckedChange": "状态变化回调；details.cancel() 可取消变更。",
@@ -12,8 +13,9 @@ export const translations = {
     }
   },
   "en": {
-    "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+    "description": "YAMI switch with a 36×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
     "argDescriptions": {
+      "size": "Track size: 36×20px by default, or 28×16px for sm.",
       "checked": "Controlled on/off state.",
       "defaultChecked": "Initial uncontrolled state; defaults to off.",
       "onCheckedChange": "State change callback; details.cancel() cancels the change.",

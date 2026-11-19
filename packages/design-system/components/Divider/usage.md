@@ -1,4 +1,27 @@
+<!-- locale:zh -->
+# Divider — 使用说明
+
+## 用法
+
+用分隔线区分内容区域。默认横向分隔线用 Base UI Separator 渲染为语义化的 `hr`。纵向分隔线适合行内元信息或同一组控件，通过 `aria-hidden` 标记为装饰。
+
+```tsx
+import { Divider } from "@yami/design-system"
+
+<Divider />
+<Divider orientation="vertical" />
+```
+
+## 强度与表面
+
+- `strength="default"` 为 1px，用于同一区域内的常规分隔。
+- `strength="emphasis"` 为 2px，用于明显的章节边界。
+- `inverse` 在当前主题的反色表面选用对应 token。分隔线无交互，分组结构由父容器提供。
+
+<!-- locale:en -->
 # Divider — Usage
+
+Base UI Separator supplies the separator primitive. The horizontal root remains an `hr`. The vertical root is a decorative `span`.
 
 ## When to use
 

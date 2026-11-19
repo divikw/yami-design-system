@@ -1,5 +1,6 @@
 "use client";
 
+import { useRender } from "@base-ui/react/use-render";
 import type { ComponentPropsWithoutRef } from "react";
 
 import styles from "./Pagination.module.css";
@@ -36,7 +37,6 @@ export function Pagination({
   "aria-label": label,
   ...rest
 }: PaginationProps) {
-  if (pageCount < 1) return null;
   const current = Math.min(Math.max(page, 1), pageCount);
   const zh = locale === "zh";
 
@@ -62,19 +62,27 @@ export function Pagination({
     );
   }
 
-  return (
-    <nav data-slot="pagination" lang={locale} {...rest} className={[styles.root, className].filter(Boolean).join(" ")}
-      data-inverse={inverse ? "true" : undefined}
-      aria-label={label ?? (zh ? "分页导航" : "Pagination")}>
-      <ul className={styles.list}>
-        {pageItems(pageCount).map((item) => (
-          <li key={item}>
-            {typeof item === "number"
-              ? control(item)
-              : <span className={styles.ellipsis} aria-hidden="true">…</span>}
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
+  return useRender({
+    defaultTagName: "nav",
+    enabled: pageCount >= 1,
+    props: {
+      "data-slot": "pagination",
+      lang: locale,
+      ...rest,
+      className: [styles.root, className].filter(Boolean).join(" "),
+      "data-inverse": inverse ? "true" : undefined,
+      "aria-label": label ?? (zh ? "分页导航" : "Pagination"),
+      children: (
+        <ul className={styles.list}>
+          {pageItems(pageCount).map((item) => (
+            <li key={item}>
+              {typeof item === "number"
+                ? control(item)
+                : <span className={styles.ellipsis} aria-hidden="true">…</span>}
+            </li>
+          ))}
+        </ul>
+      ),
+    },
+  });
 }

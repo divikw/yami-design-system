@@ -1,5 +1,6 @@
 "use client";
 
+import { useRender } from "@base-ui/react/use-render";
 import { forwardRef, type HTMLAttributes } from "react";
 
 import type { ImageSource } from "../image.types";
@@ -24,12 +25,14 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   context?: TagContext;
   /** Light or dark mode of the surface behind the Tag. */
   mode?: TagMode;
-  /** Responsive size: M is 28px; L is 32/36px on mobile/PC. */
+  /** Legacy size alias. Both values use the same 32px mobile / 36px desktop height. */
   size?: TagSize;
   /** Filled or outlined container treatment. */
   variant?: TagVariant;
   /** Optional leading artwork. */
   image?: TagImage;
+  /** Replace the span with a semantically equivalent label element. */
+  render?: useRender.RenderProp;
 }
 
 /**
@@ -45,33 +48,37 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
     variant = "filled",
     className,
     children,
+    render,
     ...rest
   },
   ref,
 ) {
-  return (
-    <span
-      {...rest}
-      ref={ref}
-      className={[styles.tag, className].filter(Boolean).join(" ")}
-      data-slot="tag"
-      data-context={context}
-      data-has-image={image ? "true" : undefined}
-      data-mode={mode}
-      data-size={size}
-      data-variant={variant}
-    >
-      {image && (
-        <span className={styles.image} data-slot="tag-image">
-          <ResponsiveImage
-            source={image.src}
-            alt={image.alt}
-            width={32}
-            height={32}
-          />
-        </span>
-      )}
-      {children}
-    </span>
-  );
+  return useRender({
+    defaultTagName: "span",
+    render,
+    ref,
+    props: {
+      ...rest,
+      className: [styles.tag, className].filter(Boolean).join(" "),
+      "data-slot": "tag",
+      "data-context": context,
+      "data-has-image": image ? "true" : undefined,
+      "data-mode": mode,
+      "data-size": size,
+      "data-variant": variant,
+      children: <>
+        {image && (
+          <span className={styles.image} data-slot="tag-image">
+            <ResponsiveImage
+              source={image.src}
+              alt={image.alt}
+              width={32}
+              height={32}
+            />
+          </span>
+        )}
+        {children}
+      </>,
+    },
+  });
 });

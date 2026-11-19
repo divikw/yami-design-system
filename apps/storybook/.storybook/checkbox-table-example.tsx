@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Checkbox } from "@yami/design-system";
 
-const selectionCell = { width: "1%", paddingBlock: "var(--space-050)", paddingInlineEnd: 0, verticalAlign: "middle" };
-const orderCell = { paddingBlock: "var(--space-050)", paddingInlineStart: "var(--space-025)", textAlign: "start", verticalAlign: "middle" } as const;
+const selectionCell = { width: "1%", height: "var(--space-500)", paddingBlock: "var(--space-050)", paddingInlineEnd: 0, verticalAlign: "middle" };
+const orderCell = { lineHeight: "var(--line-height-body-md)", paddingBlock: "var(--space-050)", paddingInlineStart: "var(--space-100)", textAlign: "start", verticalAlign: "middle" } as const;
 
 export function OrderSelection({ orders, selectAll, caption }: {
   orders: string[]; selectAll: string; caption: string;

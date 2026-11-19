@@ -4,7 +4,7 @@
   "category": "form",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+  "description": "YAMI switch with a 36×20px default track or a 28×16px small track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -15,6 +15,13 @@
     "SwitchProps"
   ],
   "props": {
+    "size": {
+      "type": "enum",
+      "values": ["default", "sm"],
+      "default": "default",
+      "required": false,
+      "description": "Track size. Both sizes have a minimum control height of 32px."
+    },
     "checked": {
       "type": "boolean",
       "required": false,
@@ -52,8 +59,12 @@
     }
   },
   "variants": {
+    "size": ["default", "sm"],
     "state": [
       "default",
+      "checked",
+      "read-only",
+      "invalid",
       "focus-visible",
       "disabled"
     ]
@@ -71,7 +82,10 @@
   "tokens": [
     "--background-secondary",
     "--border-default",
+    "--border-attention",
+    "--space-150",
     "--fill-disabled",
+    "--switch-track-off",
     "--fill-inverse",
     "--fill-primary",
     "--focus-ring",
@@ -79,13 +93,20 @@
     "--radius-component-default",
     "--space-025",
     "--space-100",
+    "--stroke-default",
     "--stroke-thick",
     "--text-disabled",
     "--text-primary",
-    "--space-400"
+    "--space-400",
+    "--space-250",
+    "--space-200"
   ],
   "tokenBindings": {
     "--fill-disabled": {
+      "property": "background",
+      "selector": ".root[data-disabled] .track"
+    },
+    "--switch-track-off": {
       "property": "background",
       "selector": ".track"
     },
@@ -95,6 +116,10 @@
     },
     "--fill-primary": {
       "property": "background",
+      "selector": ".thumb"
+    },
+    "--stroke-default": {
+      "property": "border-width",
       "selector": ".thumb"
     },
     "--border-default": {
@@ -112,6 +137,10 @@
     "--focus-ring": {
       "property": "outline-color",
       "selector": ".root:focus-visible"
+    },
+    "--space-200": {
+      "property": "width",
+      "selector": ".track"
     },
     "--space-400": {
       "property": "min-width/min-height",

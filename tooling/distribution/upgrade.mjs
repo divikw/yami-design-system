@@ -75,6 +75,12 @@ export async function compareApi(previous, current, root) {
   await fs.mkdir(path.join(root, "dist"), { recursive: true });
   const temporary = await fs.mkdtemp(path.join(root, "dist/upgrade-types-"));
   try {
+    if (previous.package.dependencies?.["@base-ui/react"] || current.package.dependencies?.["@base-ui/react"]) {
+      const scope = path.join(temporary, "node_modules/@base-ui");
+      const installed = await fs.realpath(path.join(root, "packages/design-system/node_modules/@base-ui/react"));
+      await fs.mkdir(scope, { recursive: true });
+      await fs.symlink(installed, path.join(scope, "react"), "junction");
+    }
     for (const [side, snapshot] of [["previous", previous], ["current", current]]) {
       for (const [file, text] of Object.entries(snapshot.declarations)) {
         assert.ok(/^components\/[\w./-]+\.d\.ts$/.test(file) && !file.split("/").includes(".."), `Invalid declaration path: ${file}`);

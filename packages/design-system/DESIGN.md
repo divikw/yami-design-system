@@ -371,7 +371,7 @@ remains available to existing compositions such as Header and Footer. Divider's
 | Dark / default dark | `--focus-ring` | `--color-blue-400` (`#66A1FF`) |
 | Dark / inverse light | `--focus-ring-inverse` | `--color-blue-600` (`#0066EB`) |
 
-Use these aliases for `:focus-visible` indicators, not permanent borders or selected states. Keep the existing `--border-focus` / `--border-focus-inverse` colors for component borders and selection. Inputs retain their existing state border and add a separate keyboard outline around the field. Normally use a 2px outline with 2px offset; Primary B Tabs outline their visible capsule with a 2px outer offset rather than the larger hit area; scrolling Tabs without segmented-track gutters use a 2px inset to avoid clipping, and existing inset indicators and composite panel offsets remain supported. Check at least 3:1 contrast against the adjacent background and avoid clipping the indicator. A fixed light/dark band must use the alias for its actual background polarity.
+Use these aliases for `:focus-visible` indicators, not permanent borders or selected states. Keep the existing `--border-focus` / `--border-focus-inverse` colors for component borders and selection. Inputs retain their existing state border and add a separate keyboard outline around the field. Normally use a 2px outline with 2px offset; Primary B Tabs outline their visible capsule with a 0px offset on horizontal tabs and a 2px offset otherwise; scrolling Tabs without segmented-track gutters use a 2px inset to avoid clipping, and existing inset indicators and composite panel offsets remain supported. Check at least 3:1 contrast against the adjacent background and avoid clipping the indicator. A fixed light/dark band must use the alias for its actual background polarity.
 
 Focus geometry follows the visible control boundary and its corner radius, not an invisible hit-area extension. Reserve 4px gutters for an external 2px outline plus 2px gap; inside a scroll or crop boundary, use a 2px inset instead. Thumbnail focus stays 2px away from the existing state border using a border-aware inset. Keep text truncation on a label layer so it does not clip the interactive link's outline.
 
@@ -428,7 +428,7 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 |                |                                                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------ |
 | **Variants**   | `emphasis` · `primary` · `secondary` · `tertiary` · `destructive` (subtle red fill and red text for actions such as deleting data) |
-| **Sizes**      | `sm` / `md` / `lg`: 32 / 40 / 48px. Full form at ≥1024px: 32 / 48 / 56px. |
+| **Sizes**      | `sm` / `md` / `lg`: 32 / 40 / 48px. Full form at ≥1024px: 40 / 48 / 56px. |
 | **States**     | default · hover · active · disabled · loading · focus-visible                                    |
 | **Radius**     | `form=full` → `--radius-component-default` (8px). Inline and icon use `--radius-button-primary` for pill and circular shapes. |
 | **Typography** | `--font-family-ios` + `--font-weight-emphasize` (EN 500 / CN and KO 600); sm/md `body-md`, lg `body-xl`; desktop (≥1024px) text-bearing lg uses `--font-size-button-lg-desktop` (18px), retaining 20px line-height. |
@@ -440,7 +440,7 @@ Choose by behavior: actions use Button; navigation and direct file downloads use
 
 ### ButtonGroup — `components/ButtonGroup/`
 
-Related actions composed from Button. The group provides an accessible name and an 8px gap (`--space-100`), without overriding child colors, sizes, states, or keyboard behavior.
+Related actions composed from Button. Base UI's `useRender` renders the named group. The group provides an 8px gap (`--space-100`), without overriding child colors, sizes, states, or keyboard behavior.
 
 - Default layout follows content width and wraps when space is limited.
 - `full` gives direct child Buttons equal widths in one row, capped at 480px. Use Button `form="full"` for this layout.
@@ -452,7 +452,7 @@ Related actions composed from Button. The group provides an accessible name and 
 
 Hierarchical navigation extracted from PDP, documentation and blog pages. / 从商品详情页、文档页和博客页面抽取的层级导航。
 
-- A named `nav` contains an ordered list with slash separators hidden from assistive technology. Native links retain browser behavior; `renderLink` lets applications retain framework navigation without a framework dependency in the component.
+- Base UI's `useRender` renders the named `nav` with an ordered list and slash separators hidden from assistive technology. Native links retain browser behavior; `renderLink` lets applications retain framework navigation without a framework dependency in the component.
 - `items` provide labels, optional URLs and an explicit `current` flag. Only the actual page receives `aria-current="page"`; a static parent category is not automatically current. Empty paths render nothing.
 - `sm` preserves PDP caption-md typography; `md` preserves docsite body-md typography. Links are underlined on mouse hover by default; the docsite disables this with `underline={false}`. Long labels wrap. For a collapsed path, the host can replace intermediate levels with a static `BreadcrumbEllipsis` label.
 - Preserve 24px PC links and 44px links below 1024px. A 4px root gutter with compensating outer margins keeps the existing page alignment and protects the 2px blue focus outline at a 2px offset. Use default/inverse semantic aliases.
@@ -462,6 +462,7 @@ Hierarchical navigation extracted from PDP, documentation and blog pages. / 从�
 
 PC-only numbered pagination, shown from 1024px and hidden below it. / 仅 PC 使用的数字分页，1024px 起显示，移动端隐藏。
 
+- Base UI's `useRender` renders the navigation container.
 - Controlled `page` / `pageCount`; use `onPageChange` for result updates or `getPageHref` for native links. The host owns data, routing, and result focus.
 - Fixed first nine pages, one ellipsis and last page; up to ten pages render in full. No middle expansion. A collapsed current page has no visible current marker. / 固定前 9 页、省略号和末页，不展开中间段。
 - 32px controls with 4px gaps; neutral current-page fill, `aria-current="page"` when visible, and a static ellipsis. Only numbered pages are interactive. Compact PC geometry does not claim native touch minimums.
@@ -479,6 +480,8 @@ App destination navigation extracted from the cart footer. / 从购物车底部�
 
 ### Tabs — `components/Tabs/`
 
+Base UI Tabs manages selection and keyboard focus. YAMI retains arrow-key activation by default and keeps inactive panels mounted. Use `activateOnFocus`, `loopFocus`, and `keepMounted` for explicit overrides. The list aliases `default` and `line` use Primary B and Primary A respectively.
+
 |                         |                                                                                                         |
 | ----------------------- | ------------------------------------------------------------------------------------------------------- |
 | **Variants**            | `primary` · `secondary` · `tertiary`                                                                    |
@@ -487,7 +490,7 @@ App destination navigation extracted from the cart footer. / 从购物车底部�
 | **States**              | active · inactive · disabled · focus-visible · skeleton                                                 |
 | **Responsive behavior** | Filled Primary Style B and Tertiary selection surfaces are 32px below `1024px` and 36px from the shared Desktop breakpoint. Secondary keeps its underline treatment. |
 | **Typography**          | Primary Style A uses `body-xl` (16/20) on Mobile and WEB; compact tabs use `body-md` (14/20).           |
-| **Geometry**            | Primary A: 56px horizontal / 44px vertical trigger; Primary B: 44px trigger inside a 52px track; Secondary: 40px trigger at every breakpoint. Vertical Primary A and Secondary use 4px item gaps. |
+| **Geometry**            | Primary A: 56px horizontal / 44px vertical trigger; Primary B: 32px mobile / 36px desktop horizontal trigger with 2px track padding, 44px vertical trigger; Secondary: 40px trigger at every breakpoint. Vertical Primary A and Secondary use 4px item gaps. |
 | **Tap target**          | Tertiary visual, layout, and hit-target heights match: 32px on Mobile/Tablet and 36px on Desktop. No invisible extension overlaps adjacent controls. |
 | **Focus**               | 2px `--focus-ring` outline; inverse uses `--focus-ring-inverse`.                                    |
 | **ARIA**                | Named `tablist` / `tab` / `tabpanel`; one roving Tab stop, arrow keys, Home/End, automatic/manual activation, controlled and uncontrolled state. Values preserve distinct IDs across languages. |
@@ -503,6 +506,10 @@ Inline disclosure extracted from ProductDetailPage's DetailDisclosure. / 从商�
 - Public exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` and their Props types. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
 
 ### Card — `components/Card/`
+
+Static cards can compose CardHeader, CardTitle, CardDescription, CardAction, CardContent and CardFooter. Header, body and footer share the root inset.
+
+Base UI's `useRender` preserves the polymorphic root. On a `div` Card, `size="sm"` selects the YAMI 8px inset unless `padding` is supplied.
 
 Use Card for a discrete, self-contained content item (an order, product summary, or saved address), not ordinary page sections. Use headings, spacing, and layout containers for settings groups and page structure. Mixed actions belong inside a static Card; do not nest controls inside an anchor or button Card. / Card 用于订单、商品摘要、已保存地址等独立内容项；普通设置分组和页面结构使用标题、间距与布局容器。多个操作放在静态 Card 内，不嵌套在链接或按钮卡片中。
 
@@ -536,7 +543,9 @@ Use Card for a discrete, self-contained content item (an order, product summary,
 
 ### Tag — `components/Tag/`
 
-Static full-pill label for short descriptive keywords. Its three independent color axes are placement `context` (`content` or `overlay`), surface `mode` (`light` or `dark`), and container `variant` (`filled` or `outline`). M remains 28px on mobile and PC; L is 32px on mobile and 36px on PC, switching at 1024px. Optional leading artwork follows Search geometry: a 2px leading inset, 4px label gap, an image slot 4px smaller than the Tag, and artwork 8px smaller. Filled uses transparent black at 4% with dark text in light mode and transparent white at 8% with light text in dark mode. Outline remains transparent with an 8% black stroke in light mode or 8% white stroke in dark mode. Tag is display-only and never substitutes for an interactive FilterChip.
+Base UI's `useRender` renders the static label and supports an equivalent text element via `render`.
+
+Static full-pill label for short descriptive keywords. Its three independent color axes are placement `context` (`content` or `overlay`), surface `mode` (`light` or `dark`), and container `variant` (`filled` or `outline`). Tags are 32px on mobile and 36px on PC, switching at 1024px. Text-only tags have 12px inline padding. Optional leading artwork follows Search geometry: a 2px leading inset, 4px label gap, an image slot 4px smaller than the Tag, and artwork 8px smaller. Filled uses transparent black at 4% with dark text in light mode and transparent white at 8% with light text in dark mode. Outline remains transparent with an 8% black stroke in light mode or 8% white stroke in dark mode. Tag is display-only and never substitutes for an interactive FilterChip.
 
 ### Avatar — `components/Avatar/`
 
@@ -556,6 +565,8 @@ Static membership artwork verified against Figma node `1632:21283`. Exposes the 
 
 ### Input — `components/Input/`
 
+Base UI Input renders the native field. Both `onChange` and `onValueChange` are supported, and `aria-invalid` alone applies the YAMI error border.
+
 Opt-in `action` composes a shared tertiary Button inside the field border, with underlined 14px action text and 14px value text. It preserves native form submission, disabled and error behavior. Ordinary inputs keep their current appearance; cart uses the option only on mobile. See [usage](./components/Input/usage.md).
 
 `density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This meets the Web target-size baseline; larger targets remain a touch recommendation. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
@@ -571,6 +582,8 @@ Opt-in `action` composes a shared tertiary Button inside the field border, with 
 ### FilterChip — `components/FilterChip/`
 
 Interactive filter-pill family with filled and outlined treatments, selected state, optional icons, and single-, multiple-, or hierarchical selection. Groups retain native horizontal overflow on narrow surfaces and expose selection through accessible pressed-state controls.
+
+Base UI Toggle handles pressed state. Use `pressed` or `defaultPressed` with `onPressedChange`, or keep the existing controlled `selected` and `onClick` pattern. Disabled chips use `--button-disabled` and `--text-disabled`.
 
 ### QuantitySelect — `components/QuantitySelect/`
 
@@ -597,7 +610,7 @@ Base UI modal for short forms, editing and general information on mobile and des
 |                |                                                                                                                                |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | **States**     | default · hover · selected · disabled-selected · disabled-unselected · focus-visible · indeterminate (code-only)               |
-| **Geometry**   | 32px desktop / 40px mobile frame · 20px visible square · 4px `--radius-tag-primary`                                                                  |
+| **Geometry**   | 20×20px layout with a centered 18×18px visible square · 4px `--radius-tag-primary`                                                                  |
 | **Color**      | Neutral selection: `--text-primary`, never brand or operational red.                                                           |
 | **Disabled**   | `--fill-disabled`; never CSS opacity.                                                                                          |
 | **Behavior**   | Base UI checkbox with controlled/uncontrolled state, hidden native form input, Space-key toggle, and ARIA checked/mixed state. |
@@ -608,11 +621,11 @@ Base UI modal for short forms, editing and general information on mobile and des
 |                |                                                                                                                                   |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | **States**     | default · hover · selected · disabled-selected · disabled-unselected · focus-visible                                              |
-| **Geometry**   | 40px frame · 20px outer circle · 12px selected dot                                                                                |
+| **Geometry**   | 20px layout · centered 18px outer circle · selected: 2px stroke, 2px gap, 10px dot                                                                                |
 | **Color**      | Neutral selection: `--text-primary`, never brand or operational red.                                                              |
 | **Disabled**   | `--fill-disabled`; never CSS opacity.                                                                                             |
 | **Behavior**   | Base UI radiogroup/radio composition with exclusive selection, roving focus, arrow-key navigation, and hidden native form inputs. |
-| **Tap target** | Each item reserves a 40×40px layout and pointer target at every breakpoint; focus outline follows the visible circle.                                                            |
+| **Tap target** | 32×32px pointer target from 1024px, 40×40px below; focus outline follows the visible circle.                                                            |
 
 ### Divider — `components/Divider/`
 
@@ -622,7 +635,7 @@ Base UI modal for short forms, editing and general information on mobile and des
 | **Stroke**    | `default`: `--stroke-default` (1px); `emphasis`: `--stroke-thick` (2px) |
 | **Polarity**  | Separate `inverse` boolean; opposite-polarity colors within Light or Dark |
 | **Orientation** | Horizontal fills available width; vertical stretches in a flex / grid row with a 1em minimum height |
-| **Semantics** | Horizontal: native `<hr>` separator; vertical: decorative `<span aria-hidden="true">` |
+| **Semantics** | Base UI Separator renders a horizontal `<hr>` or a decorative vertical `<span aria-hidden="true">`. |
 
 ### AspectRatio — `components/AspectRatio/`
 
@@ -807,7 +820,7 @@ Ranked search terms with the results behind each one.
 
 ### Switch — `components/Switch/`
 
-YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Switch/usage.md) for composition, state and accessibility.
+YAMI switch with a 36×20px default track, a 28×16px small track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Switch/usage.md) for composition, state and accessibility.
 
 ### Select — `components/Select/`
 

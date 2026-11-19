@@ -395,7 +395,7 @@
   .discovery > [data-slot="tabs"] > [role="tablist"] { position: sticky; top: 56px; z-index: 10; padding: var(--space-100); background: var(--surface-primary); }
   .discovery [role="tabpanel"] { padding: 0 var(--space-100); }
   .checkoutBar { display: flex; align-items: center; gap: var(--space-100); height: var(--space-800); box-sizing: border-box; padding: var(--space-100); bottom: calc(49px + env(safe-area-inset-bottom)); }
-  .checkoutAll { display: flex; flex-shrink: 0; align-items: center; gap: 0; font-size: var(--font-size-body-md); white-space: nowrap; }
+  .checkoutAll { display: flex; flex-shrink: 0; align-items: center; gap: var(--space-100); padding-inline-start: var(--space-025); font-size: var(--font-size-body-md); white-space: nowrap; }
   .checkoutTotal { flex: 1; min-width: 0; justify-content: flex-end; padding: 0; height: var(--space-600); }
   .checkoutTotal > span:last-child { display: grid; gap: 0; justify-items: end; min-width: 0; }
   .checkoutTotal small { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-sm); }

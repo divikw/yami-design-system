@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 test("Input provides PC and Mobile previews alongside the examples embedded in Docs", () => {
-  expect(Object.keys(stories).filter((name) => name !== "default").sort()).toEqual(["Compact", "MobilePreview", "PCPreview", "Playground", "Showcase", "WithAction"]);
+  expect(Object.keys(stories).filter((name) => name !== "default").sort()).toEqual(["Compact", "ExternalValidation", "MobilePreview", "PCPreview", "Playground", "Showcase", "WithAction"]);
 });
 
 for (const locale of ["zh", "en"]) {

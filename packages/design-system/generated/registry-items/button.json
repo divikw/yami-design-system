@@ -114,6 +114,7 @@
       "--space-150",
       "--space-200",
       "--space-250",
+      "--space-500",
       "--space-600",
       "--surface-inverse",
       "--surface-primary",
@@ -266,6 +267,11 @@
         "property": "padding-inline",
         "selector": ".lg"
       },
+      "--space-500": {
+        "property": "height",
+        "selector": ".sm.fullWidth",
+        "media": "(min-width: 1024px)"
+      },
       "--space-600": {
         "property": "height",
         "selector": ".md.fullWidth",
@@ -294,5 +300,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "b4554fc57dd77719a09296da9b3f19fc2452fa7b7ecf49804d994bf4307202b7"
+  "contentDigest": "92f7c8c337ebcd552f0827e6a9d9fbdb77aea1e3f10520bc702e4c930ac60718"
 }

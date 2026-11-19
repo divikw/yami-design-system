@@ -63,6 +63,7 @@
     "--fill-primary",
     "--radius-surface-default",
     "--stroke-default",
+    "--space-150",
     "--text-primary",
     "--font-family-ios",
     "--font-size-heading-sm",
@@ -72,6 +73,7 @@
     "--line-height-body-md"
   ],
   "tokenBindings": {
+    "--space-150": { "property": "padding", "selector": ".content" },
     "--fill-primary": {
       "property": "background",
       "selector": ".content"

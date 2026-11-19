@@ -18,7 +18,7 @@
 
 PDP 的末项可能只是商品所属分类，博客路径也可能止于文章分类：这种情况下不要设置 `current`。组件不会把末项或无链接文字自动视为当前页面，也不会自动附加商品或文章标题。
 
-使用命名的 `nav` 和有序列表 `ol`；当前页标记 `aria-current="page"`，斜杠通过 `aria-hidden` 排除。空数组不渲染导航，单层路径不显示分隔符。
+用 Base UI 的 `useRender` 渲染具名的 `nav`，其中包含有序列表 `ol`。当前页标记 `aria-current="page"`，斜杠通过 `aria-hidden` 排除。空数组不渲染导航，单层路径不显示分隔符。
 
 ## 折叠路径
 
@@ -72,7 +72,7 @@ Provide `items` from parent to child. Items with `href` render native links; oth
 
 A PDP path may end at a product category; a blog path may end at an article category. Neither is the current page. The component does not infer current status from position or a missing URL, and does not append product or article titles.
 
-A named `nav` contains an ordered list. Current items use `aria-current="page"`; slash separators are hidden from assistive technology. An empty array renders nothing; a single item has no separator.
+Base UI's `useRender` renders a named `nav` containing an ordered list. Current items use `aria-current="page"`. Slash separators are hidden from assistive technology. An empty array renders nothing. A single item has no separator.
 
 ## Collapsed paths
 

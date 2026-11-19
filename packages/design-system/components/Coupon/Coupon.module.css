@@ -22,7 +22,7 @@
   gap: var(--space-150);
   min-height: var(--space-600);
   padding: var(--space-100) var(--space-200);
-  padding-right: var(--space-100);
+  padding-right: var(--space-150);
   border-bottom-style: dashed;
   mask-image: radial-gradient(circle at left bottom, transparent var(--space-100), black var(--space-100)), radial-gradient(circle at right bottom, transparent var(--space-100), black var(--space-100));
 }

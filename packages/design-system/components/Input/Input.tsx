@@ -11,6 +11,7 @@
  * and aria-describedby are all preserved.
  */
 
+import { Input as BaseInput } from '@base-ui/react/input'
 import {
   type ChangeEvent,
   forwardRef,
@@ -72,6 +73,8 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   clearable?: boolean
   /** Called after the clear action dispatches a native input event. Controlled callers may also clear value here. */
   onClear?: () => void
+  /** Value callback for controlled use. Native onChange is also supported. */
+  onValueChange?: BaseInput.Props['onValueChange']
   /** Stretches root to 100% of the container. */
   fullWidth?: boolean
   /** Optional hint rendered inside the embedded label. */
@@ -148,6 +151,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     value,
     defaultValue,
     onChange,
+    onValueChange,
     onFocus,
     onBlur,
     'aria-describedby': ariaDescribedBy,
@@ -243,7 +247,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   }, [isControlled, syncTextValueFromInput])
 
   const setInputRef = useCallback(
-    (node: HTMLInputElement | null) => {
+    (element: HTMLElement | null) => {
+      const node = element as HTMLInputElement | null
       inputRef.current = node
       if (typeof ref === 'function') {
         ref(node)
@@ -258,7 +263,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const isDisabled = Boolean(disabled) || isExplicitDisabled
   const hasText = textValue.length > 0
   const hasLabel = label != null
-  const isError = Boolean(error) || state === 'error'
+  const isError = Boolean(error) || state === 'error' || ariaInvalid === true || ariaInvalid === 'true'
 
   const resolvedState: InputState = (() => {
     if (isError) return 'error'
@@ -384,7 +389,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         <div className={styles.textStack}>
           {density !== 'compact' && fieldLabel}
           <div className={styles.valueRow}>
-            <input
+            <BaseInput
               {...rest}
               ref={setInputRef}
               id={inputId}
@@ -400,6 +405,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               aria-invalid={isError || ariaInvalid}
               aria-describedby={describedBy}
               onChange={handleChange}
+              onValueChange={onValueChange}
               onFocus={handleFocus}
               onBlur={handleBlur}
             />

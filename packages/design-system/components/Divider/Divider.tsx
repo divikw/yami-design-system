@@ -11,6 +11,7 @@
  * <span aria-hidden="true"> when vertical.
  */
 
+import { Separator } from '@base-ui/react/separator'
 import type { HTMLAttributes } from 'react'
 
 import styles from './Divider.module.css'
@@ -38,12 +39,16 @@ export function Divider({
   const classes = [styles.divider, styles[orientation], styles[strength], inverse && styles.inverse, className]
     .filter(Boolean)
     .join(' ')
-  if (orientation === 'horizontal') {
-    return <hr {...rest} className={classes} data-slot="divider" />
-  }
   // Vertical dividers are visual-only. <hr> is spec-locked horizontal,
   // so we use a decorative <span aria-hidden="true">. Screen readers
   // learn list/group structure from the semantic parent (ul, dl, role=list),
   // not from vertical separator glyphs.
-  return <span {...rest} aria-hidden="true" className={classes} data-slot="divider" />
+  const vertical = orientation === 'vertical'
+  return <Separator
+    {...rest}
+    orientation={orientation}
+    render={vertical ? <span role={undefined} aria-orientation={undefined} aria-hidden="true" /> : <hr />}
+    className={classes}
+    data-slot="divider"
+  />
 }

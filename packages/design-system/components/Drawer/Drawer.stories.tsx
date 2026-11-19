@@ -42,7 +42,6 @@ const meta = {
   id: "yami-components-layout-drawer",
   title: "YAMI/Components/Drawer",
   component: Drawer,
-  globals: { theme: "light" },
   parameters: { layout: "fullscreen", controls: { disable: true }, docs: { showStories: false, translations: {
     zh: { description: "PC 右侧贴边抽屉，Mobile 底部弹层。移动端可从半屏拖到全屏，正文独立滚动，底部操作保持可见。" },
     en: { description: "Right-edge desktop drawer and mobile bottom sheet. Drag from half to full height on mobile. Content scrolls independently above the fixed footer." },

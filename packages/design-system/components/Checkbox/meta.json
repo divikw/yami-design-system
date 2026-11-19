@@ -10,7 +10,7 @@
     "nodeId": "4795:90512",
     "componentKey": "f0a1bb4e8c7540460de93a68de180508560150a3",
     "pageNodeId": "2857:32277",
-    "notes": "Figma defines the 20x20 visible control; the layout and pointer target is 32x32 on desktop and 40x40 on mobile.",
+    "notes": "The Figma reference uses a 20x20 control. The implementation centers an 18x18 visible square inside a 20x20 layout. A transparent pointer target extends to 32x32 on desktop and 40x40 on mobile.",
     "stateMapping": "Status=Default/Hover/Selected/Disable_Selected/Disable_Unselected maps to unchecked hover, checked, checked+disabled, and unchecked+disabled. Indeterminate is code-only."
   },
   "variants": {
@@ -32,7 +32,7 @@
     "focus": { "ruleId": "focus-style", "note": "Uses a 2px --focus-ring ring with 2px offset." },
     "disabled": { "ruleId": "no-opacity-disabled", "note": "Disabled states use --fill-disabled and semantic background colors." },
     "radii": { "ruleId": "no-custom-radii", "note": "Visible square uses --radius-tag-primary for a 4px radius." },
-    "tapTarget": { "ruleId": "tap-target", "note": "All targets are 32x32px from 1024px and 40x40px below. The visible control is centered at 20px. Parent labels may provide a larger target." },
+    "tapTarget": { "ruleId": "tap-target", "note": "All targets are 32x32px from 1024px and 40x40px below. The 18px visible square is centered in a 20px layout. Parent labels may provide a larger target." },
     "color": { "ruleId": "semantic-color-only", "note": "Selected state is neutral --text-primary, not operational or brand red." }
   },
   "tokens": [
@@ -51,6 +51,7 @@
     "--space-500",
     "--space-100",
     "--space-300",
+    "--stroke-default",
     "--stroke-thick"
   ],
   "tokenBindings": {
@@ -59,6 +60,7 @@
     "--text-primary": { "property": "background/border-color", "selector": ".root[data-checked]::before, .root[data-indeterminate]::before" },
     "--border-default": { "property": "border-color", "selector": ".root::before" },
     "--fill-disabled": { "property": "background/border-color", "selector": ".root[data-disabled]::before" },
+    "--stroke-default": { "property": "inset", "selector": ".root::before" },
     "--focus-ring": { "property": "outline-color", "selector": ".root[data-keyboard-focus]:focus-visible::before" },
     "--radius-tag-primary": { "property": "border-radius", "selector": ".root::before" }
   },

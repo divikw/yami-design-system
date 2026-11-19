@@ -1,4 +1,6 @@
 .root {
+  --switch-thumb-size: var(--space-250);
+  --switch-travel: var(--space-200);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -13,10 +15,12 @@
   font: inherit;
   cursor: pointer;
 }
-.track { position: relative; width: 32px; height: 20px; flex: 0 0 auto; border-radius: var(--radius-full); background: var(--fill-disabled); }
-.thumb { position: absolute; top: 0; left: 0; box-sizing: border-box; width: 20px; height: 20px; border: 2px solid var(--border-default); border-radius: var(--radius-full); background: var(--fill-primary); transition: transform 120ms ease-out; }
+.root[data-size="sm"] { --switch-thumb-size: var(--space-200); --switch-travel: var(--space-150); }
+.track { position: relative; width: calc(var(--switch-thumb-size) + var(--switch-travel)); height: var(--switch-thumb-size); flex: 0 0 auto; border-radius: var(--radius-full); background: var(--switch-track-off); }
+.thumb { position: absolute; top: 0; left: 0; box-sizing: border-box; width: var(--switch-thumb-size); height: var(--switch-thumb-size); border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-full); background: var(--fill-primary); transition: transform 120ms ease-out; }
 .root[data-checked] .track { background: var(--fill-inverse); }
-.root[data-checked] .thumb { transform: translateX(12px); }
+.root[data-checked] .thumb { transform: translateX(var(--switch-travel)); }
+.root:is([aria-invalid="true"], [data-invalid]):not([data-disabled]) .track { outline: var(--stroke-default) solid var(--border-attention); }
 .root:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
 .root[data-disabled] { color: var(--text-disabled); cursor: not-allowed; }
 .root[data-disabled] .track { background: var(--fill-disabled); }

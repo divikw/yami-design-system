@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "1316e4e3a2d98462d2686be27118f8a3018580984a2377200f16dbff1ee95fd3"
+      "digest": "3590237144919a002e86d46177e65fe07d1fec55bd067b7a47fa266964f46fb7"
     },
     {
       "name": "accordion",
@@ -99,7 +99,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/breadcrumb.json",
-      "digest": "ee90c6f739ddc240de709968196d25fb79a26840719817958907b1d50c560d72"
+      "digest": "89761b19bc6535b21c856fb854c68b204e1be05ae145a666ff15c2b001ad5593"
     },
     {
       "name": "button",
@@ -108,7 +108,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "b4554fc57dd77719a09296da9b3f19fc2452fa7b7ecf49804d994bf4307202b7"
+      "digest": "92f7c8c337ebcd552f0827e6a9d9fbdb77aea1e3f10520bc702e4c930ac60718"
     },
     {
       "name": "button-group",
@@ -117,7 +117,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/button-group.json",
-      "digest": "a48ed9741c1184d3f46c654992189f5ad19baa0664393478a0318931364bfca3"
+      "digest": "1ea57bc023b717fdd48400bf6c8572a0405257463847253b344ae8a031331a40"
     },
     {
       "name": "card",
@@ -126,7 +126,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/card.json",
-      "digest": "309810aa77044f198eeaeb1c0b6e3496afa6e3549b71683c9cba2862030a7f07"
+      "digest": "18490e8b2668cd1338bd2b066b15872572863205b705f4cc5737834931ad883d"
     },
     {
       "name": "checkbox",
@@ -135,7 +135,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
-      "digest": "12fdddeaeca8a8ee00a66af100733cd45685e25747864b403ff78350054770f4"
+      "digest": "2786a8d2468a3f77b63ae91035d8044d99d65ae2b25c16fb373b72c0cc2389a6"
     },
     {
       "name": "coupon",
@@ -144,7 +144,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/coupon.json",
-      "digest": "be4b3dd06483495ee88df29d1b25933c6245ad147c99dc2b368ebe32df89fa8c"
+      "digest": "9f85a4826814d600c5b2c91e88d111c2c8a894ddc0718d66bc84d0c89375b86e"
     },
     {
       "name": "dialog",
@@ -162,7 +162,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/divider.json",
-      "digest": "9923080aa2496208f21711f704f223706d3781b87e0e24e29e02c8ae02e04e16"
+      "digest": "fc23e68dcf5cecb0fc189c077475970b721ef46c1e9220ed7227f45e1a675ffb"
     },
     {
       "name": "drawer",
@@ -171,7 +171,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "6556bae902600e9974c1ae97586b2976c2b8875eda17e2cb15a3c1c0d7239c60"
+      "digest": "eb8f0e7b41cd5fbb3d2a7fcbdbd1b657bd382d40ef4983ccf561c967c9b26e8e"
     },
     {
       "name": "filter-chip",
@@ -180,7 +180,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/filter-chip.json",
-      "digest": "a8e5678a9077415949381c8a8f125d00d210eb1989721894484ff5a912bd1233"
+      "digest": "781667a34aae3b7c789660470b6a83112e4f5593af050393508d6edd8dce1603"
     },
     {
       "name": "footer",
@@ -225,7 +225,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "22144a63fc677b74ba8398a4ff0cb8c01a0d11f8c54e7dafaf5a3c8034064b24"
+      "digest": "dd923b1523f4f169804b91071aeba2e7e080cb7f9b7a503bef925dc8546485b4"
     },
     {
       "name": "membership-badge",
@@ -252,7 +252,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/pagination.json",
-      "digest": "cdd2d2d8b658459e504d977a54ae21cc9916a4e10fa27705183b966ee18eebec"
+      "digest": "18640a1bb82d67f8cfb07c3a3a462e74e53f0ab13addf3bbe04f05a9101f3bb0"
     },
     {
       "name": "popover",
@@ -261,7 +261,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/popover.json",
-      "digest": "21d6739d510307c16a423eeea04e9a26b26732c51e4dbbf7a8fd5e8adea0f96b"
+      "digest": "a38ebbb3c25b59159f964879ec9dda24272d5bed1772ff3ebefb9d6f1b40f57d"
     },
     {
       "name": "product-card",
@@ -315,7 +315,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/radio-group.json",
-      "digest": "36387bb471a8c77b354546c1d749a518bd5af24153a3c614a8957d21a5454b04"
+      "digest": "c8b03124622ea1a27fee77ae1ed3557e6c02f9b0c2e2e6333a6db2dfae390e93"
     },
     {
       "name": "review-list",
@@ -342,7 +342,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/select.json",
-      "digest": "5623d0e5cebe7a7f98a1afaba0fc3a3afeefd666b608db79f2bfae0c78b861b5"
+      "digest": "3052234e82a1d76d83b609cd580c0af81047250e1e666ab888cfcfb97d99ac83"
     },
     {
       "name": "shortcut-rail",
@@ -369,7 +369,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/switch.json",
-      "digest": "8348f268f95bf49dc58cfe8851600554b12b11c08ea87060b18219bc2a199959"
+      "digest": "5f80c69f61676d6545417d936e92f5682c0ce82be42f7290fb485dc1b1af007d"
     },
     {
       "name": "tab-bar",
@@ -378,7 +378,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/tab-bar.json",
-      "digest": "7b6b23ed41ce86e8dc87a5b3e85532a77903605482ff5bf07036024c133ccda4"
+      "digest": "413c6d90db41e28e8c702ff490c061fcb2cb4009477a9bab20d343de4c0ed672"
     },
     {
       "name": "tabs",
@@ -387,7 +387,7 @@
       "status": "stable",
       "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "9145456a8a439815365dd0c2af5daca4a1172d807d98963cb847404244476ddc"
+      "digest": "67484bacd950375fdc8719d0b4854d4e496ea2cf3de49edf0634018959f9bc68"
     },
     {
       "name": "tag",
@@ -396,7 +396,7 @@
       "status": "experimental",
       "version": "0.4.0",
       "path": "registry-items/tag.json",
-      "digest": "f986a6fa704bed46051cbf578eb2ea4a21696081af01ae84ff383094c7665914"
+      "digest": "5c62370f886a4b1a37bf835cf2c61143cb70c591e2cc766f5c0bb25a2e170c74"
     },
     {
       "name": "theme-hero",

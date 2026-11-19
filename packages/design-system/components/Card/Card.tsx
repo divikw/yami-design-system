@@ -11,7 +11,9 @@
  * Use as="a" with href for navigation or as="button" for an action.
  */
 
+import { useRender } from '@base-ui/react/use-render'
 import type {
+  ComponentPropsWithRef,
   ComponentPropsWithoutRef,
   ElementType,
   ForwardedRef,
@@ -46,12 +48,12 @@ export type CardProps<T extends ElementType = 'div'> = CardBaseProps &
   Omit<ComponentPropsWithoutRef<T>, keyof CardBaseProps | 'as'> & {
     /** 渲染的元素类型，默认为 'div'。链接卡片使用 'a' 并提供 href；操作卡片使用 'button'。 */
     as?: T
-  }
+  } & (T extends 'div' ? { size?: 'default' | 'sm' } : unknown)
 
 function CardImpl<T extends ElementType = 'div'>(
   {
     as,
-    padding = 'md',
+    padding,
     surface = 'primary',
     bordered = false,
     interactive,
@@ -64,15 +66,18 @@ function CardImpl<T extends ElementType = 'div'>(
   const Element = (as ?? 'div') as ElementType
 
   // Auto-infer interactive when rendering as button or anchor-with-href.
-  const restProps = rest as { href?: string; type?: string }
+  const restProps = rest as { href?: string; type?: string; size?: unknown }
+  const { size, ...divProps } = rest
+  const usesCardSize = Element === 'div' && (size === 'sm' || size === 'default')
+  const resolvedPadding = padding ?? (usesCardSize && size === 'sm' ? 'sm' : 'md')
   const isInteractive =
     interactive ?? (Element === 'button' || (Element === 'a' && typeof restProps.href === 'string'))
-  const elementProps = Element === 'button' ? { ...rest, type: restProps.type ?? 'button' } : rest
+  const elementProps = Element === 'button' ? { ...rest, type: restProps.type ?? 'button' } : usesCardSize ? divProps : rest
   const Content = Element === 'button' ? 'span' : 'div'
 
   const classes = [
     styles.card,
-    styles[`pad-${padding}`],
+    styles[`pad-${resolvedPadding}`],
     styles[`surface-${surface}`],
     bordered && styles.bordered,
     isInteractive && styles.interactive,
@@ -81,11 +86,17 @@ function CardImpl<T extends ElementType = 'div'>(
     .filter(Boolean)
     .join(' ')
 
-  return (
-    <Element {...elementProps} ref={ref} className={classes} data-slot="card">
-      <Content className={styles.content} data-slot="card-content">{children}</Content>
-    </Element>
-  )
+  return useRender({
+    defaultTagName: 'div',
+    render: as ? (props) => <Element {...props} /> : undefined,
+    ref,
+    props: {
+      ...elementProps,
+      className: classes,
+      'data-slot': 'card',
+      children: <Content className={styles.content} data-slot="card-content">{children}</Content>,
+    },
+  })
 }
 
 // Polymorphic + forwardRef: cast preserves the generic API for consumers
@@ -94,3 +105,27 @@ function CardImpl<T extends ElementType = 'div'>(
 export const Card = forwardRef(CardImpl) as <T extends ElementType = 'div'>(
   props: CardProps<T> & { ref?: ForwardedRef<HTMLElement> },
 ) => ReactElement
+
+export function CardHeader({ className, ...props }: ComponentPropsWithRef<'header'>) {
+  return <header {...props} data-slot="card-header" className={[styles.header, className].filter(Boolean).join(' ')} />
+}
+
+export function CardTitle({ className, ...props }: ComponentPropsWithRef<'h3'>) {
+  return <h3 {...props} data-slot="card-title" className={[styles.title, className].filter(Boolean).join(' ')} />
+}
+
+export function CardDescription({ className, ...props }: ComponentPropsWithRef<'p'>) {
+  return <p {...props} data-slot="card-description" className={[styles.description, className].filter(Boolean).join(' ')} />
+}
+
+export function CardAction({ className, ...props }: ComponentPropsWithRef<'div'>) {
+  return <div {...props} data-slot="card-action" className={[styles.action, className].filter(Boolean).join(' ')} />
+}
+
+export function CardContent({ className, ...props }: ComponentPropsWithRef<'div'>) {
+  return <div {...props} data-slot="card-body" className={[styles.body, className].filter(Boolean).join(' ')} />
+}
+
+export function CardFooter({ className, ...props }: ComponentPropsWithRef<'footer'>) {
+  return <footer {...props} data-slot="card-footer" className={[styles.footer, className].filter(Boolean).join(' ')} />
+}

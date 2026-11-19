@@ -26,7 +26,7 @@
   border: var(--stroke-default) solid transparent;
 }
 
-.filled[aria-pressed="true"] {
+.filled[aria-pressed="true"]:not(:disabled) {
   background: var(--fill-primary);
   box-shadow: inset 0 0 0 1px var(--border-focus);
 }
@@ -36,13 +36,19 @@
   border: var(--stroke-default) solid var(--border-default);
 }
 
-.outlined[aria-pressed="true"] {
+.outlined[aria-pressed="true"]:not(:disabled) {
   background: var(--fill-primary);
   box-shadow: inset 0 0 0 1px var(--border-focus);
 }
 
+.chip:disabled {
+  background: var(--button-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .filled:hover {
+  .filled:hover:not(:disabled) {
     background: color-mix(
       in srgb,
       var(--fill-secondary) 92%,
@@ -50,11 +56,11 @@
     );
   }
 
-  .filled[aria-pressed="true"]:hover {
+  .filled[aria-pressed="true"]:hover:not(:disabled) {
     box-shadow: inset 0 0 0 2px var(--border-focus);
   }
 
-  .outlined:hover {
+  .outlined:hover:not(:disabled) {
     background: color-mix(
       in srgb,
       var(--fill-primary) 92%,
@@ -62,7 +68,7 @@
     );
   }
 
-  .outlined[aria-pressed="true"]:hover {
+  .outlined[aria-pressed="true"]:hover:not(:disabled) {
     box-shadow: inset 0 0 0 2px var(--border-focus);
   }
 }
@@ -175,6 +181,10 @@
 .applyButton {
   min-width: 80px;
   flex: 0 0 auto;
+}
+
+.clearAction {
+  text-decoration: underline;
 }
 
 .categoryPopup {

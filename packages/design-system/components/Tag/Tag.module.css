@@ -1,4 +1,6 @@
 .tag {
+  --tag-height: var(--space-400);
+  height: var(--tag-height);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -14,22 +16,14 @@
   white-space: nowrap;
 }
 
-.tag[data-size="m"] {
-  height: calc(var(--space-300) + var(--space-050));
-}
-
-.tag[data-size="l"] {
-  height: var(--space-400);
-}
-
 .tag[data-has-image="true"] {
   padding: var(--space-025) var(--space-150) var(--space-025) var(--space-025);
 }
 
 .image {
   display: inline-flex;
-  width: var(--space-300);
-  height: var(--space-300);
+  width: calc(var(--tag-height) - var(--space-050));
+  height: calc(var(--tag-height) - var(--space-050));
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -40,34 +34,14 @@
 
 .image img {
   display: block;
-  width: calc(var(--space-200) + var(--space-050));
-  height: calc(var(--space-200) + var(--space-050));
+  width: calc(var(--tag-height) - var(--space-100));
+  height: calc(var(--tag-height) - var(--space-100));
   object-fit: contain;
 }
 
-.tag[data-size="l"] .image {
-  width: calc(var(--space-300) + var(--space-050));
-  height: calc(var(--space-300) + var(--space-050));
-}
-
-.tag[data-size="l"] .image img {
-  width: var(--space-300);
-  height: var(--space-300);
-}
-
 @media (min-width: 1024px) {
-  .tag[data-size="l"] {
-    height: calc(var(--space-400) + var(--space-050));
-  }
-
-  .tag[data-size="l"] .image {
-    width: var(--space-400);
-    height: var(--space-400);
-  }
-
-  .tag[data-size="l"] .image img {
-    width: calc(var(--space-300) + var(--space-050));
-    height: calc(var(--space-300) + var(--space-050));
+  .tag {
+    --tag-height: calc(var(--space-400) + var(--space-050));
   }
 }
 
@@ -95,4 +69,14 @@
 
 .tag[data-variant="outline"][data-mode="dark"] {
   border-color: var(--color-white-200);
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .tag[data-mode="light"]:hover {
+    background-color: var(--color-black-200);
+  }
+
+  .tag[data-mode="dark"]:hover {
+    background-color: var(--color-white-300);
+  }
 }

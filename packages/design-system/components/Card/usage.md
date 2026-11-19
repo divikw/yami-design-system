@@ -2,6 +2,8 @@
 
 # Card — 使用说明
 
+静态卡片可组合 CardHeader、CardTitle、CardDescription、CardAction、CardContent 和 CardFooter。标题区操作放入 CardAction，正文与底部操作分别放入 CardContent 和 CardFooter。
+
 ## 使用场景
 
 - **呈现独立内容项**：一笔订单、一个商品摘要、一条已保存地址。每张卡片代表一个完整对象。
@@ -30,6 +32,8 @@ Card 默认使用：
 仅在卡片排列紧密、需要细线分隔以提升浏览效率的密集列表或网格中启用 `bordered`。
 
 ### 内边距选择
+
+默认 `div` 卡片可用 `size="sm"` 简写 `padding="sm"`。显式 `padding` 优先。
 
 | 模式 | 各设备内边距 |
 |---|---|
@@ -232,6 +236,8 @@ ProductCard 等贴边媒体容器继续使用 `padding="none"`，其内部内容
 
 # Card — Usage
 
+A static card can compose CardHeader, CardTitle, CardDescription, CardAction, CardContent, and CardFooter. Place the header action in CardAction, the body in CardContent, and closing actions in CardFooter.
+
 ## When to use
 
 - **Representing a self-contained item** — one order, product summary, or saved address. Each card represents one complete object.
@@ -259,6 +265,8 @@ Cards ship with:
 Opt into `bordered` only in dense listing grids where cards are tightly packed and hairline separation improves scanability.
 
 ### Choosing padding
+
+On the default `div` Card, `size="sm"` is shorthand for `padding="sm"`. Explicit `padding` takes precedence.
 
 | Mode | Inset on every device |
 |---|---|

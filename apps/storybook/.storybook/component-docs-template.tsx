@@ -4,6 +4,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { SyntaxHighlighter } from "storybook/internal/components";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import { Button } from "@yami/design-system";
+import { usesBaseUI } from "./component-docs-scope";
 import { ComponentDocsPreview, type DocsPreviewMode } from "./component-docs-preview";
 import styles from "./component-docs-template.module.css";
 
@@ -25,7 +26,7 @@ function CopyButton({ text, locale, page = false }: { text: string; locale: Loca
   }}>{page ? label : icon}<span className={styles.srOnly} role="status">{status !== "idle" ? label : ""}</span></Button>;
 }
 
-export function CodeBlock({ code, locale, collapsible = false, language = "tsx" }: { code: string; locale: Locale; collapsible?: boolean; language?: "tsx" | "json" | "bash" | "text" }) {
+export function CodeBlock({ code, locale, collapsible = false, language = "tsx" }: { code: string; locale: Locale; collapsible?: boolean; language?: "tsx" | "css" | "json" | "bash" | "text" }) {
   const [expanded, setExpanded] = useState(false);
   return <div className={styles.codeBlock} data-expanded={!collapsible || expanded}>
     <div className={styles.codeScroll}>
@@ -69,11 +70,17 @@ export function Installation({ locale }: { locale: Locale }) {
   </>;
 }
 
-export function DocsExample({ code, locale, children, name, previewMode, previewBackground }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: DocsPreviewMode; previewBackground?: string }) {
+export function DocsExampleCard({ code, locale, children, name }: { code?: string; locale: Locale; children: ReactNode; name?: string }) {
   return <div className={styles.example} data-example={name}>
-    <ComponentDocsPreview locale={locale} name={name} mode={previewMode} previewBackground={previewBackground}>{children}</ComponentDocsPreview>
-    <CodeBlock code={code} locale={locale} collapsible />
+    {children}
+    {code && <CodeBlock code={code} locale={locale} collapsible />}
   </div>;
+}
+
+export function DocsExample({ code, locale, children, name, previewMode, previewBackground }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: DocsPreviewMode; previewBackground?: string }) {
+  return <DocsExampleCard code={code} locale={locale} name={name}>
+    <ComponentDocsPreview locale={locale} name={name} mode={previewMode} previewBackground={previewBackground}>{children}</ComponentDocsPreview>
+  </DocsExampleCard>;
 }
 
 export function DocsApiTable({ locale, rows }: { locale: Locale; rows: [string, string][] }) {
@@ -81,7 +88,7 @@ export function DocsApiTable({ locale, rows }: { locale: Locale; rows: [string, 
 }
 
 export function ComponentDocsTemplate({ name, slug, intro, previous, next, pageText, locale, children }: {
-  name: string; slug: string; intro: string; previous?: { name: string; path: string }; next?: { name: string; path: string };
+  name: string; slug: string; intro?: ReactNode; previous?: { name: string; path: string }; next?: { name: string; path: string };
   pageText: string; locale: Locale; children: ReactNode;
 }) {
   const context = useContext(DocsContext);
@@ -97,8 +104,8 @@ export function ComponentDocsTemplate({ name, slug, intro, previous, next, pageT
     context.channel.on(GLOBALS_UPDATED, sync);
     return () => context.channel.off(GLOBALS_UPDATED, sync);
   }, [context]);
-  return <article className={`sb-unstyled ${styles.page}`} data-yami-docs={slug}>
-    <header className={styles.header}><div><h1>{name}</h1><p>{intro}</p></div><div className={styles.actions}>
+  return <article className={`sb-unstyled ${styles.page}`} data-yami-docs={slug} data-docs-layout={usesBaseUI(slug) ? "base-ui" : undefined}>
+    <header className={styles.header}><div><h1>{name}</h1>{typeof intro === "string" ? <p>{intro}</p> : intro}</div><div className={styles.actions}>
       <CopyButton text={pageText} locale={locale} page />
       {previous && <a href={`/?path=/docs/${previous.path}--docs`} target="_top" aria-label={`${locale === "zh" ? "上一个组件：" : "Previous component: "}${previous.name}`}><ArrowLeft size={16} strokeWidth={2} aria-hidden="true" /></a>}
       {next && <a href={`/?path=/docs/${next.path}--docs`} target="_top" aria-label={`${locale === "zh" ? "下一个组件：" : "Next component: "}${next.name}`}><ArrowRight size={16} strokeWidth={2} aria-hidden="true" /></a>}

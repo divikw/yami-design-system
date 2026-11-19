@@ -11,7 +11,7 @@ export function ConsentForm({ label, submit, error, success }: {
   return (
     <form noValidate style={{
       display: "grid", width: "min(100%, 18rem)", gridTemplateColumns: "auto minmax(0, 1fr) auto",
-      alignItems: "center", rowGap: "var(--space-050)",
+      alignItems: "center", rowGap: "var(--space-050)", columnGap: "var(--space-100)",
     }}
       onSubmit={(event) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ export function ConsentForm({ label, submit, error, success }: {
       <Checkbox ref={control} id={id} name="terms" value="accepted" required
         aria-invalid={invalid || undefined} aria-describedby={invalid ? id + "-error" : undefined}
         onCheckedChange={() => setResult("idle")} />
-      <label htmlFor={id} style={{ marginInlineEnd: "var(--space-200)" }}>{label}</label>
+      <label htmlFor={id} style={{ lineHeight: "var(--line-height-body-md)", marginInlineEnd: "var(--space-200)" }}>{label}</label>
       <Button htmlType="submit" size="sm">{submit}</Button>
       {result !== "idle" && (
         <span id={invalid ? id + "-error" : undefined} role={invalid ? "alert" : "status"}

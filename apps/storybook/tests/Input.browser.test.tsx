@@ -18,6 +18,21 @@ afterEach(() => {
   container.remove();
 });
 
+test("reports Base UI values alongside native change events and styles external errors", async () => {
+  const change = vi.fn();
+  const valueChange = vi.fn();
+  flushSync(() => root.render(<>
+    <p id="external-error">Check the address</p>
+    <Input label="Email" aria-invalid aria-describedby="external-error" onChange={change} onValueChange={valueChange} />
+  </>));
+  const input = page.getByRole("textbox", { name: "Email" });
+  await input.fill("demo");
+  expect(change).toHaveBeenCalledOnce();
+  expect(valueChange).toHaveBeenCalledWith("demo", expect.objectContaining({ reason: "none" }));
+  expect(input.element().closest('[data-slot="input"]')).toHaveAttribute("data-state", "error");
+  expect(input.element()).toHaveAccessibleDescription("Check the address");
+});
+
 test("inline action submits by click and Enter and inherits disabled without losing field semantics", async () => {
   const submit = vi.fn((event: React.FormEvent) => event.preventDefault());
   const render = (disabled = false) => flushSync(() => root.render(<>
