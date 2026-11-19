@@ -91,7 +91,7 @@ export function SkeletonDocsPage({ locale }: { locale: DocsLocale }) {
     intro={zh ? "在内容加载时按实际布局预留空间。" : "Reserve space in the shape of the content being loaded."}
     previous={{ name: "Select", path: "yami-components-forms-select" }} next={{ name: "Slider", path: "yami-components-forms-slider" }}
     composition={"Loading region (aria-busy)\n└── Skeleton × n"} usageCode={usageCode} examples={examples}
-    leadExample={{ title: zh ? "基础示例" : "Example", code: exampleSource, preview: <ProfileSkeleton en={!zh} /> }}
+    leadExample={{ code: exampleSource, preview: <ProfileSkeleton en={!zh} /> }}
     apiNote={zh ? "在内容加载时按实际布局预留空间。" : "Reserve space in the shape of the content being loaded."}
     api={[
       ["style / className", zh ? "设置宽、高、比例和圆角，使占位块匹配最终内容。" : "Set dimensions, aspect ratio and radius to match the loaded content."],

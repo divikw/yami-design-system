@@ -44,7 +44,7 @@ export function DropdownMenuDocsPage({ locale }: { locale: DocsLocale }) {
     previous={{ name: "Drawer", path: "yami-components-layout-drawer" }} next={{ name: "EmptyState", path: "yami-components-data-display-emptystate" }}
     intro={t("Open a menu of actions and settings for the current item.", "用一个按钮展开当前对象的操作和设置。")}
     composition={"DropdownMenu\n├── DropdownMenuTrigger\n└── DropdownMenuContent\n    ├── DropdownMenuGroup → DropdownMenuLabel / DropdownMenuItem\n    ├── DropdownMenuSeparator\n    ├── DropdownMenuCheckboxItem\n    ├── DropdownMenuRadioGroup → DropdownMenuRadioItem\n    └── DropdownMenuSub → DropdownMenuSubTrigger / DropdownMenuSubContent"}
-    leadExample={{ title: t("Shopping list", "购物清单"), ...lead }}
+    leadExample={lead}
     usageCode={`"use client";
 import { useState } from "react";
 import { Button, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from "@yami/design-system";

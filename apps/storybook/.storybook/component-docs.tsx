@@ -46,8 +46,9 @@ import { SwitchDocsPage } from "./switch-docs";
 import { RadioGroupDocsPage } from "./radio-group-docs";
 import { ComboboxDocsPage } from "./combobox-docs";
 import { CheckboxDocsPage } from "./checkbox-docs";
-import { componentApiRows, normalizeComponentName, usesBaseUI } from "./component-docs-scope";
-import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, DocsExampleCard, Installation, installationMarkdown, type DocsLocale } from "./component-docs-template";
+import { componentApiRows, usesBaseUI } from "./component-docs-scope";
+import { componentDocsName, normalizeComponentName } from "./component-docs-names";
+import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, DocsExampleCard, Installation, type DocsLocale } from "./component-docs-template";
 import type { GuideExample } from "./component-guide";
 import { tabsDocsExamples } from "./tabs-docs-examples";
 import { popoverDocsExamples } from "./popover-docs-examples";
@@ -192,9 +193,10 @@ export function ComponentDocsPage() {
   const sourceTitle = csfFile.moduleExports.default.title ?? preparedMeta.title;
   const componentStories = context.componentStories();
   const primaryStory = componentStories[0];
-  const [locale, setLocale] = useState(context.getStoryContext(primaryStory).globals.locale);
+  // Docs follow the toolbar even when the first story fixes its demo locale.
+  const [locale, setLocale] = useState(context.getStoryContext(primaryStory).userGlobals.locale);
   useEffect(() => {
-    const onGlobalsUpdated = ({ globals }: { globals: Record<string, unknown> }) => setLocale(globals.locale);
+    const onGlobalsUpdated = ({ userGlobals }: { userGlobals: Record<string, unknown> }) => setLocale(userGlobals.locale);
     context.channel.on(GLOBALS_UPDATED, onGlobalsUpdated);
     return () => context.channel.off(GLOBALS_UPDATED, onGlobalsUpdated);
   }, [context.channel]);
@@ -258,7 +260,8 @@ export function ComponentDocsPage() {
     </p>
   ) : null;
 
-  const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
+  const name = sourceTitle.trim().split(/\s*\/\s*/).at(-1) ?? sourceTitle;
+  const componentKey = normalizeComponentName(name);
   const DocsPage = customDocsPages[componentKey];
   const [neighbors, setNeighbors] = useState<DocsNeighbors>();
   const docsId = primaryStory.id.split("--")[0] + "--docs";
@@ -286,7 +289,6 @@ export function ComponentDocsPage() {
   if (DocsPage) return <DocsPage locale={language} />;
 
   if (sharedDocs) {
-    const name = sourceTitle.trim().split(/\s*\/\s*/).at(-1) ?? sourceTitle;
     const intro = translation?.description ?? preparedMeta.parameters.docs?.description?.component;
     const installation = language === "zh" ? "安装" : "Installation";
     const api = language === "zh" ? "API 参考" : "API Reference";
@@ -303,19 +305,9 @@ export function ComponentDocsPage() {
         {usage ? <UsageMarkdown locale={language}>{usage}</UsageMarkdown> : usageContent}
       </section>
     </>;
-    const instructionsText = [`## ${installation}`, installationMarkdown(language), usage && formatUsageMarkdown(usage)];
-    const pageText = [
-      `# ${name}`, intro, tabsGuide && `\`\`\`tsx\n${tabsGuide.lead.code}\n\`\`\``,
-      ...(tabsGuide ? [] : instructionsText),
-      ...documentedStates.map(({ title, story }) => `## ${title}\n\n[${title}](?path=/story/${story.id})`),
-      ...examples.map(({ title, description, code }) => `## ${title}\n\n${description}\n\n\`\`\`tsx\n${code}\n\`\`\``),
-      ...(tabsGuide ? instructionsText : []),
-      `## ${api}\n\n${apiRows.map(([prop, description]) => `- \`${prop}\` — ${description}`).join("\n")}`,
-    ].filter(Boolean).join("\n\n");
-
     return <DocsContext.Provider value={localizedContext}>
       <ComponentDocsTemplate name={name} slug={componentKey} intro={intro ? <Markdown>{intro}</Markdown> : <Description of="meta" />}
-        locale={language} pageText={pageText}
+        locale={language}
         previous={neighbors?.id === docsId ? neighbors.previous : undefined}
         next={neighbors?.id === docsId ? neighbors.next : undefined}>
         <Anchor storyId={`primary--${lead.id}`}>
@@ -348,9 +340,10 @@ export function ComponentDocsPage() {
     </DocsContext.Provider>;
   }
 
+  const title = componentDocsName(name, language);
   return (
     <DocsContext.Provider value={localizedContext}>
-      <Title>{sourceTitle.trim().split(/\s*\/\s*/).at(-1)}</Title>
+      <Title>{title === name ? title : <span lang={language}>{title}</span>}</Title>
       <Subtitle />
       {translation?.description ? <Markdown>{translation.description}</Markdown> : <Description of="meta" />}
       {isSingleStory ? <Description of="story" /> : null}

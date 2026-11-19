@@ -46,7 +46,7 @@ export function SwitchDocsPage({ locale }: { locale: DocsLocale }) {
   ];
   return <ComponentGuide name="Switch" slug="switch" locale={locale}
     intro={zh ? "用开关筛选有货商品，或设置到货、降价提醒。切换后立即生效。" : "Use a switch to filter for in-stock items or turn shopping alerts on or off. Changes take effect immediately."}
-    leadExample={{ title: airplane, code: usageCode, preview: <div className={styles.row}><label style={row}><Switch />{airplane}</label></div> }}
+    leadExample={{ code: usageCode, preview: <div className={styles.row}><label style={row}><Switch />{airplane}</label></div> }}
     usageCode={usageCode} composition={"Switch\n├── children\n└── Track → Thumb"} examples={examples}
     previous={{ name: "Spinner", path: "yami-components-data-display-spinner" }} next={{ name: "Tabs", path: "yami-components-navigation-tabs" }}
     legacyAnchors={{ usage: ["switch--usage", "switch--使用说明"], description: ["component-specifications"], api: ["component-playground"] }}

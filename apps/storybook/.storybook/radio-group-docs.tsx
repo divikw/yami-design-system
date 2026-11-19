@@ -53,7 +53,7 @@ ${choices.map(([value, label]) => `  <label ${rowCode}>\n    <RadioGroupItem val
     intro={zh ? "让用户从一组选项中选择一项。用方向键在选项之间切换。" : "Choose one option from a set. Use the arrow keys to move between options."}
     previous={{ name: "Progress", path: "yami-components-data-display-progress" }}
     next={{ name: "Select", path: "yami-components-forms-select" }}
-    leadExample={{ title: density, ...lead }} usageCode={lead.code}
+    leadExample={lead} usageCode={lead.code}
     composition={"RadioGroup\n├── RadioGroupItem\n└── RadioGroupItem"} examples={examples}
     legacyAnchors={{ usage: ["radiogroup--usage", "radiogroup--使用说明"], description: ["component-specifications", "anatomy-and-states", "外观与状态"], api: ["component-playground", "accessibility", "键盘与无障碍", "值与表单", "state-changes"] }}
     apiNote={zh ? "每项占 20×20px，18×18px 圆环居中。点击区域为 PC 32×32px、Mobile 40×40px。Tab 进入或离开整组，方向键切换选项。" : "Each item occupies 20×20px with a centered 18px ring. The pointer target is 32px square on desktop and 40px on mobile. Tab enters or leaves the group. Arrow keys change the selection."}

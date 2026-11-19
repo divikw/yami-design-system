@@ -184,7 +184,7 @@ export function FieldDocsPage({ locale }: { locale: DocsLocale }) {
   return <ComponentGuide name="Field" slug="field" locale={locale} previewMode="document"
     previous={{ name: "EmptyState", path: "yami-components-data-display-emptystate" }} next={{ name: "FilterChip", path: "yami-components-forms-filterchip" }}
     intro={zh ? "用 Field 将标签、控件、说明和错误关联起来，用 FieldSet 和 FieldGroup 组织完整表单。" : "Use Field to connect a label, control, hint and error. Organize related fields into sets and responsive groups."}
-    leadExample={{ title: zh ? "配送表单" : "Delivery form", code: formSource, preview: <DeliveryPreferences locale={locale} /> }}
+    leadExample={{ code: formSource, preview: <DeliveryPreferences locale={locale} /> }}
     usageCode={basic} composition={"FieldSet\n├── FieldLegend\n└── FieldGroup\n    └── Field\n        ├── FieldLabel\n        ├── Input / Textarea / Select / Checkbox\n        ├── FieldDescription\n        └── FieldError"}
     examples={examples} apiNote={zh ? "每组相关字段用 FieldSet 和 FieldLegend 命名。实际必填规则设置在控件上。" : "Name each set of related fields with FieldSet and FieldLegend. Set required on the control."}
     api={[

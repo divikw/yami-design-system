@@ -1,0 +1,76 @@
+const chineseComponentNames = {
+  Accordion: "折叠面板",
+  ActivityPageHeader: "活动页头",
+  Alert: "页面内提示",
+  AlertDialog: "确认对话框",
+  AspectRatio: "宽高比容器",
+  Avatar: "头像",
+  Badge: "徽章",
+  Billboard: "活动快捷浮动栏",
+  BrandProductRail: "品牌商品栏",
+  Breadcrumb: "面包屑导航",
+  Button: "按钮",
+  ButtonGroup: "按钮组",
+  Card: "卡片",
+  Checkbox: "复选框",
+  Combobox: "组合框",
+  Coupon: "优惠券",
+  Dialog: "对话框",
+  Divider: "分隔线",
+  Drawer: "抽屉",
+  DropdownMenu: "操作菜单",
+  EmptyState: "空状态",
+  Field: "表单字段",
+  FilterChip: "筛选标签",
+  Footer: "页脚",
+  Header: "页头",
+  HeroBanner: "首屏横幅",
+  HorizontalScrollList: "横向滚动列表",
+  Input: "输入框",
+  MembershipBadge: "会员徽标",
+  MembershipIcon: "会员图标",
+  NavigationMenu: "导航菜单",
+  Pagination: "分页",
+  PDPPromotion: "商品促销",
+  Popover: "弹出面板",
+  ProductCard: "商品卡片",
+  ProductList: "商品列表",
+  ProductMediaGallery: "商品媒体图库",
+  ProductPricing: "商品价格",
+  ProductReviewSection: "商品评价区",
+  Progress: "进度条",
+  QuantitySelect: "数量选择器",
+  RadioGroup: "单选组",
+  ReviewList: "评价列表",
+  SectionBanner: "分区横幅",
+  Select: "选择器",
+  ShortcutRail: "快捷入口栏",
+  Skeleton: "骨架屏",
+  Slider: "滑块",
+  SocialMediaGallery: "社交媒体图库",
+  Spinner: "加载指示器",
+  Switch: "开关",
+  TabBar: "底部导航栏",
+  Tabs: "标签页",
+  Tag: "标签",
+  Textarea: "多行文本框",
+  ThemeHero: "专题主视觉",
+  ThemeProductList: "专题商品列表",
+  Toast: "轻提示",
+  Tooltip: "工具提示",
+  TrendingSearches: "热门搜索",
+};
+
+export function normalizeComponentName(value: string) {
+  return value.replace(/[^a-z0-9]/gi, "").toLowerCase();
+}
+
+const namesByKey = new Map(Object.entries(chineseComponentNames).map(([name, chinese]) => [
+  normalizeComponentName(name),
+  chinese,
+]));
+namesByKey.set("floatingbars", chineseComponentNames.Billboard);
+
+export function componentDocsName(name: string, locale: "zh" | "en") {
+  return locale === "zh" ? namesByKey.get(normalizeComponentName(name)) ?? name : name;
+}

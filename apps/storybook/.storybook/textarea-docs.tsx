@@ -33,7 +33,7 @@ export function TextareaDocsPage({ locale }: { locale: DocsLocale }) {
   return <ComponentGuide name="Textarea" slug="textarea" locale={locale} previewMode="document"
     previous={{ name: "Tag", path: "yami-components-data-display-tag" }} next={{ name: "Toast", path: "yami-components-data-display-toast" }}
     intro={zh ? "输入多行文本。支持内容自适应高度的浏览器会随输入自动增高，指定 rows 可设置固定初始行数。" : "Enter multiline text. Supporting browsers grow the control with its content. Set rows to choose its initial height instead."}
-    leadExample={{ title: label, preview: <Textarea aria-label={label} placeholder={placeholder} />, code: basic }}
+    leadExample={{ preview: <Textarea aria-label={label} placeholder={placeholder} />, code: basic }}
     usageCode={basic} composition={"Field\n├── FieldLabel\n├── Textarea\n└── FieldDescription / FieldError"} examples={examples}
     apiNote={zh ? "支持原生 textarea 属性及 ref。鼠标点击可编辑，Tab 聚焦时显示焦点框。" : "Accepts native textarea props and a ref. Tab navigation displays a focus ring."}
     api={[["value / defaultValue / onChange", zh ? "受控或非受控的文本值。" : "Controlled or uncontrolled text value."],

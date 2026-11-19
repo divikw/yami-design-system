@@ -122,7 +122,6 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
     previous={{ name: "Card", path: "yami-components-layout-card" }}
     next={{ name: "Combobox", path: "yami-components-forms-combobox" }}
     leadExample={{
-      title: zh ? "状态预览" : "State preview",
       code: `${overviewSource.trim()}\n\n<CheckboxOverview labels={${JSON.stringify(overview, null, 2)}} />`,
       preview: <CheckboxOverview labels={overview} />,
     }}

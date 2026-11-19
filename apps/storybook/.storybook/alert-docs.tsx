@@ -58,7 +58,7 @@ import { Alert, AlertTitle, AlertDescription } from "@yami/design-system";
     previous={{ name: "Accordion", path: "yami-components-layout-accordion" }} next={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}
     intro={en ? "Keep a message beside the affected content so users can refer to it while they act." : "把提示放在相关内容旁，方便用户边查看边处理。"}
     composition={"Alert\n├── Icon\n├── AlertTitle\n├── AlertDescription\n└── AlertAction"}
-    leadExample={{ title: en ? "Pickup notices" : "取货提示", code: leadCode,
+    leadExample={{ code: leadCode,
       preview: <div style={{ display: "grid", gap: "var(--space-150)" }}>
         <Alert><CircleCheck aria-hidden="true" /><AlertTitle>{title}</AlertTitle><AlertDescription>{detail}</AlertDescription></Alert>
         <Alert><Info aria-hidden="true" /><AlertTitle>{reminder}</AlertTitle><AlertDescription>{directions}</AlertDescription></Alert>

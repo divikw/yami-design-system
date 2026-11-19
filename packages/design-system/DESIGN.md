@@ -423,7 +423,7 @@ YAMI's current inventory is generated in [`generated/catalog.json`](./generated/
 
 Button, Checkbox, Tabs, QuantitySelect, Coupon and ProductCard mouse-hover feedback requires a viewport of at least 1024px plus `(hover: hover) and (pointer: fine)`. Mobile layouts have no hover feedback even when previewed with a desktop mouse. Press/active, selection and keyboard focus remain available. / 移动端不显示鼠标悬停反馈，保留按下、选中和键盘焦点反馈。
 
-Choose by behavior: actions use Button; navigation and direct file downloads use anchors with real `href`. Button has no `href`, `as`, or `asChild` API. Links and buttons may share a layout; preserve labels, destinations, and actions when repairing presentation. See [Button usage](./components/Button/usage.md) for mixed actions, grouping, and the current button-styled-link limitation. / 先判断行为：操作使用 Button，导航和文件直接下载使用链接；修正外观时保留业务含义，链接与按钮允许并列。
+Choose by behavior: actions use Button; navigation and direct file downloads use anchors with real `href`. ButtonLink shares the inline, full and icon forms. Button has no `href`, `as`, or `asChild` API. Links and buttons may share a layout; preserve labels, destinations, and actions when repairing presentation. See [Button usage](./components/Button/usage.md) for link forms and grouping. / 先判断行为：操作使用 Button，导航和文件直接下载使用链接；修正外观时保留业务含义，链接与按钮允许并列。
 
 |                |                                                                                                  |
 | -------------- | ------------------------------------------------------------------------------------------------ |
@@ -488,7 +488,7 @@ Base UI Tabs manages selection and keyboard focus. YAMI retains arrow-key activa
 | **Primary styles**      | `styleVariant="a"` underline tabs · `styleVariant="b"` segmented tabs                                   |
 | **Surfaces**            | default · inverse                                                                                       |
 | **States**              | active · inactive · disabled · focus-visible · skeleton                                                 |
-| **Responsive behavior** | Filled Primary Style B and Tertiary selection surfaces are 32px below `1024px` and 36px from the shared Desktop breakpoint. Secondary keeps its underline treatment. |
+| **Responsive behavior** | Filled Primary Style B and Tertiary selection surfaces are 32px below `1024px` and 36px from the shared Desktop breakpoint. Horizontal Secondary sizes to its labels with no default side padding. |
 | **Typography**          | Primary Style A uses `body-xl` (16/20) on Mobile and WEB; compact tabs use `body-md` (14/20).           |
 | **Geometry**            | Primary A: 56px horizontal / 44px vertical trigger; Primary B: 32px mobile / 36px desktop horizontal trigger with 2px track padding, 44px vertical trigger; Secondary: 40px trigger at every breakpoint. Vertical Primary A and Secondary use 4px item gaps. |
 | **Tap target**          | Tertiary visual, layout, and hit-target heights match: 32px on Mobile/Tablet and 36px on Desktop. No invisible extension overlaps adjacent controls. |

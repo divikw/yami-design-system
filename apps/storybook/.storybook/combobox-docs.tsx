@@ -48,7 +48,7 @@ const cities = ${JSON.stringify(items)};
   return <ComponentGuide name="Combobox" slug="combobox" locale={locale} previewMode="document"
     previous={{ name: "Checkbox", path: "yami-components-forms-checkbox" }} next={{ name: "Dialog", path: "yami-components-layout-dialog" }}
     intro={t("输入关键词筛选候选项，再选择一个或多个值。", "Type to filter the available options and select one or more values.")}
-    leadExample={{ title: t("城市选择", "City picker"), preview: <BasicCombobox en={en} />, code: source() }}
+    leadExample={{ preview: <BasicCombobox en={en} />, code: source() }}
     usageCode={source()} examples={examples}
     composition={"Combobox\n├── ComboboxInput\n└── ComboboxContent → ComboboxEmpty + ComboboxList → ComboboxItem\n\nCombobox multiple\n├── ComboboxChips → ComboboxValue → ComboboxChip\n│                └→ ComboboxChipsInput\n└── ComboboxContent → ComboboxList → ComboboxItem\n\nCombobox\n├── ComboboxTrigger → ComboboxValue\n└── ComboboxContent → ComboboxInput + ComboboxList → ComboboxItem"}
     apiNote={t("方向键移动高亮，Enter 选择，Escape 收起。为输入框和图标按钮提供可访问名称。", "Use the arrow keys to navigate, Enter to select and Escape to dismiss. Name the input and icon buttons.")}

@@ -117,7 +117,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "bd29d21afbe66d10060c7ca4449b39954f9d7fd85c4066ac84ff036da1f3b389"
+      "digest": "20a3d535af76c554147121bbbf2866cf31e3e64c71b39fd4ec8c1c97bce37b24"
     },
     {
       "name": "button-group",
@@ -477,7 +477,7 @@
       "status": "stable",
       "version": "0.1.1",
       "path": "registry-items/tabs.json",
-      "digest": "67484bacd950375fdc8719d0b4854d4e496ea2cf3de49edf0634018959f9bc68"
+      "digest": "93f69e086b8964467563ab11749e9a5537f3ae27a8e10c42b4962e5f18d0180a"
     },
     {
       "name": "tag",

@@ -114,7 +114,7 @@ export function EmptyStateDocsPage({ locale }: { locale: DocsLocale }) {
     intro={zh ? "在列表或搜索没有结果时，说明当前状态并提供下一步操作。" : "Explain an empty collection or search result and offer a next step."}
     previous={{ name: "DropdownMenu", path: "yami-components-layout-dropdown-menu" }} next={{ name: "Field", path: "yami-components-forms-field" }}
     composition={"EmptyState\n├── EmptyStateHeader\n│   ├── EmptyStateMedia (optional)\n│   ├── EmptyStateTitle\n│   └── EmptyStateDescription\n└── EmptyStateContent (optional)"} usageCode={usageCode} examples={examples}
-    leadExample={{ title: zh ? "基础示例" : "Example", code: exampleSource, preview: <SavedLists en={!zh} /> }}
+    leadExample={{ code: exampleSource, preview: <SavedLists en={!zh} /> }}
     apiNote={zh ? "在列表或搜索没有结果时，说明当前状态并提供下一步操作。" : "Explain an empty collection or search result and offer a next step."}
     api={[
       ["EmptyState / EmptyStateHeader", zh ? "根容器和居中的说明区，可传入 className 与 style。" : "The root and centered header accept className and style."],

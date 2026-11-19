@@ -40,7 +40,7 @@ import { BookOpen } from "lucide-react";
 │   │   └── NavigationMenuContent → NavigationMenuLink
 │   └── NavigationMenuItem → NavigationMenuLink
 └── NavigationMenuPositioner`}
-    leadExample={{ title: en ? "Shop navigation" : "商城导航", code: source + `\n<ShopNavigation en={${en}} />`, preview: <div style={{ display: "grid", justifyItems: "center" }}><ShopNavigation en={en} /></div> }}
+    leadExample={{ code: source + `\n<ShopNavigation en={${en}} />`, preview: <div style={{ display: "grid", justifyItems: "center" }}><ShopNavigation en={en} /></div> }}
     usageCode={`import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@yami/design-system";
 
 <NavigationMenu aria-label="${label}">

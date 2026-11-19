@@ -53,7 +53,7 @@ export function TooltipDocsPage({ locale }: { locale: DocsLocale }) {
   return <ComponentGuide name="Tooltip" slug="tooltip" locale={locale} previewMode="document"
     previous={{ name: "Toast", path: "yami-components-data-display-toast" }}
     intro={zh ? "为可聚焦控件提供简短提示，支持悬停、键盘聚焦和 Escape 关闭。" : "Show a short supplementary hint on hover or keyboard focus. Escape dismisses it."}
-    leadExample={{ title: hover, code: leadCode, preview: center(<TooltipProvider><Tooltip><TooltipTrigger render={<Button variant="tertiary" size="sm" style={outline} />}>{hover}</TooltipTrigger><TooltipContent>{hint}</TooltipContent></Tooltip></TooltipProvider>) }}
+    leadExample={{ code: leadCode, preview: center(<TooltipProvider><Tooltip><TooltipTrigger render={<Button variant="tertiary" size="sm" style={outline} />}>{hover}</TooltipTrigger><TooltipContent>{hint}</TooltipContent></Tooltip></TooltipProvider>) }}
     usageCode={leadCode} composition={"TooltipProvider\n└── Tooltip\n    ├── TooltipTrigger\n    └── TooltipContent"} examples={samples.map(example => ({ ...example, preview: center(example.preview) }))}
     apiNote={zh ? "触发器需要自己的可访问名称。" : "Give every trigger its own accessible name."}
     api={[
