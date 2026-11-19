@@ -10,15 +10,19 @@ describe("Food product detail fixture", () => {
     expect(fixture.brand).toBe("TSUJIRI");
     expect(fixture.discountLabel).toBe(locale === "zh" ? "89折" : "11% off");
     expect(fixture.giftCardPrice).toEqual({
-      label: locale === "zh" ? "使用礼卡支付可享专属价：" : "Pay with Gift Card to get sale price:",
-      price: "$9.29",
+      label: locale === "zh" ? "使用 Yami 礼卡支付" : "Pay with Yami Gift Card for",
+      price: "$2.08",
       detailsLabel: locale === "zh" ? "详情" : "Details",
     });
     expect(fixture.vvipPrice).toEqual({
       label: locale === "zh" ? "专享价：" : "Price:",
       price: "$8.99",
-      actionLabel: locale === "zh" ? "以 VVIP 价购买" : "Buy at VVIP Price",
+      endsTodayLabel: locale === "zh" ? "今日结束" : "Ends Today",
+      actionLabel: locale === "zh" ? "立即解锁" : "Unlock Now",
     });
+    expect(fixture.promotions?.coupon?.offers).toHaveLength(2);
+    expect(fixture.promotions?.discountCode?.code).toBe("JY25");
+    expect(fixture.promotions?.gifts?.activities).toHaveLength(2);
     expect(fixture.title).toContain("40");
     expect(fixture.images).toHaveLength(9);
     expect(new Set(fixture.images.map((image) => image.src)).size).toBe(9);

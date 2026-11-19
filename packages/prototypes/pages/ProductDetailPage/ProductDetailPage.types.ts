@@ -7,6 +7,7 @@ import type {
   ProductMediaGalleryItem,
   ProductReviewSectionProps,
 } from "@yami/design-system";
+import type { PDPPromotionProps } from "./components/PDPPromotion";
 import type {
   GiftCardPriceProps,
   VVIPPriceProps,
@@ -141,8 +142,9 @@ export interface ProductDetailPageProps
   priceCurrent: string;
   priceOriginal: string;
   discountLabel: string;
-  giftCardPrice?: Pick<GiftCardPriceProps, "label" | "price" | "detailsLabel">;
-  vvipPrice?: Pick<VVIPPriceProps, "label" | "price" | "actionLabel">;
+  giftCardPrice?: Pick<GiftCardPriceProps, "label" | "price" | "detailsLabel" | "description">;
+  vvipPrice?: Pick<VVIPPriceProps, "label" | "price" | "endsTodayLabel" | "actionLabel">;
+  promotions?: Pick<PDPPromotionProps, "coupon" | "discountCode" | "gifts">;
   optionGroups: readonly ProductDetailOptionGroup[];
   onAddToCart?: (quantity: number, options: Record<string, string>) => void;
   /** Complete SKU inventory; omitted combinations are unavailable. Overrides option.unavailable. */

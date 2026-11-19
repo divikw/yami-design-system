@@ -81,11 +81,17 @@ const verifyFoodPage: Story["play"] = async ({ canvasElement, globals }) => {
   const regularPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-regular"]')!;
   const giftCardPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-gift-card"]')!;
   const vvipPrice = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-vvip"]')!;
+  const promotions = pricing.querySelector<HTMLElement>('[data-slot="product-pricing-promotions"]')!;
   await expect(regularPrice).toHaveTextContent(fixture.priceCurrent);
   await expect(giftCardPrice).toHaveTextContent(fixture.giftCardPrice!.price);
   await expect(vvipPrice).toHaveTextContent(fixture.vvipPrice!.price);
-  await expect(regularPrice.nextElementSibling).toBe(giftCardPrice);
-  await expect(giftCardPrice.nextElementSibling).toBe(vvipPrice);
+  await expect(vvipPrice).toHaveTextContent(fixture.vvipPrice!.endsTodayLabel);
+  await expect(promotions).toHaveTextContent(fixture.promotions!.coupon!.offers![0]!);
+  await expect(promotions).toHaveTextContent(fixture.promotions!.discountCode!.code);
+  await expect(pricing.querySelector('[data-slot="product-promotion-gifts"]')).not.toBeNull();
+  await expect(regularPrice.nextElementSibling).toBe(vvipPrice);
+  await expect(vvipPrice.nextElementSibling).toBe(promotions);
+  await expect(giftCardPrice.parentElement).toBe(promotions);
 
   const increase = canvas.getByRole("button", { name: fixture.copy.increaseQuantity, exact: true });
   const decrease = canvas.getByRole("button", { name: fixture.copy.decreaseQuantity, exact: true });

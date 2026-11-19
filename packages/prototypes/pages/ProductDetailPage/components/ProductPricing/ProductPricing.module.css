@@ -15,6 +15,12 @@
   align-items: center;
 }
 
+.vvipMark {
+  width: auto;
+  height: var(--space-200);
+  flex: 0 0 auto;
+}
+
 .regularPrice {
   min-width: 0;
   flex-wrap: wrap;
@@ -95,8 +101,10 @@
 }
 
 .vvipPrice {
-  justify-content: space-between;
-  gap: var(--space-100);
+  align-self: flex-start;
+  width: fit-content;
+  justify-content: flex-start;
+  gap: var(--space-200);
   padding: var(--space-100);
   border-radius: var(--radius-component-default);
   background: var(--surface-secondary);
@@ -108,6 +116,24 @@
   gap: var(--space-050);
   font-size: var(--font-size-body-xl);
   line-height: var(--line-height-body-xl);
+}
+
+.vvipPriceMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  white-space: nowrap;
+}
+
+.vvipPriceDivider {
+  width: var(--stroke-default);
+  height: var(--space-150);
+  flex: 0 0 var(--stroke-default);
+  background: var(--border-default);
+}
+
+.vvipEndsToday {
+  color: var(--text-emphasis);
 }
 
 @media (max-width: 1023.98px) {

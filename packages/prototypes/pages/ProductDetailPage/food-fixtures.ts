@@ -27,6 +27,13 @@ const japanRegionIcon = new URL(
   import.meta.url,
 ).href;
 
+const promotionGiftImages = [
+  new URL("../TopicLandingPage/assets/start-here/product-heartleaf-daily-lotion.webp", import.meta.url).href,
+  new URL("../TopicLandingPage/assets/start-here/product-pdrn-cream.webp", import.meta.url).href,
+  new URL("../TopicLandingPage/assets/start-here/product-rice-ceramide-serum.webp", import.meta.url).href,
+  new URL("../TopicLandingPage/assets/start-here/product-peach-niacin-serum.webp", import.meta.url).href,
+] as const;
+
 const recommendedProducts = [
   {
     id: "1020051271", path: "tea-powder-matcha-green-tea-2oz",
@@ -163,14 +170,51 @@ export function createFoodProductDetailPageFixture(
     priceOriginal: "$10.99",
     discountLabel: zh ? "89折" : "11% off",
     giftCardPrice: {
-      label: zh ? "使用礼卡支付可享专属价：" : "Pay with Gift Card to get sale price:",
-      price: "$9.29",
+      label: zh ? "使用 Yami 礼卡支付" : "Pay with Yami Gift Card for",
+      price: "$2.08",
       detailsLabel: zh ? "详情" : "Details",
     },
     vvipPrice: {
       label: zh ? "专享价：" : "Price:",
       price: "$8.99",
-      actionLabel: zh ? "以 VVIP 价购买" : "Buy at VVIP Price",
+      endsTodayLabel: zh ? "今日结束" : "Ends Today",
+      actionLabel: zh ? "立即解锁" : "Unlock Now",
+    },
+    promotions: {
+      coupon: {
+        offers: zh
+          ? ["满 $50 享 95 折", "满 $30 减 $3"]
+          : ["Spend $50, Get 5% Off", "Spend $30, Get $3 Off"],
+        detailsLabel: zh ? "详情" : "Details",
+      },
+      discountCode: {
+        label: zh ? "使用优惠码立减 $1：" : "$1 off with discount code:",
+        code: "JY25",
+        copyLabel: zh ? "复制优惠码" : "Copy Code",
+        copiedLabel: zh ? "已复制！" : "Copied!",
+      },
+      gifts: {
+        title: zh ? "赠品" : "Gifts included with purchase",
+        detailsLabel: zh ? "详情" : "Details",
+        activities: [
+          {
+            title: zh ? "下单即赠" : "Free gifts with purchase",
+            detail: zh ? "每单限 1 份" : "1 pack per order",
+            items: [
+              { image: promotionGiftImages[0], alt: zh ? "赠品" : "Gift product", quantity: 2 },
+            ],
+          },
+          {
+            title: zh ? "满 $99 即赠" : "Spend $99+ for free gifts",
+            detail: zh ? "买越多赠越多" : "Buy more, get more",
+            items: promotionGiftImages.slice(1).map((image, index) => ({
+              image,
+              alt: zh ? `赠品 ${index + 1}` : `Gift product ${index + 1}`,
+              quantity: 1,
+            })),
+          },
+        ],
+      },
     },
     optionGroups: [],
     bestBefore: zh ? "2026年11月30日" : "Nov 30, 2026",

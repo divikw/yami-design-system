@@ -1,0 +1,322 @@
+/* yami-validate-disable: semantic-color-only */
+
+.root {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-100);
+  margin-left: auto;
+}
+
+.pcButton,
+.pcIconButton {
+  border: var(--stroke-default) solid var(--border-default);
+  background: var(--surface-primary);
+  font-weight: var(--font-weight-normal);
+}
+
+.pcButton {
+  padding-inline: var(--space-150);
+}
+
+.sharePopoverAnchor {
+  position: relative;
+  display: flex;
+}
+
+.shareMenu {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  right: calc(-1 * var(--space-500));
+  width: 240px;
+  padding-top: var(--space-150);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease;
+}
+
+.shareMenuChinese {
+  width: 388px;
+}
+
+.sharePopoverAnchor[data-open="true"] .shareMenu {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.shareMenuSurface {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-200);
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-surface-default);
+  background: var(--surface-primary);
+  box-shadow: 0 8px 16px -8px rgb(0 0 0 / 24%);
+}
+
+.shareMenuSurface::before {
+  position: absolute;
+  top: -7px;
+  right: calc(var(--space-500) + var(--space-100) + var(--space-100) - 6px);
+  width: 12px;
+  height: 12px;
+  border-top: var(--stroke-default) solid var(--border-default);
+  border-left: var(--stroke-default) solid var(--border-default);
+  background: var(--surface-primary);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.shareMenuSurfaceChinese {
+  padding: var(--space-200);
+}
+
+.chineseShareLayout {
+  display: grid;
+  grid-template-columns: 154px minmax(0, 1fr);
+  gap: var(--space-200);
+}
+
+.chineseShareSection {
+  display: flex;
+  min-width: 0;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-200);
+  border-radius: var(--radius-surface-default);
+  background: var(--surface-secondary);
+}
+
+.chineseShareHeading {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-heading-xs);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-heading-xs);
+}
+
+.chineseWechatButton {
+  margin-top: var(--space-200);
+}
+
+.chineseQr {
+  margin-top: var(--space-200);
+}
+
+.chineseQr img {
+  display: block;
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  padding: var(--space-100);
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-component-default);
+  background: var(--surface-primary);
+}
+
+.chineseSocialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  gap: var(--space-200);
+  margin-top: var(--space-200);
+}
+
+.socialGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 40px);
+  gap: var(--space-200);
+}
+
+.socialButton {
+  position: relative;
+  background-color: var(--social-channel-color);
+  color: var(--text-primary-inverse);
+}
+
+.staticSocialIcon {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button-primary);
+}
+
+.socialButton:not(.copyLink)::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-white-300);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.socialButton svg,
+.socialButton img {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.socialButton img {
+  filter: brightness(0) invert(1);
+}
+
+.whatsapp {
+  --social-channel-color: #2bbf55;
+}
+
+.facebook {
+  --social-channel-color: #1877f2;
+}
+
+.x {
+  --social-channel-color: #050505;
+}
+
+.pinterest {
+  --social-channel-color: #cf0015;
+}
+
+.email {
+  --social-channel-color: #347ff2;
+}
+
+.wechat {
+  --social-channel-color: #5bc742;
+}
+
+.weibo {
+  --social-channel-color: #e6162d;
+}
+
+.copyLink {
+  border: var(--stroke-default) solid var(--border-default);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+}
+
+.copyFeedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-050);
+  margin-top: var(--space-100);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption-md);
+  line-height: var(--line-height-caption-md);
+  text-align: center;
+}
+
+.successIcon {
+  display: flex;
+  width: var(--space-200);
+  height: var(--space-200);
+  flex: 0 0 auto;
+  color: var(--text-success);
+}
+
+.successIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.favoriteSelected {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  color: var(--text-emphasis);
+}
+
+.favoriteSelected svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .socialButton:not(.copyLink):not([aria-disabled="true"]):hover {
+    background-color: var(--social-channel-color);
+  }
+
+  .socialButton:not(.copyLink):not([aria-disabled="true"]):hover::after {
+    opacity: 1;
+  }
+}
+
+.wechatQrReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 180ms cubic-bezier(0.2, 0, 0, 1),
+    visibility 0s linear 180ms;
+}
+
+.wechatQrReveal[data-expanded="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 180ms cubic-bezier(0.2, 0, 0, 1),
+    visibility 0s linear 0s;
+}
+
+.wechatQrClip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wechatQr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-150);
+  margin-top: var(--space-250);
+  padding: var(--space-250) var(--space-150) var(--space-200);
+  border-radius: var(--radius-surface-default);
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 140ms ease,
+    transform 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.wechatQrReveal[data-expanded="true"] .wechatQr {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.wechatQr img {
+  display: block;
+  box-sizing: border-box;
+  width: 144px;
+  height: 144px;
+  padding: var(--space-100);
+  border-radius: var(--radius-component-default);
+  background: var(--surface-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shareMenu,
+  .wechatQrReveal,
+  .wechatQr {
+    transition: none;
+  }
+}

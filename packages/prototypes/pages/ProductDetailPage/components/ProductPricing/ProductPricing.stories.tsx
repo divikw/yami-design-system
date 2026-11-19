@@ -49,7 +49,8 @@ export const AllPriceTypes: Story = {
     vvip: {
       label: "Price:",
       price: "$8.49",
-      actionLabel: "Buy at VVIP Price",
+      endsTodayLabel: "Ends Today",
+      actionLabel: "Unlock Now",
       onAction: fn(),
     },
   },
