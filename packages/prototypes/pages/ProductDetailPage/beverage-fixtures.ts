@@ -210,14 +210,6 @@ export function createBeverageProductDetailPageFixture(
         code: "JY25",
         copyLabel: zh ? "复制优惠码" : "Copy Code",
       },
-      gifts: {
-        title: zh ? "赠品" : "Gifts included with purchase",
-        actionLabel: zh ? "查看全部赠品" : "View All 4 Gifts",
-        items: [
-          { image: `https://cdn.yamibuy.net/item/${imageHashes[5]}_757x757.webp`, alt: "Gift product", title: zh ? "下单即赠" : "Free gifts with purchase", detail: zh ? "每单限 1 份" : "1 pack per order" },
-          { image: `https://cdn.yamibuy.net/item/${imageHashes[6]}_757x757.webp`, alt: "Gift product", title: zh ? "满 $99 即赠" : "Spend $99+ for free gifts", detail: zh ? "买越多赠越多" : "Buy more, get more" },
-        ],
-      },
     },
     optionGroups: [],
     bestBefore: zh ? "2027年4月22日" : "Apr 22, 2027",

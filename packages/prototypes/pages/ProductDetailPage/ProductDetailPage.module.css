@@ -439,6 +439,7 @@
 .quantityRow {
   gap: var(--space-200);
   justify-content: space-between;
+  margin-top: var(--space-500);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
 }
@@ -1355,6 +1356,10 @@
 
   .quantityRow > .purchaseLabel {
     display: none;
+  }
+
+  .quantityRow {
+    margin-top: 0;
   }
 
 }
