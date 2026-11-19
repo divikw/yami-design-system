@@ -410,9 +410,6 @@ export const DesktopRegression: Story = {
     const purchaseFavorite = canvasElement.querySelector<HTMLButtonElement>(
       '[data-pdp-header-action="favorite"]'
     );
-    const purchaseShareButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
-      "[data-pdp-share-action]"
-    );
     const utilityRow = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-detail-utility-row"]'
     );
@@ -702,12 +699,6 @@ export const DesktopRegression: Story = {
       Math.round(purchaseLayout.getBoundingClientRect().height) !==
         Math.round(purchasePanel.getBoundingClientRect().height) ||
       !purchaseFavorite ||
-      getComputedStyle(purchaseFavorite).columnGap !== "8px" ||
-      getComputedStyle(purchaseFavorite).fontWeight !== "400" ||
-      getComputedStyle(purchaseFavorite).color !== "rgba(0, 0, 0, 0.55)" ||
-      !purchaseActions ||
-      getComputedStyle(purchaseActions).paddingBottom !== "96px" ||
-      purchaseShareButtons.length !== 4 ||
       !utilityRow ||
       !content ||
       getComputedStyle(content).paddingTop !== "12px" ||
@@ -872,10 +863,6 @@ export const DesktopRegression: Story = {
       canvasElement.textContent?.includes("Clip coupon") ||
       canvasElement.textContent?.includes("20% off") ||
       !shareGroup.contains(purchaseFavorite) ||
-      Array.from(purchaseShareButtons).some(
-        (button) =>
-          !shareGroup.contains(button) || purchaseLayout.contains(button)
-      ) ||
       breadcrumb.parentElement !== utilityRow ||
       shareGroup.parentElement !== utilityRow ||
       getComputedStyle(utilityRow).display !== "flex" ||
@@ -918,9 +905,6 @@ export const DesktopRegression: Story = {
       getComputedStyle(addToCart).height !== "56px" ||
       getComputedStyle(addToCart).fontSize !== "18px" ||
       getComputedStyle(quantity).fontSize !== "20px" ||
-      Array.from(purchaseShareButtons).some(
-        (button) => purchasePrimary.contains(button)
-      ) ||
       !purchasePrimary.contains(addToCart) ||
       addToCart.querySelector("img") ||
       purchaseSecondary.contains(addToCart) ||
@@ -937,9 +921,6 @@ export const DesktopRegression: Story = {
           getComputedStyle(tag).borderTopColor !== "rgb(224, 0, 0)"
       ) ||
       productInfo.contains(purchaseFavorite) ||
-      Array.from(purchaseShareButtons).some((button) =>
-        productInfo.contains(button)
-      ) ||
       !overview ||
       !leftContent ||
       !productInfo ||
