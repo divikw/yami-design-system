@@ -901,6 +901,7 @@ export const DesktopRegression: Story = {
       getComputedStyle(decreaseIcon).backgroundColor ===
         getComputedStyle(increaseIcon).backgroundColor ||
       getComputedStyle(quantityRow).fontSize !== "14px" ||
+      getComputedStyle(quantityRow).marginTop !== "40px" ||
       getComputedStyle(quantityLabel).fontSize !== "16px" ||
       getComputedStyle(addToCart).height !== "56px" ||
       getComputedStyle(addToCart).fontSize !== "18px" ||

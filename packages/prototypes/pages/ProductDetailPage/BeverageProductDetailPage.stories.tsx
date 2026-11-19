@@ -50,6 +50,7 @@ const verifyBeveragePage: Story["play"] = async ({ canvasElement, globals }) => 
   await expect(canvasElement.querySelector('[data-slot="product-detail-ranking"]')).toBeNull();
   await expect(canvasElement.querySelector('[data-slot="product-detail-options"] fieldset')).toBeNull();
   await expect(canvasElement.querySelector('[data-pdp-info-module="options"]')).toBeNull();
+  await expect(canvasElement.querySelector('[data-slot="product-promotion-gifts"]')).toBeNull();
   const bestBefore = canvasElement.querySelector<HTMLElement>('[data-slot="product-detail-best-before"]')!;
   await expect(canvasElement.querySelectorAll('[data-slot="product-detail-best-before"]')).toHaveLength(1);
   await expect(bestBefore.parentElement).toBe(canvasElement.querySelector('[data-slot="product-detail-summary"]'));
