@@ -47,7 +47,9 @@
     "ButtonSize",
     "ButtonVariant"
   ],
-  "composes": [],
+  "composes": [
+    "Spinner"
+  ],
   "dependencies": {
     "runtime": [
       "react",
@@ -300,5 +302,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "92f7c8c337ebcd552f0827e6a9d9fbdb77aea1e3f10520bc702e4c930ac60718"
+  "contentDigest": "bd29d21afbe66d10060c7ca4449b39954f9d7fd85c4066ac84ff036da1f3b389"
 }

@@ -1,0 +1,173 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Slider",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Select one value or multiple values along a scale using Base UI.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "SliderProps",
+    "Slider"
+  ],
+  "props": {
+    "value": {
+      "type": "number | readonly number[]",
+      "required": false
+    },
+    "defaultValue": {
+      "type": "number | readonly number[]",
+      "required": false
+    },
+    "min": {
+      "type": "number",
+      "required": false
+    },
+    "max": {
+      "type": "number",
+      "required": false
+    },
+    "step": {
+      "type": "number",
+      "required": false
+    },
+    "orientation": {
+      "type": "horizontal | vertical",
+      "required": false
+    },
+    "getAriaLabel": {
+      "type": "(index: number) => string",
+      "required": false
+    },
+    "getAriaValueText": {
+      "type": "(formatted: string, value: number, index: number) => string",
+      "required": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false
+    },
+    "onValueCommitted": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "rules": {
+    "tokens": {
+      "ruleId": "token-exists"
+    }
+  },
+  "tokens": [
+    "--space-100",
+    "--space-600",
+    "--space-050",
+    "--fill-disabled",
+    "--radius-full",
+    "--fill-inverse",
+    "--space-200",
+    "--stroke-default",
+    "--border-focus",
+    "--fill-primary",
+    "--stroke-thick",
+    "--focus-ring",
+    "--space-025",
+    "--border-default",
+    "--text-disabled"
+  ],
+  "tokenBindings": {
+    "--space-100": {
+      "property": "padding-inline",
+      "selector": ".root"
+    },
+    "--space-600": {
+      "property": "height",
+      "selector": ".control"
+    },
+    "--space-050": {
+      "property": "height",
+      "selector": ".track"
+    },
+    "--fill-disabled": {
+      "property": "background",
+      "selector": ".track"
+    },
+    "--radius-full": {
+      "property": "border-radius",
+      "selector": ".track"
+    },
+    "--fill-inverse": {
+      "property": "background",
+      "selector": ".indicator"
+    },
+    "--space-200": {
+      "property": "width",
+      "selector": ".thumb"
+    },
+    "--stroke-default": {
+      "property": "border",
+      "selector": ".thumb"
+    },
+    "--border-focus": {
+      "property": "border",
+      "selector": ".thumb"
+    },
+    "--fill-primary": {
+      "property": "background",
+      "selector": ".thumb"
+    },
+    "--stroke-thick": {
+      "property": "outline",
+      "selector": ".thumb:has(input:focus-visible)"
+    },
+    "--focus-ring": {
+      "property": "outline",
+      "selector": ".thumb:has(input:focus-visible)"
+    },
+    "--space-025": {
+      "property": "outline-offset",
+      "selector": ".thumb:has(input:focus-visible)"
+    },
+    "--border-default": {
+      "property": "border-color",
+      "selector": ".root[data-disabled] .thumb"
+    },
+    "--text-disabled": {
+      "property": "background",
+      "selector": ".root[data-disabled] .indicator"
+    }
+  },
+  "accessibility": {
+    "role": "slider",
+    "notes": "Give each thumb a distinct name. Base UI owns range inputs, pointer dragging and keyboard navigation."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Showcase adjusts the lower thumb by keyboard and checks the upper value."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#BudgetSlider"
+  ]
+}

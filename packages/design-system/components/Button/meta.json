@@ -44,6 +44,7 @@
     "state": ["default", "hover", "active", "disabled", "loading", "focus-visible"]
   },
 
+  "composes": ["Spinner"],
   "props": {
     "variant": {
       "type": "enum",

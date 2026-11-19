@@ -1,0 +1,190 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "field",
+  "title": "Field",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Groups a form control with its label, description, and validation message.",
+  "source": "components/Field",
+  "files": [
+    {
+      "source": "components/Field/Field.module.css",
+      "target": "components/Field/Field.module.css"
+    },
+    {
+      "source": "components/Field/Field.tsx",
+      "target": "components/Field/Field.tsx"
+    },
+    {
+      "source": "components/Field/index.ts",
+      "target": "components/Field/index.ts"
+    }
+  ],
+  "exports": [
+    "Field",
+    "FieldContent",
+    "FieldDescription",
+    "FieldDescriptionProps",
+    "FieldError",
+    "FieldErrorProps",
+    "FieldGroup",
+    "FieldLabel",
+    "FieldLabelProps",
+    "FieldLegend",
+    "FieldProps",
+    "FieldSeparator",
+    "FieldSet",
+    "FieldTitle"
+  ],
+  "composes": [
+    "Divider",
+    "Textarea"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Field/usage.md",
+    "stories": [
+      "components/Field/Field.stories.tsx"
+    ],
+    "examples": [
+      "components/Field/examples.tsx#NotesField",
+      "components/Field/delivery/examples.tsx#DeliveryPreferences",
+      "components/Field/price-range/examples.tsx#PriceRange"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--border-focus",
+      "--font-family-ios",
+      "--font-size-caption-md",
+      "--font-size-caption-sm",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--line-height-caption-md",
+      "--line-height-caption-sm",
+      "--line-height-heading-sm",
+      "--radius-surface-default",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--stroke-default",
+      "--surface-secondary",
+      "--text-disabled",
+      "--text-error",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "no-opacity-disabled",
+      "semantic-color-only",
+      "type-hierarchy"
+    ],
+    "tokenBindings": {
+      "--space-050": {
+        "property": "gap",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".label"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      },
+      "--text-error": {
+        "property": "color",
+        "selector": ".error"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".legend[data-disabled], .label[data-disabled] [data-slot=\"field-title\"], .label[data-disabled], .description[data-disabled]"
+      },
+      "--font-size-caption-md": {
+        "property": "font-size",
+        "selector": ".label"
+      },
+      "--line-height-caption-md": {
+        "property": "line-height",
+        "selector": ".label"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".label"
+      },
+      "--font-size-caption-sm": {
+        "property": "font-size",
+        "selector": ".description"
+      },
+      "--line-height-caption-sm": {
+        "property": "line-height",
+        "selector": ".description"
+      },
+      "--space-100": {
+        "property": "gap",
+        "selector": ".root[data-orientation=\"horizontal\"]"
+      },
+      "--space-150": {
+        "property": "margin-block-end",
+        "selector": ".legend"
+      },
+      "--space-200": {
+        "property": "gap",
+        "selector": ".group"
+      },
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".legend"
+      },
+      "--line-height-heading-sm": {
+        "property": "line-height",
+        "selector": ".legend"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+      },
+      "--border-default": {
+        "property": "border",
+        "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+      },
+      "--border-focus": {
+        "property": "border-color",
+        "selector": ".label:has([data-checked])"
+      },
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".label:has([data-checked])"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "notes": "FieldLabel activates and names the native control. Descriptions and visible errors are associated automatically."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "6ff282f8ae60641306b7a787b1a80b251ad0e1454aaef670110f788b10c63a9c"
+}

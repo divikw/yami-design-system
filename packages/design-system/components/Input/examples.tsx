@@ -18,7 +18,7 @@ export const CompactInput = () => (
 
 export const ActionInput = () => (
   <form onSubmit={(event) => event.preventDefault()}>
-    <Input density="compact" aria-label="Promo code" placeholder="Promo code"
+    <Input density="compact" aria-label="Promo code" placeholder="e.g. SAVE10"
       action={{ label: "Redeem", htmlType: "submit" }} />
   </form>
 )
@@ -43,7 +43,7 @@ export const CompleteInput = () => (
 
 export const WithErrorInput = () => (
   <section data-example="WithErrorInput">
-    <Input label="Label" defaultValue="Input" error="Supporting text" />
+    <Input label="Email" type="email" defaultValue="bob@" error="Enter a valid email address." />
   </section>
 )
 
@@ -61,7 +61,7 @@ export const DisabledEmptyInput = () => (
 
 export const SearchInput = () => (
   <section data-example="SearchInput">
-    <Input type="search" aria-label="Search" placeholder="Search YAMI" fullWidth />
+    <Input density="compact" type="search" aria-label="Search" placeholder="Search YAMI" fullWidth />
   </section>
 )
 

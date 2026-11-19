@@ -1,0 +1,81 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "skeleton",
+  "title": "Skeleton",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A decorative loading placeholder sized to the content it replaces.",
+  "source": "components/Skeleton",
+  "files": [
+    {
+      "source": "components/Skeleton/index.ts",
+      "target": "components/Skeleton/index.ts"
+    },
+    {
+      "source": "components/Skeleton/Skeleton.module.css",
+      "target": "components/Skeleton/Skeleton.module.css"
+    },
+    {
+      "source": "components/Skeleton/Skeleton.tsx",
+      "target": "components/Skeleton/Skeleton.tsx"
+    }
+  ],
+  "exports": [
+    "Skeleton",
+    "SkeletonProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Skeleton/usage.md",
+    "stories": [
+      "components/Skeleton/Skeleton.stories.tsx"
+    ],
+    "examples": [
+      "components/Skeleton/examples.tsx#ProfileSkeleton"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--fill-skeleton",
+      "--fill-skeleton-inverse",
+      "--radius-component-default"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--fill-skeleton": {
+        "property": "background-color",
+        "selector": ".root"
+      },
+      "--fill-skeleton-inverse": {
+        "property": "background-image",
+        "selector": ".root"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ":where(.root)"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "none",
+      "notes": "Decorative span hidden from assistive technology. The host loading region manages aria-busy."
+    },
+    "interactionCoverage": "not-applicable"
+  },
+  "contentDigest": "b4feb2cf793a0182deda1e51478fef122290078e52f3024735895e4ce6b3e185"
+}

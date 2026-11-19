@@ -1,0 +1,121 @@
+.control, .chips {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-050);
+  width: 100%;
+  min-width: 0;
+  min-height: var(--space-600);
+  padding-inline: var(--space-100);
+  border: 0;
+  box-shadow: inset 0 0 0 var(--stroke-default) var(--border-default);
+  border-radius: var(--radius-component-default);
+  background: var(--fill-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+.control:focus-within, .chips:focus-within {
+  box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-focus);
+}
+.control:has([aria-invalid="true"]), .chips:has([aria-invalid="true"]) {
+  box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-attention);
+}
+.control:has(input:disabled), .chips:has(input:disabled) {
+  background: var(--fill-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+.control input, .chips input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+.control input::placeholder, .chips input::placeholder { color: var(--text-secondary); }
+.control input:disabled::placeholder, .chips input:disabled::placeholder { color: var(--text-disabled); }
+.control:has([data-slot="combobox-clear"]) [data-slot="combobox-trigger"] { display: none; }
+.action {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--space-400);
+  height: var(--space-400);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-button-primary);
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.action:disabled { cursor: not-allowed; }
+.action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible) {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+.positioner { z-index: 100; }
+.popup {
+  box-sizing: border-box;
+  width: var(--anchor-width);
+  max-width: var(--available-width);
+  max-height: min(20rem, var(--available-height));
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-surface-default);
+  background: var(--surface-primary);
+  box-shadow: var(--elevation-400-menu-panel);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  padding: var(--space-050);
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-100);
+  min-height: var(--space-500);
+  padding-inline: var(--space-100);
+  border-radius: var(--radius-component-default);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.item[data-highlighted] { background: var(--surface-secondary); }
+.item[data-disabled] { color: var(--text-disabled); cursor: not-allowed; }
+.indicator { display: flex; flex: none; }
+.groupLabel, .popup [role="status"]:not(:empty) {
+  padding: var(--space-100);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption-sm);
+  line-height: var(--line-height-caption-sm);
+}
+.separator { height: var(--stroke-default); margin-block: var(--space-050); background: var(--divider-default); }
+.chips { flex-wrap: wrap; padding-block: var(--space-050); }
+.chips input { min-width: min(8ch, 100%); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding-inline: var(--space-100) var(--space-025);
+  border-radius: var(--radius-tag-primary);
+  background: var(--fill-secondary);
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-caption-md);
+  line-height: var(--line-height-caption-md);
+}
+@media (min-width: 1024px) {
+  .control, .chips { min-height: var(--space-500); }
+  .item { min-height: var(--space-400); }
+}
+
+@media (forced-colors: active) {
+  .control, .chips { outline: var(--stroke-default) solid ButtonText; }
+  .control:focus-within, .chips:focus-within { outline: var(--stroke-thick) solid Highlight; }
+}

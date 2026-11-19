@@ -1,0 +1,142 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "slider",
+  "title": "Slider",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Select one value or multiple values along a scale using Base UI.",
+  "source": "components/Slider",
+  "files": [
+    {
+      "source": "components/Slider/index.ts",
+      "target": "components/Slider/index.ts"
+    },
+    {
+      "source": "components/Slider/Slider.module.css",
+      "target": "components/Slider/Slider.module.css"
+    },
+    {
+      "source": "components/Slider/Slider.tsx",
+      "target": "components/Slider/Slider.tsx"
+    }
+  ],
+  "exports": [
+    "Slider",
+    "SliderProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Slider/usage.md",
+    "stories": [
+      "components/Slider/Slider.stories.tsx"
+    ],
+    "examples": [
+      "components/Slider/examples.tsx#BudgetSlider"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--border-focus",
+      "--fill-disabled",
+      "--fill-inverse",
+      "--fill-primary",
+      "--focus-ring",
+      "--radius-full",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-200",
+      "--space-600",
+      "--stroke-default",
+      "--stroke-thick",
+      "--text-disabled"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-100": {
+        "property": "padding-inline",
+        "selector": ".root"
+      },
+      "--space-600": {
+        "property": "height",
+        "selector": ".control"
+      },
+      "--space-050": {
+        "property": "height",
+        "selector": ".track"
+      },
+      "--fill-disabled": {
+        "property": "background",
+        "selector": ".track"
+      },
+      "--radius-full": {
+        "property": "border-radius",
+        "selector": ".track"
+      },
+      "--fill-inverse": {
+        "property": "background",
+        "selector": ".indicator"
+      },
+      "--space-200": {
+        "property": "width",
+        "selector": ".thumb"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".thumb"
+      },
+      "--border-focus": {
+        "property": "border",
+        "selector": ".thumb"
+      },
+      "--fill-primary": {
+        "property": "background",
+        "selector": ".thumb"
+      },
+      "--stroke-thick": {
+        "property": "outline",
+        "selector": ".thumb:has(input:focus-visible)"
+      },
+      "--focus-ring": {
+        "property": "outline",
+        "selector": ".thumb:has(input:focus-visible)"
+      },
+      "--space-025": {
+        "property": "outline-offset",
+        "selector": ".thumb:has(input:focus-visible)"
+      },
+      "--border-default": {
+        "property": "border-color",
+        "selector": ".root[data-disabled] .thumb"
+      },
+      "--text-disabled": {
+        "property": "background",
+        "selector": ".root[data-disabled] .indicator"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "slider",
+      "notes": "Give each thumb a distinct name. Base UI owns range inputs, pointer dragging and keyboard navigation."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "fcc61c1ecfa209a7860a6dbd8f718fe7e4d1e07e8f6c711f6f7a4670a7685b6a"
+}

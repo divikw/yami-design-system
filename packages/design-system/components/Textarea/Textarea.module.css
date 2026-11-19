@@ -1,0 +1,62 @@
+.control {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--space-600);
+  padding: var(--space-100);
+  border: 0;
+  --textarea-stroke: var(--stroke-default);
+  --textarea-border-color: var(--border-default);
+  box-shadow: inset 0 0 0 var(--textarea-stroke) var(--textarea-border-color);
+  border-radius: var(--radius-component-default);
+  background: var(--fill-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  resize: vertical;
+}
+
+.control::placeholder {
+  color: var(--text-secondary);
+}
+
+.control:focus {
+  --textarea-stroke: var(--stroke-thick);
+  --textarea-border-color: var(--border-focus);
+  outline: none;
+}
+
+.control:not([data-pointer-focus]):focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+
+.control[aria-invalid="true"]:not(:disabled) {
+  --textarea-border-color: var(--border-attention);
+}
+
+.control:disabled {
+  background: var(--fill-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.control[data-auto-size] {
+  field-sizing: content;
+  min-block-size: var(--space-800);
+}
+
+.control:disabled::placeholder {
+  color: var(--text-disabled);
+}
+
+@media (forced-colors: active) {
+  .control, .control:focus {
+    outline: var(--textarea-stroke) solid CanvasText;
+    outline-offset: calc(0px - var(--textarea-stroke));
+  }
+  .control:disabled {
+    outline-color: GrayText;
+  }
+}

@@ -1,20 +1,21 @@
 <!-- locale:zh -->
 # Input — 使用说明
 
-Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。
+Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。两种规格在 PC 和移动端的左右内边距均为 8px，编辑时使用 2px 内描边。
 
 ## 用法
 
 ```tsx
 import { Input } from "@yami/design-system"
 
-<Input label="邮箱" type="email" name="email" required />
+<Input density="compact" label="邮箱" type="email" name="email" placeholder="name@example.com" required />
 ```
 
 ## 值与状态
 
 - `defaultValue` 设置非受控的起始值。用 `value` 受控时，可用原生 `onChange` 或接收值和事件详情的 `onValueChange`。
-- `error` 渲染关联的错误说明。已有外部说明时，可设置 `aria-invalid` 和 `aria-describedby`。两种方式都使用 YAMI 错误边框。
+- 只有填写或搜索提示时，使用 `density="compact"` 和 `placeholder`，并用外部标签或 `aria-label` 提供可访问名称。持续可见的补充说明使用 `helperText`。
+- `error` 在输入框下方显示关联的错误说明。已有外部说明时，可设置 `aria-invalid` 和 `aria-describedby`。两种方式都使用 YAMI 错误边框。
 - 支持原生 `disabled`、`readOnly`、`required` 和表单重置。通过 `clearable` 提供清空操作。可选的 `action` 或尾部内容会占用清空操作的位置。
 - 标签、辅助文字和交互状态沿用 YAMI token。键盘焦点和字段状态边框分别显示。
 
@@ -31,8 +32,8 @@ stateful borders, optional clear action, and supporting text.
 
 The default field width is 320px and shrinks with `max-width: 100%` in narrower containers.
 Use `fullWidth` when the field should fill its available layout column.
-The field's inline-end padding is 8px in both densities at every breakpoint, including fields
-with leading or trailing slots. In left-to-right layouts, the clear button's hit target ends
+Both densities use 8px horizontal padding and a 2px inset editing border at every breakpoint, including fields
+with icons, a clear button or an inline action. In left-to-right layouts, the clear button's hit target ends
 8px from the field's right edge.
 
 ## Storybook Examples
@@ -86,6 +87,8 @@ body-md text and a single value/placeholder row. The default density stays uncha
 ```tsx
 <Input density="compact" label="Promo code" placeholder="SAVE10" clearable />
 ```
+
+For a field with only an entry or search hint, use `density="compact"` with a placeholder and an external label or `aria-label`. Use helperText for information that should stay visible while typing, and error for validation feedback below the field.
 
 The label stays above the field with a 4px gap and remains associated with the native input.
 It does not float or disappear when the value changes. A separately authored label may instead
@@ -180,6 +183,7 @@ Use YAMI SVG assets from `packages/design-system/assets/icons` and keep them cur
 
 ```tsx
 <Input
+  density="compact"
   aria-label="Search"
   type="search"
   placeholder="Search YAMI"
@@ -223,7 +227,7 @@ from the YAMI Figma file and YAMI tokens, not from Baseline styles.
 ### Missing Accessible Name
 
 ```tsx
-<Input placeholder="Search" />
+<Input density="compact" placeholder="Search" />
 ```
 
 If no visible label is used, provide `aria-label`.

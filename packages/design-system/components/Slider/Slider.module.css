@@ -1,0 +1,49 @@
+.root {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-inline: var(--space-100);
+}
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--space-600);
+  touch-action: none;
+  user-select: none;
+}
+.track {
+  width: 100%;
+  height: var(--space-050);
+  background: var(--fill-disabled);
+  border-radius: var(--radius-full);
+}
+.indicator {
+  background: var(--fill-inverse);
+  border-radius: inherit;
+}
+.thumb {
+  box-sizing: border-box;
+  width: var(--space-200);
+  height: var(--space-200);
+  border: var(--stroke-default) solid var(--border-focus);
+  border-radius: var(--radius-full);
+  background: var(--fill-primary);
+}
+.thumb:has(input:focus-visible) {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+.root[data-disabled] .thumb {
+  border-color: var(--border-default);
+  background: var(--fill-disabled);
+}
+.root[data-disabled] .indicator { background: var(--text-disabled); }
+.root[data-orientation="vertical"] {
+  width: var(--space-600);
+  height: 10rem;
+  padding: var(--space-100) 0;
+}
+.root[data-orientation="vertical"] .control { height: 100%; }
+.root[data-orientation="vertical"] .track { width: var(--space-050); height: 100%; }

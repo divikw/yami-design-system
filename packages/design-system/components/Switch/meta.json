@@ -175,6 +175,7 @@
   },
   "usageRef": "./usage.md",
   "examples": [
-    "./examples.tsx#BasicSwitch"
+    "./examples.tsx#BasicSwitch",
+    "./validation/examples.tsx#TermsSwitch"
   ]
 }

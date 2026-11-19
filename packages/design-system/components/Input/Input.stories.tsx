@@ -135,6 +135,7 @@ function SearchIcon() {
 
 function StateExample({
   title,
+  label = "Label",
   state,
   value,
   error,
@@ -142,6 +143,7 @@ function StateExample({
   clearable,
 }: {
   title: string
+  label?: string
   state: InputState
   value?: string
   error?: string
@@ -152,7 +154,7 @@ function StateExample({
     <div style={groupStyle}>
       <p style={labelStyle}>{title}</p>
       <Input
-        label="Label"
+        label={label}
         state={state}
         defaultValue={value}
         error={error}
@@ -178,15 +180,16 @@ export const Showcase: Story = {
             <StateExample title="Complete" state="complete" value="Input" />
             <StateExample title="Disabled filled" state="disabled-filled" value="Input" disabled />
             <StateExample title="Disabled empty" state="disabled-empty" disabled />
-            <StateExample title="Error" state="error" value="Input" error="Supporting text" />
+            <StateExample title={english ? "Error" : "错误"} label={english ? "Email" : "邮箱"} state="error" value="bob@" error={english ? "Enter a valid email address." : "请输入有效的邮箱地址。"} />
           </div>
         </div>
 
         <div style={groupStyle}>
-          <p style={labelStyle}>Search with leading icon</p>
+          <p style={labelStyle}>{english ? "Search with leading icon" : "带图标的搜索框"}</p>
           <Input
-            aria-label="Search"
-            placeholder="Search YAMI"
+            density="compact"
+            aria-label={english ? "Product search" : "商品搜索"}
+            placeholder={english ? "Search YAMI products" : "搜索 YAMI 商品"}
             leadingIcon={<SearchIcon />}
             fullWidth
           />
@@ -208,8 +211,8 @@ export const Showcase: Story = {
             <Input density="compact" label={english ? "Compact disabled with error" : "紧凑规格禁用与错误组合"} defaultValue="BAD" disabled error={english ? "Check your promo code." : "请检查折扣码后重试。"} />
           </div>
           <div style={rowStyle}>
-            <Input label={english ? "Long helper text" : "长辅助说明"} helperText={message} />
-            <Input density="compact" label={english ? "Long error text" : "长错误提示"} error={message} />
+            <Input label={english ? "Long helper text" : "长辅助说明"} helperText={english ? `Help page: ${message}` : `帮助页面：${message}`} />
+            <Input density="compact" label={english ? "Long error text" : "长错误提示"} error={english ? `Unsupported URL: ${message}` : `不支持此网址：${message}`} />
           </div>
         </div>
       </section>
@@ -256,8 +259,8 @@ export const Playground: Story = {
 }
 
 export const Compact: Story = {
-  args: { density: "compact", label: undefined, clearable: true, defaultValue: "SAVE10" },
-  render: (args, { globals }) => <Input {...args} label={args.label ?? (globals.locale === "en" ? "Promo code" : "折扣码")} helperText={globals.locale === "en" ? "40px on desktop; 48px on mobile." : "桌面端 40px，移动端 48px。"} />,
+  args: { density: "compact", label: undefined, clearable: true, placeholder: "SAVE10" },
+  render: (args, { globals }) => <Input {...args} label={args.label ?? (globals.locale === "en" ? "Promo code" : "折扣码")} />,
 }
 
 function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }) {
@@ -270,7 +273,7 @@ function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }
     setError(value.trim() ? "" : english ? "Enter a promo code" : "请输入折扣码")
     setSubmitted(value.trim())
   }}>
-    <Input {...args} density="compact" aria-label={label} placeholder={label} value={value} error={error}
+    <Input {...args} density="compact" aria-label={label} placeholder={english ? "e.g. SAVE10" : "例如 SAVE10"} value={value} error={error}
       action={{ label: english ? "Redeem" : "兑换", htmlType: "submit" }}
       onChange={(event) => { setValue(event.target.value); setError(""); setSubmitted("") }} />
     {submitted && <p role="status">{english ? "Submitted: " : "已提交："}{submitted}</p>}

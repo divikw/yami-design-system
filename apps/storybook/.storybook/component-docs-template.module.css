@@ -6,7 +6,7 @@
 :global([data-yami-docs="usage"]) :is(ul, ol) { padding-inline-start: var(--space-300); }
 .usage :is(p, li, th, td) > code { white-space: normal; overflow-wrap: anywhere; }
 .legacyAnchor { display: block; scroll-margin-top: var(--space-400); }
-.page:where(:not([data-docs-layout])) p, .page > section > p { margin: 0 0 var(--space-200); }
+.page:where(:not([data-docs-layout], .frameContent)) p, .page > section > p { margin: 0 0 var(--space-200); }
 .page:where(:not([data-docs-layout])) section, .page > section { margin-top: var(--space-600); }
 :where(.page) a { color: inherit; text-underline-offset: 4px; }
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-300); margin-bottom: var(--space-400); }
@@ -18,7 +18,7 @@
 .previewViewport { display: flex; justify-content: center; overflow: clip; }
 .previewFrame { display: block; flex: none; width: 100vw; max-width: none; border: 0; }
 .frameBody { margin: 0; overflow: hidden; background: var(--surface-primary); }
-.frameContent { display: grid; place-items: center; width: 100%; min-height: 252px; margin-inline: auto; padding: var(--space-400) var(--space-200); }
+.frameContent { box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; width: 100%; min-height: 252px; margin-inline: auto; padding: var(--space-400) var(--space-200); }
 .demo { width: 100%; max-width: 400px; }
 .demo h3 { margin: 0; }
 .codeBlock { position: relative; background: var(--surface-secondary); border-radius: var(--radius-surface-default); margin-top: var(--space-200); overflow: hidden; }

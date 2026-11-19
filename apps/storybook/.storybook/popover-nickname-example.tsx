@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
-import { Button, Input, Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@yami/design-system";
+import { useDesktopViewport, Button, Input, Popover, PopoverContent, PopoverTitle, PopoverTrigger } from "@yami/design-system";
 
 export function EditNickname({ locale }: { locale: "zh" | "en" }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [nickname, setNickname] = useState("");
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -20,7 +21,7 @@ export function EditNickname({ locale }: { locale: "zh" | "en" }) {
           }}>
           <PopoverTitle>{title}</PopoverTitle>
           <Input fullWidth name="nickname" label={zh ? "昵称" : "Nickname"} defaultValue={nickname} />
-          <Button htmlType="submit">{zh ? "保存" : "Save"}</Button>
+          <Button size={actionSize} htmlType="submit">{zh ? "保存" : "Save"}</Button>
         </form>
       </PopoverContent>
     </Popover>

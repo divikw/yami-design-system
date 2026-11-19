@@ -66,6 +66,7 @@
   "composes": [
     "Button",
     "ProductCard",
+    "Skeleton",
     "Tabs"
   ],
   "dependencies": {
@@ -96,8 +97,6 @@
       "--button-secondary-active",
       "--divider-default",
       "--divider-emphasis",
-      "--fill-skeleton",
-      "--fill-skeleton-inverse",
       "--focus-ring",
       "--focus-ring-inverse",
       "--font-family-ios",
@@ -140,10 +139,6 @@
         "property": "background-color",
         "selector": ".root[data-appearance='themed'], .root[data-appearance='atmospheric']"
       },
-      "--fill-skeleton": {
-        "property": "background-color",
-        "selector": ".skeletonMedia, .skeletonLine, .skeletonPrice"
-      },
       "--radius-component-default": {
         "property": "border-radius",
         "selector": ".item, .skeletonItem, .skeletonMedia"
@@ -170,5 +165,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f41603128175dc3941e66c2fa0d23403cbeb94bd0fa6a44d54b0f96e94448fa9"
+  "contentDigest": "39c29bde56e698e6f342a115e04d6391e85a3613bf923488c7220af609de3715"
 }

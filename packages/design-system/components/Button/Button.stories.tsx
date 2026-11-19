@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite"
 import { Button } from "./Button"
 import { ButtonLink } from "./ButtonLink"
 import { ButtonGroup } from "../ButtonGroup"
+import { useDesktopViewport } from "../Drawer/useDesktopViewport"
 import showcaseStyles from "./Button.stories.module.css"
 
 // Heart icon from packages/design-system/assets/icons/action/heart.svg.
@@ -166,11 +167,12 @@ function StateMatrix({ inverse = false }: { inverse?: boolean }) {
 }
 
 function SaveDemo({ duration = 700, label = "保存设置" }: { duration?: number; label?: string }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm"
   const [status, setStatus] = useState<"idle" | "saving" | "saved">("idle")
   const saving = useRef(false)
   return (
     <div className={showcaseStyles.saveDemo}>
-      <Button loading={status === "saving"} loadingDelay={150} onClick={async () => {
+      <Button size={actionSize} loading={status === "saving"} loadingDelay={150} onClick={async () => {
         if (saving.current) return
         saving.current = true
         setStatus("saving")

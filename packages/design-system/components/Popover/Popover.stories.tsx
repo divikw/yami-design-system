@@ -2,16 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Popover, PopoverTrigger, PopoverContent, PopoverTitle, PopoverDescription } from "./Popover";
 import { Button } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 import styles from "./examples.module.css";
 import { translations } from "./story-translations";
 
 const meta = { id: "yami-components-layout-popover", title: "YAMI/Components/Popover", component: Popover,
   parameters: { layout: "centered", controls: { localizeDescriptions: true }, docs: { translations } },
   argTypes: { onOpenChange: { control: false }, children: { control: false }, open: { control: "boolean" }, defaultOpen: { control: "boolean" } },
-  render: (args, { globals }) => {
+  render: function PopoverExample(args, { globals }) {
+    const actionSize = useDesktopViewport() ? "md" : "sm";
     const title = globals.locale === "en" ? "Delivery details" : "配送说明";
     return <Popover {...args}>
-      <PopoverTrigger render={<Button variant="secondary" />}>{title}</PopoverTrigger>
+      <PopoverTrigger render={<Button size={actionSize} variant="secondary" />}>{title}</PopoverTrigger>
       <PopoverContent>
         <div className={styles.body}>
           <PopoverTitle>{title}</PopoverTitle>

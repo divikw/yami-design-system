@@ -1,0 +1,72 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Skeleton",
+  "category": "display",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A decorative loading placeholder sized to the content it replaces.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "SkeletonProps",
+    "Skeleton"
+  ],
+  "props": {
+    "className": {
+      "type": "string",
+      "required": false
+    },
+    "style": {
+      "type": "CSSProperties",
+      "required": false
+    }
+  },
+  "rules": {
+    "tokens": {
+      "ruleId": "token-exists"
+    }
+  },
+  "tokens": [
+    "--fill-skeleton",
+    "--fill-skeleton-inverse",
+    "--radius-component-default"
+  ],
+  "tokenBindings": {
+    "--fill-skeleton": {
+      "property": "background-color",
+      "selector": ".root"
+    },
+    "--fill-skeleton-inverse": {
+      "property": "background-image",
+      "selector": ".root"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ":where(.root)"
+    }
+  },
+  "accessibility": {
+    "role": "none",
+    "notes": "Decorative span hidden from assistive technology. The host loading region manages aria-busy."
+  },
+  "testing": {
+    "interaction": "not-applicable",
+    "rationale": "Decorative placeholder with no user interaction."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#ProfileSkeleton"
+  ]
+}

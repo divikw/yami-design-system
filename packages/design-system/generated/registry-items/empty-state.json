@@ -1,0 +1,151 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "empty-state",
+  "title": "EmptyState",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Compose empty states with media, a heading, descriptive text and optional actions.",
+  "source": "components/EmptyState",
+  "files": [
+    {
+      "source": "components/EmptyState/EmptyState.module.css",
+      "target": "components/EmptyState/EmptyState.module.css"
+    },
+    {
+      "source": "components/EmptyState/EmptyState.tsx",
+      "target": "components/EmptyState/EmptyState.tsx"
+    },
+    {
+      "source": "components/EmptyState/index.ts",
+      "target": "components/EmptyState/index.ts"
+    }
+  ],
+  "exports": [
+    "EmptyState",
+    "EmptyStateContent",
+    "EmptyStateContentProps",
+    "EmptyStateDescription",
+    "EmptyStateDescriptionProps",
+    "EmptyStateHeader",
+    "EmptyStateHeaderProps",
+    "EmptyStateMedia",
+    "EmptyStateMediaProps",
+    "EmptyStateProps",
+    "EmptyStateTitle",
+    "EmptyStateTitleProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/EmptyState/usage.md",
+    "stories": [
+      "components/EmptyState/EmptyState.stories.tsx"
+    ],
+    "examples": [
+      "components/EmptyState/examples.tsx#SavedLists"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-heading-sm",
+      "--font-weight-semibold",
+      "--line-height-body-md",
+      "--line-height-heading-sm",
+      "--radius-component-default",
+      "--radius-surface-default",
+      "--space-100",
+      "--space-200",
+      "--space-300",
+      "--space-500",
+      "--surface-secondary",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-200": {
+        "property": "gap",
+        "selector": ".root"
+      },
+      "--space-300": {
+        "property": "padding",
+        "selector": ".root"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      },
+      "--space-100": {
+        "property": "gap",
+        "selector": ".header, .content"
+      },
+      "--space-500": {
+        "property": "width",
+        "selector": ".media[data-variant=\"icon\"]"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".media[data-variant=\"icon\"]"
+      },
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".media[data-variant=\"icon\"]"
+      },
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".root .title"
+      },
+      "--line-height-heading-sm": {
+        "property": "line-height",
+        "selector": ".root .title"
+      },
+      "--font-weight-semibold": {
+        "property": "font-weight",
+        "selector": ".root .title"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".description"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".description"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "none",
+      "notes": "The title is an h2. Controls provided by the host retain their native semantics."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "b6189dfd0ffd6a231425275e0b7e97d8ea0577d5c01a8993aa6d2651b474cebe"
+}

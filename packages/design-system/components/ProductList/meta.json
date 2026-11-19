@@ -19,7 +19,7 @@
     "ProductListItem",
     "ProductListTab"
   ],
-  "composes": ["ProductCard", "Tabs", "Button"],
+  "composes": ["ProductCard", "Tabs", "Button", "Skeleton"],
   "props": {
     "title": {
       "type": "ReactNode",
@@ -202,8 +202,6 @@
     "--button-secondary",
     "--button-secondary-active",
     "--text-primary",
-    "--fill-skeleton",
-    "--fill-skeleton-inverse",
     "--divider-default",
     "--divider-emphasis",
     "--border-default",
@@ -239,10 +237,6 @@
     "--surface-secondary": {
       "property": "background-color",
       "selector": ".root[data-appearance='themed'], .root[data-appearance='atmospheric']"
-    },
-    "--fill-skeleton": {
-      "property": "background-color",
-      "selector": ".skeletonMedia, .skeletonLine, .skeletonPrice"
     },
     "--radius-component-default": {
       "property": "border-radius",

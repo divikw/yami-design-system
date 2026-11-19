@@ -26,9 +26,8 @@
   align-items: center;
   width: 100%;
   height: var(--space-600);
-  gap: var(--space-0);
-  padding-inline-start: var(--space-050);
-  padding-inline-end: var(--space-100);
+  gap: var(--space-100);
+  padding-inline: var(--space-100);
 
   background: var(--background-primary);
   border: 0;
@@ -58,10 +57,6 @@
   cursor: not-allowed;
 }
 
-.root[data-leading="true"] .field {
-  padding-inline-start: var(--space-150);
-}
-
 .textStack {
   display: flex;
   flex: 1 1 0;
@@ -69,12 +64,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding-inline: var(--space-100);
-}
-
-.root[data-leading="true"] .textStack {
-  padding-inline-start: var(--space-100);
-  padding-inline-end: 0;
 }
 
 .label {
@@ -240,12 +229,6 @@
 @media (min-width: 1024px) {
   .field {
     height: 56px;
-    gap: var(--space-100);
-    padding-inline-start: var(--space-150);
-  }
-
-  .textStack {
-    padding-inline: 0;
   }
 
   .control {
@@ -271,18 +254,9 @@
   line-height: var(--line-height-body-md);
 }
 
-.root[data-density="compact"] .textStack {
-  padding-inline: 0;
-}
-
 .root[data-density="compact"] .control {
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
-}
-
-.root[data-density="compact"] .field {
-  padding-inline-start: var(--space-150);
-  gap: var(--space-100);
 }
 
 .root[data-density="compact"] .errorText {
@@ -299,10 +273,6 @@
 .root[data-action="true"] .control {
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-xl);
-}
-
-.root[data-action="true"] .field {
-  padding-inline-start: var(--space-200);
 }
 
 .root .fieldAction {

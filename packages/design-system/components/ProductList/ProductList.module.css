@@ -381,32 +381,6 @@
   background: var(--surface-primary);
 }
 
-.skeletonMedia,
-.skeletonLine,
-.skeletonLineShort,
-.skeletonLineMedium,
-.skeletonPrice {
-  display: block;
-  overflow: hidden;
-  background: var(--fill-skeleton);
-}
-
-.skeletonMedia,
-.skeletonLine,
-.skeletonLineShort,
-.skeletonLineMedium,
-.skeletonPrice {
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    var(--fill-skeleton-inverse),
-    transparent
-  );
-  background-position: 200% 0;
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s linear infinite;
-}
-
 .skeletonMedia {
   width: 100%;
   aspect-ratio: 1;
@@ -453,12 +427,6 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-@keyframes skeleton-shimmer {
-  to {
-    background-position: -200% 0;
-  }
 }
 
 @media (max-width: 1023px) {
@@ -785,13 +753,6 @@
     transition: none;
   }
 
-  .skeletonMedia,
-  .skeletonLine,
-  .skeletonLineShort,
-  .skeletonLineMedium,
-  .skeletonPrice {
-    animation: none;
-  }
 }
 
 .railFrame { display: contents; }

@@ -1,0 +1,304 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Combobox",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Searchable single or multiple selection using Base UI, with grouped options, object values and removable chips.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "Combobox",
+    "ComboboxProps",
+    "ComboboxValue",
+    "ComboboxList",
+    "ComboboxGroup",
+    "ComboboxCollection",
+    "ComboboxEmpty",
+    "ComboboxTrigger",
+    "ComboboxInputProps",
+    "ComboboxInput",
+    "ComboboxContentProps",
+    "ComboboxContent",
+    "ComboboxItem",
+    "ComboboxLabel",
+    "ComboboxSeparator",
+    "ComboboxChips",
+    "ComboboxChip",
+    "ComboboxChipsInput",
+    "useComboboxAnchor"
+  ],
+  "props": {
+    "items": {
+      "type": "array",
+      "required": false
+    },
+    "multiple": {
+      "type": "boolean",
+      "required": false
+    },
+    "value": {
+      "type": "Value | Value[] | null",
+      "required": false
+    },
+    "defaultValue": {
+      "type": "Value | Value[] | null",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false
+    },
+    "inputValue": {
+      "type": "string",
+      "required": false
+    },
+    "onInputValueChange": {
+      "type": "function",
+      "required": false
+    },
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "required": {
+      "type": "boolean",
+      "required": false
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false
+    },
+    "autoHighlight": {
+      "type": "boolean",
+      "required": false
+    },
+    "itemToStringLabel": {
+      "type": "function",
+      "required": false
+    },
+    "itemToStringValue": {
+      "type": "function",
+      "required": false
+    },
+    "showClear": {
+      "type": "boolean",
+      "required": false
+    },
+    "showTrigger": {
+      "type": "boolean",
+      "required": false
+    }
+  },
+  "rules": {
+    "color": {
+      "ruleId": "semantic-color-only"
+    },
+    "type": {
+      "ruleId": "type-hierarchy"
+    },
+    "radius": {
+      "ruleId": "no-custom-radii"
+    }
+  },
+  "tokens": [
+    "--space-050",
+    "--space-600",
+    "--stroke-default",
+    "--border-default",
+    "--radius-component-default",
+    "--fill-primary",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--border-focus",
+    "--border-attention",
+    "--fill-disabled",
+    "--text-disabled",
+    "--text-secondary",
+    "--space-400",
+    "--radius-button-primary",
+    "--stroke-thick",
+    "--focus-ring",
+    "--space-025",
+    "--radius-surface-default",
+    "--surface-primary",
+    "--elevation-400-menu-panel",
+    "--space-100",
+    "--space-500",
+    "--surface-secondary",
+    "--font-size-caption-sm",
+    "--line-height-caption-sm",
+    "--divider-default",
+    "--radius-tag-primary",
+    "--fill-secondary",
+    "--font-size-caption-md",
+    "--line-height-caption-md"
+  ],
+  "tokenBindings": {
+    "--space-050": {
+      "property": "gap",
+      "selector": ".control, .chips"
+    },
+    "--space-600": {
+      "property": "min-height",
+      "selector": ".control, .chips"
+    },
+    "--stroke-default": {
+      "property": "box-shadow",
+      "selector": ".control, .chips"
+    },
+    "--border-default": {
+      "property": "box-shadow",
+      "selector": ".control, .chips"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".control, .chips"
+    },
+    "--fill-primary": {
+      "property": "background",
+      "selector": ".control, .chips"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".control, .chips"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".control, .chips"
+    },
+    "--font-size-body-md": {
+      "property": "font-size",
+      "selector": ".control, .chips"
+    },
+    "--line-height-body-md": {
+      "property": "line-height",
+      "selector": ".control, .chips"
+    },
+    "--border-focus": {
+      "property": "box-shadow",
+      "selector": ".control:focus-within, .chips:focus-within"
+    },
+    "--border-attention": {
+      "property": "box-shadow",
+      "selector": ".control:has([aria-invalid=\"true\"]), .chips:has([aria-invalid=\"true\"])"
+    },
+    "--fill-disabled": {
+      "property": "background",
+      "selector": ".control:has(input:disabled), .chips:has(input:disabled)"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".control:has(input:disabled), .chips:has(input:disabled)"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".control input::placeholder, .chips input::placeholder"
+    },
+    "--space-400": {
+      "property": "width",
+      "selector": ".action"
+    },
+    "--radius-button-primary": {
+      "property": "border-radius",
+      "selector": ".action"
+    },
+    "--stroke-thick": {
+      "property": "box-shadow",
+      "selector": ".control:focus-within, .chips:focus-within"
+    },
+    "--focus-ring": {
+      "property": "outline",
+      "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
+    },
+    "--space-025": {
+      "property": "outline-offset",
+      "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".popup"
+    },
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".popup"
+    },
+    "--elevation-400-menu-panel": {
+      "property": "box-shadow",
+      "selector": ".popup"
+    },
+    "--space-100": {
+      "property": "padding-inline",
+      "selector": ".control, .chips"
+    },
+    "--space-500": {
+      "property": "min-height",
+      "selector": ".item"
+    },
+    "--surface-secondary": {
+      "property": "background",
+      "selector": ".item[data-highlighted]"
+    },
+    "--font-size-caption-sm": {
+      "property": "font-size",
+      "selector": ".groupLabel, .popup [role=\"status\"]:not(:empty)"
+    },
+    "--line-height-caption-sm": {
+      "property": "line-height",
+      "selector": ".groupLabel, .popup [role=\"status\"]:not(:empty)"
+    },
+    "--divider-default": {
+      "property": "background",
+      "selector": ".separator"
+    },
+    "--radius-tag-primary": {
+      "property": "border-radius",
+      "selector": ".chip"
+    },
+    "--fill-secondary": {
+      "property": "background",
+      "selector": ".chip"
+    },
+    "--font-size-caption-md": {
+      "property": "font-size",
+      "selector": ".chip"
+    },
+    "--line-height-caption-md": {
+      "property": "line-height",
+      "selector": ".chip"
+    }
+  },
+  "accessibility": {
+    "keyboardNav": [
+      "tab",
+      "arrow-down",
+      "arrow-up",
+      "enter",
+      "escape"
+    ],
+    "notes": "Name the searchable input and localize each icon button. Arrow keys navigate options, Enter selects and Escape dismisses."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "The canonical story verifies filtering, empty results, keyboard selection and dismissal."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#BasicCombobox"
+  ]
+}

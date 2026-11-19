@@ -597,6 +597,10 @@ Contextual modal for coupons and unavailable items. Uses Base UI Drawer with mod
 
 Controlled coupon selection card with title, scope and optional localized validity text. Composes Checkbox with a circular marker, transparent ticket cutouts and a dashed divider. The host owns eligibility, selection limits and saving; the cart commits its zero-or-one selection only on Save and discards drafts on dismissal. See [usage](./components/Coupon/usage.md).
 
+### Alert — `components/Alert/`
+
+Persistent inline feedback with an optional icon, title, description and action. Destructive messages use semantic error text. [Usage](./components/Alert/usage.md).
+
 ### AlertDialog — `components/AlertDialog/`
 
 Base UI modal confirmation with YAMI centered surface, semantic typography and Button actions. Compose AlertDialog / Trigger / Content / Header / Title / Description / Footer / Cancel / Action. Outside presses never dismiss; Escape and explicit actions close and restore focus. Place Cancel first for safe initial focus. Controlled open/onOpenChange supports host-owned async work; synchronous Action closes immediately. Destructive confirmation opts into one emphasis action. Content stays centered with 16px minimum side margins and a scrolling header/message for long content. From 1024px, PC uses a 480px maximum width, left-aligned 24px title, 16px description, 24px outer spacing, no corner close control and a right-aligned ButtonGroup with pill-shaped secondary Cancel and black primary confirmation. Mobile retains the 400px maximum width, centered title and equal-width md (40px) pill actions without extra hit-area extension or corner close. This does not replace the existing draft Dialog API.
@@ -818,9 +822,37 @@ Ranked search terms with the results behind each one.
 
 ---
 
+### NavigationMenu — `components/NavigationMenu/`
+
+Base UI site navigation with direct links and keyboard- or touch-operated disclosure panels. Uses semantic menu elevation, surface, text and focus tokens. [Usage](./components/NavigationMenu/usage.md).
+
+### Progress — `components/Progress/`
+
+Read-only task completion with optional label and localized value. A null value indicates unknown progress and respects reduced motion. The track and fill use YAMI neutral fill tokens. [Usage](./components/Progress/usage.md).
+
+### Slider — `components/Slider/`
+
+Select one value or multiple values along a scale using Base UI. Give each thumb a distinct name. Base UI owns range inputs, pointer dragging and keyboard navigation. See [usage](./components/Slider/usage.md).
+
+### EmptyState — `components/EmptyState/`
+
+Compose empty states with media, a heading, descriptive text and optional actions. The title is an h2. Controls provided by the host retain their native semantics. See [usage](./components/EmptyState/usage.md).
+
+### Skeleton — `components/Skeleton/`
+
+A decorative loading placeholder sized to the content it replaces. Decorative span hidden from assistive technology. The host loading region manages aria-busy. See [usage](./components/Skeleton/usage.md).
+
+### Spinner — `components/Spinner/`
+
+An indeterminate loading indicator that inherits its size and color. A named spinner exposes a status. Unnamed spinners are decorative beside an existing status or busy button. See [usage](./components/Spinner/usage.md).
+
 ### Switch — `components/Switch/`
 
 YAMI switch with a 36×20px default track, a 28×16px small track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Switch/usage.md) for composition, state and accessibility.
+
+### Combobox — `components/Combobox/`
+
+Search and select one or more options with Base UI. The field uses the default component radius and the popup uses the menu elevation and surface radius. See [usage](./components/Combobox/usage.md) for grouped options, chips and form submission.
 
 ### Select — `components/Select/`
 
@@ -829,6 +861,26 @@ YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and 
 ### Popover — `components/Popover/`
 
 YAMI non-modal popover using the existing filter menu surface. Supports anchored positioning, collision handling, Escape dismissal and focus restoration. The caller chooses a Drawer on mobile. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Popover/usage.md) for composition, state and accessibility.
+
+### Textarea — `components/Textarea/`
+
+Native multiline control with Base UI Field integration. Uses the YAMI form background and semantic state borders, `--radius-component-default`, and a separate `--focus-ring` outline. Omitting rows enables content sizing in supporting browsers, with a three-row fallback. Explicit rows retain native sizing. See [usage](./components/Textarea/usage.md).
+
+### Field — `components/Field/`
+
+Use FieldSet and FieldLegend for named groups and FieldGroup for stacked or responsive columns. Field also supports horizontal and container-responsive label layouts, choice cards, separators, and external error lists. Base UI field composition connects a control to its label, description, and validation message. Parts use `--space-050` spacing, caption typography, and semantic text and error colors. See [usage](./components/Field/usage.md).
+
+### DropdownMenu — `components/DropdownMenu/`
+
+Base UI action menus support grouped commands, checkboxes, radio choices and submenus. Panels use YAMI surface, border and menu elevation tokens with 4px inner padding. [Usage](./components/DropdownMenu/usage.md).
+
+### Toast — `components/Toast/`
+
+Transient Base UI notifications with semantic status icons, undo actions and promise updates. Toaster supports six positions. By default notifications sit at the bottom right on desktop and bottom center below 1024px. [Usage](./components/Toast/usage.md).
+
+### Tooltip — `components/Tooltip/`
+
+Base UI hover and keyboard-focus hint with collision-aware placement and Escape dismissal. Uses YAMI inverse fill and text, caption typography, and a directional arrow facing the trigger. DismissibleTooltip initially opens a nonmodal hint with a close button. Both forms use 6px vertical and 8px horizontal padding. Keep essential information visible for touch users. See [usage](./components/Tooltip/usage.md).
 
 ## Motion System
 

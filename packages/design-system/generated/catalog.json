@@ -345,6 +345,147 @@
       }
     },
     {
+      "id": "Alert",
+      "source": "components/Alert",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Alert",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Persistent inline feedback with optional text, icon and action.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "AlertProps",
+          "Alert",
+          "AlertTitle",
+          "AlertDescription",
+          "AlertAction"
+        ],
+        "props": {
+          "variant": {
+            "type": "default | destructive",
+            "required": false,
+            "default": "default"
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-150",
+          "--space-200",
+          "--stroke-default",
+          "--border-default",
+          "--radius-component-default",
+          "--surface-primary",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--space-025",
+          "--space-100",
+          "--font-weight-emphasize",
+          "--text-secondary",
+          "--space-050",
+          "--text-error"
+        ],
+        "tokenBindings": {
+          "--space-150": {
+            "property": "padding",
+            "selector": ".root"
+          },
+          "--space-200": {
+            "property": "padding",
+            "selector": ".root"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".root"
+          },
+          "--border-default": {
+            "property": "border",
+            "selector": ".root"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".root"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".root"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".root"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".root"
+          },
+          "--space-025": {
+            "property": "margin-block-start",
+            "selector": ".root > svg"
+          },
+          "--space-100": {
+            "property": "margin-inline-end",
+            "selector": ".root > svg"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".title"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          },
+          "--space-050": {
+            "property": "margin-block-start",
+            "selector": ".title + .description"
+          },
+          "--text-error": {
+            "property": "color",
+            "selector": ".root[data-variant=\"destructive\"]"
+          }
+        },
+        "accessibility": {
+          "role": "alert",
+          "notes": "Supports status announcements and host-provided links or buttons."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase resolves a stock warning through its action."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#StockAlert"
+        ]
+      }
+    },
+    {
       "id": "AlertDialog",
       "source": "components/AlertDialog",
       "meta": {
@@ -1764,6 +1905,9 @@
             "focus-visible"
           ]
         },
+        "composes": [
+          "Spinner"
+        ],
         "props": {
           "variant": {
             "type": "enum",
@@ -2691,6 +2835,314 @@
       }
     },
     {
+      "id": "Combobox",
+      "source": "components/Combobox",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Combobox",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Searchable single or multiple selection using Base UI, with grouped options, object values and removable chips.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "Combobox",
+          "ComboboxProps",
+          "ComboboxValue",
+          "ComboboxList",
+          "ComboboxGroup",
+          "ComboboxCollection",
+          "ComboboxEmpty",
+          "ComboboxTrigger",
+          "ComboboxInputProps",
+          "ComboboxInput",
+          "ComboboxContentProps",
+          "ComboboxContent",
+          "ComboboxItem",
+          "ComboboxLabel",
+          "ComboboxSeparator",
+          "ComboboxChips",
+          "ComboboxChip",
+          "ComboboxChipsInput",
+          "useComboboxAnchor"
+        ],
+        "props": {
+          "items": {
+            "type": "array",
+            "required": false
+          },
+          "multiple": {
+            "type": "boolean",
+            "required": false
+          },
+          "value": {
+            "type": "Value | Value[] | null",
+            "required": false
+          },
+          "defaultValue": {
+            "type": "Value | Value[] | null",
+            "required": false
+          },
+          "onValueChange": {
+            "type": "function",
+            "required": false
+          },
+          "inputValue": {
+            "type": "string",
+            "required": false
+          },
+          "onInputValueChange": {
+            "type": "function",
+            "required": false
+          },
+          "name": {
+            "type": "string",
+            "required": false
+          },
+          "required": {
+            "type": "boolean",
+            "required": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false
+          },
+          "autoHighlight": {
+            "type": "boolean",
+            "required": false
+          },
+          "itemToStringLabel": {
+            "type": "function",
+            "required": false
+          },
+          "itemToStringValue": {
+            "type": "function",
+            "required": false
+          },
+          "showClear": {
+            "type": "boolean",
+            "required": false
+          },
+          "showTrigger": {
+            "type": "boolean",
+            "required": false
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only"
+          },
+          "type": {
+            "ruleId": "type-hierarchy"
+          },
+          "radius": {
+            "ruleId": "no-custom-radii"
+          }
+        },
+        "tokens": [
+          "--space-050",
+          "--space-600",
+          "--stroke-default",
+          "--border-default",
+          "--radius-component-default",
+          "--fill-primary",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--border-focus",
+          "--border-attention",
+          "--fill-disabled",
+          "--text-disabled",
+          "--text-secondary",
+          "--space-400",
+          "--radius-button-primary",
+          "--stroke-thick",
+          "--focus-ring",
+          "--space-025",
+          "--radius-surface-default",
+          "--surface-primary",
+          "--elevation-400-menu-panel",
+          "--space-100",
+          "--space-500",
+          "--surface-secondary",
+          "--font-size-caption-sm",
+          "--line-height-caption-sm",
+          "--divider-default",
+          "--radius-tag-primary",
+          "--fill-secondary",
+          "--font-size-caption-md",
+          "--line-height-caption-md"
+        ],
+        "tokenBindings": {
+          "--space-050": {
+            "property": "gap",
+            "selector": ".control, .chips"
+          },
+          "--space-600": {
+            "property": "min-height",
+            "selector": ".control, .chips"
+          },
+          "--stroke-default": {
+            "property": "box-shadow",
+            "selector": ".control, .chips"
+          },
+          "--border-default": {
+            "property": "box-shadow",
+            "selector": ".control, .chips"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".control, .chips"
+          },
+          "--fill-primary": {
+            "property": "background",
+            "selector": ".control, .chips"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".control, .chips"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".control, .chips"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".control, .chips"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".control, .chips"
+          },
+          "--border-focus": {
+            "property": "box-shadow",
+            "selector": ".control:focus-within, .chips:focus-within"
+          },
+          "--border-attention": {
+            "property": "box-shadow",
+            "selector": ".control:has([aria-invalid=\"true\"]), .chips:has([aria-invalid=\"true\"])"
+          },
+          "--fill-disabled": {
+            "property": "background",
+            "selector": ".control:has(input:disabled), .chips:has(input:disabled)"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".control:has(input:disabled), .chips:has(input:disabled)"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".control input::placeholder, .chips input::placeholder"
+          },
+          "--space-400": {
+            "property": "width",
+            "selector": ".action"
+          },
+          "--radius-button-primary": {
+            "property": "border-radius",
+            "selector": ".action"
+          },
+          "--stroke-thick": {
+            "property": "box-shadow",
+            "selector": ".control:focus-within, .chips:focus-within"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
+          },
+          "--space-025": {
+            "property": "outline-offset",
+            "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".popup"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".popup"
+          },
+          "--elevation-400-menu-panel": {
+            "property": "box-shadow",
+            "selector": ".popup"
+          },
+          "--space-100": {
+            "property": "padding-inline",
+            "selector": ".control, .chips"
+          },
+          "--space-500": {
+            "property": "min-height",
+            "selector": ".item"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".item[data-highlighted]"
+          },
+          "--font-size-caption-sm": {
+            "property": "font-size",
+            "selector": ".groupLabel, .popup [role=\"status\"]:not(:empty)"
+          },
+          "--line-height-caption-sm": {
+            "property": "line-height",
+            "selector": ".groupLabel, .popup [role=\"status\"]:not(:empty)"
+          },
+          "--divider-default": {
+            "property": "background",
+            "selector": ".separator"
+          },
+          "--radius-tag-primary": {
+            "property": "border-radius",
+            "selector": ".chip"
+          },
+          "--fill-secondary": {
+            "property": "background",
+            "selector": ".chip"
+          },
+          "--font-size-caption-md": {
+            "property": "font-size",
+            "selector": ".chip"
+          },
+          "--line-height-caption-md": {
+            "property": "line-height",
+            "selector": ".chip"
+          }
+        },
+        "accessibility": {
+          "keyboardNav": [
+            "tab",
+            "arrow-down",
+            "arrow-up",
+            "enter",
+            "escape"
+          ],
+          "notes": "Name the searchable input and localize each icon button. Arrow keys navigate options, Enter selects and Escape dismisses."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "The canonical story verifies filtering, empty results, keyboard selection and dismissal."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#BasicCombobox"
+        ]
+      }
+    },
+    {
       "id": "Coupon",
       "source": "components/Coupon",
       "meta": {
@@ -3348,6 +3800,598 @@
           "interaction": "covered",
           "rationale": "Storybook covers child-view navigation. Browser tests cover touch snap points, keyboard resizing, footer geometry, focus restoration and reduced motion."
         }
+      }
+    },
+    {
+      "id": "DropdownMenu",
+      "source": "components/DropdownMenu",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "DropdownMenu",
+        "category": "layout",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "A button-triggered action menu with grouped commands, shortcuts, checkboxes, radio choices and nested menus.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "DropdownMenu",
+          "DropdownMenuProps",
+          "DropdownMenuTrigger",
+          "DropdownMenuPortal",
+          "DropdownMenuGroup",
+          "DropdownMenuRadioGroup",
+          "DropdownMenuSub",
+          "DropdownMenuContentProps",
+          "DropdownMenuContent",
+          "DropdownMenuSubContent",
+          "DropdownMenuLabel",
+          "DropdownMenuItem",
+          "DropdownMenuSubTrigger",
+          "DropdownMenuCheckboxItem",
+          "DropdownMenuRadioItem",
+          "DropdownMenuSeparator",
+          "DropdownMenuShortcut"
+        ],
+        "props": {
+          "open": {
+            "type": "boolean",
+            "required": false
+          },
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false
+          },
+          "onOpenChange": {
+            "type": "function",
+            "required": false
+          },
+          "modal": {
+            "type": "boolean",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-050",
+          "--stroke-default",
+          "--border-default",
+          "--radius-surface-default",
+          "--surface-primary",
+          "--elevation-400-menu-panel",
+          "--text-primary",
+          "--font-weight-normal",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--font-family-ios",
+          "--space-100",
+          "--space-400",
+          "--radius-component-default",
+          "--surface-secondary",
+          "--stroke-thick",
+          "--focus-ring",
+          "--text-error",
+          "--fill-error-secondary",
+          "--text-disabled",
+          "--text-secondary",
+          "--font-size-caption-sm",
+          "--line-height-caption-sm",
+          "--font-weight-emphasize",
+          "--space-200",
+          "--divider-default"
+        ],
+        "tokenBindings": {
+          "--space-050": {
+            "property": "padding",
+            "selector": ".popup"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".popup"
+          },
+          "--border-default": {
+            "property": "border",
+            "selector": ".popup"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".popup"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".popup"
+          },
+          "--elevation-400-menu-panel": {
+            "property": "box-shadow",
+            "selector": ".popup"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".popup"
+          },
+          "--font-weight-normal": {
+            "property": "font",
+            "selector": ".popup"
+          },
+          "--font-size-body-md": {
+            "property": "font",
+            "selector": ".popup"
+          },
+          "--line-height-body-md": {
+            "property": "font",
+            "selector": ".popup"
+          },
+          "--font-family-ios": {
+            "property": "font",
+            "selector": ".popup"
+          },
+          "--space-100": {
+            "property": "gap",
+            "selector": ".item"
+          },
+          "--space-400": {
+            "property": "min-height",
+            "selector": ".item"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".item"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".item[data-highlighted]:not([data-disabled])"
+          },
+          "--stroke-thick": {
+            "property": "outline",
+            "selector": ".item:focus-visible"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".item:focus-visible"
+          },
+          "--text-error": {
+            "property": "color",
+            "selector": ".item[data-variant=\"destructive\"]"
+          },
+          "--fill-error-secondary": {
+            "property": "background",
+            "selector": ".item[data-variant=\"destructive\"][data-highlighted]:not([data-disabled])"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".item[data-disabled]"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".label"
+          },
+          "--font-size-caption-sm": {
+            "property": "font-size",
+            "selector": ".label"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".label"
+          },
+          "--space-200": {
+            "property": "width",
+            "selector": ".item > svg"
+          },
+          "--divider-default": {
+            "property": "background",
+            "selector": ".separator"
+          },
+          "--line-height-caption-sm": {
+            "property": "line-height",
+            "selector": ".label"
+          }
+        },
+        "accessibility": {
+          "role": "menu",
+          "notes": "Base UI provides typeahead, arrow keys, nested menus, selection semantics, dismissal and focus return."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase verifies keyboard opening, checkbox and radio selection and focus return from nested menus."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ShoppingListMenu"
+        ]
+      }
+    },
+    {
+      "id": "EmptyState",
+      "source": "components/EmptyState",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "EmptyState",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Compose empty states with media, a heading, descriptive text and optional actions.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "EmptyStateProps",
+          "EmptyState",
+          "EmptyStateHeaderProps",
+          "EmptyStateHeader",
+          "EmptyStateMediaProps",
+          "EmptyStateMedia",
+          "EmptyStateTitleProps",
+          "EmptyStateTitle",
+          "EmptyStateDescriptionProps",
+          "EmptyStateDescription",
+          "EmptyStateContentProps",
+          "EmptyStateContent"
+        ],
+        "props": {
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-200",
+          "--space-300",
+          "--radius-surface-default",
+          "--text-primary",
+          "--font-family-ios",
+          "--space-100",
+          "--space-500",
+          "--radius-component-default",
+          "--surface-secondary",
+          "--font-size-heading-sm",
+          "--line-height-heading-sm",
+          "--font-weight-semibold",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--text-secondary"
+        ],
+        "tokenBindings": {
+          "--space-200": {
+            "property": "gap",
+            "selector": ".root"
+          },
+          "--space-300": {
+            "property": "padding",
+            "selector": ".root"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".root"
+          },
+          "--space-100": {
+            "property": "gap",
+            "selector": ".header, .content"
+          },
+          "--space-500": {
+            "property": "width",
+            "selector": ".media[data-variant=\"icon\"]"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".media[data-variant=\"icon\"]"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".media[data-variant=\"icon\"]"
+          },
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".root .title"
+          },
+          "--line-height-heading-sm": {
+            "property": "line-height",
+            "selector": ".root .title"
+          },
+          "--font-weight-semibold": {
+            "property": "font-weight",
+            "selector": ".root .title"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".description"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".description"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          }
+        },
+        "accessibility": {
+          "role": "none",
+          "notes": "The title is an h2. Controls provided by the host retain their native semantics."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase invokes the host action by its accessible name."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#SavedLists"
+        ]
+      }
+    },
+    {
+      "id": "Field",
+      "source": "components/Field",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Field",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Groups a form control with its label, description, and validation message.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "Field",
+          "FieldProps",
+          "FieldLabel",
+          "FieldLabelProps",
+          "FieldDescription",
+          "FieldDescriptionProps",
+          "FieldError",
+          "FieldErrorProps",
+          "FieldGroup",
+          "FieldSet",
+          "FieldLegend",
+          "FieldContent",
+          "FieldTitle",
+          "FieldSeparator"
+        ],
+        "composes": [
+          "Textarea",
+          "Divider"
+        ],
+        "props": {
+          "name": {
+            "type": "string",
+            "required": false,
+            "description": "Overrides the control's native form name."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "description": "Disables the associated control."
+          },
+          "invalid": {
+            "type": "boolean",
+            "required": false,
+            "description": "Supplies invalid state from an external form."
+          },
+          "validationMode": {
+            "type": "onSubmit | onBlur | onChange",
+            "required": false,
+            "description": "Defaults to the parent Base UI Form mode, or onSubmit."
+          },
+          "validate": {
+            "type": "function",
+            "required": false,
+            "description": "Custom validation callback returning error messages."
+          },
+          "match": {
+            "type": "boolean | keyof ValidityState",
+            "required": false,
+            "description": "On FieldError, chooses which validity state displays the message. Set true for external errors."
+          },
+          "orientation": {
+            "type": "vertical | horizontal | responsive",
+            "required": false,
+            "default": "vertical",
+            "description": "Label and control layout on Field."
+          },
+          "layout": {
+            "type": "stack | responsive",
+            "required": false,
+            "default": "stack",
+            "description": "FieldGroup stacks its children or lays them out in responsive columns."
+          },
+          "variant": {
+            "type": "legend | label",
+            "required": false,
+            "default": "legend",
+            "description": "Typography variant for FieldLegend."
+          },
+          "errors": {
+            "type": "Array<{ message?: string } | undefined>",
+            "required": false,
+            "description": "External messages for FieldError. Duplicate or empty messages are omitted."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only"
+          },
+          "type": {
+            "ruleId": "type-hierarchy"
+          },
+          "disabled": {
+            "ruleId": "no-opacity-disabled"
+          }
+        },
+        "tokens": [
+          "--space-050",
+          "--font-family-ios",
+          "--text-primary",
+          "--text-secondary",
+          "--text-error",
+          "--text-disabled",
+          "--font-size-caption-md",
+          "--line-height-caption-md",
+          "--font-weight-emphasize",
+          "--font-size-caption-sm",
+          "--line-height-caption-sm",
+          "--space-100",
+          "--space-150",
+          "--space-200",
+          "--font-size-heading-sm",
+          "--line-height-heading-sm",
+          "--stroke-default",
+          "--border-default",
+          "--radius-surface-default",
+          "--border-focus",
+          "--surface-secondary"
+        ],
+        "tokenBindings": {
+          "--space-050": {
+            "property": "gap",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".label"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          },
+          "--text-error": {
+            "property": "color",
+            "selector": ".error"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".legend[data-disabled], .label[data-disabled] [data-slot=\"field-title\"], .label[data-disabled], .description[data-disabled]"
+          },
+          "--font-size-caption-md": {
+            "property": "font-size",
+            "selector": ".label"
+          },
+          "--line-height-caption-md": {
+            "property": "line-height",
+            "selector": ".label"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".label"
+          },
+          "--font-size-caption-sm": {
+            "property": "font-size",
+            "selector": ".description"
+          },
+          "--line-height-caption-sm": {
+            "property": "line-height",
+            "selector": ".description"
+          },
+          "--space-100": {
+            "property": "gap",
+            "selector": ".root[data-orientation=\"horizontal\"]"
+          },
+          "--space-150": {
+            "property": "margin-block-end",
+            "selector": ".legend"
+          },
+          "--space-200": {
+            "property": "gap",
+            "selector": ".group"
+          },
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".legend"
+          },
+          "--line-height-heading-sm": {
+            "property": "line-height",
+            "selector": ".legend"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+          },
+          "--border-default": {
+            "property": "border",
+            "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+          },
+          "--border-focus": {
+            "property": "border-color",
+            "selector": ".label:has([data-checked])"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".label:has([data-checked])"
+          }
+        },
+        "accessibility": {
+          "notes": "FieldLabel activates and names the native control. Descriptions and visible errors are associated automatically."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "The canonical story verifies label focus, descriptive associations, validation, and error clearing."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#NotesField",
+          "./delivery/examples.tsx#DeliveryPreferences",
+          "./price-range/examples.tsx#PriceRange"
+        ]
       }
     },
     {
@@ -4703,12 +5747,9 @@
           "--line-height-body-xl",
           "--line-height-caption-md",
           "--letter-spacing-normal",
-          "--space-0",
           "--space-025",
           "--space-050",
           "--space-100",
-          "--space-150",
-          "--space-200",
           "--space-300",
           "--space-500",
           "--space-600",
@@ -4717,12 +5758,8 @@
         ],
         "tokenBindings": {
           "--space-100": {
-            "property": "padding-inline-end",
+            "property": "padding-inline",
             "selector": ".field"
-          },
-          "--space-200": {
-            "property": "padding-inline-start",
-            "selector": ".root[data-action='true'] .field"
           },
           "--space-300": {
             "property": "width",
@@ -5048,6 +6085,204 @@
           "interaction": "not-applicable",
           "rationale": "Static original artwork. Storybook verifies all four assets load; browser tests verify geometry and accessible naming."
         }
+      }
+    },
+    {
+      "id": "NavigationMenu",
+      "source": "components/NavigationMenu",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "NavigationMenu",
+        "category": "navigation",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Site navigation with links and anchored disclosure panels.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "NavigationMenuProps",
+          "NavigationMenu",
+          "NavigationMenuItem",
+          "NavigationMenuList",
+          "NavigationMenuTrigger",
+          "NavigationMenuContent",
+          "NavigationMenuLink",
+          "NavigationMenuIndicator",
+          "NavigationMenuPositioner",
+          "navigationMenuTriggerStyle"
+        ],
+        "props": {
+          "value": {
+            "type": "Value | null",
+            "required": false
+          },
+          "defaultValue": {
+            "type": "Value | null",
+            "required": false
+          },
+          "onValueChange": {
+            "type": "function",
+            "required": false
+          },
+          "orientation": {
+            "type": "horizontal | vertical",
+            "required": false
+          },
+          "side": {
+            "type": "Side",
+            "required": false
+          },
+          "align": {
+            "type": "Align",
+            "required": false
+          },
+          "sideOffset": {
+            "type": "number",
+            "required": false
+          },
+          "alignOffset": {
+            "type": "number",
+            "required": false
+          },
+          "positioner": {
+            "type": "ReactElement",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-050",
+          "--space-400",
+          "--space-100",
+          "--radius-component-default",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--font-weight-emphasize",
+          "--text-disabled",
+          "--surface-secondary",
+          "--stroke-thick",
+          "--focus-ring",
+          "--space-150",
+          "--stroke-default",
+          "--border-default",
+          "--radius-surface-default",
+          "--surface-primary",
+          "--elevation-400-menu-panel",
+          "--button-tertiary-active"
+        ],
+        "tokenBindings": {
+          "--space-050": {
+            "property": "gap",
+            "selector": ".list"
+          },
+          "--space-400": {
+            "property": "min-height",
+            "selector": ".trigger"
+          },
+          "--space-100": {
+            "property": "padding",
+            "selector": ".trigger"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".trigger"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".trigger"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".trigger"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".trigger"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".trigger"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".trigger"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".trigger[data-disabled]"
+          },
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".trigger[data-popup-open]"
+          },
+          "--stroke-thick": {
+            "property": "outline",
+            "selector": ".trigger:focus-visible"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".trigger:focus-visible"
+          },
+          "--space-150": {
+            "property": "width",
+            "selector": ".chevron"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".popup"
+          },
+          "--border-default": {
+            "property": "border",
+            "selector": ".popup"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".popup"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".popup"
+          },
+          "--elevation-400-menu-panel": {
+            "property": "box-shadow",
+            "selector": ".popup"
+          },
+          "--button-tertiary-active": {
+            "property": "background",
+            "selector": ".link:active"
+          }
+        },
+        "accessibility": {
+          "role": "navigation",
+          "notes": "Use a named navigation landmark and real links. Base UI handles keyboard navigation, touch and dismissal."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase opens a panel by keyboard and checks its destination, dismissal and focus return."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ShopNavigation"
+        ]
       }
     },
     {
@@ -5793,7 +7028,8 @@
         "composes": [
           "ProductCard",
           "Tabs",
-          "Button"
+          "Button",
+          "Skeleton"
         ],
         "props": {
           "title": {
@@ -5977,8 +7213,6 @@
           "--button-secondary",
           "--button-secondary-active",
           "--text-primary",
-          "--fill-skeleton",
-          "--fill-skeleton-inverse",
           "--divider-default",
           "--divider-emphasis",
           "--border-default",
@@ -6014,10 +7248,6 @@
           "--surface-secondary": {
             "property": "background-color",
             "selector": ".root[data-appearance='themed'], .root[data-appearance='atmospheric']"
-          },
-          "--fill-skeleton": {
-            "property": "background-color",
-            "selector": ".skeletonMedia, .skeletonLine, .skeletonPrice"
           },
           "--radius-component-default": {
             "property": "border-radius",
@@ -6467,6 +7697,143 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#ProductReviewSectionExample"
+        ]
+      }
+    },
+    {
+      "id": "Progress",
+      "source": "components/Progress",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Progress",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Display task completion with a labeled track, localized values and indeterminate state.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "ProgressProps",
+          "Progress",
+          "ProgressLabel",
+          "ProgressValue",
+          "ProgressTrack",
+          "ProgressIndicator"
+        ],
+        "props": {
+          "value": {
+            "type": "number | null",
+            "required": true
+          },
+          "min": {
+            "type": "number",
+            "required": false
+          },
+          "max": {
+            "type": "number",
+            "required": false
+          },
+          "locale": {
+            "type": "Intl.LocalesArgument",
+            "required": false
+          },
+          "format": {
+            "type": "Intl.NumberFormatOptions",
+            "required": false
+          },
+          "getAriaValueText": {
+            "type": "function",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-100",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--font-weight-emphasize",
+          "--text-secondary",
+          "--space-050",
+          "--fill-secondary",
+          "--radius-full",
+          "--fill-inverse"
+        ],
+        "tokenBindings": {
+          "--space-100": {
+            "property": "gap",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".root"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".root"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".root"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".label"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".value"
+          },
+          "--space-050": {
+            "property": "height",
+            "selector": ".track"
+          },
+          "--fill-secondary": {
+            "property": "background",
+            "selector": ".track"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".track"
+          },
+          "--fill-inverse": {
+            "property": "background",
+            "selector": ".indicator"
+          }
+        },
+        "accessibility": {
+          "role": "progressbar",
+          "notes": "Name the bar with ProgressLabel or aria-label. Base UI provides range semantics; unknown totals omit aria-valuenow."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase adjusts a controlled slider and verifies the accessible and displayed completion values."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#TransferProgress"
         ]
       }
     },
@@ -7174,7 +8541,6 @@
           "--font-family-ios",
           "--font-size-body-md",
           "--line-height-body-md",
-          "--radius-button-primary",
           "--radius-component-default",
           "--radius-surface-default",
           "--border-attention",
@@ -7207,13 +8573,9 @@
             "property": "border-color",
             "selector": ".trigger, .content"
           },
-          "--radius-button-primary": {
-            "property": "border-radius",
-            "selector": ".trigger"
-          },
           "--radius-component-default": {
             "property": "border-radius",
-            "selector": ".item"
+            "selector": ".trigger, .item"
           },
           "--radius-surface-default": {
             "property": "border-radius",
@@ -7482,6 +8844,259 @@
       }
     },
     {
+      "id": "Skeleton",
+      "source": "components/Skeleton",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Skeleton",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "A decorative loading placeholder sized to the content it replaces.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "SkeletonProps",
+          "Skeleton"
+        ],
+        "props": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "style": {
+            "type": "CSSProperties",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--fill-skeleton",
+          "--fill-skeleton-inverse",
+          "--radius-component-default"
+        ],
+        "tokenBindings": {
+          "--fill-skeleton": {
+            "property": "background-color",
+            "selector": ".root"
+          },
+          "--fill-skeleton-inverse": {
+            "property": "background-image",
+            "selector": ".root"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ":where(.root)"
+          }
+        },
+        "accessibility": {
+          "role": "none",
+          "notes": "Decorative span hidden from assistive technology. The host loading region manages aria-busy."
+        },
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Decorative placeholder with no user interaction."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ProfileSkeleton"
+        ]
+      }
+    },
+    {
+      "id": "Slider",
+      "source": "components/Slider",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Slider",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Select one value or multiple values along a scale using Base UI.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "SliderProps",
+          "Slider"
+        ],
+        "props": {
+          "value": {
+            "type": "number | readonly number[]",
+            "required": false
+          },
+          "defaultValue": {
+            "type": "number | readonly number[]",
+            "required": false
+          },
+          "min": {
+            "type": "number",
+            "required": false
+          },
+          "max": {
+            "type": "number",
+            "required": false
+          },
+          "step": {
+            "type": "number",
+            "required": false
+          },
+          "orientation": {
+            "type": "horizontal | vertical",
+            "required": false
+          },
+          "getAriaLabel": {
+            "type": "(index: number) => string",
+            "required": false
+          },
+          "getAriaValueText": {
+            "type": "(formatted: string, value: number, index: number) => string",
+            "required": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false
+          },
+          "name": {
+            "type": "string",
+            "required": false
+          },
+          "onValueChange": {
+            "type": "function",
+            "required": false
+          },
+          "onValueCommitted": {
+            "type": "function",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-100",
+          "--space-600",
+          "--space-050",
+          "--fill-disabled",
+          "--radius-full",
+          "--fill-inverse",
+          "--space-200",
+          "--stroke-default",
+          "--border-focus",
+          "--fill-primary",
+          "--stroke-thick",
+          "--focus-ring",
+          "--space-025",
+          "--border-default",
+          "--text-disabled"
+        ],
+        "tokenBindings": {
+          "--space-100": {
+            "property": "padding-inline",
+            "selector": ".root"
+          },
+          "--space-600": {
+            "property": "height",
+            "selector": ".control"
+          },
+          "--space-050": {
+            "property": "height",
+            "selector": ".track"
+          },
+          "--fill-disabled": {
+            "property": "background",
+            "selector": ".track"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".track"
+          },
+          "--fill-inverse": {
+            "property": "background",
+            "selector": ".indicator"
+          },
+          "--space-200": {
+            "property": "width",
+            "selector": ".thumb"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".thumb"
+          },
+          "--border-focus": {
+            "property": "border",
+            "selector": ".thumb"
+          },
+          "--fill-primary": {
+            "property": "background",
+            "selector": ".thumb"
+          },
+          "--stroke-thick": {
+            "property": "outline",
+            "selector": ".thumb:has(input:focus-visible)"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".thumb:has(input:focus-visible)"
+          },
+          "--space-025": {
+            "property": "outline-offset",
+            "selector": ".thumb:has(input:focus-visible)"
+          },
+          "--border-default": {
+            "property": "border-color",
+            "selector": ".root[data-disabled] .thumb"
+          },
+          "--text-disabled": {
+            "property": "background",
+            "selector": ".root[data-disabled] .indicator"
+          }
+        },
+        "accessibility": {
+          "role": "slider",
+          "notes": "Give each thumb a distinct name. Base UI owns range inputs, pointer dragging and keyboard navigation."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase adjusts the lower thumb by keyboard and checks the upper value."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#BudgetSlider"
+        ]
+      }
+    },
+    {
       "id": "SocialMediaGallery",
       "source": "components/SocialMediaGallery",
       "meta": {
@@ -7697,6 +9312,81 @@
       }
     },
     {
+      "id": "Spinner",
+      "source": "components/Spinner",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Spinner",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "An indeterminate loading indicator that inherits its size and color.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "SpinnerProps",
+          "Spinner"
+        ],
+        "props": {
+          "aria-label": {
+            "type": "string",
+            "required": false
+          },
+          "aria-labelledby": {
+            "type": "string",
+            "required": false
+          },
+          "style": {
+            "type": "CSSProperties",
+            "required": false
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--stroke-thick",
+          "--radius-full"
+        ],
+        "tokenBindings": {
+          "--stroke-thick": {
+            "property": "border",
+            "selector": ".root"
+          },
+          "--radius-full": {
+            "property": "border-radius",
+            "selector": ".root"
+          }
+        },
+        "accessibility": {
+          "role": "status when named",
+          "notes": "A named spinner exposes a status. Unnamed spinners are decorative beside an existing status or busy button."
+        },
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "Read-only status indicator with no user interaction."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#LoadingOrders"
+        ]
+      }
+    },
+    {
       "id": "Switch",
       "source": "components/Switch",
       "meta": {
@@ -7882,7 +9572,8 @@
         },
         "usageRef": "./usage.md",
         "examples": [
-          "./examples.tsx#BasicSwitch"
+          "./examples.tsx#BasicSwitch",
+          "./validation/examples.tsx#TermsSwitch"
         ]
       }
     },
@@ -8638,6 +10329,214 @@
       }
     },
     {
+      "id": "Textarea",
+      "source": "components/Textarea",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Textarea",
+        "category": "form",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Native multiline form control with YAMI styles and Base UI Field integration.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "Textarea",
+          "TextareaProps"
+        ],
+        "props": {
+          "rows": {
+            "type": "number",
+            "required": false,
+            "default": 3,
+            "description": "Explicit rows use native sizing. When omitted, supporting browsers grow the control with its content."
+          },
+          "value": {
+            "type": "string",
+            "required": false,
+            "description": "Controlled value. Update it in onChange."
+          },
+          "defaultValue": {
+            "type": "string",
+            "required": false,
+            "description": "Initial uncontrolled value."
+          },
+          "onChange": {
+            "type": "React.ChangeEventHandler<HTMLTextAreaElement>",
+            "required": false,
+            "description": "Handles native multiline text changes."
+          },
+          "name": {
+            "type": "string",
+            "required": false,
+            "description": "Native submission name. Field can supply it."
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "description": "Requires a value for form validation."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "description": "Disables interaction and form submission for this control."
+          },
+          "readOnly": {
+            "type": "boolean",
+            "required": false,
+            "description": "Allows focus and copying while preventing edits."
+          },
+          "aria-invalid": {
+            "type": "boolean | string",
+            "required": false,
+            "description": "Mark the control invalid. True displays the YAMI error border."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only"
+          },
+          "border": {
+            "ruleId": "border-strength"
+          },
+          "focus": {
+            "ruleId": "focus-style"
+          },
+          "disabled": {
+            "ruleId": "no-opacity-disabled"
+          },
+          "target": {
+            "ruleId": "tap-target"
+          }
+        },
+        "tokens": [
+          "--space-800",
+          "--space-600",
+          "--space-100",
+          "--stroke-default",
+          "--border-default",
+          "--border-focus",
+          "--border-attention",
+          "--stroke-thick",
+          "--space-025",
+          "--focus-ring",
+          "--radius-component-default",
+          "--fill-primary",
+          "--fill-disabled",
+          "--text-primary",
+          "--text-secondary",
+          "--text-disabled",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--line-height-body-md"
+        ],
+        "tokenBindings": {
+          "--space-800": {
+            "property": "min-block-size",
+            "selector": ".control[data-auto-size]"
+          },
+          "--space-600": {
+            "property": "min-block-size",
+            "selector": ".control"
+          },
+          "--space-100": {
+            "property": "padding",
+            "selector": ".control"
+          },
+          "--stroke-default": {
+            "property": "--textarea-stroke",
+            "selector": ".control"
+          },
+          "--border-default": {
+            "property": "--textarea-border-color",
+            "selector": ".control"
+          },
+          "--border-focus": {
+            "property": "--textarea-border-color",
+            "selector": ".control:focus"
+          },
+          "--border-attention": {
+            "property": "--textarea-border-color",
+            "selector": ".control[aria-invalid=\"true\"]:not(:disabled)"
+          },
+          "--stroke-thick": {
+            "property": "--textarea-stroke",
+            "selector": ".control:focus"
+          },
+          "--space-025": {
+            "property": "outline-offset",
+            "selector": ".control:not([data-pointer-focus]):focus-visible"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".control:not([data-pointer-focus]):focus-visible"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".control"
+          },
+          "--fill-primary": {
+            "property": "background",
+            "selector": ".control"
+          },
+          "--fill-disabled": {
+            "property": "background",
+            "selector": ".control:disabled"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".control"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".control::placeholder"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".control:disabled"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".control"
+          },
+          "--font-size-body-md": {
+            "property": "font-size",
+            "selector": ".control"
+          },
+          "--line-height-body-md": {
+            "property": "line-height",
+            "selector": ".control"
+          }
+        },
+        "accessibility": {
+          "role": "textbox",
+          "tapTargetMin": 48,
+          "notes": "Use a visible label. Native editing, multiline keyboard input, and form semantics are preserved."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "The canonical story verifies native text entry and line breaks."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#NotesTextarea"
+        ]
+      }
+    },
+    {
       "id": "ThemeHero",
       "source": "components/ThemeHero",
       "meta": {
@@ -8988,6 +10887,376 @@
         "usageRef": "./usage.md",
         "examples": [
           "./examples.tsx#ThemeProductListExample"
+        ]
+      }
+    },
+    {
+      "id": "Toast",
+      "source": "components/Toast",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Toast",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Transient notifications with status icons, actions, stacking and async updates.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "createToastManager",
+          "useToastManager",
+          "toast",
+          "ToastProvider",
+          "ToastPortal",
+          "ToastProps",
+          "Toast",
+          "ToastViewport",
+          "ToastContent",
+          "ToastTitle",
+          "ToastDescription",
+          "ToastAction",
+          "ToastClose",
+          "ToastPosition",
+          "ToasterProps",
+          "Toaster"
+        ],
+        "props": {
+          "toast": {
+            "type": "ToastObject",
+            "required": true
+          }
+        },
+        "rules": {
+          "tokens": {
+            "ruleId": "token-exists"
+          }
+        },
+        "tokens": [
+          "--space-200",
+          "--surface-primary",
+          "--stroke-default",
+          "--border-default",
+          "--radius-surface-default",
+          "--elevation-400-menu-panel",
+          "--text-primary",
+          "--font-weight-normal",
+          "--font-size-body-md",
+          "--line-height-body-md",
+          "--font-family-ios",
+          "--space-100",
+          "--stroke-thick",
+          "--focus-ring",
+          "--space-150",
+          "--font-weight-emphasize",
+          "--text-secondary",
+          "--space-050",
+          "--text-success",
+          "--text-info",
+          "--text-warning",
+          "--text-error"
+        ],
+        "tokenBindings": {
+          "--space-200": {
+            "property": "inset-inline",
+            "selector": ".viewport"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".root"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".root"
+          },
+          "--border-default": {
+            "property": "border",
+            "selector": ".root"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".root"
+          },
+          "--elevation-400-menu-panel": {
+            "property": "box-shadow",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--font-weight-normal": {
+            "property": "font",
+            "selector": ".root"
+          },
+          "--font-size-body-md": {
+            "property": "font",
+            "selector": ".root"
+          },
+          "--line-height-body-md": {
+            "property": "font",
+            "selector": ".root"
+          },
+          "--font-family-ios": {
+            "property": "font",
+            "selector": ".root"
+          },
+          "--space-100": {
+            "property": "--lift",
+            "selector": ".root"
+          },
+          "--stroke-thick": {
+            "property": "outline",
+            "selector": ".root:focus-visible"
+          },
+          "--focus-ring": {
+            "property": "outline",
+            "selector": ".root:focus-visible"
+          },
+          "--space-150": {
+            "property": "padding",
+            "selector": ".content"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".title"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          },
+          "--space-050": {
+            "property": "margin-top",
+            "selector": ".title + .description"
+          },
+          "--text-success": {
+            "property": "color",
+            "selector": ".root[data-type=\"success\"] .icon"
+          },
+          "--text-info": {
+            "property": "color",
+            "selector": ".root[data-type=\"info\"] .icon"
+          },
+          "--text-warning": {
+            "property": "color",
+            "selector": ".root[data-type=\"warning\"] .icon"
+          },
+          "--text-error": {
+            "property": "color",
+            "selector": ".root[data-type=\"error\"] .icon"
+          }
+        },
+        "accessibility": {
+          "role": "dialog / alertdialog",
+          "notes": "Base UI manages live regions, F6 focus, pause on interaction and dismissal."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "Showcase verifies undo and explicit dismissal."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#SaveForLater"
+        ],
+        "composes": [
+          "Button",
+          "Spinner"
+        ]
+      }
+    },
+    {
+      "id": "Tooltip",
+      "source": "components/Tooltip",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "Tooltip",
+        "category": "display",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "A short supplementary hint on hover or keyboard focus with a YAMI inverse surface.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "Tooltip",
+          "TooltipProps",
+          "TooltipProvider",
+          "TooltipTrigger",
+          "TooltipContent",
+          "TooltipContentProps",
+          "DismissibleTooltip",
+          "DismissibleTooltipProps"
+        ],
+        "props": {
+          "open": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled open state on Tooltip."
+          },
+          "defaultOpen": {
+            "type": "boolean",
+            "required": false,
+            "description": "Initial uncontrolled open state on Tooltip."
+          },
+          "onOpenChange": {
+            "type": "function",
+            "required": false,
+            "description": "Called when Tooltip requests an open state change."
+          },
+          "side": {
+            "type": "top | right | bottom | left",
+            "required": false,
+            "default": "top",
+            "description": "Preferred side for TooltipContent. It can flip to fit the viewport."
+          },
+          "align": {
+            "type": "start | center | end",
+            "required": false,
+            "default": "center",
+            "description": "Alignment of TooltipContent relative to the trigger."
+          },
+          "sideOffset": {
+            "type": "number",
+            "required": false,
+            "default": 4,
+            "description": "Distance from the trigger in pixels."
+          },
+          "alignOffset": {
+            "type": "number",
+            "required": false,
+            "default": 0,
+            "description": "Offset along the alignment axis in pixels."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only"
+          },
+          "type": {
+            "ruleId": "type-hierarchy"
+          },
+          "radius": {
+            "ruleId": "no-custom-radii"
+          }
+        },
+        "tokens": [
+          "--space-025",
+          "--space-100",
+          "--radius-sm",
+          "--elevation-300-tooltip",
+          "--fill-inverse",
+          "--text-primary-inverse",
+          "--font-family-ios",
+          "--font-size-caption-sm",
+          "--line-height-caption-sm",
+          "--stroke-default",
+          "--border-default-inverse",
+          "--radius-tag-primary",
+          "--space-050",
+          "--space-200",
+          "--space-300"
+        ],
+        "tokenBindings": {
+          "--space-025": {
+            "property": "bottom",
+            "selector": ".arrow[data-side=\"top\"]"
+          },
+          "--space-100": {
+            "property": "padding",
+            "selector": ".content"
+          },
+          "--elevation-300-tooltip": {
+            "property": "box-shadow",
+            "selector": ".content"
+          },
+          "--radius-sm": {
+            "property": "border-radius",
+            "selector": ".content"
+          },
+          "--fill-inverse": {
+            "property": "background",
+            "selector": ".content"
+          },
+          "--text-primary-inverse": {
+            "property": "color",
+            "selector": ".content"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": ".content"
+          },
+          "--font-size-caption-sm": {
+            "property": "font-size",
+            "selector": ".content"
+          },
+          "--line-height-caption-sm": {
+            "property": "line-height",
+            "selector": ".content"
+          },
+          "--stroke-default": {
+            "property": "border",
+            "selector": ".content kbd"
+          },
+          "--border-default-inverse": {
+            "property": "border",
+            "selector": ".content kbd"
+          },
+          "--radius-tag-primary": {
+            "property": "border-radius",
+            "selector": ".content kbd"
+          },
+          "--space-050": {
+            "property": "padding",
+            "selector": ".content"
+          },
+          "--space-300": {
+            "property": "height",
+            "selector": ".dismissible .closeButton"
+          },
+          "--space-200": {
+            "property": "width",
+            "selector": ".closeIcon"
+          }
+        },
+        "accessibility": {
+          "keyboardNav": [
+            "tab",
+            "escape"
+          ],
+          "notes": "Use a named, focusable trigger. Content is supplemental and has no interactive elements. Touch users rely on the visible label. DismissibleTooltip uses a named nonmodal dialog with a labeled close button and leaves focus in place on initial display."
+        },
+        "testing": {
+          "interaction": "covered",
+          "rationale": "The canonical story verifies hover, keyboard focus, Escape dismissal, and retained focus."
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "@base-ui/react"
+          ],
+          "peer": [],
+          "devOnly": [
+            "@storybook/react-vite",
+            "storybook"
+          ]
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#HoverTooltip",
+          "./examples.tsx#LibraryHint"
         ]
       }
     },

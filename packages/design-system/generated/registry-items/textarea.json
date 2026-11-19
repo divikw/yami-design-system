@@ -1,0 +1,167 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "textarea",
+  "title": "Textarea",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Native multiline form control with YAMI styles and Base UI Field integration.",
+  "source": "components/Textarea",
+  "files": [
+    {
+      "source": "components/Textarea/index.ts",
+      "target": "components/Textarea/index.ts"
+    },
+    {
+      "source": "components/Textarea/Textarea.module.css",
+      "target": "components/Textarea/Textarea.module.css"
+    },
+    {
+      "source": "components/Textarea/Textarea.tsx",
+      "target": "components/Textarea/Textarea.tsx"
+    }
+  ],
+  "exports": [
+    "Textarea",
+    "TextareaProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Textarea/usage.md",
+    "stories": [
+      "components/Textarea/Textarea.stories.tsx"
+    ],
+    "examples": [
+      "components/Textarea/examples.tsx#NotesTextarea"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-attention",
+      "--border-default",
+      "--border-focus",
+      "--fill-disabled",
+      "--fill-primary",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--line-height-body-md",
+      "--radius-component-default",
+      "--space-025",
+      "--space-100",
+      "--space-600",
+      "--space-800",
+      "--stroke-default",
+      "--stroke-thick",
+      "--text-disabled",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "border-strength",
+      "focus-style",
+      "no-opacity-disabled",
+      "semantic-color-only",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--space-800": {
+        "property": "min-block-size",
+        "selector": ".control[data-auto-size]"
+      },
+      "--space-600": {
+        "property": "min-block-size",
+        "selector": ".control"
+      },
+      "--space-100": {
+        "property": "padding",
+        "selector": ".control"
+      },
+      "--stroke-default": {
+        "property": "--textarea-stroke",
+        "selector": ".control"
+      },
+      "--border-default": {
+        "property": "--textarea-border-color",
+        "selector": ".control"
+      },
+      "--border-focus": {
+        "property": "--textarea-border-color",
+        "selector": ".control:focus"
+      },
+      "--border-attention": {
+        "property": "--textarea-border-color",
+        "selector": ".control[aria-invalid=\"true\"]:not(:disabled)"
+      },
+      "--stroke-thick": {
+        "property": "--textarea-stroke",
+        "selector": ".control:focus"
+      },
+      "--space-025": {
+        "property": "outline-offset",
+        "selector": ".control:not([data-pointer-focus]):focus-visible"
+      },
+      "--focus-ring": {
+        "property": "outline",
+        "selector": ".control:not([data-pointer-focus]):focus-visible"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".control"
+      },
+      "--fill-primary": {
+        "property": "background",
+        "selector": ".control"
+      },
+      "--fill-disabled": {
+        "property": "background",
+        "selector": ".control:disabled"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".control"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".control::placeholder"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".control:disabled"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".control"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".control"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".control"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "textbox",
+      "tapTargetMin": 48,
+      "notes": "Use a visible label. Native editing, multiline keyboard input, and form semantics are preserved."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "93e2d51a5be825a6073a3b2818686a6939b8f85f5e1f2105a4f35fea316d992f"
+}

@@ -8,6 +8,7 @@ import {
   useRef,
 } from "react";
 
+import { Skeleton } from "../Skeleton";
 import { Button } from "../Button";
 import { RailNavigation } from "../Button/RailNavigation";
 import {
@@ -68,12 +69,12 @@ function ProductListSkeleton({
           role="listitem"
           aria-hidden="true"
         >
-          <span className={styles.skeletonMedia} />
+          <Skeleton className={styles.skeletonMedia} />
           <span className={styles.skeletonContent}>
-            <span className={styles.skeletonLineShort} />
-            <span className={styles.skeletonLine} />
-            <span className={styles.skeletonLineMedium} />
-            <span className={styles.skeletonPrice} />
+            <Skeleton className={styles.skeletonLineShort} />
+            <Skeleton className={styles.skeletonLine} />
+            <Skeleton className={styles.skeletonLineMedium} />
+            <Skeleton className={styles.skeletonPrice} />
           </span>
         </div>
       ))}

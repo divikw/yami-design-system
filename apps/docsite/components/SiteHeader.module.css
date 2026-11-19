@@ -250,7 +250,7 @@
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   }
 
-  .menuButton {
+  .tools > .menuButton {
     display: none;
   }
 

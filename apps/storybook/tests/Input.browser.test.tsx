@@ -186,7 +186,7 @@ test.each([false, true])("error fields support keyboard clear and return focus (
 });
 
 for (const density of ["default", "compact"] as const) {
-  test.each([375, 1280])(`${density} keeps 8px right padding with and without icon slots at %ipx`, async (width) => {
+  test.each([375, 1280])(`${density} keeps 8px horizontal padding with and without icon slots at %ipx`, async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
     try {
       await page.viewport(width, 812);
@@ -194,7 +194,10 @@ for (const density of ["default", "compact"] as const) {
         for (const trailing of [false, true]) {
           flushSync(() => root.render(<Input density={density} label="Search" defaultValue="Matcha" state="typing" clearable leadingIcon={leading ? <svg width="20" height="20" aria-hidden="true" /> : undefined} trailingIcon={trailing ? <span>USD</span> : undefined} />));
           const field = container.querySelector<HTMLElement>('div[class*="field"]')!;
+          expect(getComputedStyle(field).paddingLeft).toBe("8px");
           expect(getComputedStyle(field).paddingRight).toBe("8px");
+          const start = leading ? field.firstElementChild! : field.querySelector("input")!;
+          expect(start.getBoundingClientRect().left - field.getBoundingClientRect().left).toBe(8);
           const end = field.lastElementChild!;
           expect(field.getBoundingClientRect().right - end.getBoundingClientRect().right).toBe(8);
         }

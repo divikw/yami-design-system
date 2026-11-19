@@ -120,7 +120,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
   return <ComponentGuide name="Checkbox" slug="checkbox" locale={locale}
     intro={zh ? "用复选框选择一个或多个独立选项。批量选择时，用半选表示只选中了部分项目。" : "Use checkboxes for independent choices. Use the mixed state when only part of a group is selected."}
     previous={{ name: "Card", path: "yami-components-layout-card" }}
-    next={{ name: "Dialog", path: "yami-components-layout-dialog" }}
+    next={{ name: "Combobox", path: "yami-components-forms-combobox" }}
     leadExample={{
       title: zh ? "状态预览" : "State preview",
       code: `${overviewSource.trim()}\n\n<CheckboxOverview labels={${JSON.stringify(overview, null, 2)}} />`,

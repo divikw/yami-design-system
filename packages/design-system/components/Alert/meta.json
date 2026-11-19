@@ -1,0 +1,137 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Alert",
+  "category": "display",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Persistent inline feedback with optional text, icon and action.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "AlertProps",
+    "Alert",
+    "AlertTitle",
+    "AlertDescription",
+    "AlertAction"
+  ],
+  "props": {
+    "variant": {
+      "type": "default | destructive",
+      "required": false,
+      "default": "default"
+    }
+  },
+  "rules": {
+    "tokens": {
+      "ruleId": "token-exists"
+    }
+  },
+  "tokens": [
+    "--space-150",
+    "--space-200",
+    "--stroke-default",
+    "--border-default",
+    "--radius-component-default",
+    "--surface-primary",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--space-025",
+    "--space-100",
+    "--font-weight-emphasize",
+    "--text-secondary",
+    "--space-050",
+    "--text-error"
+  ],
+  "tokenBindings": {
+    "--space-150": {
+      "property": "padding",
+      "selector": ".root"
+    },
+    "--space-200": {
+      "property": "padding",
+      "selector": ".root"
+    },
+    "--stroke-default": {
+      "property": "border",
+      "selector": ".root"
+    },
+    "--border-default": {
+      "property": "border",
+      "selector": ".root"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".root"
+    },
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".root"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".root"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".root"
+    },
+    "--font-size-body-md": {
+      "property": "font-size",
+      "selector": ".root"
+    },
+    "--line-height-body-md": {
+      "property": "line-height",
+      "selector": ".root"
+    },
+    "--space-025": {
+      "property": "margin-block-start",
+      "selector": ".root > svg"
+    },
+    "--space-100": {
+      "property": "margin-inline-end",
+      "selector": ".root > svg"
+    },
+    "--font-weight-emphasize": {
+      "property": "font-weight",
+      "selector": ".title"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".description"
+    },
+    "--space-050": {
+      "property": "margin-block-start",
+      "selector": ".title + .description"
+    },
+    "--text-error": {
+      "property": "color",
+      "selector": ".root[data-variant=\"destructive\"]"
+    }
+  },
+  "accessibility": {
+    "role": "alert",
+    "notes": "Supports status announcements and host-provided links or buttons."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Showcase resolves a stock warning through its action."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#StockAlert"
+  ]
+}

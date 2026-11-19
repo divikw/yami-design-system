@@ -1,0 +1,154 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "tooltip",
+  "title": "Tooltip",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A short supplementary hint on hover or keyboard focus with a YAMI inverse surface.",
+  "source": "components/Tooltip",
+  "files": [
+    {
+      "source": "components/Tooltip/index.ts",
+      "target": "components/Tooltip/index.ts"
+    },
+    {
+      "source": "components/Tooltip/Tooltip.module.css",
+      "target": "components/Tooltip/Tooltip.module.css"
+    },
+    {
+      "source": "components/Tooltip/Tooltip.tsx",
+      "target": "components/Tooltip/Tooltip.tsx"
+    }
+  ],
+  "exports": [
+    "DismissibleTooltip",
+    "DismissibleTooltipProps",
+    "Tooltip",
+    "TooltipContent",
+    "TooltipContentProps",
+    "TooltipProps",
+    "TooltipProvider",
+    "TooltipTrigger"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Tooltip/usage.md",
+    "stories": [
+      "components/Tooltip/Tooltip.stories.tsx"
+    ],
+    "examples": [
+      "components/Tooltip/examples.tsx#HoverTooltip",
+      "components/Tooltip/examples.tsx#LibraryHint"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default-inverse",
+      "--elevation-300-tooltip",
+      "--fill-inverse",
+      "--font-family-ios",
+      "--font-size-caption-sm",
+      "--line-height-caption-sm",
+      "--radius-sm",
+      "--radius-tag-primary",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-200",
+      "--space-300",
+      "--stroke-default",
+      "--text-primary-inverse"
+    ],
+    "rules": [
+      "no-custom-radii",
+      "semantic-color-only",
+      "type-hierarchy"
+    ],
+    "tokenBindings": {
+      "--space-025": {
+        "property": "bottom",
+        "selector": ".arrow[data-side=\"top\"]"
+      },
+      "--space-100": {
+        "property": "padding",
+        "selector": ".content"
+      },
+      "--elevation-300-tooltip": {
+        "property": "box-shadow",
+        "selector": ".content"
+      },
+      "--radius-sm": {
+        "property": "border-radius",
+        "selector": ".content"
+      },
+      "--fill-inverse": {
+        "property": "background",
+        "selector": ".content"
+      },
+      "--text-primary-inverse": {
+        "property": "color",
+        "selector": ".content"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".content"
+      },
+      "--font-size-caption-sm": {
+        "property": "font-size",
+        "selector": ".content"
+      },
+      "--line-height-caption-sm": {
+        "property": "line-height",
+        "selector": ".content"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".content kbd"
+      },
+      "--border-default-inverse": {
+        "property": "border",
+        "selector": ".content kbd"
+      },
+      "--radius-tag-primary": {
+        "property": "border-radius",
+        "selector": ".content kbd"
+      },
+      "--space-050": {
+        "property": "padding",
+        "selector": ".content"
+      },
+      "--space-300": {
+        "property": "height",
+        "selector": ".dismissible .closeButton"
+      },
+      "--space-200": {
+        "property": "width",
+        "selector": ".closeIcon"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "keyboardNav": [
+        "tab",
+        "escape"
+      ],
+      "notes": "Use a named, focusable trigger. Content is supplemental and has no interactive elements. Touch users rely on the visible label. DismissibleTooltip uses a named nonmodal dialog with a labeled close button and leaves focus in place on initial display."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "315412850aca5ad1e4bca51bd9201f2f28ab0facd8db21a884120875e44c4bc1"
+}

@@ -4,6 +4,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 
 import { Card } from "./Card";
 import { Button, ButtonLink } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 import { ButtonGroup } from "../ButtonGroup";
 
 const copy = {
@@ -261,6 +262,7 @@ export const UsageBoundaries: Story = {
 };
 
 function OrderActionsDemo({ locale, onReceipt }: { locale: "zh" | "en"; onReceipt?: MouseEventHandler<HTMLButtonElement> }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const text = copy[locale];
   const [state, setState] = useState<"idle" | "generating" | "ready">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -273,8 +275,8 @@ function OrderActionsDemo({ locale, onReceipt }: { locale: "zh" | "en"; onReceip
         <p>{text.delivery}</p>
         <footer>
           <ButtonGroup aria-label={text.orderActions}>
-            <ButtonLink href="/orders/Y20261011-1234" variant="primary" size="md">{text.viewOrder}</ButtonLink>
-            <Button variant="secondary" size="md" loading={state === "generating"} loadingDelay={150} onClick={(event) => {
+            <ButtonLink href="/orders/Y20261011-1234" variant="primary" size={actionSize}>{text.viewOrder}</ButtonLink>
+            <Button variant="secondary" size={actionSize} loading={state === "generating"} loadingDelay={150} onClick={(event) => {
               if (timer.current !== undefined) return;
               setState("generating");
               onReceipt?.(event);

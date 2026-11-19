@@ -130,7 +130,7 @@ test("slows the essential loading spinner when reduced motion is requested", () 
 
   try {
     flushSync(() => root.render(<Button loading>Save</Button>));
-    const spinner = container.querySelector<HTMLElement>('[aria-hidden="true"]')!;
+    const spinner = container.querySelector<HTMLElement>('[data-slot="spinner"]')!;
     expect(getComputedStyle(spinner).animationDuration).toBe("1s");
 
     const reducedMotionRule = Array.from(document.styleSheets).some((sheet) => {
@@ -146,7 +146,7 @@ test("slows the essential loading spinner when reduced motion is requested", () 
         }
         return Array.from(rule.cssRules).some((nestedRule) =>
           nestedRule instanceof CSSStyleRule &&
-          nestedRule.selectorText.includes(`.${spinner.className}`) &&
+          spinner.matches(nestedRule.selectorText) &&
           ["1.5s", "1500ms"].includes(nestedRule.style.animationDuration),
         );
       });

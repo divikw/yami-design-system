@@ -65,7 +65,7 @@ export function AccordionDocsPage({ locale }: { locale: Locale }) {
   const apiRows = [["Accordion", "multiple, value, defaultValue, onValueChange, disabled, keepMounted, hiddenUntilFound"], ["AccordionItem", "value, disabled, onOpenChange"], ["AccordionTrigger", "render, nativeButton"], ["AccordionContent", "render"]];
   const pageText = [`# Accordion`, intro, ...sections.map((section, index) => `## ${headings[locale][index]}\n${section in descriptions ? descriptions[section as ExampleKind] + "\n\n```tsx\n" + exampleCode(locale, section as ExampleKind) + "\n```" : section === "composition" ? composition : section === "usage" ? "\n```tsx\n" + usageCode + "\n```" : section === "installation" ? installationMarkdown(locale) : apiRows.map(([part, props]) => `- ${part}: ${props}`).join("\n") + "\n\nhttps://base-ui.com/react/components/accordion"}`)].join("\n\n");
   const heading = (id: typeof sections[number]) => <h2 id={`accordion-${id}`}>{headings[locale][sections.indexOf(id)]}</h2>;
-  return <ComponentDocsTemplate name="Accordion" slug="accordion" intro={intro} locale={locale} pageText={pageText} next={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}>
+  return <ComponentDocsTemplate name="Accordion" slug="accordion" intro={intro} locale={locale} pageText={pageText} next={{ name: "Alert", path: "yami-components-data-display-alert" }}>
     <Example key={locale} locale={locale} />
     <section>{heading("installation")}<Installation locale={locale} /></section>
     <section>{heading("usage")}<CodeBlock locale={locale} code={imports} /><CodeBlock locale={locale} code={usage} /></section>

@@ -3,8 +3,8 @@ import type { DocsLocale } from "./component-docs-template";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import { Preference } from "./switch-preference-example";
 import preferenceSource from "./switch-preference-example.tsx?raw";
-import { TermsSwitch } from "./switch-invalid-example";
-import invalidSource from "./switch-invalid-example.tsx?raw";
+import { TermsSwitch } from "../../../packages/design-system/components/Switch/validation/examples";
+import invalidSource from "../../../packages/design-system/components/Switch/validation/examples.tsx?raw";
 import styles from "./component-guide.module.css";
 
 const imports = 'import { Switch } from "@yami/design-system";';
@@ -48,7 +48,7 @@ export function SwitchDocsPage({ locale }: { locale: DocsLocale }) {
     intro={zh ? "用开关筛选有货商品，或设置到货、降价提醒。切换后立即生效。" : "Use a switch to filter for in-stock items or turn shopping alerts on or off. Changes take effect immediately."}
     leadExample={{ title: airplane, code: usageCode, preview: <div className={styles.row}><label style={row}><Switch />{airplane}</label></div> }}
     usageCode={usageCode} composition={"Switch\n├── children\n└── Track → Thumb"} examples={examples}
-    previous={{ name: "Select", path: "yami-components-forms-select" }} next={{ name: "Tabs", path: "yami-components-navigation-tabs" }}
+    previous={{ name: "Spinner", path: "yami-components-data-display-spinner" }} next={{ name: "Tabs", path: "yami-components-navigation-tabs" }}
     legacyAnchors={{ usage: ["switch--usage", "switch--使用说明"], description: ["component-specifications"], api: ["component-playground"] }}
     apiNote={zh ? "使用 Tab 聚焦开关，按空格或 Enter 切换。图标或独立开关需要可访问名称。" : "Tab to focus the switch, then press Space or Enter to toggle. Give standalone switches an accessible name."}
     api={[

@@ -12,12 +12,13 @@ export function DrawerDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
   const title = zh ? "抽屉" : "Drawer";
   const snippet = (props: string, trigger = zh ? "打开" : "Open") => `import { useState } from "react";
-import { Button, Drawer } from "@yami/design-system";
+import { Button, Drawer, useDesktopViewport } from "@yami/design-system";
 
 function DrawerExample() {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [open, setOpen] = useState(false);
   return <>
-    <Button onClick={() => setOpen(true)}>${trigger}</Button>
+    <Button size={actionSize} onClick={() => setOpen(true)}>${trigger}</Button>
     <Drawer open={open}${props ? " " + props : ""} lang="${locale}" title="${title}"
       closeLabel="${zh ? "关闭" : "Close"}" onClose={() => setOpen(false)}>
       <p>${zh ? "按 Escape 或点击关闭按钮返回页面。" : "Press Escape or use the close button to return to the page."}</p>
@@ -50,7 +51,7 @@ function DrawerExample() {
   return <ComponentGuide name="Drawer" slug="drawer" locale={locale} previewMode="document"
     intro={zh ? "在当前页面展示补充内容。抽屉在桌面端从右侧打开，在移动端从底部打开。" : "Show additional content on the current page. The drawer opens from the right on desktop and from the bottom on mobile."}
     previous={{ name: "Divider", path: "yami-components-layout-divider" }}
-    next={{ name: "FilterChip", path: "yami-components-forms-filterchip" }}
+    next={{ name: "DropdownMenu", path: "yami-components-layout-dropdown-menu" }}
     composition={zh ? "Drawer\n├── 标题、说明与关闭或返回按钮\n├── children（可滚动正文）\n└── footer（固定操作区）" : "Drawer\n├── Title, description and Close or Back\n├── children (scrolling content)\n└── footer (fixed actions)"}
     examples={examples}
     apiNote={zh ? "PC 从 1024px 起展示 480px 宽的右侧面板。移动端展开后，顶部至少留出 48px。" : "From 1024px wide, the desktop panel occupies 480px on the right. Expanded mobile panels leave at least 48px above them."}

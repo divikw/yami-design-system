@@ -1,0 +1,37 @@
+.root {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-content: start;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-150) var(--space-200);
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-component-default);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  overflow-wrap: anywhere;
+}
+.root > svg {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: var(--space-200);
+  height: var(--space-200);
+  margin-block-start: var(--space-025);
+  margin-inline-end: var(--space-100);
+}
+.title, .description { grid-column: 2; }
+.title { font-weight: var(--font-weight-emphasize); }
+.description { color: var(--text-secondary); }
+.title + .description { margin-block-start: var(--space-050); }
+.description > p { margin: 0; }
+.description > p + p { margin-block-start: var(--space-100); }
+.title a, .description a { color: inherit; text-decoration: underline; }
+.root[data-variant="destructive"], .root[data-variant="destructive"] .description { color: var(--text-error); }
+.action { grid-column: 3; grid-row: 1 / span 2; margin-inline-start: var(--space-150); }
+@media (width < 1024px) {
+  .action { grid-column: 2; grid-row: auto; margin: var(--space-100) 0 0; }
+}

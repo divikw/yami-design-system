@@ -1,0 +1,126 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "progress",
+  "title": "Progress",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Display task completion with a labeled track, localized values and indeterminate state.",
+  "source": "components/Progress",
+  "files": [
+    {
+      "source": "components/Progress/index.ts",
+      "target": "components/Progress/index.ts"
+    },
+    {
+      "source": "components/Progress/Progress.module.css",
+      "target": "components/Progress/Progress.module.css"
+    },
+    {
+      "source": "components/Progress/Progress.tsx",
+      "target": "components/Progress/Progress.tsx"
+    }
+  ],
+  "exports": [
+    "Progress",
+    "ProgressIndicator",
+    "ProgressLabel",
+    "ProgressProps",
+    "ProgressTrack",
+    "ProgressValue"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Progress/usage.md",
+    "stories": [
+      "components/Progress/Progress.stories.tsx"
+    ],
+    "examples": [
+      "components/Progress/examples.tsx#TransferProgress"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--fill-inverse",
+      "--fill-secondary",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--radius-full",
+      "--space-050",
+      "--space-100",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-100": {
+        "property": "gap",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".root"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".root"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".label"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".value"
+      },
+      "--space-050": {
+        "property": "height",
+        "selector": ".track"
+      },
+      "--fill-secondary": {
+        "property": "background",
+        "selector": ".track"
+      },
+      "--radius-full": {
+        "property": "border-radius",
+        "selector": ".track"
+      },
+      "--fill-inverse": {
+        "property": "background",
+        "selector": ".indicator"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "progressbar",
+      "notes": "Name the bar with ProgressLabel or aria-label. Base UI provides range semantics; unknown totals omit aria-valuenow."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "5fe74abf759d0a91e2a464379582464395d96e81c9f831e4d5de39672a6cfd95"
+}

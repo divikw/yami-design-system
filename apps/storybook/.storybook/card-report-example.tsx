@@ -1,8 +1,9 @@
 import { useState, type CSSProperties } from "react";
 import { ChevronRight } from "lucide-react";
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@yami/design-system";
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, useDesktopViewport } from "@yami/design-system";
 
 export function ReportCard({ locale }: { locale: "zh" | "en" }) {
+  const fullButtonSize = useDesktopViewport() ? "sm" : "md";
   const zh = locale === "zh";
   const [enabled, setEnabled] = useState(false);
   const [details, setDetails] = useState(false);
@@ -29,10 +30,10 @@ export function ReportCard({ locale }: { locale: "zh" | "en" }) {
       backgroundColor: "var(--surface-secondary)", borderTop: "var(--stroke-default) solid var(--border-default)",
       borderRadius: "0 0 var(--radius-surface-default) var(--radius-surface-default)",
     }}>
-      <Button form="full" size="sm" aria-pressed={enabled} onClick={() => setEnabled(!enabled)}>
+      <Button form="full" size={fullButtonSize} aria-pressed={enabled} onClick={() => setEnabled(!enabled)}>
         {enabled ? (zh ? "已开启周报" : "Weekly reports enabled") : (zh ? "开启周报" : "Enable weekly reports")}
       </Button>
-      <Button form="full" size="sm" variant="secondary" style={{ "--button-secondary": "var(--surface-primary)", border: "var(--stroke-default) solid var(--border-default)" } as CSSProperties} aria-expanded={details} onClick={() => setDetails(!details)}>
+      <Button form="full" size={fullButtonSize} variant="secondary" style={{ "--button-secondary": "var(--surface-primary)", border: "var(--stroke-default) solid var(--border-default)" } as CSSProperties} aria-expanded={details} onClick={() => setDetails(!details)}>
         {zh ? "报告说明" : "Report details"}
       </Button>
     </CardFooter>

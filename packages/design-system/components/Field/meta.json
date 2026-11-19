@@ -1,0 +1,231 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Field",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Groups a form control with its label, description, and validation message.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "Field",
+    "FieldProps",
+    "FieldLabel",
+    "FieldLabelProps",
+    "FieldDescription",
+    "FieldDescriptionProps",
+    "FieldError",
+    "FieldErrorProps",
+    "FieldGroup",
+    "FieldSet",
+    "FieldLegend",
+    "FieldContent",
+    "FieldTitle",
+    "FieldSeparator"
+  ],
+  "composes": [
+    "Textarea",
+    "Divider"
+  ],
+  "props": {
+    "name": {
+      "type": "string",
+      "required": false,
+      "description": "Overrides the control's native form name."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "description": "Disables the associated control."
+    },
+    "invalid": {
+      "type": "boolean",
+      "required": false,
+      "description": "Supplies invalid state from an external form."
+    },
+    "validationMode": {
+      "type": "onSubmit | onBlur | onChange",
+      "required": false,
+      "description": "Defaults to the parent Base UI Form mode, or onSubmit."
+    },
+    "validate": {
+      "type": "function",
+      "required": false,
+      "description": "Custom validation callback returning error messages."
+    },
+    "match": {
+      "type": "boolean | keyof ValidityState",
+      "required": false,
+      "description": "On FieldError, chooses which validity state displays the message. Set true for external errors."
+    },
+    "orientation": {
+      "type": "vertical | horizontal | responsive",
+      "required": false,
+      "default": "vertical",
+      "description": "Label and control layout on Field."
+    },
+    "layout": {
+      "type": "stack | responsive",
+      "required": false,
+      "default": "stack",
+      "description": "FieldGroup stacks its children or lays them out in responsive columns."
+    },
+    "variant": {
+      "type": "legend | label",
+      "required": false,
+      "default": "legend",
+      "description": "Typography variant for FieldLegend."
+    },
+    "errors": {
+      "type": "Array<{ message?: string } | undefined>",
+      "required": false,
+      "description": "External messages for FieldError. Duplicate or empty messages are omitted."
+    }
+  },
+  "rules": {
+    "color": {
+      "ruleId": "semantic-color-only"
+    },
+    "type": {
+      "ruleId": "type-hierarchy"
+    },
+    "disabled": {
+      "ruleId": "no-opacity-disabled"
+    }
+  },
+  "tokens": [
+    "--space-050",
+    "--font-family-ios",
+    "--text-primary",
+    "--text-secondary",
+    "--text-error",
+    "--text-disabled",
+    "--font-size-caption-md",
+    "--line-height-caption-md",
+    "--font-weight-emphasize",
+    "--font-size-caption-sm",
+    "--line-height-caption-sm",
+    "--space-100",
+    "--space-150",
+    "--space-200",
+    "--font-size-heading-sm",
+    "--line-height-heading-sm",
+    "--stroke-default",
+    "--border-default",
+    "--radius-surface-default",
+    "--border-focus",
+    "--surface-secondary"
+  ],
+  "tokenBindings": {
+    "--space-050": {
+      "property": "gap",
+      "selector": ".root"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".root"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".label"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".description"
+    },
+    "--text-error": {
+      "property": "color",
+      "selector": ".error"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".legend[data-disabled], .label[data-disabled] [data-slot=\"field-title\"], .label[data-disabled], .description[data-disabled]"
+    },
+    "--font-size-caption-md": {
+      "property": "font-size",
+      "selector": ".label"
+    },
+    "--line-height-caption-md": {
+      "property": "line-height",
+      "selector": ".label"
+    },
+    "--font-weight-emphasize": {
+      "property": "font-weight",
+      "selector": ".label"
+    },
+    "--font-size-caption-sm": {
+      "property": "font-size",
+      "selector": ".description"
+    },
+    "--line-height-caption-sm": {
+      "property": "line-height",
+      "selector": ".description"
+    },
+    "--space-100": {
+      "property": "gap",
+      "selector": ".root[data-orientation=\"horizontal\"]"
+    },
+    "--space-150": {
+      "property": "margin-block-end",
+      "selector": ".legend"
+    },
+    "--space-200": {
+      "property": "gap",
+      "selector": ".group"
+    },
+    "--font-size-heading-sm": {
+      "property": "font-size",
+      "selector": ".legend"
+    },
+    "--line-height-heading-sm": {
+      "property": "line-height",
+      "selector": ".legend"
+    },
+    "--stroke-default": {
+      "property": "border",
+      "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+    },
+    "--border-default": {
+      "property": "border",
+      "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".label:has([data-slot=\"checkbox\"]), .label:has(> [data-slot=\"field\"])"
+    },
+    "--border-focus": {
+      "property": "border-color",
+      "selector": ".label:has([data-checked])"
+    },
+    "--surface-secondary": {
+      "property": "background",
+      "selector": ".label:has([data-checked])"
+    }
+  },
+  "accessibility": {
+    "notes": "FieldLabel activates and names the native control. Descriptions and visible errors are associated automatically."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "The canonical story verifies label focus, descriptive associations, validation, and error clearing."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#NotesField",
+    "./delivery/examples.tsx#DeliveryPreferences",
+    "./price-range/examples.tsx#PriceRange"
+  ]
+}

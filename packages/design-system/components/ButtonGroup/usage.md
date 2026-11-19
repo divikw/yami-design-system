@@ -22,10 +22,17 @@ import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
 - `full`：按钮等宽，填满容器，整组最大 480px。配合 Button / ButtonLink 的 `form="full"` 使用。
 
 ```tsx
-<ButtonGroup full aria-label="购物车操作">
-  <Button form="full" size="lg" variant="secondary" onClick={closeSheet}>继续购物</Button>
-  <Button form="full" size="lg" variant="emphasis" onClick={checkout}>前往结算</Button>
-</ButtonGroup>
+import { Button, ButtonGroup, useDesktopViewport } from '@yami/design-system'
+
+function CheckoutActions({ closeSheet, checkout }: { closeSheet: () => void; checkout: () => void }) {
+  const size = useDesktopViewport() ? "lg" : "md"
+  return (
+    <ButtonGroup full aria-label="购物车操作">
+      <Button form="full" size={size} variant="secondary" onClick={closeSheet}>继续购物</Button>
+      <Button form="full" size={size} variant="emphasis" onClick={checkout}>前往结算</Button>
+    </ButtonGroup>
+  )
+}
 ```
 
 ## 内容与边界
@@ -78,10 +85,17 @@ import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
 - `full`: equal-width entries in one row, filling the container up to 480px. Set `form="full"` on each Button / ButtonLink.
 
 ```tsx
-<ButtonGroup full aria-label="Cart actions">
-  <Button form="full" size="lg" variant="secondary" onClick={closeSheet}>Continue shopping</Button>
-  <Button form="full" size="lg" variant="emphasis" onClick={checkout}>Checkout</Button>
-</ButtonGroup>
+import { Button, ButtonGroup, useDesktopViewport } from '@yami/design-system'
+
+function CheckoutActions({ closeSheet, checkout }: { closeSheet: () => void; checkout: () => void }) {
+  const size = useDesktopViewport() ? "lg" : "md"
+  return (
+    <ButtonGroup full aria-label="Cart actions">
+      <Button form="full" size={size} variant="secondary" onClick={closeSheet}>Continue shopping</Button>
+      <Button form="full" size={size} variant="emphasis" onClick={checkout}>Checkout</Button>
+    </ButtonGroup>
+  )
+}
 ```
 
 ## Content and boundaries

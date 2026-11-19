@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "3590237144919a002e86d46177e65fe07d1fec55bd067b7a47fa266964f46fb7"
+      "digest": "61975eaa9fc05d67a61435aede543dc605b66296966aba17e0bfbde911f10196"
     },
     {
       "name": "accordion",
@@ -27,7 +27,7 @@
       "status": "experimental",
       "version": "0.2.0",
       "path": "registry-items/accordion.json",
-      "digest": "743bb55bc125052c3147a3784379310d4fec3b41c63d68c3cbc2330d087c5a9f"
+      "digest": "079e76647e1a5cbfa625c0dd0092d10eed709b9f2c9725ef947eb27c689baa3d"
     },
     {
       "name": "activity-page-header",
@@ -39,13 +39,22 @@
       "digest": "5361544bdcaee769ba0893533ba10cab62c0c3c013ef25dacd88eb25b96a73ba"
     },
     {
+      "name": "alert",
+      "title": "Alert",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/alert.json",
+      "digest": "7f2ba2c4e587c3f0b77791ec6c2b1e52558024f996a23b3acc9356e6af51cdf1"
+    },
+    {
       "name": "alert-dialog",
       "title": "AlertDialog",
       "type": "component",
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/alert-dialog.json",
-      "digest": "2f19f4c771b3141b1ebb8f621aa4f2c111c14c7a3e7d0a9d0302759a3e31a776"
+      "digest": "ac75389d0c64dfb6fdf39b96452164944576cb703cfbff42d04bd16e20cbdacf"
     },
     {
       "name": "aspect-ratio",
@@ -108,7 +117,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "92f7c8c337ebcd552f0827e6a9d9fbdb77aea1e3f10520bc702e4c930ac60718"
+      "digest": "bd29d21afbe66d10060c7ca4449b39954f9d7fd85c4066ac84ff036da1f3b389"
     },
     {
       "name": "button-group",
@@ -117,7 +126,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/button-group.json",
-      "digest": "1ea57bc023b717fdd48400bf6c8572a0405257463847253b344ae8a031331a40"
+      "digest": "25c4b6c762014bfe3b61c61721a50a8728aa96db0250f9b58a2206363ddee99b"
     },
     {
       "name": "card",
@@ -126,7 +135,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/card.json",
-      "digest": "18490e8b2668cd1338bd2b066b15872572863205b705f4cc5737834931ad883d"
+      "digest": "61db5c751714ce29c13bed88759f6395f810db52b4f001ce8b34330954950022"
     },
     {
       "name": "checkbox",
@@ -136,6 +145,15 @@
       "version": "0.1.0",
       "path": "registry-items/checkbox.json",
       "digest": "2786a8d2468a3f77b63ae91035d8044d99d65ae2b25c16fb373b72c0cc2389a6"
+    },
+    {
+      "name": "combobox",
+      "title": "Combobox",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/combobox.json",
+      "digest": "d44d3b473a1b2dca5378440fb050c5bf357366cefed180a8b2d10ae10781bbbb"
     },
     {
       "name": "coupon",
@@ -153,7 +171,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/dialog.json",
-      "digest": "474999631c5c20d7ea5e4e5ed57135bd0e8a705e2246a90b90115eb8c03d3c7c"
+      "digest": "66597adde5e936750273cec9fc7a006ebf22fdadb701870bb05ea2a7afc7b8f9"
     },
     {
       "name": "divider",
@@ -171,7 +189,34 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "eb8f0e7b41cd5fbb3d2a7fcbdbd1b657bd382d40ef4983ccf561c967c9b26e8e"
+      "digest": "bc0cb161ead81c0f906d3ac53cb8079e3eb888ce46646324e2b07a57d786d8bb"
+    },
+    {
+      "name": "dropdown-menu",
+      "title": "DropdownMenu",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/dropdown-menu.json",
+      "digest": "e44eb430386e187e31fe9d8d562c9d49c9938cc27fa815fa9fba0ca0bc900243"
+    },
+    {
+      "name": "empty-state",
+      "title": "EmptyState",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/empty-state.json",
+      "digest": "b6189dfd0ffd6a231425275e0b7e97d8ea0577d5c01a8993aa6d2651b474cebe"
+    },
+    {
+      "name": "field",
+      "title": "Field",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/field.json",
+      "digest": "6ff282f8ae60641306b7a787b1a80b251ad0e1454aaef670110f788b10c63a9c"
     },
     {
       "name": "filter-chip",
@@ -225,7 +270,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "dd923b1523f4f169804b91071aeba2e7e080cb7f9b7a503bef925dc8546485b4"
+      "digest": "52b70c599c42125d7a35da90767b92b4ab055224055a9908f42bb17f438f4152"
     },
     {
       "name": "membership-badge",
@@ -246,6 +291,15 @@
       "digest": "0759e48c6c2d77ccb274e54c8135d75bd0630078928ea30343359cd3d9eab0eb"
     },
     {
+      "name": "navigation-menu",
+      "title": "NavigationMenu",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/navigation-menu.json",
+      "digest": "b90799c7d988a11bfb9d92338f1a03588ecf7928335868b639cedfe3be38e508"
+    },
+    {
       "name": "pagination",
       "title": "Pagination",
       "type": "component",
@@ -261,7 +315,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/popover.json",
-      "digest": "a38ebbb3c25b59159f964879ec9dda24272d5bed1772ff3ebefb9d6f1b40f57d"
+      "digest": "d5ab74c22e0d8825273624c95f1a08fce7f8891ef917d80c55611a08a5bb74ad"
     },
     {
       "name": "product-card",
@@ -279,7 +333,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "f41603128175dc3941e66c2fa0d23403cbeb94bd0fa6a44d54b0f96e94448fa9"
+      "digest": "39c29bde56e698e6f342a115e04d6391e85a3613bf923488c7220af609de3715"
     },
     {
       "name": "product-media-gallery",
@@ -298,6 +352,15 @@
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
       "digest": "ff5267419a0ac88c144f2efd8c23c66c47fac46d91f2855b2bea48f61a431595"
+    },
+    {
+      "name": "progress",
+      "title": "Progress",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/progress.json",
+      "digest": "5fe74abf759d0a91e2a464379582464395d96e81c9f831e4d5de39672a6cfd95"
     },
     {
       "name": "quantity-select",
@@ -342,7 +405,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/select.json",
-      "digest": "3052234e82a1d76d83b609cd580c0af81047250e1e666ab888cfcfb97d99ac83"
+      "digest": "6aaa4baea0d105ddae38a87a92d7080666b5a1ee5113c8b82e36ff6efd9e826d"
     },
     {
       "name": "shortcut-rail",
@@ -354,6 +417,24 @@
       "digest": "00f05f97d256755129cbd1df01cf0804a1130e7869eaa3b9bb6b0e24ca29c231"
     },
     {
+      "name": "skeleton",
+      "title": "Skeleton",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/skeleton.json",
+      "digest": "b4feb2cf793a0182deda1e51478fef122290078e52f3024735895e4ce6b3e185"
+    },
+    {
+      "name": "slider",
+      "title": "Slider",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/slider.json",
+      "digest": "fcc61c1ecfa209a7860a6dbd8f718fe7e4d1e07e8f6c711f6f7a4670a7685b6a"
+    },
+    {
       "name": "social-media-gallery",
       "title": "SocialMediaGallery",
       "type": "component",
@@ -363,13 +444,22 @@
       "digest": "8983985edb0a4be43e6d436d8b148ed03a340b99fa2ebc98214e3d3a8a1fe317"
     },
     {
+      "name": "spinner",
+      "title": "Spinner",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/spinner.json",
+      "digest": "2bbf55307a127c522e97f4689959506d469a777e55c06600bcbf86ed377bbc8c"
+    },
+    {
       "name": "switch",
       "title": "Switch",
       "type": "component",
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/switch.json",
-      "digest": "5f80c69f61676d6545417d936e92f5682c0ce82be42f7290fb485dc1b1af007d"
+      "digest": "4a116ccec2e9d1c4a92d37997f81557e35929ef594f8a01d0be3727407d89133"
     },
     {
       "name": "tab-bar",
@@ -399,6 +489,15 @@
       "digest": "5c62370f886a4b1a37bf835cf2c61143cb70c591e2cc766f5c0bb25a2e170c74"
     },
     {
+      "name": "textarea",
+      "title": "Textarea",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/textarea.json",
+      "digest": "93e2d51a5be825a6073a3b2818686a6939b8f85f5e1f2105a4f35fea316d992f"
+    },
+    {
       "name": "theme-hero",
       "title": "ThemeHero",
       "type": "component",
@@ -415,6 +514,24 @@
       "version": "0.1.0",
       "path": "registry-items/theme-product-list.json",
       "digest": "6e61b6b94ff9b1ce52ef35b1e920afcbf1fed2397ab9f4edeb84c9e952148e95"
+    },
+    {
+      "name": "toast",
+      "title": "Toast",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/toast.json",
+      "digest": "6e196decc638bf81a99e116e131fc731be21cd6175835e9932178a0f52038bfe"
+    },
+    {
+      "name": "tooltip",
+      "title": "Tooltip",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/tooltip.json",
+      "digest": "315412850aca5ad1e4bca51bd9201f2f28ab0facd8db21a884120875e44c4bc1"
     },
     {
       "name": "trending-searches",
