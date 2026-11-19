@@ -193,6 +193,32 @@ export function createBeverageProductDetailPageFixture(
     priceCurrent: "$6.89",
     priceOriginal: "$8.89",
     discountLabel: zh ? "78折" : "22% off",
+    vvipPrice: {
+      label: zh ? "专享价：" : "Price:",
+      price: "$5.89",
+      endsTodayLabel: zh ? "今日结束" : "Ends Today",
+      actionLabel: zh ? "立即解锁" : "Unlock Now",
+    },
+    promotions: {
+      coupon: {
+        title: zh ? "最高立减 $10.00" : "Up to $10.00 off with coupon",
+        description: zh ? "满 $100 减 $10 · 满 $50 减 $5" : "Spend $100, Get $10 Off · Spend $50, Get $5 Off",
+        detailsLabel: zh ? "详情" : "Details",
+      },
+      discountCode: {
+        label: zh ? "使用优惠码立减 $1：" : "$1 off with discount code:",
+        code: "JY25",
+        copyLabel: zh ? "复制优惠码" : "Copy Code",
+      },
+      gifts: {
+        title: zh ? "赠品" : "Gifts included with purchase",
+        actionLabel: zh ? "查看全部赠品" : "View All 4 Gifts",
+        items: [
+          { image: `https://cdn.yamibuy.net/item/${imageHashes[5]}_757x757.webp`, alt: "Gift product", title: zh ? "下单即赠" : "Free gifts with purchase", detail: zh ? "每单限 1 份" : "1 pack per order" },
+          { image: `https://cdn.yamibuy.net/item/${imageHashes[6]}_757x757.webp`, alt: "Gift product", title: zh ? "满 $99 即赠" : "Spend $99+ for free gifts", detail: zh ? "买越多赠越多" : "Buy more, get more" },
+        ],
+      },
+    },
     optionGroups: [],
     bestBefore: zh ? "2027年4月22日" : "Apr 22, 2027",
     highlights: zh ? [

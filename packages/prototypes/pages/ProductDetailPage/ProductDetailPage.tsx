@@ -20,6 +20,7 @@ import {
 
 import styles from "./ProductDetailPage.module.css";
 import { ProductPricing } from "./components/ProductPricing";
+import { ProductShareActions } from "./components/ProductShareActions";
 import { ProductStickyPurchaseBar } from "./components/ProductStickyPurchaseBar";
 import type { ProductDetailPageProps } from "./ProductDetailPage.types";
 import { ProductNutritionSheet } from "./ProductNutritionSheet";
@@ -32,22 +33,6 @@ const heartIcon = new URL(
 ).href;
 const shareIcon = new URL(
   "../../../design-system/assets/icons/action/share.svg",
-  import.meta.url
-).href;
-const weiboIcon = new URL(
-  "../../../design-system/assets/icons/social-monochrome/weibo.svg",
-  import.meta.url
-).href;
-const facebookIcon = new URL(
-  "../../../design-system/assets/icons/social-monochrome/facebook.svg",
-  import.meta.url
-).href;
-const emailIcon = new URL(
-  "../../../design-system/assets/icons/social-monochrome/email.svg",
-  import.meta.url
-).href;
-const wechatIcon = new URL(
-  "../../../design-system/assets/icons/social-monochrome/wechat.svg",
   import.meta.url
 ).href;
 const addIcon = new URL(
@@ -219,6 +204,7 @@ export function ProductDetailPage({
   discountLabel,
   giftCardPrice,
   vvipPrice,
+  promotions,
   optionGroups,
   onAddToCart,
   skus,
@@ -400,38 +386,12 @@ export function ProductDetailPage({
             <Breadcrumb items={breadcrumb} locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
               data-slot="product-detail-breadcrumb" />
 
-            <div
-              className={styles.shareActions}
-              role="group"
-              aria-label={copy.share}
-            >
-              {[
-                ["weibo", copy.shareWeibo, weiboIcon],
-                ["facebook", copy.shareFacebook, facebookIcon],
-                ["email", copy.shareEmail, emailIcon],
-                ["wechat", copy.shareWechat, wechatIcon],
-              ].map(([id, label, icon]) => (
-                <Button
-                  key={id}
-                  variant="tertiary"
-                  form="icon"
-                  size="sm"
-                  aria-label={label}
-                  data-pdp-share-action={id}
-                >
-                  <img src={icon} alt="" width={20} height={20} />
-                </Button>
-              ))}
-              <Button
-                className={styles.affiliateLinkButton}
-                variant="primary"
-                form="inline"
-                size="sm"
-                data-pdp-affiliate-link="true"
-              >
-                {copy.getAffiliateLink}
-              </Button>
-            </div>
+            <ProductShareActions
+              affiliateLabel={copy.getAffiliateLink}
+              shareLabel={copy.share}
+              favoriteLabel={copy.addToFavorites}
+              locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
+            />
           </div>
 
           <article className={styles.product} aria-labelledby="product-title">
@@ -570,6 +530,7 @@ export function ProductDetailPage({
                       }}
                       giftCard={giftCardPrice}
                       vvip={vvipPrice}
+                      promotions={promotions}
                     />
                     {optionGroups.length === 0 && (
                       <p
@@ -786,20 +747,6 @@ export function ProductDetailPage({
                   className={styles.purchaseGroup}
                   data-slot="product-detail-purchase-primary"
                 >
-                  <div className={styles.purchaseActions}>
-                    <Button
-                      className={styles.favoriteButton}
-                      variant="tertiary"
-                      size="sm"
-                      rightIcon={
-                        <img src={heartIcon} alt="" width={20} height={20} />
-                      }
-                      data-pdp-purchase-action="favorite"
-                    >
-                      {copy.addToFavorites}
-                    </Button>
-                  </div>
-
                   <div
                     className={styles.purchaseStickyGroup}
                     data-slot="product-detail-purchase-sticky"

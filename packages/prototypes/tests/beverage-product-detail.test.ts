@@ -26,6 +26,13 @@ describe("Beverage product detail fixture", () => {
     expect(fixture.priceCurrent).toBe("$6.89");
     expect(fixture.priceOriginal).toBe("$8.89");
     expect(fixture.discountLabel).toBe(locale === "zh" ? "78折" : "22% off");
+    expect(fixture.vvipPrice).toMatchObject({
+      price: "$5.89",
+      endsTodayLabel: locale === "zh" ? "今日结束" : "Ends Today",
+      actionLabel: locale === "zh" ? "立即解锁" : "Unlock Now",
+    });
+    expect(fixture.promotions?.discountCode?.code).toBe("JY25");
+    expect(fixture.promotions?.gifts?.items).toHaveLength(2);
     expect(fixture.reviewSection?.reviewCount).toBe(539);
     expect(fixture.reviewSection?.reviews).toHaveLength(4);
     expect(fixture.reviewSection?.ratingDistribution.reduce((sum, row) => sum + row.percentage, 0)).toBe(100);

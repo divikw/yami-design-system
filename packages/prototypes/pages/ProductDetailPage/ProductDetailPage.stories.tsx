@@ -408,11 +408,7 @@ export const DesktopRegression: Story = {
       '[data-slot="product-detail-purchase-layout"]'
     );
     const purchaseFavorite = canvasElement.querySelector<HTMLButtonElement>(
-      '[data-pdp-purchase-action="favorite"]'
-    );
-    const purchaseActions = purchaseFavorite?.parentElement;
-    const purchaseShareButtons = canvasElement.querySelectorAll<HTMLButtonElement>(
-      "[data-pdp-share-action]"
+      '[data-pdp-header-action="favorite"]'
     );
     const utilityRow = canvasElement.querySelector<HTMLElement>(
       '[data-slot="product-detail-utility-row"]'
@@ -703,12 +699,6 @@ export const DesktopRegression: Story = {
       Math.round(purchaseLayout.getBoundingClientRect().height) !==
         Math.round(purchasePanel.getBoundingClientRect().height) ||
       !purchaseFavorite ||
-      getComputedStyle(purchaseFavorite).columnGap !== "8px" ||
-      getComputedStyle(purchaseFavorite).fontWeight !== "400" ||
-      getComputedStyle(purchaseFavorite).color !== "rgba(0, 0, 0, 0.55)" ||
-      !purchaseActions ||
-      getComputedStyle(purchaseActions).paddingBottom !== "96px" ||
-      purchaseShareButtons.length !== 4 ||
       !utilityRow ||
       !content ||
       getComputedStyle(content).paddingTop !== "12px" ||
@@ -872,11 +862,7 @@ export const DesktopRegression: Story = {
       Math.round(purchaseTagToggle.getBoundingClientRect().height) !== 20 ||
       canvasElement.textContent?.includes("Clip coupon") ||
       canvasElement.textContent?.includes("20% off") ||
-      !purchaseLayout.contains(purchaseFavorite) ||
-      Array.from(purchaseShareButtons).some(
-        (button) =>
-          !shareGroup.contains(button) || purchaseLayout.contains(button)
-      ) ||
+      !shareGroup.contains(purchaseFavorite) ||
       breadcrumb.parentElement !== utilityRow ||
       shareGroup.parentElement !== utilityRow ||
       getComputedStyle(utilityRow).display !== "flex" ||
@@ -884,11 +870,10 @@ export const DesktopRegression: Story = {
       shareGroup.getBoundingClientRect().left ||
       purchasePrimary.parentElement !== purchaseLayout ||
       getComputedStyle(purchasePrimary).display !== "contents" ||
-      !purchasePrimary.contains(purchaseFavorite) ||
+      purchasePrimary.contains(purchaseFavorite) ||
       purchaseSticky.parentElement !== purchasePrimary ||
       purchaseCheckout.parentElement !== purchaseSticky ||
       purchaseSecondary.parentElement !== purchaseSticky ||
-      purchaseSticky.previousElementSibling !== purchaseActions ||
       !purchaseCheckout.contains(quantity) ||
       !purchaseCheckout.contains(addToCart) ||
       getComputedStyle(purchaseCheckout).borderTopWidth !== "0px" ||
@@ -920,9 +905,6 @@ export const DesktopRegression: Story = {
       getComputedStyle(addToCart).height !== "56px" ||
       getComputedStyle(addToCart).fontSize !== "18px" ||
       getComputedStyle(quantity).fontSize !== "20px" ||
-      Array.from(purchaseShareButtons).some(
-        (button) => purchasePrimary.contains(button)
-      ) ||
       !purchasePrimary.contains(addToCart) ||
       addToCart.querySelector("img") ||
       purchaseSecondary.contains(addToCart) ||
@@ -939,9 +921,6 @@ export const DesktopRegression: Story = {
           getComputedStyle(tag).borderTopColor !== "rgb(224, 0, 0)"
       ) ||
       productInfo.contains(purchaseFavorite) ||
-      Array.from(purchaseShareButtons).some((button) =>
-        productInfo.contains(button)
-      ) ||
       !overview ||
       !leftContent ||
       !productInfo ||
@@ -1665,10 +1644,9 @@ export const MobileRegression: Story = {
     const mobileSummaryButtons = mobileSummaryActions?.querySelectorAll(
       "[data-pdp-mobile-action]"
     );
-    const purchaseFavorite = purchasePanel?.querySelector<HTMLElement>(
-      '[data-pdp-purchase-action="favorite"]'
+    const purchaseFavorite = canvasElement.querySelector<HTMLElement>(
+      '[data-pdp-header-action="favorite"]'
     );
-    const purchaseActions = purchaseFavorite?.parentElement;
     const quantityLabel = purchaseCheckout?.querySelector<HTMLElement>(
       '[data-slot="product-detail-quantity-row"] > span'
     );
@@ -2017,8 +1995,7 @@ export const MobileRegression: Story = {
       getComputedStyle(mobileSummaryActions).columnGap !== "8px" ||
       mobileSummaryButtons?.length !== 2 ||
       !purchaseFavorite ||
-      !purchaseActions ||
-      getComputedStyle(purchaseActions).display !== "none" ||
+      !shareGroup.contains(purchaseFavorite) ||
       !quantityLabel ||
       getComputedStyle(quantityLabel).display !== "none" ||
       !title ||
