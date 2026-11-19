@@ -1,0 +1,194 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "NavigationMenu",
+  "category": "navigation",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Site navigation with links and anchored disclosure panels.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "NavigationMenuProps",
+    "NavigationMenu",
+    "NavigationMenuItem",
+    "NavigationMenuList",
+    "NavigationMenuTrigger",
+    "NavigationMenuContent",
+    "NavigationMenuLink",
+    "NavigationMenuIndicator",
+    "NavigationMenuPositioner",
+    "navigationMenuTriggerStyle"
+  ],
+  "props": {
+    "value": {
+      "type": "Value | null",
+      "required": false
+    },
+    "defaultValue": {
+      "type": "Value | null",
+      "required": false
+    },
+    "onValueChange": {
+      "type": "function",
+      "required": false
+    },
+    "orientation": {
+      "type": "horizontal | vertical",
+      "required": false
+    },
+    "side": {
+      "type": "Side",
+      "required": false
+    },
+    "align": {
+      "type": "Align",
+      "required": false
+    },
+    "sideOffset": {
+      "type": "number",
+      "required": false
+    },
+    "alignOffset": {
+      "type": "number",
+      "required": false
+    },
+    "positioner": {
+      "type": "ReactElement",
+      "required": false
+    }
+  },
+  "rules": {
+    "tokens": {
+      "ruleId": "token-exists"
+    }
+  },
+  "tokens": [
+    "--space-050",
+    "--space-400",
+    "--space-100",
+    "--radius-component-default",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--font-weight-emphasize",
+    "--text-disabled",
+    "--surface-secondary",
+    "--stroke-thick",
+    "--focus-ring",
+    "--space-150",
+    "--stroke-default",
+    "--border-default",
+    "--radius-surface-default",
+    "--surface-primary",
+    "--elevation-400-menu-panel",
+    "--button-tertiary-active"
+  ],
+  "tokenBindings": {
+    "--space-050": {
+      "property": "gap",
+      "selector": ".list"
+    },
+    "--space-400": {
+      "property": "min-height",
+      "selector": ".trigger"
+    },
+    "--space-100": {
+      "property": "padding",
+      "selector": ".trigger"
+    },
+    "--radius-component-default": {
+      "property": "border-radius",
+      "selector": ".trigger"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".trigger"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".trigger"
+    },
+    "--font-size-body-md": {
+      "property": "font-size",
+      "selector": ".trigger"
+    },
+    "--line-height-body-md": {
+      "property": "line-height",
+      "selector": ".trigger"
+    },
+    "--font-weight-emphasize": {
+      "property": "font-weight",
+      "selector": ".trigger"
+    },
+    "--text-disabled": {
+      "property": "color",
+      "selector": ".trigger[data-disabled]"
+    },
+    "--surface-secondary": {
+      "property": "background",
+      "selector": ".trigger[data-popup-open]"
+    },
+    "--stroke-thick": {
+      "property": "outline",
+      "selector": ".trigger:focus-visible"
+    },
+    "--focus-ring": {
+      "property": "outline",
+      "selector": ".trigger:focus-visible"
+    },
+    "--space-150": {
+      "property": "width",
+      "selector": ".chevron"
+    },
+    "--stroke-default": {
+      "property": "border",
+      "selector": ".popup"
+    },
+    "--border-default": {
+      "property": "border",
+      "selector": ".popup"
+    },
+    "--radius-surface-default": {
+      "property": "border-radius",
+      "selector": ".popup"
+    },
+    "--surface-primary": {
+      "property": "background",
+      "selector": ".popup"
+    },
+    "--elevation-400-menu-panel": {
+      "property": "box-shadow",
+      "selector": ".popup"
+    },
+    "--button-tertiary-active": {
+      "property": "background",
+      "selector": ".link:active"
+    }
+  },
+  "accessibility": {
+    "role": "navigation",
+    "notes": "Use a named navigation landmark and real links. Base UI handles keyboard navigation, touch and dismissal."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Showcase opens a panel by keyboard and checks its destination, dismissal and focus return."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#ShopNavigation"
+  ]
+}

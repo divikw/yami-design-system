@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "navigation-menu",
+  "title": "NavigationMenu",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Site navigation with links and anchored disclosure panels.",
+  "source": "components/NavigationMenu",
+  "files": [
+    {
+      "source": "components/NavigationMenu/index.ts",
+      "target": "components/NavigationMenu/index.ts"
+    },
+    {
+      "source": "components/NavigationMenu/NavigationMenu.module.css",
+      "target": "components/NavigationMenu/NavigationMenu.module.css"
+    },
+    {
+      "source": "components/NavigationMenu/NavigationMenu.tsx",
+      "target": "components/NavigationMenu/NavigationMenu.tsx"
+    }
+  ],
+  "exports": [
+    "NavigationMenu",
+    "NavigationMenuContent",
+    "NavigationMenuIndicator",
+    "NavigationMenuItem",
+    "NavigationMenuLink",
+    "NavigationMenuList",
+    "NavigationMenuPositioner",
+    "NavigationMenuProps",
+    "NavigationMenuTrigger",
+    "navigationMenuTriggerStyle"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/NavigationMenu/usage.md",
+    "stories": [
+      "components/NavigationMenu/NavigationMenu.stories.tsx"
+    ],
+    "examples": [
+      "components/NavigationMenu/examples.tsx#ShopNavigation"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--button-tertiary-active",
+      "--elevation-400-menu-panel",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--radius-component-default",
+      "--radius-surface-default",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-400",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-disabled",
+      "--text-primary"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-050": {
+        "property": "gap",
+        "selector": ".list"
+      },
+      "--space-400": {
+        "property": "min-height",
+        "selector": ".trigger"
+      },
+      "--space-100": {
+        "property": "padding",
+        "selector": ".trigger"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".trigger"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".trigger"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".trigger"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".trigger"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".trigger"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".trigger"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".trigger[data-disabled]"
+      },
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".trigger[data-popup-open]"
+      },
+      "--stroke-thick": {
+        "property": "outline",
+        "selector": ".trigger:focus-visible"
+      },
+      "--focus-ring": {
+        "property": "outline",
+        "selector": ".trigger:focus-visible"
+      },
+      "--space-150": {
+        "property": "width",
+        "selector": ".chevron"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".popup"
+      },
+      "--border-default": {
+        "property": "border",
+        "selector": ".popup"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".popup"
+      },
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".popup"
+      },
+      "--elevation-400-menu-panel": {
+        "property": "box-shadow",
+        "selector": ".popup"
+      },
+      "--button-tertiary-active": {
+        "property": "background",
+        "selector": ".link:active"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "navigation",
+      "notes": "Use a named navigation landmark and real links. Base UI handles keyboard navigation, touch and dismissal."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "b90799c7d988a11bfb9d92338f1a03588ecf7928335868b639cedfe3be38e508"
+}

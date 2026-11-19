@@ -11,6 +11,7 @@
 import { Button } from './Button'
 import { ButtonLink } from './ButtonLink'
 import { ButtonGroup } from '../ButtonGroup'
+import { useDesktopViewport } from '../Drawer/useDesktopViewport'
 
 export const EmphasisExample = () => (
   <section data-example="EmphasisExample">
@@ -80,13 +81,16 @@ export const DisabledExample = () => (
   </section>
 )
 
-export const FullWidthExample = () => (
-  <section data-example="FullWidthExample">
-    <Button variant="emphasis" size="lg" form="full">
-      Place Order
-    </Button>
-  </section>
-)
+export function FullWidthExample() {
+  const size = useDesktopViewport() ? "lg" : "md"
+  return (
+    <section data-example="FullWidthExample">
+      <Button variant="emphasis" size={size} form="full">
+        Place Order
+      </Button>
+    </section>
+  )
+}
 
 export const AllSizesExample = () => (
   <section data-example="AllSizesExample">
@@ -109,19 +113,22 @@ export const AllSizesExample = () => (
  * pattern that every bottom-of-screen cart action uses. Paired like
  * this, the emphasis red doesn't compete with itself.
  */
-export const CheckoutCTARowExample = () => (
-  <section data-example="CheckoutCTARowExample">
-    <ButtonGroup full aria-label="Checkout actions">
-      {/* Continue Shopping closes the current sheet; use an anchor if it navigates. */}
-      <Button variant="secondary" size="lg" form="full">
-        Continue Shopping
-      </Button>
-      <Button variant="emphasis" size="lg" form="full">
-        Place Order
-      </Button>
-    </ButtonGroup>
-  </section>
-)
+export function CheckoutCTARowExample() {
+  const size = useDesktopViewport() ? "lg" : "md"
+  return (
+    <section data-example="CheckoutCTARowExample">
+      <ButtonGroup full aria-label="Checkout actions">
+        {/* Continue Shopping closes the current sheet; use an anchor if it navigates. */}
+        <Button variant="secondary" size={size} form="full">
+          Continue Shopping
+        </Button>
+        <Button variant="emphasis" size={size} form="full">
+          Place Order
+        </Button>
+      </ButtonGroup>
+    </section>
+  )
+}
 
 export const InverseExample = () => (
   <section

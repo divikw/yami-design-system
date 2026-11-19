@@ -38,7 +38,7 @@ for (const locale of ["zh", "en"]) {
     expect(disabled).toHaveLength(2);
     for (const input of disabled) expect(input.getAttribute("aria-invalid")).toBe("true");
     expect(new Set(disabled.map((input) => input.closest('[data-slot="input"]')!.getAttribute("data-density")))).toEqual(new Set(["default", "compact"]));
-    const longMessages = Array.from(boundaries.querySelectorAll<HTMLElement>('span[class*="helperText"], span[class*="errorText"]')).filter((element) => element.textContent!.startsWith("https://example.com/"));
+    const longMessages = Array.from(boundaries.querySelectorAll<HTMLElement>('span[class*="helperText"], span[class*="errorText"]')).filter((element) => element.textContent!.includes("https://example.com/"));
     expect(longMessages).toHaveLength(2);
     for (const message of longMessages) expect(message.scrollWidth).toBeLessThanOrEqual(message.clientWidth);
     for (const field of container.querySelectorAll('[data-slot="input"]')) {

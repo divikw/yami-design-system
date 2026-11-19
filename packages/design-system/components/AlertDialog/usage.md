@@ -34,7 +34,7 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader,
 
 ## 布局与无障碍
 
-PC 和 Mobile 都居中，侧边至少保留 16px。1024px 起 PC 最大宽度 480px，标题左对齐、24px 字号，描述 16px，四周留白 24px；不显示右上角关闭按钮，底部操作区四边内边距 24px、操作靠右，使用 ButtonGroup，灰底取消与黑色确认按钮均为胶囊形。Mobile 最大宽度仍为 400px，标题居中、双列等宽、40px 高的全圆角按钮，不显示右上角关闭按钮。长标题/说明在 Header 内滚动，Footer 始终可操作。颜色、圆角和字体消费 YAMI token，深色主题自动跟随；Portal 内容显式传入 lang。
+PC 和 Mobile 都居中，侧边至少保留 16px。1024px 起 PC 最大宽度 480px，标题左对齐、24px 字号，描述 16px，四周留白 24px；不显示右上角关闭按钮，底部操作区四边内边距 24px、操作靠右，使用 ButtonGroup，灰底取消与黑色确认按钮均为胶囊形。Mobile 最大宽度仍为 400px，标题居中，示例使用双列等宽的 md（40px）全圆角按钮，不显示右上角关闭按钮。长标题/说明在 Header 内滚动，Footer 始终可操作。颜色、圆角和字体消费 YAMI token，深色主题自动跟随；Portal 内容显式传入 lang。
 
 点击外部不会关闭。Escape、取消和确认可关闭；Tab 焦点限制在弹窗内，关闭后恢复触发器。把 Cancel 放在第一个可聚焦位置，避免默认聚焦危险操作。Base UI 触摸打开默认聚焦 Popup，可用 initialFocus 显式覆盖。确认不可用时禁用 Action；不可撤销操作使用一个 emphasis 按钮，普通确认保持 primary。
 
@@ -55,6 +55,6 @@ Cancel and Action compose Base UI Close with YAMI Button. They default to second
 
 ## Layout and accessibility
 
-Both PC and Mobile stay centered with at least 16px side margins. From 1024px, PC uses a 480px maximum width, left-aligned 24px title, 16px description, 24px outer padding, no corner close control, and 24px footer padding and a right-aligned ButtonGroup with pill-shaped secondary Cancel and primary confirmation buttons. Mobile retains the 400px maximum width, centered title and equal-width 40px pill actions without the corner close control. Long messages scroll in Header; Footer remains accessible. Semantic tokens support light/dark themes. Declare lang on portal content.
+Both PC and Mobile stay centered with at least 16px side margins. From 1024px, PC uses a 480px maximum width, left-aligned 24px title, 16px description, 24px outer padding, no corner close control, and 24px footer padding and a right-aligned ButtonGroup with pill-shaped secondary Cancel and primary confirmation buttons. Mobile retains the 400px maximum width, centered title and, in these examples, equal-width md (40px) pill actions without the corner close control. Long messages scroll in Header; Footer remains accessible. Semantic tokens support light/dark themes. Declare lang on portal content.
 
 Outside presses never dismiss. Escape and explicit actions close and restore trigger focus. Tab stays within the modal. Put Cancel first to avoid focusing a destructive action by default; touch opening follows Base UI's Popup-focus behavior. Override initialFocus only when needed. Disable unavailable actions. Use one emphasis action for irreversible changes; ordinary confirmation uses primary.

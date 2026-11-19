@@ -1,0 +1,16 @@
+.root {
+  display: block;
+  overflow: hidden;
+  background-color: var(--fill-skeleton);
+  background-image: linear-gradient(90deg, transparent, var(--fill-skeleton-inverse), transparent);
+  background-position: 200% 0;
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+:where(.root) { border-radius: var(--radius-component-default); }
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .root { animation: none; background-image: none; }
+}

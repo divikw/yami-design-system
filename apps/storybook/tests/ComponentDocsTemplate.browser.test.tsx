@@ -5,7 +5,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
-import { Button, ButtonLink } from "@yami/design-system";
+import { Button, ButtonLink, Input } from "@yami/design-system";
 import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import { DrawerExample } from "../../../packages/design-system/components/Drawer/examples";
 import { AlertDialogDocsPage } from "../.storybook/alert-dialog-docs";
@@ -46,7 +46,7 @@ for (const locale of ["zh", "en"] as const) {
       expect(title.textContent).toBe(name);
       expect(getComputedStyle(title).fontSize).toBe("32px");
       const previous = host.querySelector('header a[aria-label^="上一个"], header a[aria-label^="Previous"]');
-      const previousPaths = { "Radio Group": "yami-components-layout-popover", Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-checkbox", AlertDialog: "yami-components-layout-accordion", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
+      const previousPaths = { "Radio Group": "yami-components-data-display-progress", Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-combobox", AlertDialog: "yami-components-data-display-alert", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
       if (name === "Accordion") expect(previous).toBeNull();
       else expect(previous?.getAttribute("href")).toBe(`/?path=/docs/${previousPaths[name]}--docs`);
       const headings = [...host.querySelectorAll("h2")];
@@ -120,7 +120,7 @@ test("previews follow the Docs viewport while keeping their content inside the e
     flushSync(() => root.render(
       <>
         <ComponentDocsPreview name="first" locale="en" previewBackground="var(--surface-inverse)"><Button form="full" inverse>Continue</Button></ComponentDocsPreview>
-        <ComponentDocsPreview name="second" locale="en"><Button form="full">Save</Button></ComponentDocsPreview>
+        <ComponentDocsPreview name="second" locale="en"><Input density="compact" aria-label="Search" placeholder="Search" /></ComponentDocsPreview>
       </>,
     ));
     const [first, second] = host.querySelectorAll("iframe");
@@ -136,6 +136,9 @@ test("previews follow the Docs viewport while keeping their content inside the e
     expect(canvasColor(first)).not.toBe(canvasColor(second));
     expect(second.contentWindow?.innerWidth).toBe(375);
     expect(host.getBoundingClientRect().width).toBe(300);
+    const inputBounds = second.contentDocument!.querySelector('[data-slot="input"]')!.getBoundingClientRect();
+    expect(inputBounds.width).toBeLessThanOrEqual(300 - 2 * 16);
+    expect(inputBounds.left + inputBounds.width / 2).toBeCloseTo(375 / 2, 0);
     document.documentElement.dataset.theme = "dark";
     await expect.poll(() => first.contentDocument?.documentElement.dataset.theme).toBe("dark");
   } finally {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./Accordion";
 import { Button } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 
 export function ProductDetailsAccordion() {
   return (
@@ -22,11 +23,12 @@ export function ProductDetailsAccordion() {
 }
 
 export function ControlledAccordion({ locale = "zh" }: { locale?: "zh" | "en" }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [value, setValue] = useState<string[]>([]);
   const zh = locale === "zh";
   return (
     <div>
-      <Button variant="secondary" onClick={() => setValue([])}>
+      <Button size={actionSize} variant="secondary" onClick={() => setValue([])}>
         {zh ? "收起内容" : "Collapse content"}
       </Button>
       <Accordion value={value} onValueChange={setValue}>

@@ -79,12 +79,9 @@
       "--line-height-body-xl",
       "--line-height-caption-md",
       "--radius-component-default",
-      "--space-0",
       "--space-025",
       "--space-050",
       "--space-100",
-      "--space-150",
-      "--space-200",
       "--space-300",
       "--space-500",
       "--space-600",
@@ -103,12 +100,8 @@
     ],
     "tokenBindings": {
       "--space-100": {
-        "property": "padding-inline-end",
+        "property": "padding-inline",
         "selector": ".field"
-      },
-      "--space-200": {
-        "property": "padding-inline-start",
-        "selector": ".root[data-action='true'] .field"
       },
       "--space-300": {
         "property": "width",
@@ -212,5 +205,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "dd923b1523f4f169804b91071aeba2e7e080cb7f9b7a503bef925dc8546485b4"
+  "contentDigest": "52b70c599c42125d7a35da90767b92b4ab055224055a9908f42bb17f438f4152"
 }

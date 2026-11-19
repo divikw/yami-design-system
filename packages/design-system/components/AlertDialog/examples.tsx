@@ -1,10 +1,12 @@
 import { Button } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "./AlertDialog";
 
 export function AlertDialogExample({ locale = "zh", destructive = false }: { locale?: "zh" | "en"; destructive?: boolean }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const zh = locale === "zh";
   return <AlertDialog>
-    <AlertDialogTrigger render={<Button variant="secondary" />}>
+    <AlertDialogTrigger render={<Button size={actionSize} variant="secondary" />}>
       {destructive ? (zh ? "删除地址" : "Delete address") : (zh ? "确认更改" : "Confirm changes")}
     </AlertDialogTrigger>
     <AlertDialogContent lang={locale}>

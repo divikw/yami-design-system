@@ -19,7 +19,19 @@ import { isValidElement, useContext, useEffect, useState, type ComponentProps, t
 import { ChevronRight } from "lucide-react";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import type { PreparedStory } from "storybook/internal/types";
+import { AlertDocsPage } from "./alert-docs";
+import { ToastDocsPage } from "./toast-docs";
 import { AlertDialogDocsPage } from "./alert-dialog-docs";
+import { NavigationMenuDocsPage } from "./navigation-menu-docs";
+import { ProgressDocsPage } from "./progress-docs";
+import { SliderDocsPage } from "./slider-docs";
+import { EmptyStateDocsPage } from "./empty-state-docs";
+import { SkeletonDocsPage } from "./skeleton-docs";
+import { SpinnerDocsPage } from "./spinner-docs";
+import { TextareaDocsPage } from "./textarea-docs";
+import { TooltipDocsPage } from "./tooltip-docs";
+import { FieldDocsPage } from "./field-docs";
+import { DropdownMenuDocsPage } from "./dropdown-menu-docs";
 import { DrawerDocsPage } from "./drawer-docs";
 import { DialogDocsPage } from "./dialog-docs";
 import { AccordionDocsPage } from "./accordion-docs";
@@ -32,6 +44,7 @@ import { ButtonGroupDocsPage } from "./button-group-docs";
 import { CardDocsPage } from "./card-docs";
 import { SwitchDocsPage } from "./switch-docs";
 import { RadioGroupDocsPage } from "./radio-group-docs";
+import { ComboboxDocsPage } from "./combobox-docs";
 import { CheckboxDocsPage } from "./checkbox-docs";
 import { componentApiRows, normalizeComponentName, usesBaseUI } from "./component-docs-scope";
 import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, DocsExampleCard, Installation, installationMarkdown, type DocsLocale } from "./component-docs-template";
@@ -53,7 +66,7 @@ const usageModules = import.meta.glob(
 
 type DocsNeighbor = { name: string; path: string };
 type DocsNeighbors = { id: string; previous?: DocsNeighbor; next?: DocsNeighbor };
-const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
+const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { dropdownmenu: DropdownMenuDocsPage, alert: AlertDocsPage, toast: ToastDocsPage, navigationmenu: NavigationMenuDocsPage, progress: ProgressDocsPage, combobox: ComboboxDocsPage, spinner: SpinnerDocsPage, skeleton: SkeletonDocsPage, emptystate: EmptyStateDocsPage, slider: SliderDocsPage, textarea: TextareaDocsPage, tooltip: TooltipDocsPage, field: FieldDocsPage, drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
 
 function componentNameFromUsagePath(filePath: string) {
   return filePath.match(/\/components\/([^/]+)\/usage\.md$/)?.[1];

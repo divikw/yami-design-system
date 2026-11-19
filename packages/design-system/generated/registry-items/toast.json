@@ -1,0 +1,194 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "toast",
+  "title": "Toast",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Transient notifications with status icons, actions, stacking and async updates.",
+  "source": "components/Toast",
+  "files": [
+    {
+      "source": "components/Toast/index.ts",
+      "target": "components/Toast/index.ts"
+    },
+    {
+      "source": "components/Toast/Toast.module.css",
+      "target": "components/Toast/Toast.module.css"
+    },
+    {
+      "source": "components/Toast/Toast.tsx",
+      "target": "components/Toast/Toast.tsx"
+    }
+  ],
+  "exports": [
+    "createToastManager",
+    "toast",
+    "Toast",
+    "ToastAction",
+    "ToastClose",
+    "ToastContent",
+    "ToastDescription",
+    "Toaster",
+    "ToasterProps",
+    "ToastPortal",
+    "ToastPosition",
+    "ToastProps",
+    "ToastProvider",
+    "ToastTitle",
+    "ToastViewport",
+    "useToastManager"
+  ],
+  "composes": [
+    "Button",
+    "Spinner"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Toast/usage.md",
+    "stories": [
+      "components/Toast/Toast.stories.tsx"
+    ],
+    "examples": [
+      "components/Toast/examples.tsx#SaveForLater"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--elevation-400-menu-panel",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--font-weight-normal",
+      "--line-height-body-md",
+      "--radius-surface-default",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--text-error",
+      "--text-info",
+      "--text-primary",
+      "--text-secondary",
+      "--text-success",
+      "--text-warning"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-200": {
+        "property": "inset-inline",
+        "selector": ".viewport"
+      },
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".root"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".root"
+      },
+      "--border-default": {
+        "property": "border",
+        "selector": ".root"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".root"
+      },
+      "--elevation-400-menu-panel": {
+        "property": "box-shadow",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--font-weight-normal": {
+        "property": "font",
+        "selector": ".root"
+      },
+      "--font-size-body-md": {
+        "property": "font",
+        "selector": ".root"
+      },
+      "--line-height-body-md": {
+        "property": "font",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font",
+        "selector": ".root"
+      },
+      "--space-100": {
+        "property": "--lift",
+        "selector": ".root"
+      },
+      "--stroke-thick": {
+        "property": "outline",
+        "selector": ".root:focus-visible"
+      },
+      "--focus-ring": {
+        "property": "outline",
+        "selector": ".root:focus-visible"
+      },
+      "--space-150": {
+        "property": "padding",
+        "selector": ".content"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".title"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      },
+      "--space-050": {
+        "property": "margin-top",
+        "selector": ".title + .description"
+      },
+      "--text-success": {
+        "property": "color",
+        "selector": ".root[data-type=\"success\"] .icon"
+      },
+      "--text-info": {
+        "property": "color",
+        "selector": ".root[data-type=\"info\"] .icon"
+      },
+      "--text-warning": {
+        "property": "color",
+        "selector": ".root[data-type=\"warning\"] .icon"
+      },
+      "--text-error": {
+        "property": "color",
+        "selector": ".root[data-type=\"error\"] .icon"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "dialog / alertdialog",
+      "notes": "Base UI manages live regions, F6 focus, pause on interaction and dismissal."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "6e196decc638bf81a99e116e131fc731be21cd6175835e9932178a0f52038bfe"
+}

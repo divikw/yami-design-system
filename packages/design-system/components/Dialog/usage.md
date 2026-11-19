@@ -26,7 +26,7 @@ DialogContent 的 showCloseButton 默认为 true。隐藏右上角图标时可�
 - 默认弹窗顶部有关闭图标时，图标上方留 12px；隐藏该图标时，标题上方留 20px。左右留白在 PC（≥1024px）为 24px，Mobile 为 16px。关闭按钮独占标题上方一行。标题栏底部留 8px，正文上下各留 8px。操作栏顶部留 16px，底部留 PC 20px、Mobile 16px，并兼顾安全区。
 - confirmation 信息左右 12px、底部 8px、footer 12px，保留旧布局。
 - 关闭按钮与图标同为 24px，圆角 4px，使用 YAMI 关闭资源与 Button 44px 热区。
-- footer 无分隔线。操作由宿主组合 Button / ButtonGroup，示例使用 md（40px）全圆角按钮，PC 靠右、Mobile 两列等宽；普通保存使用黑色 primary，取消使用 secondary。表单字段使用 Input fullWidth 撑满内容区。
+- footer 无分隔线。操作由宿主组合 Button / ButtonGroup，示例中 PC 使用 md（40px）全圆角按钮并靠右排列，Mobile 使用 md（40px）并按两列等宽排列；普通保存使用黑色 primary，取消使用 secondary。表单字段使用 Input fullWidth 撑满内容区。
 
 示例见 `examples.tsx#DialogExample`；无独立 Figma 绑定。
 
@@ -53,6 +53,6 @@ Legacy `variant="confirmation"` keeps its centered heading, compact spacing and 
 
 ## Layout
 
-PC and Mobile stay centered with a 400px maximum width, at least 16px side margins and 48px vertical safe clearance. Overflowing body content scrolls between the fixed header and footer. Close occupies its own top row above the heading. In the default layout, leave 12px above the corner close icon, or 20px above the heading when the corner icon is hidden. Side insets are 24px from 1024px and 16px below. The header has 8px of bottom padding. The body has 8px of vertical padding. Footer actions have 16px above them. Bottom padding is 20px on desktop and 16px on mobile, with extra clearance for the safe area. Mobile headings are 20px and desktop headings are 24px. Surface radius remains 12px using YAMI tokens. Confirmation retains 12px side/footer padding and 8px body-bottom spacing. Close fits the 24px YAMI icon with a 4px radius and Button's 44px target. The footer has no divider. Hosts compose Button / ButtonGroup actions; examples use md (40px) pills, right-aligned on PC and equal-width on Mobile, primary black for Save and secondary for Cancel. Input fullWidth fills the content area.
+PC and Mobile stay centered with a 400px maximum width, at least 16px side margins and 48px vertical safe clearance. Overflowing body content scrolls between the fixed header and footer. Close occupies its own top row above the heading. In the default layout, leave 12px above the corner close icon, or 20px above the heading when the corner icon is hidden. Side insets are 24px from 1024px and 16px below. The header has 8px of bottom padding. The body has 8px of vertical padding. Footer actions have 16px above them. Bottom padding is 20px on desktop and 16px on mobile, with extra clearance for the safe area. Mobile headings are 20px and desktop headings are 24px. Surface radius remains 12px using YAMI tokens. Confirmation retains 12px side/footer padding and 8px body-bottom spacing. Close fits the 24px YAMI icon with a 4px radius and Button's 44px target. The footer has no divider. Hosts compose Button / ButtonGroup actions; examples use right-aligned md (40px) pills on PC and equal-width md (40px) pills on mobile, primary black for Save and secondary for Cancel. Input fullWidth fills the content area.
 
 See `examples.tsx#DialogExample`. No standalone Figma binding is assigned.

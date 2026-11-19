@@ -1,0 +1,133 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Progress",
+  "category": "display",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Display task completion with a labeled track, localized values and indeterminate state.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "ProgressProps",
+    "Progress",
+    "ProgressLabel",
+    "ProgressValue",
+    "ProgressTrack",
+    "ProgressIndicator"
+  ],
+  "props": {
+    "value": {
+      "type": "number | null",
+      "required": true
+    },
+    "min": {
+      "type": "number",
+      "required": false
+    },
+    "max": {
+      "type": "number",
+      "required": false
+    },
+    "locale": {
+      "type": "Intl.LocalesArgument",
+      "required": false
+    },
+    "format": {
+      "type": "Intl.NumberFormatOptions",
+      "required": false
+    },
+    "getAriaValueText": {
+      "type": "function",
+      "required": false
+    }
+  },
+  "rules": {
+    "tokens": {
+      "ruleId": "token-exists"
+    }
+  },
+  "tokens": [
+    "--space-100",
+    "--text-primary",
+    "--font-family-ios",
+    "--font-size-body-md",
+    "--line-height-body-md",
+    "--font-weight-emphasize",
+    "--text-secondary",
+    "--space-050",
+    "--fill-secondary",
+    "--radius-full",
+    "--fill-inverse"
+  ],
+  "tokenBindings": {
+    "--space-100": {
+      "property": "gap",
+      "selector": ".root"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": ".root"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".root"
+    },
+    "--font-size-body-md": {
+      "property": "font-size",
+      "selector": ".root"
+    },
+    "--line-height-body-md": {
+      "property": "line-height",
+      "selector": ".root"
+    },
+    "--font-weight-emphasize": {
+      "property": "font-weight",
+      "selector": ".label"
+    },
+    "--text-secondary": {
+      "property": "color",
+      "selector": ".value"
+    },
+    "--space-050": {
+      "property": "height",
+      "selector": ".track"
+    },
+    "--fill-secondary": {
+      "property": "background",
+      "selector": ".track"
+    },
+    "--radius-full": {
+      "property": "border-radius",
+      "selector": ".track"
+    },
+    "--fill-inverse": {
+      "property": "background",
+      "selector": ".indicator"
+    }
+  },
+  "accessibility": {
+    "role": "progressbar",
+    "notes": "Name the bar with ProgressLabel or aria-label. Base UI provides range semantics; unknown totals omit aria-valuenow."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "Showcase adjusts a controlled slider and verifies the accessible and displayed completion values."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#TransferProgress"
+  ]
+}

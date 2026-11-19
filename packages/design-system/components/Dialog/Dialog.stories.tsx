@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { DialogExample } from "./examples";
 import { Button } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 import { Dialog, type DialogProps } from "./Dialog";
 import styles from "./Dialog.stories.module.css";
 
@@ -18,19 +19,20 @@ function DialogDemo({
   message = "应用后，当前设置将立即生效。",
   ...args
 }: DialogDemoProps) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [open, setOpen] = useState(args.open);
   useEffect(() => setOpen(args.open), [args.open]);
   return (
     <div className={styles.screen}>
-      <Button onClick={() => setOpen(true)}>打开居中弹窗</Button>
+      <Button size={actionSize} onClick={() => setOpen(true)}>打开居中弹窗</Button>
       <Dialog
         {...args}
         open={open}
         onClose={() => setOpen(false)}
         footer={(
           <div className={styles.footerActions}>
-            <Button variant="secondary" form="full" onClick={() => setOpen(false)}>取消</Button>
-            <Button variant={confirmVariant} form="full" onClick={() => setOpen(false)}>{confirmLabel}</Button>
+            <Button size="md" variant="secondary" form="full" onClick={() => setOpen(false)}>取消</Button>
+            <Button size="md" variant={confirmVariant} form="full" onClick={() => setOpen(false)}>{confirmLabel}</Button>
           </div>
         )}
       >
@@ -41,20 +43,21 @@ function DialogDemo({
 }
 
 function LongTitleDialogDemo(args: DialogProps) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [open, setOpen] = useState(args.open);
   useEffect(() => setOpen(args.open), [args.open]);
   return (
     <div className={styles.screen}>
-      <Button onClick={() => setOpen(true)}>打开多操作弹窗</Button>
+      <Button size={actionSize} onClick={() => setOpen(true)}>打开多操作弹窗</Button>
       <Dialog
         {...args}
         open={open}
         onClose={() => setOpen(false)}
         footer={(
           <div className={`${styles.footerActions} ${styles.footerActionsVertical}`}>
-            <Button variant="primary" form="full" onClick={() => setOpen(false)}>使用当前地址</Button>
-            <Button variant="secondary" form="full" onClick={() => setOpen(false)}>选择其他地址</Button>
-            <Button variant="secondary" form="full" onClick={() => setOpen(false)}>取消</Button>
+            <Button size="md" variant="primary" form="full" onClick={() => setOpen(false)}>使用当前地址</Button>
+            <Button size="md" variant="secondary" form="full" onClick={() => setOpen(false)}>选择其他地址</Button>
+            <Button size="md" variant="secondary" form="full" onClick={() => setOpen(false)}>取消</Button>
           </div>
         )}
       >

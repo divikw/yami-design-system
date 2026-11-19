@@ -1,0 +1,81 @@
+.viewport {
+  position: fixed;
+  z-index: 1100;
+  inset-inline: var(--space-200);
+  bottom: max(var(--space-200), env(safe-area-inset-bottom));
+  max-width: 24rem;
+  margin-inline: auto;
+  pointer-events: none;
+  outline: none;
+}
+@media (min-width: 1024px) {
+  .viewport:not([data-position]) { inset-inline-start: auto; width: 24rem; }
+}
+/* Leave room for left, center and right alignment even on a phone. */
+.viewport[data-position] { width: calc(100% - 4 * var(--space-200)); }
+.viewport[data-position$="-left"] { margin-left: 0; }
+.viewport[data-position$="-right"] { margin-right: 0; }
+.viewport[data-position^="top-"] {
+  top: max(var(--space-200), env(safe-area-inset-top));
+  bottom: auto;
+  --stack-direction: 1;
+}
+.viewport[data-position^="top-"] .root {
+  top: 0;
+  bottom: auto;
+  transform-origin: top;
+}
+.viewport[data-position^="top-"] .root[data-expanded]::after { inset: auto 0 100%; }
+.root {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  pointer-events: auto;
+  z-index: calc(100 - var(--toast-index));
+  background: var(--surface-primary);
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-surface-default);
+  box-shadow: var(--elevation-400-menu-panel);
+  color: var(--text-primary);
+  font: var(--font-weight-normal) var(--font-size-body-md) / var(--line-height-body-md) var(--font-family-ios);
+  height: var(--toast-frontmost-height, auto);
+  transform-origin: bottom;
+  --lift: calc(var(--stack-direction, -1) * var(--toast-index) * var(--space-100));
+  transform: translate(var(--toast-swipe-movement-x), calc(var(--lift) + var(--toast-swipe-movement-y))) scale(calc(1 - var(--toast-index) * 0.04));
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+.root[data-expanded] {
+  height: var(--toast-height, auto);
+  --lift: calc(var(--stack-direction, -1) * (var(--toast-offset-y) + var(--toast-index) * var(--space-100)));
+  transform: translate(var(--toast-swipe-movement-x), calc(var(--lift) + var(--toast-swipe-movement-y)));
+}
+.root[data-expanded]::after {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  height: var(--space-100);
+}
+.root[data-limited] { visibility: hidden; pointer-events: none; }
+.root[data-starting-style], .root[data-ending-style] { opacity: 0; }
+.root[data-swiping] { transition: none; }
+.root:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); }
+.content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  padding: var(--space-150);
+}
+.content[data-behind]:not([data-expanded]) { opacity: 0; }
+.message { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.title, .description { margin: 0; font: inherit; }
+.title { font-weight: var(--font-weight-emphasize); }
+.description { color: var(--text-secondary); }
+.title + .description { margin-top: var(--space-050); }
+.icon, .closeIcon { width: var(--space-200); height: var(--space-200); flex: none; }
+.root[data-type="success"] .icon { color: var(--text-success); }
+.root[data-type="info"] .icon { color: var(--text-info); }
+.root[data-type="warning"] .icon { color: var(--text-warning); }
+.root[data-type="error"] .icon { color: var(--text-error); }
+.closeIcon { display: block; background: currentColor; mask: url("../../assets/icons/action/close.svg") center / contain no-repeat; }
+@media (prefers-reduced-motion: reduce) { .root { transition: none; } }

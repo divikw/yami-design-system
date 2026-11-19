@@ -2,11 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button";
+import { useDesktopViewport } from "./useDesktopViewport";
 import { Input } from "../Input";
 import { Drawer, type DrawerProps } from "./Drawer";
 
 type Mode = "default" | "empty" | "loading" | "error" | "long" | "child";
 function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?: boolean }) {
+  const desktop = useDesktopViewport();
+  const actionSize = desktop ? "md" : "sm";
   const zh = locale === "zh";
   const [mode, setMode] = useState<Mode | null>(null);
   const [child, setChild] = useState(false);
@@ -20,17 +23,17 @@ function Demo({ locale = "zh", states = false }: { locale?: "zh" | "en"; states?
   }
   return <div lang={locale} style={{ display: "grid", minHeight: "100dvh", boxSizing: "border-box", placeItems: "center", padding: "var(--space-300)" }}>
     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "var(--space-200)" }}>
-      {(states ? Object.keys(labels) as Mode[] : ["default" as const]).map((value) => <Button key={value} onClick={() => { setMode(value); setChild(value === "child"); }}>{states ? labels[value] : zh ? "打开" : "Open"}</Button>)}
+      {(states ? Object.keys(labels) as Mode[] : ["default" as const]).map((value) => <Button size={actionSize} key={value} onClick={() => { setMode(value); setChild(value === "child"); }}>{states ? labels[value] : zh ? "打开" : "Open"}</Button>)}
     </div>
     <Drawer size="half" lang={locale} open={mode !== null} title={child ? zh ? "详情" : "Details" : zh ? "抽屉" : "Drawer"} closeLabel={zh ? "关闭" : "Close"} onClose={() => setMode(null)}
       back={child ? { label: zh ? "返回" : "Back", onClick: back } : undefined}
-      footer={<div style={{ padding: "var(--space-200)" }}><Button size="lg" form="full" onClick={() => setMode(null)}>{zh ? "完成" : "Done"}</Button></div>}>
+      footer={<div style={{ padding: "var(--space-200)" }}><Button size={desktop ? "lg" : "md"} form="full" onClick={() => setMode(null)}>{zh ? "完成" : "Done"}</Button></div>}>
       <div hidden={child}>
         {mode === "empty" ? <p>{zh ? "暂无内容" : "No content available"}</p>
           : mode === "loading" ? <p role="status">{zh ? "正在加载…" : "Loading…"}</p>
-            : mode === "error" ? <><p role="alert">{zh ? "内容加载失败" : "Could not load content"}</p><Button onClick={() => setMode("default")}>{zh ? "重试" : "Retry"}</Button></>
+            : mode === "error" ? <><p role="alert">{zh ? "内容加载失败" : "Could not load content"}</p><Button size={actionSize} onClick={() => setMode("default")}>{zh ? "重试" : "Retry"}</Button></>
               : <><p>{zh ? "填写备注，或打开详情查看补充说明。" : "Add a note or open the details for more information."}</p><Input fullWidth label={zh ? "备注" : "Note"} />
-                <Button ref={entry} onClick={() => setChild(true)}>{zh ? "查看详情" : "View details"}</Button>
+                <Button size={actionSize} ref={entry} onClick={() => setChild(true)}>{zh ? "查看详情" : "View details"}</Button>
                 {mode === "long" && Array.from({ length: 24 }, (_, index) => <p key={index}>{zh ? `第 ${index + 1} 项` : `Item ${index + 1}`}</p>)}</>}
       </div>
       {child && <p>{zh ? "使用返回按钮回到上一级。" : "Use Back to return to the previous view."}</p>}
@@ -90,9 +93,10 @@ export const MobilePreview: Story = {
 };
 
 function DrawerPlayground(args: DrawerProps & { opener: string }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [open, setOpen] = useState(args.open);
   return <>
-    <Button onClick={() => setOpen(true)}>{args.opener}</Button>
+    <Button size={actionSize} onClick={() => setOpen(true)}>{args.opener}</Button>
     <Drawer {...args} open={open} onClose={() => setOpen(false)}>
       {args.children ?? args.title}
     </Drawer>

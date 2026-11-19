@@ -28,6 +28,7 @@
 import { Button as BaseButton } from '@base-ui/react/button'
 import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useEffect, useState } from 'react'
 
+import { Spinner } from '../Spinner'
 import styles from './Button.module.css'
 
 declare const process: { env?: { NODE_ENV?: string } } | undefined
@@ -184,7 +185,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         <span className={styles.label}>{children}</span>
       )}
       {rightIcon && !isIconOnly && <span className={styles.icon}>{rightIcon}</span>}
-      {showSpinner && <span className={styles.spinner} aria-hidden="true" />}
+      {showSpinner && <Spinner className={styles.spinner} />}
     </BaseButton>
   )
 })

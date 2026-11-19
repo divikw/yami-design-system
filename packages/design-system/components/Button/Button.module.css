@@ -370,18 +370,6 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 1em;
-  height: 1em;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: var(--radius-full);
-  animation: button-spin 1000ms linear infinite;
-}
-
-@keyframes button-spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -389,8 +377,4 @@
     transition-duration: 0ms;
   }
 
-  /* The loading indicator remains essential feedback, but rotates more slowly. */
-  .spinner {
-    animation-duration: 1500ms;
-  }
 }

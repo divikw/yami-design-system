@@ -51,7 +51,7 @@ ${choices.map(([value, label]) => `  <label ${rowCode}>\n    <RadioGroupItem val
   ];
   return <ComponentGuide name="Radio Group" slug="radiogroup" locale={locale}
     intro={zh ? "让用户从一组选项中选择一项。用方向键在选项之间切换。" : "Choose one option from a set. Use the arrow keys to move between options."}
-    previous={{ name: "Popover", path: "yami-components-layout-popover" }}
+    previous={{ name: "Progress", path: "yami-components-data-display-progress" }}
     next={{ name: "Select", path: "yami-components-forms-select" }}
     leadExample={{ title: density, ...lead }} usageCode={lead.code}
     composition={"RadioGroup\n├── RadioGroupItem\n└── RadioGroupItem"} examples={examples}

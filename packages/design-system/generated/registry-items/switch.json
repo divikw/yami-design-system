@@ -48,7 +48,8 @@
       "components/Switch/Switch.stories.tsx"
     ],
     "examples": [
-      "components/Switch/examples.tsx#BasicSwitch"
+      "components/Switch/examples.tsx#BasicSwitch",
+      "components/Switch/validation/examples.tsx#TermsSwitch"
     ]
   },
   "design": {
@@ -139,5 +140,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "5f80c69f61676d6545417d936e92f5682c0ce82be42f7290fb485dc1b1af007d"
+  "contentDigest": "4a116ccec2e9d1c4a92d37997f81557e35929ef594f8a01d0be3727407d89133"
 }

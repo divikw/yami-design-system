@@ -1,0 +1,78 @@
+.positioner {
+  z-index: 101;
+}
+
+.content {
+  box-sizing: border-box;
+  max-inline-size: min(20rem, var(--available-width));
+  padding: calc(var(--space-050) + var(--space-025)) var(--space-100);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elevation-300-tooltip);
+  background: var(--fill-inverse);
+  color: var(--text-primary-inverse);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-caption-sm);
+  line-height: var(--line-height-caption-sm);
+  overflow-wrap: anywhere;
+  transform-origin: var(--transform-origin);
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
+}
+
+.content[data-starting-style],
+.content[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.arrow {
+  width: var(--space-100);
+  height: var(--space-100);
+  background: var(--fill-inverse);
+  rotate: 45deg;
+}
+
+.arrow[data-side="top"] { bottom: calc(-1 * var(--space-025)); }
+.arrow[data-side="bottom"] { top: calc(-1 * var(--space-025)); }
+.arrow[data-side="left"] { right: calc(-1 * var(--space-025)); }
+.arrow[data-side="inline-start"] { inset-inline-end: calc(-1 * var(--space-025)); }
+.arrow[data-side="right"] { left: calc(-1 * var(--space-025)); }
+.arrow[data-side="inline-end"] { inset-inline-start: calc(-1 * var(--space-025)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .content { transition: none; }
+}
+
+.content kbd {
+  margin-inline-start: var(--space-025);
+  padding: var(--space-025) var(--space-050);
+  border: var(--stroke-default) solid var(--border-default-inverse);
+  border-radius: var(--radius-tag-primary);
+  font: inherit;
+  white-space: nowrap;
+}
+
+.positioner[data-anchor-hidden] { visibility: hidden; }
+
+.dismissible { position: relative; }
+
+.hintText {
+  display: block;
+  padding-inline-end: var(--space-300);
+}
+
+.dismissible .closeButton {
+  position: absolute;
+  inset-inline-end: var(--space-050);
+  top: 50%;
+  translate: 0 -50%;
+  width: var(--space-300);
+  height: var(--space-300);
+}
+
+.closeIcon {
+  display: block;
+  width: var(--space-200);
+  height: var(--space-200);
+  background: currentColor;
+  mask: url("../../assets/icons/action/close.svg") center / contain no-repeat;
+}

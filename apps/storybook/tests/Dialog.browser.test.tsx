@@ -208,7 +208,7 @@ test("nested dialogs dismiss only the top layer and restore focus through both l
 });
 
 
-test("Dialog example uses 40px pill actions with equal mobile widths and right-aligned desktop actions", async () => {
+test("Dialog example uses equal-width 40px actions on mobile and right-aligned 40px actions on desktop", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div"); document.body.append(container);
   const root = createRoot(container);

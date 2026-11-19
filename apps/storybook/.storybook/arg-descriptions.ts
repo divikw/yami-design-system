@@ -286,12 +286,74 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Coupon Dialog Divider Drawer FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail SocialMediaGallery Switch TabBar Tabs Tag ThemeHero ThemeProductList TrendingSearches".split(" ");
+const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Combobox Coupon Dialog Divider Drawer DropdownMenu EmptyState Field FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon NavigationMenu Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection Progress QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail Skeleton Slider SocialMediaGallery Spinner Switch TabBar Tabs Tag Textarea ThemeHero ThemeProductList Toast Tooltip TrendingSearches".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");
 
 const overrides: Record<string, Record<string, Copy>> = {
+  Combobox: {
+    items: ["供输入框筛选和选择的候选项。", "Options available for filtering and selection."],
+    multiple: ["允许选择多项。", "Allows multiple selections."],
+    inputValue: ["当前搜索文本。", "Controlled search text."],
+    onInputValueChange: ["搜索文本变化时触发。", "Called when the search text changes."],
+    autoHighlight: ["筛选后自动高亮首个匹配项。", "Highlights the first match after filtering."],
+    itemToStringLabel: ["获取候选项的显示文本。", "Returns the display label for an option."],
+    itemToStringValue: ["获取候选项的表单提交值。", "Returns the option's form submission value."],
+    showClear: ["有选中项时显示清除按钮。", "Shows a clear button when a value is selected."],
+    showTrigger: ["显示打开选项列表的按钮。", "Shows the button that opens the list."],
+  },
+  Field: {
+    invalid: ["标记字段的外部校验错误。", "Marks the field invalid after external validation."],
+    validationMode: ["指定触发校验的时机。", "Sets when validation runs."],
+    validate: ["返回当前字段的自定义校验错误。", "Returns validation errors for the field."],
+    match: ["决定 FieldError 显示哪种错误。", "Selects which validation error FieldError displays."],
+    errors: ["传入外部错误列表，重复或空的消息会被省略。", "Supplies external errors, omitting repeated and empty messages."],
+    layout: ["设置字段组的堆叠或响应式布局。", "Sets the field group's stacked or responsive layout."],
+    orientation: ["设置字段标签与控件的排列方向。", "Sets the layout direction of the label and control."],
+    variant: ["设置字段组标题的样式。", "Sets the appearance of the fieldset legend."],
+  },
+  Textarea: {
+    rows: ["设置初始可见行数。", "Sets the initial number of visible lines."],
+    "aria-invalid": ["声明输入无效并显示错误描边。", "Marks the input invalid and displays its error border."],
+  },
+  Tooltip: {
+    side: ["首选弹出方向，空间不足时可翻转。", "Preferred popup side, which can flip to fit available space."],
+    sideOffset: ["提示与触发器之间的像素间距。", "Gap in pixels between the tooltip and its trigger."],
+    alignOffset: ["沿对齐轴偏移的像素数。", "Offset in pixels along the alignment axis."],
+  },
+  NavigationMenu: {
+    value: ["受控展开项的值；null 表示关闭。", "The open item in controlled mode; null closes the panel."],
+    defaultValue: ["初始展开项的值。", "Initially open item in uncontrolled mode."],
+    orientation: ["导航项水平或垂直排列，同时决定方向键移动方式。", "Horizontal or vertical list and arrow-key navigation."],
+    side: ["面板相对触发器的首选方向。", "Preferred side of the trigger for the panel."],
+    align: ["面板相对触发器的对齐方式。", "Panel alignment relative to the trigger."],
+    alignOffset: ["沿对齐轴的像素偏移。", "Offset in pixels along the alignment axis."],
+    positioner: ["替换内置的面板定位部件。", "Replaces the built-in panel positioner."],
+    sideOffset: ["面板与触发器之间的像素间距。", "Gap in pixels between the panel and trigger."],
+  },
+  Alert: {
+    variant: ["提示外观：默认或错误。", "Default or destructive appearance."],
+  },
+  Toast: {
+    toast: ["管理器提供的单条通知。", "Notification record supplied by the manager."],
+  },
+  Progress: {
+    value: ["当前进度；总量未知时传 null。", "Current progress; pass null for an unknown total."],
+    min: ["起始值，默认 0。", "Minimum value, default 0."],
+    max: ["完成值，默认 100。", "Maximum value, default 100."],
+    locale: ["格式化进度数值所用的语言。", "Locale for formatting the progress value."],
+    format: ["进度数值的 Intl.NumberFormat 格式选项。", "Intl.NumberFormat options for the displayed value."],
+    getAriaValueText: ["根据当前数值提供读屏文案。", "Provides spoken text for the current value."],
+  },
+  Slider: {
+    min: ["可选的最小值，默认 0。", "Lowest selectable value, default 0."],
+    max: ["可选的最大值，默认 100。", "Highest selectable value, default 100."],
+    step: ["每次调节的增量，默认 1。", "Increment between selectable values, default 1."],
+    getAriaLabel: ["为每个滑块提供独立的无障碍名称。", "Provides a distinct accessible name for each thumb."],
+    getAriaValueText: ["为读屏提供带单位的当前值。", "Formats the spoken value, including units when needed."],
+    onValueCommitted: ["用户完成本次调整时报告最终值。", "Reports the final value when an adjustment is committed."],
+  },
   Accordion: {
     multiple: ["允许同时展开多个面板。", "Allows multiple panels to remain expanded."],
     keepMounted: ["收起时保留面板内容，以保留子组件状态。", "Keeps collapsed panel content mounted to preserve child state."],
@@ -339,6 +401,9 @@ const overrides: Record<string, Record<string, Copy>> = {
     variant: ["弹窗内容形式：默认内容或确认操作。", "Dialog form: default content or confirmation action."],
     onOpenChangeComplete: ["弹窗完成打开或关闭后触发。", "Called once the dialog finishes opening or closing."],
     showCloseButton: ["显示对应区域的关闭按钮。正文容器默认显示，操作区默认隐藏。", "Shows the close button in this part. Defaults to visible in DialogContent and hidden in DialogFooter."],
+  },
+  DropdownMenu: {
+    modal: ["菜单打开时限制与背景内容的交互。", "Restricts interaction with background content while the menu is open."],
   },
   Drawer: {
     size: ["移动端可选内容高度、全屏或半屏拖动。", "Mobile height: content, full, or draggable from half height."],

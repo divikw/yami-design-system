@@ -1,0 +1,76 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "spinner",
+  "title": "Spinner",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "An indeterminate loading indicator that inherits its size and color.",
+  "source": "components/Spinner",
+  "files": [
+    {
+      "source": "components/Spinner/index.ts",
+      "target": "components/Spinner/index.ts"
+    },
+    {
+      "source": "components/Spinner/Spinner.module.css",
+      "target": "components/Spinner/Spinner.module.css"
+    },
+    {
+      "source": "components/Spinner/Spinner.tsx",
+      "target": "components/Spinner/Spinner.tsx"
+    }
+  ],
+  "exports": [
+    "Spinner",
+    "SpinnerProps"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Spinner/usage.md",
+    "stories": [
+      "components/Spinner/Spinner.stories.tsx"
+    ],
+    "examples": [
+      "components/Spinner/examples.tsx#LoadingOrders"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--radius-full",
+      "--stroke-thick"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--stroke-thick": {
+        "property": "border",
+        "selector": ".root"
+      },
+      "--radius-full": {
+        "property": "border-radius",
+        "selector": ".root"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "status when named",
+      "notes": "A named spinner exposes a status. Unnamed spinners are decorative beside an existing status or busy button."
+    },
+    "interactionCoverage": "not-applicable"
+  },
+  "contentDigest": "2bbf55307a127c522e97f4689959506d469a777e55c06600bcbf86ed377bbc8c"
+}

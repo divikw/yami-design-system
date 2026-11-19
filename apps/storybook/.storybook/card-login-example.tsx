@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import {
   Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter,
-  CardHeader, CardTitle, Input,
+  CardHeader, CardTitle, Input, useDesktopViewport,
 } from "@yami/design-system";
 
 const spacings = [
@@ -12,6 +12,7 @@ const spacings = [
 ] as const;
 
 export function LoginCard({ locale, adjustableSpacing = false }: { locale: "zh" | "en"; adjustableSpacing?: boolean }) {
+  const fullButtonSize = useDesktopViewport() ? "sm" : "md";
   const zh = locale === "zh";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,8 +54,8 @@ export function LoginCard({ locale, adjustableSpacing = false }: { locale: "zh" 
           backgroundColor: "var(--surface-secondary)", borderTop: "var(--stroke-default) solid var(--border-default)",
           borderRadius: "0 0 var(--radius-surface-default) var(--radius-surface-default)",
         }}>
-          <Button form="full" size="sm" htmlType="submit">{zh ? "登录" : "Sign in"}</Button>
-          <Button form="full" size="sm" variant="secondary" style={{ "--button-secondary": "var(--surface-primary)", border: "var(--stroke-default) solid var(--border-default)" } as CSSProperties} onClick={() => {
+          <Button form="full" size={fullButtonSize} htmlType="submit">{zh ? "登录" : "Sign in"}</Button>
+          <Button form="full" size={fullButtonSize} variant="secondary" style={{ "--button-secondary": "var(--surface-primary)", border: "var(--stroke-default) solid var(--border-default)" } as CSSProperties} onClick={() => {
             setEmail("demo@example.com"); setPassword("example-only"); setValidated(false);
           }}>{zh ? "填入示例账户" : "Use sample account"}</Button>
           {validated && <span role="status">{zh ? "示例表单已验证。" : "Sample form validated."}</span>}

@@ -1,0 +1,149 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "alert",
+  "title": "Alert",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Persistent inline feedback with optional text, icon and action.",
+  "source": "components/Alert",
+  "files": [
+    {
+      "source": "components/Alert/Alert.module.css",
+      "target": "components/Alert/Alert.module.css"
+    },
+    {
+      "source": "components/Alert/Alert.tsx",
+      "target": "components/Alert/Alert.tsx"
+    },
+    {
+      "source": "components/Alert/index.ts",
+      "target": "components/Alert/index.ts"
+    }
+  ],
+  "exports": [
+    "Alert",
+    "AlertAction",
+    "AlertDescription",
+    "AlertProps",
+    "AlertTitle"
+  ],
+  "composes": [],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "documentation": {
+    "usage": "components/Alert/usage.md",
+    "stories": [
+      "components/Alert/Alert.stories.tsx"
+    ],
+    "examples": [
+      "components/Alert/examples.tsx#StockAlert"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-weight-emphasize",
+      "--line-height-body-md",
+      "--radius-component-default",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--stroke-default",
+      "--surface-primary",
+      "--text-error",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "token-exists"
+    ],
+    "tokenBindings": {
+      "--space-150": {
+        "property": "padding",
+        "selector": ".root"
+      },
+      "--space-200": {
+        "property": "padding",
+        "selector": ".root"
+      },
+      "--stroke-default": {
+        "property": "border",
+        "selector": ".root"
+      },
+      "--border-default": {
+        "property": "border",
+        "selector": ".root"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".root"
+      },
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": ".root"
+      },
+      "--font-size-body-md": {
+        "property": "font-size",
+        "selector": ".root"
+      },
+      "--line-height-body-md": {
+        "property": "line-height",
+        "selector": ".root"
+      },
+      "--space-025": {
+        "property": "margin-block-start",
+        "selector": ".root > svg"
+      },
+      "--space-100": {
+        "property": "margin-inline-end",
+        "selector": ".root > svg"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".title"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      },
+      "--space-050": {
+        "property": "margin-block-start",
+        "selector": ".title + .description"
+      },
+      "--text-error": {
+        "property": "color",
+        "selector": ".root[data-variant=\"destructive\"]"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "alert",
+      "notes": "Supports status announcements and host-provided links or buttons."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "7f2ba2c4e587c3f0b77791ec6c2b1e52558024f996a23b3acc9356e6af51cdf1"
+}

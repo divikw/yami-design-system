@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, Button } from "@yami/design-system";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, Button, useDesktopViewport } from "@yami/design-system";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import type { DocsLocale } from "./component-docs-template";
 import styles from "./component-guide.module.css";
@@ -12,9 +12,10 @@ function AlertDialogPreview({ locale, trigger, title, description, cancel, actio
   action: string;
   variant: "primary" | "emphasis";
 }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   return <div className={styles.row}>
     <AlertDialog>
-      <AlertDialogTrigger render={<Button variant="secondary" />}>{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger render={<Button size={actionSize} variant="secondary" />}>{trigger}</AlertDialogTrigger>
       <AlertDialogContent lang={locale}>
         <AlertDialogHeader><AlertDialogTitle>{title}</AlertDialogTitle><AlertDialogDescription>{description}</AlertDialogDescription></AlertDialogHeader>
         <AlertDialogFooter><AlertDialogCancel>{cancel}</AlertDialogCancel><AlertDialogAction variant={variant}>{action}</AlertDialogAction></AlertDialogFooter>
@@ -24,6 +25,7 @@ function AlertDialogPreview({ locale, trigger, title, description, cancel, actio
 }
 
 export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const zh = locale === "zh";
   const examples: GuideExample[] = [false, true].map((destructive) => {
     const trigger = destructive ? (zh ? "删除地址" : "Delete address") : (zh ? "确认更改" : "Confirm changes");
@@ -36,13 +38,13 @@ export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
       id: destructive ? "destructive" : "basic",
       title: destructive ? (zh ? "危险操作" : "Destructive action") : (zh ? "基础用法" : "Basic"),
       description: destructive ? (zh ? "不可撤销的操作使用一个 emphasis 按钮。示例只演示确认交互，不会删除实际地址。" : "Use one emphasis action for irreversible changes. This demo does not delete a real address.") : (zh ? "取消按钮排在确认之前。点击遮罩不会关闭；Escape、取消或确认可以关闭并恢复触发器焦点。" : "Cancel precedes confirmation. Outside presses do not dismiss; Escape, Cancel and confirmation close the dialog and restore trigger focus."),
-      code: `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, Button } from "@yami/design-system";\n\n<AlertDialog>\n  <AlertDialogTrigger render={<Button variant="secondary" />}>${trigger}</AlertDialogTrigger>\n  <AlertDialogContent lang="${locale}">\n    <AlertDialogHeader>\n      <AlertDialogTitle>${title}</AlertDialogTitle>\n      <AlertDialogDescription>${description}</AlertDialogDescription>\n    </AlertDialogHeader>\n    <AlertDialogFooter>\n      <AlertDialogCancel>${cancel}</AlertDialogCancel>\n      <AlertDialogAction variant="${variant}">${action}</AlertDialogAction>\n    </AlertDialogFooter>\n  </AlertDialogContent>\n</AlertDialog>`,
+      code: `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, Button } from "@yami/design-system";\n\n<AlertDialog>\n  <AlertDialogTrigger render={<Button size="${actionSize}" variant="secondary" />}>${trigger}</AlertDialogTrigger>\n  <AlertDialogContent lang="${locale}">\n    <AlertDialogHeader>\n      <AlertDialogTitle>${title}</AlertDialogTitle>\n      <AlertDialogDescription>${description}</AlertDialogDescription>\n    </AlertDialogHeader>\n    <AlertDialogFooter>\n      <AlertDialogCancel>${cancel}</AlertDialogCancel>\n      <AlertDialogAction variant="${variant}">${action}</AlertDialogAction>\n    </AlertDialogFooter>\n  </AlertDialogContent>\n</AlertDialog>`,
       preview: <AlertDialogPreview {...{ locale, trigger, title, description, cancel, action, variant }} />,
     };
   });
   return <ComponentGuide previewMode="document" name="AlertDialog" slug="alert-dialog" locale={locale}
     intro={zh ? "需要用户明确确认的模态弹窗，适用于重要更改和不可撤销操作。" : "A modal confirmation for important changes and irreversible actions."}
-    previous={{ name: "Accordion", path: "yami-components-layout-accordion" }}
+    previous={{ name: "Alert", path: "yami-components-data-display-alert" }}
     next={{ name: "AspectRatio", path: "yami-components-layout-aspectratio" }}
     composition={"AlertDialog\n├── AlertDialogTrigger\n└── AlertDialogContent\n    ├── AlertDialogHeader\n    │   ├── AlertDialogTitle\n    │   └── AlertDialogDescription\n    └── AlertDialogFooter\n        ├── AlertDialogCancel\n        └── AlertDialogAction"}
     examples={examples}
@@ -53,7 +55,7 @@ export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
       ["AlertDialogContent", zh ? "initialFocus、finalFocus、container、keepMounted、lang、className、style；内部包含 Portal / Backdrop / Viewport / Popup。" : "initialFocus, finalFocus, container, keepMounted, lang, className, style. Includes Portal / Backdrop / Viewport / Popup."],
       ["AlertDialogTitle / Description", zh ? "提供弹窗的无障碍名称和说明。" : "Supply the accessible name and description."],
       ["AlertDialogHeader / Footer", zh ? "内容布局；Header 支持溢出滚动，Footer 保留操作。" : "Layout containers; Header scrolls overflowing content while Footer retains actions."],
-      ["AlertDialogCancel / Action", zh ? "Base UI Close 属性及 variant、size；默认 secondary / primary；PC / Mobile 均为 md（40px）。支持 disabled、onClick、ref、render。" : "Base UI Close props plus variant and size; defaults secondary / primary; md (40px) on both PC and Mobile. Supports disabled, onClick, ref, render."],
+      ["AlertDialogCancel / Action", zh ? "Base UI Close 属性及 variant、size；默认 secondary / primary；默认尺寸为 md（40px）。支持 disabled、onClick、ref、render。" : "Base UI Close props plus variant and size; defaults secondary / primary; the default size is md (40px). Supports disabled, onClick, ref, render."],
     ]}
     reference={{ label: "Base UI Alert Dialog", href: "https://base-ui.com/react/components/alert-dialog" }} />;
 }

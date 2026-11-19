@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { Switch } from "./Switch";
+import { TermsSwitch } from "./validation/examples";
 import { translations } from "./story-translations";
 const meta = { id: "yami-components-forms-switch", title: "YAMI/Components/Switch", component: Switch,
   parameters: { layout: "padded", controls: { localizeDescriptions: true }, docs: { translations } },
@@ -14,7 +15,7 @@ export const Showcase: Story = {
     <Switch>{globals.locale === "en" ? "Notifications" : "接收通知"}</Switch>
     <Switch defaultChecked>{globals.locale === "en" ? "On" : "已开启"}</Switch>
     <Switch size="sm">{globals.locale === "en" ? "Small" : "小号"}</Switch>
-    <Switch aria-invalid>{globals.locale === "en" ? "Invalid" : "错误状态"}</Switch>
+    <TermsSwitch locale={globals.locale === "en" ? "en" : "zh"} />
     <Switch disabled>{globals.locale === "en" ? "Disabled" : "不可用"}</Switch>
     <Switch defaultChecked disabled>{globals.locale === "en" ? "Disabled on" : "已开启（禁用）"}</Switch>
     <Switch defaultChecked readOnly>{globals.locale === "en" ? "Read only" : "只读"}</Switch>

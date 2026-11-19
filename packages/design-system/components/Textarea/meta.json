@@ -1,0 +1,65 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Textarea",
+  "category": "form",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Native multiline form control with YAMI styles and Base UI Field integration.",
+  "figma": { "nodeId": null, "componentKey": null },
+  "exports": ["Textarea", "TextareaProps"],
+  "props": {
+    "rows": { "type": "number", "required": false, "default": 3, "description": "Explicit rows use native sizing. When omitted, supporting browsers grow the control with its content." },
+    "value": { "type": "string", "required": false, "description": "Controlled value. Update it in onChange." },
+    "defaultValue": { "type": "string", "required": false, "description": "Initial uncontrolled value." },
+    "onChange": { "type": "React.ChangeEventHandler<HTMLTextAreaElement>", "required": false, "description": "Handles native multiline text changes." },
+    "name": { "type": "string", "required": false, "description": "Native submission name. Field can supply it." },
+    "required": { "type": "boolean", "required": false, "description": "Requires a value for form validation." },
+    "disabled": { "type": "boolean", "required": false, "description": "Disables interaction and form submission for this control." },
+    "readOnly": { "type": "boolean", "required": false, "description": "Allows focus and copying while preventing edits." },
+    "aria-invalid": { "type": "boolean | string", "required": false, "description": "Mark the control invalid. True displays the YAMI error border." }
+  },
+  "rules": {
+    "color": { "ruleId": "semantic-color-only" },
+    "border": { "ruleId": "border-strength" },
+    "focus": { "ruleId": "focus-style" },
+    "disabled": { "ruleId": "no-opacity-disabled" },
+    "target": { "ruleId": "tap-target" }
+  },
+  "tokens": [
+    "--space-800", "--space-600", "--space-100", "--stroke-default",
+    "--border-default", "--border-focus", "--border-attention", "--stroke-thick", "--space-025", "--focus-ring",
+    "--radius-component-default", "--fill-primary", "--fill-disabled",
+    "--text-primary", "--text-secondary", "--text-disabled", "--font-family-ios",
+    "--font-size-body-md", "--line-height-body-md"
+  ],
+  "tokenBindings": {
+    "--space-800": { "property": "min-block-size", "selector": ".control[data-auto-size]" },
+    "--space-600": { "property": "min-block-size", "selector": ".control" },
+    "--space-100": { "property": "padding", "selector": ".control" },
+    "--stroke-default": { "property": "--textarea-stroke", "selector": ".control" },
+    "--border-default": { "property": "--textarea-border-color", "selector": ".control" },
+    "--border-focus": { "property": "--textarea-border-color", "selector": ".control:focus" },
+    "--border-attention": { "property": "--textarea-border-color", "selector": ".control[aria-invalid=\"true\"]:not(:disabled)" },
+    "--stroke-thick": { "property": "--textarea-stroke", "selector": ".control:focus" },
+    "--space-025": { "property": "outline-offset", "selector": ".control:not([data-pointer-focus]):focus-visible" },
+    "--focus-ring": { "property": "outline", "selector": ".control:not([data-pointer-focus]):focus-visible" },
+    "--radius-component-default": { "property": "border-radius", "selector": ".control" },
+    "--fill-primary": { "property": "background", "selector": ".control" },
+    "--fill-disabled": { "property": "background", "selector": ".control:disabled" },
+    "--text-primary": { "property": "color", "selector": ".control" },
+    "--text-secondary": { "property": "color", "selector": ".control::placeholder" },
+    "--text-disabled": { "property": "color", "selector": ".control:disabled" },
+    "--font-family-ios": { "property": "font-family", "selector": ".control" },
+    "--font-size-body-md": { "property": "font-size", "selector": ".control" },
+    "--line-height-body-md": { "property": "line-height", "selector": ".control" }
+  },
+  "accessibility": {
+    "role": "textbox",
+    "tapTargetMin": 48,
+    "notes": "Use a visible label. Native editing, multiline keyboard input, and form semantics are preserved."
+  },
+  "testing": { "interaction": "covered", "rationale": "The canonical story verifies native text entry and line breaks." },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": ["@storybook/react-vite", "storybook"] },
+  "usageRef": "./usage.md",
+  "examples": ["./examples.tsx#NotesTextarea"]
+}

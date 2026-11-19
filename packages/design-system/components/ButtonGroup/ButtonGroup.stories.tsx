@@ -2,18 +2,20 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../Button";
+import { useDesktopViewport } from "../Drawer/useDesktopViewport";
 import styles from "./ButtonGroup.stories.module.css";
 
 import { ButtonGroup } from "./ButtonGroup";
 
 function PairedDemo({ inverse = false }: { inverse?: boolean }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const [state, setState] = useState<"idle" | "saving" | "saved" | "cancelled">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
   return <div className={styles.demo}>
     <ButtonGroup aria-label={inverse ? "反色表面保存设置" : "保存偏好设置"}>
-      <Button inverse={inverse} variant="secondary" disabled={state === "saving"} onClick={() => setState("cancelled")}>取消</Button>
-      <Button inverse={inverse} loading={state === "saving"} loadingDelay={150} onClick={() => {
+      <Button size={actionSize} inverse={inverse} variant="secondary" disabled={state === "saving"} onClick={() => setState("cancelled")}>取消</Button>
+      <Button size={actionSize} inverse={inverse} loading={state === "saving"} loadingDelay={150} onClick={() => {
         if (timer.current !== undefined) return;
         setState("saving");
         timer.current = setTimeout(() => {
@@ -27,12 +29,13 @@ function PairedDemo({ inverse = false }: { inverse?: boolean }) {
 }
 
 function PurchaseDemo() {
+  const actionSize = useDesktopViewport() ? "lg" : "md";
   const [message, setMessage] = useState("示例操作不会修改购物车。");
   return <div className={styles.purchase}>
     <div className={styles.orderInfo}><span>购物车 · 3 件商品</span><strong>$38.90</strong></div>
     <ButtonGroup full aria-label="购物车操作">
-      <Button form="full" size="lg" variant="secondary" onClick={() => setMessage("已模拟继续购物。")}>继续购物</Button>
-      <Button form="full" size="lg" variant="emphasis" onClick={() => setMessage("已模拟前往结算。")}>前往结算</Button>
+      <Button form="full" size={actionSize} variant="secondary" onClick={() => setMessage("已模拟继续购物。")}>继续购物</Button>
+      <Button form="full" size={actionSize} variant="emphasis" onClick={() => setMessage("已模拟前往结算。")}>前往结算</Button>
     </ButtonGroup>
     <p className={styles.feedback} role="status">{message}</p>
   </div>;
@@ -48,6 +51,7 @@ function Section({ title, description, children }: {
 }
 
 function Proposal() {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   return <main className={styles.page} lang="zh">
     <header className={styles.header}>
       <div className={styles.eyebrow}><span>YAMI / ACTIONS</span></div>
@@ -64,9 +68,9 @@ function Proposal() {
       <div className={styles.states}>
         {[false, true].map((inverse) => <div key={String(inverse)} className={`${styles.statePanel} ${inverse ? styles.inverse : ""}`}>
           <h3>{inverse ? "反色背景" : "默认背景"}</h3>
-          <div className={styles.stateRow}><span className={styles.caption}>默认</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}设置操作`}><Button inverse={inverse} variant="secondary">取消</Button><Button inverse={inverse}>保存设置</Button></ButtonGroup></div>
-          <div className={styles.stateRow}><span className={styles.caption}>尚无改动</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}尚无改动的设置操作`}><Button inverse={inverse} variant="secondary">取消</Button><Button inverse={inverse} disabled>保存设置</Button></ButtonGroup></div>
-          <div className={styles.stateRow}><span className={styles.caption}>正在保存</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}正在保存设置`}><Button inverse={inverse} variant="secondary" disabled>取消</Button><Button inverse={inverse} loading>保存设置</Button></ButtonGroup></div>
+          <div className={styles.stateRow}><span className={styles.caption}>默认</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}设置操作`}><Button size={actionSize} inverse={inverse} variant="secondary">取消</Button><Button size={actionSize} inverse={inverse}>保存设置</Button></ButtonGroup></div>
+          <div className={styles.stateRow}><span className={styles.caption}>尚无改动</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}尚无改动的设置操作`}><Button size={actionSize} inverse={inverse} variant="secondary">取消</Button><Button size={actionSize} inverse={inverse} disabled>保存设置</Button></ButtonGroup></div>
+          <div className={styles.stateRow}><span className={styles.caption}>正在保存</span><ButtonGroup aria-label={`${inverse ? "反色" : "默认"}正在保存设置`}><Button size={actionSize} inverse={inverse} variant="secondary" disabled>取消</Button><Button size={actionSize} inverse={inverse} loading>保存设置</Button></ButtonGroup></div>
         </div>)}
       </div>
     </Section>
@@ -123,11 +127,12 @@ export const Showcase: Story = {
     for (const group of canvas.getAllByRole("group")) {
       const buttons = group.querySelectorAll("button");
       const full = group.dataset.full === "true";
-      const height = full ? (window.innerWidth >= 1024 ? 56 : 48) : 40;
+      const mobile = window.innerWidth < 1024;
+      const height = full ? (mobile ? 40 : 56) : (mobile ? 32 : 40);
       for (const button of buttons) {
         expect(button.getBoundingClientRect().height).toBe(height);
         expect(button.getBoundingClientRect().width).toBeGreaterThanOrEqual(44);
-        if (!full) expect(parseFloat(getComputedStyle(button, "::before").height)).toBeGreaterThanOrEqual(44);
+        if (!full || mobile) expect(parseFloat(getComputedStyle(button, "::before").height)).toBeGreaterThanOrEqual(44);
       }
       expect(buttons[1].getBoundingClientRect().left - buttons[0].getBoundingClientRect().right).toBeCloseTo(8, 0);
       if (full) {
@@ -139,12 +144,16 @@ export const Showcase: Story = {
   },
 };
 export const Playground: Story = {
-  render: (args) => <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "min(480px, 100vw - 32px)", maxWidth: "100%" }}>
-    <ButtonGroup {...args}>
-      <Button variant="secondary" form={args.full ? "full" : "inline"}>取消</Button>
-      <Button form={args.full ? "full" : "inline"}>保存设置</Button>
-    </ButtonGroup>
-  </div>,
+  render: function PlaygroundExample(args) {
+    const desktop = useDesktopViewport();
+    const actionSize = desktop || args.full ? "md" : "sm";
+    return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "min(480px, 100vw - 32px)", maxWidth: "100%" }}>
+      <ButtonGroup {...args}>
+        <Button size={actionSize} variant="secondary" form={args.full ? "full" : "inline"}>取消</Button>
+        <Button size={actionSize} form={args.full ? "full" : "inline"}>保存设置</Button>
+      </ButtonGroup>
+    </div>;
+  },
 };
 export const Interaction: Story = {
   parameters: { controls: { disable: true } },

@@ -1,0 +1,180 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "Tooltip",
+  "category": "display",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A short supplementary hint on hover or keyboard focus with a YAMI inverse surface.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "Tooltip",
+    "TooltipProps",
+    "TooltipProvider",
+    "TooltipTrigger",
+    "TooltipContent",
+    "TooltipContentProps",
+    "DismissibleTooltip",
+    "DismissibleTooltipProps"
+  ],
+  "props": {
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "description": "Controlled open state on Tooltip."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "required": false,
+      "description": "Initial uncontrolled open state on Tooltip."
+    },
+    "onOpenChange": {
+      "type": "function",
+      "required": false,
+      "description": "Called when Tooltip requests an open state change."
+    },
+    "side": {
+      "type": "top | right | bottom | left",
+      "required": false,
+      "default": "top",
+      "description": "Preferred side for TooltipContent. It can flip to fit the viewport."
+    },
+    "align": {
+      "type": "start | center | end",
+      "required": false,
+      "default": "center",
+      "description": "Alignment of TooltipContent relative to the trigger."
+    },
+    "sideOffset": {
+      "type": "number",
+      "required": false,
+      "default": 4,
+      "description": "Distance from the trigger in pixels."
+    },
+    "alignOffset": {
+      "type": "number",
+      "required": false,
+      "default": 0,
+      "description": "Offset along the alignment axis in pixels."
+    }
+  },
+  "rules": {
+    "color": {
+      "ruleId": "semantic-color-only"
+    },
+    "type": {
+      "ruleId": "type-hierarchy"
+    },
+    "radius": {
+      "ruleId": "no-custom-radii"
+    }
+  },
+  "tokens": [
+    "--space-025",
+    "--space-100",
+    "--radius-sm",
+    "--elevation-300-tooltip",
+    "--fill-inverse",
+    "--text-primary-inverse",
+    "--font-family-ios",
+    "--font-size-caption-sm",
+    "--line-height-caption-sm",
+    "--stroke-default",
+    "--border-default-inverse",
+    "--radius-tag-primary",
+    "--space-050",
+    "--space-200",
+    "--space-300"
+  ],
+  "tokenBindings": {
+    "--space-025": {
+      "property": "bottom",
+      "selector": ".arrow[data-side=\"top\"]"
+    },
+    "--space-100": {
+      "property": "padding",
+      "selector": ".content"
+    },
+    "--elevation-300-tooltip": {
+      "property": "box-shadow",
+      "selector": ".content"
+    },
+    "--radius-sm": {
+      "property": "border-radius",
+      "selector": ".content"
+    },
+    "--fill-inverse": {
+      "property": "background",
+      "selector": ".content"
+    },
+    "--text-primary-inverse": {
+      "property": "color",
+      "selector": ".content"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": ".content"
+    },
+    "--font-size-caption-sm": {
+      "property": "font-size",
+      "selector": ".content"
+    },
+    "--line-height-caption-sm": {
+      "property": "line-height",
+      "selector": ".content"
+    },
+    "--stroke-default": {
+      "property": "border",
+      "selector": ".content kbd"
+    },
+    "--border-default-inverse": {
+      "property": "border",
+      "selector": ".content kbd"
+    },
+    "--radius-tag-primary": {
+      "property": "border-radius",
+      "selector": ".content kbd"
+    },
+    "--space-050": {
+      "property": "padding",
+      "selector": ".content"
+    },
+    "--space-300": {
+      "property": "height",
+      "selector": ".dismissible .closeButton"
+    },
+    "--space-200": {
+      "property": "width",
+      "selector": ".closeIcon"
+    }
+  },
+  "accessibility": {
+    "keyboardNav": [
+      "tab",
+      "escape"
+    ],
+    "notes": "Use a named, focusable trigger. Content is supplemental and has no interactive elements. Touch users rely on the visible label. DismissibleTooltip uses a named nonmodal dialog with a labeled close button and leaves focus in place on initial display."
+  },
+  "testing": {
+    "interaction": "covered",
+    "rationale": "The canonical story verifies hover, keyboard focus, Escape dismissal, and retained focus."
+  },
+  "dependencies": {
+    "runtime": [
+      "react",
+      "@base-ui/react"
+    ],
+    "peer": [],
+    "devOnly": [
+      "@storybook/react-vite",
+      "storybook"
+    ]
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#HoverTooltip",
+    "./examples.tsx#LibraryHint"
+  ]
+}

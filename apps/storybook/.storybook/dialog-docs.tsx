@@ -1,10 +1,11 @@
-import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@yami/design-system";
+import { Button, Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, useDesktopViewport } from "@yami/design-system";
 import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import type { DocsLocale } from "./component-docs-template";
 import styles from "./component-guide.module.css";
 
 export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
+  const actionSize = useDesktopViewport() ? "md" : "sm";
   const zh = locale === "zh";
   const [basic, sticky]: GuideExample[] = [false, true].map((long) => {
     const title = long ? (zh ? "配送说明" : "Delivery details") : (zh ? "编辑昵称" : "Edit nickname");
@@ -17,7 +18,7 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
       title: long ? (zh ? "固定底部操作区" : "Sticky footer") : (zh ? "基础用法" : "Basic"),
       description: long ? (zh ? "内容超过安全高度后独立滚动，标题与操作区保持可见。长篇移动端详情优先使用 Drawer。" : "Overflowing content scrolls while the heading and actions stay visible. Prefer Drawer for lengthy mobile detail flows.") : (zh ? "受控弹窗用于短任务和表单。关闭按钮、Escape 和点击遮罩均请求关闭；保存由表单提交处理。示例不保存实际账户数据。" : "A controlled modal for short tasks and forms. Close, Escape and outside presses request dismissal; the form handles Save. This demo does not save account data."),
       preview: <div className={styles.row}><DialogExample locale={locale} long={long} /></div>,
-      code: `import { useId, useState } from "react";\nimport { Dialog, Button, ButtonGroup, Input } from "@yami/design-system";\n\nfunction Example() {\n  const [open, setOpen] = useState(false);\n  const formId = useId();\n  return (\n    <div lang="${locale}">\n      <Button variant="secondary" onClick={() => setOpen(true)}>${trigger}</Button>\n      <Dialog open={open} title="${title}" closeLabel="${zh ? "关闭" : "Close"}" lang="${locale}" onClose={() => setOpen(false)}\n        footer={<ButtonGroup full aria-label="${zh ? "编辑操作" : "Editing actions"}">\n          <Button variant="secondary" size="md" onClick={() => setOpen(false)}>${zh ? "取消" : "Cancel"}</Button>\n          <Button size="md" htmlType="submit" htmlForm={formId}>${zh ? "保存" : "Save"}</Button>\n        </ButtonGroup>}>\n        <form id={formId} onSubmit={(event) => { event.preventDefault(); setOpen(false); }}>\n          ${content}\n        </form>\n      </Dialog>\n    </div>\n  );\n}`,
+      code: `import { useId, useState } from "react";\nimport { Dialog, Button, ButtonGroup, Input } from "@yami/design-system";\n\nfunction Example() {\n  const [open, setOpen] = useState(false);\n  const formId = useId();\n  return (\n    <div lang="${locale}">\n      <Button size="${actionSize}" variant="secondary" onClick={() => setOpen(true)}>${trigger}</Button>\n      <Dialog open={open} title="${title}" closeLabel="${zh ? "关闭" : "Close"}" lang="${locale}" onClose={() => setOpen(false)}\n        footer={<ButtonGroup full aria-label="${zh ? "编辑操作" : "Editing actions"}">\n          <Button variant="secondary" size="md" onClick={() => setOpen(false)}>${zh ? "取消" : "Cancel"}</Button>\n          <Button size="md" htmlType="submit" htmlForm={formId}>${zh ? "保存" : "Save"}</Button>\n        </ButtonGroup>}>\n        <form id={formId} onSubmit={(event) => { event.preventDefault(); setOpen(false); }}>\n          ${content}\n        </form>\n      </Dialog>\n    </div>\n  );\n}`,
     };
   });
   const close = zh ? "关闭" : "Close";
@@ -34,22 +35,25 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
         : (zh ? "隐藏右上角图标，用底部关闭按钮退出。" : "Hide the corner icon and dismiss with the footer close button."),
       preview: <div className={styles.row}>
         <Dialog>
-          <DialogTrigger render={<Button variant="secondary" />}>{trigger}</DialogTrigger>
+          <DialogTrigger render={<Button size={actionSize} variant="secondary" />}>{trigger}</DialogTrigger>
           <DialogContent showCloseButton={false} lang={locale}>
             <DialogHeader><DialogTitle>{details}</DialogTitle><DialogDescription>{instructions}</DialogDescription></DialogHeader>
-            {custom ? <DialogFooter><DialogClose render={<Button />}>{done}</DialogClose></DialogFooter> : <DialogFooter showCloseButton closeLabel={close} />}
+            <DialogFooter><DialogClose render={<Button size={actionSize} variant={custom ? "primary" : "secondary"} />}>{custom ? done : close}</DialogClose></DialogFooter>
           </DialogContent>
         </Dialog>
       </div>,
-      code: `import { Button, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter${custom ? ", DialogClose" : ""} } from "@yami/design-system";
+      code: `import { Button, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@yami/design-system";
 
 <Dialog>
-  <DialogTrigger render={<Button variant="secondary" />}>${trigger}</DialogTrigger>
+  <DialogTrigger render={<Button size="${actionSize}" variant="secondary" />}>${trigger}</DialogTrigger>
   <DialogContent showCloseButton={false} lang="${locale}">
     <DialogHeader>
       <DialogTitle>${details}</DialogTitle>
       <DialogDescription>${instructions}</DialogDescription>
-    </DialogHeader>${custom ? `\n    <DialogFooter><DialogClose render={<Button />}>${done}</DialogClose></DialogFooter>` : `\n    <DialogFooter showCloseButton closeLabel="${close}" />`}
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose render={<Button size="${actionSize}" variant="${custom ? "primary" : "secondary"}" />}>${custom ? done : close}</DialogClose>
+    </DialogFooter>
   </DialogContent>
 </Dialog>`,
     };
@@ -60,7 +64,7 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
     id: "scrolling", title: zh ? "正文滚动" : "Scrollable content",
     description: zh ? "长正文在 DialogBody 内滚动，标题和关闭按钮保持可见。" : "Long content scrolls inside DialogBody while the heading and close control stay visible.",
     preview: <div className={styles.row}><Dialog>
-      <DialogTrigger render={<Button variant="secondary" />}>{scroll}</DialogTrigger>
+      <DialogTrigger render={<Button size={actionSize} variant="secondary" />}>{scroll}</DialogTrigger>
       <DialogContent closeLabel={close} lang={locale}>
         <DialogHeader><DialogTitle>{terms}</DialogTitle></DialogHeader>
         <DialogBody>{Array.from({ length: 30 }, (_, i) => <p key={i}>{i + 1}. {instructions}</p>)}</DialogBody>
@@ -69,7 +73,7 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
     code: `import { Button, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogBody } from "@yami/design-system";
 
 <Dialog>
-  <DialogTrigger render={<Button variant="secondary" />}>${scroll}</DialogTrigger>
+  <DialogTrigger render={<Button size="${actionSize}" variant="secondary" />}>${scroll}</DialogTrigger>
   <DialogContent closeLabel="${close}" lang="${locale}">
     <DialogHeader><DialogTitle>${terms}</DialogTitle></DialogHeader>
     <DialogBody>{Array.from({ length: 30 }, (_, i) => <p key={i}>{i + 1}. ${instructions}</p>)}</DialogBody>
@@ -80,7 +84,7 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
     usageCode={`import { Button, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@yami/design-system";
 
 <Dialog>
-  <DialogTrigger render={<Button />}>${zh ? "查看自提说明" : "View pickup details"}</DialogTrigger>
+  <DialogTrigger render={<Button size="${actionSize}" />}>${zh ? "查看自提说明" : "View pickup details"}</DialogTrigger>
   <DialogContent closeLabel="${close}">
     <DialogHeader>
       <DialogTitle>${details}</DialogTitle>
@@ -89,7 +93,7 @@ export function DialogDocsPage({ locale }: { locale: DocsLocale }) {
   </DialogContent>
 </Dialog>`}
     intro={zh ? "用于短表单、编辑和一般信息的居中模态弹窗，行为由 Base UI 管理。重要确认使用 AlertDialog。" : "A centered modal for short forms, editing and general information, powered by Base UI. Use AlertDialog for important confirmations."}
-    previous={{ name: "Checkbox", path: "yami-components-forms-checkbox" }}
+    previous={{ name: "Combobox", path: "yami-components-forms-combobox" }}
     next={{ name: "Divider", path: "yami-components-layout-divider" }}
     composition={"Dialog\n├── DialogTrigger\n└── DialogContent\n    ├── DialogHeader → DialogTitle / DialogDescription\n    ├── DialogBody\n    └── DialogFooter → DialogClose"}
     examples={[basic, ...closeExamples, sticky, scrolling]}

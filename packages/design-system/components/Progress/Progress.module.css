@@ -1,0 +1,33 @@
+.root {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-100);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+.label { font-weight: var(--font-weight-emphasize); overflow-wrap: anywhere; }
+.value { margin-inline-start: auto; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.track {
+  width: 100%;
+  height: var(--space-050);
+  overflow: hidden;
+  background: var(--fill-secondary);
+  border-radius: var(--radius-full);
+}
+.indicator {
+  height: 100%;
+  background: var(--fill-inverse);
+  border-radius: inherit;
+  transition: width 150ms linear;
+}
+.indicator[data-indeterminate] { width: 40%; animation: sweep 1.5s linear infinite alternate; }
+@keyframes sweep { to { transform: translateX(150%); } }
+@media (prefers-reduced-motion: reduce) {
+  .indicator { transition: none; }
+  .indicator[data-indeterminate] { animation: none; margin-inline: auto; }
+}

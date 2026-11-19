@@ -1,6 +1,7 @@
-import { Badge, ButtonLink, Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@yami/design-system";
+import { Badge, ButtonLink, Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle, useDesktopViewport } from "@yami/design-system";
 
 export function BeautyGuideCard({ locale, src }: { locale: "zh" | "en"; src: string }) {
+  const fullButtonSize = useDesktopViewport() ? "sm" : "md";
   const zh = locale === "zh";
   return <Card padding="none" bordered style={{ maxWidth: "24rem", marginInline: "auto" }}>
     <img src={src} alt="" style={{ display: "block", width: "100%", aspectRatio: "16 / 9", objectFit: "cover",
@@ -15,7 +16,7 @@ export function BeautyGuideCard({ locale, src }: { locale: "zh" | "en"; src: str
       backgroundColor: "var(--surface-secondary)", borderTop: "var(--stroke-default) solid var(--border-default)",
       borderRadius: "0 0 var(--radius-surface-default) var(--radius-surface-default)",
     }}>
-      <ButtonLink form="full" size="sm" href={`https://www.yami.com/us/${locale}/c/masks/59`}>{zh ? "浏览面膜" : "Explore masks"}</ButtonLink>
+      <ButtonLink form="full" size={fullButtonSize} href={`https://www.yami.com/us/${locale}/c/masks/59`}>{zh ? "浏览面膜" : "Explore masks"}</ButtonLink>
     </CardFooter>
   </Card>;
 }
