@@ -81,7 +81,7 @@
     "--space-150",
     "--stroke-default",
     "--border-default",
-    "--radius-surface-default",
+    "--radius-tag-primary",
     "--surface-primary",
     "--elevation-400-menu-panel",
     "--button-tertiary-active"
@@ -101,7 +101,7 @@
     },
     "--radius-component-default": {
       "property": "border-radius",
-      "selector": ".trigger"
+      "selector": ".trigger, .link, .popup"
     },
     "--text-primary": {
       "property": "color",
@@ -151,9 +151,9 @@
       "property": "border",
       "selector": ".popup"
     },
-    "--radius-surface-default": {
+    "--radius-tag-primary": {
       "property": "border-radius",
-      "selector": ".popup"
+      "selector": ".content .link"
     },
     "--surface-primary": {
       "property": "background",

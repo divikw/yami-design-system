@@ -8,7 +8,7 @@
   overscroll-behavior: contain;
   padding: var(--space-050);
   border: var(--stroke-default) solid var(--border-default);
-  border-radius: var(--radius-surface-default);
+  border-radius: var(--radius-component-default);
   background: var(--surface-primary);
   box-shadow: var(--elevation-400-menu-panel);
   color: var(--text-primary);
@@ -27,7 +27,7 @@
   box-sizing: border-box;
   min-height: var(--space-400);
   padding: var(--space-050) var(--space-100);
-  border-radius: var(--radius-component-default);
+  border-radius: var(--radius-tag-primary);
   overflow-wrap: anywhere;
   outline: none;
   cursor: pointer;

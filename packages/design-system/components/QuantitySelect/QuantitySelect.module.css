@@ -44,14 +44,14 @@
   gap: 0;
   min-width: 60px;
   height: var(--space-400);
-  padding-inline: var(--space-100);
+  padding-inline: var(--space-150);
   border: var(--stroke-default) solid var(--border-default);
   border-radius: var(--radius-button-primary);
   background: var(--surface-primary);
   pointer-events: none;
 }
 
-.value { min-width: var(--space-300); text-align: center; }
+.value { min-width: var(--space-200); text-align: center; }
 
 .arrow {
   display: block;
@@ -97,7 +97,8 @@
   width: 60px;
   height: var(--space-400);
   margin: 0;
-  padding: 0 var(--space-100);
+  padding-block: 0;
+  padding-inline: var(--space-150);
   border: var(--stroke-default) solid var(--border-default);
   border-radius: var(--radius-button-primary);
   background: var(--surface-primary);

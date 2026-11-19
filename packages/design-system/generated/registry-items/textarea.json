@@ -61,6 +61,7 @@
       "--radius-component-default",
       "--space-025",
       "--space-100",
+      "--space-150",
       "--space-600",
       "--space-800",
       "--stroke-default",
@@ -86,7 +87,11 @@
         "selector": ".control"
       },
       "--space-100": {
-        "property": "padding",
+        "property": "padding-block",
+        "selector": ".control"
+      },
+      "--space-150": {
+        "property": "padding-inline",
         "selector": ".control"
       },
       "--stroke-default": {
@@ -163,5 +168,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "93e2d51a5be825a6073a3b2818686a6939b8f85f5e1f2105a4f35fea316d992f"
+  "contentDigest": "9d224ea100e75a79dfc3e595b6d88fbf9c87d8f27939f944870fa55cf45cc424"
 }

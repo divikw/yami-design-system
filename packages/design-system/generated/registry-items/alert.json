@@ -77,8 +77,8 @@
         "selector": ".root"
       },
       "--space-200": {
-        "property": "padding",
-        "selector": ".root"
+        "property": "width",
+        "selector": ".root > svg"
       },
       "--stroke-default": {
         "property": "border",
@@ -145,5 +145,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "7f2ba2c4e587c3f0b77791ec6c2b1e52558024f996a23b3acc9356e6af51cdf1"
+  "contentDigest": "7400af0ef8e5726d99665aff8f55198dcc2ade589e66b8f3c7345711c98c97bc"
 }

@@ -90,7 +90,7 @@
 .popup {
   overflow: hidden;
   border: var(--stroke-default) solid var(--border-default);
-  border-radius: var(--radius-surface-default);
+  border-radius: var(--radius-component-default);
   background: var(--surface-primary);
   color: var(--text-primary);
   /* User-requested elevation; matches the shared FilterChip menu popup. */
@@ -122,7 +122,7 @@
   gap: var(--space-150);
   min-height: var(--space-400);
   padding: calc(var(--space-050) + var(--space-025)) var(--space-150);
-  border-radius: var(--radius-component-default);
+  border-radius: var(--radius-tag-primary);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
   cursor: pointer;

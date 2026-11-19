@@ -74,7 +74,7 @@
   "tokens": [
     "--space-025",
     "--space-100",
-    "--radius-sm",
+    "--radius-component-default",
     "--elevation-300-tooltip",
     "--fill-inverse",
     "--text-primary-inverse",
@@ -101,7 +101,7 @@
       "property": "box-shadow",
       "selector": ".content"
     },
-    "--radius-sm": {
+    "--radius-component-default": {
       "property": "border-radius",
       "selector": ".content"
     },

@@ -117,6 +117,7 @@
     "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
   },
   "tokenBindings": {
+    "--space-150": { "property": "padding-inline", "selector": ".display, .input" },
     "--surface-primary": {
       "property": "background",
       "selector": ".display"

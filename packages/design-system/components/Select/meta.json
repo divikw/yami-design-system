@@ -84,12 +84,13 @@
   "tokens": [
     "--border-default",
     "--button-disabled",
+    "--elevation-400-menu-panel",
     "--focus-ring",
     "--font-family-ios",
     "--font-size-body-md",
     "--line-height-body-md",
     "--radius-component-default",
-    "--radius-surface-default",
+    "--radius-tag-primary",
     "--border-attention",
     "--text-secondary",
     "--divider-default",
@@ -122,10 +123,14 @@
     },
     "--radius-component-default": {
       "property": "border-radius",
-      "selector": ".trigger, .item"
+      "selector": ".trigger, .content"
     },
-    "--radius-surface-default": {
+    "--radius-tag-primary": {
       "property": "border-radius",
+      "selector": ".item"
+    },
+    "--elevation-400-menu-panel": {
+      "property": "box-shadow",
       "selector": ".content"
     },
     "--focus-ring": {

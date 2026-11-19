@@ -27,7 +27,7 @@
   width: 100%;
   height: var(--space-600);
   gap: var(--space-100);
-  padding-inline: var(--space-100);
+  padding-inline: var(--space-150);
 
   background: var(--background-primary);
   border: 0;

@@ -5,7 +5,7 @@
   align-items: start;
   width: 100%;
   box-sizing: border-box;
-  padding: var(--space-150) var(--space-200);
+  padding: var(--space-150);
   border: var(--stroke-default) solid var(--border-default);
   border-radius: var(--radius-component-default);
   background: var(--surface-primary);

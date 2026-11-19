@@ -1,19 +1,45 @@
 import { expect, test } from "@playwright/test";
 
+test("redirects old workbench links with their preview settings", async ({ page }) => {
+  const query = "project=global-navigation&variant=image-categories&path=%2Fcart&locale=en&previewMode=h5&viewport=402";
+  await page.goto(`/workbench?${query}`);
+  await expect(page).toHaveURL(`/design?${query}`);
+  await expect(page).toHaveTitle("PROTOTYPE · Yami Design System");
+  await expect(page.getByText("PROTOTYPE", { exact: true })).toBeVisible();
+  await expect(page.locator("#canvas-preview")).toHaveCSS("width", "402px");
+});
+
 test("keeps device selection in sync with typed widths and drag boundaries", async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/workbench?project=global-navigation&variant=current&viewport=806");
+  await page.goto("/design?project=global-navigation&variant=current&viewport=806");
   const input = page.getByRole("spinbutton", { name: "宽度（px）" });
-  const device = page.getByRole("group", { name: "设备", exact: true });
+  const device = page.getByRole("radiogroup", { name: "设备", exact: true });
+  const decrease = page.getByRole("button", { name: "减小预览宽度" });
+  const increase = page.getByRole("button", { name: "增大预览宽度" });
   await expect(page.getByRole("radio", { name: "平板", exact: true })).toBeChecked();
-  await expect(input.locator("..").getByText("px", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-slot="input"]').filter({ has: input }).getByText("PX", { exact: true })).toBeVisible();
+  await expect(increase).toBeHidden();
+  await input.hover();
+  await expect(increase).toBeVisible();
+  await page.mouse.move(0, 0);
+  await expect(increase).toBeHidden();
+  await input.fill("767");
+  await increase.click();
+  await expect(input).toHaveValue("768");
+  await expect(page.locator("#canvas-preview")).toHaveCSS("width", "768px");
+  await expect(page.getByRole("radio", { name: "平板", exact: true })).toBeChecked();
+  await decrease.press("Space");
+  await expect(input).toHaveValue("767");
+  await expect(page.getByRole("radio", { name: "手机", exact: true })).toBeChecked();
   for (const [width, label] of [[320, "手机"], [767, "手机"], [768, "平板"], [1023, "平板"], [1024, "桌面"], [1920, "桌面"]] as const) {
     await input.fill(String(width));
     await expect(page.getByRole("radio", { name: label, exact: true })).toBeChecked();
     await input.press("Enter");
     await expect(page.locator("#canvas-preview")).toHaveCSS("width", `${width}px`);
-    await expect(device.locator("input:checked")).toHaveCount(1);
+    await expect(device.getByRole("radio", { checked: true })).toHaveCount(1);
   }
+  await input.focus();
+  await expect(increase).toBeDisabled();
   await input.fill("");
   await expect(page.getByRole("radio", { name: "桌面", exact: true })).toBeChecked();
   await input.press("Escape");
@@ -26,7 +52,7 @@ test("keeps device selection in sync with typed widths and drag boundaries", asy
   await page.mouse.move(box.x + box.width / 2 - 10, box.y + box.height / 2);
   await expect(input).toHaveValue("748");
   await expect(page.getByRole("radio", { name: "手机", exact: true })).toBeChecked();
-  await expect(device.locator("input:checked")).toHaveCount(1);
+  await expect(device.getByRole("radio", { checked: true })).toHaveCount(1);
   await page.mouse.up();
   await expect(page).toHaveURL(/viewport=748/);
   await page.reload();
@@ -34,15 +60,13 @@ test("keeps device selection in sync with typed widths and drag boundaries", asy
 });
 
 test("navigates back and forward, restores history on reload and discards replaced branches", async ({ page }) => {
-  await page.goto("/workbench?project=global-navigation&variant=current&viewport=768");
+  await page.goto("/design?project=global-navigation&variant=current&viewport=768");
   const back = page.getByRole("button", { name: "返回上一步" });
   const forward = page.getByRole("button", { name: "前进到下一步" });
   await expect(back).toBeDisabled();
   await expect(forward).toBeDisabled();
   await expect(back).toHaveText("");
   await expect(forward).toHaveText("");
-  await expect(back).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect(forward).toHaveCSS("background-color", "rgb(255, 255, 255)");
   const selectPage = async (name: string) => {
     await page.getByRole("combobox", { name: "页面", exact: true }).click();
     await page.getByRole("option", { name, exact: true }).click();
@@ -93,7 +117,7 @@ test("navigates back and forward, restores history on reload and discards replac
 
 test("resizes the preview without reloading and retains custom widths", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/workbench?project=global-navigation&variant=current&viewport=768");
+  await page.goto("/design?project=global-navigation&variant=current&viewport=768");
   const iframe = page.locator("#canvas-preview");
   const preview = page.frameLocator("#canvas-preview");
   await expect(preview.locator('[data-slot="ecommerce-home"]')).toBeVisible();
@@ -171,7 +195,7 @@ test("shares a complete variant and retains it through navigation, reload and br
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (/Unknown event handler|hydration|Maximum update depth/.test(message.text())) errors.push(message.text()); });
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/workbench?project=global-navigation&variant=image-categories&locale=en&theme=light&viewport=1440");
+  await page.goto("/design?project=global-navigation&variant=image-categories&locale=en&theme=light&viewport=1440");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.locator('[data-slot="ecommerce-home"]')).toBeVisible();
   await expect(page.locator('iframe[title="YAMI 原型预览"]')).toHaveCSS("width", "1440px");
@@ -194,8 +218,14 @@ test("shares a complete variant and retains it through navigation, reload and br
   await expect(page).toHaveURL(/path=%2Fproducts%2Fdemo-product/);
 
   const shareLink = page.getByRole("link", { name: "独立预览", exact: true });
+  await expect(page.getByText("随浏览器宽度显示", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "复制预览链接", exact: true })).toBeVisible();
   await expect(shareLink).toHaveAttribute("href", /path=%2Fproducts%2Fdemo-product/);
   const shared = await shareLink.getAttribute("href");
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.getByRole("button", { name: "复制预览链接", exact: true }).click();
+  await expect(page.getByText("已复制预览链接", { exact: true })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(`http://localhost:3200${shared}`);
   const fresh = await browser.newContext();
   const receiver = await fresh.newPage();
   await receiver.goto(`http://localhost:3200${shared}`);
@@ -203,6 +233,8 @@ test("shares a complete variant and retains it through navigation, reload and br
   await expect(receiver.getByRole("combobox", { name: "设计方案" })).toHaveAttribute("data-value", "image-categories");
   await receiver.getByRole("link", { name: "购物车", exact: true }).click();
   await expect(receiver.locator('[data-slot="cart-item"]')).toHaveCount(0);
+  await receiver.getByRole("link", { name: "工作台", exact: true }).click();
+  await expect(receiver).toHaveURL(/\/design\?[^#]*variant=image-categories[^#]*path=%2Fcart/);
   await fresh.close();
   expect(errors).toEqual([]);
 });

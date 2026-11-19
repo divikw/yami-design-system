@@ -77,7 +77,7 @@
       "--line-height-body-md",
       "--line-height-caption-sm",
       "--radius-component-default",
-      "--radius-surface-default",
+      "--radius-tag-primary",
       "--space-050",
       "--space-100",
       "--space-200",
@@ -107,7 +107,7 @@
         "property": "border",
         "selector": ".popup"
       },
-      "--radius-surface-default": {
+      "--radius-component-default": {
         "property": "border-radius",
         "selector": ".popup"
       },
@@ -147,7 +147,7 @@
         "property": "min-height",
         "selector": ".item"
       },
-      "--radius-component-default": {
+      "--radius-tag-primary": {
         "property": "border-radius",
         "selector": ".item"
       },
@@ -208,5 +208,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "e44eb430386e187e31fe9d8d562c9d49c9938cc27fa815fa9fba0ca0bc900243"
+  "contentDigest": "6e443d907169859c1250df179b776b28cd518091774bb7cc93280ffb81308cf7"
 }

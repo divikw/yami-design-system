@@ -124,10 +124,10 @@
     "--stroke-thick",
     "--focus-ring",
     "--space-025",
-    "--radius-surface-default",
     "--surface-primary",
     "--elevation-400-menu-panel",
     "--space-100",
+    "--space-150",
     "--space-500",
     "--surface-secondary",
     "--font-size-caption-sm",
@@ -157,7 +157,7 @@
     },
     "--radius-component-default": {
       "property": "border-radius",
-      "selector": ".control, .chips"
+      "selector": ".control, .chips, .popup"
     },
     "--fill-primary": {
       "property": "background",
@@ -219,10 +219,6 @@
       "property": "outline-offset",
       "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
     },
-    "--radius-surface-default": {
-      "property": "border-radius",
-      "selector": ".popup"
-    },
     "--surface-primary": {
       "property": "background",
       "selector": ".popup"
@@ -231,9 +227,13 @@
       "property": "box-shadow",
       "selector": ".popup"
     },
-    "--space-100": {
+    "--space-150": {
       "property": "padding-inline",
       "selector": ".control, .chips"
+    },
+    "--space-100": {
+      "property": "padding-inline",
+      "selector": ".item"
     },
     "--space-500": {
       "property": "min-height",
@@ -257,7 +257,7 @@
     },
     "--radius-tag-primary": {
       "property": "border-radius",
-      "selector": ".chip"
+      "selector": ".chip, .item"
     },
     "--fill-secondary": {
       "property": "background",

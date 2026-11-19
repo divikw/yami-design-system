@@ -79,7 +79,7 @@ test.describe("ecommerce-home-full-matrix", () => {
             const poster = await sharp("packages/design-system/components/Billboard/assets/new-user-offer-en-mobile.gif").png().toBuffer();
             await page.route(/\/new-user-offer-en-mobile[^/]*\.gif$/, (route) => route.fulfill({ contentType: "image/png", body: poster }));
           }
-          await page.goto(`/workbench?path=%2F&direction=current&locale=${locale}&theme=${theme}&viewport=${viewport}`);
+          await page.goto(`/design?path=%2F&direction=current&locale=${locale}&theme=${theme}&viewport=${viewport}`);
           await waitForStablePreview(page);
           await expect(page).toHaveScreenshot(`current-${locale}-${theme}-${viewport}.png`, { fullPage: true });
         });

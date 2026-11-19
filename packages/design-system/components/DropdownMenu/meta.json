@@ -55,7 +55,7 @@
     "--space-050",
     "--stroke-default",
     "--border-default",
-    "--radius-surface-default",
+    "--radius-component-default",
     "--surface-primary",
     "--elevation-400-menu-panel",
     "--text-primary",
@@ -65,7 +65,7 @@
     "--font-family-ios",
     "--space-100",
     "--space-400",
-    "--radius-component-default",
+    "--radius-tag-primary",
     "--surface-secondary",
     "--stroke-thick",
     "--focus-ring",
@@ -92,7 +92,7 @@
       "property": "border",
       "selector": ".popup"
     },
-    "--radius-surface-default": {
+    "--radius-component-default": {
       "property": "border-radius",
       "selector": ".popup"
     },
@@ -132,7 +132,7 @@
       "property": "min-height",
       "selector": ".item"
     },
-    "--radius-component-default": {
+    "--radius-tag-primary": {
       "property": "border-radius",
       "selector": ".item"
     },

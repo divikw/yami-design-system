@@ -5,58 +5,32 @@
   margin-bottom: 14px;
 }
 
+.settingSelect, .settingGroup {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-100);
+}
+
+.settingSelect {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.settingSelect > [role="combobox"]::after { content: none; }
+
+.settingSelectIcon {
+  flex: none;
+  color: var(--color-black-400);
+}
+
+:global(.control-panel.dark) .settingSelectIcon { color: var(--text-secondary); }
+
+.settingSelect > [data-popup-open] .settingSelectIcon { transform: rotate(180deg); }
+
 .label {
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 16px;
-}
-
-.visuallyHidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-.inputWrap { position: relative; min-width: 0; }
-.inputWrap[data-has-suffix] input { padding-right: 32px; appearance: textfield; }
-.inputWrap[data-has-suffix] input::-webkit-inner-spin-button,
-.inputWrap[data-has-suffix] input::-webkit-outer-spin-button { appearance: none; margin: 0; }
-.inputSuffix { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 2; pointer-events: none; color: var(--text-secondary); font-size: var(--font-size-caption-md); }
-
-.textInput {
-  width: 100%;
-  height: 36px;
-  min-width: 0;
-  margin: 0;
-  padding: 0 10px;
-  border: 1px solid var(--border-default);
-  border-radius: 0;
-  outline: 0;
-  background: var(--surface-primary);
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
-  transition: background-color 120ms ease, border-color 120ms ease;
-}
-
-.textInput::placeholder {
-  color: var(--text-disabled);
-}
-
-.textInput:hover:not(:disabled) {
-  border-color: var(--text-secondary);
-  background: var(--surface-secondary);
-}
-
-.textInput:focus-visible {
-  position: relative;
-  z-index: 1;
-  border-color: var(--text-secondary);
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.textInput:disabled {
-  border-color: var(--button-disabled);
-  background: var(--button-disabled);
-  color: var(--text-disabled);
-  cursor: not-allowed;
 }
 
 .selectTrigger {
@@ -115,8 +89,7 @@
 }
 
 .selectTrigger:focus-visible,
-.button:focus-visible,
-.segmentedOptions:has(.segmentedInput:focus-visible) {
+.button:focus-visible {
   position: relative;
   z-index: 1;
   outline: 2px solid var(--focus-ring);
@@ -146,10 +119,10 @@
   max-width: var(--available-width);
   overflow: hidden;
   border: 1px solid var(--border-default);
-  border-radius: 0;
+  border-radius: var(--radius-component-default);
   outline: 0;
   background: var(--surface-primary);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  box-shadow: var(--elevation-400-menu-panel);
   color: var(--text-primary);
 }
 
@@ -169,7 +142,7 @@
   padding: 0 8px;
   align-items: center;
   grid-template-columns: minmax(0, 1fr);
-  border-radius: 0;
+  border-radius: var(--radius-tag-primary);
   outline: 0;
   color: var(--text-primary);
   cursor: default;
@@ -259,81 +232,134 @@
   opacity: 1;
 }
 
-.segmentedField {
-  min-width: 0;
-  margin: 4px 0 16px;
+.widthInput {
+  --background-primary: var(--surface-primary);
+}
+
+.widthInput [data-slot="input-control"] {
+  appearance: textfield;
+}
+
+.widthInput [data-slot="input-control"]::-webkit-inner-spin-button,
+.widthInput [data-slot="input-control"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.widthControls {
+  display: inline-flex;
+  align-items: center;
+  column-gap: var(--space-100);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.widthStepper {
+  display: grid;
+  gap: var(--space-025);
+  visibility: hidden;
+}
+
+.widthInput:is(:focus-within, :active) .widthStepper {
+  visibility: visible;
+}
+
+.widthStep {
+  display: grid;
+  place-items: center;
+  width: var(--space-250);
+  height: var(--space-150);
   padding: 0;
   border: 0;
-}
-
-.segmentedField > .label {
-  margin-bottom: 7px;
-}
-
-.segmentedBody { display: grid; gap: var(--space-100); }
-.segmentedBody > .field { margin-bottom: 0; }
-
-.segmentedOptions {
-  display: grid;
-  height: 36px;
-  padding: 3px;
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
-  gap: 2px;
-  overflow: hidden;
-  border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-tag-primary);
   background: var(--surface-secondary);
-  box-shadow: none;
-}
-
-.segmentedOption {
-  position: relative;
-  min-width: 0;
-}
-
-.segmentedInput {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
+  color: var(--text-primary);
   cursor: pointer;
-  opacity: 0;
 }
 
-.segmentedLabel {
+.widthControls .widthStep svg {
+  width: var(--space-150);
+  height: var(--space-150);
+}
+
+.widthStep:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
+}
+
+.widthStep:active:not(:disabled) {
+  background: var(--button-secondary-active);
+}
+
+.widthStep:disabled {
+  background: var(--button-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .widthInput:hover .widthStepper {
+    visibility: visible;
+  }
+
+  .widthStep:hover:not(:disabled) {
+    background: var(--button-tertiary-active);
+  }
+}
+
+.segmentGroup[data-slot="radio-group"] {
+  --segment-inset: var(--space-025);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0;
+  padding: var(--segment-inset);
+  border-radius: var(--radius-component-default);
+  background: var(--surface-secondary);
+}
+
+:global(.control-panel.dark) .segmentGroup[data-slot="radio-group"] {
+  background: var(--background-primary);
+}
+
+.segment {
   display: flex;
-  height: 100%;
   align-items: center;
   justify-content: center;
-  border-radius: 0;
+  min-height: calc(var(--space-400) + var(--space-050));
+  padding: var(--space-025) var(--space-100);
+  border: 0;
+  border-radius: calc(var(--radius-component-default) - var(--segment-inset));
   background: transparent;
   color: var(--text-secondary);
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
-  box-shadow: none;
-  transition: background-color 120ms ease, color 120ms ease;
+  font: inherit;
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  cursor: pointer;
 }
 
-.segmentedInput:hover:not(:checked) + .segmentedLabel {
-  background: var(--button-tertiary-active);
-}
-
-.segmentedInput:checked + .segmentedLabel {
+.segment[aria-checked="true"] {
   background: var(--surface-primary);
   color: var(--text-primary);
   font-weight: var(--font-weight-emphasize);
 }
 
-.segmentedInput:disabled {
-  cursor: not-allowed;
+:global(.control-panel.dark) .segment[aria-checked="true"] {
+  background: var(--surface-secondary);
 }
 
-.segmentedInput:disabled + .segmentedLabel {
-  color: var(--text-disabled);
+.segment:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
 }
 
-.segmentedInput:disabled:checked + .segmentedLabel {
-  background: var(--surface-primary);
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .segment:hover {
+    color: var(--text-primary);
+  }
+}
+
+@media (pointer: coarse) {
+  .segment {
+    min-height: calc(var(--space-500) + var(--space-050));
+  }
 }

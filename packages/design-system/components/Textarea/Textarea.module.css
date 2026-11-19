@@ -3,7 +3,8 @@
   display: block;
   inline-size: 100%;
   min-block-size: var(--space-600);
-  padding: var(--space-100);
+  padding-block: var(--space-100);
+  padding-inline: var(--space-150);
   border: 0;
   --textarea-stroke: var(--stroke-default);
   --textarea-border-color: var(--border-default);

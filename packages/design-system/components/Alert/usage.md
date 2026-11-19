@@ -3,6 +3,8 @@
 
 将提示放在受影响的内容旁，直到用户处理或页面状态发生变化。使用默认样式说明状态，错误使用 destructive。标题、说明、图标和操作均可选。紧急动态消息使用默认的 alert 语义，普通更新可以通过 role="status" 温和播报。使用带文字的操作按钮，由宿主执行修正并更新提示。
 
+桌面和移动端的面板内边距均为 12px。
+
 ```tsx
 import { Alert, AlertTitle, AlertDescription } from "@yami/design-system";
 
@@ -16,6 +18,8 @@ import { Alert, AlertTitle, AlertDescription } from "@yami/design-system";
 # Alert — Inline feedback
 
 Keep the message beside the affected content until the issue is resolved. Use the default appearance for information and destructive for errors. Add an optional icon, title, description or action. The root defaults to role="alert". Use role="status" for polite updates. The host owns the action and resulting state.
+
+The panel uses 12px padding on desktop and mobile.
 
 ```tsx
 import { Alert, AlertTitle, AlertDescription } from "@yami/design-system";

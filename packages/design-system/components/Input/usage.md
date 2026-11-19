@@ -1,7 +1,7 @@
 <!-- locale:zh -->
 # Input — 使用说明
 
-Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。两种规格在 PC 和移动端的左右内边距均为 8px，编辑时使用 2px 内描边。
+Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。两种规格在 PC 和移动端的左右内边距均为 12px，编辑时使用 2px 内描边。
 
 ## 用法
 
@@ -32,9 +32,9 @@ stateful borders, optional clear action, and supporting text.
 
 The default field width is 320px and shrinks with `max-width: 100%` in narrower containers.
 Use `fullWidth` when the field should fill its available layout column.
-Both densities use 8px horizontal padding and a 2px inset editing border at every breakpoint, including fields
+Both densities use 12px horizontal padding and a 2px inset editing border at every breakpoint, including fields
 with icons, a clear button or an inline action. In left-to-right layouts, the clear button's hit target ends
-8px from the field's right edge.
+12px from the field's right edge.
 
 ## Storybook Examples
 

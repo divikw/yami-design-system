@@ -71,21 +71,21 @@ for the demonstration flow, sharing, state boundaries and authoring instructions
 
 Yami Design System does not call a model at runtime. Legacy `DirectionManifestV1`
 JSON drafts are home-only overlays loaded from local storage by old direction
-links. The current control panel imports Storybook pages, not JSON directions.
+links. Use `/design?story=<story-id>` to preview a single Storybook page.
 
 No API key, login, or database is required.
 
 See [`docs/ai-workflow.md`](docs/ai-workflow.md) for the reusable agent prompt
 and import contract.
 
-- Canvas Workbench: http://localhost:3200/workbench
+- PROTOTYPE: http://localhost:3200/design
 - Canvas Preview: http://localhost:3200/preview?locale=en
 - Storybook: http://localhost:6006
 - Docsite: http://localhost:3400/zh
 
 ## Hosted environments
 
-- Canvas Workbench: https://yds-prototype.vercel.app/workbench
+- PROTOTYPE: https://yds-prototype.vercel.app/design
 - Canvas Preview: https://yds-prototype.vercel.app/preview?locale=en
 - Storybook: https://yds-storybook.vercel.app
 - Docsite: https://yds-docsite.vercel.app/zh

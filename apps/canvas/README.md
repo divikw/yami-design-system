@@ -1,12 +1,14 @@
 # PROTOTYPE
 
 Run `pnpm dev:canvas` from the repository root and open
-`http://localhost:3200/workbench`.
+`http://localhost:3200/design`. Existing `/workbench` links redirect to `/design`
+with their query parameters.
 
 ## Project delivery
 
 The workbench selects a project, variant, page, language, H5/App preview mode and device width.
-“独立预览” opens the complete flow without the workbench frame; “复制方案链接”
+The header theme toggle remembers the workbench theme in the browser. The preview uses its own theme.
+“独立预览” opens the complete flow at the recipient's browser width. “复制预览链接”
 copies that same address. A recipient does not need the author's local drafts.
 Links use the current host: localhost links require the local service; remote
 sharing requires deploying this code to the intended host first.
@@ -30,7 +32,7 @@ page without clearing the basket, and More opens the standalone page. The
 address shows the preview host. Toolbars do not collapse while scrolling.
 `previewMode=h5` or `previewMode=app` is retained across navigation, refresh,
 standalone preview and shared links. Switching modes preserves the demo basket.
-Imported Storybook pages receive the same mode without changing standalone Storybook.
+Storybook pages opened through `/design?story=<story-id>` receive the same mode.
 Tablet/desktop and standalone H5 pages do not receive simulated Safari chrome.
 
 Example independent address:
@@ -61,6 +63,8 @@ Standalone links retain their project/variant and support browser back/forward.
 Modified clicks and links opened in a new tab retain native link behavior.
 Device width is exact in the workbench, with horizontal scrolling when needed;
 standalone previews adapt to the recipient's browser width.
+On narrow windows, the workbench opens with the sidebar collapsed and uses a
+phone preview width when the URL does not specify one.
 Drag the preview's right edge to resize between 320 and 1920 pixels. Width is
 updated live without reloading the embedded page, then saved to the workbench URL
 on release. The focused handle supports arrow keys (1px), Shift+arrow (10px),
@@ -79,8 +83,7 @@ current variant, language and viewport. They never navigate outside the workbenc
 
 Old `direction=...` workbench links without a `project` still use the legacy
 preview. Legacy JSON directions affect only the home page and use local storage.
-The Storybook importer remains a single-page inspection tool; imported stories
-are not automatically registered as project routes or variants.
+A `/design?story=<story-id>` link opens a single Storybook page for inspection.
 
 ## Verification
 

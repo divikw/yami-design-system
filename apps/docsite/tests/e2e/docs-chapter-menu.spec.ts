@@ -28,7 +28,7 @@ for (const locale of ["zh", "en"]) {
       const list = page.getByRole("listbox", { name: label });
       await expect(list).toBeVisible();
       const popup = list.locator("..");
-      await expect(popup).toHaveCSS("border-radius", "12px");
+      await expect(popup).toHaveCSS("border-radius", "8px");
       await expect(popup).toHaveCSS("box-shadow", "rgba(0, 0, 0, 0.24) 0px 8px 16px -8px");
       await expect(list.getByRole("option")).toHaveCount(5);
       const triggerBox = (await trigger.boundingBox())!;
@@ -37,6 +37,7 @@ for (const locale of ["zh", "en"]) {
       expect(popupBox.x).toBeCloseTo(triggerBox.x, 0);
       expect(triggerBox.height).toBe(44);
       const selected = list.getByRole("option", { selected: true });
+      await expect(selected).toHaveCSS("border-radius", "4px");
       expect((await selected.boundingBox())!.height).toBeCloseTo(32, 2);
       await expect(selected).toHaveCSS("font-size", "14px");
       await expect(selected.locator("svg")).toHaveCount(1);

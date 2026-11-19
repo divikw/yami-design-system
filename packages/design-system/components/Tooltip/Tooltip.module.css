@@ -6,7 +6,7 @@
   box-sizing: border-box;
   max-inline-size: min(20rem, var(--available-width));
   padding: calc(var(--space-050) + var(--space-025)) var(--space-100);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-component-default);
   box-shadow: var(--elevation-300-tooltip);
   background: var(--fill-inverse);
   color: var(--text-primary-inverse);

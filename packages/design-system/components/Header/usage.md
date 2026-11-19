@@ -299,7 +299,7 @@ it changes the 75 × 36 control geometry.
 
 ## Search
 
-The field is a 40px pill with an embedded 52 × 32 submit.
+The desktop field is a 40px pill with an embedded 52 × 32 submit. Search text uses 12px of horizontal padding on desktop and mobile.
 
 ```tsx
 <Header

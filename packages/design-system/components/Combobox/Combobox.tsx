@@ -52,8 +52,8 @@ export const ComboboxGroup = Base.Group;
 export const ComboboxCollection = Base.Collection;
 export const ComboboxEmpty = Base.Empty;
 
-function Mark({ kind }: { kind: "expand" | "clear" | "check" }) {
-  const path = { expand: "m4 6 4 4 4-4", clear: "m4 4 8 8m0-8-8 8", check: "m2.5 8 3.5 3.5 7-7" }[kind];
+function Mark({ kind }: { kind: "clear" | "check" }) {
+  const path = { clear: "m4 4 8 8m0-8-8 8", check: "m2.5 8 3.5 3.5 7-7" }[kind];
   return <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
     strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d={path} />
@@ -61,7 +61,7 @@ function Mark({ kind }: { kind: "expand" | "clear" | "check" }) {
 }
 
 export function ComboboxTrigger({ children, ...props }: ComponentPropsWithRef<typeof Base.Trigger>) {
-  return <Base.Trigger data-slot="combobox-trigger" {...props}>{children}<Mark kind="expand" /></Base.Trigger>;
+  return <Base.Trigger data-slot="combobox-trigger" {...props}>{children}<span className={styles.chevron} aria-hidden="true" /></Base.Trigger>;
 }
 
 export type ComboboxInputProps = Omit<ComponentPropsWithRef<typeof Base.Input>, "children"> & {

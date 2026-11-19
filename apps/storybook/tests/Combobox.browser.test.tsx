@@ -52,8 +52,8 @@ test("single and multiple inputs use the 2px active stroke without moving their 
       const input = page.getByRole("combobox", { name, exact: true });
       const element = input.element();
       const control = element.parentElement!;
-      expect(getComputedStyle(control).paddingLeft).toBe("8px");
-      expect(getComputedStyle(control).paddingRight).toBe("8px");
+      expect(getComputedStyle(control).paddingLeft).toBe("12px");
+      expect(getComputedStyle(control).paddingRight).toBe("12px");
       const left = element.getBoundingClientRect().left;
       const height = control.getBoundingClientRect().height;
       expect(getComputedStyle(control).boxShadow).toContain("0px 0px 0px 1px");

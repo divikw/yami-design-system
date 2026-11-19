@@ -78,7 +78,7 @@ subscribe={{
 }}
 ```
 
-The field wires `aria-invalid` and `aria-describedby` to that error node for you.
+The field uses 12px of horizontal padding and wires `aria-invalid` and `aria-describedby` to the error node.
 
 ## Store badges are caller-supplied
 

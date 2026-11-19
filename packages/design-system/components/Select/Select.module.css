@@ -12,8 +12,8 @@
 .trigger[data-placeholder] { color: var(--text-secondary); }
 .trigger[aria-invalid="true"], .trigger[data-invalid] { border-color: var(--border-attention); }
 .trigger[data-disabled] { background: var(--button-disabled); color: var(--text-disabled); cursor: not-allowed; }
-.content { box-sizing: border-box; min-width: var(--anchor-width); max-width: var(--available-width); max-height: var(--available-height); overflow-y: auto; overscroll-behavior: contain; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); background: var(--surface-primary); color: var(--text-primary); padding: var(--space-050); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); outline: none; }
-.item { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: var(--space-100); min-height: var(--space-400); border-radius: var(--radius-component-default); padding-inline: var(--space-100); cursor: pointer; outline: none; overflow-wrap: anywhere; }
+.content { box-sizing: border-box; min-width: var(--anchor-width); max-width: var(--available-width); max-height: var(--available-height); overflow-y: auto; overscroll-behavior: contain; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-component-default); background: var(--surface-primary); color: var(--text-primary); box-shadow: var(--elevation-400-menu-panel); padding: var(--space-050); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); outline: none; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: var(--space-100); min-height: var(--space-400); border-radius: var(--radius-tag-primary); padding-inline: var(--space-100); cursor: pointer; outline: none; overflow-wrap: anywhere; }
 .item[data-highlighted] { background: var(--surface-secondary); }
 .item[data-disabled] { color: var(--text-disabled); cursor: not-allowed; }
 .indicator { display: flex; }

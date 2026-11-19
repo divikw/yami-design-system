@@ -186,7 +186,7 @@ test.each([false, true])("error fields support keyboard clear and return focus (
 });
 
 for (const density of ["default", "compact"] as const) {
-  test.each([375, 1280])(`${density} keeps 8px horizontal padding with and without icon slots at %ipx`, async (width) => {
+  test.each([375, 1280])(`${density} keeps 12px horizontal padding with and without icon slots at %ipx`, async (width) => {
     const viewport = { width: innerWidth, height: innerHeight };
     try {
       await page.viewport(width, 812);
@@ -194,12 +194,12 @@ for (const density of ["default", "compact"] as const) {
         for (const trailing of [false, true]) {
           flushSync(() => root.render(<Input density={density} label="Search" defaultValue="Matcha" state="typing" clearable leadingIcon={leading ? <svg width="20" height="20" aria-hidden="true" /> : undefined} trailingIcon={trailing ? <span>USD</span> : undefined} />));
           const field = container.querySelector<HTMLElement>('div[class*="field"]')!;
-          expect(getComputedStyle(field).paddingLeft).toBe("8px");
-          expect(getComputedStyle(field).paddingRight).toBe("8px");
+          expect(getComputedStyle(field).paddingLeft).toBe("12px");
+          expect(getComputedStyle(field).paddingRight).toBe("12px");
           const start = leading ? field.firstElementChild! : field.querySelector("input")!;
-          expect(start.getBoundingClientRect().left - field.getBoundingClientRect().left).toBe(8);
+          expect(start.getBoundingClientRect().left - field.getBoundingClientRect().left).toBe(12);
           const end = field.lastElementChild!;
-          expect(field.getBoundingClientRect().right - end.getBoundingClientRect().right).toBe(8);
+          expect(field.getBoundingClientRect().right - end.getBoundingClientRect().right).toBe(12);
         }
       }
     } finally {
@@ -409,7 +409,7 @@ for (const theme of ["light", "dark"]) {
       const clear = container.querySelector("button")!;
       const clearBounds = clear.getBoundingClientRect();
       expect([clearBounds.width, clearBounds.height]).toEqual([24, 24]);
-      expect(bounds.right - clearBounds.right).toBe(8);
+      expect(bounds.right - clearBounds.right).toBe(12);
       expect(clearBounds.top + clearBounds.height / 2).toBe(bounds.top + bounds.height / 2);
       expect(clear.contains(document.elementFromPoint(clearBounds.left + 2, clearBounds.top + 2))).toBe(true);
       const outside = document.elementFromPoint(clearBounds.left + clearBounds.width / 2, clearBounds.top - 2)!;
@@ -443,7 +443,7 @@ for (const theme of ["light", "dark"]) {
       const field = clear.parentElement!.getBoundingClientRect();
       const bounds = clear.getBoundingClientRect();
       expect([bounds.width, bounds.height]).toEqual([24, 24]);
-      expect(field.right - bounds.right).toBe(8);
+      expect(field.right - bounds.right).toBe(12);
       expect(bounds.top).toBeGreaterThanOrEqual(field.top);
       expect(bounds.bottom).toBeLessThanOrEqual(field.bottom);
       expect(bounds.top + bounds.height / 2).toBe(field.top + field.height / 2);

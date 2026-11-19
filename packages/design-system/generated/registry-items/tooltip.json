@@ -62,7 +62,7 @@
       "--font-family-ios",
       "--font-size-caption-sm",
       "--line-height-caption-sm",
-      "--radius-sm",
+      "--radius-component-default",
       "--radius-tag-primary",
       "--space-025",
       "--space-050",
@@ -90,7 +90,7 @@
         "property": "box-shadow",
         "selector": ".content"
       },
-      "--radius-sm": {
+      "--radius-component-default": {
         "property": "border-radius",
         "selector": ".content"
       },
@@ -150,5 +150,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "315412850aca5ad1e4bca51bd9201f2f28ab0facd8db21a884120875e44c4bc1"
+  "contentDigest": "dd7c88e89ed8acfe7789d7c16c1e2bffdb371106a0a0e3c63f88bc9e1d13792c"
 }

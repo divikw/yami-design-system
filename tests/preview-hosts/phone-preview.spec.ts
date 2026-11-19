@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 test("H5 and App modes preserve context and control home navigation and chrome", async ({ page }) => {
-  await page.goto("/workbench?project=global-navigation&variant=image-categories&path=%2F&viewport=374&locale=en");
+  await page.goto("/design?project=global-navigation&variant=image-categories&path=%2F&viewport=374&locale=en");
   const frame = page.frameLocator("#canvas-preview");
   await expectPhoneFrame(page, "#canvas-preview");
   await expect(frame.locator('.prototype-home-navigation')).toBeVisible();
@@ -43,7 +43,7 @@ test("H5 and App modes preserve context and control home navigation and chrome",
 });
 
 test("H5 mode also adapts imported cart pages without affecting standalone Storybook", async ({ page }) => {
-  await page.goto("/workbench?story=yami-pages-cart--mobile&viewport=402&locale=en&previewMode=h5");
+  await page.goto("/design?story=yami-pages-cart--mobile&viewport=402&locale=en&previewMode=h5");
   const frame = page.frameLocator("#canvas-preview");
   await expect(frame.locator('[data-slot="cart-page"]')).toBeVisible();
   await expect(frame.locator('[data-slot="cart-app-navigation"]')).toBeHidden();
@@ -102,7 +102,7 @@ async function expectSafariFrame(page: Page) {
 }
 
 for (const theme of ["light", "dark"]) test(`Safari has fixed controls, native icon sizes and usable narrow layouts (${theme})`, async ({ page }) => {
-  await page.goto(`/workbench?project=global-navigation&variant=current&path=%2Fcart&viewport=402&locale=en&previewMode=h5&theme=${theme}`);
+  await page.goto(`/design?project=global-navigation&variant=current&path=%2Fcart&viewport=402&locale=en&previewMode=h5&theme=${theme}`);
   await expectSafariFrame(page);
   const frame = page.frameLocator('#canvas-preview');
   const toolbar = page.getByRole("navigation", { name: "Safari 预览工具栏" });
@@ -160,7 +160,7 @@ for (const theme of ["light", "dark"]) test(`Safari has fixed controls, native i
 });
 
 test("H5 extends fixed TabBar colors and clears them when hidden or removed", async ({ page }) => {
-  await page.goto('/workbench?project=global-navigation&variant=current&path=%2F&viewport=402&locale=en&previewMode=h5');
+  await page.goto('/design?project=global-navigation&variant=current&path=%2F&viewport=402&locale=en&previewMode=h5');
   await expectSafariFrame(page);
   const frame = page.frameLocator('#canvas-preview');
   await expect(frame.locator('[data-phone-preview-bottom-bar]')).toHaveCount(0);
@@ -190,7 +190,7 @@ test("H5 extends fixed TabBar colors and clears them when hidden or removed", as
 });
 
 test("PROTOTYPE reserves phone chrome without covering fixed cart navigation", async ({ page }) => {
-  await page.goto("/workbench?project=global-navigation&variant=current&path=%2Fcart&viewport=402&locale=en");
+  await page.goto("/design?project=global-navigation&variant=current&path=%2Fcart&viewport=402&locale=en");
   await expectPhoneFrame(page, "#canvas-preview");
   const frame = page.frameLocator("#canvas-preview");
   const navigation = frame.locator('[data-slot="cart-app-navigation"]');
@@ -217,7 +217,7 @@ test("PROTOTYPE reserves phone chrome without covering fixed cart navigation", a
 });
 
 for (const mode of ["app", "h5"]) test(`PROTOTYPE matches the navigation background when scrolled and clears it at the top (${mode})`, async ({ page }) => {
-  await page.goto(`/workbench?project=global-navigation&variant=current&path=%2F&viewport=402&locale=en&previewMode=${mode}`);
+  await page.goto(`/design?project=global-navigation&variant=current&path=%2F&viewport=402&locale=en&previewMode=${mode}`);
   await expectPhoneFrame(page, "#canvas-preview");
   const frame = page.frameLocator("#canvas-preview");
   await expect(frame.locator("html")).toHaveAttribute("data-phone-preview-content", "");
@@ -253,7 +253,7 @@ test("Storybook pages and standalone components have no phone chrome or insets",
 });
 
 test("imported Storybook pages receive only the PROTOTYPE shell", async ({ page }) => {
-  await page.goto("/workbench?story=yami-pages-ecommerce-home--mobile&viewport=375&locale=en&theme=dark");
+  await page.goto("/design?story=yami-pages-ecommerce-home--mobile&viewport=375&locale=en&theme=dark");
   await expectPhoneFrame(page, "#canvas-preview");
   await expect(page.locator("[data-phone-preview-shell]")).toHaveAttribute("data-theme", "dark");
   await expect(page.frameLocator("#canvas-preview").locator("[data-phone-preview-shell]")).toHaveCount(0);
@@ -262,7 +262,7 @@ test("imported Storybook pages receive only the PROTOTYPE shell", async ({ page 
 
 
 test("phone status content stays anchored to the edges when widened and fits narrow screens", async ({ page }) => {
-  await page.goto("/workbench?viewport=402&locale=en");
+  await page.goto("/design?viewport=402&locale=en");
   await expectPhoneFrame(page, "#canvas-preview");
   const measure = () => page.locator("[data-phone-preview-status]").evaluate((element) => {
     const bounds = element.getBoundingClientRect();

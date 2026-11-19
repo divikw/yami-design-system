@@ -181,6 +181,7 @@
     "--space-025",
     "--space-050",
     "--space-100",
+    "--space-150",
     "--space-300",
     "--space-500",
     "--space-600",
@@ -189,7 +190,8 @@
   ],
 
   "tokenBindings": {
-    "--space-100": { "property": "padding-inline", "selector": ".field" },
+    "--space-100": { "property": "gap", "selector": ".field" },
+    "--space-150": { "property": "padding-inline", "selector": ".field" },
     "--space-300": { "property": "width", "selector": ".clearButton" },
     "--space-500": { "property": "height", "selector": "@media(min-width:1024px) .root[data-density='compact'] .field" },
     "--focus-ring": { "property": "outline-color", "selector": ".root[data-keyboard-focus='true'] .field:has(.control:focus-visible), .root[data-keyboard-focus='true'] .clearButton:focus-visible" },
