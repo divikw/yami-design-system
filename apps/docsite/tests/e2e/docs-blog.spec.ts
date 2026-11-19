@@ -112,7 +112,7 @@ test("filters Blog categories and opens a complete article", async ({ page }) =>
   await expect(articleTags).toHaveCount(4);
   for (const tag of await articleTags.all()) {
     await expect(tag).toHaveAttribute("data-size", "m");
-    await expect(tag).toHaveCSS("height", "28px");
+    await expect(tag).toHaveCSS("height", "36px");
     await expect(tag).toHaveCSS("background-color", "rgba(0, 0, 0, 0.04)");
   }
 

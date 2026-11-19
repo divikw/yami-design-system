@@ -4,10 +4,10 @@ Use `Checkbox` when people may select zero, one, or several independent options.
 
 ## Anatomy
 
-The component supplies a 20px visible square with a transparent layout and pointer target of 32×32px from 1024px and 40×40px below. Compose its accessible label with a native `<label htmlFor>` or an equivalent field primitive.
+The control occupies a 20×20px square with an 18×18px visible box centered inside. Its transparent pointer target extends 6px beyond each edge from 1024px (32×32px total) and 10px below that breakpoint (40×40px total). Space adjacent controls so their targets do not overlap. Compose its accessible label with a native `<label htmlFor>` or an equivalent field primitive.
 
 ```tsx
-<label htmlFor="save-payment">
+<label htmlFor="save-payment" style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" }}>
   <Checkbox id="save-payment" name="preferences" value="save-payment" />
   Save payment method · 保存付款方式
 </label>
@@ -29,7 +29,7 @@ Dark theme is automatic through semantic aliases. Checkbox has no `dark` prop an
 - A visible `<label>` is preferred. If no visible label is rendered, pass `aria-label`.
 - Use native `disabled`, `required`, `name`, `value`, and `form` props.
 - Mouse and touch clicks do not show the blue focus outline, including clicks on an associated label or after keyboard interaction. Tab and Space retain the keyboard focus outline.
-- Both `default` and `compact` center the 20×20px square with a 4px radius and draw the keyboard focus outline around it. In option lists, wrap it with a native `<label>` so the full row can remain clickable.
+- Both `default` and `compact` center the 18×18px square with a 4px radius and draw the keyboard focus outline around it. In option lists, wrap it with a native `<label>` so the full row can remain clickable.
 
 
 ### State changes

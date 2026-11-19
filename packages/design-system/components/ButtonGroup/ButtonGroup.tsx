@@ -1,3 +1,4 @@
+import { useRender } from "@base-ui/react/use-render";
 import type { ComponentPropsWithRef } from "react";
 import styles from "./ButtonGroup.module.css";
 
@@ -9,7 +10,16 @@ export interface ButtonGroupProps extends ComponentPropsWithRef<"div"> {
 }
 
 /** Groups related Button and ButtonLink entries without changing their behavior. */
-export function ButtonGroup({ full = false, className, ...props }: ButtonGroupProps) {
-  return <div {...props} role="group" data-slot="button-group" data-full={full}
-    className={[styles.group, className].filter(Boolean).join(" ")} />;
+export function ButtonGroup({ full = false, className, ref, ...props }: ButtonGroupProps) {
+  return useRender({
+    defaultTagName: "div",
+    ref,
+    props: {
+      ...props,
+      role: "group",
+      "data-slot": "button-group",
+      "data-full": full,
+      className: [styles.group, className].filter(Boolean).join(" "),
+    },
+  });
 }

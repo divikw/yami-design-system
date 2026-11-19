@@ -15,9 +15,12 @@ const meta = {
   parameters: {
     layout: "centered",
     docs: {
+      translations: {
+        zh: { description: "用于短描述的静态标签，支持填充、描边、反色表面和前置图像。" },
+      },
       description: {
         component:
-          "A static responsive pill with M and L sizes, optional leading artwork, independent placement context, light or dark surface mode, and filled or outline treatment.",
+          "A static responsive pill with optional leading artwork, independent placement context, light or dark surface mode, and filled or outline treatment.",
       },
     },
   },
@@ -120,7 +123,7 @@ function Variants({ context, mode }: { context: TagContext; mode: TagMode }) {
   );
 }
 
-function SizesAndImages() {
+function ContentExamples() {
   return (
     <div
       data-size-showcase
@@ -131,14 +134,8 @@ function SizesAndImages() {
         flexWrap: "wrap",
       }}
     >
-      <Tag size="m">M</Tag>
-      <Tag size="m" image={{ src: matchaImage, alt: "" }}>
-        M · image
-      </Tag>
-      <Tag size="l">L</Tag>
-      <Tag size="l" image={{ src: matchaImage, alt: "" }}>
-        L · image
-      </Tag>
+      <Tag>Green tea</Tag>
+      <Tag size="l" image={{ src: matchaImage, alt: "" }}>Matcha</Tag>
     </div>
   );
 }
@@ -154,10 +151,10 @@ export const Showcase: Story = {
         <Tag {...args} />
       </Panel>
       <Panel
-        label="Responsive sizes · optional image"
+        label="Text and image tags"
         background={backgrounds.content.light}
       >
-        <SizesAndImages />
+        <ContentExamples />
       </Panel>
       <Panel label="Content · light mode" background={backgrounds.content.light}>
         <Variants context="content" mode="light" />
@@ -187,7 +184,7 @@ export const Showcase: Story = {
     const isPc = window.matchMedia("(min-width: 1024px)").matches;
     for (const tag of tags) {
       const style = getComputedStyle(tag);
-      const expectedHeight = "28px";
+      const expectedHeight = isPc ? "36px" : "32px";
       if (style.height !== expectedHeight || style.borderRadius !== "9999px") {
         throw new Error("Tag M must use the responsive full-pill size contract");
       }
@@ -198,14 +195,13 @@ export const Showcase: Story = {
         "[data-size-showcase] [data-slot='tag']",
       ),
     );
-    if (sizeTags.length !== 4) {
-      throw new Error("Tag Showcase must render M and L with and without images");
+    if (sizeTags.length !== 2) {
+      throw new Error("Tag Showcase must render text-only and image examples");
     }
 
     for (const tag of sizeTags) {
       const size = tag.dataset.size;
-      const expectedHeight =
-        size === "l" ? (isPc ? "36px" : "32px") : "28px";
+      const expectedHeight = isPc ? "36px" : "32px";
       if (getComputedStyle(tag).height !== expectedHeight) {
         throw new Error(`Tag ${size} must use its responsive height contract`);
       }
@@ -213,7 +209,12 @@ export const Showcase: Story = {
       const imageSlot = tag.querySelector<HTMLElement>(
         "[data-slot='tag-image']",
       );
-      if (!imageSlot) continue;
+      if (!imageSlot) {
+        if (getComputedStyle(tag).paddingInline !== "12px") {
+          throw new Error("Text-only Tags must have 12px padding on both sides");
+        }
+        continue;
+      }
       const image = imageSlot.querySelector<HTMLImageElement>("img");
       const slotSize = `${Number.parseInt(expectedHeight, 10) - 4}px`;
       const imageSize = `${Number.parseInt(expectedHeight, 10) - 8}px`;

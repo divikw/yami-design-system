@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { composeStory } from "@storybook/react-vite";
@@ -162,16 +163,21 @@ test("static categories are not current pages; empty and single paths expose no 
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
+  const navRef = createRef<HTMLElement>();
   try {
     flushSync(() => root.render(<Breadcrumb items={[{ label: "Blog", href: "/en/blog" }, { label: "Engineering" }]} />));
     expect(container.querySelector('[aria-current]')).toBeNull();
     expect(container.querySelectorAll("a")).toHaveLength(1);
-    flushSync(() => root.render(<Breadcrumb aria-label="Article location" items={[{ label: "Article", current: true }]} />));
+    flushSync(() => root.render(<Breadcrumb ref={navRef} aria-label="Article location" items={[{ label: "Article", current: true }]} />));
     expect(container.querySelector("nav")).toHaveAccessibleName("Article location");
+    expect(navRef.current).toBe(container.querySelector("nav"));
     expect(container.querySelector('[aria-current="page"]')).toHaveTextContent("Article");
     expect(container.querySelector("a, button, [aria-hidden]")).toBeNull();
-    flushSync(() => root.render(<Breadcrumb items={[]} />));
+    flushSync(() => root.render(<Breadcrumb ref={navRef} items={[]} />));
     expect(container.querySelector("nav")).toBeNull();
+    expect(navRef.current).toBeNull();
+    flushSync(() => root.render(<Breadcrumb ref={navRef} items={[{ label: "Blog", href: "/en/blog" }]} />));
+    expect(navRef.current).toContainElement(container.querySelector("a"));
   } finally {
     root.unmount();
     container.remove();

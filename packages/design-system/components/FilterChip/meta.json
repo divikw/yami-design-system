@@ -38,6 +38,9 @@
       "default": "outlined",
       "description": "Filled suggested-filter treatment or outlined toolbar-control treatment."
     },
+    "pressed": { "type": "boolean", "required": false, "description": "Controlled toggle state. The legacy selected prop takes precedence." },
+    "defaultPressed": { "type": "boolean", "required": false, "description": "Initial state for an uncontrolled toggle chip." },
+    "onPressedChange": { "type": "(pressed: boolean, eventDetails: Toggle.ChangeEventDetails) => void", "required": false, "description": "Called when a toggle changes; call eventDetails.cancel() to cancel an uncontrolled change." },
     "selected": {
       "type": "boolean",
       "required": false,
@@ -57,7 +60,7 @@
   "rules": {
     "interaction": {
       "contractId": "native-semantics",
-      "note": "FilterChip renders a button; FilterChipMenu uses Base UI Popover with Checkbox or RadioGroup semantics."
+      "note": "FilterChip uses Base UI Toggle with optional pressed semantics. FilterChipMenu composes Popover or Drawer with Checkbox or RadioGroup."
     },
     "focus": {
       "ruleId": "focus-style",
@@ -73,6 +76,7 @@
     }
   },
   "tokens": [
+    "--button-disabled",
     "--border-default",
     "--border-focus",
     "--focus-ring",
@@ -90,10 +94,13 @@
     "--space-150",
     "--space-300",
     "--stroke-default",
+    "--text-disabled",
     "--text-primary",
     "--text-secondary"
   ],
   "tokenBindings": {
+    "--button-disabled": { "property": "background-color", "selector": ".chip:disabled" },
+    "--text-disabled": { "property": "color", "selector": ".chip:disabled" },
     "--focus-ring": { "property": "outline-color", "selector": ".chip:focus-visible, .categoryToggle:focus-visible" },
     "--fill-secondary": {
       "property": "background-color",
@@ -101,7 +108,7 @@
     },
     "--fill-primary": {
       "property": "background-color",
-      "selector": ".outlined, .filled[aria-pressed='true']"
+      "selector": ".outlined, .filled[aria-pressed='true']:not(:disabled)"
     },
     "--border-default": {
       "property": "border-color",
@@ -109,7 +116,7 @@
     },
     "--border-focus": {
       "property": "inset box-shadow",
-      "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
+      "selector": ".filled[aria-pressed='true']:not(:disabled), .outlined[aria-pressed='true']:not(:disabled)"
     },
     "--color-black-200": {
       "property": "background-color",
@@ -129,7 +136,7 @@
     "notes": "Provide accessible labels for chip groups and popup menus."
   },
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": ["react", "@base-ui/react"],
     "peer": [],
     "devOnly": ["@storybook/react-vite", "storybook"]
   },

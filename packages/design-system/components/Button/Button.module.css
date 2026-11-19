@@ -11,7 +11,7 @@
  * Heights (sm / md / lg):
  *   Inline and icon, all viewports: 32 / 40 / 48px
  *   Full below 1024px:              32 / 40 / 48px
- *   Full from 1024px:               32 / 48 / 56px
+ *   Full from 1024px:               40 / 48 / 56px
  */
 
 .button {
@@ -75,6 +75,10 @@
 }
 
 @media (min-width: 1024px) {
+  .sm.fullWidth {
+    height: var(--space-500);
+  }
+
   .md.fullWidth {
     height: var(--space-600);
   }

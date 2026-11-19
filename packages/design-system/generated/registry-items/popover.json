@@ -72,6 +72,7 @@
       "--line-height-body-md",
       "--line-height-heading-sm",
       "--radius-surface-default",
+      "--space-150",
       "--stroke-default",
       "--text-primary"
     ],
@@ -80,6 +81,10 @@
       "semantic-color-only"
     ],
     "tokenBindings": {
+      "--space-150": {
+        "property": "padding",
+        "selector": ".content"
+      },
       "--fill-primary": {
         "property": "background",
         "selector": ".content"
@@ -137,5 +142,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "21d6739d510307c16a423eeea04e9a26b26732c51e4dbbf7a8fd5e8adea0f96b"
+  "contentDigest": "a38ebbb3c25b59159f964879ec9dda24272d5bed1772ff3ebefb9d6f1b40f57d"
 }

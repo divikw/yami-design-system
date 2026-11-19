@@ -34,7 +34,8 @@
   ],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -71,6 +72,7 @@
       "--font-size-body-md",
       "--font-size-body-xl",
       "--font-size-caption-md",
+      "--font-size-caption-sm",
       "--font-weight-normal",
       "--letter-spacing-normal",
       "--line-height-body-md",
@@ -170,7 +172,11 @@
       },
       "--font-size-caption-md": {
         "property": "font-size",
-        "selector": ".root[data-floating='true'] .label, .helperText"
+        "selector": ".helperText, .errorText"
+      },
+      "--font-size-caption-sm": {
+        "property": "font-size",
+        "selector": ".root[data-floating='true'] .label"
       },
       "--line-height-body-md": {
         "property": "line-height",
@@ -182,7 +188,7 @@
       },
       "--line-height-caption-md": {
         "property": "line-height",
-        "selector": ".root[data-floating='true'] .label, .helperText, .errorText"
+        "selector": ".helperText, .errorText"
       }
     }
   },
@@ -206,5 +212,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "22144a63fc677b74ba8398a4ff0cb8c01a0d11f8c54e7dafaf5a3c8034064b24"
+  "contentDigest": "dd923b1523f4f169804b91071aeba2e7e080cb7f9b7a503bef925dc8546485b4"
 }

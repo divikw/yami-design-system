@@ -2,21 +2,15 @@
  * Card — canonical examples.
  */
 
-import { Card } from './Card'
+import { Card, CardHeader, CardTitle, CardDescription } from './Card'
 
 export const BasicCard = () => (
   <section data-example="BasicCard">
     <Card>
-      <h3
-        style={{
-          margin: 0,
-          marginBottom: 'var(--space-050)',
-          fontSize: 'var(--font-size-heading-sm)',
-        }}
-      >
-        Order #Y20260420-1234
-      </h3>
-      <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Estimated delivery: Apr 22–24</p>
+      <CardHeader>
+        <CardTitle>Order #Y20260420-1234</CardTitle>
+        <CardDescription>Estimated delivery: Apr 22–24</CardDescription>
+      </CardHeader>
     </Card>
   </section>
 )

@@ -1,4 +1,26 @@
+<!-- locale:zh -->
+# FilterChip — 使用说明
+
+## 单个筛选项
+
+筛选芯片使用 Base UI Toggle。受控场景可传 `pressed` 和 `onPressedChange`，或沿用已有的 `selected` 和 `onClick`。同时传入 `selected` 和 `pressed` 时，以 `selected` 为准。用 `defaultPressed` 设置非受控初始值。没有配置按下状态时，芯片作为普通按钮工作。
+
+```tsx
+import { FilterChip } from "@yami/design-system"
+
+<FilterChip defaultPressed variant="filled">有货</FilterChip>
+```
+
+## 菜单与成组布局
+
+`FilterChipGroup` 提供 8px 间距、横向滚动和键盘焦点留白。`FilterChipMenu` 的单选立即提交，多选需要确认后提交。分层分类使用 `FilterChipCategoryMenu`，展开分类和确认选择是独立操作。三种菜单都在 PC 上使用 Popover，低于 1024px 时使用 Drawer。用 `popupAriaLabel` 补充弹层的无障碍名称。
+
+多选菜单底部的「清除」和「显示结果」均使用 YAMI Button 的 `size="sm"`（32px）。
+
+<!-- locale:en -->
 # FilterChip
+
+FilterChip uses Base UI Toggle. Use `pressed` and `onPressedChange` for controlled use or `defaultPressed` for an uncontrolled initial value. When both are supplied, `selected` takes precedence over `pressed`. Chips without pressed-state props act as ordinary buttons.
 
 Use `FilterChip` for compact, interactive filters in horizontal toolbars.
 Use `filled` for suggested filters and `outlined` for filter controls. Both
@@ -15,8 +37,8 @@ matches the Search Results specification:
 
 - `selectionMode="single"` uses `RadioGroup`, commits immediately, then closes.
 - `selectionMode="multiple"` uses `Checkbox`, keeps draft selections open, and
-  commits only from the 40px `md` primary footer action. Clear resets the draft
-  values.
+  commits with the primary footer action. Both Clear and Apply use the 32px `sm` Button size.
+  Clear resets the draft values.
 
 The popup is portalled and collision-aware, so it is not clipped by a
 horizontally scrolling `FilterChipGroup`. Provide `popupAriaLabel` when the

@@ -1,14 +1,18 @@
 .page { color: var(--text-primary); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: 1.65; min-width: 0; }
 .page h1 { font-size: var(--font-size-heading-2xl); line-height: 1.2; margin: 0 0 var(--space-150); font-weight: var(--font-weight-emphasize); }
-.page h2 { margin: 0 0 var(--space-200); padding: 0; border: 0; font-size: var(--font-size-heading-md); line-height: 1.4; font-weight: var(--font-weight-emphasize); scroll-margin-top: var(--space-400); }
+.page:where(:not([data-docs-layout])) h2, .page > section > h2, .usage h2 { margin: 0 0 var(--space-200); padding: 0; border: 0; font-size: var(--font-size-heading-md); line-height: 1.4; font-weight: var(--font-weight-emphasize); scroll-margin-top: var(--space-400); }
+.usage h3 { margin: var(--space-400) 0 var(--space-200); color: var(--text-primary); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); font-weight: var(--font-weight-emphasize); }
+.usage h4 { margin: var(--space-300) 0 var(--space-150); }
+:global([data-yami-docs="usage"]) :is(ul, ol) { padding-inline-start: var(--space-300); }
+.usage :is(p, li, th, td) > code { white-space: normal; overflow-wrap: anywhere; }
 .legacyAnchor { display: block; scroll-margin-top: var(--space-400); }
-.page p { margin: 0 0 var(--space-200); }
-.page section { margin-top: var(--space-600); }
+.page:where(:not([data-docs-layout])) p, .page > section > p { margin: 0 0 var(--space-200); }
+.page:where(:not([data-docs-layout])) section, .page > section { margin-top: var(--space-600); }
 :where(.page) a { color: inherit; text-underline-offset: 4px; }
 .header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-300); margin-bottom: var(--space-400); }
 .header p { color: var(--text-secondary); max-width: 480px; font-size: var(--font-size-heading-sm); margin: 0; }
 .actions { display: flex; align-items: center; gap: var(--space-100); flex-shrink: 0; }
-.actions a { display: grid; place-items: center; width: var(--space-400); height: var(--space-400); background: var(--surface-secondary); border-radius: var(--radius-full); text-decoration: none; }
+.actions a { display: grid; place-items: center; width: var(--space-400); height: var(--space-400); background: var(--surface-secondary); border-radius: var(--radius-button-primary); text-decoration: none; }
 .example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
 .preview { display: flow-root; background: var(--surface-primary); }
 .previewViewport { display: flex; justify-content: center; overflow: clip; }
@@ -19,7 +23,7 @@
 .demo h3 { margin: 0; }
 .codeBlock { position: relative; background: var(--surface-secondary); border-radius: var(--radius-surface-default); margin-top: var(--space-200); overflow: hidden; }
 .example > .codeBlock { margin: 0; border-radius: 0; border-top: var(--stroke-default) solid var(--border-default); }
-.codeBlock + p { margin-top: var(--space-200); }
+.page .codeBlock + p { margin-top: var(--space-200); }
 .codeScroll { overflow: auto; border-radius: inherit; scrollbar-width: none; }
 .codeScroll::-webkit-scrollbar { display: none; }
 .codeScroll [data-orientation="horizontal"] { display: none; }
@@ -57,18 +61,45 @@
 .tabs { display: flex; gap: var(--space-300); margin-bottom: var(--space-150); }
 .tabs button { border: 0; border-bottom: var(--stroke-thick) solid transparent; padding: var(--space-100) 0; background: transparent; color: var(--text-secondary); font: inherit; cursor: pointer; }
 .tabs button[aria-pressed="true"] { border-bottom-color: var(--text-primary); color: var(--text-primary); }
-.page :is(a, button):focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
+.page :is(a, button):where(:not([role="radio"])):focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
 .tableScroll { overflow: auto; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); margin-bottom: var(--space-200); }
-.page table { border-collapse: collapse; width: 100%; text-align: start; margin: 0; }
-.page th, .page td { padding: var(--space-150); border-bottom: var(--stroke-default) solid var(--border-default); vertical-align: top; text-align: start; }
-.page tbody tr:last-child td { border-bottom: 0; }
-.page td code { overflow-wrap: anywhere; }
+:is(.page:where(:not([data-docs-layout])), .tableScroll) table { border-collapse: collapse; width: 100%; text-align: start; margin: 0; }
+:is(.page:where(:not([data-docs-layout])), .tableScroll) :is(th, td) { padding: var(--space-150); border-bottom: var(--stroke-default) solid var(--border-default); vertical-align: top; text-align: start; }
+:is(.page:where(:not([data-docs-layout])), .tableScroll) tbody tr:last-child td { border-bottom: 0; }
+:is(.page:where(:not([data-docs-layout])), .tableScroll) td code { overflow-wrap: anywhere; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 :global(.sbdocs-wrapper):has(.page) { background: var(--background-primary); }
 :global(.sbdocs-content):has(.page) { max-width: 720px; min-width: 0; }
+:global(.sbdocs-content):has(.page[data-docs-layout="base-ui"]) { max-width: 640px; }
+.page[data-docs-layout="base-ui"] h1 {
+  margin-bottom: var(--space-100);
+  font-size: var(--font-size-heading-3xl);
+  line-height: var(--line-height-heading-3xl);
+  letter-spacing: var(--letter-spacing-tight);
+  overflow-wrap: anywhere;
+}
+.page[data-docs-layout="base-ui"] .header p {
+  max-width: 40ch;
+  font-size: var(--font-size-body-xl);
+  line-height: var(--line-height-body-xl);
+}
+.page[data-docs-layout="base-ui"] > section > h2, .usage h2 {
+  color: var(--text-primary);
+  font-size: var(--font-size-heading-xl);
+  line-height: var(--line-height-heading-xl);
+}
+.page[data-docs-layout="base-ui"] .codeBlock[data-expanded="false"] .expand {
+  inset-block: 50% auto;
+  transform: translateY(-50%);
+}
+.page[data-docs-layout="base-ui"] .codeScroll pre {
+  font-size: var(--font-size-caption-md) !important;
+  line-height: var(--line-height-caption-md) !important;
+}
 @media (max-width: 600px) {
+  :global(.sbdocs-wrapper):has(.page[data-docs-layout="base-ui"]) { padding-inline: var(--space-200); }
   .header { flex-direction: column; gap: var(--space-200); }
-  .page section { margin-top: var(--space-400); }
+  .page:where(:not([data-docs-layout])) section, .page > section { margin-top: var(--space-400); }
 }
 
 .codeScroll :global(.token) { color: var(--text-primary) !important; }

@@ -1894,6 +1894,11 @@ export const tokens = {
     "$value": "{color.neutral.100}",
     "$description": "用于次级或嵌套内容的组件表面，用于区分容器内部层级但不抢占主视觉。不用于页面级背景。"
   },
+  "switch.track-off": {
+    "$type": "color",
+    "$value": "{color.neutral.200}",
+    "$description": "开关关闭时的轨道底色。"
+  },
   "text.disabled": {
     "$type": "color",
     "$value": "{color.black.400}",

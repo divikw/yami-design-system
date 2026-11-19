@@ -24,7 +24,6 @@ const meta = {
             value: "受控选中项的字符串值；null 表示未选择。",
             defaultValue: "非受控模式的初始选中项。",
             onValueChange: "选中项变化时触发；返回字符串或 null，以及 Base UI 事件详情。",
-            loop: "方向键到达首尾时是否循环，默认为 true。",
           },
         },
         en: {
@@ -39,7 +38,6 @@ const meta = {
             value: "Controlled selected string value; null means no selection.",
             defaultValue: "Initially selected value in uncontrolled mode.",
             onValueChange: "Receives the selected string or null and Base UI event details.",
-            loop: "Whether arrow-key navigation wraps at either end; defaults to true.",
           },
         },
       },
@@ -50,7 +48,6 @@ const meta = {
     },
   },
   argTypes: {
-    loop: { control: "boolean" },
     onValueChange: { control: false },
     defaultValue: { control: "text" },
     value: { control: "text" },
@@ -85,7 +82,7 @@ const optionStyle: CSSProperties = {
   display: "inline-flex",
   minHeight: "var(--space-600)",
   alignItems: "center",
-  gap: 0,
+  gap: "var(--space-100)",
   color: "var(--text-primary)",
   fontSize: "var(--font-size-body-md)",
   lineHeight: "var(--line-height-body-md)",
@@ -148,11 +145,11 @@ export const Showcase: Story = {
     const uncheckedStyle = getComputedStyle(unchecked)
     const uncheckedSurface = getComputedStyle(unchecked, "::before")
     if (
-      uncheckedStyle.width !== "40px" ||
-      uncheckedStyle.height !== "40px" ||
-      uncheckedSurface.width !== "20px" ||
-      uncheckedSurface.height !== "20px" ||
-      uncheckedSurface.inset !== "10px" ||
+      uncheckedStyle.width !== "20px" ||
+      uncheckedStyle.height !== "20px" ||
+      uncheckedSurface.width !== "18px" ||
+      uncheckedSurface.height !== "18px" ||
+      uncheckedSurface.inset !== "1px" ||
       uncheckedSurface.borderColor !== "rgba(0, 0, 0, 0.08)"
     ) {
       throw new Error("RadioGroupItem must match the Checkbox geometry and subtle border")

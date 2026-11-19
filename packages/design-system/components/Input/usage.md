@@ -1,4 +1,27 @@
+<!-- locale:zh -->
+# Input — 使用说明
+
+Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。
+
+## 用法
+
+```tsx
+import { Input } from "@yami/design-system"
+
+<Input label="邮箱" type="email" name="email" required />
+```
+
+## 值与状态
+
+- `defaultValue` 设置非受控的起始值。用 `value` 受控时，可用原生 `onChange` 或接收值和事件详情的 `onValueChange`。
+- `error` 渲染关联的错误说明。已有外部说明时，可设置 `aria-invalid` 和 `aria-describedby`。两种方式都使用 YAMI 错误边框。
+- 支持原生 `disabled`、`readOnly`、`required` 和表单重置。通过 `clearable` 提供清空操作。可选的 `action` 或尾部内容会占用清空操作的位置。
+- 标签、辅助文字和交互状态沿用 YAMI token。键盘焦点和字段状态边框分别显示。
+
+<!-- locale:en -->
 # Input — Usage
+
+The control uses Base UI Input. It accepts native `onChange` and the value-oriented `onValueChange` callback. Set `aria-invalid` to apply the YAMI error border when the error message is supplied externally.
 
 ## What It Is
 
@@ -32,8 +55,8 @@ The browser regression suite covers Input behavior independently of these naviga
 
 | Platform | Field height | Error total | Value text | Label text |
 |---|---:|---:|---|---|
-| Mobile | 48px | 68px | body-md, 14/20 | default 14/20, floating caption-md 12/16 |
-| PC | 56px | 77px | body-xl, 16/20 | body-md, 14/20 |
+| Mobile | 48px | 68px | body-md, 14/20 | default 14/20, floating 12/20 |
+| PC | 56px | 77px | body-xl, 16/20 | default 14/20, floating 12/20 |
 
 States:
 

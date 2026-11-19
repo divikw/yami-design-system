@@ -6,7 +6,7 @@ import { tabBarExampleItems } from "./examples";
 
 const meta = {
   id: "yami-components-navigation-tab-bar",
-  title: "YAMI/Components/Tab Bar",
+  title: "YAMI/Modules/Tab Bar",
   component: TabBar,
   parameters: { layout: "fullscreen", docs: { playground: "Playground", showStories: false,
     translations: {

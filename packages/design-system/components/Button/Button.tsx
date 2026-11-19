@@ -6,7 +6,7 @@
  * Uses the YAMI UI/UX Guidelines (Mobile v2 + PC v2) as its visual reference:
  *   - variant: emphasis / primary / secondary / tertiary / destructive
  *   - form:    3 layout modes — full / inline / icon
- *   - size:    sm / md / lg (32 / 40 / 48; PC full form uses 32 / 48 / 56)
+ *   - size:    sm / md / lg (32 / 40 / 48; PC full form uses 40 / 48 / 56)
  *   - inverse: false (default surface polarity) / true (opposite surface polarity)
  *
  * A11y contract:
@@ -47,7 +47,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
    * When omitted, falls back to legacy iconOnly / fullWidth booleans.
    */
   form?: ButtonForm
-  /** Height / padding tier. Defaults to 'md'. On PC, full md/lg are 48/56px. */
+  /** Height / padding tier. Defaults to 'md'. On PC, full sm/md/lg are 40/48/56px. */
   size?: ButtonSize
   /** When true, swaps to the opposite-polarity token set in either Light or Dark. Default: false. */
   inverse?: boolean

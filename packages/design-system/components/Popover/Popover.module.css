@@ -2,7 +2,7 @@
 
 .content {
   max-width: calc(100vw - 32px);
-  padding: 0;
+  padding: var(--space-150);
   margin: 0;
   box-sizing: border-box;
   display: flex;

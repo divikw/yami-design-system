@@ -245,7 +245,7 @@ export const Playground: Story = {
   args: { label: undefined },
   render: (args, { globals }) => {
     const english = globals.locale === "en"
-    return <section style={shellStyle}>
+    return <section style={{ ...shellStyle, width: args.fullWidth ? shellStyle.width : "min(320px, 100%)", marginInline: "auto" }}>
       <div data-input-controls style={groupStyle}>
         <p style={labelStyle}>{english ? "Try the input" : "试用输入框"}</p>
         <p style={labelStyle}>{english ? "Change properties in the Controls panel below to see how this input responds." : "在下方 Controls 中调整属性，查看这个输入框的变化。"}</p>
@@ -283,6 +283,19 @@ export const WithAction: Story = {
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   render: (args, { globals }) => <ActionInputDemo {...args} english={globals.locale === "en"} />,
 }
+
+export const ExternalValidation: Story = {
+  render: (_args, { globals }) => {
+    const zh = globals.locale !== "en";
+    return <div>
+      <Input label={zh ? "邮箱" : "Email"} type="email" defaultValue="example"
+        aria-invalid aria-describedby="external-email-error" />
+      <p id="external-email-error" style={{ color: "var(--text-error)" }}>
+        {zh ? "请输入完整邮箱地址。" : "Enter a complete email address."}
+      </p>
+    </div>;
+  },
+};
 
 export const PCPreview: Story = {
   ...Showcase,

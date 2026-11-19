@@ -517,6 +517,8 @@ Generated from DTCG sources. Contextual values are listed separately.
 | `surface.primary` | dark | color | `var(--color-neutral-900)` |
 | `surface.secondary` | root | color | `var(--color-neutral-100)` |
 | `surface.secondary` | dark | color | `var(--color-neutral-800)` |
+| `switch.track-off` | root | color | `var(--color-neutral-200)` |
+| `switch.track-off` | dark | color | `var(--fill-secondary)` |
 | `text.disabled` | root | color | `var(--color-black-400)` |
 | `text.disabled` | dark | color | `var(--color-white-400)` |
 | `text.disabled-inverse` | root | color | `var(--color-white-400)` |

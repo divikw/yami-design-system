@@ -549,6 +549,7 @@
       "--surface-inverse",
       "--surface-primary",
       "--surface-secondary",
+      "--switch-track-off",
       "--text-disabled",
       "--text-disabled-inverse",
       "--text-emphasis",
@@ -588,5 +589,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "1316e4e3a2d98462d2686be27118f8a3018580984a2377200f16dbff1ee95fd3"
+  "contentDigest": "3590237144919a002e86d46177e65fe07d1fec55bd067b7a47fa266964f46fb7"
 }

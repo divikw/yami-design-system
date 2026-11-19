@@ -2,7 +2,7 @@ import { Checkbox } from "./Checkbox"
 
 export const BasicCheckbox = () => (
   <section data-example="BasicCheckbox">
-    <label htmlFor="marketing-email">
+    <label htmlFor="marketing-email" style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" }}>
       <Checkbox id="marketing-email" name="marketing" value="email" />
       Email deals · 邮件优惠
     </label>

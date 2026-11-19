@@ -92,6 +92,8 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 
 Each `meta.json` declares props, variants, `tokenBindings` (which property of which selector reads which token), rules consumed, and a11y profile.
 
+YAMI component and Storybook locales are Chinese and English, both left-to-right. When comparing with shadcn/ui or Base UI, omit RTL-specific APIs, configuration, examples, Docs sections, and acceptance tests unless explicitly requested. Keep the underlying primitive’s native behavior.
+
 ## Choose actions by behavior
 
 - Use Button for actions such as saving, submitting, opening a dialog, or generating a receipt. Use ButtonLink with a real `href` for navigation or a direct file download with button appearance; use a plain anchor for text navigation. Button has no `href`, `as`, or `asChild` API; do not redirect from its click handler to imitate a link.

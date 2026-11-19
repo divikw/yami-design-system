@@ -1,6 +1,6 @@
 # 组件说明模板
 
-Accordion、AlertDialog、AspectRatio、Avatar、Badge、Breadcrumb、Button、ButtonGroup、Card、Checkbox、Dialog、Drawer 共用当前 Docs 模板。
+组件的 `meta.json` 在 `dependencies.runtime` 中声明 `@base-ui/react` 时，Docs 使用共享模板的新版排版。
 此模板仅用于 Storybook 文档，不修改 `@yami/design-system` 的真实组件。
 
 ## 文件职责
@@ -9,7 +9,7 @@ Accordion、AlertDialog、AspectRatio、Avatar、Badge、Breadcrumb、Button、B
 - `component-docs-preview.tsx` 提供跟随 Docs 视口的示例预览和文档级弹层预览。
 - `component-guide.tsx`：常规说明页面的章节顺序（安装、用法、组合结构、示例、API），并生成“复制页面”的 Markdown。
 - `*-docs.tsx`：各组件的双语文案、真实组件示例、对应代码和公开 API。Accordion 保留原有章节内容，使用相同的模板基础组件。
-- `component-docs.tsx`：按组件名称选择模板页面；未接入的组件继续使用现有 Storybook Docs。
+- `component-docs.tsx`：优先选择组件自定义页。其余 Base UI 组件复用 Story、使用指南和共享模板。
 
 ## 接入另一个组件
 

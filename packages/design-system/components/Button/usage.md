@@ -62,7 +62,7 @@ ButtonLink 没有 `loading` 或 `disabled` API。导航不可用时显示静态�
 
 | size | 移动端 | 桌面端（≥1024px） | 使用场景 |
 |---|---|---|---|
-| `sm` | 32px | 32px | 紧凑操作；文字形态为产品扩展 |
+| `sm` | 32px | 通栏 40px，行内与图标 32px | 紧凑操作；文字形态为产品扩展 |
 | `md` | 40px | 通栏 48px，行内与图标 40px | 默认尺寸 |
 | `lg` | 48px | 通栏 56px，行内与图标 48px | 主要行动入口、页面底部操作 |
 
@@ -253,7 +253,7 @@ Tertiary is a low-emphasis button with a transparent background and no outline a
 
 | Size | Mobile | Desktop (≥1024px) | Use when |
 |---|---|---|---|
-| `sm` | 32px | 32px | Inline table actions, filter chips, compact contexts. **Icon form only** in Figma; YAMI product extends it to text buttons. |
+| `sm` | 32px | 40px (full) · 32px (inline and icon) | Inline table actions, filter chips, compact contexts. **Icon form only** in Figma; YAMI product extends it to text buttons. |
 | `md` | 40px | 48px (full) · 40px (inline and icon) | **Default.** Most buttons in the product |
 | `lg` | 48px | 56px (full) · 48px (inline and icon) | Hero CTAs, mobile primary actions at the bottom of the screen, and full-width sheet actions |
 

@@ -6,7 +6,7 @@
   "type": "component",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "description": "Surface for a self-contained item with optional header, title, description, action, content and footer. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "source": "components/Card",
   "files": [
     {
@@ -24,14 +24,21 @@
   ],
   "exports": [
     "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
     "CardPadding",
     "CardProps",
-    "CardSurface"
+    "CardSurface",
+    "CardTitle"
   ],
   "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []
@@ -58,6 +65,9 @@
       "--border-default",
       "--border-default-inverse",
       "--focus-ring",
+      "--font-size-heading-sm",
+      "--font-weight-emphasize",
+      "--line-height-heading-sm",
       "--radius-surface-default",
       "--space-0",
       "--space-050",
@@ -71,7 +81,9 @@
       "--text-disabled",
       "--text-disabled-inverse",
       "--text-primary",
-      "--text-primary-inverse"
+      "--text-primary-inverse",
+      "--text-secondary",
+      "--text-secondary-inverse"
     ],
     "rules": [
       "card-no-border",
@@ -80,6 +92,26 @@
       "no-custom-radii"
     ],
     "tokenBindings": {
+      "--font-size-heading-sm": {
+        "property": "font-size",
+        "selector": ".title"
+      },
+      "--line-height-heading-sm": {
+        "property": "line-height",
+        "selector": ".title"
+      },
+      "--font-weight-emphasize": {
+        "property": "font-weight",
+        "selector": ".title"
+      },
+      "--text-secondary": {
+        "property": "color",
+        "selector": ".description"
+      },
+      "--text-secondary-inverse": {
+        "property": "color",
+        "selector": ".surface-inverse > .content > .header > .description"
+      },
       "--surface-primary": {
         "property": "background-color",
         "selector": ".card, .surface-primary"
@@ -165,5 +197,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "309810aa77044f198eeaeb1c0b6e3496afa6e3549b71683c9cba2862030a7f07"
+  "contentDigest": "18490e8b2668cd1338bd2b066b15872572863205b705f4cc5737834931ad883d"
 }

@@ -73,7 +73,7 @@ export function ButtonGroupDocsPage({ locale }: { locale: DocsLocale }) {
       legacyAnchors={legacyAnchors}
       composition={"ButtonGroup\n├── Button | ButtonLink\n└── Button | ButtonLink"}
       examples={examples}
-      apiNote={zh ? "ButtonGroup 渲染具名的 role=\"group\"。各子项保留自己的外观、焦点和激活行为。" : "ButtonGroup renders a named role=\"group\". Each child retains its own appearance, focus and activation behavior."}
+      apiNote={zh ? "ButtonGroup 用 Base UI 的 useRender 渲染具名的 role=\"group\"。外观、焦点和激活行为由各子项管理。" : "ButtonGroup uses Base UI’s useRender to render a named role=\"group\". Each child manages its own appearance, focus and activation."}
       api={[
         ["aria-label", zh ? "必填。用简短文字描述整组操作的用途。" : "Required. A short name describing the purpose of the group."],
         ["full", zh ? "boolean，默认 false。设为 true 时使用等宽单行布局，最大宽度 480px。" : "Boolean, defaults to false. Enables an equal-width single row up to 480px."],

@@ -89,8 +89,7 @@
 }
 
 .root[data-floating="true"] .label {
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
+  font-size: var(--font-size-caption-sm);
 }
 
 .root[data-state="focused"] .label,
@@ -111,8 +110,6 @@
 .optionalHint {
   margin-inline-start: var(--space-050);
   color: var(--text-secondary);
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
 }
 
 .valueRow {
@@ -249,11 +246,6 @@
 
   .textStack {
     padding-inline: 0;
-  }
-
-  .root[data-floating="true"] .label {
-    font-size: var(--font-size-body-md);
-    line-height: var(--line-height-body-md);
   }
 
   .control {

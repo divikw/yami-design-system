@@ -4,13 +4,19 @@
   "category": "layout",
   "status": "stable",
   "version": "0.1.0",
-  "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+  "description": "Surface for a self-contained item with optional header, title, description, action, content and footer. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
   "figma": {
     "nodeId": null,
     "componentKey": null
   },
   "exports": [
     "Card",
+    "CardHeader",
+    "CardTitle",
+    "CardDescription",
+    "CardAction",
+    "CardContent",
+    "CardFooter",
     "CardPadding",
     "CardProps",
     "CardSurface"
@@ -33,6 +39,7 @@
     ]
   },
   "props": {
+    "size": { "type": "enum", "values": ["default", "sm"], "required": false, "default": "default", "description": "Compact size alias for the default div card. Explicit padding takes precedence." },
     "as": {
       "type": "ElementType",
       "required": false,
@@ -114,6 +121,11 @@
     }
   },
   "tokens": [
+    "--font-size-heading-sm",
+    "--line-height-heading-sm",
+    "--font-weight-emphasize",
+    "--text-secondary",
+    "--text-secondary-inverse",
     "--surface-primary",
     "--surface-secondary",
     "--surface-inverse",
@@ -133,6 +145,11 @@
     "--space-300"
   ],
   "tokenBindings": {
+    "--font-size-heading-sm": { "property": "font-size", "selector": ".title" },
+    "--line-height-heading-sm": { "property": "line-height", "selector": ".title" },
+    "--font-weight-emphasize": { "property": "font-weight", "selector": ".title" },
+    "--text-secondary": { "property": "color", "selector": ".description" },
+    "--text-secondary-inverse": { "property": "color", "selector": ".surface-inverse > .content > .header > .description" },
     "--surface-primary": {
       "property": "background-color",
       "selector": ".card, .surface-primary"
@@ -216,7 +233,8 @@
   },
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": []

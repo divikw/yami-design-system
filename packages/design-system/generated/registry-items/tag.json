@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.4.0",
-  "description": "Static responsive full-pill label with M and L sizes, optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
+  "description": "Static responsive full-pill label with optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
   "source": "components/Tag",
   "files": [
     {
@@ -34,7 +34,8 @@
   "composes": [],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": [
@@ -62,6 +63,7 @@
       "--color-black-900",
       "--color-white-1000",
       "--color-white-200",
+      "--color-white-300",
       "--font-family-ios",
       "--font-size-body-md",
       "--font-weight-normal",
@@ -70,9 +72,8 @@
       "--radius-full",
       "--space-025",
       "--space-050",
+      "--space-100",
       "--space-150",
-      "--space-200",
-      "--space-300",
       "--space-400",
       "--stroke-default",
       "--surface-primary"
@@ -135,5 +136,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f986a6fa704bed46051cbf578eb2ea4a21696081af01ae84ff383094c7665914"
+  "contentDigest": "5c62370f886a4b1a37bf835cf2c61143cb70c591e2cc766f5c0bb25a2e170c74"
 }

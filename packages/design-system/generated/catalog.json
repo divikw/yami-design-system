@@ -1670,7 +1670,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -1786,7 +1787,7 @@
             ],
             "required": false,
             "default": "md",
-            "description": "Heights for sm / md / lg are 32 / 40 / 48px. Full form uses 32 / 48 / 56px from 1024px."
+            "description": "Heights for sm / md / lg are 32 / 40 / 48px. Full form uses 40 / 48 / 56px from 1024px."
           },
           "leftIcon": {
             "type": "ReactNode",
@@ -1948,6 +1949,7 @@
           "--space-150",
           "--space-200",
           "--space-250",
+          "--space-500",
           "--space-600"
         ],
         "tokenBindings": {
@@ -2084,6 +2086,11 @@
             "property": "padding-inline",
             "selector": ".lg"
           },
+          "--space-500": {
+            "property": "height",
+            "selector": ".sm.fullWidth",
+            "media": "(min-width: 1024px)"
+          },
           "--space-600": {
             "property": "height",
             "selector": ".md.fullWidth",
@@ -2197,7 +2204,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -2218,13 +2226,19 @@
         "category": "layout",
         "status": "stable",
         "version": "0.1.0",
-        "description": "Surface primitive for a discrete, self-contained item, not ordinary page sections. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
+        "description": "Surface for a self-contained item with optional header, title, description, action, content and footer. Default padding: 16px on every device; 12px surface radius, no border or shadow. Native link/button hosts support single interactions; keep mixed actions inside a static Card. Child overflow remains visible; crop media separately.",
         "figma": {
           "nodeId": null,
           "componentKey": null
         },
         "exports": [
           "Card",
+          "CardHeader",
+          "CardTitle",
+          "CardDescription",
+          "CardAction",
+          "CardContent",
+          "CardFooter",
           "CardPadding",
           "CardProps",
           "CardSurface"
@@ -2247,6 +2261,16 @@
           ]
         },
         "props": {
+          "size": {
+            "type": "enum",
+            "values": [
+              "default",
+              "sm"
+            ],
+            "required": false,
+            "default": "default",
+            "description": "Compact size alias for the default div card. Explicit padding takes precedence."
+          },
           "as": {
             "type": "ElementType",
             "required": false,
@@ -2328,6 +2352,11 @@
           }
         },
         "tokens": [
+          "--font-size-heading-sm",
+          "--line-height-heading-sm",
+          "--font-weight-emphasize",
+          "--text-secondary",
+          "--text-secondary-inverse",
           "--surface-primary",
           "--surface-secondary",
           "--surface-inverse",
@@ -2347,6 +2376,26 @@
           "--space-300"
         ],
         "tokenBindings": {
+          "--font-size-heading-sm": {
+            "property": "font-size",
+            "selector": ".title"
+          },
+          "--line-height-heading-sm": {
+            "property": "line-height",
+            "selector": ".title"
+          },
+          "--font-weight-emphasize": {
+            "property": "font-weight",
+            "selector": ".title"
+          },
+          "--text-secondary": {
+            "property": "color",
+            "selector": ".description"
+          },
+          "--text-secondary-inverse": {
+            "property": "color",
+            "selector": ".surface-inverse > .content > .header > .description"
+          },
           "--surface-primary": {
             "property": "background-color",
             "selector": ".card, .surface-primary"
@@ -2430,7 +2479,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -2464,7 +2514,7 @@
           "nodeId": "4795:90512",
           "componentKey": "f0a1bb4e8c7540460de93a68de180508560150a3",
           "pageNodeId": "2857:32277",
-          "notes": "Figma defines the 20x20 visible control; the layout and pointer target is 32x32 on desktop and 40x40 on mobile.",
+          "notes": "The Figma reference uses a 20x20 control. The implementation centers an 18x18 visible square inside a 20x20 layout. A transparent pointer target extends to 32x32 on desktop and 40x40 on mobile.",
           "stateMapping": "Status=Default/Hover/Selected/Disable_Selected/Disable_Unselected maps to unchecked hover, checked, checked+disabled, and unchecked+disabled. Indeterminate is code-only."
         },
         "variants": {
@@ -2551,7 +2601,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "All targets are 32x32px from 1024px and 40x40px below. The visible control is centered at 20px. Parent labels may provide a larger target."
+            "note": "All targets are 32x32px from 1024px and 40x40px below. The 18px visible square is centered in a 20px layout. Parent labels may provide a larger target."
           },
           "color": {
             "ruleId": "semantic-color-only",
@@ -2574,6 +2624,7 @@
           "--space-500",
           "--space-100",
           "--space-300",
+          "--stroke-default",
           "--stroke-thick"
         ],
         "tokenBindings": {
@@ -2596,6 +2647,10 @@
           "--fill-disabled": {
             "property": "background/border-color",
             "selector": ".root[data-disabled]::before"
+          },
+          "--stroke-default": {
+            "property": "inset",
+            "selector": ".root::before"
           },
           "--focus-ring": {
             "property": "outline-color",
@@ -3106,7 +3161,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -3352,6 +3408,21 @@
             "default": "outlined",
             "description": "Filled suggested-filter treatment or outlined toolbar-control treatment."
           },
+          "pressed": {
+            "type": "boolean",
+            "required": false,
+            "description": "Controlled toggle state. The legacy selected prop takes precedence."
+          },
+          "defaultPressed": {
+            "type": "boolean",
+            "required": false,
+            "description": "Initial state for an uncontrolled toggle chip."
+          },
+          "onPressedChange": {
+            "type": "(pressed: boolean, eventDetails: Toggle.ChangeEventDetails) => void",
+            "required": false,
+            "description": "Called when a toggle changes; call eventDetails.cancel() to cancel an uncontrolled change."
+          },
           "selected": {
             "type": "boolean",
             "required": false,
@@ -3371,7 +3442,7 @@
         "rules": {
           "interaction": {
             "contractId": "native-semantics",
-            "note": "FilterChip renders a button; FilterChipMenu uses Base UI Popover with Checkbox or RadioGroup semantics."
+            "note": "FilterChip uses Base UI Toggle with optional pressed semantics. FilterChipMenu composes Popover or Drawer with Checkbox or RadioGroup."
           },
           "focus": {
             "ruleId": "focus-style",
@@ -3387,6 +3458,7 @@
           }
         },
         "tokens": [
+          "--button-disabled",
           "--border-default",
           "--border-focus",
           "--focus-ring",
@@ -3404,10 +3476,19 @@
           "--space-150",
           "--space-300",
           "--stroke-default",
+          "--text-disabled",
           "--text-primary",
           "--text-secondary"
         ],
         "tokenBindings": {
+          "--button-disabled": {
+            "property": "background-color",
+            "selector": ".chip:disabled"
+          },
+          "--text-disabled": {
+            "property": "color",
+            "selector": ".chip:disabled"
+          },
           "--focus-ring": {
             "property": "outline-color",
             "selector": ".chip:focus-visible, .categoryToggle:focus-visible"
@@ -3418,7 +3499,7 @@
           },
           "--fill-primary": {
             "property": "background-color",
-            "selector": ".outlined, .filled[aria-pressed='true']"
+            "selector": ".outlined, .filled[aria-pressed='true']:not(:disabled)"
           },
           "--border-default": {
             "property": "border-color",
@@ -3426,7 +3507,7 @@
           },
           "--border-focus": {
             "property": "inset box-shadow",
-            "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
+            "selector": ".filled[aria-pressed='true']:not(:disabled), .outlined[aria-pressed='true']:not(:disabled)"
           },
           "--color-black-200": {
             "property": "background-color",
@@ -3453,7 +3534,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": [
@@ -4519,6 +4601,11 @@
             "default": false,
             "description": "Shows the clear-fill action while focus remains inside an editable field with a value, including error states. Hidden when read-only or disabled."
           },
+          "onValueChange": {
+            "type": "(value: string, eventDetails: Input.ChangeEventDetails) => void",
+            "required": false,
+            "description": "Base UI value callback alongside native onChange."
+          },
           "onClear": {
             "type": "function",
             "required": false,
@@ -4611,6 +4698,7 @@
           "--font-size-body-md",
           "--font-size-body-xl",
           "--font-size-caption-md",
+          "--font-size-caption-sm",
           "--line-height-body-md",
           "--line-height-body-xl",
           "--line-height-caption-md",
@@ -4698,7 +4786,11 @@
           },
           "--font-size-caption-md": {
             "property": "font-size",
-            "selector": ".root[data-floating='true'] .label, .helperText"
+            "selector": ".helperText, .errorText"
+          },
+          "--font-size-caption-sm": {
+            "property": "font-size",
+            "selector": ".root[data-floating='true'] .label"
           },
           "--line-height-body-md": {
             "property": "line-height",
@@ -4710,7 +4802,7 @@
           },
           "--line-height-caption-md": {
             "property": "line-height",
-            "selector": ".root[data-floating='true'] .label, .helperText, .errorText"
+            "selector": ".helperText, .errorText"
           }
         },
         "accessibility": {
@@ -4732,7 +4824,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -5110,7 +5203,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -5194,6 +5288,7 @@
           "--fill-primary",
           "--radius-surface-default",
           "--stroke-default",
+          "--space-150",
           "--text-primary",
           "--font-family-ios",
           "--font-size-heading-sm",
@@ -5203,6 +5298,10 @@
           "--line-height-body-md"
         ],
         "tokenBindings": {
+          "--space-150": {
+            "property": "padding",
+            "selector": ".content"
+          },
           "--fill-primary": {
             "property": "background",
             "selector": ".content"
@@ -6547,7 +6646,7 @@
           "nodeId": "4795:90633",
           "componentKey": "8012bc4680692313a0305812a3b3774e6b9252e5",
           "pageNodeId": "2857:32277",
-          "notes": "Figma defines the 20x20 visible Radio Button; code reserves a 40x40 layout and pointer target. RadioGroup is a code-side accessibility composition.",
+          "notes": "Figma defines the 20x20 visible Radio Button; code centers an 18px visible circle in a 20px layout. RadioGroup is a code-side accessibility composition.",
           "stateMapping": "Property 1=Default/Hover/Selected/Disable_Selected/Disable_Unselected maps to unchecked hover, checked, checked+disabled, and unchecked+disabled."
         },
         "variants": {
@@ -6638,7 +6737,7 @@
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "40x40px layout and pointer target at every breakpoint, with a centered 20px visible control. Parent labels may provide a larger target."
+            "note": "The 20px layout has a centered 18px circle. A transparent target extends to 32px on desktop (1024px and up) and 40px on mobile. Parent labels may provide a larger target."
           },
           "color": {
             "ruleId": "semantic-color-only",
@@ -6657,6 +6756,9 @@
           "--space-025",
           "--space-250",
           "--space-500",
+          "--space-400",
+          "--stroke-default",
+          "--border-attention",
           "--space-100",
           "--space-150",
           "--space-300",
@@ -6674,6 +6776,10 @@
           "--text-primary": {
             "property": "border-color/background",
             "selector": ".item[data-checked]::before, .dot"
+          },
+          "--border-attention": {
+            "property": "border-color",
+            "selector": ".item[aria-invalid=true]::before"
           },
           "--border-default": {
             "property": "border-color",
@@ -6695,7 +6801,7 @@
         "accessibility": {
           "role": "radiogroup with radio children",
           "wcagLevel": "AA",
-          "tapTargetMin": 40,
+          "tapTargetMin": 32,
           "keyboardNav": [
             "tab",
             "shift+tab",
@@ -7001,7 +7107,10 @@
           "SelectItemProps",
           "SelectValue",
           "SelectLabel",
-          "SelectList"
+          "SelectList",
+          "SelectGroup",
+          "SelectGroupLabel",
+          "SelectSeparator"
         ],
         "props": {
           "value": {
@@ -7044,6 +7153,7 @@
           "state": [
             "default",
             "focus-visible",
+            "invalid",
             "disabled"
           ]
         },
@@ -7066,6 +7176,11 @@
           "--line-height-body-md",
           "--radius-button-primary",
           "--radius-component-default",
+          "--radius-surface-default",
+          "--border-attention",
+          "--text-secondary",
+          "--divider-default",
+          "--font-size-caption-sm",
           "--space-025",
           "--space-050",
           "--space-100",
@@ -7097,6 +7212,10 @@
             "selector": ".trigger"
           },
           "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".item"
+          },
+          "--radius-surface-default": {
             "property": "border-radius",
             "selector": ".content"
           },
@@ -7586,7 +7705,7 @@
         "category": "form",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "YAMI switch with the search filter’s 32×20px track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
+        "description": "YAMI switch with a 36×20px default track or a 28×16px small track and a 32px minimum control height. Supports controlled/uncontrolled state, read-only, disabled and native forms.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -7597,6 +7716,16 @@
           "SwitchProps"
         ],
         "props": {
+          "size": {
+            "type": "enum",
+            "values": [
+              "default",
+              "sm"
+            ],
+            "default": "default",
+            "required": false,
+            "description": "Track size. Both sizes have a minimum control height of 32px."
+          },
           "checked": {
             "type": "boolean",
             "required": false,
@@ -7634,8 +7763,15 @@
           }
         },
         "variants": {
+          "size": [
+            "default",
+            "sm"
+          ],
           "state": [
             "default",
+            "checked",
+            "read-only",
+            "invalid",
             "focus-visible",
             "disabled"
           ]
@@ -7653,7 +7789,10 @@
         "tokens": [
           "--background-secondary",
           "--border-default",
+          "--border-attention",
+          "--space-150",
           "--fill-disabled",
+          "--switch-track-off",
           "--fill-inverse",
           "--fill-primary",
           "--focus-ring",
@@ -7661,13 +7800,20 @@
           "--radius-component-default",
           "--space-025",
           "--space-100",
+          "--stroke-default",
           "--stroke-thick",
           "--text-disabled",
           "--text-primary",
-          "--space-400"
+          "--space-400",
+          "--space-250",
+          "--space-200"
         ],
         "tokenBindings": {
           "--fill-disabled": {
+            "property": "background",
+            "selector": ".root[data-disabled] .track"
+          },
+          "--switch-track-off": {
             "property": "background",
             "selector": ".track"
           },
@@ -7677,6 +7823,10 @@
           },
           "--fill-primary": {
             "property": "background",
+            "selector": ".thumb"
+          },
+          "--stroke-default": {
+            "property": "border-width",
             "selector": ".thumb"
           },
           "--border-default": {
@@ -7694,6 +7844,10 @@
           "--focus-ring": {
             "property": "outline-color",
             "selector": ".root:focus-visible"
+          },
+          "--space-200": {
+            "property": "width",
+            "selector": ".track"
           },
           "--space-400": {
             "property": "min-width/min-height",
@@ -7898,7 +8052,7 @@
               "secondaryButton": "3112:22838"
             }
           },
-          "sizeDelta": "Maintained web horizontal Primary Style A uses 56px triggers and 16/20 text on both mobile and PC. Code-side vertical Primary A uses 44px rows with the same text size; vertical Primary A and Secondary use 4px item gaps. Primary Style B uses a 52px segmented surface with a 44px trigger; its selected pill is 32px below 1024px and 36px from the 1024px desktop breakpoint. Secondary stays underline-based at 40px with 14/20 text on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
+          "sizeDelta": "Maintained web horizontal Primary Style A uses 56px triggers and 16/20 text on both mobile and PC. Code-side vertical Primary A uses 44px rows with the same text size; vertical Primary A and Secondary use 4px item gaps. Horizontal Primary B uses 2px padding around a 32px trigger and fill below 1024px and a 36px trigger and fill from 1024px. Vertical triggers are 44px with a 32px pill. Secondary stays underline-based at 40px with 14/20 text on both mobile and PC. Tertiary aligns its visual, layout, and hit-target heights: 32px below 1024px and 36px from the desktop breakpoint.",
           "stateMapping": "Figma State=Default/Skeleton maps to TabsList skeleton=false/true. Selected/default tab states map to data-state='active'/'inactive'. Hover/focus are code-only interaction states; disabled is a code-side accessibility state for product use."
         },
         "variants": {
@@ -7992,12 +8146,31 @@
             "default": "automatic",
             "description": "automatic changes selection while arrowing; manual only moves focus until click/Enter/Space."
           },
+          "TabsList.activateOnFocus": {
+            "type": "boolean",
+            "required": false,
+            "description": "Explicit Base UI activation on focus. When omitted, root activationMode applies."
+          },
+          "TabsList.loopFocus": {
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "description": "Wrap arrow-key focus at either end of the list."
+          },
+          "TabsContent.keepMounted": {
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "description": "Keep inactive panels mounted to preserve their contents and state."
+          },
           "TabsList.variant": {
             "type": "enum",
             "values": [
               "primary",
               "secondary",
-              "tertiary"
+              "tertiary",
+              "default",
+              "line"
             ],
             "required": false,
             "default": "primary"
@@ -8096,11 +8269,11 @@
           },
           "focus": {
             "ruleId": "focus-style",
-            "note": "2px solid --focus-ring ring with --focus-ring-inverse on opposite-polarity surfaces. Use a 2px inset in scrolling lists without gutters; Primary B outlines the visible capsule pseudo-element at a 2px outer offset, independently of the 44px hit area."
+            "note": "2px solid --focus-ring ring with --focus-ring-inverse on opposite-polarity surfaces. Use a 2px inset in scrolling lists without gutters; Primary B outlines the visible capsule pseudo-element with a 0px offset on horizontal tabs and a 2px offset otherwise."
           },
           "tapTarget": {
             "ruleId": "tap-target",
-            "note": "Web targets preserve geometry: Primary A 56px, Primary B 44px, Secondary 40px, Tertiary 32px below 1024px and 36px on desktop. Compact variants have no invisible extensions and do not claim the native iOS 44pt / Android 48dp minimum."
+            "note": "Web targets preserve geometry: Primary A 56px, Primary B 32px mobile / 36px desktop horizontally and 44px vertically, Secondary 40px, Tertiary 32px below 1024px and 36px on desktop. Compact variants have no invisible extensions and do not claim the native iOS 44pt / Android 48dp minimum."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -8233,11 +8406,12 @@
           "disabled": "Disabled triggers set aria-disabled=true, tabIndex=-1, and are skipped by arrow navigation.",
           "labelling": "Require aria-label or aria-labelledby on each TabsList. Trigger and panel IDs use useId + losslessly encoded value; controls may reference an existing external content region.",
           "focusManagement": "One enabled roving Tab stop; manual activation moves focus without selection until Enter/Space or click.",
-          "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 44px, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
+          "targetGeometry": "Web: Primary A 56px horizontal / 44px vertical, Primary B 32px mobile / 36px desktop horizontally and 44px vertically, Secondary 40px, Tertiary 32px mobile / 36px desktop. Compact targets do not claim native minimum dimensions."
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": []
@@ -8263,7 +8437,7 @@
         "category": "display",
         "status": "experimental",
         "version": "0.4.0",
-        "description": "Static responsive full-pill label with M and L sizes, optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
+        "description": "Static responsive full-pill label with optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -8325,7 +8499,7 @@
             ],
             "required": false,
             "default": "m",
-            "description": "Responsive size. M is 28px on mobile and PC; L is 32px on mobile and 36px on PC."
+            "description": "Both legacy size values use the responsive height: 32px on mobile and 36px on desktop."
           },
           "variant": {
             "type": "enum",
@@ -8341,6 +8515,11 @@
             "type": "TagImage",
             "required": false,
             "description": "Optional leading artwork with an ImageSource and alt text. Use an empty alt when the artwork repeats the visible label."
+          },
+          "render": {
+            "type": "ReactElement | function",
+            "required": false,
+            "description": "Render a semantically equivalent label element, with the YAMI props and styling applied."
           },
           "children": {
             "type": "ReactNode",
@@ -8363,7 +8542,7 @@
           },
           "responsive-size": {
             "contractId": "responsive-size",
-            "note": "M remains 28px across breakpoints. At 1024px, L steps from 32px to 36px. The optional image slot remains 4px smaller than the Tag and its artwork remains 8px smaller."
+            "note": "All Tags are 32px tall below 1024px and 36px tall from 1024px. Text-only Tags use 12px inline padding. The optional image slot remains 4px smaller than the Tag and its artwork remains 8px smaller."
           }
         },
         "tokens": [
@@ -8372,6 +8551,7 @@
           "--color-black-100",
           "--color-black-200",
           "--color-white-200",
+          "--color-white-300",
           "--color-white-1000",
           "--font-family-ios",
           "--font-size-body-md",
@@ -8381,9 +8561,8 @@
           "--radius-full",
           "--space-025",
           "--space-050",
-          "--space-200",
+          "--space-100",
           "--space-150",
-          "--space-300",
           "--space-400",
           "--surface-primary",
           "--stroke-default"
@@ -8440,7 +8619,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "@base-ui/react"
           ],
           "peer": [],
           "devOnly": [

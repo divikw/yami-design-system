@@ -46,7 +46,8 @@
   ],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "@base-ui/react"
     ],
     "peer": [],
     "devOnly": [
@@ -67,6 +68,7 @@
     "tokens": [
       "--border-default",
       "--border-focus",
+      "--button-disabled",
       "--color-black-200",
       "--fill-primary",
       "--fill-secondary",
@@ -82,6 +84,7 @@
       "--space-150",
       "--space-300",
       "--stroke-default",
+      "--text-disabled",
       "--text-primary",
       "--text-secondary"
     ],
@@ -91,6 +94,14 @@
       "semantic-color-only"
     ],
     "tokenBindings": {
+      "--button-disabled": {
+        "property": "background-color",
+        "selector": ".chip:disabled"
+      },
+      "--text-disabled": {
+        "property": "color",
+        "selector": ".chip:disabled"
+      },
       "--focus-ring": {
         "property": "outline-color",
         "selector": ".chip:focus-visible, .categoryToggle:focus-visible"
@@ -101,7 +112,7 @@
       },
       "--fill-primary": {
         "property": "background-color",
-        "selector": ".outlined, .filled[aria-pressed='true']"
+        "selector": ".outlined, .filled[aria-pressed='true']:not(:disabled)"
       },
       "--border-default": {
         "property": "border-color",
@@ -109,7 +120,7 @@
       },
       "--border-focus": {
         "property": "inset box-shadow",
-        "selector": ".filled[aria-pressed='true'], .outlined[aria-pressed='true']"
+        "selector": ".filled[aria-pressed='true']:not(:disabled), .outlined[aria-pressed='true']:not(:disabled)"
       },
       "--color-black-200": {
         "property": "background-color",
@@ -138,5 +149,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "a8e5678a9077415949381c8a8f125d00d210eb1989721894484ff5a912bd1233"
+  "contentDigest": "781667a34aae3b7c789660470b6a83112e4f5593af050393508d6edd8dce1603"
 }

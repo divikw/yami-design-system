@@ -57,7 +57,7 @@
       "values": ["sm", "md", "lg"],
       "required": false,
       "default": "md",
-      "description": "Heights for sm / md / lg are 32 / 40 / 48px. Full form uses 32 / 48 / 56px from 1024px."
+      "description": "Heights for sm / md / lg are 32 / 40 / 48px. Full form uses 40 / 48 / 56px from 1024px."
     },
     "leftIcon": {
       "type": "ReactNode",
@@ -213,6 +213,7 @@
     "--space-150",
     "--space-200",
     "--space-250",
+    "--space-500",
     "--space-600"
   ],
 
@@ -268,6 +269,7 @@
     "--space-150": { "property": "padding-inline", "selector": ".sm" },
     "--space-200": { "property": "padding-inline", "selector": ".md" },
     "--space-250": { "property": "padding-inline", "selector": ".lg" },
+    "--space-500": { "property": "height", "selector": ".sm.fullWidth", "media": "(min-width: 1024px)" },
     "--space-600": { "property": "height", "selector": ".md.fullWidth", "media": "(min-width: 1024px)" }
   },
 

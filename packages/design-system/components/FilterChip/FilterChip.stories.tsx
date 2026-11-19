@@ -28,6 +28,9 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
+      translations: {
+        zh: { description: "36px 筛选芯片，支持受控、非受控和禁用状态。筛选菜单按视口使用 Popover 或 Drawer。" },
+      },
       description: {
         component:
           "Interactive 36px filter pills with filled and outlined treatments, optional leading/trailing icons, custom popup menus, and a horizontally scrollable group.",
@@ -272,6 +275,16 @@ export const Showcase: Story = {
 
 export const Playground: Story = {};
 
+export const PressedStates: Story = {
+  render: (_args, { globals }) => {
+    const zh = globals.locale !== "en";
+    return <FilterChipGroup>
+      <FilterChip defaultPressed variant="filled">{zh ? "有货" : "In stock"}</FilterChip>
+      <FilterChip defaultPressed disabled>{zh ? "暂不可用" : "Unavailable"}</FilterChip>
+    </FilterChipGroup>;
+  },
+};
+
 export const PopupMenus: Story = {
   render: () => <MenuDemo />,
   play: async ({ canvasElement }) => {
@@ -351,8 +364,9 @@ export const PopupMenus: Story = {
     if (!apply) throw new Error("Multiple-select footer did not render");
     const footer = apply.closest<HTMLElement>('[data-filter-chip-menu-footer="true"]');
     const footerStyle = footer ? getComputedStyle(footer) : undefined;
+    const actions = Array.from(footer?.querySelectorAll('button[data-slot="button"]') ?? []);
     if (
-      getComputedStyle(apply).height !== "40px" ||
+      actions.length !== 2 || actions.some((button) => getComputedStyle(button).height !== "32px") ||
       getComputedStyle(apply).flexGrow !== "0" ||
       footerStyle?.justifyContent !== "space-between" ||
       footerStyle?.paddingTop !== "8px" ||

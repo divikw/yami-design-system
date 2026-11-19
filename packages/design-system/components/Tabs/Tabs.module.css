@@ -125,11 +125,11 @@
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .trigger:not([aria-disabled="true"]):hover {
+  .list:is([data-variant="primary"], [data-variant="secondary"]) .trigger[data-state="inactive"]:not([aria-disabled="true"]):hover {
     color: var(--text-primary);
   }
 
-  .list[data-inverse="true"] .trigger:not([aria-disabled="true"]):hover {
+  .list[data-inverse="true"]:is([data-variant="primary"], [data-variant="secondary"]) .trigger[data-state="inactive"]:not([aria-disabled="true"]):hover {
     color: var(--text-primary-inverse);
   }
 }
@@ -269,7 +269,11 @@
   min-height: var(--space-500);
   gap: var(--space-200);
   padding-inline: var(--space-200);
-  border-bottom: var(--stroke-default) solid var(--divider-default);
+  --tabs-divider: var(--divider-default);
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="secondary"] {
+  box-shadow: inset 0 calc(0px - var(--stroke-default)) var(--tabs-divider);
 }
 
 .list[data-variant="secondary"] .trigger {
@@ -300,7 +304,7 @@
 }
 
 .list[data-inverse="true"][data-variant="secondary"] {
-  border-bottom-color: var(--border-default-inverse);
+  --tabs-divider: var(--border-default-inverse);
 }
 
 .list[data-inverse="true"][data-variant="secondary"] .trigger {
@@ -397,10 +401,24 @@
   );
 }
 
+.root[data-orientation="vertical"] .list[data-variant="secondary"] {
+  flex-shrink: 0;
+  padding-inline: 0;
+  box-shadow: inset calc(0px - var(--stroke-default)) 0 var(--tabs-divider);
+}
+
+.root[data-orientation="vertical"] .list[data-variant="secondary"] .trigger {
+  padding: var(--space-050) var(--space-200);
+}
+
+.root[data-orientation="vertical"] .list[data-variant="secondary"] ~ .content {
+  padding-block-start: calc((var(--space-500) - var(--line-height-body-md)) / 2);
+}
+
 .root[data-orientation="vertical"] .list[data-variant="secondary"] .trigger::after {
-  top: 0;
+  top: var(--space-050);
   right: 0;
-  bottom: 0;
+  bottom: var(--space-050);
   left: auto;
   width: var(--stroke-thick);
   height: auto;
@@ -447,23 +465,44 @@
   height: var(--space-400);
 }
 
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] {
+  --tabs-segment-height: var(--space-400);
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"],
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .track {
+  min-height: calc(var(--tabs-segment-height) + 2 * var(--space-025));
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .track {
+  padding: var(--space-025);
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .track::before {
+  inset: 0;
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .trigger {
+  min-height: var(--tabs-segment-height);
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .trigger::before {
+  inset-block: 0;
+}
+
+.root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] .trigger:focus-visible::before {
+  outline-offset: 0;
+}
+
 @media (min-width: 1024px) {
-  .root[data-orientation="horizontal"]
-    .list[data-variant="primary"][data-style="b"]
-    .track::before {
-    inset-block: calc(var(--space-100) - var(--space-025));
+  .root[data-orientation="horizontal"] .list[data-variant="primary"][data-style="b"] {
+    --tabs-segment-height: calc(var(--space-400) + var(--space-050));
   }
 
   .root[data-orientation="horizontal"]
     .list[data-variant="tertiary"]
     .trigger {
     min-width: var(--space-600);
-  }
-
-  .root[data-orientation="horizontal"]
-    .list[data-variant="primary"][data-style="b"]
-    .trigger::before {
-    inset-block: var(--space-050);
   }
 
   .root[data-orientation="horizontal"]

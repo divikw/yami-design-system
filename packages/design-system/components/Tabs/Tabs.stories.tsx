@@ -11,7 +11,7 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
-      playground: "Playground",
+      playground: "AllVariantsContract",
       showStories: false,
       translations: {
         zh: {
@@ -222,26 +222,26 @@ function contrastRatio(foreground: string, background: string) {
 
 export const AllVariantsContract: Story = {
   name: "Overview",
-  render: () => (
+  render: (_, { globals }) => (
     <div data-tabs-showcase-stack style={storyStackStyle}>
-      <Section title="Primary - Style A">
+      <Section title={globals.locale === "en" ? "Primary - Style A" : "一级标签页 · 样式 A"}>
         <SampleTabs variant="primary" styleVariant="a" sampleItems={primaryItems} compactPanel />
       </Section>
 
-      <Section title="Primary - Style B">
+      <Section title={globals.locale === "en" ? "Primary - Style B" : "一级标签页 · 样式 B"}>
         <SampleTabs variant="primary" styleVariant="b" sampleItems={segmentedItems} compactPanel />
       </Section>
 
-      <Section title="Secondary">
+      <Section title={globals.locale === "en" ? "Secondary" : "二级标签页"}>
         <SampleTabs variant="secondary" sampleItems={secondaryItems} compactPanel />
       </Section>
 
-      <Section title="Tertiary">
+      <Section title={globals.locale === "en" ? "Tertiary" : "三级标签页"}>
         <SampleTabs variant="tertiary" sampleItems={tertiaryItems} compactPanel />
       </Section>
 
       <div data-tabs-inverse-showcase style={inverseSectionStyle}>
-        <Section title="Inverse" inverse>
+        <Section title={globals.locale === "en" ? "Inverse" : "反色背景"} inverse>
           <SampleTabs variant="primary" styleVariant="a" inverse sampleItems={primaryItems} compactPanel />
           <SampleTabs variant="primary" styleVariant="b" inverse sampleItems={segmentedItems} compactPanel />
           <SampleTabs variant="secondary" inverse sampleItems={secondaryItems} compactPanel />
@@ -836,8 +836,22 @@ export const CenteredScrolling: Story = {
   } : undefined,
 }
 
+export const BaseUIOptions: Story = {
+  render: (_args, { globals }) => {
+    const zh = globals.locale !== "en";
+    return <Tabs defaultValue="orders">
+      <TabsList variant="line" activateOnFocus loopFocus={false} aria-label={zh ? "账户" : "Account"}>
+        <TabsTrigger value="orders">{zh ? "订单" : "Orders"}</TabsTrigger>
+        <TabsTrigger value="saved">{zh ? "收藏" : "Saved"}</TabsTrigger>
+      </TabsList>
+      <TabsContent value="orders" keepMounted={false}>{zh ? "查看订单记录" : "View order history"}</TabsContent>
+      <TabsContent value="saved" keepMounted={false}>{zh ? "查看收藏商品" : "View saved items"}</TabsContent>
+    </Tabs>;
+  },
+};
+
 export const PCPreview: Story = {
-  ...Showcase,
+  ...AllVariantsContract,
   name: "PC",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },
@@ -845,7 +859,7 @@ export const PCPreview: Story = {
 };
 
 export const MobilePreview: Story = {
-  ...PrimaryStyleA,
+  ...AllVariantsContract,
   name: "Mobile",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },

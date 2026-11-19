@@ -5,7 +5,7 @@
 ## 使用场景
 
 组织作用于同一对象的相关操作，例如取消与保存、继续购物与结算。
-按钮组只负责布局和分组语义，Button 和 ButtonLink 负责外观及各自的交互行为。
+按钮组用 Base UI 的 `useRender` 渲染分组容器，负责布局和分组语义。Button 和 ButtonLink 负责外观及各自的交互行为。
 
 ```tsx
 import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'
@@ -61,7 +61,7 @@ Card 不裁切按钮组的焦点框和扩展点击区域。SM / MD 点击区域�
 
 ## When to use
 
-Group related entries acting on the same object, such as Cancel and Save, or Continue shopping and Checkout. ButtonGroup owns layout and grouping semantics; Button and ButtonLink own appearance and interaction.
+Group related entries acting on the same object, such as Cancel and Save, or Continue shopping and Checkout. ButtonGroup uses Base UI's `useRender` for the group container and owns layout and grouping semantics. Button and ButtonLink own appearance and interaction.
 
 ```tsx
 import { Button, ButtonLink, ButtonGroup } from '@yami/design-system'

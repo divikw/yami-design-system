@@ -92,6 +92,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 - 所有 Docs 示例直接展示组件，随 Docs 视口响应。设备对比统一使用侧栏的 PC、Mobile Stories，主示例和章节示例均不添加设备切换控件。
 - 全局弹层采用[模板的文档预览模式](../../../apps/storybook/.storybook/component-docs-template.md#预览模式)，打开后检查遮罩覆盖范围和关闭后的焦点恢复。
 - 沿用模板的代码折叠、复制、固定行号、隐藏横向滚动条、圆角、表格描边、按钮反馈和响应式样式，不另写一套。文档图标沿用 Lucide 16px / 2px 线宽，不改变真实组件图标。文档布局断点不能替代组件设备断点。
+- YAMI 组件按中文、英文的从左到右布局交付。核对 shadcn/ui 或 Base UI 时，除非用户明确要求 RTL，否则跳过 RTL 专属 API、配置、Story、文档示例和验收项。保留底层原语的原生行为。
 - 不增加 Overview/Properties 页签、框架切换栏、RTL 章节或 Storybook Controls；需要演示属性时使用真实组件示例。不要把 Storybook Source 再套进模板代码块形成嵌套。
 
 ### Stories

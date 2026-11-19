@@ -58,6 +58,7 @@
       "--space-300",
       "--space-400",
       "--space-500",
+      "--stroke-default",
       "--stroke-thick",
       "--surface-secondary",
       "--text-primary",
@@ -91,6 +92,10 @@
         "property": "background/border-color",
         "selector": ".root[data-disabled]::before"
       },
+      "--stroke-default": {
+        "property": "inset",
+        "selector": ".root::before"
+      },
       "--focus-ring": {
         "property": "outline-color",
         "selector": ".root[data-keyboard-focus]:focus-visible::before"
@@ -116,5 +121,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "12fdddeaeca8a8ee00a66af100733cd45685e25747864b403ff78350054770f4"
+  "contentDigest": "2786a8d2468a3f77b63ae91035d8044d99d65ae2b25c16fb373b72c0cc2389a6"
 }

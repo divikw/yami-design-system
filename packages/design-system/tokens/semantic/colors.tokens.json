@@ -210,6 +210,13 @@
       "$description": "用于突出展示营销与内容推荐信息，如优惠、活动、卖点或运营强调内容。不用于系统状态反馈。"
     }
   },
+  "switch": {
+    "track-off": {
+      "$type": "color",
+      "$value": "{color.neutral.200}",
+      "$description": "开关关闭时的轨道底色。"
+    }
+  },
   "button": {
     "emphasis": {
       "$type": "color",

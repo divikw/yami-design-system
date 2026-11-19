@@ -72,7 +72,7 @@ for (const [name, status] of [
 const dependencies = Object.fromEntries(Object.entries(workspacePackage.dependencies).filter(([name]) => name.startsWith("@fontsource")));
 for (const specifier of external) {
   if (specifier === "react") continue;
-  if (!["@base-ui/react/button", "@base-ui/react/use-render"].includes(specifier) || !workspacePackage.dependencies["@base-ui/react"]) {
+  if (!["@base-ui/react/button", "@base-ui/react/input", "@base-ui/react/tabs", "@base-ui/react/use-render"].includes(specifier) || !workspacePackage.dependencies["@base-ui/react"]) {
     throw new Error(`Undeclared candidate dependency: ${specifier}`);
   }
   dependencies["@base-ui/react"] = workspacePackage.dependencies["@base-ui/react"];

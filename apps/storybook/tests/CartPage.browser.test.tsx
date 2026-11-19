@@ -391,11 +391,11 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
     if (width >= 1024) expect(Math.abs(center(merchant) - center(item))).toBeLessThan(1);
     else {
       const shipping = container.querySelector('[aria-labelledby="merchant-yami"] [class*="shippingActions"]')!;
-      const squareLeft = merchant.getBoundingClientRect().left + parseFloat(getComputedStyle(merchant, "::before").left);
-      expect(squareLeft).toBe(shipping.getBoundingClientRect().left);
-      expect(merchant.getBoundingClientRect().left).toBe(merchant.parentElement!.getBoundingClientRect().left);
+      const layoutLeft = merchant.getBoundingClientRect().left;
+      expect(layoutLeft).toBe(shipping.getBoundingClientRect().left);
+      expect(center(merchant)).toBe(center(merchant.parentElement!));
       expect(center(item)).toBe(center(merchant));
-      expect(container.querySelector('#merchant-yami')!.getBoundingClientRect().left - squareLeft).toBe(32);
+      expect(container.querySelector('#merchant-yami')!.getBoundingClientRect().left - layoutLeft).toBe(32);
       expect(container.querySelector('[data-slot="cart-item"] img')!.getBoundingClientRect().left).toBe(container.querySelector('#merchant-yami')!.getBoundingClientRect().left);
     }
     const glyph = merchant.querySelector('[data-slot="checkbox-indicator"] svg')!;
@@ -403,8 +403,9 @@ test.each([360, 375, 402, 768, 1024, 1440])("CartPage aligns checkbox targets, d
     expect(Math.abs(glyph.getBoundingClientRect().top + glyph.getBoundingClientRect().height / 2 - merchant.getBoundingClientRect().top - merchant.getBoundingClientRect().height / 2)).toBeLessThan(1);
     const target = merchant.parentElement!;
     for (const checkbox of [all, merchant, item]) {
-      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().width).toBe(width >= 1024 ? 32 : 40);
-      expect((width < 1024 && checkbox === all ? checkbox : checkbox.parentElement!).getBoundingClientRect().height).toBe(width >= 1024 ? 32 : 40);
+      const hit = getComputedStyle(checkbox, "::after");
+      const size = width >= 1024 ? "32px" : "40px";
+      expect([hit.width, hit.height]).toEqual([size, size]);
     }
     await page.getByRole("checkbox", { name: `Select ${fixture.initialItems[0].title}`, exact: true }).click();
     expect(merchant.getAttribute("aria-checked")).toBe("false");
@@ -911,8 +912,8 @@ for (const locale of ["zh", "en"] as const) {
             expect(actions.getBoundingClientRect().top - identity.getBoundingClientRect().bottom).toBe(width < 1024 ? 4 : 0);
             expect(header.getBoundingClientRect().bottom - actions.getBoundingClientRect().bottom).toBe(width < 1024 ? 8 : 12);
             const checkbox = identity.querySelector('[data-slot="checkbox"]')!;
-            expect(checkbox.getBoundingClientRect().width).toBe(width >= 1024 ? 32 : 40);
-            expect(checkbox.getBoundingClientRect().height).toBe(width >= 1024 ? 32 : 40);
+            expect(checkbox.getBoundingClientRect().width).toBe(20);
+            expect(checkbox.getBoundingClientRect().height).toBe(20);
             expect(identity.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
             expect(Math.abs(actions.getBoundingClientRect().right - identity.getBoundingClientRect().right)).toBeLessThan(1);
             if (width >= 1024) {

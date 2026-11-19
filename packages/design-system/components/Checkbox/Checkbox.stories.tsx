@@ -14,7 +14,7 @@ const meta = {
     docs: {
       translations: {
         zh: {
-          description: "YAMI 复选框：PC 32px、Mobile 40px 点击区域、20px 可见控件，支持选中、半选、禁用和键盘操作。",
+          description: "YAMI 复选框：PC 32px、Mobile 40px 点击区域、20px 布局与 18px 可见方框，支持选中、半选、禁用和键盘操作。",
           argDescriptions: {
             density: "两种密度的点击区域均为 PC 32px、Mobile 40px。",
             disabled: "禁用控件，阻止操作和聚焦，且不参与表单提交。",
@@ -31,7 +31,7 @@ const meta = {
           },
         },
         en: {
-          description: "YAMI checkbox with a 32px desktop or 40px mobile target and 20px visible control. Supports checked, mixed, disabled and keyboard states.",
+          description: "YAMI checkbox with a 32px desktop or 40px mobile target and 20px layout with an 18px visible square. Supports checked, mixed, disabled and keyboard states.",
           argDescriptions: {
             density: "Both densities use a 32px target from 1024px and 40px below.",
             disabled: "Disables interaction and focus; excludes the control from form submission.",
@@ -50,7 +50,7 @@ const meta = {
       },
       description: {
         component:
-          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 32px desktop or 40px mobile pointer target, 20px visible control, neutral selected state, and Base UI form/keyboard behavior.",
+          "YAMI Checkbox from Figma `↪ 表单输入 Forms`: 32px desktop or 40px mobile pointer target, 20px layout with an 18px visible square, neutral selected state, and Base UI form/keyboard behavior.",
       },
     },
   },
@@ -95,7 +95,7 @@ const rowStyle: CSSProperties = {
 
 const optionStyle: CSSProperties = {
   display: "inline-flex",
-  gap: 0,
+  gap: "var(--space-100)",
   alignItems: "center",
   minHeight: "var(--space-600)",
   color: "var(--text-primary)",
@@ -160,12 +160,12 @@ export const Showcase: Story = {
       '[data-slot="checkbox-indicator"]',
     )
     if (
-      rootStyle.width !== `${targetSize}px` ||
-      rootStyle.height !== `${targetSize}px` ||
-      visibleStyle.width !== "20px" ||
-      visibleStyle.height !== "20px" ||
+      rootStyle.width !== "20px" ||
+      rootStyle.height !== "20px" ||
+      visibleStyle.width !== "18px" ||
+      visibleStyle.height !== "18px" ||
       visibleStyle.borderRadius !== "4px" ||
-      visibleStyle.inset !== `${(targetSize - 20) / 2}px`
+      getComputedStyle(checkbox, "::after").width !== `${targetSize}px`
     ) {
       throw new Error("Checkbox must retain its 20px control, responsive pointer target, and 4px radius")
     }

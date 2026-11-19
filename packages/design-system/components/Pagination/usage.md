@@ -7,6 +7,8 @@ PC 搜索或商品列表的数字分页。1024px 起显示，低于此宽度隐�
 
 ## 受控更新
 
+导航容器通过 Base UI 的 `useRender` 渲染。页数和当前页由调用方传入。
+
 ```tsx
 <Pagination page={page} pageCount={25} onPageChange={loadPage} locale="zh" />
 ```
@@ -41,6 +43,8 @@ PC 搜索或商品列表的数字分页。1024px 起显示，低于此宽度隐�
 Numbered pagination for PC search or product listings. Visible from 1024px; hidden and removed from keyboard navigation below that width. The host owns any mobile load-more or alternative browsing flow; hiding pagination does not add mobile loading.
 
 ## Controlled updates
+
+Base UI's `useRender` renders the navigation container. The host supplies the page count and current page.
 
 ```tsx
 <Pagination page={page} pageCount={25} onPageChange={loadPage} locale="en" />

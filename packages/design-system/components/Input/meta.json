@@ -78,6 +78,7 @@
       "default": false,
       "description": "Shows the clear-fill action while focus remains inside an editable field with a value, including error states. Hidden when read-only or disabled."
     },
+    "onValueChange": { "type": "(value: string, eventDetails: Input.ChangeEventDetails) => void", "required": false, "description": "Base UI value callback alongside native onChange." },
     "onClear": {
       "type": "function",
       "required": false,
@@ -172,6 +173,7 @@
     "--font-size-body-md",
     "--font-size-body-xl",
     "--font-size-caption-md",
+    "--font-size-caption-sm",
     "--line-height-body-md",
     "--line-height-body-xl",
     "--line-height-caption-md",
@@ -224,13 +226,14 @@
     "--font-size-body-xl": { "property": "font-size", "selector": "@media(min-width:1024px) .root[data-density='default'] .control" },
     "--font-size-caption-md": {
       "property": "font-size",
-      "selector": ".root[data-floating='true'] .label, .helperText"
+      "selector": ".helperText, .errorText"
     },
+    "--font-size-caption-sm": { "property": "font-size", "selector": ".root[data-floating='true'] .label" },
     "--line-height-body-md": { "property": "line-height", "selector": ".label, .control" },
     "--line-height-body-xl": { "property": "line-height", "selector": "@media(min-width:1024px) .control" },
     "--line-height-caption-md": {
       "property": "line-height",
-      "selector": ".root[data-floating='true'] .label, .helperText, .errorText"
+      "selector": ".helperText, .errorText"
     }
   },
 
@@ -246,7 +249,7 @@
     "disabled": "native disabled prevents focus and editing"
   },
 
-  "dependencies": { "runtime": ["react"], "peer": [], "devOnly": [] },
+  "dependencies": { "runtime": ["react", "@base-ui/react"], "peer": [], "devOnly": [] },
 
   "usageRef": "./usage.md",
   "examples": [

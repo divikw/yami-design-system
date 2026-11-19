@@ -24,6 +24,15 @@ const states = ["light", "dark"].flatMap((theme) =>
   (["primary", "secondary", "inverse"] as const).map((surface) => ({ theme, surface })),
 );
 
+test("the compact size alias uses YAMI padding and yields to explicit padding", () => {
+  flushSync(() => root.render(<>
+    <Card size="sm">Compact</Card>
+    <Card size="sm" padding="lg">Explicit padding</Card>
+  </>));
+  const cards = Array.from(container.querySelectorAll('[data-slot="card"]'));
+  expect(cards.map((card) => getComputedStyle(card).paddingTop)).toEqual(["8px", "24px"]);
+});
+
 test.each(states)("$theme / $surface preserves its text and changes surface on hover and press", async ({ theme, surface }) => {
   container.className = theme === "dark" ? "dark" : "";
   flushSync(() => root.render(<Card as="button" surface={surface}>View order</Card>));

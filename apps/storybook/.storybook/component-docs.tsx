@@ -1,16 +1,21 @@
 import {
+  Anchor,
+  AnchorMdx,
   Canvas,
   Controls,
   Description,
   DocsContext,
+  HeadersMdx,
   Markdown,
   Primary,
+  SourceContext,
   Stories,
   Subtitle,
   Title,
   useOf,
+  useSourceProps,
 } from "@storybook/addon-docs/blocks";
-import { useContext, useEffect, useState } from "react";
+import { isValidElement, useContext, useEffect, useState, type ComponentProps, type ComponentType, type ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
 import type { PreparedStory } from "storybook/internal/types";
@@ -25,9 +30,18 @@ import { BreadcrumbDocsPage } from "./breadcrumb-docs";
 import { ButtonDocsPage } from "./button-docs";
 import { ButtonGroupDocsPage } from "./button-group-docs";
 import { CardDocsPage } from "./card-docs";
+import { SwitchDocsPage } from "./switch-docs";
+import { RadioGroupDocsPage } from "./radio-group-docs";
 import { CheckboxDocsPage } from "./checkbox-docs";
+import { componentApiRows, normalizeComponentName, usesBaseUI } from "./component-docs-scope";
+import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, DocsExampleCard, Installation, installationMarkdown, type DocsLocale } from "./component-docs-template";
+import type { GuideExample } from "./component-guide";
+import { tabsDocsExamples } from "./tabs-docs-examples";
+import { popoverDocsExamples } from "./popover-docs-examples";
+import { popoverApi } from "./popover-docs-api";
 import { localizeArgTypes, type DescriptionTranslations } from "./arg-descriptions";
 import styles from "./component-docs.module.css";
+import templateStyles from "./component-docs-template.module.css";
 
 const usageModules = import.meta.glob(
   "../../../packages/design-system/components/*/usage.md",
@@ -37,9 +51,9 @@ const usageModules = import.meta.glob(
   },
 ) as Record<string, () => Promise<string>>;
 
-function normalizeComponentName(value: string) {
-  return value.replace(/[^a-z0-9]/gi, "").toLowerCase();
-}
+type DocsNeighbor = { name: string; path: string };
+type DocsNeighbors = { id: string; previous?: DocsNeighbor; next?: DocsNeighbor };
+const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
 
 function componentNameFromUsagePath(filePath: string) {
   return filePath.match(/\/components\/([^/]+)\/usage\.md$/)?.[1];
@@ -70,48 +84,90 @@ export async function loadUsageForTitle(title: string, locale = "zh") {
 }
 
 export function formatUsageMarkdown(markdown: string) {
-  return markdown.replace(/^#\s+(.+)\n+/, "## $1\n\n");
+  if (!/^# /.test(markdown)) return markdown;
+  // Nest the standalone guide below the page title, preserving code samples.
+  let fence = "";
+  return markdown.split("\n").map((line) => {
+    const marker = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
+    if (marker) {
+      if (!fence) fence = marker[1];
+      else if (marker[1].startsWith(fence) && !marker[2].trim()) fence = "";
+      return line;
+    }
+    return fence ? line : line.replace(/^(#{1,5}) /, "#$1 ");
+  }).join("\n");
 }
 
-export function UsageMarkdown({ children }: { children: string }) {
+function UsageCode({ children, locale }: { children: ReactNode; locale: DocsLocale }) {
+  if (!isValidElement<{ children?: ReactNode; className?: string }>(children) || typeof children.props.children !== "string") {
+    return <pre>{children}</pre>;
+  }
+  const fence = children.props.className?.replace(/^lang(?:uage)?-/, "");
+  const language = fence === "tsx" || fence === "css" || fence === "json" || fence === "bash" ? fence : "text";
+  return <CodeBlock code={children.props.children.trimEnd()} locale={locale} language={language} />;
+}
+
+function UsageTable(props: ComponentProps<"table">) {
+  return <div className={templateStyles.tableScroll}><table {...props} /></div>;
+}
+
+export function UsageMarkdown({ children, locale }: { children: string; locale?: DocsLocale }) {
   const ids = new Set<string>();
-  return <Markdown options={{ slugify: (text) => {
-    // Preserve Unicode letters while retaining existing ASCII heading URLs.
-    const base = text.replace(/[^\p{L}\p{M}\p{N} -]/gu, "").replace(/ /g, "-").toLowerCase() || "section";
-    let id = base;
-    let suffix = 1;
-    while (ids.has(id)) id = `${base}-${suffix++}`;
-    ids.add(id);
-    return id;
-  } }}>{formatUsageMarkdown(children)}</Markdown>;
+  return <Markdown options={{
+    ...(locale && {
+      overrides: { ...HeadersMdx, a: AnchorMdx, table: UsageTable, pre: (props) => <UsageCode {...props} locale={locale} /> },
+    }),
+    slugify: (text) => {
+      // Preserve Unicode letters while retaining existing ASCII heading URLs.
+      const base = text.replace(/[^\p{L}\p{M}\p{N} -]/gu, "").replace(/ /g, "-").toLowerCase() || "section";
+      let id = base;
+      let suffix = 1;
+      while (ids.has(id)) id = `${base}-${suffix++}`;
+      ids.add(id);
+      return id;
+    },
+  }}>{formatUsageMarkdown(children)}</Markdown>;
 }
 
 const additionalStateExports: Record<string, readonly string[]> = {
   Accordion: ["SingleExpansion", "Controlled", "Disabled", "LongContent"],
   ActivityPageHeader: ["ChineseLocaleUsesEnglishLogo"],
   BrandProductRail: ["Centered", "MobilePlainCoverage", "BlackBottomDivider"],
+  Divider: ["Vertical"],
+  FilterChip: ["PressedStates", "PopupMenus"],
   Header: ["HallSwitcher", "PromotionBadges", "CategoryRail"],
   HeroBanner: ["ContentVariants", "MobileDividerDisabled"],
   HorizontalScrollList: ["WithBackground", "WithoutBackground", "Disabled", "PCSideNavigation"],
+  Input: ["Compact", "WithAction", "ExternalValidation"],
+  Pagination: ["Links", "Disabled"],
   ProductCard: ["PresentationMatrix", "LongContent", "Horizontal", "DisabledAddButton"],
   ProductList: ["StandardRailExample", "ThemedRailExample", "WaterfallExample", "LoadingExample"],
   ReviewList: ["MobilePlain", "WithoutProduct"],
   SectionBanner: ["Centered"],
   SocialMediaGallery: ["SingleProduct", "MultipleProducts", "Centered"],
-  Tabs: ["DesktopSecondary", "PrimaryStyleA", "PrimaryStyleB", "Secondary", "Tertiary", "Skeleton"],
+  Tabs: ["DesktopSecondary", "PrimaryStyleA", "PrimaryStyleB", "Secondary", "Tertiary", "Skeleton", "ManualActivation", "BaseUIOptions"],
   ThemeHero: ["MobileWithActions"],
   ThemeProductList: ["MobilePlain"],
   TrendingSearches: ["Centered"],
 };
 
-function StateExample({ story }: { story: PreparedStory }) {
+function StoryExample({ story, locale, name }: { story: PreparedStory; locale: DocsLocale; name?: string }) {
+  const context = useContext(DocsContext);
+  const sources = useContext(SourceContext);
+  const { code } = useSourceProps({ of: story.moduleExport }, context, sources);
+  return <DocsExampleCard code={code} locale={locale} name={name}>
+    <div className={styles.storyPreview}><Canvas of={story.moduleExport} sourceState="none" story={{ autoplay: false }} /></div>
+  </DocsExampleCard>;
+}
+
+function StateExample({ story, locale }: { story: PreparedStory; locale?: DocsLocale }) {
   const [open, setOpen] = useState(false);
   return (
     <details onToggle={(event) => setOpen(event.currentTarget.open)}>
       <summary className={styles.stateSummary}><ChevronRight size={16} strokeWidth={2} aria-hidden="true" />{story.name}</summary>
       {open && <>
         <Description of={story.moduleExport} />
-        <Canvas of={story.moduleExport} story={{ autoplay: false }} />
+        {locale ? <StoryExample story={story} locale={locale} /> : <Canvas of={story.moduleExport} story={{ autoplay: false }} />}
       </>}
     </details>
   );
@@ -156,6 +212,11 @@ export function ComponentDocsPage() {
   const stateComponent = Object.keys(additionalStateExports).find((name) => titleSegments.includes(normalizeComponentName(name)));
   const extraExamples = (stateComponent ? additionalStateExports[stateComponent] : [])
     .map((exportName) => csfFile.moduleExports[exportName]);
+  const stateSections: Record<string, Record<DocsLocale, string>> = preparedMeta.parameters.docs?.stateSections ?? {};
+  const documentedStates = Object.entries(stateSections).flatMap(([key, titles]) => {
+    const story = componentStories.find(entry => entry.moduleExport === csfFile.moduleExports[key]);
+    return story ? [{ story, title: titles[language], id: key.toLowerCase() }] : [];
+  });
   const stateExamples = hasDevicePreviews ? componentStories.filter((story) => (
     !story.usesMount && !story.tags.includes("component-device") &&
     story.moduleExport !== playground && story.moduleExport !== showcase &&
@@ -184,10 +245,95 @@ export function ComponentDocsPage() {
     </p>
   ) : null;
 
-  const customDocsPages = { drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage };
   const componentKey = normalizeComponentName(sourceTitle.split("/").at(-1) ?? "");
-  const DocsPage = customDocsPages[componentKey as keyof typeof customDocsPages];
+  const DocsPage = customDocsPages[componentKey];
+  const [neighbors, setNeighbors] = useState<DocsNeighbors>();
+  const docsId = primaryStory.id.split("--")[0] + "--docs";
+  const sharedDocs = usesBaseUI(componentKey) && hasDevicePreviews;
+  useEffect(() => {
+    if (!sharedDocs || DocsPage || !/^YAMI\/Components\/[^/]+$/i.test(sourceTitle)) return;
+    const controller = new AbortController();
+    void fetch(new URL("index.json", window.location.href), { signal: controller.signal })
+      .then((response) => response.json() as Promise<{ entries: Record<string, { type: string; id: string; title: string; tags?: string[] }> }>)
+      .then(({ entries }) => {
+        const siblings = Object.values(entries).filter((entry) => (
+          entry.type === "docs" && entry.tags?.includes("dev") && /^YAMI\/Components\/[^/]+$/i.test(entry.title)
+        ));
+        const index = siblings.findIndex((entry) => entry.id === docsId);
+        if (index === -1) return;
+        const neighbor = (entry: (typeof siblings)[number] | undefined) => entry && ({
+          name: entry.title.split("/")[2],
+          path: entry.id.replace(/--docs$/, ""),
+        });
+        setNeighbors({ id: docsId, previous: neighbor(siblings[index - 1]), next: neighbor(siblings[index + 1]) });
+      })
+      .catch(() => { /* The Docs page still works if the sidebar index cannot be loaded. */ });
+    return () => controller.abort();
+  }, [DocsPage, docsId, sharedDocs, sourceTitle]);
   if (DocsPage) return <DocsPage locale={language} />;
+
+  if (sharedDocs) {
+    const name = sourceTitle.trim().split(/\s*\/\s*/).at(-1) ?? sourceTitle;
+    const intro = translation?.description ?? preparedMeta.parameters.docs?.description?.component;
+    const installation = language === "zh" ? "安装" : "Installation";
+    const api = language === "zh" ? "API 参考" : "API Reference";
+    const apiRows = componentKey === "popover"
+      ? popoverApi[language]
+      : componentApiRows(componentKey, sourceTitle, language, translations);
+    const lead = (playground && componentStories.find((story) => story.moduleExport === playground)) ?? primaryStory;
+    const specifications = showcase && componentStories.find((story) => story.moduleExport === showcase);
+    const tabsGuide = componentKey === "tabs" ? tabsDocsExamples(language) : undefined;
+    const examples: GuideExample[] = tabsGuide?.examples ?? (componentKey === "popover" ? popoverDocsExamples(language) : []);
+    const instructions = <>
+      <section><h2 id={`${componentKey}-installation`}>{installation}</h2><Installation locale={language} /></section>
+      <section className={templateStyles.usage} data-yami-docs="usage">
+        {usage ? <UsageMarkdown locale={language}>{usage}</UsageMarkdown> : usageContent}
+      </section>
+    </>;
+    const instructionsText = [`## ${installation}`, installationMarkdown(language), usage && formatUsageMarkdown(usage)];
+    const pageText = [
+      `# ${name}`, intro, tabsGuide && `\`\`\`tsx\n${tabsGuide.lead.code}\n\`\`\``,
+      ...(tabsGuide ? [] : instructionsText),
+      ...documentedStates.map(({ title, story }) => `## ${title}\n\n[${title}](?path=/story/${story.id})`),
+      ...examples.map(({ title, description, code }) => `## ${title}\n\n${description}\n\n\`\`\`tsx\n${code}\n\`\`\``),
+      ...(tabsGuide ? instructionsText : []),
+      `## ${api}\n\n${apiRows.map(([prop, description]) => `- \`${prop}\` — ${description}`).join("\n")}`,
+    ].filter(Boolean).join("\n\n");
+
+    return <DocsContext.Provider value={localizedContext}>
+      <ComponentDocsTemplate name={name} slug={componentKey} intro={intro ? <Markdown>{intro}</Markdown> : <Description of="meta" />}
+        locale={language} pageText={pageText}
+        previous={neighbors?.id === docsId ? neighbors.previous : undefined}
+        next={neighbors?.id === docsId ? neighbors.next : undefined}>
+        <Anchor storyId={`primary--${lead.id}`}>
+          {tabsGuide ? <DocsExample name="lead" locale={language} code={tabsGuide.lead.code}>{tabsGuide.lead.preview}</DocsExample>
+            : <StoryExample story={lead} locale={language} name="lead" />}
+        </Anchor>
+        {!tabsGuide && instructions}
+        {examples.length > 0 ? examples.map(({ id, title, description, code, preview, previewBackground }, index) => (
+          <section key={id} id={index === 0 ? "component-specifications" : undefined}>
+            <h2 id={`${componentKey}-${id}`}>{title}</h2><p>{description}</p>
+            <DocsExample name={id} code={code} locale={language} previewMode={tabsGuide ? "viewport" : "document"} previewBackground={previewBackground}>
+              {tabsGuide ? <div style={{ display: "grid", justifyItems: "center" }}>{preview}</div> : preview}
+            </DocsExample>
+          </section>
+        )) : (playground || stateExamples.length > 0) && <section>
+          <h2 id="component-specifications">{language === "zh" ? "规格与状态对照" : "Specifications and states"}</h2>
+          {specifications && specifications !== lead && <StoryExample story={specifications} locale={language} name="specifications" />}
+          {stateExamples.filter(story => !documentedStates.some(entry => entry.story === story)).map((story) => <StateExample key={story.id} story={story} locale={language} />)}
+        </section>}
+        {tabsGuide && instructions}
+        {documentedStates.map(({ story, title, id }) => <section key={story.id}>
+          <h2 id={`${componentKey}-${id}`}>{title}</h2>
+          <StoryExample story={story} locale={language} name={id} />
+        </section>)}
+        <section>
+          <h2 id={playground ? "component-playground" : `${componentKey}-api`}>{api}</h2>
+          <DocsApiTable locale={language} rows={apiRows} />
+        </section>
+      </ComponentDocsTemplate>
+    </DocsContext.Provider>;
+  }
 
   return (
     <DocsContext.Provider value={localizedContext}>

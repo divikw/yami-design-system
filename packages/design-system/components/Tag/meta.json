@@ -4,7 +4,7 @@
   "category": "display",
   "status": "experimental",
   "version": "0.4.0",
-  "description": "Static responsive full-pill label with M and L sizes, optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
+  "description": "Static responsive full-pill label with optional leading artwork, independent content or overlay context, light or dark surface mode, and filled or outline variant.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -37,7 +37,7 @@
       "values": ["m", "l"],
       "required": false,
       "default": "m",
-      "description": "Responsive size. M is 28px on mobile and PC; L is 32px on mobile and 36px on PC."
+      "description": "Both legacy size values use the responsive height: 32px on mobile and 36px on desktop."
     },
     "variant": {
       "type": "enum",
@@ -51,6 +51,7 @@
       "required": false,
       "description": "Optional leading artwork with an ImageSource and alt text. Use an empty alt when the artwork repeats the visible label."
     },
+    "render": { "type": "ReactElement | function", "required": false, "description": "Render a semantically equivalent label element, with the YAMI props and styling applied." },
     "children": {
       "type": "ReactNode",
       "required": false,
@@ -72,7 +73,7 @@
     },
     "responsive-size": {
       "contractId": "responsive-size",
-      "note": "M remains 28px across breakpoints. At 1024px, L steps from 32px to 36px. The optional image slot remains 4px smaller than the Tag and its artwork remains 8px smaller."
+      "note": "All Tags are 32px tall below 1024px and 36px tall from 1024px. Text-only Tags use 12px inline padding. The optional image slot remains 4px smaller than the Tag and its artwork remains 8px smaller."
     }
   },
   "tokens": [
@@ -81,6 +82,7 @@
     "--color-black-100",
     "--color-black-200",
     "--color-white-200",
+    "--color-white-300",
     "--color-white-1000",
     "--font-family-ios",
     "--font-size-body-md",
@@ -90,9 +92,8 @@
     "--radius-full",
     "--space-025",
     "--space-050",
-    "--space-200",
+    "--space-100",
     "--space-150",
-    "--space-300",
     "--space-400",
     "--surface-primary",
     "--stroke-default"
@@ -148,7 +149,7 @@
     "notes": "Non-interactive content. Keep labels concise and select the mode that suits the rendered background; outline variants have no contrast-providing fill."
   },
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": ["react", "@base-ui/react"],
     "peer": [],
     "devOnly": ["@storybook/react-vite"]
   },

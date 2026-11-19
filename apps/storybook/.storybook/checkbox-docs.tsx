@@ -2,14 +2,16 @@ import { Checkbox } from "@yami/design-system";
 import type { DocsLocale } from "./component-docs-template";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import styles from "./component-guide.module.css";
+import { CheckboxOverview } from "./checkbox-overview-example";
+import overviewSource from "./checkbox-overview-example.tsx?raw";
 import { OrderSelection } from "./checkbox-table-example";
 import tableSource from "./checkbox-table-example.tsx?raw";
 import { ConsentForm } from "./checkbox-validation-example";
 import validationSource from "./checkbox-validation-example.tsx?raw";
 
 const imports = 'import { Checkbox } from "@yami/design-system";';
-const labelStyle = { display: "inline-flex", alignItems: "center" };
-const labelStyleCode = 'style={{ display: "inline-flex", alignItems: "center" }}';
+const labelStyle = { display: "inline-flex", alignItems: "center", gap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" };
+const labelStyleCode = 'style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" }}';
 
 export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
@@ -21,13 +23,21 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
   const all = zh ? "选择全部订单" : "Select all orders";
   const orders = ["YM-1024", "YM-1025", "YM-1026"];
   const caption = zh ? "订单编号" : "Order number";
+  const overview = {
+    offers,
+    shipping,
+    shippingHelp: help,
+    sms,
+    restock: zh ? "订阅到货通知" : "Notify me when items are back in stock",
+    restockHelp: zh ? "收藏的商品补货时，通过邮件通知我。" : "Get an email when a saved item is available again.",
+  };
   const form = {
     label: zh ? "我同意退换货条款" : "I accept the return policy",
     submit: zh ? "确认" : "Confirm",
     error: zh ? "请先勾选退换货条款。" : "Accept the return policy to continue.",
     success: zh ? "已确认条款。" : "Policy accepted.",
   };
-  const basic = `<label htmlFor="email-offers">
+  const basic = `<label htmlFor="email-offers" ${labelStyleCode}>
   <Checkbox id="email-offers" name="offers" value="email" />
   ${offers}
 </label>`;
@@ -36,7 +46,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
     {
       id: "basic", title: zh ? "基础用法" : "Basic",
       description: zh ? "点击方框或标签切换选中状态。使用 Tab 聚焦后，按空格也可以切换。" : "Click the box or its label to toggle it. Use Tab to focus it and Space to toggle it from the keyboard.",
-      code: `${imports}\n\n${basic.replace('<label htmlFor="email-offers">', `<label htmlFor="email-offers" ${labelStyleCode}>`)}`,
+      code: `${imports}\n\n${basic}`,
       preview: <label htmlFor="email-offers" style={labelStyle}><Checkbox id="email-offers" name="offers" value="email" />{offers}</label>,
     },
     {
@@ -44,12 +54,12 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
       description: zh ? "defaultChecked 设置初始状态。用 aria-describedby 关联补充说明，让读屏软件分别读出名称和说明。" : "Initialize the option with defaultChecked. Connect supporting text with aria-describedby so assistive technology can distinguish the name and description.",
       code: `${imports}
 
-<div style={{ display: "grid", gridTemplateColumns: "auto 1fr", alignItems: "center" }}>
+<div style={{ display: "grid", gridTemplateColumns: "auto 1fr", alignItems: "center", columnGap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" }}>
   <Checkbox id="shipping" defaultChecked aria-describedby="shipping-note" />
   <label htmlFor="shipping">${shipping}</label>
   <p id="shipping-note" style={{ gridColumn: 2, margin: 0, color: "var(--text-secondary)" }}>${help}</p>
 </div>`,
-      preview: <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", alignItems: "center" }}>
+      preview: <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", alignItems: "center", columnGap: "var(--space-100)", lineHeight: "var(--line-height-body-md)" }}>
         <Checkbox id="shipping" defaultChecked aria-describedby="shipping-note" />
         <label htmlFor="shipping">{shipping}</label>
         <p id="shipping-note" style={{ gridColumn: 2, margin: 0, color: "var(--text-secondary)" }}>{help}</p>
@@ -60,7 +70,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
       description: zh ? "禁用选项可以保留已选值。Tab 会跳过这些控件，提交表单时也会跳过它们。" : "A disabled option can retain its checked state. It is skipped during keyboard navigation and form submission.",
       code: `${imports}
 
-<div style={{ display: "grid", color: "var(--text-disabled)" }}>
+<div style={{ display: "grid", rowGap: "var(--space-250)", color: "var(--text-disabled)" }}>
   <label htmlFor="sms-off" ${labelStyleCode}>
     <Checkbox id="sms-off" disabled />${sms}
   </label>
@@ -68,7 +78,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
     <Checkbox id="shipping-on" defaultChecked disabled />${shipping}
   </label>
 </div>`,
-      preview: <div style={{ display: "grid", color: "var(--text-disabled)" }}>
+      preview: <div style={{ display: "grid", rowGap: "var(--space-250)", color: "var(--text-disabled)" }}>
         <label htmlFor="sms-off" style={labelStyle}><Checkbox id="sms-off" disabled />{sms}</label>
         <label htmlFor="shipping-on" style={labelStyle}><Checkbox id="shipping-on" defaultChecked disabled />{shipping}</label>
       </div>,
@@ -78,7 +88,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
       description: zh ? "用 fieldset 和 legend 为一组独立选项命名。共享 name 并设置不同的 value，提交时用 FormData.getAll 读取所有选中项。" : "Name a group of independent options with fieldset and legend. Give them the same name and different values, then read the selected values with FormData.getAll.",
       code: `${imports}
 
-<fieldset style={{ display: "grid", border: 0, padding: 0 }}>
+<fieldset style={{ display: "grid", rowGap: "var(--space-250)", border: 0, padding: 0 }}>
   <legend>${groupLabel}</legend>
   <label htmlFor="notify-email" ${labelStyleCode}>
     <Checkbox id="notify-email" name="notify" value="email" />${offers}
@@ -87,7 +97,7 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
     <Checkbox id="notify-sms" name="notify" value="sms" />${sms}
   </label>
 </fieldset>`,
-      preview: <fieldset style={{ display: "grid", border: 0, padding: 0 }}>
+      preview: <fieldset style={{ display: "grid", rowGap: "var(--space-250)", border: 0, padding: 0 }}>
         <legend>{groupLabel}</legend>
         <label htmlFor="notify-email" style={labelStyle}><Checkbox id="notify-email" name="notify" value="email" />{offers}</label>
         <label htmlFor="notify-sms" style={labelStyle}><Checkbox id="notify-sms" name="notify" value="sms" />{sms}</label>
@@ -108,14 +118,19 @@ export function CheckboxDocsPage({ locale }: { locale: DocsLocale }) {
   ];
 
   return <ComponentGuide name="Checkbox" slug="checkbox" locale={locale}
-    intro={zh ? "用复选框选择一个或多个独立选项。为每个选项提供可点击的标签，在批量选择时用半选表示只选中了部分项目。" : "Use checkboxes for one or more independent choices. Give each option a clickable label and use the mixed state when only some items in a group are selected."}
+    intro={zh ? "用复选框选择一个或多个独立选项。批量选择时，用半选表示只选中了部分项目。" : "Use checkboxes for independent choices. Use the mixed state when only part of a group is selected."}
     previous={{ name: "Card", path: "yami-components-layout-card" }}
     next={{ name: "Dialog", path: "yami-components-layout-dialog" }}
+    leadExample={{
+      title: zh ? "状态预览" : "State preview",
+      code: `${overviewSource.trim()}\n\n<CheckboxOverview labels={${JSON.stringify(overview, null, 2)}} />`,
+      preview: <CheckboxOverview labels={overview} />,
+    }}
     usageCode={`${imports}\n\n${basic}`}
     composition={'label (htmlFor)\n└── Checkbox (id)\n    └── '+(zh ? "内置选中与半选指示器" : "Built-in checked and mixed indicators")}
     examples={examples.map(example => ({ ...example, preview: <div className={styles.row}>{example.preview}</div> }))}
     legacyAnchors={{ usage: ["checkbox--usage"], composition: ["anatomy"], basic: ["component-playground", "accessibility"], disabled: ["component-specifications", "states"], table: ["state-changes"] }}
-    apiNote={zh ? "可见方框为 20 × 20px，PC 点击区域为 32 × 32px，Mobile 为 40 × 40px。Checkbox 自带指示器，标签和说明由调用方提供。" : "The visible square is 20 × 20px inside a 32 × 32px desktop or 40 × 40px mobile target. Checkbox supplies the indicator. Provide the label and any description alongside it."}
+    apiNote={zh ? "布局为 20 × 20px，内部方框为 18 × 18px，PC 点击区域为 32 × 32px，Mobile 为 40 × 40px。Checkbox 自带指示器，标签和说明由调用方提供。" : "An 18 × 18px visible square sits in a 20 × 20px layout, with a 32 × 32px desktop or 40 × 40px mobile target. Checkbox supplies the indicator. Provide the label and any description alongside it."}
     api={[
       ["density", zh ? '默认 "default"。"default" 和 "compact" 尺寸相同，视口宽度达到 1024px 时点击区域为 32 × 32px，更窄时为 40 × 40px。' : 'Defaults to "default". Both values use a 32 × 32px target at viewport widths of 1024px or more and 40 × 40px below.'],
       ["checked / defaultChecked", zh ? "布尔值。checked 由调用方维护，defaultChecked 设置非受控初始值，默认未选中。" : "Boolean. Manage checked in controlled mode or initialize with defaultChecked. Defaults to unchecked."],

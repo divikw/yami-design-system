@@ -98,6 +98,10 @@ test.each([false, true])("segmented tabs keep equal background insets (inverse: 
     for (const width of [375, 768, 1024, 1280]) {
       await page.viewport(width, 812);
       const background = getComputedStyle(track, "::before");
+      const trackHeight = width >= 1024 ? 40 : 36;
+      expect(track.getBoundingClientRect().height).toBe(trackHeight);
+      expect(track.parentElement!.getBoundingClientRect().height).toBe(trackHeight);
+      expect(background.inset).toBe("0px");
       for (const [index, tab] of Array.from(tabs).entries()) {
         await userEvent.click(tab);
         const trackRect = track.getBoundingClientRect();
@@ -110,6 +114,35 @@ test.each([false, true])("segmented tabs keep equal background insets (inverse: 
           : trackRect.right - Number.parseFloat(background.right) - rect.right + Number.parseFloat(fill.right);
         expect([top, bottom, edge], `${width}px, tab ${index + 1}`).toEqual([2, 2, 2]);
       }
+    }
+  } finally {
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
+test("hover emphasizes inactive primary and secondary labels without selecting them", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  try {
+    await page.viewport(1280, 812);
+    for (const variant of ["line", "default", "secondary"] as const) {
+      flushSync(() => root.render(
+        <Tabs key={variant} defaultValue="one">
+          <TabsList variant={variant} aria-label="Sections">
+            <TabsTrigger value="one">One</TabsTrigger>
+            <TabsTrigger value="two">Two</TabsTrigger>
+          </TabsList>
+        </Tabs>,
+      ));
+      const one = page.getByRole("tab", { name: "One" });
+      const two = page.getByRole("tab", { name: "Two" });
+      await one.hover();
+      const normal = getComputedStyle(two.element()).color;
+      await two.hover();
+      expect(getComputedStyle(two.element()).color).toBe(getComputedStyle(one.element()).color);
+      expect(two.element()).toHaveAttribute("aria-selected", "false");
+      await one.hover();
+      expect(getComputedStyle(two.element()).color).toBe(normal);
+      expect(normal).not.toBe(getComputedStyle(one.element()).color);
     }
   } finally {
     await page.viewport(viewport.width, viewport.height);
@@ -138,6 +171,9 @@ test.each([false, true])("secondary underlines match primary without clipping (i
         const active = list.querySelector<HTMLElement>('[aria-selected="true"]')!;
         const underline = getComputedStyle(active, "::after");
         const bottom = active.getBoundingClientRect().bottom - Number.parseFloat(underline.bottom);
+        if (list.dataset.variant === "secondary") {
+          expect(bottom).toBe(list.getBoundingClientRect().bottom);
+        }
         const top = bottom - Number.parseFloat(underline.height);
         const clipTop = list.getBoundingClientRect().top + list.clientTop;
         return Math.min(bottom, clipTop + list.clientHeight) - Math.max(top, clipTop);
@@ -285,6 +321,14 @@ test.each([
         const marker = getComputedStyle(one!, "::after");
         const markerTop = one!.getBoundingClientRect().bottom - Number.parseFloat(marker.bottom) - Number.parseFloat(marker.height);
         expect(markerTop - one!.querySelector("span")!.getBoundingClientRect().bottom).toBe(4);
+      } else {
+        const list = one!.closest('[role="tablist"]')!;
+        expect(getComputedStyle(one!).paddingBlock).toBe("4px");
+        expect(getComputedStyle(list).borderBottomWidth).toBe("0px");
+        const marker = getComputedStyle(one!, "::after");
+        expect([marker.top, marker.bottom, marker.height]).toEqual(["4px", "4px", "32px"]);
+        expect(one!.getBoundingClientRect().right - Number.parseFloat(marker.right)).toBe(list.getBoundingClientRect().right);
+        expect(one!.getBoundingClientRect().right - one!.querySelector("span")!.getBoundingClientRect().right).toBeGreaterThanOrEqual(16);
       }
       one!.focus();
       await userEvent.keyboard("{ArrowDown}");
@@ -388,6 +432,38 @@ test("skeleton lists expose no interactive tabs", () => {
   expect(container.querySelector('[role="tab"]')).toBeNull();
 });
 
+test("supports Base UI focus activation, non-looping lists and opt-in panel unmounting", async () => {
+  const change = vi.fn();
+  flushSync(() => root.render(
+    <Tabs defaultValue="one" onValueChange={change}>
+      <TabsList aria-label="Sections" variant="line" activateOnFocus loopFocus={false}>
+        <TabsTrigger value="one">One</TabsTrigger>
+        <TabsTrigger value="two">Two</TabsTrigger>
+      </TabsList>
+      <TabsContent value="one" keepMounted={false}>One content</TabsContent>
+      <TabsContent value="two" keepMounted={false}>Two content</TabsContent>
+    </Tabs>,
+  ));
+  expect(container.querySelector('[role="tablist"]')).toHaveAttribute("data-style", "a");
+  const two = page.getByRole("tab", { name: "Two" });
+  expect(container.querySelectorAll('[role="tabpanel"]')).toHaveLength(1);
+  await two.click();
+  expect(change).toHaveBeenCalledTimes(1);
+  await expect.element(two).toHaveAttribute("aria-selected", "true");
+  await expect.element(page.getByRole("tabpanel", { name: "Two" })).toBeVisible();
+  await expect.poll(() => container.querySelectorAll('[role="tabpanel"]').length).toBe(1);
+  const one = page.getByRole("tab", { name: "One" });
+  await expect.element(one).not.toHaveAttribute("aria-controls");
+  await two.click();
+  expect(change).toHaveBeenCalledTimes(2);
+  one.element().focus();
+  await expect.element(one).toHaveAttribute("aria-selected", "true");
+  two.element().focus();
+  await expect.element(two).toHaveAttribute("aria-selected", "true");
+  await userEvent.keyboard("{ArrowRight}");
+  await expect.element(two).toHaveFocus();
+});
+
 for (const dark of [false, true]) {
   for (const inverse of [false, true]) {
     test(`Primary B focus follows the visible capsule in ${dark ? "dark" : "light"} / ${inverse ? "inverse" : "default"}`, async () => {
@@ -410,16 +486,16 @@ for (const dark of [false, true]) {
             const capsule = getComputedStyle(two!, "::before");
             const rect = two!.getBoundingClientRect();
             const capsuleHeight = rect.height - Number.parseFloat(capsule.top) - Number.parseFloat(capsule.bottom);
-            expect(rect.height).toBe(44);
+            expect(rect.height).toBe(orientation === "vertical" ? 44 : capsuleHeight);
             expect(capsuleHeight).toBe(width >= 1024 && orientation === "horizontal" ? 36 : 32);
             expect(trigger.outlineStyle).toBe("none");
             expect(capsule.outlineStyle).toBe("solid");
             expect(capsule.outlineWidth).toBe("2px");
-            expect(capsule.outlineOffset).toBe("2px");
+            expect(capsule.outlineOffset).toBe(orientation === "horizontal" ? "0px" : "2px");
             expect(capsule.borderRadius).toBe(trigger.borderRadius);
             expect(capsule.outlineColor).toBe(dark !== inverse ? "rgb(102, 161, 255)" : "rgb(0, 102, 235)");
             const expandedHeight = capsuleHeight + 2 * (Number.parseFloat(capsule.outlineWidth) + Number.parseFloat(capsule.outlineOffset));
-            expect(expandedHeight).toBe(width >= 1024 && orientation === "horizontal" ? 44 : 40);
+            expect(expandedHeight).toBe(width < 1024 && orientation === "horizontal" ? 36 : 40);
           }
         }
       } finally {
