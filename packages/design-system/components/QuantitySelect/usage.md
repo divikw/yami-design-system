@@ -1,6 +1,8 @@
 <!-- locale:zh -->
 # QuantitySelect — 使用说明
 
+下拉触发器和内联输入的左右内边距均为 12px。
+
 用于购物车的受控整数数量选择。共享 Select（Base UI）下拉列表提供 1–9，max ≥10 时提供 10+；选择 10+ 后在原位切换为居中的内联输入，失焦或按 Enter 提交。已提交的 10+ 数量保持输入外观，可直接再次编辑；没有确认、取消或修改按钮。输入过滤非数字，空值或 0 归为 1，超过 max 归为上限，并通过不占布局空间的居中 toast 播报；toast 采用线上白底深色边框及警告图标，2.5 秒后自动消失，重复超限重新计时。相同数量不重复调用 onValueChange，Enter 只通过失焦提交一次。Esc 放弃未提交的修改；输入内的 Esc 不关闭外层抽屉。
 
 value、max、onValueChange、label 必填。value 为 1–max 的整数，max 为业务提供的正整数库存／限购上限；组件不自行定义业务限购。label 应包含商品名称，locale 控制中英文操作和提示文案。调用方维护受控值，以及 loading、disabled、error 和提交结果；组件不请求 API，也不更改价格。
@@ -10,6 +12,8 @@ value、max、onValueChange、label 必填。value 为 1–max 的整数，max �
 <!-- locale:en -->
 
 # QuantitySelect — Usage
+
+The select trigger and inline input use 12px of horizontal padding.
 
 Controlled cart quantity selection. The shared Select (Base UI) popup offers 1–9, plus 10+ when max allows it. Choosing 10+ replaces the pill in place with a centered inline input. Blur or Enter commits; confirmed quantities above nine remain directly editable. There are no Apply, Cancel or Edit buttons. Non-digits are filtered; empty/zero normalizes to 1 and over-limit values clamp to max with a centered, non-layout toast (source-style white surface, dark border and warning icon). It disappears after 2.5 seconds; repeated over-limit submissions restart the timer. Unchanged values do not trigger updates; Enter submits only through blur. Escape discards the draft without dismissing a surrounding drawer.
 

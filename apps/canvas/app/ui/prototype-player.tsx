@@ -31,7 +31,7 @@ export function PrototypePlayer() {
   useEffect(() => { setReady(true); }, []);
   const project = prototypeProjects.find((item) => item.id === (params.get("project") ?? prototypeProjects[0].id));
   const variant = project?.variants.find((item) => item.id === (params.get("variant") ?? "current"));
-  if (!project || !variant) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><WorkbenchLink href="/workbench">返回工作台</WorkbenchLink></main>;
+  if (!project || !variant) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><WorkbenchLink href="/design">返回工作台</WorkbenchLink></main>;
   if (!ready) return <main className="app-loading">正在打开原型…</main>;
   return <PrototypeExperience key={`${project.id}:${variant.id}`} project={project} variant={variant} />;
 }
@@ -200,7 +200,7 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
       <WorkbenchLink href={hrefFor("/")}><WorkbenchIcon icon={Home01Icon} />首页</WorkbenchLink>
       <WorkbenchLink href={hrefFor("/cart")}><WorkbenchIcon icon={ShoppingCart01Icon} />购物车</WorkbenchLink>
       <WorkbenchButton onClick={reset}><WorkbenchIcon icon={RefreshCcwIcon} />重置演示</WorkbenchButton>
-      <WorkbenchLink href={hrefFor(path).replace("/prototype?", "/workbench?")}><WorkbenchIcon icon={Layout01Icon} />工作台</WorkbenchLink>
+      <WorkbenchLink href={hrefFor(path).replace("/prototype?", "/design?")}><WorkbenchIcon icon={Layout01Icon} />工作台</WorkbenchLink>
     </div>}
     {notice && <div className="prototype-notice" role="status">{notice}<button type="button" aria-label="关闭提示" onClick={() => setNotice("")}><WorkbenchIcon icon={Cancel01Icon} /></button></div>}
     <div className="prototype-content" key={`${path}:${locale}:${resetVersion}`} onClickCapture={intercept}>

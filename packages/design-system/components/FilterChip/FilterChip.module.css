@@ -130,7 +130,7 @@
   align-items: center;
   gap: var(--space-050);
   padding: var(--space-050);
-  border-radius: var(--radius-button-emphasis);
+  border-radius: var(--radius-tag-primary);
   cursor: pointer;
 }
 
@@ -187,6 +187,10 @@
   text-decoration: underline;
 }
 
+.menuPopup[data-slot] {
+  border-radius: var(--radius-component-default);
+}
+
 .categoryPopup {
   width: 360px;
   max-height: min(800px, var(--available-height));
@@ -218,7 +222,7 @@
   align-items: center;
   gap: 0;
   padding: var(--space-050);
-  border-radius: var(--radius-button-emphasis);
+  border-radius: var(--radius-tag-primary);
 }
 
 @media (hover: hover) and (pointer: fine) {

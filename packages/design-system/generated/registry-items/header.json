@@ -515,6 +515,10 @@
       "type-hierarchy"
     ],
     "tokenBindings": {
+      "--space-150": {
+        "property": "padding-inline",
+        "selector": ".searchField"
+      },
       "--focus-ring": {
         "property": "outline-color",
         "selector": ".brand:focus-visible, .search:has(.searchField:focus-visible), other focusable slots"
@@ -592,5 +596,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "ca23a8bd00eee87f3f3b2aadc452fbd6511d400a49c050b22e21868471d85d9c"
+  "contentDigest": "4d1304e1f50916513acf0627a38b07a319a396428b4ee905cea14c3474e1dbd3"
 }

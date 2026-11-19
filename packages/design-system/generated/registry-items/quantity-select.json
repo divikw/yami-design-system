@@ -80,6 +80,10 @@
       "no-custom-radii"
     ],
     "tokenBindings": {
+      "--space-150": {
+        "property": "padding-inline",
+        "selector": ".display, .input"
+      },
       "--surface-primary": {
         "property": "background",
         "selector": ".display"
@@ -132,5 +136,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "5a92d02ac4956c4e88e868cb4b3b83c995520ce258f474efca6a09615c6187e7"
+  "contentDigest": "794eb42bdfcd9cfe07f9cfbc22b8fa86749585b2b9c471b8bd2c481d84f17984"
 }

@@ -52,8 +52,8 @@
       "selector": ".root"
     },
     "--space-200": {
-      "property": "padding",
-      "selector": ".root"
+      "property": "width",
+      "selector": ".root > svg"
     },
     "--stroke-default": {
       "property": "border",

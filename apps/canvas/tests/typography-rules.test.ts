@@ -29,7 +29,6 @@ describe("Canvas typography rules", () => {
     for (const selector of [
       "selectItem\\[data-selected\\]",
       "button",
-      "segmentedInput:checked \\+ \\.segmentedLabel",
     ]) {
       expect(controlsCss).toMatch(
         new RegExp(`\\.${selector}\\s*\\{[^}]*font-weight:\\s*var\\(--font-weight-emphasize\\)`, "s"),

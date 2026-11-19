@@ -101,6 +101,9 @@ importers:
       '@yami/prototypes':
         specifier: workspace:*
         version: link:../../packages/prototypes
+      lucide-react:
+        specifier: 1.73.0
+        version: 1.73.0(@types/react@19.3.0)(react@19.3.1)
       motion:
         specifier: 14.12.0
         version: 14.12.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)

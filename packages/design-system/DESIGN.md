@@ -255,10 +255,10 @@ container instead of the global viewport.
 
 | Token                        | Value    | Use                                                           |
 | ---------------------------- | -------- | ------------------------------------------------------------- |
-| `--radius-tag-primary`       | `4px`    | Badges, tags, status chips                                    |
-| `--radius-component-default` | `8px`    | Inputs, selects, search bar                                   |
+| `--radius-tag-primary`       | `4px`    | Badges, tags, status chips, popup list rows                    |
+| `--radius-component-default` | `8px`    | Inputs, selects, search bar, list popups                      |
 | `--radius-button-emphasis`   | `8px`    | Emphasis CTA (Buy Now / Submit) — square-ish for high gravity |
-| `--radius-surface-default`   | `12px`   | Cards, centered Dialogs, desktop Drawers, floating panels      |
+| `--radius-surface-default`   | `12px`   | Cards, centered Dialogs, desktop Drawers, content popovers     |
 | `--radius-surface-sheet`     | `16px`   | Mobile bottom Drawer: top corners only, bottom corners square |
 | `--radius-button-primary`    | `9999px` | Primary / secondary / tertiary pill buttons                   |
 
@@ -852,7 +852,7 @@ YAMI switch with a 36×20px default track, a 28×16px small track and a 32px min
 
 ### Combobox — `components/Combobox/`
 
-Search and select one or more options with Base UI. The field uses the default component radius and the popup uses the menu elevation and surface radius. See [usage](./components/Combobox/usage.md) for grouped options, chips and form submission.
+Search and select one or more options with Base UI. The field and popup use the default component radius. The popup uses menu elevation and each option uses the tag radius. See [usage](./components/Combobox/usage.md) for grouped options, chips and form submission.
 
 ### Select — `components/Select/`
 
@@ -880,7 +880,7 @@ Transient Base UI notifications with semantic status icons, undo actions and pro
 
 ### Tooltip — `components/Tooltip/`
 
-Base UI hover and keyboard-focus hint with collision-aware placement and Escape dismissal. Uses YAMI inverse fill and text, caption typography, and a directional arrow facing the trigger. DismissibleTooltip initially opens a nonmodal hint with a close button. Both forms use 6px vertical and 8px horizontal padding. Keep essential information visible for touch users. See [usage](./components/Tooltip/usage.md).
+Base UI hover and keyboard-focus hint with collision-aware placement and Escape dismissal. Uses YAMI inverse fill and text, caption typography, and a directional arrow facing the trigger. DismissibleTooltip initially opens a nonmodal hint with a close button. Both forms use `--radius-component-default` (8px), 6px vertical padding, and 8px horizontal padding. Keep essential information visible for touch users. See [usage](./components/Tooltip/usage.md).
 
 ## Motion System
 

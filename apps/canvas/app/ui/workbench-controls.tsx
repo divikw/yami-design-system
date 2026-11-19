@@ -6,9 +6,7 @@ import { HugeiconsIcon, type HugeiconsIconProps } from "@hugeicons/react";
 import {
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
-  type InputHTMLAttributes,
   type ReactNode,
-  useId,
 } from "react";
 import styles from "./workbench-controls.module.css";
 
@@ -20,42 +18,6 @@ export interface WorkbenchSelectOption {
   value: string;
   label: ReactNode;
   disabled?: boolean;
-}
-
-export interface WorkbenchTextFieldProps
-  extends InputHTMLAttributes<HTMLInputElement> {
-  label: ReactNode;
-  hideLabel?: boolean;
-  suffix?: ReactNode;
-}
-
-export function WorkbenchTextField({
-  label,
-  hideLabel = false,
-  suffix,
-  id,
-  className,
-  ...props
-}: WorkbenchTextFieldProps) {
-  const generatedId = useId();
-  const inputId = id ?? generatedId;
-  const inputClassName = [styles.textInput, className].filter(Boolean).join(" ");
-
-  return (
-    <div className={styles.field}>
-      <label
-        className={hideLabel ? styles.visuallyHidden : styles.label}
-        data-slot={hideLabel ? undefined : "workbench-field-label"}
-        htmlFor={inputId}
-      >
-        {label}
-      </label>
-      <div className={styles.inputWrap} data-has-suffix={suffix ? true : undefined}>
-        <input {...props} id={inputId} className={inputClassName} />
-        {suffix && <span className={styles.inputSuffix} aria-hidden="true">{suffix}</span>}
-      </div>
-    </div>
-  );
 }
 
 export interface WorkbenchSelectProps {
@@ -172,56 +134,4 @@ export function WorkbenchLink({
     .join(" ");
 
   return <a {...props} className={linkClassName} />;
-}
-
-export interface SegmentedOption {
-  value: string;
-  label: string;
-}
-
-export interface SegmentedControlProps {
-  label: ReactNode;
-  children?: ReactNode;
-  options: readonly SegmentedOption[];
-  value: string;
-  onValueChange(value: string): void;
-  name?: string;
-  disabled?: boolean;
-}
-
-export function SegmentedControl({
-  label,
-  children,
-  options,
-  value,
-  onValueChange,
-  name,
-  disabled = false,
-}: SegmentedControlProps) {
-  const generatedName = useId();
-
-  return (
-    <div className={styles.segmentedField} role="group" aria-labelledby={`${generatedName}-label`} aria-disabled={disabled || undefined}>
-      <div id={`${generatedName}-label`} className={styles.label} data-slot="workbench-field-label">{label}</div>
-      <div className={styles.segmentedBody}>
-        <div className={styles.segmentedOptions} data-slot="workbench-segmented-options">
-          {options.map((option) => (
-            <label className={styles.segmentedOption} key={option.value}>
-              <input
-                className={styles.segmentedInput}
-                type="radio"
-                disabled={disabled}
-                name={name ?? generatedName}
-                value={option.value}
-                checked={value === option.value}
-                onChange={() => onValueChange(option.value)}
-              />
-              <span className={styles.segmentedLabel}>{option.label}</span>
-            </label>
-          ))}
-        </div>
-        {children}
-      </div>
-    </div>
-  );
 }

@@ -25,6 +25,7 @@ test("QuantitySelect matches the source cart pill while preserving its accessibl
       const target = select.getBoundingClientRect();
       expect(rect.width).toBe(60);
       expect(rect.height).toBe(32);
+      expect(getComputedStyle(display).paddingInline).toBe("12px");
       expect(target.height).toBe(32);
       expect(Math.abs(rect.top + rect.height / 2 - target.top - target.height / 2)).toBeLessThan(1);
       expect(document.elementFromPoint(target.left + 2, target.top + 2)).toBe(select);
@@ -225,6 +226,7 @@ test.each([375, 1440])("QuantitySelect replaces 10+ in place and commits once on
     expect({ width: after.width, height: after.height, left: after.left, top: after.top }).toEqual({ width: before.width, height: before.height, left: before.left, top: before.top });
     expect(input.element().closest("label")!.getBoundingClientRect().height).toBe(32);
     expect(getComputedStyle(input.element()).textAlign).toBe("center");
+    expect(getComputedStyle(input.element()).paddingInline).toBe("12px");
     expect(page.getByRole("button").elements()).toHaveLength(1);
     await input.fill("12");
     expect(changes).toEqual([]);

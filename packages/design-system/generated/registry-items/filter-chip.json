@@ -77,8 +77,10 @@
       "--font-size-body-md",
       "--font-weight-normal",
       "--line-height-body-md",
+      "--radius-component-default",
       "--radius-full",
       "--radius-sm",
+      "--radius-tag-primary",
       "--space-050",
       "--space-100",
       "--space-150",
@@ -126,6 +128,14 @@
         "property": "background-color",
         "selector": ".categoryToggle:hover"
       },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".menuPopup[data-slot]"
+      },
+      "--radius-tag-primary": {
+        "property": "border-radius",
+        "selector": ".optionRow, .categoryRow"
+      },
       "--radius-full": {
         "property": "border-radius",
         "selector": ".chip"
@@ -149,5 +159,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "781667a34aae3b7c789660470b6a83112e4f5593af050393508d6edd8dce1603"
+  "contentDigest": "da2ea37e9e9df4c0d108fe5be39ecb707b231d26be507be3274d86d8c6edcf99"
 }

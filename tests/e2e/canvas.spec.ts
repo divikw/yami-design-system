@@ -126,7 +126,7 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     });
     page.on("pageerror", (error) => hydrationErrors.push(error.message));
 
-    await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+    await page.goto("/design?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
     const panel = page.locator(".control-panel");
     await expect(panel).toHaveCSS("opacity", "1");
     await expect(panel).toHaveCSS("transform", "none");
@@ -137,37 +137,27 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
 }
 
 test("renders Ecommerce Home and routes iframe links through parent history", async ({ page }) => {
-  await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+  await page.goto("/design?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
   await expect(page.getByText("PROTOTYPE", { exact: true })).toBeVisible();
   await expect(page.getByText("LIVE PROTOTYPE", { exact: true })).toHaveCount(0);
   await expect(page.getByText("AI 设计工作台", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("img", { name: "Yami" })).toHaveCount(0);
   await expect(page.locator(".canvas-header")).toHaveCSS("height", "56px");
-  await expect(page.locator(".control-panel")).toHaveCSS("background-color", "rgb(250, 250, 250)");
-  await expect(page.locator(".preview-stage")).toHaveCSS("background-color", "rgb(235, 235, 235)");
+  await expect(page.locator(".canvas-header")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(page.locator(".control-panel")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(page.locator(".control-panel")).toHaveCSS("width", "280px");
+  await expect(page.locator(".canvas-grid")).toHaveCSS("background-color", "rgb(235, 235, 235)");
   await expect(page.locator(".canvas-header").getByRole("button", { name: "返回上一步" })).toHaveCount(0);
   const backButton = page.getByRole("button", { name: "返回上一步" });
   await expect(backButton).toBeDisabled();
-  await expect(page.locator(".path-readout")).toHaveCSS("border-left-color", "rgb(34, 34, 34)");
-  const importButton = page.locator(".canvas-header").getByRole("button", { name: "导入", exact: true });
-  await expect(importButton).toBeVisible();
-  const storybookLink = page.getByRole("link", { name: "Storybook", exact: true });
-  const controlStyles = async (locator: typeof importButton) => locator.evaluate((element) => {
-    const styles = getComputedStyle(element);
-    return {
-      height: styles.height,
-      padding: styles.padding,
-      border: styles.border,
-      borderRadius: styles.borderRadius,
-      background: styles.backgroundColor,
-      color: styles.color,
-      fontSize: styles.fontSize,
-      fontWeight: styles.fontWeight,
-      lineHeight: styles.lineHeight,
-    };
-  });
-  expect(await controlStyles(storybookLink)).toEqual(await controlStyles(importButton));
-  await expect(page.locator(".control-panel").getByRole("button", { name: "导入", exact: true })).toHaveCount(0);
+  await expect(page.getByText("当前路径", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "从 Storybook 预览", exact: true })).toHaveCount(0);
+  const storybookLink = page.locator("#workbench-sidebar").getByRole("link", { name: "Storybook", exact: true });
+  await expect(storybookLink).toBeVisible();
+  await expect(storybookLink).toHaveCSS("height", "32px");
+  await expect(storybookLink).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(storybookLink).toHaveAttribute("target", "_blank");
+  await expect(page.locator(".canvas-header").getByRole("link", { name: "Storybook", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "导入 AI 方案", exact: true })).toHaveCount(0);
   await expect(page.getByText("AI 设计工作流", { exact: true })).toHaveCount(0);
   await expect(workbenchSelect(page, "设计方案")).toHaveCount(0);
@@ -189,84 +179,123 @@ test("renders Ecommerce Home and routes iframe links through parent history", as
   await expect(backButton).toBeDisabled();
 });
 
+test("shows the preview first on a narrow screen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/design");
+  const sidebarToggle = page.getByRole("button", { name: "展开侧边栏" });
+  await expect(sidebarToggle).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator("#canvas-preview")).toBeInViewport({ ratio: 0.8 });
+  await expect(page.getByRole("combobox", { name: "设计方案" })).toBeHidden();
+  const storybookLink = page.getByRole("link", { name: "Storybook", exact: true });
+  await expect(storybookLink).toBeHidden();
+  await sidebarToggle.click();
+  await expect(page.getByRole("combobox", { name: "设计方案" })).toBeVisible();
+  await expect(storybookLink).toBeVisible();
+});
+
+test("switches and remembers the workbench theme independently of the preview", async ({ page }) => {
+  await page.goto("/design?project=global-navigation&variant=current&viewport=402&previewMode=h5&theme=light");
+  const canvas = page.locator(".canvas-shell");
+  const header = page.locator(".canvas-header");
+  const frame = page.locator("#canvas-preview");
+  const preview = frame.contentFrame().locator(".prototype-root");
+  const phone = page.locator("[data-phone-preview-shell]");
+  const standalone = page.getByRole("link", { name: "独立预览" });
+  const previewSrc = await frame.getAttribute("src");
+  const standaloneHref = await standalone.getAttribute("href");
+  const workbenchUrl = page.url();
+  const frameElement = await frame.elementHandle();
+
+  await expect(canvas).toHaveAttribute("data-workbench-theme", "light");
+  await expect(preview).toHaveAttribute("data-theme", "light");
+  await expect(phone).toHaveAttribute("data-theme", "light");
+  await header.getByRole("button", { name: "切换到深色模式" }).press("Enter");
+  await expect(canvas).toHaveAttribute("data-workbench-theme", "dark");
+  await expect(header).toHaveCSS("background-color", "rgb(34, 34, 34)");
+  await expect(page.locator("#workbench-sidebar")).toHaveCSS("background-color", "rgb(34, 34, 34)");
+  await expect(page).toHaveURL(workbenchUrl);
+  await expect(frame).toHaveAttribute("src", previewSrc!);
+  expect(await frame.evaluate((element, previous) => element === previous, frameElement)).toBe(true);
+  await expect(standalone).toHaveAttribute("href", standaloneHref!);
+  await expect(preview).toHaveAttribute("data-theme", "light");
+  await expect(phone).toHaveAttribute("data-theme", "light");
+
+  await workbenchSelect(page, "项目方案").click();
+  await expect(page.getByRole("listbox").locator("..")).toHaveCSS("background-color", "rgb(34, 34, 34)");
+  await page.keyboard.press("Escape");
+  await page.reload();
+  await expect(canvas).toHaveAttribute("data-workbench-theme", "dark");
+  await header.getByRole("button", { name: "切换到浅色模式" }).click();
+  await expect(canvas).toHaveAttribute("data-workbench-theme", "light");
+  await expect(header).toHaveCSS("background-color", "rgb(255, 255, 255)");
+});
+
 test("renders accessible workbench controls and switches device by keyboard", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 900 });
-  await page.goto("/workbench?path=%2F&direction=current&locale=en&theme=light&viewport=402");
+  await page.goto("/design?path=%2F&direction=current&locale=en&theme=light&viewport=402");
   await expect(page).toHaveURL(/viewport=402/);
+  await expect(page.locator("#canvas-preview")).toHaveCSS("width", "402px");
+  await page.getByRole("button", { name: "展开侧边栏" }).press("Enter");
   await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("402");
-  await expect(page.locator(".canvas-header").getByRole("button", { name: "导入", exact: true })).toBeVisible();
+  await expect(page.locator("#workbench-sidebar")).toHaveCSS("padding", "16px");
+  await expect(page.locator("#workbench-sidebar")).toHaveCSS("row-gap", "16px");
 
   await expectWorkbenchSelectValue(page, "页面", "/");
   await expectWorkbenchSelectValue(page, "语言", "en");
   await expect(workbenchSelect(page, "主题")).toHaveCount(0);
-  await expect(workbenchSelect(page, "页面")).toHaveCSS("height", "36px");
-  await expect(workbenchSelect(page, "页面")).toHaveCSS("border-radius", "0px");
-
-  await workbenchSelect(page, "页面").click();
-  await expect(workbenchSelect(page, "页面")).toHaveCSS("outline-style", "none");
-  const selectPopup = page.locator('[data-slot="workbench-select-popup"]');
-  await expect(selectPopup).toBeVisible();
-  await expect(selectPopup).toHaveCSS("border-radius", "0px");
-  await expect(selectPopup).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect(page.getByRole("option", { name: "Ecommerce Home", exact: true })).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("option", { name: "Ecommerce Home", exact: true })).toHaveCSS("min-height", "32px");
-  await expect(page.getByRole("option", { name: "Ecommerce Home", exact: true })).toHaveCSS("border-radius", "0px");
+  const pageSelect = workbenchSelect(page, "页面");
+  await expect(pageSelect).toHaveCSS("min-height", "40px");
+  await expect(pageSelect).toHaveCSS("font-size", "14px");
+  await expect(pageSelect).toHaveCSS("line-height", "20px");
+  const arrow = pageSelect.locator("svg");
+  const offset = await arrow.evaluate((icon) => {
+    const arrowBox = icon.getBoundingClientRect();
+    const triggerBox = icon.closest("button")!.getBoundingClientRect();
+    return arrowBox.y + arrowBox.height / 2 - triggerBox.y - triggerBox.height / 2;
+  });
+  expect(Math.abs(offset)).toBeLessThan(0.5);
+  await pageSelect.press("Enter");
+  const home = page.getByRole("option", { name: "Ecommerce Home", exact: true });
+  await expect(home).toBeVisible();
+  await expect(home).toHaveAttribute("aria-selected", "true");
   await page.keyboard.press("Escape");
-  await workbenchSelect(page, "页面").focus();
+  await expect(home).toBeHidden();
+  await pageSelect.focus();
   await page.keyboard.press("Tab");
   await expect(workbenchSelect(page, "语言")).toBeFocused();
   await expect(workbenchSelect(page, "语言")).toHaveCSS("outline-width", "2px");
 
-  const fieldLabels = page.locator('[data-slot="workbench-field-label"]');
-  await expect(fieldLabels).toHaveText(["页面", "语言", "预览模式", "设备"]);
-  for (const fieldLabel of await fieldLabels.all()) {
-    await expect(fieldLabel).toHaveCSS("font-size", "12px");
-    await expect(fieldLabel).toHaveCSS("line-height", "16px");
-  }
+  const mode = page.getByRole("radiogroup", { name: "预览模式" });
+  const app = mode.getByRole("radio", { name: "App" });
+  await app.press("ArrowLeft");
+  await expect(mode.getByRole("radio", { name: "H5" })).toBeChecked();
+  await expect(page).toHaveURL(/previewMode=h5/);
 
-  const selectIcons = page.locator('[data-slot="workbench-select-icon"]');
-  await expect(selectIcons).toHaveCount(2);
-  const selectBounds = await workbenchSelect(page, "页面").boundingBox();
-  const iconBounds = await selectIcons.first().boundingBox();
-  expect(selectBounds).not.toBeNull();
-  expect(iconBounds).not.toBeNull();
-  expect(iconBounds?.width).toBe(12);
-  expect(iconBounds?.height).toBe(12);
-  expect(Math.round((selectBounds?.x ?? 0) + (selectBounds?.width ?? 0) - (iconBounds?.x ?? 0) - (iconBounds?.width ?? 0))).toBe(8);
-
-  const deviceGroup = page.getByRole("group", { name: "设备" });
-  const mobile = page.getByRole("radio", { name: "手机" });
-  const tablet = page.getByRole("radio", { name: "平板" });
-  const desktop = page.getByRole("radio", { name: "桌面" });
-  await expect(deviceGroup).toBeVisible();
+  const device = page.getByRole("radiogroup", { name: "设备" });
+  const mobile = device.getByRole("radio", { name: "手机" });
+  const tablet = device.getByRole("radio", { name: "平板" });
+  const desktop = device.getByRole("radio", { name: "桌面" });
   await expect(mobile).toBeChecked();
-  const deviceTabs = deviceGroup.locator('[data-slot="workbench-segmented-options"]');
-  const mobileTab = mobile.locator("..").locator("span");
-  await expect(deviceTabs).toHaveCSS("background-color", "rgb(245, 245, 245)");
-  await expect(deviceTabs).toHaveCSS("border-top-width", "0px");
-  await expect(deviceTabs).toHaveCSS("border-radius", "0px");
-  await expect(deviceTabs).toHaveCSS("box-shadow", "none");
-  await expect(mobileTab).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect(mobileTab).toHaveCSS("border-radius", "0px");
-  await expect(mobileTab).toHaveCSS("box-shadow", "none");
-
-  await mobile.focus();
-  await page.keyboard.press("ArrowRight");
+  await mobile.press("ArrowRight");
+  await expect(tablet).toBeFocused();
   await expect(tablet).toBeChecked();
-  await expect(deviceTabs).toHaveCSS("outline-width", "2px");
-  await expect(tablet.locator("..").locator("span")).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(page).toHaveURL(/viewport=768/);
   await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("768");
+  await expect(mode).toBeHidden();
 
   await desktop.click();
   await expect(desktop).toBeChecked();
   await expect(page).toHaveURL(/viewport=1440/);
+  await expect(mode).toBeHidden();
+
+  await mobile.click();
+  await expect(mode.getByRole("radio", { name: "H5" })).toBeChecked();
 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
 test("opens the localized Anua Topic Landing Page from the Canvas page control", async ({ page }) => {
-  await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+  await page.goto("/design?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.getByRole("heading", { name: "热销榜单" })).toBeVisible();
 
@@ -285,7 +314,7 @@ test("opens the localized Anua Topic Landing Page from the Canvas page control",
 });
 
 test("renders the Anua Topic Landing Page for its storefront brand deep link", async ({ page }) => {
-  await page.goto("/workbench?path=%2Fbrands%2F11712&direction=current&locale=en&theme=light&viewport=1440");
+  await page.goto("/design?path=%2Fbrands%2F11712&direction=current&locale=en&theme=light&viewport=1440");
 
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.locator('[data-slot="topic-landing-page"]')).toBeVisible();
@@ -307,7 +336,7 @@ test("scopes Ecommerce Home direction colors to Ecommerce Home", async ({ page }
 
 test("preserves a legacy direction deep link without exposing direction controls", async ({ page }) => {
   await seedTestDirection(page);
-  await page.goto("/workbench?path=%2F&direction=test-direction&locale=zh&theme=dark&viewport=402");
+  await page.goto("/design?path=%2F&direction=test-direction&locale=zh&theme=dark&viewport=402");
   await expect(page).toHaveURL(/direction=test-direction/);
   await expect(page).toHaveURL(/theme=dark/);
   await expect(page).toHaveURL(/viewport=402/);
@@ -317,7 +346,7 @@ test("preserves a legacy direction deep link without exposing direction controls
 
 test("routes cart, category, account and search destinations into prototype shells", async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1000 });
-  await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+  await page.goto("/design?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
 
   await preview.locator('a[href="/cart"]:visible').click();
@@ -352,7 +381,7 @@ test("routes cart, category, account and search destinations into prototype shel
 });
 
 test("rejects rogue and unknown messages while rapid iframe navigation settles safely", async ({ page }) => {
-  await page.goto("/workbench?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
+  await page.goto("/design?path=%2F&direction=current&locale=zh&theme=light&viewport=1440");
   const initialUrl = page.url();
 
   await page.evaluate(() => window.postMessage({ type: "yami-design-system:v1:navigate", path: "/cart" }, window.location.origin));
@@ -379,17 +408,14 @@ test("rejects rogue and unknown messages while rapid iframe navigation settles s
   await expectCanvasPath(page, "/");
 });
 
-test("imports a page from the Storybook page index", async ({ page }) => {
+test("opens a Storybook page by direct link and returns to an ordinary preview page", async ({ page }) => {
   await page.route("http://localhost:6006/index.json", (route) => route.fulfill({
     contentType: "application/json",
     headers: { "Access-Control-Allow-Origin": "*" },
     body: JSON.stringify({
       v: 5,
       entries: {
-        "yami-pages-ecommerce-home--pc": { id: "yami-pages-ecommerce-home--pc", type: "story", title: "YAMI/Pages/Ecommerce Home", name: "PC" },
-        "yami-pages-ecommerce-home--mobile": { id: "yami-pages-ecommerce-home--mobile", type: "story", title: "YAMI/Pages/Ecommerce Home", name: "Mobile" },
         "yami-pages-topic-landing-page-topic--pc": { id: "yami-pages-topic-landing-page-topic--pc", type: "story", title: "YAMI/Pages/Topic Landing Page/Topic", name: "Topic — PC" },
-        "yami-components-button--primary": { id: "yami-components-button--primary", type: "story", title: "YAMI/Components/Button", name: "Primary" },
       },
     }),
   }));
@@ -398,19 +424,9 @@ test("imports a page from the Storybook page index", async ({ page }) => {
     body: "<!doctype html><html><body><main><h1>Imported Topic Page</h1></main></body></html>",
   }));
 
-  await page.goto("/workbench?path=%2F&direction=current&locale=en&theme=light&viewport=402");
-  await page.getByRole("button", { name: "导入", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "从 Storybook 导入页面" });
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("button", { name: "Ecommerce Home", exact: true })).toHaveCount(1);
-  await expect(dialog.getByRole("button", { name: "Topic Landing Page / Topic", exact: true })).toHaveCount(1);
-  await expect(dialog.getByText("YAMI/Components/Button", { exact: true })).toHaveCount(0);
-
-  await dialog.getByRole("button", { name: "Topic Landing Page / Topic", exact: true }).click();
-  await expect(dialog).not.toBeVisible();
-  await expect.poll(() => new URL(page.url()).searchParams.get("story")).toBe("yami-pages-topic-landing-page-topic--pc");
-  await expect.poll(() => new URL(page.url()).searchParams.get("path")).toBeNull();
+  await page.goto("/design?story=yami-pages-topic-landing-page-topic--pc&direction=current&locale=en&theme=light&viewport=402");
   await expectWorkbenchSelectValue(page, "页面", "storybook:yami-pages-topic-landing-page-topic--pc");
+  await expect(workbenchSelect(page, "页面")).toHaveText("Topic Landing Page / Topic");
   await expect(page.getByText("yami-pages-topic-landing-page-topic--pc", { exact: true })).toBeVisible();
   await expect(page.frameLocator('iframe[title="YAMI 原型预览"]').getByRole("heading", { name: "Imported Topic Page" })).toBeVisible();
 
@@ -421,14 +437,14 @@ test("imports a page from the Storybook page index", async ({ page }) => {
 
 test("uses the complete iframe state on first render and after deep-link refresh", async ({ page }) => {
   await seedTestDirection(page);
-  await page.goto("/workbench?path=%2F&direction=test-direction&locale=en&theme=dark&viewport=768");
+  await page.goto("/design?path=%2F&direction=test-direction&locale=en&theme=dark&viewport=768");
   await expect(page.getByRole("spinbutton", { name: "宽度（px）" })).toHaveValue("768");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.locator(".prototype-root")).toHaveAttribute("data-theme", "dark");
   await expect(preview.getByRole("heading", { name: "Test Selection" })).toBeVisible();
 
-  await page.goto("/workbench?path=%2Fcart&direction=test-direction&locale=en&theme=dark&viewport=768");
+  await page.goto("/design?path=%2Fcart&direction=test-direction&locale=en&theme=dark&viewport=768");
   await page.reload();
-  await expect(page.getByText("/cart", { exact: true })).toBeVisible();
+  await expectCanvasPath(page, "/cart");
   await expect(preview.getByText("YAMI PROTOTYPE ROUTE")).toBeVisible();
 });

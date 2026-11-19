@@ -917,7 +917,6 @@
 }
 
 .searchMobile .searchField {
-  padding-inline: var(--space-100);
   font-size: var(--font-size-caption-md);
   line-height: var(--line-height-caption-md);
 }

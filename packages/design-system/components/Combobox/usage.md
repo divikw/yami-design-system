@@ -16,7 +16,7 @@ const cities = ["上海", "东京", "首尔"];
 </Combobox>
 ```
 
-单选搜索框和多选标签容器在 PC 和移动端的左右内边距均为 8px，聚焦描边为 2px。
+单选搜索框和多选标签容器在 PC 和移动端的左右内边距均为 12px，聚焦描边为 2px。下拉箭头尺寸与 Select 一致。下拉面板圆角为 8px，选项圆角为 4px。
 
 使用方向键移动高亮，Enter 选择，Escape 收起。搜索提示使用 ComboboxInput 的 placeholder。用 FieldLabel 标识字段，并将 FieldError 放在 Combobox 后方显示校验错误。通过根组件的 disabled 或 required 控制整个字段。用 value 和 onValueChange 管理已选值，用 inputValue 和 onInputValueChange 管理搜索文本。
 
@@ -40,7 +40,7 @@ const cities = ["Shanghai", "Tokyo", "Seoul"];
 </Combobox>
 ```
 
-Single-select inputs and multi-select chip containers use 8px horizontal padding and a 2px focus border on desktop and mobile.
+Single-select inputs and multi-select chip containers use 12px horizontal padding and a 2px focus border on desktop and mobile. The dropdown chevron matches the Select chevron in size. The popup has an 8px radius and each option has a 4px radius.
 
 Use arrow keys to navigate, Enter to select and Escape to close. Put search hints in the ComboboxInput placeholder. Inside a Field, use FieldLabel to name the control and place FieldError after Combobox to display validation feedback. Set disabled or required on the root. Manage selection with value and onValueChange, and search text with inputValue and onInputValueChange.
 

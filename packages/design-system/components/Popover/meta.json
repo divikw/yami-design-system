@@ -60,6 +60,7 @@
   },
   "tokens": [
     "--border-default",
+    "--elevation-400-menu-panel",
     "--fill-primary",
     "--radius-surface-default",
     "--stroke-default",
@@ -88,6 +89,10 @@
     },
     "--radius-surface-default": {
       "property": "border-radius",
+      "selector": ".content"
+    },
+    "--elevation-400-menu-panel": {
+      "property": "box-shadow",
       "selector": ".content"
     },
     "--font-family-ios": {

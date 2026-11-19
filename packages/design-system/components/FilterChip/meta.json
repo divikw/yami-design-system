@@ -87,6 +87,8 @@
     "--font-size-body-md",
     "--font-weight-normal",
     "--line-height-body-md",
+    "--radius-component-default",
+    "--radius-tag-primary",
     "--radius-full",
     "--radius-sm",
     "--space-050",
@@ -122,6 +124,8 @@
       "property": "background-color",
       "selector": ".categoryToggle:hover"
     },
+    "--radius-component-default": { "property": "border-radius", "selector": ".menuPopup[data-slot]" },
+    "--radius-tag-primary": { "property": "border-radius", "selector": ".optionRow, .categoryRow" },
     "--radius-full": {
       "property": "border-radius",
       "selector": ".chip"

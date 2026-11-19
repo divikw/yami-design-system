@@ -1,13 +1,18 @@
 "use client";
 
+import { Radio } from "@base-ui/react/radio";
 import { PreviewNavigateMessageSchema } from "@yami/contracts";
+import {
+  Button, ButtonLink, Input, RadioGroup, Select, SelectContent, SelectItem, SelectLabel, SelectList,
+  SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
+} from "@yami/design-system";
 import { isPhonePreviewPage, PhonePreviewShell } from "@yami/prototypes/phone-preview";
-import { ArrowLeft02Icon, ArrowRight02Icon, Cancel01Icon, Copy01Icon, ImportIcon, LinkSquare02Icon, RefreshCcwIcon, SidebarLeftIcon } from "@hugeicons/core-free-icons";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Component, ExternalLink, Link, Monitor, Moon, PanelLeft, RotateCcw, Smartphone, Sun, Tablet, type LucideIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent, type ReactElement, type RefObject } from "react";
 import { prototypeHref, prototypeProjects, prototypePageLabel } from "../lib/prototype-projects";
 import { prototypeSessionKey } from "../lib/prototype-session";
-import { SegmentedControl, WorkbenchButton, WorkbenchIcon, WorkbenchLink, WorkbenchSelect, WorkbenchTextField } from "./workbench-controls";
+import styles from "./workbench-controls.module.css";
 
 type Locale = "zh" | "en";
 type Theme = "light" | "dark";
@@ -19,14 +24,14 @@ const STORYBOOK_URL = process.env.NEXT_PUBLIC_STORYBOOK_URL
     ? "https://yds-storybook.vercel.app"
     : "http://localhost:6006");
 const STORYBOOK_PAGE_PREFIX = "YAMI/Pages/";
+const WORKBENCH_THEME_KEY = "yami-workbench-theme";
+const WorkbenchOverlayContext = createContext<RefObject<HTMLDivElement | null> | undefined>(undefined);
 
 interface StorybookPage {
   id: string;
   label: string;
   title: string;
 }
-
-type StorybookLoadState = "idle" | "loading" | "ready" | "error";
 
 interface PreviewHistory {
   scope: string;
@@ -79,10 +84,76 @@ const localeOptions = [
   { value: "en", label: "English" },
 ] as const;
 const viewportOptions = [
-  { value: "402", label: "手机" },
-  { value: "768", label: "平板" },
-  { value: "1440", label: "桌面" },
+  { value: "402", label: "手机", icon: Smartphone },
+  { value: "768", label: "平板", icon: Tablet },
+  { value: "1440", label: "桌面", icon: Monitor },
 ] as const;
+
+interface WorkbenchSetting {
+  label: string;
+  options: readonly { label: string; value: string; icon?: LucideIcon }[];
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+function ToolIcon({ icon: Icon, className }: { icon: LucideIcon; className?: string }) {
+  return <Icon size={16} strokeWidth={2} className={className} aria-hidden="true" focusable="false" />;
+}
+
+function WorkbenchTooltip({ label, children }: { label: string; children: ReactElement }) {
+  const container = useContext(WorkbenchOverlayContext);
+  return <Tooltip>
+    <TooltipTrigger render={children} />
+    <TooltipContent container={container} side="bottom">{label}</TooltipContent>
+  </Tooltip>;
+}
+
+function WorkbenchSettingSelect({ label, options, value, onValueChange }: WorkbenchSetting) {
+  const container = useContext(WorkbenchOverlayContext);
+  return <div className={styles.settingSelect}>
+    <Select items={options} value={value} onValueChange={(next) => { if (next !== null) onValueChange(next); }}>
+      <SelectLabel className={styles.label}>{label}</SelectLabel>
+      <SelectTrigger data-value={value}>
+        <SelectValue />
+        <ToolIcon icon={ChevronDown} className={styles.settingSelectIcon} />
+      </SelectTrigger>
+      <SelectContent container={container}>
+        <SelectList>
+          {options.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+        </SelectList>
+      </SelectContent>
+    </Select>
+  </div>;
+}
+
+function WorkbenchSettingSegments({ label, options, value, onValueChange }: WorkbenchSetting) {
+  const labelId = useId();
+  return <>
+    <div id={labelId} className={styles.label}>{label}</div>
+    <RadioGroup className={styles.segmentGroup} aria-labelledby={labelId} value={value}
+      onValueChange={(next) => { if (next !== null) onValueChange(next); }}>
+      {options.map((option) => {
+        const segment = <Radio.Root key={option.value} value={option.value} className={styles.segment} nativeButton render={<button type="button" />}
+          aria-label={option.icon ? option.label : undefined}>
+          {option.icon ? <ToolIcon icon={option.icon} /> : option.label}
+        </Radio.Root>;
+        return option.icon ? <WorkbenchTooltip key={option.value} label={option.label}>{segment}</WorkbenchTooltip> : segment;
+      })}
+    </RadioGroup>
+  </>;
+}
+
+function subscribeToWindowSize(onChange: () => void) {
+  window.addEventListener("resize", onChange);
+  return () => window.removeEventListener("resize", onChange);
+}
+
+function getNarrowPreviewWidth() {
+  if (window.innerWidth > 860) return null;
+  // Account for the narrow canvas padding and the preview frame's border.
+  const availableWidth = document.documentElement.clientWidth - 18;
+  return Math.max(MIN_PREVIEW_WIDTH, Math.min(Number(viewportOptions[0].value), availableWidth));
+}
 
 export function CanvasWorkbench() {
   const params = useSearchParams();
@@ -93,8 +164,11 @@ export function CanvasWorkbench() {
   const activePages = projectMode && project ? project.pages : canvasPages;
   const [resetVersion, setResetVersion] = useState(0);
   const [shareStatus, setShareStatus] = useState("");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const importDialog = useRef<HTMLDialogElement>(null);
+  const [workbenchTheme, setWorkbenchTheme] = useState<Theme>("light");
+  const workbenchOverlays = useRef<HTMLDivElement>(null);
+  const narrowPreviewWidth = useSyncExternalStore(subscribeToWindowSize, getNarrowPreviewWidth, () => null);
+  const [sidebarOverride, setSidebarOverride] = useState<boolean | null>(null);
+  const sidebarCollapsed = sidebarOverride ?? (narrowPreviewWidth !== null);
   const previewFrame = useRef<HTMLIFrameElement>(null);
   const [phoneFrame, setPhoneFrame] = useState<HTMLIFrameElement | null>(null);
   const attachPreviewFrame = useCallback((frame: HTMLIFrameElement | null) => {
@@ -110,7 +184,7 @@ export function CanvasWorkbench() {
   const pendingPreviewNavigation = useRef(false);
   const [storybookPages, setStorybookPages] = useState<StorybookPage[]>([]);
   const [importedPages, setImportedPages] = useState<StorybookPage[]>([]);
-  const [storybookLoadState, setStorybookLoadState] = useState<StorybookLoadState>("idle");
+  const storybookIndexRequested = useRef(false);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
   const requestedPath = params.get("path") || "/";
@@ -128,7 +202,7 @@ export function CanvasWorkbench() {
   const previewMode = params.get("previewMode") === "h5" ? "h5" : "app";
   const requestedViewport = params.get("viewport");
   const viewport = requestedViewport && /^\d+$/.test(requestedViewport)
-    ? String(clampPreviewWidth(Number(requestedViewport))) : "1440";
+    ? String(clampPreviewWidth(Number(requestedViewport))) : String(narrowPreviewWidth ?? viewportOptions[2].value);
   const previewWidth = dragWidth ?? Number(viewport);
   const deviceWidth = widthDraft?.trim() && Number.isFinite(Number(widthDraft))
     ? clampPreviewWidth(Number(widthDraft)) : previewWidth;
@@ -165,7 +239,7 @@ export function CanvasWorkbench() {
       if (value === null) query.delete(key);
       else query.set(key, value);
     }
-    const href = `/workbench?${query.toString()}`;
+    const href = `/design?${query.toString()}`;
     if (mode === "push") {
       const destination = query.get("story") ? `storybook:${query.get("story")}` : query.get("path") || "/";
       pendingPreviewNavigation.current = destination !== historyPage;
@@ -244,6 +318,13 @@ export function CanvasWorkbench() {
     return `/preview?${previewQuery.toString()}`;
   }, [path, direction, locale, theme, transition, previewMode, storyId, projectMode, params, resetVersion]);
 
+  function commitPreviewWidth(value: number) {
+    const width = clampPreviewWidth(value);
+    setWidthDraft(null);
+    setDragWidth(width);
+    update({ viewport: String(width) });
+  }
+
   function startResize(event: PointerEvent<HTMLDivElement>) {
     if (event.button !== 0 || !deviceMat.current || !previewFrame.current) return;
     const mat = deviceMat.current;
@@ -281,38 +362,23 @@ export function CanvasWorkbench() {
   }
 
   const loadStorybookPages = useCallback(async () => {
-    if (storybookLoadState === "loading" || storybookLoadState === "ready") return;
-    setStorybookLoadState("loading");
+    if (storybookIndexRequested.current) return;
+    storybookIndexRequested.current = true;
     try {
       const response = await fetch(`${STORYBOOK_URL}/index.json`);
-      if (!response.ok) throw new Error(`Storybook returned ${response.status}`);
+      if (!response.ok) return;
       const pages = readStorybookPages(await response.json());
-      if (pages.length === 0) throw new Error("Storybook has no page stories");
       setStorybookPages(pages);
       if (storyId) {
         const selectedStory = pages.find((page) => page.id === storyId);
         if (selectedStory) setImportedPages((current) => current.some((page) => page.id === storyId) ? current : [...current, selectedStory]);
       }
-      setStorybookLoadState("ready");
-    } catch {
-      setStorybookLoadState("error");
-    }
-  }, [storybookLoadState, storyId]);
+    } catch { /* The direct preview can still use its fallback label. */ }
+  }, [storyId]);
 
   useEffect(() => {
     if (storyId) void loadStorybookPages();
   }, [storyId, loadStorybookPages]);
-
-  function openStorybookImporter() {
-    if (!importDialog.current?.open) importDialog.current?.showModal();
-    void loadStorybookPages();
-  }
-
-  function importStorybookPage(page: StorybookPage) {
-    setImportedPages((current) => current.some((item) => item.id === page.id) ? current : [...current, page]);
-    importDialog.current?.close();
-    update({ path: null, story: page.id }, "push");
-  }
 
   function selectPage(value: string) {
     if (value.startsWith("storybook:")) {
@@ -334,88 +400,142 @@ export function CanvasWorkbench() {
   async function copyShareLink() {
     try {
       await navigator.clipboard.writeText(new URL(shareHref, window.location.origin).href);
-      setShareStatus("已复制方案链接");
+      setShareStatus("已复制预览链接");
     } catch { setShareStatus("请打开独立预览并复制地址栏链接。"); }
   }
 
-  if (projectMode && (!project || !variant)) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><WorkbenchLink href="/workbench">返回工作台</WorkbenchLink></main>;
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(WORKBENCH_THEME_KEY) === "dark") setWorkbenchTheme("dark");
+    } catch { /* Use the default theme when storage is unavailable. */ }
+  }, []);
 
-  return (
-    <main className="canvas-shell">
-      <header className="canvas-header">
+  const nextWorkbenchTheme = workbenchTheme === "dark" ? "light" : "dark";
+  function toggleWorkbenchTheme() {
+    setWorkbenchTheme(nextWorkbenchTheme);
+    try {
+      localStorage.setItem(WORKBENCH_THEME_KEY, nextWorkbenchTheme);
+    } catch { /* The theme remains active for the current page. */ }
+  }
+
+  if (projectMode && (!project || !variant)) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><ButtonLink href="/design" variant="secondary" size="sm">返回工作台</ButtonLink></main>;
+
+  const showProjectActions = projectMode && !storyId;
+  const sidebarToggleLabel = sidebarCollapsed ? "展开侧边栏" : "收起侧边栏";
+  const themeToggleLabel = nextWorkbenchTheme === "dark" ? "切换到深色模式" : "切换到浅色模式";
+  // The simulated device and the iframe keep their own preview theme.
+  const chromeThemeClass = workbenchTheme === "dark" ? " dark" : "";
+  return <WorkbenchOverlayContext value={workbenchOverlays}><TooltipProvider>
+    <main className="canvas-shell" data-workbench-theme={workbenchTheme}>
+      <header className={`canvas-header${chromeThemeClass}`}>
         <div className="brand-lockup">
-          <WorkbenchButton className="sidebar-toggle" aria-label={sidebarCollapsed ? "展开侧边栏" : "收起侧边栏"}
-            title={sidebarCollapsed ? "展开侧边栏" : "收起侧边栏"} aria-expanded={!sidebarCollapsed} aria-controls="workbench-sidebar"
-            onClick={() => setSidebarCollapsed((value) => !value)}>
-            <WorkbenchIcon icon={SidebarLeftIcon} />
-          </WorkbenchButton>
+          <WorkbenchTooltip label={sidebarToggleLabel}>
+            <Button form="icon" variant="secondary" size="sm" className="sidebar-toggle" aria-label={sidebarToggleLabel}
+              aria-expanded={!sidebarCollapsed} aria-controls="workbench-sidebar" onClick={() => setSidebarOverride(!sidebarCollapsed)}>
+              <ToolIcon icon={PanelLeft} />
+            </Button>
+          </WorkbenchTooltip>
           <strong>PROTOTYPE</strong>
         </div>
-        <div className="header-actions"><WorkbenchButton onClick={openStorybookImporter}><WorkbenchIcon icon={ImportIcon} />导入</WorkbenchButton><WorkbenchLink href={STORYBOOK_URL} target="_blank" rel="noreferrer">Storybook<WorkbenchIcon icon={LinkSquare02Icon} /></WorkbenchLink></div>
+        <WorkbenchTooltip label={themeToggleLabel}>
+          <Button form="icon" variant="tertiary" size="sm" className="workbench-theme-toggle" aria-label={themeToggleLabel}
+            onClick={toggleWorkbenchTheme}>
+            <ToolIcon icon={nextWorkbenchTheme === "dark" ? Moon : Sun} />
+          </Button>
+        </WorkbenchTooltip>
       </header>
 
       <section className="canvas-grid" data-sidebar-collapsed={sidebarCollapsed || undefined}>
-        <aside className="control-panel" id="workbench-sidebar" hidden={sidebarCollapsed}>
-          <div className="panel-heading"><span>{projectMode ? "项目与方案" : "页面管理"}</span></div>
-          {projectMode && project && variant ? <>
-            <WorkbenchSelect label="项目" options={prototypeProjects.map((item) => ({ value: item.id, label: item.name }))} value={project.id}
-              onValueChange={(value) => update({ project: value, variant: "current", path: "/", story: null }, "push")} />
-            <WorkbenchSelect label="设计方案" options={project.variants.map((item) => ({ value: item.id, label: item.name }))} value={variant.id}
-              onValueChange={(value) => update({ variant: value, story: null })} />
-          </> : <WorkbenchLink href="/workbench?project=global-navigation&variant=current">打开项目原型</WorkbenchLink>}
+        <aside className={`control-panel${chromeThemeClass}`} id="workbench-sidebar" hidden={sidebarCollapsed}>
+          <div className="control-panel-settings">
+            {!projectMode && <div className="panel-heading"><span>页面管理</span></div>}
+            {projectMode && project && variant ? <>
+              <WorkbenchSettingSelect label="项目方案" options={prototypeProjects.map((item) => ({ value: item.id, label: item.name }))} value={project.id}
+                onValueChange={(value) => update({ project: value, variant: "current", path: "/", story: null }, "push")} />
+              <WorkbenchSettingSelect label="设计方案" options={project.variants.map((item) => ({ value: item.id, label: item.name }))} value={variant.id}
+                onValueChange={(value) => update({ variant: value, story: null })} />
+            </> : <ButtonLink variant="secondary" size="sm" href="/design?project=global-navigation&variant=current">打开项目原型</ButtonLink>}
 
-          <WorkbenchSelect
-            label="页面"
-            options={selectedPage ? pageOptions : [{ value: "", label: "其他路径" }, ...pageOptions]}
-            value={selectedPage}
-            onValueChange={selectPage}
-          />
-          <WorkbenchSelect
-            label="语言"
-            options={localeOptions}
-            value={locale}
-            onValueChange={(value) => update({ locale: value as Locale })}
-          />
-          <SegmentedControl label="预览模式" options={[{ value: "h5", label: "H5" }, { value: "app", label: "App" }]}
-            value={previewMode} onValueChange={(value) => update({ previewMode: value })} />
-          <SegmentedControl
-            label="设备"
-            options={viewportOptions}
-            value={selectedDevice}
-            onValueChange={(value) => { setWidthDraft(null); setDragWidth(null); update({ viewport: value }); }}
-          >
-            <WorkbenchTextField label="宽度（px）" hideLabel suffix="px" type="number" min={MIN_PREVIEW_WIDTH} max={MAX_PREVIEW_WIDTH} step={1}
-              value={widthDraft ?? String(previewWidth)}
-              onChange={(event) => setWidthDraft(event.target.value)}
-              onBlur={() => {
-                if (widthDraft === null) return;
-                const value = Number(widthDraft);
-                setWidthDraft(null);
-                if (!widthDraft.trim() || !Number.isFinite(value)) return;
-                const width = clampPreviewWidth(value);
-                setDragWidth(width);
-                update({ viewport: String(width) });
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") event.currentTarget.blur();
-                if (event.key === "Escape") { event.preventDefault(); setWidthDraft(null); }
-              }} />
-          </SegmentedControl>
-          {storyId && <p className="prototype-description">Storybook 单页预览，未加入项目流程。</p>}
-          <div className="path-readout"><span>{storyId ? "Storybook Story" : "当前路径"}</span><code>{storyId || path}</code></div>
+            <WorkbenchSettingSelect
+              label="页面"
+              options={selectedPage ? pageOptions : [{ value: "", label: "其他路径" }, ...pageOptions]}
+              value={selectedPage}
+              onValueChange={selectPage}
+            />
+            <WorkbenchSettingSelect
+              label="语言"
+              options={localeOptions}
+              value={locale}
+              onValueChange={(value) => update({ locale: value as Locale })}
+            />
+            <div className={styles.settingGroup}>
+              <WorkbenchSettingSegments label="设备" options={viewportOptions} value={selectedDevice}
+                onValueChange={(value) => { setWidthDraft(null); setDragWidth(null); update({ viewport: value }); }} />
+              <Input className={styles.widthInput} density="compact" fullWidth aria-label="宽度（px）" type="number"
+                min={MIN_PREVIEW_WIDTH} max={MAX_PREVIEW_WIDTH} step={1}
+                trailingIcon={<span className={styles.widthControls}>
+                  <span className={styles.widthStepper}>
+                    <button type="button" className={styles.widthStep} aria-label="增大预览宽度" disabled={deviceWidth >= MAX_PREVIEW_WIDTH}
+                      onClick={() => commitPreviewWidth(deviceWidth + 1)}><ToolIcon icon={ChevronUp} /></button>
+                    <button type="button" className={styles.widthStep} aria-label="减小预览宽度" disabled={deviceWidth <= MIN_PREVIEW_WIDTH}
+                      onClick={() => commitPreviewWidth(deviceWidth - 1)}><ToolIcon icon={ChevronDown} /></button>
+                  </span>
+                  <span aria-hidden="true">PX</span>
+                </span>}
+                value={widthDraft ?? String(previewWidth)}
+                onChange={(event) => setWidthDraft(event.target.value)}
+                onBlur={() => {
+                  if (widthDraft === null) return;
+                  const value = Number(widthDraft);
+                  if (widthDraft.trim() && Number.isFinite(value)) commitPreviewWidth(value);
+                  else setWidthDraft(null);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") event.currentTarget.blur();
+                  if (event.key === "Escape") { event.preventDefault(); setWidthDraft(null); }
+                }} />
+            </div>
+            {selectedDevice === viewportOptions[0].value && <div className={styles.settingGroup}>
+              <WorkbenchSettingSegments label="预览模式" options={[{ value: "h5", label: "H5" }, { value: "app", label: "App" }]}
+                value={previewMode} onValueChange={(value) => update({ previewMode: value })} />
+            </div>}
+            {storyId && <p className="prototype-description">Storybook 单页预览，未加入项目流程。</p>}
+            {storyId && <div className="path-readout"><span>Storybook Story</span><code>{storyId}</code></div>}
+          </div>
+          <a className="control-panel-storybook" href={STORYBOOK_URL} target="_blank" rel="noreferrer">
+            <ToolIcon icon={Component} />
+            <span>Storybook</span>
+          </a>
         </aside>
 
         <section className="preview-stage" aria-label="原型预览区">
-          <div className="preview-actions" role="group" aria-label="预览操作">
-            <div className="preview-history" role="group" aria-label="页面历史">
-              <WorkbenchButton onClick={() => navigatePreview(-1)} disabled={!canGoBack} aria-label="返回上一步" title="后退"><WorkbenchIcon icon={ArrowLeft02Icon} /></WorkbenchButton>
-              <WorkbenchButton onClick={() => navigatePreview(1)} disabled={!canGoForward} aria-label="前进到下一步" title="前进"><WorkbenchIcon icon={ArrowRight02Icon} /></WorkbenchButton>
+          <div className={`preview-actions${chromeThemeClass}`} role="group" aria-label="预览操作">
+            <div className="preview-button-group" role="group" aria-label={showProjectActions ? "页面历史和重置" : "页面历史"}>
+              <WorkbenchTooltip label="后退">
+                <Button form="icon" variant="tertiary" size="sm" className="preview-history-button" onClick={() => navigatePreview(-1)} disabled={!canGoBack} aria-label="返回上一步"><ToolIcon icon={ArrowLeft} /></Button>
+              </WorkbenchTooltip>
+              <WorkbenchTooltip label="前进">
+                <Button form="icon" variant="tertiary" size="sm" className="preview-history-button" onClick={() => navigatePreview(1)} disabled={!canGoForward} aria-label="前进到下一步"><ToolIcon icon={ArrowRight} /></Button>
+              </WorkbenchTooltip>
+              {showProjectActions && <>
+                <span className="preview-history-divider" aria-hidden="true" />
+                <WorkbenchTooltip label="重置演示">
+                  <Button form="icon" variant="tertiary" size="sm" onClick={resetDemo} aria-label="重置演示"><ToolIcon icon={RotateCcw} /></Button>
+                </WorkbenchTooltip>
+              </>}
             </div>
-            {projectMode && !storyId && <div className="prototype-actions">
+            {showProjectActions && <div className="prototype-actions">
               <span role="status" className="preview-action-status">{shareStatus}</span>
-              <WorkbenchLink href={shareHref} target="_blank" rel="noreferrer">独立预览<WorkbenchIcon icon={LinkSquare02Icon} /></WorkbenchLink>
-              <WorkbenchButton onClick={copyShareLink}><WorkbenchIcon icon={Copy01Icon} />复制方案链接</WorkbenchButton>
-              <WorkbenchButton onClick={resetDemo}><WorkbenchIcon icon={RefreshCcwIcon} />重置演示</WorkbenchButton>
+              <div className="preview-button-group" role="group" aria-label="预览链接">
+                <WorkbenchTooltip label="独立预览">
+                  <ButtonLink form="icon" variant="tertiary" size="sm" href={shareHref} target="_blank" rel="noreferrer"
+                    aria-label="独立预览"><ToolIcon icon={ExternalLink} /></ButtonLink>
+                </WorkbenchTooltip>
+                <WorkbenchTooltip label="复制预览链接">
+                  <Button form="icon" variant="tertiary" size="sm" onClick={copyShareLink}
+                    aria-label="复制预览链接"><ToolIcon icon={Link} /></Button>
+                </WorkbenchTooltip>
+              </div>
             </div>}
           </div>
           <div className="device-mat" ref={deviceMat} data-resizing={resizing || undefined}>
@@ -447,25 +567,7 @@ export function CanvasWorkbench() {
         </section>
       </section>
 
-      <dialog ref={importDialog} className="storybook-import-dialog" aria-labelledby="storybook-import-title">
-        <div className="storybook-import-header">
-          <div>
-            <h2 id="storybook-import-title">从 Storybook 导入页面</h2>
-            <p>选择一个页面并在 Canvas 中预览。</p>
-          </div>
-          <button type="button" aria-label="关闭导入页面弹窗" onClick={() => importDialog.current?.close()}><WorkbenchIcon icon={Cancel01Icon} /></button>
-        </div>
-        <div className="storybook-page-list">
-          {storybookLoadState === "loading" && <p role="status">正在读取 Storybook 页面…</p>}
-          {storybookLoadState === "error" && <div className="storybook-import-error"><p role="alert">无法读取 Storybook 页面，请确认 Storybook 已启动。</p><WorkbenchButton onClick={loadStorybookPages}>重试</WorkbenchButton></div>}
-          {storybookLoadState === "ready" && storybookPages.map((page) => (
-            <button key={page.id} type="button" className="storybook-page-option" aria-label={page.label} onClick={() => importStorybookPage(page)}>
-              <strong>{page.label}</strong>
-              <span>{page.title}</span>
-            </button>
-          ))}
-        </div>
-      </dialog>
+      <div className={`workbench-overlays${chromeThemeClass}`} ref={workbenchOverlays} />
     </main>
-  );
+  </TooltipProvider></WorkbenchOverlayContext>;
 }

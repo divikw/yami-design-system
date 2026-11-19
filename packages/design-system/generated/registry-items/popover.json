@@ -64,6 +64,7 @@
   "design": {
     "tokens": [
       "--border-default",
+      "--elevation-400-menu-panel",
       "--fill-primary",
       "--font-family-ios",
       "--font-size-body-md",
@@ -99,6 +100,10 @@
       },
       "--radius-surface-default": {
         "property": "border-radius",
+        "selector": ".content"
+      },
+      "--elevation-400-menu-panel": {
+        "property": "box-shadow",
         "selector": ".content"
       },
       "--font-family-ios": {
@@ -142,5 +147,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "d5ab74c22e0d8825273624c95f1a08fce7f8891ef917d80c55611a08a5bb74ad"
+  "contentDigest": "44ed6a2a97b986e05056f7847ddb14be77ef440c8c2eac04291f2763290c2e0e"
 }

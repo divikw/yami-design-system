@@ -66,7 +66,7 @@
       "--font-weight-emphasize",
       "--line-height-body-md",
       "--radius-component-default",
-      "--radius-surface-default",
+      "--radius-tag-primary",
       "--space-050",
       "--space-100",
       "--space-150",
@@ -96,7 +96,7 @@
       },
       "--radius-component-default": {
         "property": "border-radius",
-        "selector": ".trigger"
+        "selector": ".trigger, .link, .popup"
       },
       "--text-primary": {
         "property": "color",
@@ -146,9 +146,9 @@
         "property": "border",
         "selector": ".popup"
       },
-      "--radius-surface-default": {
+      "--radius-tag-primary": {
         "property": "border-radius",
-        "selector": ".popup"
+        "selector": ".content .link"
       },
       "--surface-primary": {
         "property": "background",
@@ -171,5 +171,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "b90799c7d988a11bfb9d92338f1a03588ecf7928335868b639cedfe3be38e508"
+  "contentDigest": "9bedf68105a9c28af2314bacbcc6a286d301a938e9efce4940cc75543bf2d0a7"
 }

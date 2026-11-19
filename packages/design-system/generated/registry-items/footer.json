@@ -165,6 +165,10 @@
       "type-hierarchy"
     ],
     "tokenBindings": {
+      "--space-150": {
+        "property": "padding-inline",
+        "selector": ".subscribeInput"
+      },
       "--focus-ring": {
         "property": "outline-color",
         "selector": ".groupLink:focus-visible, .socialLink:focus-visible, .subscribeSubmit:focus-visible, .subscribeInput:focus-visible"
@@ -256,5 +260,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "66e61850fd7486d917aea1b0d0d52c688c58b0df5964540769b29e2bae557f8c"
+  "contentDigest": "87282fb7301f8bd8a7f808b39a3cdcaf0f0624c2c639d30521fd0d60ca96c4f8"
 }

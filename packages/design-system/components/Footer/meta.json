@@ -183,6 +183,7 @@
     "--space-800"
   ],
   "tokenBindings": {
+    "--space-150": { "property": "padding-inline", "selector": ".subscribeInput" },
     "--focus-ring": { "property": "outline-color", "selector": ".groupLink:focus-visible, .socialLink:focus-visible, .subscribeSubmit:focus-visible, .subscribeInput:focus-visible" },
     "--surface-secondary": {
       "property": "background",

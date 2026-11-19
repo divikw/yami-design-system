@@ -26,7 +26,7 @@
     "target": { "ruleId": "tap-target" }
   },
   "tokens": [
-    "--space-800", "--space-600", "--space-100", "--stroke-default",
+    "--space-800", "--space-600", "--space-100", "--space-150", "--stroke-default",
     "--border-default", "--border-focus", "--border-attention", "--stroke-thick", "--space-025", "--focus-ring",
     "--radius-component-default", "--fill-primary", "--fill-disabled",
     "--text-primary", "--text-secondary", "--text-disabled", "--font-family-ios",
@@ -35,7 +35,8 @@
   "tokenBindings": {
     "--space-800": { "property": "min-block-size", "selector": ".control[data-auto-size]" },
     "--space-600": { "property": "min-block-size", "selector": ".control" },
-    "--space-100": { "property": "padding", "selector": ".control" },
+    "--space-100": { "property": "padding-block", "selector": ".control" },
+    "--space-150": { "property": "padding-inline", "selector": ".control" },
     "--stroke-default": { "property": "--textarea-stroke", "selector": ".control" },
     "--border-default": { "property": "--textarea-border-color", "selector": ".control" },
     "--border-focus": { "property": "--textarea-border-color", "selector": ".control:focus" },

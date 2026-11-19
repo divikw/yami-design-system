@@ -184,7 +184,7 @@ function FilterChipPopup({
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger render={trigger} />
-      <PopoverContent style={{ padding: 0 }} className={category ? styles.categoryPopup : undefined} aria-label={ariaLabel}
+      <PopoverContent style={{ padding: 0 }} className={category ? `${styles.menuPopup} ${styles.categoryPopup}` : styles.menuPopup} aria-label={ariaLabel}
         collisionAvoidance={category ? { side: "none", align: "shift", fallbackAxisSide: "none" } : undefined}
         render={<div data-slot={slot} />} data-selection-mode={selectionMode}>
         {children}

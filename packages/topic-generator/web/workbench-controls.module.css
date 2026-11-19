@@ -141,10 +141,10 @@
   max-width: var(--available-width);
   overflow: hidden;
   border: 1px solid var(--border-default);
-  border-radius: 0;
+  border-radius: var(--radius-component-default);
   outline: 0;
   background: var(--surface-primary);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  box-shadow: var(--elevation-400-menu-panel);
   color: var(--text-primary);
 }
 
@@ -164,7 +164,7 @@
   padding: 0 8px;
   align-items: center;
   grid-template-columns: minmax(0, 1fr);
-  border-radius: 0;
+  border-radius: var(--radius-tag-primary);
   outline: 0;
   color: var(--text-primary);
   cursor: default;

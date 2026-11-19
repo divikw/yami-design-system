@@ -84,11 +84,11 @@
       "--line-height-caption-sm",
       "--radius-button-primary",
       "--radius-component-default",
-      "--radius-surface-default",
       "--radius-tag-primary",
       "--space-025",
       "--space-050",
       "--space-100",
+      "--space-150",
       "--space-400",
       "--space-500",
       "--space-600",
@@ -124,7 +124,7 @@
       },
       "--radius-component-default": {
         "property": "border-radius",
-        "selector": ".control, .chips"
+        "selector": ".control, .chips, .popup"
       },
       "--fill-primary": {
         "property": "background",
@@ -186,10 +186,6 @@
         "property": "outline-offset",
         "selector": ".action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible)"
       },
-      "--radius-surface-default": {
-        "property": "border-radius",
-        "selector": ".popup"
-      },
       "--surface-primary": {
         "property": "background",
         "selector": ".popup"
@@ -198,9 +194,13 @@
         "property": "box-shadow",
         "selector": ".popup"
       },
-      "--space-100": {
+      "--space-150": {
         "property": "padding-inline",
         "selector": ".control, .chips"
+      },
+      "--space-100": {
+        "property": "padding-inline",
+        "selector": ".item"
       },
       "--space-500": {
         "property": "min-height",
@@ -224,7 +224,7 @@
       },
       "--radius-tag-primary": {
         "property": "border-radius",
-        "selector": ".chip"
+        "selector": ".chip, .item"
       },
       "--fill-secondary": {
         "property": "background",
@@ -253,5 +253,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "d44d3b473a1b2dca5378440fb050c5bf357366cefed180a8b2d10ae10781bbbb"
+  "contentDigest": "dd401b870390efc4acbfed0859d29de520c78a08864172375a3c77da179dd591"
 }

@@ -1,7 +1,7 @@
 <!-- locale:zh -->
 # DropdownMenu — 操作菜单
 
-在商品、账户或清单旁提供一组操作。用 DropdownMenuTrigger 的 render 组合一个 YAMI Button，DropdownMenuContent 默认在触发器下方起始边对齐。面板使用 4px 内边距，触屏菜单项至少高 44px。
+在商品、账户或清单旁提供一组操作。用 DropdownMenuTrigger 的 render 组合一个 YAMI Button，DropdownMenuContent 默认在触发器下方起始边对齐。面板圆角为 8px，内边距和菜单项圆角均为 4px。触屏菜单项至少高 44px。
 
 ```tsx
 "use client";
@@ -26,7 +26,7 @@ export function ViewOptions() {
 <!-- locale:en -->
 # DropdownMenu — Action menu
 
-Offer actions for an item, account or list. Compose a YAMI Button with the trigger's render prop. The popup aligns to the start edge below the trigger, with 4px panel padding and at least 44px tall items on touch devices.
+Offer actions for an item, account or list. Compose a YAMI Button with the trigger's render prop. The popup aligns to the start edge below the trigger, with an 8px radius, 4px panel padding, and 4px item radii. Items are at least 44px tall on touch devices.
 
 ```tsx
 "use client";
