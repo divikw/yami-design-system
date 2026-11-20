@@ -52,8 +52,8 @@
       "--border-attention",
       "--border-default",
       "--border-focus",
-      "--fill-disabled",
       "--fill-primary",
+      "--fill-tertiary",
       "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
@@ -130,7 +130,7 @@
         "property": "background",
         "selector": ".control"
       },
-      "--fill-disabled": {
+      "--fill-tertiary": {
         "property": "background",
         "selector": ".control:disabled"
       },
@@ -168,5 +168,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "9d224ea100e75a79dfc3e595b6d88fbf9c87d8f27939f944870fa55cf45cc424"
+  "contentDigest": "6a0c202ee65fe54cbab3359a0dc9f9a3ffb8b87564e3f9619521c66624ac5a15"
 }

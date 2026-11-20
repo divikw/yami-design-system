@@ -50,8 +50,8 @@ export function CardDocsPage({ locale }: { locale: DocsLocale }) {
     {
       id: "basic", title: zh ? "基础卡片" : "Basic card",
       description: zh ? "用 article 包住一条独立信息，通过标题和正文组织内容。PC 和 Mobile 默认均留 16px 内边距，标题与说明之间留 4px。" : "Use an article for a self-contained item with a heading and body. The default inset is 16px on both PC and Mobile. The title and description are 4px apart.",
-      code: `${imports}\n\n<Card as="article" bordered>\n  <h3>${order}</h3>\n  <p style={{ margin: 0 }}>${delivery}</p>\n</Card>`,
-      preview: <Card as="article" bordered><h3>{order}</h3><p style={{ margin: 0 }}>{delivery}</p></Card>,
+      code: `${imports}\n\n<Card as="article" bordered style={{ width: "100%" }}>\n  <h3>${order}</h3>\n  <p style={{ margin: 0 }}>${delivery}</p>\n</Card>`,
+      preview: <Card as="article" bordered style={{ width: "100%" }}><h3>{order}</h3><p style={{ margin: 0 }}>{delivery}</p></Card>,
     },
     {
       id: "size", title: zh ? "尺寸" : "Size",
@@ -110,7 +110,7 @@ export function ReminderCard() {
       description: zh ? "卡片内有多个目的地时，让外层 article 保持静态。用 ButtonGroup 排列链接，每个链接都可以单独聚焦。" : "Keep the article static when it contains multiple destinations. Group the links with ButtonGroup so each can receive focus independently.",
       code: `import { ButtonGroup, ButtonLink, Card } from "@yami/design-system";
 
-<Card as="article" bordered>
+<Card as="article" bordered style={{ width: "100%" }}>
   <h3 style={{ margin: 0 }}>${categories}</h3>
   <footer>
     <ButtonGroup aria-label="${categories}">
@@ -119,7 +119,7 @@ export function ReminderCard() {
     </ButtonGroup>
   </footer>
 </Card>`,
-      preview: <Card as="article" bordered>
+      preview: <Card as="article" bordered style={{ width: "100%" }}>
         <h3 style={{ margin: 0 }}>{categories}</h3>
         <footer>
           <ButtonGroup aria-label={categories}>

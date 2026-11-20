@@ -1,4 +1,10 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+async function navigateFromPreview(page: Page, path: string) {
+  await page.frameLocator("#canvas-preview").locator(".prototype-root").evaluate((_, path) => {
+    window.parent.postMessage({ type: "yami-design-system:v1:navigate", path }, window.location.origin);
+  }, path);
+}
 
 test("redirects old workbench links with their preview settings", async ({ page }) => {
   const query = "project=global-navigation&variant=image-categories&path=%2Fcart&locale=en&previewMode=h5&viewport=402";
@@ -7,11 +13,23 @@ test("redirects old workbench links with their preview settings", async ({ page 
   await expect(page).toHaveTitle("PROTOTYPE · Yami Design System");
   await expect(page.getByText("PROTOTYPE", { exact: true })).toBeVisible();
   await expect(page.locator("#canvas-preview")).toHaveCSS("width", "402px");
+  const variant = page.getByRole("combobox", { name: "设计方案" });
+  await expect(variant).toHaveAttribute("data-value", "h5-v1");
+  await expect(page.getByRole("link", { name: "独立预览" })).toHaveAttribute("href", /variant=h5-v1/);
+  await variant.click();
+  await expect(page.getByRole("option")).toHaveText(["H5 V1 · 侧边导航", "H5 V2 · 商城切换"]);
+  await page.keyboard.press("Escape");
+  const pageSelect = page.getByRole("combobox", { name: "页面", exact: true });
+  await expect(pageSelect).toHaveText("购物车");
+  await pageSelect.click();
+  await expect(page.getByRole("option")).toHaveText(["Ecommerce Home"]);
+  await page.getByRole("option", { name: "Ecommerce Home", exact: true }).click();
+  await expect(page.frameLocator("#canvas-preview").locator('[data-slot="ecommerce-home"]')).toBeVisible();
 });
 
 test("keeps device selection in sync with typed widths and drag boundaries", async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/design?project=global-navigation&variant=current&viewport=806");
+  await page.goto("/design?project=global-navigation&variant=h5-v2&viewport=806");
   const input = page.getByRole("spinbutton", { name: "宽度（px）" });
   const device = page.getByRole("radiogroup", { name: "设备", exact: true });
   const decrease = page.getByRole("button", { name: "减小预览宽度" });
@@ -31,7 +49,7 @@ test("keeps device selection in sync with typed widths and drag boundaries", asy
   await decrease.press("Space");
   await expect(input).toHaveValue("767");
   await expect(page.getByRole("radio", { name: "手机", exact: true })).toBeChecked();
-  for (const [width, label] of [[320, "手机"], [767, "手机"], [768, "平板"], [1023, "平板"], [1024, "桌面"], [1920, "桌面"]] as const) {
+  for (const [width, label] of [[360, "手机"], [767, "手机"], [768, "平板"], [1023, "平板"], [1024, "桌面"], [1920, "桌面"]] as const) {
     await input.fill(String(width));
     await expect(page.getByRole("radio", { name: label, exact: true })).toBeChecked();
     await input.press("Enter");
@@ -59,35 +77,118 @@ test("keeps device selection in sync with typed widths and drag boundaries", asy
   await expect(page.getByRole("radio", { name: "手机", exact: true })).toBeChecked();
 });
 
+test("locks V2 to English H5 and applies the phone width limits", async ({ page }) => {
+  await page.goto("/design?project=global-navigation&variant=h5-v2&locale=zh&previewMode=app");
+  const language = page.getByRole("combobox", { name: "语言", exact: true });
+  const width = page.getByRole("spinbutton", { name: "宽度（px）" });
+  const preview = page.frameLocator("#canvas-preview");
+  await expect(language).toBeDisabled();
+  await expect(language).toHaveText("English");
+  const h5Mode = page.getByRole("radio", { name: "H5", exact: true });
+  const appMode = page.getByRole("radio", { name: "App", exact: true });
+  await expect(h5Mode).toBeChecked();
+  await expect(appMode).toBeVisible();
+  await expect(appMode).toBeDisabled();
+  await h5Mode.press("ArrowRight");
+  await expect(h5Mode).toBeChecked();
+  await expect(preview.locator("html")).toHaveAttribute("data-prototype-preview-mode", "h5");
+  await expect(width).toHaveValue("402");
+  await expect(preview.getByRole("button", { name: "Switch storefront" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "独立预览" })).toHaveAttribute("href", /locale=en/);
+  await expect(page.getByRole("link", { name: "独立预览" })).toHaveAttribute("href", /previewMode=h5/);
+
+  await width.fill("320");
+  await width.press("Enter");
+  await expect(width).toHaveValue("360");
+  await expect(page.locator("#canvas-preview")).toHaveCSS("width", "360px");
+  await expect(page.getByRole("separator", { name: "调整预览宽度" })).toHaveAttribute("aria-valuemin", "360");
+  await page.getByRole("radio", { name: "平板", exact: true }).click();
+  await page.getByRole("radio", { name: "手机", exact: true }).click();
+  await expect(width).toHaveValue("402");
+
+  await page.getByRole("combobox", { name: "设计方案", exact: true }).click();
+  await page.getByRole("option", { name: "H5 V1 · 侧边导航", exact: true }).click();
+  await expect(language).toBeEnabled();
+  await expect(language).toHaveText("中文");
+  await expect(appMode).toBeDisabled();
+  await h5Mode.press("ArrowRight");
+  await expect(h5Mode).toBeChecked();
+  await expect(preview.getByRole("button", { name: "打开导航菜单" })).toBeVisible();
+
+  await page.goto("/design?project=global-navigation&variant=h5-v2&locale=zh&viewport=320");
+  await expect(width).toHaveValue("360");
+  await expect(preview.getByRole("button", { name: "Switch storefront" })).toBeVisible();
+  await width.fill("380");
+  await page.getByRole("button", { name: "重置演示", exact: true }).click();
+  await expect(width).toHaveValue("402");
+  await expect(page.locator("#canvas-preview")).toHaveCSS("width", "402px");
+  await expect(page).not.toHaveURL(/viewport=/);
+  await page.reload();
+  await expect(width).toHaveValue("402");
+  await page.setViewportSize({ width: 402, height: 812 });
+  await page.goto("/prototype?project=global-navigation&variant=h5-v2&locale=zh&previewMode=app");
+  await expect(page).toHaveURL(/previewMode=h5/);
+  await expect(page.getByRole("button", { name: "Switch storefront" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-prototype-preview-mode", "h5");
+  await page.goto("/prototype?project=global-navigation&variant=h5-v1&locale=en&previewMode=app");
+  await expect(page).toHaveURL(/previewMode=h5/);
+  await expect(page.getByRole("button", { name: "Open navigation menu" })).toBeVisible();
+});
+
+test("keeps the desktop preset disabled and constrains V1 to phone and tablet widths", async ({ page }) => {
+  await page.goto("/design?project=global-navigation&variant=h5-v1&viewport=402");
+  const frame = page.locator("#canvas-preview");
+  const width = page.getByRole("spinbutton", { name: "宽度（px）" });
+  const phone = page.getByRole("radio", { name: "手机", exact: true });
+  const tablet = page.getByRole("radio", { name: "平板", exact: true });
+  const desktop = page.getByRole("radio", { name: "桌面", exact: true });
+  const resize = page.getByRole("separator", { name: "调整预览宽度" });
+  await expect(phone).toBeChecked();
+  await expect(desktop).toBeVisible();
+  await expect(desktop).toBeDisabled();
+  await tablet.click();
+  await expect(frame).toHaveCSS("width", "768px");
+  await tablet.press("ArrowRight");
+  await expect(desktop).not.toBeChecked();
+  await width.fill("1440");
+  await width.press("Enter");
+  await expect(width).toHaveValue("1023");
+  await expect(frame).toHaveCSS("width", "1023px");
+  await expect(resize).toHaveAttribute("aria-valuemax", "1023");
+
+  await phone.click();
+  await resize.press("End");
+  await expect(frame).toHaveCSS("width", "1023px");
+  await page.goto("/design?project=global-navigation&variant=h5-v1&viewport=1440");
+  await expect(frame).toHaveCSS("width", "1023px");
+  await expect(tablet).toBeChecked();
+});
+
 test("navigates back and forward, restores history on reload and discards replaced branches", async ({ page }) => {
-  await page.goto("/design?project=global-navigation&variant=current&viewport=768");
+  await page.goto("/design?project=global-navigation&variant=h5-v1&viewport=768");
   const back = page.getByRole("button", { name: "返回上一步" });
   const forward = page.getByRole("button", { name: "前进到下一步" });
   await expect(back).toBeDisabled();
   await expect(forward).toBeDisabled();
   await expect(back).toHaveText("");
   await expect(forward).toHaveText("");
-  const selectPage = async (name: string) => {
-    await page.getByRole("combobox", { name: "页面", exact: true }).click();
-    await page.getByRole("option", { name, exact: true }).click();
-  };
-  await selectPage("购物车");
+  await navigateFromPreview(page, "/cart");
   await expect(page).toHaveURL(/path=%2Fcart/);
   await expect(back).toBeEnabled();
-  await selectPage("商品详情");
+  await navigateFromPreview(page, "/products/demo-product");
   await expect(page).toHaveURL(/path=%2Fproducts%2Fdemo-product/);
   await page.getByRole("combobox", { name: "语言", exact: true }).click();
   await page.getByRole("option", { name: "English", exact: true }).click();
   await page.getByRole("combobox", { name: "设计方案", exact: true }).click();
-  await page.getByRole("option", { name: "方案 A · 图片分类", exact: true }).click();
+  await page.getByRole("option", { name: "H5 V2 · 商城切换", exact: true }).click();
   await page.getByRole("radio", { name: "桌面", exact: true }).click();
   await expect(page).toHaveURL(/viewport=1440/);
   await expect(page).toHaveURL(/locale=en/);
-  await expect(page).toHaveURL(/variant=image-categories/);
+  await expect(page).toHaveURL(/variant=h5-v2/);
   await back.click();
   await expect(page).toHaveURL(/path=%2Fcart/);
   await expect(page).toHaveURL(/locale=en/);
-  await expect(page).toHaveURL(/variant=image-categories/);
+  await expect(page).toHaveURL(/variant=h5-v2/);
   await expect(page).toHaveURL(/viewport=1440/);
   await expect(forward).toBeEnabled();
   await page.reload();
@@ -95,7 +196,7 @@ test("navigates back and forward, restores history on reload and discards replac
   await forward.click();
   await expect(page).toHaveURL(/path=%2Fproducts%2Fdemo-product/);
   await expect(page).toHaveURL(/locale=en/);
-  await expect(page).toHaveURL(/variant=image-categories/);
+  await expect(page).toHaveURL(/variant=h5-v2/);
   await expect(page).toHaveURL(/viewport=1440/);
   await expect(forward).toBeDisabled();
   await page.goBack();
@@ -104,7 +205,7 @@ test("navigates back and forward, restores history on reload and discards replac
   await page.getByRole("radio", { name: "手机", exact: true }).click();
   await expect(page).toHaveURL(/viewport=402/);
   await expect(forward).toBeEnabled();
-  await selectPage("分类商品");
+  await navigateFromPreview(page, "/categories/beauty");
   await expect(page).toHaveURL(/path=%2Fcategories%2Fbeauty/);
   await expect(forward).toBeDisabled();
   await back.click();
@@ -117,7 +218,7 @@ test("navigates back and forward, restores history on reload and discards replac
 
 test("resizes the preview without reloading and retains custom widths", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/design?project=global-navigation&variant=current&viewport=768");
+  await page.goto("/design?project=global-navigation&variant=h5-v2&viewport=768");
   const iframe = page.locator("#canvas-preview");
   const preview = page.frameLocator("#canvas-preview");
   await expect(preview.locator('[data-slot="ecommerce-home"]')).toBeVisible();
@@ -154,7 +255,7 @@ test("resizes the preview without reloading and retains custom widths", async ({
   await expect(iframe).toHaveCSS("width", "878px");
   await handle.press("Home");
   await handle.press("ArrowLeft");
-  await expect(iframe).toHaveCSS("width", "320px");
+  await expect(iframe).toHaveCSS("width", "360px");
   await handle.press("End");
   await handle.press("ArrowRight");
   await expect(iframe).toHaveCSS("width", "1920px");
@@ -195,21 +296,20 @@ test("shares a complete variant and retains it through navigation, reload and br
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (/Unknown event handler|hydration|Maximum update depth/.test(message.text())) errors.push(message.text()); });
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto("/design?project=global-navigation&variant=image-categories&locale=en&theme=light&viewport=1440");
+  await page.goto("/design?project=global-navigation&variant=h5-v2&locale=en&theme=light&viewport=1440");
   const preview = page.frameLocator('iframe[title="YAMI 原型预览"]');
   await expect(preview.locator('[data-slot="ecommerce-home"]')).toBeVisible();
   await expect(page.locator('iframe[title="YAMI 原型预览"]')).toHaveCSS("width", "1440px");
   await preview.locator('[data-category-id="beauty"]').hover();
-  await expect(preview.locator('[data-slot="header-category-menu"]')).toHaveAttribute("data-presentation", "images");
+  await expect(preview.locator('[data-slot="header-category-menu"]')).toHaveAttribute("data-presentation", "text");
   await page.keyboard.press("Escape");
   await page.screenshot({ path: testInfo.outputPath("prototype-workbench.png") });
-  await page.getByRole("combobox", { name: "页面", exact: true }).click();
-  await page.getByRole("option", { name: "商品详情", exact: true }).click();
+  await navigateFromPreview(page, "/products/demo-product");
   await expect(preview.locator('[data-pdp-add-to-cart="true"]')).toBeVisible();
   await preview.locator('[data-pdp-add-to-cart="true"]').click();
   await expect(preview.locator(".prototype-notice")).toContainText("Added to demo cart");
   await preview.locator('a[href*="path=%2Fcart"]:visible').first().click();
-  await expect(page).toHaveURL(/variant=image-categories/);
+  await expect(page).toHaveURL(/variant=h5-v2/);
   await expect(page).toHaveURL(/path=%2Fcart/);
   await expect(preview.locator('[data-slot="cart-item"]')).toHaveCount(1);
   await page.reload();
@@ -230,27 +330,28 @@ test("shares a complete variant and retains it through navigation, reload and br
   const receiver = await fresh.newPage();
   await receiver.goto(`http://localhost:3200${shared}`);
   await expect(receiver.locator('[data-pdp-add-to-cart="true"]')).toBeVisible();
-  await expect(receiver.getByRole("combobox", { name: "设计方案" })).toHaveAttribute("data-value", "image-categories");
+  await expect(receiver.getByRole("combobox", { name: "设计方案" })).toHaveAttribute("data-value", "h5-v2");
   await receiver.getByRole("link", { name: "购物车", exact: true }).click();
   await expect(receiver.locator('[data-slot="cart-item"]')).toHaveCount(0);
   await receiver.getByRole("link", { name: "工作台", exact: true }).click();
-  await expect(receiver).toHaveURL(/\/design\?[^#]*variant=image-categories[^#]*path=%2Fcart/);
+  await expect(receiver).toHaveURL(/\/design\?[^#]*variant=h5-v2[^#]*path=%2Fcart/);
   await fresh.close();
   expect(errors).toEqual([]);
 });
 
 test("keeps baskets isolated across variants and resets only the selected variant", async ({ page }) => {
-  await page.goto("/prototype?project=global-navigation&variant=current&path=%2Fproducts%2Fdemo-product&locale=en");
+  await page.goto("/prototype?project=global-navigation&variant=h5-v1&path=%2Fproducts%2Fdemo-product&locale=en");
   await page.locator('[data-pdp-add-to-cart="true"]').click();
   await page.getByRole("link", { name: "购物车", exact: true }).click();
   await expect(page.locator('[data-slot="cart-item"]')).toHaveCount(1);
   await page.getByRole("combobox", { name: "设计方案" }).click();
-  await page.getByRole("option", { name: "方案 A · 图片分类", exact: true }).click();
+  await page.getByRole("option", { name: "H5 V2 · 商城切换", exact: true }).click();
   await expect(page).toHaveURL(/path=%2Fcart/);
+  await expect(page.locator("html")).toHaveAttribute("data-prototype-preview-mode", "h5");
   await expect(page.locator('[data-slot="cart-item"]')).toHaveCount(0);
   await page.getByRole("button", { name: "重置演示" }).click();
   await page.getByRole("combobox", { name: "设计方案" }).click();
-  await page.getByRole("option", { name: "当前版 · 文字分类", exact: true }).click();
+  await page.getByRole("option", { name: "H5 V1 · 侧边导航", exact: true }).click();
   await expect(page.locator('[data-slot="cart-item"]')).toHaveCount(1);
   await page.getByRole("button", { name: "重置演示" }).click();
   await expect(page.locator('[data-slot="cart-item"]')).toHaveCount(0);
@@ -259,7 +360,7 @@ test("keeps baskets isolated across variants and resets only the selected varian
 });
 
 test("keeps search products distinct in the cart and preserves their detail links", async ({ page }) => {
-  await page.goto("/prototype?project=global-navigation&variant=current&path=%2Fsearch%2Fmatcha&locale=en");
+  await page.goto("/prototype?project=global-navigation&variant=h5-v1&path=%2Fsearch%2Fmatcha&locale=en");
   const cards = page.locator('[data-slot="product-card"]');
   const destinations: string[] = [];
   const titles: string[] = [];
@@ -287,7 +388,7 @@ test("keeps search products distinct in the cart and preserves their detail link
 
 test("restores search presentation after leaving the page and handles unknown variants explicitly", async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 850 });
-  await page.goto("/prototype?project=global-navigation&variant=current&path=%2Fsearch%2Fmatcha&locale=en");
+  await page.goto("/prototype?project=global-navigation&variant=h5-v1&path=%2Fsearch%2Fmatcha&locale=en");
   await expect(page.locator('[data-slot="search-results-page"]')).toBeVisible();
   await page.getByRole("button", { name: "Switch to list view" }).click();
   const filter = page.locator('[data-search-results-popular-filter="true"]').first();

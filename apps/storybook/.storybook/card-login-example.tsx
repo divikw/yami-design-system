@@ -20,7 +20,7 @@ export function LoginCard({ locale, adjustableSpacing = false }: { locale: "zh" 
 
   const [spacing, setSpacing] = useState<string>(spacings[0][1]);
 
-  return <div style={{ display: "grid", gap: "var(--space-200)", maxWidth: "24rem", marginInline: "auto" }}>
+  return <div style={{ display: "grid", gap: "var(--space-200)", width: "100%" }}>
     {adjustableSpacing && <ButtonGroup aria-label={zh ? "卡片间距" : "Card spacing"}>
       {spacings.map(([px, token]) => (
         <Button key={px} size="sm" variant={spacing === token ? "secondary" : "tertiary"}

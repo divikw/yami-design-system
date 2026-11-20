@@ -28,7 +28,7 @@ const config: StorybookConfig = {
         const device = isComponent && isDevice(entry);
         const name = entry.name ?? (entry.type === "docs" ? "docs" : storyNameFromExport(entry.exportName));
         const sourceTitle = entry.title;
-        const flatComponent = isComponent && sourceTitle && /^YAMI\/Components\/[^/]+$/i.test(sourceTitle);
+        const flatComponent = sourceTitle && /^YAMI\/Components\/[^/]+$/i.test(sourceTitle);
         return {
           ...entry,
           tags: device ? entry.tags?.filter((tag) => tag !== "play-fn")

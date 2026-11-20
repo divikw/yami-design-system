@@ -12,6 +12,7 @@
   "exports": [
     "Field",
     "FieldProps",
+    "FieldDensity",
     "FieldLabel",
     "FieldLabelProps",
     "FieldDescription",
@@ -30,6 +31,11 @@
     "Divider"
   ],
   "props": {
+    "density": {
+      "type": "default | compact",
+      "required": false,
+      "description": "Sets the density inherited by Input, SelectTrigger, ComboboxInput and ComboboxChips."
+    },
     "name": {
       "type": "string",
       "required": false,
@@ -84,6 +90,7 @@
       "description": "External messages for FieldError. Duplicate or empty messages are omitted."
     }
   },
+  "variants": { "density": ["default", "compact"] },
   "rules": {
     "color": {
       "ruleId": "semantic-color-only"

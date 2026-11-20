@@ -44,7 +44,9 @@
 .label { padding: var(--space-050) var(--space-100); font-weight: var(--font-weight-emphasize); }
 .indicator, .chevron, .shortcut { margin-left: auto; flex: none; }
 .item > svg, .indicator, .chevron { width: var(--space-200); height: var(--space-200); flex-shrink: 0; }
-.chevron { background: currentColor; mask: url("../../assets/icons/system/arrow-right.svg") center / contain no-repeat; }
+.chevron { background: currentColor; color: var(--color-black-400); mask: url("../../assets/icons/system/arrow-right.svg") center / contain no-repeat; }
+:global(.dark) .chevron { color: var(--color-white-400); }
+.item[data-disabled] .chevron { color: inherit; }
 .indicator { display: grid; place-items: center; }
 .check {
   width: var(--space-050); height: var(--space-100);

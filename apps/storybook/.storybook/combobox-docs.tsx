@@ -17,15 +17,16 @@ export function ComboboxDocsPage({ locale }: { locale: DocsLocale }) {
   const en = locale === "en";
   const t = (zh: string, english: string) => en ? english : zh;
   const label = t("搜索城市", "Search cities");
+  const title = t("城市", "City");
   const items = en ? ["Tokyo", "Seoul", "Shanghai", "Taipei"] : ["东京", "首尔", "上海", "台北"];
-  function source(rootProps = "", inputProps = "", icon = false) {
+  function source(rootProps = "", inputProps = "", icon = false, density?: "default" | "compact") {
     const search = icon ? 'import { Search } from "lucide-react";\n' : "";
     return `${search}import { Combobox, ComboboxInput, ComboboxContent, ComboboxEmpty, ComboboxList, ComboboxItem } from "@yami/design-system";
 
 const cities = ${JSON.stringify(items)};
 
 <Combobox items={cities}${rootProps}>
-  <ComboboxInput aria-label="${label}" placeholder="${label}" triggerLabel="${t("显示城市", "Show cities")}"${inputProps}${icon ? '><Search size={16} aria-hidden="true" /></ComboboxInput>' : ' />'}
+  <ComboboxInput ${density ? `density="${density}" label="${title}"` : `aria-label="${label}"`} placeholder="${label}" triggerLabel="${t("显示城市", "Show cities")}"${inputProps}${icon ? '><Search size={16} aria-hidden="true" /></ComboboxInput>' : ' />'}
   <ComboboxContent>
     <ComboboxEmpty>${t("没有匹配的城市", "No matching cities")}</ComboboxEmpty>
     <ComboboxList>{(city: string) => (
@@ -35,6 +36,9 @@ const cities = ${JSON.stringify(items)};
 </Combobox>`;
   }
   const examples: GuideExample[] = [
+    { id: "default-density", title: t("宽松组合框", "Combobox with an embedded label"),
+      description: t("控件高 56 px，标签在框内。", "The control is 56 px high with an embedded label."),
+      preview: <BasicCombobox en={en} density="default" />, code: source("", "", false, "default") },
     { id: "multiple", title: t("多选", "Multiple"), description: t("选择多个城市，点击标签上的移除按钮可取消选择。", "Select several cities and remove individual chips."), preview: <MultipleCities en={en} />, code: multipleSource },
     { id: "clear", title: t("清除选择", "Clear button"), description: t("选择城市后，使用清除按钮重新开始搜索。", "Use the clear button after choosing a city to start another search."), preview: <BasicCombobox en={en} showClear />, code: source("", ` showClear clearLabel="${t("清除城市", "Clear city")}"`) },
     { id: "groups", title: t("分组", "Groups"), description: t("按国家组织城市，输入关键词后保留匹配的分组。", "Group cities by country. Filtering keeps groups with matching cities."), preview: <GroupedCities en={en} />, code: groupsSource },
@@ -47,9 +51,9 @@ const cities = ${JSON.stringify(items)};
   ];
   return <ComponentGuide name="Combobox" slug="combobox" locale={locale} previewMode="document"
     previous={{ name: "Checkbox", path: "yami-components-forms-checkbox" }} next={{ name: "Dialog", path: "yami-components-layout-dialog" }}
-    intro={t("输入关键词筛选候选项，再选择一个或多个值。", "Type to filter the available options and select one or more values.")}
-    leadExample={{ preview: <BasicCombobox en={en} />, code: source() }}
-    usageCode={source()} examples={examples}
+    intro={t("输入关键词筛选候选项。宽松版为 56 px，紧凑版为 40 px，PC 和移动端同高。", "Type to filter the options. Default is 56 px and compact is 40 px on PC and mobile.")}
+    leadExample={{ preview: <BasicCombobox en={en} density="compact" />, code: source("", "", false, "compact") }}
+    usageCode={source("", "", false, "compact")} examples={examples}
     composition={"Combobox\n├── ComboboxInput\n└── ComboboxContent → ComboboxEmpty + ComboboxList → ComboboxItem\n\nCombobox multiple\n├── ComboboxChips → ComboboxValue → ComboboxChip\n│                └→ ComboboxChipsInput\n└── ComboboxContent → ComboboxList → ComboboxItem\n\nCombobox\n├── ComboboxTrigger → ComboboxValue\n└── ComboboxContent → ComboboxInput + ComboboxList → ComboboxItem"}
     apiNote={t("方向键移动高亮，Enter 选择，Escape 收起。为输入框和图标按钮提供可访问名称。", "Use the arrow keys to navigate, Enter to select and Escape to dismiss. Name the input and icon buttons.")}
     api={[
@@ -58,6 +62,7 @@ const cities = ${JSON.stringify(items)};
       ["inputValue / onInputValueChange", t("读写当前搜索词。", "Read or control the current search text.")],
       ["itemToStringLabel / itemToStringValue", t("定义对象的显示文本与提交值。支持 { label, value }。", "Set the display label and submitted value for custom objects. The { label, value } shape is supported.")],
       ["ComboboxInput", t("showClear、showTrigger 控制按钮，clearLabel、triggerLabel 指定其名称。", "Toggle the buttons with showClear and showTrigger. Set their names with clearLabel and triggerLabel.")],
+      ["ComboboxInput / ComboboxChips density, label", t("控件可继承 Field 的规格。单选 default 的标题在框内，compact 在框外。多选两档的标题都在框外，已选标签换行时控件会增高。", "Controls can inherit the Field density. Single-select embeds its label at default density and places it above the control at compact density. Both multi-select densities place the label above the control and grow as chips wrap.")],
       ["ComboboxContent", t("anchor、side、align 和 sideOffset 控制弹层位置。", "Position the popup with anchor, side, align and sideOffset.")],
       ["autoHighlight / disabled / required", t("自动高亮首个匹配项、禁用和必填。", "Highlight the first match, disable selection or require a selection.")],
     ]} reference={{ label: "shadcn/ui Combobox", href: "https://ui.shadcn.com/docs/components/base/combobox" }} />;

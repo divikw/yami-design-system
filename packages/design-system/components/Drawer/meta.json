@@ -30,6 +30,11 @@
       "type": "string",
       "required": true
     },
+    "titleContent": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Custom visual title. The required title string remains the accessible name of the dialog."
+    },
     "closeLabel": {
       "type": "string",
       "required": true

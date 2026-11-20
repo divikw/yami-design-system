@@ -1,18 +1,19 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useArgs } from "storybook/preview-api";
 import { expect, userEvent, within } from "storybook/test";
 import { TabBar } from "./TabBar";
-import { tabBarExampleItems } from "./examples";
+import { selectableTabBarItems, tabBarExampleItems } from "./examples";
 
 const meta = {
   id: "yami-components-navigation-tab-bar",
-  title: "YAMI/Modules/Tab Bar",
+  title: "YAMI/Modules/Global/Tab Bar",
   component: TabBar,
   parameters: { layout: "fullscreen", docs: { playground: "Playground", showStories: false,
     translations: {
-      zh: { description: "从购物车抽取的 App 底部导航，保留图标、标签、当前项和数量角标。页面负责路由、底部固定位置及响应式显示。",
+      zh: { description: "从购物车抽取的底部导航，APP 和 H5 预览共用图标、标签、当前项和数量角标。页面负责路由、底部固定位置及响应式显示。",
         argDescriptions: { items: "导航项目：唯一值、标签、装饰图标、可选数量，以及链接或操作回调。", value: "由页面控制的当前目的地。", "aria-label": "导航区域的可访问名称。" } },
-      en: { description: "App destination navigation extracted from the cart. Preserves icons, labels, current destination and count badges. The host owns routing, fixed positioning and responsive visibility.",
+      en: { description: "Bottom navigation extracted from the cart. The APP and H5 previews share the icons, labels, current destination and count badges. The host owns routing, fixed positioning and responsive visibility.",
         argDescriptions: { items: "Destinations with unique values, labels, decorative icons, optional counts and links or callbacks.", value: "Current destination controlled by the host.", "aria-label": "Accessible name for the navigation region." } },
     },
   } },
@@ -42,8 +43,7 @@ export const CountOverflow: Story = {
 
 function ActionExample() {
   const [value, setValue] = useState("shop");
-  const items = tabBarExampleItems().map(({ href: _href, ...item }) => ({ ...item, onClick: () => setValue(item.value) }));
-  return <TabBar aria-label="App navigation" value={value} items={items} />;
+  return <TabBar aria-label="App navigation" value={value} items={selectableTabBarItems("en", setValue)} />;
 }
 
 export const Interaction: Story = {
@@ -60,18 +60,31 @@ export const Interaction: Story = {
   },
 };
 
-export const PCPreview: Story = {
-  ...Showcase,
-  name: "PC",
-  tags: ["component-device", "dev", "autodocs", "!test"],
-  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
-  play: undefined,
-};
+function renderSelectablePreview(platform: "App" | "H5"): NonNullable<Story["render"]> {
+  return function Preview({ value }, { globals }) {
+    const [, updateArgs] = useArgs();
+    const locale = globals.locale === "en" ? "en" : "zh";
+    const items = selectableTabBarItems(locale, (nextValue) => updateArgs({ value: nextValue }));
+    return <div style={{ maxWidth: 402, margin: "var(--space-200) auto" }}>
+      <TabBar lang={locale} aria-label={locale === "zh" ? `${platform} 导航` : `${platform} navigation`} value={value} items={items} />
+    </div>;
+  };
+}
 
 export const MobilePreview: Story = {
   ...Mobile,
-  name: "Mobile",
+  name: "APP",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { controls: { include: ["value"] } },
+  render: renderSelectablePreview("App"),
   play: undefined,
+};
+
+export const H5Preview: Story = {
+  name: "H5",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  parameters: { controls: { include: ["value"] } },
+  render: renderSelectablePreview("H5"),
 };

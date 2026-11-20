@@ -52,6 +52,8 @@
     }
   },
   "tokens": [
+    "--color-black-400",
+    "--color-white-400",
     "--space-050",
     "--stroke-default",
     "--border-default",
@@ -80,6 +82,8 @@
     "--divider-default"
   ],
   "tokenBindings": {
+    "--color-black-400": { "property": "color", "selector": ".chevron" },
+    "--color-white-400": { "property": "color", "selector": ".dark .chevron" },
     "--space-050": {
       "property": "padding",
       "selector": ".popup"

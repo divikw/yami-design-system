@@ -13,6 +13,7 @@ import { Field, FieldError, FieldLabel, Textarea } from "@yami/design-system";
 </Field>;
 ```
 
+- 同一组表单中的 Input、Select 和 Combobox 使用同一档规格，尤其是并排时。为各 Field 传入相同的 `density`，搭配控件的 `label`。PC 和移动端均为 `default` 56px 内嵌标签或 `compact` 40px 外置标签。多选 Combobox 的标题在两档都放在框外。控件显式设置的规格优先，Field 高度随说明和校验内容增长。
 - 将标签及说明放在各自的 Field 中，FieldContent 可将两者排在控件旁。选项卡片可在 FieldLabel 内组合 Checkbox 和 FieldTitle。用 FieldSeparator 分隔不同的字段组。
 - Field 的 `orientation="responsive"` 在 FieldGroup 达到 24rem 时将标签与控件并排。FieldError 的 `errors` 接受带 message 的对象数组并去重，提供 `children` 可替换错误文案。
 - 用 FieldSet 和 FieldLegend 为相关字段分组。FieldGroup 默认堆叠，layout="responsive" 按容器宽度分列。复选框可以使用 Field 的 orientation="horizontal" 将控件与标签并排。
@@ -35,6 +36,7 @@ import { Field, FieldError, FieldLabel, Textarea } from "@yami/design-system";
 </Field>;
 ```
 
+- Use one density for Input, Select and Combobox in the same form group, especially side by side. Pass the same `density` to each Field and provide a `label` on its control. PC and Mobile use `default` (56px, embedded label) or `compact` (40px, external label). Multi-select Combobox places its label above the control at both densities. An explicit control density takes precedence. Field grows with descriptions and errors.
 - Keep the label and description inside their Field. FieldContent groups supporting text beside a control. For a choice card, put Checkbox and FieldTitle inside FieldLabel. Use FieldSeparator between sections.
 - Field’s `orientation="responsive"` places the label beside the control in FieldGroup containers at least 24rem wide. FieldError accepts external `errors` as message objects and deduplicates them. Children override the generated text.
 - Group related fields with FieldSet and FieldLegend. FieldGroup stacks fields by default. Use layout="responsive" for fluid columns or orientation="horizontal" on Field to place a checkbox beside its label.

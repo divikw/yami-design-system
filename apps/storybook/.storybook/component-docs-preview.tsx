@@ -5,22 +5,34 @@ import styles from "./component-docs-template.module.css";
 const frameMarkup = "<!doctype html><html><head></head><body></body></html>";
 
 export type DocsPreviewMode = "viewport" | "document";
-type PreviewProps = { children: ReactNode; name?: string; locale: "zh" | "en"; mode?: DocsPreviewMode; previewBackground?: string };
+type PreviewProps = { children: ReactNode; name?: string; locale: "zh" | "en"; mode?: DocsPreviewMode; previewBackground?: string; viewportWidth?: string };
 
-export function ComponentDocsPreview({ mode = "viewport", children, name, locale, previewBackground }: PreviewProps) {
+export function ComponentDocsPreview({ mode = "viewport", children, name, locale, previewBackground, viewportWidth }: PreviewProps) {
   return <div className={styles.preview}>
-    {mode === "viewport" ? <ViewportPreview name={name} locale={locale} previewBackground={previewBackground}>{children}</ViewportPreview> :
+    {mode === "viewport" ? <ViewportPreview name={name} locale={locale} previewBackground={previewBackground} viewportWidth={viewportWidth}>{children}</ViewportPreview> :
       <div className={`${styles.page} ${styles.frameContent}`} style={{ background: previewBackground }}>
         <div className={styles.demo}>{children}</div>
       </div>}
   </div>;
 }
 
-function ViewportPreview({ children, name, locale, previewBackground }: PreviewProps) {
+function ViewportPreview({ children, name, locale, previewBackground, viewportWidth }: PreviewProps) {
   const [frameDocument, setFrameDocument] = useState<Document | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current;
+    const docsWindow = frame?.ownerDocument.defaultView;
+    if (!frame || viewportWidth || docsWindow?.frameElement?.id !== "storybook-preview-iframe") return;
+
+    const storybookWindow = docsWindow.parent;
+    const syncWidth = () => { frame.style.width = `${storybookWindow.innerWidth}px`; };
+    syncWidth();
+    storybookWindow.addEventListener("resize", syncWidth);
+    return () => storybookWindow.removeEventListener("resize", syncWidth);
+  }, [viewportWidth]);
 
   useLayoutEffect(() => {
     const viewport = viewportRef.current;
@@ -78,6 +90,7 @@ function ViewportPreview({ children, name, locale, previewBackground }: PreviewP
         className={styles.previewFrame}
         ref={frameRef}
         title={`${label}${name ? ` · ${name}` : ""}`}
+        style={{ width: viewportWidth }}
         height={252}
         srcDoc={frameMarkup}
         loading="lazy"

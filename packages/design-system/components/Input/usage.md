@@ -1,7 +1,7 @@
 <!-- locale:zh -->
 # Input — 使用说明
 
-Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。两种规格在 PC 和移动端的左右内边距均为 12px，编辑时使用 2px 内描边。
+Input 用 Base UI Input 渲染原生输入控件。内嵌标签默认 14px，上浮时为 12px。`density="compact"` 使用外置标签，适合折扣码等短输入。PC 和移动端统一为宽松版 56px、紧凑版 40px，左右内边距均为 12px，编辑时使用 2px 内描边。
 
 ## 用法
 
@@ -54,10 +54,12 @@ The browser regression suite covers Input behavior independently of these naviga
 
 ## Figma Contract
 
+The current implementation uses body-md for value text on both platforms.
+
 | Platform | Field height | Error total | Value text | Label text |
 |---|---:|---:|---|---|
-| Mobile | 48px | 68px | body-md, 14/20 | default 14/20, floating 12/20 |
-| PC | 56px | 77px | body-xl, 16/20 | default 14/20, floating 12/20 |
+| Mobile | 56px | 76px | body-md, 14/20 | default 14/20, floating 12/20 |
+| PC | 56px | 77px | body-md, 14/20 | default 14/20, floating 12/20 |
 
 States:
 
@@ -76,13 +78,13 @@ States:
 ```
 
 The label is embedded inside the field. It floats when the input is focused, has a value,
-or is in an explicit visual state such as `error`.
+or is in an explicit visual state such as `error`. During focus and typing, the floating label
+uses `--text-secondary`. The floating label and value row are separated by 2 px.
 
 ## Compact Density
 
 Use `density="compact"` for promo codes and short inputs in dense layouts. It is a code-defined
-extension, not a verified Figma variant. The field is 48px below 1024px and 40px on PC, with
-body-md text and a single value/placeholder row. The default density stays unchanged.
+extension, not a verified Figma variant. The field is 40px on PC and Mobile, with body-md text and a single value/placeholder row.
 
 ```tsx
 <Input density="compact" label="Promo code" placeholder="SAVE10" clearable />

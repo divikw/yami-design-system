@@ -8,13 +8,21 @@ const icons = {
   account: new URL("../../assets/icons/tabbar/account.svg", import.meta.url).href,
 };
 
-export function tabBarExampleItems(locale: "zh" | "en" = "en", badgeCount = 6): TabBarItem[] {
+export function tabBarExampleItems(locale: "zh" | "en" = "en", badgeCount = 6): (TabBarItem & { value: keyof typeof icons })[] {
   const labels = locale === "zh" ? ["YAMI", "分类", "社区", "购物车", "我的"] : ["YAMI", "Shop", "Community", "Cart", "Account"];
   const paths = ["/", "/search", "/show", "/cart", "/account"];
   return (Object.keys(icons) as (keyof typeof icons)[]).map((value, index) => ({
     value, label: labels[index], href: paths[index],
     icon: <img src={icons[value]} width={24} height={24} alt="" />,
     ...(value === "cart" ? { badgeCount } : {}),
+  }));
+}
+
+export function selectableTabBarItems(locale: "zh" | "en", onSelect: (value: string) => void): TabBarItem[] {
+  return tabBarExampleItems(locale).map(({ value, label, badgeCount }) => ({
+    value, label, badgeCount,
+    onClick: () => onSelect(value),
+    icon: <span style={{ display: "block", width: "100%", height: "100%", background: "currentColor", mask: `url("${icons[value]}") center / contain no-repeat` }} />,
   }));
 }
 

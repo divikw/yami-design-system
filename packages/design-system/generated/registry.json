@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "a819ff6f3352d4ef9f764d580ad5da6c34c99d9f237b3e3d2a08b2ea05f75cb2"
+      "digest": "f1fcdddd12f56615e46f62cc542eb752349afeffd596dd2767487b3789b60873"
     },
     {
       "name": "accordion",
@@ -36,7 +36,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/activity-page-header.json",
-      "digest": "5361544bdcaee769ba0893533ba10cab62c0c3c013ef25dacd88eb25b96a73ba"
+      "digest": "3070e8cef466c78737d06f4929da044cd58c4c8155bc66485b0aca4edb6aa847"
     },
     {
       "name": "alert",
@@ -54,7 +54,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/alert-dialog.json",
-      "digest": "ac75389d0c64dfb6fdf39b96452164944576cb703cfbff42d04bd16e20cbdacf"
+      "digest": "2997826b97c74c3e3e5ae8f4915482d8b9277dade5ef2d57162f26ac979d740b"
     },
     {
       "name": "aspect-ratio",
@@ -153,7 +153,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/combobox.json",
-      "digest": "dd401b870390efc4acbfed0859d29de520c78a08864172375a3c77da179dd591"
+      "digest": "4ebe5f218fef6e04fd47691e36c185f14f2c2eed15e59ab4cf7c78e0a9c45ad2"
     },
     {
       "name": "coupon",
@@ -189,7 +189,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "bc0cb161ead81c0f906d3ac53cb8079e3eb888ce46646324e2b07a57d786d8bb"
+      "digest": "e4f550ea0266cc7829e795a6d0def8c8bf6b961075148ca55fe2cf60eb0ea594"
     },
     {
       "name": "dropdown-menu",
@@ -198,7 +198,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/dropdown-menu.json",
-      "digest": "6e443d907169859c1250df179b776b28cd518091774bb7cc93280ffb81308cf7"
+      "digest": "ffa4d6303e566f066037192a654b74901aed0da01a283f31925edc5d05f65a43"
     },
     {
       "name": "empty-state",
@@ -216,7 +216,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/field.json",
-      "digest": "6ff282f8ae60641306b7a787b1a80b251ad0e1454aaef670110f788b10c63a9c"
+      "digest": "c75011c47e7010f612f33af0a188578b5e7383e48bbb83e9a5eac01dd2e56672"
     },
     {
       "name": "filter-chip",
@@ -225,7 +225,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/filter-chip.json",
-      "digest": "da2ea37e9e9df4c0d108fe5be39ecb707b231d26be507be3274d86d8c6edcf99"
+      "digest": "2f9a05f3dde46321463e5061540be267660e662f89e74d4ec17f0a92dcfcd7d6"
     },
     {
       "name": "footer",
@@ -234,7 +234,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/footer.json",
-      "digest": "87282fb7301f8bd8a7f808b39a3cdcaf0f0624c2c639d30521fd0d60ca96c4f8"
+      "digest": "151b640506ff0f5d5c2c3aa1808102bfd8e3f608179de331f8bc792d72cc68cd"
     },
     {
       "name": "header",
@@ -243,7 +243,7 @@
       "status": "beta",
       "version": "0.3.0",
       "path": "registry-items/header.json",
-      "digest": "4d1304e1f50916513acf0627a38b07a319a396428b4ee905cea14c3474e1dbd3"
+      "digest": "46f10ae3d77cd03709fd1d09cbacbee69b49187cac999ccbccebdb56f995c1a2"
     },
     {
       "name": "hero-banner",
@@ -270,7 +270,7 @@
       "status": "stable",
       "version": "0.2.0",
       "path": "registry-items/input.json",
-      "digest": "8db96f07dec96cb3b62c911792e3eac7f3574645eb06a90c3a777973ab737552"
+      "digest": "fbf3c7078b022b13eed53056a39de746be756a59b87812949035b0ad61bee876"
     },
     {
       "name": "membership-badge",
@@ -351,7 +351,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/product-review-section.json",
-      "digest": "ff5267419a0ac88c144f2efd8c23c66c47fac46d91f2855b2bea48f61a431595"
+      "digest": "2ee493efc449f0d628b0442283585a53682aeaba3a806a5b0c0d1315ae788161"
     },
     {
       "name": "progress",
@@ -369,7 +369,7 @@
       "status": "experimental",
       "version": "0.3.1",
       "path": "registry-items/quantity-select.json",
-      "digest": "794eb42bdfcd9cfe07f9cfbc22b8fa86749585b2b9c471b8bd2c481d84f17984"
+      "digest": "1afaefd467292e7211768ba918f1937052fa80eeab36ac53038e213fca862400"
     },
     {
       "name": "radio-group",
@@ -378,7 +378,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/radio-group.json",
-      "digest": "c8b03124622ea1a27fee77ae1ed3557e6c02f9b0c2e2e6333a6db2dfae390e93"
+      "digest": "e86e67a44db9e558843d0f8ada709e0bfdaee80cc5bc09af443ea69c38f2f6bf"
     },
     {
       "name": "review-list",
@@ -405,7 +405,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/select.json",
-      "digest": "af2331c96aebde85ca44235863d630bbd812511ab56e34d804b3141b6c601967"
+      "digest": "5548c572c2b9a105fec219404f9e116aef1ff1a93a484b9a53edf51f1f6c2a9d"
     },
     {
       "name": "shortcut-rail",
@@ -468,7 +468,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/tab-bar.json",
-      "digest": "413c6d90db41e28e8c702ff490c061fcb2cb4009477a9bab20d343de4c0ed672"
+      "digest": "95830d77b3ba55de95851382ef294049250c45cac01256b339e7f215b33bfebf"
     },
     {
       "name": "tabs",
@@ -495,7 +495,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/textarea.json",
-      "digest": "9d224ea100e75a79dfc3e595b6d88fbf9c87d8f27939f944870fa55cf45cc424"
+      "digest": "6a0c202ee65fe54cbab3359a0dc9f9a3ffb8b87564e3f9619521c66624ac5a15"
     },
     {
       "name": "theme-hero",

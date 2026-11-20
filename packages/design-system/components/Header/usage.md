@@ -9,10 +9,16 @@ at `--breakpoints-desktop` (1024px).
 2. **Category rail** (63.6px + 2px closing rule) — 48px inline gutter,
    category artwork + label, with edge paging
 
-**Below 1024px** — the mobile chrome (Figma `2725:151904`), 100px total:
+**Below 1024px** — the default mobile chrome (Figma `2725:151904`), 100px total:
 
 1. **Brand bar** (56px) — Mobile lockup · deliver-to · inbox, on an 8px page inset
 2. **Search row** (36px field + 8px) — full-width field with visual search
+
+For the H5 home header, pass `mobileVariant="h5-home"`. The right side follows
+Figma `4559:214925`, with a horizontal delivery icon and postal code beside the
+24px flag and language code in two 40px-high entries. Configure their destinations
+with `zipcode.href` and `locale.href`. Search uses the text field, and the
+inbox and visual-search controls are omitted in this layout.
 
 For Product Detail, pass `mobileVariant="pdp"`. Below 1024px it uses the H5 PDP
 navigation from Figma `2786:18423`: one 56px row with the 84 × 32 English
@@ -21,10 +27,8 @@ The row stays pinned to the top of the viewport while the PDP scrolls.
 
 ## The two bands are not a reflow of each other
 
-The mobile band is a different anatomy, not the PC one rearranged. The hall
-switcher, locale flag, account, cart, and the entire category rail have no
-mobile counterpart and drop out; the inbox entry and visual search exist only
-below 1024px.
+The default mobile band omits the PC hall switcher, locale flag, account, cart,
+and category rail. The inbox entry and visual search exist only below 1024px.
 
 Both trees are always rendered and `@media` picks one, so `Header` needs no
 width probe and stays server-renderable — but it also means every prop is
@@ -236,7 +240,7 @@ not exist in production.
 />
 
 {/* CN — no halls prop at all */}
-<Header zipcode={{ code: '94199', label: '配送至' }} /* … */ />
+<Header zipcode={{ code: '92821', label: '配送至' }} /* … */ />
 ```
 
 Selection is uncontrolled by default and falls back to the first hall. Pass
@@ -274,11 +278,11 @@ locale={{ label: 'EN', flag: { src: unitedStatesIcon, alt: 'United States' } }}
 ## Deliver-to
 
 ```tsx
-<Header zipcode={{ code: '91789', label: 'Deliver to', href: '/en/delivery' }} />
+<Header zipcode={{ code: '92821', label: 'Deliver to', href: '/en/delivery' }} />
 ```
 
 `label` is the localized accessible name; the accessible name becomes
-`"Deliver to 91789"`. Omit `zipcode` to hide the control.
+`"Deliver to 92821"`. Omit `zipcode` to hide the control.
 
 ## Promotion badges
 

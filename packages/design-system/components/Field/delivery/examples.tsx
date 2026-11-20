@@ -6,6 +6,7 @@ import {
 
 export function DeliveryPreferences({ locale = "zh" }: { locale?: "zh" | "en" }) {
   const zh = locale === "zh";
+  const density = "compact";
   const [saved, setSaved] = useState(false);
   const [doorbell, setDoorbell] = useState(true);
   const deliveryOptions = [
@@ -22,11 +23,11 @@ export function DeliveryPreferences({ locale = "zh" }: { locale?: "zh" | "en" })
       <FieldSet>
         <FieldLegend>{zh ? "收件信息" : "Recipient details"}</FieldLegend>
         <FieldGroup layout="responsive">
-          <Field name="recipient">
+          <Field name="recipient" density={density}>
             <FieldLabel>{zh ? "收件人（必填）" : "Recipient (required)"}</FieldLabel>
-            <Input density="compact" fullWidth required autoComplete="name" />
+            <Input fullWidth required autoComplete="name" />
           </Field>
-          <Field name="delivery">
+          <Field name="delivery" density={density}>
             <FieldLabel>{zh ? "送达位置" : "Drop-off location"}</FieldLabel>
             <Select defaultValue="door" items={deliveryOptions} onValueChange={() => setSaved(false)}>
               <SelectTrigger style={{ width: "100%" }}><SelectValue /></SelectTrigger>

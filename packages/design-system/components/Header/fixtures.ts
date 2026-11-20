@@ -232,6 +232,8 @@ const CATEGORIES_ZH: CategoryFixture[] = [
   { id: 'gift-card', label: '亚米礼卡', slug: 'gift-card' },
 ]
 
+const DEFAULT_ZIPCODE = '92821'
+
 /**
  * Per-locale storefront chrome.
  *
@@ -253,7 +255,7 @@ const STOREFRONT = {
       { id: 'beauty', label: 'Beauty' },
     ] as HeaderHall[],
     hallsLabel: 'Storefront',
-    zipcode: { code: '91789', label: 'Deliver to' },
+    zipcode: { code: DEFAULT_ZIPCODE, label: 'Deliver to' },
     searchPlaceholder: 'Best 300K Asian products to explore',
     account: 'Sign In / Sign Up',
     cart: 'Shopping cart',
@@ -277,7 +279,7 @@ const STOREFRONT = {
     categories: CATEGORIES_ZH,
     halls: undefined,
     hallsLabel: '商城',
-    zipcode: { code: '94199', label: '配送至' },
+    zipcode: { code: DEFAULT_ZIPCODE, label: '配送至' },
     searchPlaceholder: '沃集鲜网红爆款来啦',
     account: '登录/注册',
     cart: '购物车',

@@ -83,6 +83,10 @@ export const FilterChip = forwardRef<HTMLButtonElement, FilterChipProps>(
 
 export type FilterChipGroupProps = HTMLAttributes<HTMLDivElement>;
 
+export function FilterChipDropdownIcon() {
+  return <span className={styles.dropdownArrow} aria-hidden="true" />;
+}
+
 export const FilterChipGroup = forwardRef<
   HTMLDivElement,
   FilterChipGroupProps

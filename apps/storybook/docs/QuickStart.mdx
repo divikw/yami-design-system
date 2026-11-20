@@ -1,0 +1,39 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="YAMI/快速开始" id="yami-quick-start" />
+
+# 快速开始 / Quick Start
+
+## 添加工作区依赖 / Add the workspace dependency
+
+在同一个 monorepo 中，从使用组件的应用目录运行以下命令。
+
+Run this command from the consuming app's directory in the same monorepo.
+
+```bash
+pnpm add "@yami/design-system@workspace:*"
+```
+
+也可以在应用的 `package.json` 中添加以下依赖，再运行 `pnpm install`。
+
+You can also add this dependency to the app's `package.json` and run `pnpm install`.
+
+```json
+{
+  "dependencies": {
+    "@yami/design-system": "workspace:*"
+  }
+}
+```
+
+## 引入全局样式 / Import global styles
+
+在应用入口按以下顺序引入字体、设计令牌和基础样式。每个应用只需配置一次。
+
+Import the fonts, design tokens, and base styles in this order once at the app entry point.
+
+```ts
+import "@yami/design-system/styles/fonts.css";
+import "@yami/design-system/tokens.css";
+import "@yami/design-system/styles/base.css";
+```

@@ -3,6 +3,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { Button, Input, FilterChip, Tabs, TabsList, TabsTrigger } from "@yami/design-system";
+import { HeaderSearch } from "@yami/design-system/components/Header";
 import "@yami/design-system/tokens.css";
 import emailStyles from "../../../packages/prototypes/pages/EmailTemplates/EmailAppDownload.module.css";
 import downloadStyles from "../../../packages/prototypes/pages/AppDownloadPageV2/AppDownloadPageV2.module.css";
@@ -17,6 +18,24 @@ beforeEach(() => {
 afterEach(() => {
   root.unmount();
   container.remove();
+});
+
+test("mobile header search shows its ring only when reached by keyboard", async () => {
+  flushSync(() => root.render(<HeaderSearch variant="mobile" searchLabel="Search" placeholder="Search products" />));
+  const search = container.querySelector('[data-slot="header-search"]')!;
+  const input = page.getByRole("searchbox", { name: "Search" });
+
+  await input.click();
+  await expect.element(input).toHaveFocus();
+  expect(getComputedStyle(search).outlineStyle).toBe("none");
+
+  await userEvent.tab();
+  await userEvent.tab({ shift: true });
+  await expect.element(input).toHaveFocus();
+  expect(getComputedStyle(search).outlineWidth).toBe("2px");
+
+  await input.click();
+  expect(getComputedStyle(search).outlineStyle).toBe("none");
 });
 
 function luminance(color: string) {

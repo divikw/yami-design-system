@@ -415,7 +415,7 @@ test("opens a Storybook page by direct link and returns to an ordinary preview p
     body: JSON.stringify({
       v: 5,
       entries: {
-        "yami-pages-topic-landing-page-topic--pc": { id: "yami-pages-topic-landing-page-topic--pc", type: "story", title: "YAMI/Pages/Topic Landing Page/Topic", name: "Topic — PC" },
+        "yami-pages-topic-landing-page-topic--pc": { id: "yami-pages-topic-landing-page-topic--pc", type: "story", title: "YAMI/pages/landing pages/topic templates/topic", name: "Topic — PC" },
       },
     }),
   }));
@@ -426,7 +426,7 @@ test("opens a Storybook page by direct link and returns to an ordinary preview p
 
   await page.goto("/design?story=yami-pages-topic-landing-page-topic--pc&direction=current&locale=en&theme=light&viewport=402");
   await expectWorkbenchSelectValue(page, "页面", "storybook:yami-pages-topic-landing-page-topic--pc");
-  await expect(workbenchSelect(page, "页面")).toHaveText("Topic Landing Page / Topic");
+  await expect(workbenchSelect(page, "页面")).toHaveText("landing pages / topic templates / topic");
   await expect(page.getByText("yami-pages-topic-landing-page-topic--pc", { exact: true })).toBeVisible();
   await expect(page.frameLocator('iframe[title="YAMI 原型预览"]').getByRole("heading", { name: "Imported Topic Page" })).toBeVisible();
 

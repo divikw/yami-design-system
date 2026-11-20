@@ -8,6 +8,42 @@
   font-family: var(--font-family-ios);
 }
 
+.storyNavigation {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  :global(html:not([data-prototype-preview-mode="h5"])) .mobileStory,
+  .mobileStory[data-h5-home-draft] {
+    padding-block-end: calc(var(--space-600) + var(--stroke-default) + env(safe-area-inset-bottom));
+    background: var(--background-primary);
+  }
+
+  :global(html:not([data-prototype-preview-mode="h5"])) .storyNavigation,
+  .mobileStory[data-h5-home-draft] .storyNavigation {
+    display: block;
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    background: var(--surface-primary);
+  }
+
+  :global(html[data-phone-preview-content]:not([data-prototype-preview-mode="h5"])) .storyNavigation > :global([data-slot="tab-bar"]) {
+    height: calc(var(--space-600) + var(--stroke-default) + 34px);
+    padding-block-end: 34px;
+  }
+}
+
+.storyNavigationIcon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
 .main {
   display: flex;
   min-width: 0;

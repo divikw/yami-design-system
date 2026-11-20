@@ -2,7 +2,6 @@ import { Breadcrumb } from "@yami/design-system";
 import { CollapsedBreadcrumb } from "../../../packages/design-system/components/Breadcrumb/examples";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import type { DocsLocale } from "./component-docs-template";
-import styles from "./component-guide.module.css";
 
 const imports = 'import { Breadcrumb } from "@yami/design-system";';
 const legacyAnchors = {
@@ -69,11 +68,16 @@ export function BreadcrumbDocsPage({ locale }: { locale: DocsLocale }) {
 
   return <ComponentGuide name="Breadcrumb" slug="breadcrumb" locale={locale}
     intro={zh ? "按层级顺序传入 items，Breadcrumb 会生成路径和分隔符。为上级链接提供 href，用 current 标记当前页。" : "Pass items in hierarchy order. Breadcrumb renders the trail and its separators. Use href for parent links and current to mark the current page."}
+    usageNote={zh ? "在多级分类或详情页展示用户所处层级。" : "Show where a person is in a hierarchy, such as a nested category or product page."}
+    practices={zh ? [["do", "从最上层到当前页排列，给可访问的上级页面提供真实链接。"], ["avoid", "用面包屑记录访问历史或跨页面任务的步骤。"]]
+      : [["do", "Order items from the top level to the current page and link to available parent pages."], ["avoid", "Use breadcrumbs to show browsing history or steps in a task."]]}
+    accessibility={zh ? ["只为实际当前页设置 current，组件会输出 aria-current=page。", "遇到多个导航区域时，用 aria-label 给面包屑导航命名。"]
+      : ["Set current on the actual current page so the component renders aria-current=page.", "Use aria-label to distinguish the breadcrumb when a page has multiple navigation regions."]}
     previous={{ name: "Badge", path: "yami-components-data-display-badge" }}
     next={{ name: "Button", path: "yami-components-actions-button" }}
     composition={`Breadcrumb (nav)\n└── ol\n    └── li\n        ├── / (aria-hidden)\n        └── a | span`}
     legacyAnchors={legacyAnchors}
-    examples={examples.map(example => ({ ...example, preview: <div className={styles.row}>{example.preview}</div> }))}
+    examples={examples}
     apiNote={zh ? "Breadcrumb 用 Base UI 的 useRender 渲染导航容器。PC 链接最小为 24 × 24px，低于 1024px 时为 44 × 44px。由宿主页面决定是否显示整条路径。" : "Breadcrumb uses Base UI’s useRender for the navigation container. Links have a minimum target of 24 × 24px on desktop and 44 × 44px below 1024px. The host page controls visibility."}
     api={[
       ["items", zh ? "必填，按从上级到下级传入 BreadcrumbItem[]。空数组不渲染，单项省略分隔符。" : "Required ordered array of BreadcrumbItem, from parent to child. An empty array renders nothing. A single item has no separator."],

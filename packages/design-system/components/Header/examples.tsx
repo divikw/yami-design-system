@@ -50,7 +50,7 @@ export function PcHeader() {
         { id: 'all', label: 'All' },
         { id: 'beauty', label: 'Beauty' },
       ]}
-      zipcode={{ code: '91789', label: 'Deliver to', href: '/en/delivery' }}
+      zipcode={{ code: '92821', label: 'Deliver to', href: '/en/delivery' }}
       categories={categories}
       searchPlaceholder="Best 300K Asian products to explore"
       onSearchSubmit={(query) => {

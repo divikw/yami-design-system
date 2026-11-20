@@ -44,6 +44,11 @@ export function AlertDialogDocsPage({ locale }: { locale: DocsLocale }) {
   });
   return <ComponentGuide previewMode="document" name="AlertDialog" slug="alert-dialog" locale={locale}
     intro={zh ? "需要用户明确确认的模态弹窗，适用于重要更改和不可撤销操作。" : "A modal confirmation for important changes and irreversible actions."}
+    usageNote={zh ? "当操作需要用户先阅读后果并明确确认时，使用 AlertDialog。" : "Use AlertDialog when people need to review a consequence and explicitly confirm the action."}
+    practices={zh ? [["do", "说明确认后会发生什么，使用能描述操作的按钮文案。"], ["avoid", "用确认对话框承载长表单或多步骤任务。"]]
+      : [["do", "Explain the consequence and label the confirmation button with the action."], ["avoid", "Put long forms or multi-step tasks inside a confirmation dialog."]]}
+    accessibility={zh ? ["通过 AlertDialogTitle 和 AlertDialogDescription 提供名称及说明。", "取消按钮排在确认之前。Escape 会关闭对话框并把焦点还给触发器。"]
+      : ["Use AlertDialogTitle and AlertDialogDescription to name and describe the dialog.", "Place Cancel before confirmation. Escape dismisses the dialog and returns focus to the trigger."]}
     previous={{ name: "Alert", path: "yami-components-data-display-alert" }}
     next={{ name: "AspectRatio", path: "yami-components-layout-aspectratio" }}
     composition={"AlertDialog\n├── AlertDialogTrigger\n└── AlertDialogContent\n    ├── AlertDialogHeader\n    │   ├── AlertDialogTitle\n    │   └── AlertDialogDescription\n    └── AlertDialogFooter\n        ├── AlertDialogCancel\n        └── AlertDialogAction"}

@@ -4,9 +4,14 @@ import { Field as FieldPrimitive } from "@base-ui/react/field";
 import { Fieldset } from "@base-ui/react/fieldset";
 import type { ComponentPropsWithRef } from "react";
 import { Divider } from "../Divider";
+import { FieldDensityContext, type FieldDensity } from "./density";
 import styles from "./Field.module.css";
 
-export type FieldProps = Omit<FieldPrimitive.Root.Props, "className"> & { className?: string; orientation?: "vertical" | "horizontal" | "responsive" };
+export type FieldProps = Omit<FieldPrimitive.Root.Props, "className"> & {
+  className?: string;
+  orientation?: "vertical" | "horizontal" | "responsive";
+  density?: FieldDensity;
+};
 export type FieldLabelProps = Omit<FieldPrimitive.Label.Props, "className"> & { className?: string };
 export type FieldDescriptionProps = Omit<FieldPrimitive.Description.Props, "className"> & { className?: string };
 export type FieldErrorProps = Omit<FieldPrimitive.Error.Props, "className"> & {
@@ -14,8 +19,11 @@ export type FieldErrorProps = Omit<FieldPrimitive.Error.Props, "className"> & {
   errors?: ReadonlyArray<{ message?: string } | undefined>;
 };
 
-export function Field({ className, orientation = "vertical", ...props }: FieldProps) {
-  return <FieldPrimitive.Root role="group" data-slot="field" data-orientation={orientation} {...props} className={[styles.root, className].filter(Boolean).join(" ")} />;
+export function Field({ className, orientation = "vertical", density, ...props }: FieldProps) {
+  return <FieldDensityContext.Provider value={density}>
+    <FieldPrimitive.Root role="group" data-slot="field" data-orientation={orientation} data-density={density} {...props}
+      className={[styles.root, className].filter(Boolean).join(" ")} />
+  </FieldDensityContext.Provider>;
 }
 
 export function FieldLabel({ className, ...props }: FieldLabelProps) {

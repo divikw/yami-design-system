@@ -126,3 +126,7 @@
     column-gap: var(--space-150);
   }
 }
+
+.root[data-density="default"]:not(:has(> [data-slot="field-label"], > [data-slot="field-content"])) {
+  grid-template-columns: minmax(0, 1fr);
+}

@@ -10,6 +10,10 @@
   "source": "components/Field",
   "files": [
     {
+      "source": "components/Field/density.ts",
+      "target": "components/Field/density.ts"
+    },
+    {
       "source": "components/Field/Field.module.css",
       "target": "components/Field/Field.module.css"
     },
@@ -25,6 +29,7 @@
   "exports": [
     "Field",
     "FieldContent",
+    "FieldDensity",
     "FieldDescription",
     "FieldDescriptionProps",
     "FieldError",
@@ -186,5 +191,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "6ff282f8ae60641306b7a787b1a80b251ad0e1454aaef670110f788b10c63a9c"
+  "contentDigest": "c75011c47e7010f612f33af0a188578b5e7383e48bbb83e9a5eac01dd2e56672"
 }

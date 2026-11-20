@@ -12,7 +12,12 @@
 .header { margin-bottom: var(--space-400); }
 .titleRow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-200); margin-bottom: var(--space-150); }
 .page .titleRow h1 { margin: 0; overflow-wrap: anywhere; }
-.header p { color: var(--text-secondary); max-width: 480px; font-size: var(--font-size-heading-sm); margin: 0; }
+.header p { color: var(--text-secondary); font-size: var(--font-size-heading-sm); margin: 0; }
+.page .examples > section { margin-top: var(--space-400); }
+.examples h3 { margin: 0 0 var(--space-100); font-size: var(--font-size-heading-md); line-height: var(--line-height-heading-md); scroll-margin-top: var(--space-400); }
+.examples > section > p { margin: 0 0 var(--space-200); }
+.guideList { margin: 0; padding-inline-start: var(--space-300); }
+.guideList li + li { margin-top: var(--space-100); }
 .actions { flex-shrink: 0; }
 .actions > [data-slot="button-link"]:not(:only-child)::before { inline-size: var(--space-500); }
 .example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
@@ -21,11 +26,18 @@
 .previewFrame { display: block; flex: none; width: 100vw; max-width: none; border: 0; }
 .frameBody { margin: 0; overflow: hidden; background: var(--surface-primary); }
 .frameContent { box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; width: 100%; min-height: 252px; margin-inline: auto; padding: var(--space-400) var(--space-200); }
-.demo { width: 100%; max-width: 400px; }
+.demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+.demo > * { max-inline-size: 100%; }
 .demo h3 { margin: 0; }
 .codeBlock { position: relative; background: var(--surface-secondary); border-radius: var(--radius-surface-default); margin-top: var(--space-200); overflow: hidden; }
 .example > .codeBlock { margin: 0; border-radius: 0; border-top: var(--stroke-default) solid var(--border-default); }
-.page :is(.codeBlock, .installationTabs) + p { margin-top: var(--space-200); }
+.page .codeBlock + p { margin-top: var(--space-200); }
 .codeScroll { overflow: auto; border-radius: inherit; scrollbar-width: none; }
 .codeScroll::-webkit-scrollbar { display: none; }
 .codeScroll [data-orientation="horizontal"] { display: none; }
@@ -68,34 +80,29 @@
   inset-block-end: var(--space-150);
   padding: 0;
 }
-.installationTabs > [data-slot="tabs-list"] { width: 100%; }
-.installationTabs .codeBlock { margin-top: 0; }
 :where(.page) :where(a, button):focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
 .tableScroll { overflow: auto; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); margin-bottom: var(--space-200); }
+.guidanceTable td:first-child { white-space: nowrap; }
 :is(.page:where(:not([data-docs-layout])), .tableScroll) table { border-collapse: collapse; width: 100%; text-align: start; margin: 0; }
 :is(.page:where(:not([data-docs-layout])), .tableScroll) :is(th, td) { padding: var(--space-150); border-bottom: var(--stroke-default) solid var(--border-default); vertical-align: top; text-align: start; }
 :is(.page:where(:not([data-docs-layout])), .tableScroll) tbody tr:last-child td { border-bottom: 0; }
 :is(.page:where(:not([data-docs-layout])), .tableScroll) td code { overflow-wrap: anywhere; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 :global(.sbdocs-wrapper):has(.page) { background: var(--background-primary); }
-:global(.sbdocs-content):has(.page) { max-width: 720px; min-width: 0; }
-:global(.sbdocs-content):has(.page[data-docs-layout="base-ui"]) { max-width: 640px; }
-.page[data-docs-layout="base-ui"] .titleRow { margin-bottom: var(--space-100); }
-.page[data-docs-layout="base-ui"] h1 {
+.page[data-docs-layout] .titleRow { margin-bottom: var(--space-100); }
+.page[data-docs-layout] h1 {
   letter-spacing: var(--letter-spacing-tight);
 }
-.page[data-docs-layout="base-ui"] .header p {
-  max-width: 40ch;
+.page[data-docs-layout] .header p {
   font-size: var(--font-size-body-xl);
   line-height: var(--line-height-body-xl);
 }
-.page[data-docs-layout="base-ui"] > section > h2, .usage h2 {
+.page[data-docs-layout] > section > h2, .usage h2 {
   color: var(--text-primary);
   font-size: var(--font-size-heading-xl);
   line-height: var(--line-height-heading-xl);
 }
 @media (max-width: 600px) {
-  :global(.sbdocs-wrapper):has(.page[data-docs-layout="base-ui"]) { padding-inline: var(--space-200); }
   .page:where(:not([data-docs-layout])) section, .page > section { margin-top: var(--space-400); }
 }
 

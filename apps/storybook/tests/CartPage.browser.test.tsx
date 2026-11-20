@@ -107,8 +107,8 @@ for (const locale of ["zh", "en"] as const) {
       await document.fonts.ready;
       const fieldBounds = field.getBoundingClientRect();
       const label = form.querySelector("label")!;
-      expect(fieldBounds.height).toBeCloseTo(width < 1024 ? 48 : 40, 2);
-      expect(redeem.getBoundingClientRect().height).toBeCloseTo(width < 1024 ? 40 : fieldBounds.height, 2);
+      expect(fieldBounds.height).toBeCloseTo(40, 2);
+      expect(redeem.getBoundingClientRect().height).toBeCloseTo(fieldBounds.height, 2);
       if (width >= 1024) expect(edit.getBoundingClientRect().height).toBe(fieldBounds.height);
       for (const button of width < 1024 ? [redeem] : [redeem, edit]) {
         expect(getComputedStyle(button).paddingLeft).toBe(width < 1024 ? "8px" : "16px");
@@ -122,7 +122,7 @@ for (const locale of ["zh", "en"] as const) {
         expect(edit.getBoundingClientRect().width).toBe(redeem.getBoundingClientRect().width);
         expect(editLabel.left).toBe(redeemLabel.left);
       }
-      expect(redeem.getBoundingClientRect().top).toBe(fieldBounds.top + (width < 1024 ? 4 : 0));
+      expect(redeem.getBoundingClientRect().top).toBe(fieldBounds.top);
       expect(getComputedStyle(redeem).marginTop).toBe("0px");
       expect(label.htmlFor).toBe(input.id);
       if (width >= 1024) expect(label.getBoundingClientRect().bottom).toBeLessThanOrEqual(fieldBounds.top - 4);
@@ -130,11 +130,11 @@ for (const locale of ["zh", "en"] as const) {
       await userEvent.click(redeem);
       expect(form.querySelector('[role="alert"]')!.textContent).toBe(locale === "zh" ? "请输入折扣码" : "Enter a promo code");
       expect(input.getAttribute("aria-invalid")).toBe("true");
-      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top + (width < 1024 ? 4 : 0));
+      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top);
       await page.elementLocator(input).fill("BAD");
       await userEvent.keyboard("{Enter}");
       expect(form.querySelector('[role="alert"]')!.textContent).toBe(locale === "zh" ? "折扣码无效，请检查后重试" : "Invalid promo code. Check it and try again.");
-      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top + (width < 1024 ? 4 : 0));
+      expect(redeem.getBoundingClientRect().top).toBe(field.getBoundingClientRect().top);
       expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(width);
     } finally {
       root.unmount(); container.remove();

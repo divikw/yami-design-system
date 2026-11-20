@@ -20,7 +20,7 @@ export function EditNickname({ locale }: { locale: "zh" | "en" }) {
             setOpen(false);
           }}>
           <PopoverTitle>{title}</PopoverTitle>
-          <Input fullWidth name="nickname" label={zh ? "昵称" : "Nickname"} defaultValue={nickname} />
+          <Input density="compact" fullWidth name="nickname" label={zh ? "昵称" : "Nickname"} defaultValue={nickname} />
           <Button size={actionSize} htmlType="submit">{zh ? "保存" : "Save"}</Button>
         </form>
       </PopoverContent>

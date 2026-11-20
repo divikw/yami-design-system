@@ -1,4 +1,4 @@
-import { FilterChip, FilterChipGroup } from "./FilterChip";
+import { FilterChip, FilterChipDropdownIcon, FilterChipGroup } from "./FilterChip";
 
 export function FilterChipExample() {
   return (
@@ -7,7 +7,7 @@ export function FilterChipExample() {
         Hot
       </FilterChip>
       <FilterChip variant="filled">Tea Drinks</FilterChip>
-      <FilterChip rightIcon={<span aria-hidden="true">⌄</span>}>
+      <FilterChip rightIcon={<FilterChipDropdownIcon />}>
         Category
       </FilterChip>
     </FilterChipGroup>

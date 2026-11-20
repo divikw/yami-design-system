@@ -14,3 +14,4 @@ export {
   type FieldLabelProps,
   type FieldProps,
 } from "./Field";
+export type { FieldDensity } from "./density";

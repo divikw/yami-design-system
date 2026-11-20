@@ -255,7 +255,7 @@
   outline: none;
 }
 
-.search:has(.searchField:focus-visible) {
+.search:has(.searchField:focus-visible:not([data-pointer-focus])) {
   outline: var(--stroke-thick) solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -896,6 +896,34 @@
    * a 24px icon over a 12px label = 36px, which 14px would overrun. */
   line-height: 12px;
   text-align: center;
+}
+
+.mobileBand[data-mobile-variant='h5-home'] .mobileBar {
+  padding-inline-end: 0;
+}
+
+.mobileBand[data-mobile-variant='h5-home'] .mobileActions {
+  gap: 0;
+}
+
+.mobileBand[data-mobile-variant='h5-home'] .mobileAction {
+  width: auto;
+  min-width: var(--space-500);
+  height: var(--space-500);
+  box-sizing: border-box;
+  flex-direction: row;
+  gap: var(--space-025);
+  padding: var(--space-050) var(--space-100);
+}
+
+.mobileBand[data-mobile-variant='h5-home'] .mobileActionLabel {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.mobileLocaleLabel {
+  font-size: var(--font-size-caption-sm);
+  line-height: var(--line-height-caption-sm);
 }
 
 .mobileSearchRow {

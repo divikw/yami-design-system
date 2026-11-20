@@ -17,7 +17,7 @@ export function NotificationPreference({ locale }: { locale: "zh" | "en" }) {
         ["sms", zh ? "仅短信" : "SMS only"],
         ["both", zh ? "邮件和短信" : "Email and SMS"],
       ].map(([option, label]) => <label key={option} style={{
-        display: "flex", alignItems: "center", gap: "var(--space-100)", lineHeight: "var(--line-height-body-md)",
+        display: "flex", alignItems: "center", columnGap: "var(--space-050)", lineHeight: "var(--line-height-body-md)",
       }}><RadioGroupItem value={option} aria-invalid={invalid} />{label}</label>)}
     </RadioGroup>
     {invalid && <p id={id + "-error"} style={{ color: "var(--text-error)", marginBlock: "var(--space-150) 0" }}>

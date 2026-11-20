@@ -1,0 +1,82 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="YAMI/pages/landing pages/component index" />
+
+# 落地页组件索引 / Landing Page Component Index
+
+Topic Templates 和 Collection Templates 共用以下组件。模板栏列出当前 Storybook 示例中的用法。
+
+Topic Templates and Collection Templates share these components. The template column reflects the current Storybook examples.
+
+<div role="region" aria-label="落地页组件表 / Landing page components" tabIndex={0} style={{ overflowX: "auto" }}>
+<table>
+  <thead>
+    <tr>
+      <th scope="col">页面区块 / Section</th>
+      <th scope="col">组件 / Component</th>
+      <th scope="col">模板 / Templates</th>
+      <th scope="col">PC / Mobile</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">页头 / Header</th>
+      <td>
+        <a href="/?path=/docs/yami-components-navigation-header--docs" target="_top">Header</a>
+        <br />
+        <a href="/?path=/docs/yami-components-navigation-activity-page-header--docs" target="_top">ActivityPageHeader</a>
+      </td>
+      <td>全部 / All</td>
+      <td>PC 用全局导航，Mobile 用活动页头。<br />PC uses the global header. Mobile uses the activity header.</td>
+    </tr>
+    <tr>
+      <th scope="row">主视觉 / Hero</th>
+      <td><a href="/?path=/docs/yami-components-commerce-theme-hero--docs" target="_top">ThemeHero</a></td>
+      <td>全部 / All</td>
+      <td>PC 图文并排，Mobile 文案叠在主图底部。<br />PC places copy beside the artwork. Mobile overlays it along the bottom.</td>
+    </tr>
+    <tr>
+      <th scope="row">区块导航 / Section navigation</th>
+      <td><a href="/?path=/docs/yami-components-navigation-tabs--docs" target="_top">Tabs</a></td>
+      <td>全部 / All</td>
+      <td>随滚动定位区块。PC 吸附于全局页头下，Mobile 横向滚动。<br />Tracks the active section, sticks below the PC header, and scrolls horizontally on Mobile.</td>
+    </tr>
+    <tr>
+      <th scope="row">精选分类 / Category shortcuts</th>
+      <td><a href="/?path=/docs/yami-components-navigation-shortcut-rail--docs" target="_top">ShortcutRail</a></td>
+      <td>全部 / All</td>
+      <td>PC 最多 6 项时用大图卡，更多时用紧凑入口。Mobile 用可滑动的小图入口。<br />PC uses image cards for up to six items, then a compact layout. Mobile uses smaller shortcuts in a swipeable rail.</td>
+    </tr>
+    <tr>
+      <th scope="row">主题导购 / Guided shopping</th>
+      <td><a href="/?path=/docs/yami-components-commerce-theme-product-list--docs" target="_top">ThemeProductList</a></td>
+      <td>全部 / All</td>
+      <td>PC 导购卡在商品横滑列表开头，Mobile 放在列表上方。<br />The editorial panel leads the product rail on PC and sits above it on Mobile.</td>
+    </tr>
+    <tr>
+      <th scope="row">热门精选、探索更多 / Popular Picks and Explore More</th>
+      <td><a href="/?path=/docs/yami-components-commerce-product-list--docs" target="_top">ProductList</a></td>
+      <td>全部 / All</td>
+      <td>热门精选用横滑列表，探索更多用瀑布流。Mobile 手机宽度为双列，宽屏随可用宽度增列。<br />Popular Picks uses a rail. Explore More uses a grid with two columns at phone widths and more as space allows.</td>
+    </tr>
+    <tr>
+      <th scope="row">品牌推荐 / Brand Spotlight</th>
+      <td><a href="/?path=/docs/yami-components-commerce-brand-product-rail--docs" target="_top">BrandProductRail</a></td>
+      <td>Topic、Campaign</td>
+      <td>PC 可并排展示多组品牌商品，Mobile 横滑浏览。<br />PC can show brand collections side by side. Mobile uses a swipeable rail.</td>
+    </tr>
+    <tr>
+      <th scope="row">评价与心得 / Reviews and notes</th>
+      <td><a href="/?path=/docs/yami-components-commerce-review-list--docs" target="_top">ReviewList</a></td>
+      <td>全部 / All</td>
+      <td>PC 并排显示三张卡片，Mobile 横滑浏览。<br />PC shows three cards side by side. Mobile uses a swipeable rail.</td>
+    </tr>
+    <tr>
+      <th scope="row">页脚 / Footer</th>
+      <td><a href="/?path=/docs/yami-components-navigation-footer--docs" target="_top">Footer</a></td>
+      <td>全部 / All</td>
+      <td>仅在 PC 显示（≥ 1024px）。<br />Visible on PC at 1024px and above.</td>
+    </tr>
+  </tbody>
+</table>
+</div>

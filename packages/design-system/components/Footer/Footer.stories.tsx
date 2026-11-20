@@ -41,14 +41,14 @@ function getProps(locale: FooterLocale): FooterProps {
 
 const meta = {
   id: 'yami-components-navigation-footer',
-  title: 'YAMI/Modules/Footer',
+  title: 'YAMI/Modules/Global/Footer',
   component: Footer,
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          'YAMI PC global site footer: a responsive masthead that follows the 1920, 1440, and 1024px Figma variants, closed by an inverse bar carrying payment marks, copyright, and legal links. PC only — the mobile footer ships separately.',
+          'YAMI PC global site footer: a responsive masthead that follows the 1920, 1440, and 1024px Figma variants, closed by an inverse bar carrying payment marks, copyright, and legal links.',
       },
       story: { inline: false, height: '760px' },
     },
@@ -279,13 +279,6 @@ export const PCPreview: Story = {
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },
   play: undefined,
-};
-
-export const MobilePreview: Story = {
-  name: "Mobile",
-  tags: ["component-device", "dev", "autodocs", "!test"],
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
-  render: (_, { globals }) => <p>{globals.locale === "en" ? "This footer is desktop only. Mobile uses a separate footer." : "此页脚仅用于 PC。移动端使用独立页脚。"}</p>,
 };
 
 export const Playground: Story = { tags: ["!dev", "!test"] };

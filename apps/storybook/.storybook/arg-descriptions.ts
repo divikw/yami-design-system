@@ -73,7 +73,7 @@ const common: Record<string, Copy> = {
   prefix: ["输入前缀，兼容 leadingIcon 的旧别名。", "Input prefix; legacy alias for leadingIcon."],
   suffix: ["输入后缀，兼容 trailingIcon 的旧别名。", "Input suffix; legacy alias for trailingIcon."],
   action: ["输入框内的文字操作配置。", "Inline text action within the input field."],
-  density: ["输入框布局密度，compact 使用外置标签和单行输入。", "Input density; compact uses an external label and a single input row."],
+  density: ["控件规格：default 为 56 px 内嵌标签，compact 为 40 px 外置标签。", "Control density: default is 56 px with an embedded label; compact is 40 px with an external label."],
   helperText: ["字段下方的辅助说明；有错误时由错误文案替代。", "Supporting text below the field, replaced by error copy when present."],
   error: ["错误提示文案，与对应控件关联显示。", "Error message displayed and associated with the control."],
   state: ["示例中的视觉状态覆盖；业务通常由实际交互状态决定。", "Visual state override for demos; product usage normally derives actual state."],
@@ -385,7 +385,7 @@ const overrides: Record<string, Record<string, Copy>> = {
   },
   Header: { locale: ["页头语言／地区入口配置，包含文案和切换行为。", "Header language/region entry configuration with labels and switching behavior."] },
   Input: {
-    size: ["已弃用的兼容属性；输入框按响应式规范与 density 决定尺寸。", "Deprecated compatibility prop; responsive rules and density determine input sizing."],
+    size: ["已弃用的兼容属性；用 density 选择输入框规格。", "Deprecated compatibility prop; use density to set input sizing."],
     onValueChange: ["接收输入值和 Base UI 事件详情。", "Receives the input value and Base UI event details."],
   },
   Tabs: {
@@ -406,6 +406,7 @@ const overrides: Record<string, Record<string, Copy>> = {
     modal: ["菜单打开时限制与背景内容的交互。", "Restricts interaction with background content while the menu is open."],
   },
   Drawer: {
+    titleContent: ["自定义抽屉的可见标题，读屏仍使用 title。", "Custom visible drawer title. The title prop supplies the accessible name."],
     size: ["移动端可选内容高度、全屏或半屏拖动。", "Mobile height: content, full, or draggable from half height."],
     swipeDirection: ["滑动关闭的方向，默认桌面向右、移动端向下。", "Direction of the dismiss gesture. Defaults to right on desktop and down on mobile."],
     showSwipeHandle: ["显示拖动手柄。配置停靠点时默认显示。", "Shows the swipe handle. Visible by default when snap points are set."],

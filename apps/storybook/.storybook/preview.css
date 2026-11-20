@@ -1,3 +1,28 @@
 html, body, #storybook-root { min-height: 100%; }
 body { margin: 0; }
 [data-theme="dark"] { color-scheme: dark; }
+
+.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) {
+  column-gap: var(--space-400);
+  padding-inline: var(--space-300);
+}
+
+.sbdocs-content:has([data-component-docs]) {
+  max-inline-size: 880px;
+}
+
+.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom {
+  flex: 0 0 160px;
+}
+
+@media (width < 1280px) {
+  .sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) {
+    padding-inline: var(--space-200);
+  }
+}

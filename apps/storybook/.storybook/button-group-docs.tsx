@@ -111,6 +111,11 @@ export function SavingActions() {
   return <div id="component-playground">
     <ComponentGuide name="ButtonGroup" slug="buttongroup" locale={locale}
       intro={zh ? "将作用于同一对象的按钮和链接成组排列，支持内容宽度和等宽两种布局。" : "Group buttons and links that act on the same item, with content-width and equal-width layouts."}
+      usageNote={zh ? "把同一对象的相关操作放在一组，例如保存和取消。" : "Group related actions for one item, such as Save and Cancel."}
+      practices={zh ? [["do", "让组内子项使用相同尺寸。需要等宽时，给组设置 full，并让子项使用 form=full。"], ["avoid", "把无关操作放在同一个按钮组里。"]]
+        : [["do", "Match child sizes. For equal widths, set full on the group and form=full on the children."], ["avoid", "Put unrelated actions into the same group."]]}
+      accessibility={zh ? ["使用 aria-label 命名整组操作。", "按 Tab 逐项聚焦，按钮和链接各自保留原生键盘行为。"]
+        : ["Name the group with aria-label.", "Press Tab to move through the items. Each button or link retains its native keyboard behavior."]}
       previous={{ name: "Button", path: "yami-components-actions-button" }}
       next={{ name: "Card", path: "yami-components-layout-card" }}
       legacyAnchors={legacyAnchors}

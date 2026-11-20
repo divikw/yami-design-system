@@ -1,13 +1,13 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, Card } from "@yami/design-system";
-import { CodeBlock, ComponentDocsTemplate, DocsExample, Installation, type DocsLocale as Locale } from "./component-docs-template";
+import { ComponentGuide } from "./component-guide";
+import type { DocsLocale as Locale } from "./component-docs-template";
 import styles from "./accordion-docs.module.css";
-import docsStyles from "./component-docs-template.module.css";
 
-type ExampleKind = "basic" | "multiple" | "disabled" | "borders" | "card";
-const sections = ["installation", "usage", "composition", "basic", "multiple", "disabled", "borders", "card", "api"] as const;
+const exampleKinds = ["basic", "multiple", "disabled", "borders", "card"] as const;
+type ExampleKind = typeof exampleKinds[number];
 const headings = {
-  zh: ["安装", "用法", "组合结构", "基础用法", "多项展开", "禁用", "边框", "卡片", "API 参考"],
-  en: ["Installation", "Usage", "Composition", "Basic", "Multiple", "Disabled", "Borders", "Card", "API Reference"],
+  zh: ["基础用法", "多项展开", "禁用", "边框", "卡片"],
+  en: ["Basic", "Multiple", "Disabled", "Borders", "Card"],
 };
 const questions = {
   zh: [
@@ -40,11 +40,8 @@ function Demo({ locale, kind = "basic" }: { locale: Locale; kind?: ExampleKind }
   return kind === "card" ? <Card surface="secondary" padding="md" style={{ paddingBlock: 0 }}>{group}</Card> : group;
 }
 
-function Example({ locale, kind = "basic" }: { locale: Locale; kind?: ExampleKind }) {
-  return <DocsExample name={kind} code={exampleCode(locale, kind)} locale={locale}><Demo locale={locale} kind={kind} /></DocsExample>;
-}
-
 export function AccordionDocsPage({ locale }: { locale: Locale }) {
+  const zh = locale === "zh";
   const intro = locale === "zh" ? "一组纵向排列的交互标题，点击标题可以展开或收起对应内容。" : "A vertical group of interactive headings. Select a heading to expand or collapse its content.";
   const descriptions: Record<ExampleKind, string> = locale === "zh" ? {
     basic: "默认同时展开一项。首项初始展开，再次点击可收起。",
@@ -60,19 +57,16 @@ export function AccordionDocsPage({ locale }: { locale: Locale }) {
     card: "Wrap Accordion in a YAMI Card with horizontal padding only; the accordion items provide vertical spacing.",
   };
   const composition = "Accordion\n├── AccordionItem\n│   ├── AccordionTrigger\n│   └── AccordionContent\n└── AccordionItem\n    ├── AccordionTrigger\n    └── AccordionContent";
-  const usageCode = exampleCode(locale, "usage");
-  const [imports, usage] = usageCode.split("\n\n");
-  const apiRows = [["Accordion", "multiple, value, defaultValue, onValueChange, disabled, keepMounted, hiddenUntilFound"], ["AccordionItem", "value, disabled, onOpenChange"], ["AccordionTrigger", "render, nativeButton"], ["AccordionContent", "render"]];
-  const heading = (id: typeof sections[number]) => <h2 id={`accordion-${id}`}>{headings[locale][sections.indexOf(id)]}</h2>;
-  return <ComponentDocsTemplate name="Accordion" slug="accordion" intro={intro} locale={locale} next={{ name: "Alert", path: "yami-components-data-display-alert" }}>
-    <Example key={locale} locale={locale} />
-    <section>{heading("installation")}<Installation locale={locale} /></section>
-    <section>{heading("usage")}<CodeBlock locale={locale} code={imports} /><CodeBlock locale={locale} code={usage} /></section>
-    <section>{heading("composition")}<p>{locale === "zh" ? "使用以下结构组合面板，属性和状态由 Base UI 管理。" : "Compose panels using these parts. Base UI manages their properties and state."}</p><CodeBlock locale={locale} code={composition} language="text" /></section>
-    {(["basic", "multiple", "disabled", "borders", "card"] as const).map((kind) => <section key={kind}>{heading(kind)}<p>{descriptions[kind]}</p><Example key={`${kind}-${locale}`} locale={locale} kind={kind} /></section>)}
-    <section>{heading("api")}<p>{locale === "zh" ? "组件命名与组合方式遵循 shadcn/ui，行为由 Base UI 提供。完整属性、事件与数据属性请查看 " : "Component names and composition follow shadcn/ui, with behavior provided by Base UI. See all props, events and data attributes in the "}<a href="https://base-ui.com/react/components/accordion" target="_blank" rel="noreferrer">Base UI Accordion {locale === "zh" ? "文档" : "documentation"}</a>{locale === "zh" ? "。" : "."}</p>
-      <div className={docsStyles.tableScroll}><table><thead><tr><th>{locale === "zh" ? "部件" : "Part"}</th><th>{locale === "zh" ? "常用属性" : "Common props"}</th></tr></thead><tbody>{apiRows.map(([part, props]) => <tr key={part}><td><code>{part}</code></td><td><code>{props}</code></td></tr>)}</tbody></table></div>
-      <p>{locale === "zh" ? "AccordionTrigger 内部包含语义标题 Header，无需额外包裹。单面板也采用相同组合结构。" : "AccordionTrigger includes the semantic Header internally. Use the same composition for a single panel."}</p>
-    </section>
-  </ComponentDocsTemplate>;
+  return <ComponentGuide name="Accordion" slug="accordion" intro={intro} locale={locale}
+    next={{ name: "Alert", path: "yami-components-data-display-alert" }}
+    usageNote={zh ? "用折叠面板组织商品规格、配料或配送说明等可按需展开的内容。" : "Use an accordion for details people can reveal on demand, such as product specifications, ingredients, or delivery notes."}
+    usageCode={exampleCode(locale, "usage")} composition={composition}
+    practices={zh ? [["do", "每项使用能概括内容的标题。需要同时对照多个面板时开启 multiple。"], ["avoid", "把完成当前任务所必需的信息全部藏在折叠面板里。"]]
+      : [["do", "Name each item for its content. Enable multiple when people need to compare panels."], ["avoid", "Hide all information needed for the current task inside collapsed panels."]]}
+    examples={exampleKinds.map((kind, index) => ({ id: kind, title: headings[locale][index], description: descriptions[kind], code: exampleCode(locale, kind), preview: <Demo locale={locale} kind={kind} /> }))}
+    apiNote={zh ? "组件命名与组合方式遵循 shadcn/ui，交互由 Base UI 提供。" : "Component names and composition follow shadcn/ui. Base UI provides the interaction."}
+    api={[["Accordion", "multiple, value, defaultValue, onValueChange, disabled, keepMounted, hiddenUntilFound"], ["AccordionItem", "value, disabled, onOpenChange"], ["AccordionTrigger", "render, nativeButton"], ["AccordionContent", "render"]]}
+    accessibility={zh ? ["AccordionTrigger 已包含语义标题和原生按钮。", "按 Enter 或空格展开当前面板；收起后，面板内容会退出键盘焦点顺序。"]
+      : ["AccordionTrigger includes a semantic heading and a native button.", "Press Enter or Space to toggle the current panel. Collapsed content leaves the keyboard focus order."]}
+    reference={{ label: "Base UI Accordion", href: "https://base-ui.com/react/components/accordion" }} />;
 }

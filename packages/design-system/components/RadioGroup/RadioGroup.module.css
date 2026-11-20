@@ -58,6 +58,10 @@
   }
 }
 
+.item:focus-visible {
+  outline: 0;
+}
+
 .item:focus-visible::before {
   border-radius: var(--radius-button-primary);
   outline: var(--stroke-thick) solid var(--focus-ring);

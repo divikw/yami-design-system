@@ -48,6 +48,18 @@ const draftStoryPaths = new Set(entries
   .map((entry) => path.resolve(root, "apps/storybook", entry.importPath)));
 const docsEntries = entries.filter((entry) => entry.type === "docs");
 const docsComponentNames = new Set(docsEntries.map((entry) => normalizeComponentName(entry.title.split("/").at(-1))));
+const deviceStoryNames = {
+  ActivityPageHeader: "",
+  Header: "docs,PC,APP,H5",
+  Footer: "docs,PC",
+  TabBar: "docs,APP,H5",
+};
+const componentsWithProperties = new Set([
+  "Accordion", "Alert", "AlertDialog", "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
+  "Card", "Checkbox", "Combobox", "Dialog", "Divider", "Drawer", "DropdownMenu", "EmptyState", "Field",
+  "FilterChip", "Input", "NavigationMenu", "Pagination", "Popover", "Progress", "RadioGroup", "Select",
+  "Skeleton", "Slider", "Spinner", "Switch", "Tabs", "Tag", "Textarea", "Toast", "Tooltip",
+]);
 for (const component of componentDocs) {
   if (docsEntries.some((entry) => path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath)) {
     docsComponentNames.add(normalizeComponentName(component.name));
@@ -75,10 +87,18 @@ for (const component of componentDocs) {
     throw new Error(`${component.name} is missing its Storybook docs entry`);
   }
   const visible = entries.filter((entry) => entry.tags?.includes("dev") &&
-    path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath);
-  if (visible.map((entry) => entry.name).join(",") !== "docs,PC,Mobile" ||
-      visible[0].type !== "docs" || visible.slice(1).some((entry) => entry.type !== "story" || entry.tags.includes("play-fn"))) {
-    throw new Error(`${component.name} must show only Docs, PC, and Mobile, with no autoplay in the device previews`);
+    (path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath ||
+      entry.storiesImports?.some((storyPath) => path.resolve(root, "apps/storybook", storyPath) === component.storyPath)));
+  const hasProperties = componentsWithProperties.has(component.name);
+  const expectedNames = deviceStoryNames[component.name] ?? (hasProperties ? "docs,Properties,PC,Mobile" : "docs,PC,Mobile");
+  if (!expectedNames) {
+    if (visible.length) throw new Error(`${component.name} must stay out of the sidebar`);
+    continue;
+  }
+  const invalidProperties = hasProperties && !(visible[1]?.type === "docs" && visible[1].tags.includes("attached-mdx"));
+  if (visible.map((entry) => entry.name).join(",") !== expectedNames || invalidProperties ||
+      visible[0].type !== "docs" || visible.slice(hasProperties ? 2 : 1).some((entry) => entry.type !== "story" || entry.tags.includes("play-fn"))) {
+    throw new Error(`${component.name} must show ${expectedNames.split(",").join(", ")} in order, with no autoplay in the device previews`);
   }
 }
 

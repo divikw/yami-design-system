@@ -62,6 +62,8 @@
     }
   },
   "tokens": [
+    "--color-black-400",
+    "--color-white-400",
     "--surface-primary",
     "--surface-secondary",
     "--text-primary",
@@ -117,6 +119,8 @@
     "rationale": "Storybook play tests cover controlled changes, keyboard and validation; browser tests cover responsive geometry."
   },
   "tokenBindings": {
+    "--color-black-400": { "property": "color", "selector": ".arrow" },
+    "--color-white-400": { "property": "color", "selector": ".dark .arrow" },
     "--space-150": { "property": "padding-inline", "selector": ".display, .input" },
     "--surface-primary": {
       "property": "background",

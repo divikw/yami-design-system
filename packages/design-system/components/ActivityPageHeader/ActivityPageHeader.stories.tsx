@@ -112,17 +112,10 @@ export const ChineseLocaleUsesEnglishLogo: Story = {
   },
 };
 
-export const PCPreview: Story = {
-  name: "PC",
-  tags: ["component-device", "dev", "autodocs", "!test"],
-  globals: { viewport: { value: "yamiDesktop", isRotated: false } },
-  render: (_, { globals }) => <p>{globals.locale === "en" ? "Activity Page Header is available on mobile only." : "活动页头仅用于移动端。"}</p>,
-};
-
 export const MobilePreview: Story = {
   ...Showcase,
-  name: "Mobile",
-  tags: ["component-device", "dev", "autodocs", "!test"],
+  name: "H5",
+  tags: ["component-device", "!dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
   play: undefined,
 };

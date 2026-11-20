@@ -1,0 +1,20 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="tabbar / categories" clip-path="url(#clip0_0_637)">
+<g id="Vector">
+</g>
+<g id="Vector_2">
+<path d="M1.14258 4.29165H8.42373V5.79165H1.14258V4.29165Z" fill-rule="evenodd" clip-rule="evenodd" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+<path d="M1.14258 10.0365H6.35084V11.5365H1.14258V10.0365Z" fill-rule="evenodd" clip-rule="evenodd" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+<path d="M1.14258 16.026H8.42365V17.526H1.14258V16.026Z" fill-rule="evenodd" clip-rule="evenodd" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+<use xlink:href="#stroke0_0_637" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+<path d="M19.7892 16.0365L23.2318 22.0026L21.9326 22.7523L18.49 16.7862L19.7892 16.0365Z" fill-rule="evenodd" clip-rule="evenodd" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+<use xlink:href="#stroke0_0_637" fill="black" fill-opacity="0.87" style="fill:black;fill-opacity:0.87;"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_0_637">
+<rect width="24" height="24" fill="white" style="fill:white;fill-opacity:1;"/>
+</clipPath>
+<path id="stroke0_0_637" d="M15.7155 4.75C12.5342 4.75 9.95522 7.32899 9.95522 10.5103C9.95522 13.6917 12.5342 16.2707 15.7155 16.2707C18.8969 16.2707 21.4759 13.6917 21.4759 10.5103C21.4759 7.32899 18.8969 4.75 15.7155 4.75ZM8.45522 10.5103C8.45522 6.50056 11.7058 3.25 15.7155 3.25C19.7253 3.25 22.9759 6.50056 22.9759 10.5103C22.9759 14.5201 19.7253 17.7707 15.7155 17.7707C11.7058 17.7707 8.45522 14.5201 8.45522 10.5103Z" fill-rule="evenodd" clip-rule="evenodd"/>
+</defs>
+</svg>

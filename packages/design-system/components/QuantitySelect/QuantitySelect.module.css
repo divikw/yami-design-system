@@ -59,10 +59,13 @@
   width: var(--space-200);
   height: var(--space-200);
   background: currentColor;
+  color: var(--color-black-400);
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
 }
+:global(.dark) .arrow { color: var(--color-white-400); }
+.select:disabled .arrow { color: inherit; }
 
 .root[data-keyboard-focus] .control:has(.select:focus-visible) .display {
   outline: var(--stroke-thick) solid var(--focus-ring);

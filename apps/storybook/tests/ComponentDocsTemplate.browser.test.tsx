@@ -5,7 +5,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Button, ButtonLink, Input } from "@yami/design-system";
+import { Button, ButtonLink, Input, Pagination } from "@yami/design-system";
 import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import { DrawerExample } from "../../../packages/design-system/components/Drawer/examples";
 import componentCatalog from "../../../packages/design-system/generated/catalog.json";
@@ -23,15 +23,23 @@ import { ButtonGroupDocsPage } from "../.storybook/button-group-docs";
 import { CardDocsPage } from "../.storybook/card-docs";
 import { RadioGroupDocsPage } from "../.storybook/radio-group-docs";
 import { CheckboxDocsPage } from "../.storybook/checkbox-docs";
+import { ComboboxDocsPage } from "../.storybook/combobox-docs";
+import { DividerDocsPage } from "../.storybook/divider-docs";
 import { ComponentDocsPreview } from "../.storybook/component-docs-preview";
+import { ComponentPropertiesPage } from "../.storybook/component-properties";
+import { alertDialogProperties } from "../.storybook/properties-examples";
 import { componentDocsName } from "../.storybook/component-docs-names";
 import { CodeBlock } from "../.storybook/component-docs-template";
 import "@yami/design-system/tokens.css";
+import "../.storybook/preview.css";
 
-const guides = [
-  ["Accordion", AccordionDocsPage], ["AlertDialog", AlertDialogDocsPage], ["AspectRatio", AspectRatioDocsPage],
-  ["Avatar", AvatarDocsPage], ["Badge", BadgeDocsPage], ["Dialog", DialogDocsPage], ["Drawer", DrawerDocsPage],
-  ["Breadcrumb", BreadcrumbDocsPage], ["Button", ButtonDocsPage], ["ButtonGroup", ButtonGroupDocsPage], ["Card", CardDocsPage], ["Checkbox", CheckboxDocsPage], ["Radio Group", RadioGroupDocsPage],
+const propertiesGuides = [
+  ["Accordion", AccordionDocsPage], ["Alert", AlertDocsPage], ["AlertDialog", AlertDialogDocsPage],
+  ["AspectRatio", AspectRatioDocsPage], ["Avatar", AvatarDocsPage], ["Badge", BadgeDocsPage],
+  ["Breadcrumb", BreadcrumbDocsPage], ["Button", ButtonDocsPage], ["ButtonGroup", ButtonGroupDocsPage],
+  ["Card", CardDocsPage], ["Checkbox", CheckboxDocsPage], ["Combobox", ComboboxDocsPage],
+  ["Dialog", DialogDocsPage], ["Divider", DividerDocsPage], ["Drawer", DrawerDocsPage],
+  ["Radio Group", RadioGroupDocsPage],
 ] as const;
 
 test("every catalog component has a Chinese Docs name", () => {
@@ -43,8 +51,34 @@ test("every catalog component has a Chinese Docs name", () => {
   expect(componentDocsName("Floating Bars", "en")).toBe("Floating Bars");
 });
 
+test("component Docs cap the reading column and show the directory only when it fits", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const host = document.createElement("div");
+  host.className = "sbdocs-wrapper";
+  Object.assign(host.style, { display: "flex", flexDirection: "row-reverse", justifyContent: "center" });
+  host.innerHTML = '<aside class="sbdocs-toc--custom"></aside><div class="sbdocs-content" style="flex: 1"><div><article data-component-docs></article></div></div>';
+  document.body.append(host);
+  const content = host.querySelector(".sbdocs-content")!;
+  const directory = host.querySelector("aside")!;
+
+  try {
+    for (const [width, columnWidth, directoryWidth] of [[1280, 880, 160], [1279, 880, 0], [820, 772, 0], [390, 358, 0]]) {
+      await page.viewport(width, 720);
+      const column = content.getBoundingClientRect();
+      const toc = directory.getBoundingClientRect();
+      expect(column.width).toBe(columnWidth);
+      expect(toc.width).toBe(directoryWidth);
+      if (directoryWidth) expect(toc.left - column.right).toBe(32);
+      expect(column.left).toBeCloseTo(width - (directoryWidth ? toc.right : column.right), 0);
+    }
+  } finally {
+    host.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});
+
 for (const locale of ["zh", "en"] as const) {
-  test.each(guides)(`%s shares the docs layout and code disclosure in ${locale}`, async (name, Guide) => {
+  test.each(propertiesGuides)(`%s shares the docs layout and code disclosure in ${locale}`, async (name, Guide) => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
@@ -54,19 +88,42 @@ for (const locale of ["zh", "en"] as const) {
     } as unknown as ContextType<typeof DocsContext>;
     try {
       flushSync(() => root.render(<ThemeProvider theme={convert(themes.light)}><DocsContext.Provider value={context}><Guide locale={locale} /></DocsContext.Provider></ThemeProvider>));
+      expect(host.querySelector("article[data-component-docs]")).not.toBeNull();
       const title = host.querySelector("h1")!;
       expect(title.textContent).toBe(componentDocsName(name, locale));
       expect(getComputedStyle(title).fontSize).toBe("32px");
+      const intro = host.querySelector("header p")!;
+      expect(getComputedStyle(intro).fontSize).toBe("16px");
+      expect(intro.getBoundingClientRect().width).toBeCloseTo(intro.closest("header")!.getBoundingClientRect().width);
       const previous = host.querySelector('header a[aria-label^="上一个"], header a[aria-label^="Previous"]');
-      const previousPaths = { "Radio Group": "yami-components-data-display-progress", Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-combobox", AlertDialog: "yami-components-data-display-alert", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
+      const previousPaths = { "Radio Group": "yami-components-data-display-progress", Drawer: "yami-components-layout-divider", Checkbox: "yami-components-layout-card", Combobox: "yami-components-forms-checkbox", Divider: "yami-components-layout-dialog", Card: "yami-components-actions-button-group", Breadcrumb: "yami-components-data-display-badge", Button: "yami-components-navigation-breadcrumb", ButtonGroup: "yami-components-actions-button", Dialog: "yami-components-forms-combobox", Alert: "yami-components-layout-accordion", AlertDialog: "yami-components-data-display-alert", AspectRatio: "yami-components-layout-alert-dialog", Avatar: "yami-components-layout-aspectratio", Badge: "yami-components-data-display-avatar" };
       if (name === "Accordion") expect(previous).toBeNull();
       else expect(previous?.getAttribute("href")).toBe(`/?path=/docs/${previousPaths[name]}--docs${locale === "en" ? "&globals=locale:en" : ""}`);
-      const headings = [...host.querySelectorAll("h2")];
-      expect(headings.map((h) => h.textContent)).toContain(locale === "zh" ? "API 参考" : "API Reference");
+      const headings = [...host.querySelectorAll("article[data-component-docs] > section > h2[id], article[data-component-docs] > section > section > h3[id]")];
+      const chapterTitles = headings.filter(heading => heading.tagName === "H2").map(heading => heading.textContent);
+      const zh = locale === "zh";
+      expect(chapterTitles[0]).toBe(zh ? "用法" : "Usage");
+      expect(chapterTitles).not.toContain(zh ? "安装" : "Installation");
+      expect(chapterTitles).toContain(zh ? "API 参考" : "API Reference");
+      {
+        expect(chapterTitles).toEqual(zh ? ["用法", "组合结构", "使用建议", "示例", "API 参考", "无障碍"]
+          : ["Usage", "Anatomy", "Best Practices", "Examples", "API Reference", "Accessibility"]);
+        const guidance = page.getByRole("table", { name: zh ? "使用建议" : "Best Practices" });
+        expect(guidance.getByRole("cell", { name: zh ? "推荐" : "Do", exact: true }).all().length).toBeGreaterThan(0);
+        expect(guidance.getByRole("cell", { name: zh ? "避免" : "Avoid", exact: true }).all().length).toBeGreaterThan(0);
+      }
+      if (name === "Button") expect(host.querySelector("h3#button-variants")).not.toBeNull();
       expect(new Set(headings.map((h) => h.id)).size).toBe(headings.length);
       expect(host.textContent).not.toContain("RTL");
       if (locale === "en") expect(host.textContent).not.toMatch(/[\u4e00-\u9fff]/u);
       const example = host.querySelector<HTMLElement>("[data-example]")!;
+      if (name === "Breadcrumb") {
+        const frame = example.querySelector("iframe")!;
+        const items = () => frame.contentDocument?.querySelectorAll('[data-slot="breadcrumb"] ol > li');
+        await expect.poll(() => items()?.length).toBe(2);
+        const [first, second] = Array.from(items()!, item => item.getBoundingClientRect());
+        expect(first.top + first.height / 2).toBeCloseTo(second.top + second.height / 2, 0);
+      }
       const exampleButtons = [...host.querySelectorAll("[data-example] button")];
       expect(exampleButtons.some(button => ["PC", "Mobile"].includes(button.textContent?.trim() ?? ""))).toBe(false);
       const copyLabel = locale === "zh" ? "复制代码" : "Copy code";
@@ -80,20 +137,9 @@ for (const locale of ["zh", "en"] as const) {
       expect(example.querySelector('[aria-expanded="true"]')).not.toBeNull();
       await page.getByRole("button", { name: locale === "zh" ? "收起代码" : "Hide Code", exact: true }).click();
       expect(example.querySelector(`[aria-label="${copyLabel}"]`)).toBeNull();
-      const command = locale === "zh" ? "命令" : "Command";
-      const manual = locale === "zh" ? "手动" : "Manual";
-      const methods = page.getByRole("tablist", { name: locale === "zh" ? "安装方式" : "Installation method", exact: true });
-      const list = methods.element();
-      expect(list.getBoundingClientRect().width).toBeCloseTo(list.closest("section")!.getBoundingClientRect().width);
-      expect(getComputedStyle(list).paddingInline).toBe("0px");
-      const commandPanel = page.getByRole("tabpanel", { name: command, exact: true }).element();
-      await expect.poll(() => commandPanel.querySelector("pre")?.textContent).toContain("pnpm add");
-      const commandTab = methods.getByRole("tab", { name: command, exact: true }).element() as HTMLElement;
-      commandTab.focus();
-      await userEvent.keyboard("{ArrowRight}");
-      expect(methods.getByRole("tab", { name: manual, exact: true }).element()).toHaveAttribute("aria-selected", "true");
-      const manualPanel = page.getByRole("tabpanel", { name: manual, exact: true }).element();
-      await expect.poll(() => manualPanel.querySelector("pre")?.textContent).toContain('"dependencies"');
+      const usage = headings[0].closest("section")!;
+      await expect.poll(() => usage.querySelector("pre")?.textContent).toContain("@yami/design-system");
+      await expect.poll(() => usage.querySelectorAll("pre")[1]?.textContent).toMatch(/<\w/);
       for (const svg of host.querySelectorAll("header svg")) {
         expect(svg.getAttribute("width")).toBe("16");
         expect(svg.getAttribute("stroke-width")).toBe("2");
@@ -239,7 +285,67 @@ test("a Button on an inverse Docs surface keeps its inverse keyboard focus ring"
   }
 });
 
-test("previews follow the Docs viewport while keeping their content inside the example", async () => {
+test.each(["viewport", "document"] as const)("%s Docs previews center controls and preserve full-width layouts", async (mode) => {
+  const host = document.createElement("div");
+  host.style.width = "640px";
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    flushSync(() => root.render(
+      <ComponentDocsPreview mode={mode} locale="en">
+        <Input density="compact" aria-label="Delivery address" />
+        <Button form="full">Continue</Button>
+      </ComponentDocsPreview>,
+    ));
+    const frame = host.querySelector("iframe");
+    const input = () => (frame?.contentDocument ?? host).querySelector('[data-slot="input"]');
+    await expect.poll(() => input()?.getBoundingClientRect().width).toBe(320);
+    const area = input()!.parentElement!;
+    const bounds = area.getBoundingClientRect();
+    const field = input()!.getBoundingClientRect();
+    expect(field.left + field.width / 2).toBeCloseTo(bounds.left + bounds.width / 2);
+    expect(area.querySelector("button")!.getBoundingClientRect().width).toBe(bounds.width);
+  } finally {
+    root.unmount();
+    host.remove();
+  }
+});
+
+test("automatic Docs previews follow the Storybook window and fixed previews follow their device width", async () => {
+  const originalViewport = { width: innerWidth, height: innerHeight };
+  const docsFrame = document.createElement("iframe");
+  docsFrame.id = "storybook-preview-iframe";
+  docsFrame.style.width = "600px";
+  docsFrame.style.height = "600px";
+  document.body.append(docsFrame);
+  const docs = docsFrame.contentDocument!;
+  docs.head.append(...Array.from(document.head.querySelectorAll('style, link[rel="stylesheet"]'), node => node.cloneNode(true)));
+  const root = createRoot(docs.body);
+  try {
+    const pages = <Pagination page={1} pageCount={5} onPageChange={() => {}} />;
+    flushSync(() => root.render(<>
+      <ComponentDocsPreview locale="en">{pages}</ComponentDocsPreview>
+      <ComponentDocsPreview locale="en" viewportWidth="375px">{pages}</ComponentDocsPreview>
+    </>));
+    const [automatic, fixed] = docs.querySelectorAll("iframe");
+    const isPaginationVisible = (frame: HTMLIFrameElement) => frame.contentDocument?.querySelector('[data-slot="pagination"]')?.checkVisibility();
+    await page.viewport(1023, 720);
+    await expect.poll(() => isPaginationVisible(automatic)).toBe(false);
+    await expect.poll(() => automatic.contentWindow?.innerWidth).toBe(1023);
+    await page.viewport(1024, 720);
+    await expect.poll(() => isPaginationVisible(automatic)).toBe(true);
+    expect(automatic.contentWindow?.innerWidth).toBe(1024);
+    expect(docsFrame.contentWindow?.innerWidth).toBe(600);
+    expect(fixed.contentWindow?.innerWidth).toBe(375);
+    await expect.poll(() => isPaginationVisible(fixed)).toBe(false);
+  } finally {
+    root.unmount();
+    docsFrame.remove();
+    await page.viewport(originalViewport.width, originalViewport.height);
+  }
+});
+
+test("standalone previews follow the Docs viewport while keeping their content inside the example", async () => {
   const host = document.createElement("div");
   const originalViewport = { width: innerWidth, height: innerHeight };
   host.style.width = "300px";
@@ -314,6 +420,53 @@ test("AlertDialog Docs follows the responsive layout and covers the full documen
       await expect.element(cancel).toHaveFocus();
       await cancel.click();
       await expect.poll(popup).toBeNull();
+      await expect.element(trigger).toHaveFocus();
+    }
+  } finally { root.unmount(); host.remove(); await page.viewport(originalViewport.width, originalViewport.height); }
+});
+
+test("AlertDialog Properties covers the full document viewport and restores focus", async () => {
+  const originalViewport = { width: innerWidth, height: innerHeight };
+  const host = document.createElement("div");
+  host.style.width = "320px";
+  document.body.append(host);
+  const root = createRoot(host);
+  const story = {
+    title: "YAMI/components/AlertDialog",
+    tags: ["component-device"],
+    parameters: { viewport: { options: {
+      yamiDesktop: { styles: { width: "1024px", height: "768px" } },
+      yamiMobile: { styles: { width: "375px", height: "812px" } },
+    } } },
+  };
+  const context = {
+    componentStories: () => [
+      { ...story, name: "PC", storyGlobals: { viewport: { value: "yamiDesktop" } } },
+      { ...story, name: "Mobile", storyGlobals: { viewport: { value: "yamiMobile" } } },
+    ],
+    getStoryContext: () => ({ userGlobals: { locale: "en" }, globals: { locale: "en", theme: "light" } }),
+    channel: { on: vi.fn(), off: vi.fn() },
+  } as unknown as ContextType<typeof DocsContext>;
+  try {
+    flushSync(() => root.render(<DocsContext.Provider value={context}><ComponentPropertiesPage definition={alertDialogProperties} /></DocsContext.Provider>));
+    expect(host.querySelector("iframe")).toBeNull();
+    expect(host.querySelector('[role="tablist"]')).toBeNull();
+    await page.getByRole("textbox", { name: "Dialog title" }).fill("Confirm address change");
+    const trigger = page.getByRole("button", { name: "Review changes", exact: true });
+    for (const [viewportWidth, dialogWidth] of [[1280, 480], [375, 343]]) {
+      await page.viewport(viewportWidth, 720);
+      await trigger.click();
+      const locator = page.getByRole("alertdialog", { name: "Confirm address change" });
+      await expect.element(locator).toBeVisible();
+      const dialog = locator.element();
+      expect(host.contains(dialog)).toBe(false);
+      expect(dialog.getBoundingClientRect().width).toBe(dialogWidth);
+      const scrim = dialog.parentElement!.previousElementSibling!;
+      const bounds = scrim.getBoundingClientRect();
+      expect([bounds.x, bounds.y, bounds.width, bounds.height]).toEqual([0, 0, viewportWidth, 720]);
+      await expect.element(page.getByRole("button", { name: "Cancel", exact: true })).toHaveFocus();
+      await userEvent.keyboard("{Escape}");
+      await expect.element(locator).not.toBeInTheDocument();
       await expect.element(trigger).toHaveFocus();
     }
   } finally { root.unmount(); host.remove(); await page.viewport(originalViewport.width, originalViewport.height); }

@@ -57,6 +57,11 @@ import { Alert, AlertTitle, AlertDescription } from "@yami/design-system";
   return <ComponentGuide name="Alert" slug="alert" locale={locale}
     previous={{ name: "Accordion", path: "yami-components-layout-accordion" }} next={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}
     intro={en ? "Keep a message beside the affected content so users can refer to it while they act." : "把提示放在相关内容旁，方便用户边查看边处理。"}
+    usageNote={en ? "Place inline feedback next to the affected field, order, or action." : "在受影响的字段、订单或操作旁显示提示。"}
+    practices={en ? [["do", "Tell people what happened and what they can do next."], ["avoid", "Use the destructive variant for routine information."]]
+      : [["do", "说明发生了什么，以及用户接下来可以做什么。"], ["avoid", "用 destructive 展示常规提示。"]]}
+    accessibility={en ? ["Use role=alert for urgent announcements and role=status for non-urgent updates.", "Put the message in text so readers can understand it without the icon or color."]
+      : ["紧急动态提示使用 role=alert，非紧急动态反馈使用 role=status。", "用文字表达提示内容，让用户无需辨认图标或颜色也能理解。"]}
     composition={"Alert\n├── Icon\n├── AlertTitle\n├── AlertDescription\n└── AlertAction"}
     leadExample={{ code: leadCode,
       preview: <div style={{ display: "grid", gap: "var(--space-150)" }}>

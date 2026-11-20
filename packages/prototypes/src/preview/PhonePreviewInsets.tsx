@@ -69,7 +69,7 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
     if (!enabled || !active || mode !== "h5") return;
     // Only page-owned fixed bars extend beneath Safari; inline tabs and drawer
     // controls keep their ordinary backgrounds and positioning.
-    const selector = '[data-slot="tab-bar"], [data-slot="cart-app-navigation"], [data-slot="cart-checkout-bar"], [data-slot="product-detail-purchase-checkout"]';
+    const selector = '[data-slot="tab-bar"], [data-slot="tab-bar-container"], [data-slot="cart-app-navigation"], [data-slot="cart-checkout-bar"], [data-slot="product-detail-purchase-checkout"]';
     const update = () => {
       document.querySelectorAll<HTMLElement>(selector).forEach((bar) => {
         const fixed = getComputedStyle(bar).position === "fixed" && !bar.closest("[data-drawer]");
@@ -108,6 +108,10 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
       padding-top: 62px;
     }
     html[data-phone-preview-content] :is([data-slot="sticky-storefront-header"], [data-slot="cart-mobile-header"], [data-slot="topic-landing-global-header"], [data-slot="campaign-header"], [data-slot="product-detail-page"] > [data-slot="header"]) { top: 62px; }
+    html[data-phone-preview-content] [data-phone-preview-extend-status]::before {
+      content: ""; position: absolute; inset: auto 0 100%; height: 62px;
+      background-color: inherit; pointer-events: none;
+    }
     html[data-phone-preview-content] [data-slot="topic-landing-tabs"] { top: calc(62px + var(--topic-landing-header-height, 0px)); }
     html[data-phone-preview-content] [data-slot="campaign-section-nav"] { top: calc(62px + var(--campaign-header-height)); }
     html[data-phone-preview-content] [data-slot="cart-discovery"] > [data-slot="tabs"] > [role="tablist"] { top: 118px; }
@@ -117,6 +121,9 @@ export function PhonePreviewInsets({ enabled = true }: { enabled?: boolean }) {
     html[data-phone-preview-content] [data-drawer][data-swipe-direction] { max-height: calc(100dvh - ${62 + bottomInset}px); }
     html[data-phone-preview-content] [data-drawer][data-swipe-direction="down"] { bottom: ${bottomInset}px; }
     html[data-phone-preview-content] [data-drawer][data-swipe-direction]:not([data-swipe-direction="down"]) { top: 62px; }
+    html[data-phone-preview-content][data-prototype-preview-mode="h5"] [data-slot="storefront-navigation-drawer"][data-drawer][data-swipe-direction="left"] {
+      top: 0; max-height: none; padding-block: 62px ${bottomInset}px;
+    }
     html[data-phone-preview-content][data-prototype-preview-mode="h5"] [data-phone-preview-bottom-bar] { bottom: 86px; }
     html[data-phone-preview-content][data-prototype-preview-mode="h5"] [data-phone-preview-bottom-bar]::after {
       content: ""; position: absolute; inset: 100% 0 auto; height: 86px;

@@ -42,7 +42,9 @@
     "SelectTriggerProps",
     "SelectValue"
   ],
-  "composes": [],
+  "composes": [
+    "Field"
+  ],
   "dependencies": {
     "runtime": [
       "react",
@@ -67,9 +69,11 @@
     "tokens": [
       "--border-attention",
       "--border-default",
-      "--button-disabled",
+      "--color-black-400",
+      "--color-white-400",
       "--divider-default",
       "--elevation-400-menu-panel",
+      "--fill-tertiary",
       "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
@@ -81,8 +85,12 @@
       "--space-050",
       "--space-100",
       "--space-150",
+      "--space-200",
+      "--space-250",
+      "--space-300",
       "--space-400",
       "--space-500",
+      "--space-600",
       "--stroke-default",
       "--stroke-thick",
       "--surface-primary",
@@ -96,6 +104,10 @@
       "semantic-color-only"
     ],
     "tokenBindings": {
+      "--fill-tertiary": {
+        "property": "background",
+        "selector": ".trigger[data-disabled]"
+      },
       "--surface-primary": {
         "property": "background",
         "selector": ".trigger, .content"
@@ -107,6 +119,14 @@
       "--border-default": {
         "property": "border-color",
         "selector": ".trigger, .content"
+      },
+      "--color-black-400": {
+        "property": "color",
+        "selector": ".trigger::after, .trigger[data-placeholder]:not([data-disabled])"
+      },
+      "--color-white-400": {
+        "property": "color",
+        "selector": ".dark .trigger::after, .dark .trigger[data-placeholder]:not([data-disabled])"
       },
       "--radius-component-default": {
         "property": "border-radius",
@@ -124,9 +144,25 @@
         "property": "outline-color",
         "selector": ".trigger:focus-visible"
       },
+      "--space-200": {
+        "property": "mask",
+        "selector": ".trigger::after"
+      },
+      "--space-250": {
+        "property": "width",
+        "selector": ".trigger::after"
+      },
+      "--space-300": {
+        "property": "padding-inline-end",
+        "selector": ".trigger"
+      },
       "--space-400": {
         "property": "min-height",
         "selector": ".item"
+      },
+      "--space-600": {
+        "property": "min-height",
+        "selector": ".trigger[data-density='default']"
       },
       "--space-500": {
         "property": "min-height",
@@ -151,5 +187,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "af2331c96aebde85ca44235863d630bbd812511ab56e34d804b3141b6c601967"
+  "contentDigest": "5548c572c2b9a105fec219404f9e116aef1ff1a93a484b9a53edf51f1f6c2a9d"
 }

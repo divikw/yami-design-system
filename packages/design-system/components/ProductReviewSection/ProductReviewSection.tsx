@@ -4,6 +4,7 @@ import { Fragment, useId, useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "../Button";
 import { FilterChip, FilterChipGroup, FilterChipMenu } from "../FilterChip";
+import { FilterChipDropdownIcon } from "../FilterChip/FilterChip";
 import { SectionHeading } from "../SectionHeading";
 
 import styles from "./ProductReviewSection.module.css";
@@ -12,11 +13,6 @@ import type {
   ProductReviewItem,
   ProductReviewSectionProps,
 } from "./ProductReviewSection.types";
-
-const dropdownIcon = new URL(
-  "../../assets/icons/system/arrow-down.svg",
-  import.meta.url,
-).href;
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -407,7 +403,7 @@ export function ProductReviewSection({
                 value: option.value,
                 label: accessibleText(option.label, option.value),
               }))}
-              rightIcon={<img src={dropdownIcon} alt="" width={12} height={12} />}
+              rightIcon={<FilterChipDropdownIcon />}
             />
           </div>
         </div>

@@ -19,7 +19,7 @@ export const home: HomepageData = {
     account: { label: "Account", href: "#account" },
     locale: { label: "EN", flag: { src: icon, alt: "" }, href: "#language" },
     cart: { label: "Cart", href: "#cart" },
-    zipcode: { code: "94000", label: "Deliver to", href: "#delivery" },
+    zipcode: { code: "92821", label: "Deliver to", href: "#delivery" },
   },
   hero: {
     ariaLabel: "Featured campaigns", previousLabel: "Previous campaigns", nextLabel: "Next campaigns",

@@ -1,7 +1,9 @@
-import { useState, type CSSProperties } from "react"
+import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
-import { Input, type InputProps, type InputState } from "./Input"
+import { Input, type InputDensity, type InputProps } from "./Input"
+import { InputDensityStates, groupStyle, labelStyle, shellStyle } from "./Input.story-examples"
+import stateExamplesSource from "./Input.story-examples.tsx?raw"
 
 const meta = {
   id: "yami-components-forms-input",
@@ -10,16 +12,20 @@ const meta = {
   parameters: {
     layout: "padded",
     docs: {
+      stateSections: {
+        Specifications: { zh: "宽松版 · 56 px", en: "Default · 56 px" },
+        CompactStates: { zh: "紧凑版 · 40 px", en: "Compact · 40 px" },
+      },
       translations: {
         zh: {
-          description: "YAMI 单行输入框。默认规格采用内嵌标签，移动端 48px、桌面端 56px；紧凑规格采用外置标签和单行内容，移动端 48px、桌面端 40px。支持受控与非受控输入、内容清空、辅助说明、错误提示、只读和禁用状态。",
+          description: "YAMI 单行输入框。PC 与移动端统一为默认 56px（内嵌标签）和紧凑 40px（外置标签）。支持受控与非受控输入、内容清空、辅助说明、错误提示、只读和禁用状态。",
           argDescriptions: {
             label: "字段标签：默认内嵌，紧凑规格放在框外。未提供标签时，需使用外部 label 或 aria-label。",
-            density: "规格密度：default 为内嵌标签，移动端 48px / 桌面端 56px；compact 为外置标签和单行内容，移动端 48px / 桌面端 40px。",
+            density: "规格密度：default 为 56px 内嵌标签，compact 为 40px 外置标签。PC 与移动端同高。",
             helperText: "输入框下方的辅助说明；存在错误提示时隐藏。",
             error: "错误提示内容；设置 aria-invalid，并通过 aria-describedby 关联提示。",
             state: "用于文档和视觉验收的状态覆盖。业务中通常根据值、焦点、错误和禁用状态自动推导。",
-            size: "已弃用。输入框按移动端与桌面端自适应；保留该属性以兼容旧代码。",
+            size: "已弃用。请用 density 选择规格。",
             leadingIcon: "输入框前置图标或文字，优先使用 YAMI 的 currentColor SVG 图标。",
             trailingIcon: "输入框尾部图标、文字或操作；交互操作从受控状态读取输入值。",
             prefix: "leadingIcon 的兼容别名。",
@@ -35,10 +41,10 @@ const meta = {
           },
         },
         en: {
-          description: "YAMI single-line input. Default density has an embedded label at 48px mobile / 56px desktop. Compact density has an external label and a single value row at 48px mobile / 40px desktop. Supports controlled and uncontrolled values, clearing, helper text, errors, read-only, and disabled states.",
+          description: "YAMI single-line input. Default density is 56px with an embedded label. Compact density is 40px with an external label. Both heights apply on mobile and desktop. Supports controlled and uncontrolled values, clearing, helper text, errors, read-only, and disabled states.",
           argDescriptions: {
             label: "Field label: embedded by default, external in compact density. Without it, use an external label or aria-label.",
-            density: "Default: embedded label, 48px mobile / 56px desktop. Compact: external label and a single value row, 48px mobile / 40px desktop.",
+            density: "Default: 56px, embedded label. Compact: 40px, external label. Both heights apply on mobile and desktop.",
             clearable: "Shows the clear action while the field has a value and contains focus, including error states. Uses a 24×24px hit target and a 20px icon. Hidden when read-only or disabled.",
             readOnly: "Allows focus and copying while preventing edits and clearing.",
             disabled: "Prevents editing and focus and hides clear. Errors retain their border and message alongside the disabled appearance.",
@@ -47,7 +53,7 @@ const meta = {
       },
       description: {
         component:
-          "YAMI Input Field from Figma `↪ 表单输入 Forms`: embedded label, responsive Mobile/PC sizing, clear action, disabled, focus, typing, complete, and error states.",
+          "YAMI Input Field from Figma `↪ 表单输入 Forms`: embedded label and two densities, clear action, disabled, focus, typing, complete, and error states.",
       },
     },
   },
@@ -88,136 +94,30 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const shellStyle: CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "var(--space-500)",
-  width: "min(760px, 100%)",
-  fontFamily: "var(--font-family-ios)",
+const publicStateExamples = stateExamplesSource.replace('from "./Input"', 'from "@yami/design-system"').trim()
+
+function statePreviewCode(density: InputDensity) {
+  return (_source: string, context: { globals: { locale?: string } }) =>
+    `${publicStateExamples}\n\n<InputDensityStates density="${density}" english={${context.globals.locale === "en"}} />`
 }
 
-const groupStyle: CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "var(--space-200)",
-  minWidth: 0,
-  maxWidth: "100%",
+export const Specifications: Story = {
+  parameters: { docs: { source: { transform: statePreviewCode("default") } } },
+  render: (_args, { globals }) => <InputDensityStates density="default" english={globals.locale === "en"} />,
 }
 
-const rowStyle: CSSProperties = {
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "var(--space-200)",
-  alignItems: "flex-start",
-}
-
-const labelStyle: CSSProperties = {
-  margin: 0,
-  color: "var(--text-secondary)",
-  fontSize: "var(--font-size-body-md)",
-  lineHeight: "var(--line-height-body-md)",
-  fontWeight: "var(--font-weight-normal)",
-}
-
-// Search icon from packages/design-system/assets/icons/action/search.svg.
-// Inlined as a component so Storybook renders the canonical currentColor SVG
-// path without depending on bundler-specific SVG imports.
-function SearchIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M10.5001 3C14.6422 3 18.0001 6.35786 18.0001 10.5C18.0001 12.3009 17.3637 13.9522 16.3058 15.2451L21.088 20.0273L20.0274 21.0879L15.2452 16.3057C13.9523 17.3636 12.301 18 10.5001 18C6.35796 18 3.0001 14.6421 3.0001 10.5C3.0001 6.35786 6.35796 3 10.5001 3ZM10.5001 4.60742C7.24556 4.60742 4.60752 7.24546 4.60752 10.5C4.60752 13.7545 7.24556 16.3926 10.5001 16.3926C13.7546 16.3926 16.3927 13.7545 16.3927 10.5C16.3927 7.24546 13.7546 4.60742 10.5001 4.60742Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function StateExample({
-  title,
-  label = "Label",
-  state,
-  value,
-  error,
-  disabled,
-  clearable,
-}: {
-  title: string
-  label?: string
-  state: InputState
-  value?: string
-  error?: string
-  disabled?: boolean
-  clearable?: boolean
-}) {
-  return (
-    <div style={groupStyle}>
-      <p style={labelStyle}>{title}</p>
-      <Input
-        label={label}
-        state={state}
-        defaultValue={value}
-        error={error}
-        disabled={disabled}
-        clearable={clearable}
-      />
-    </div>
-  )
+export const CompactStates: Story = {
+  parameters: { docs: { source: { transform: statePreviewCode("compact") } } },
+  render: (_args, { globals }) => <InputDensityStates density="compact" english={globals.locale === "en"} />,
 }
 
 export const Showcase: Story = {
-  render: (_args, { globals }) => {
-    const english = globals.locale === "en"
-    const message = `https://example.com/${"a".repeat(100)}`
-    return (
-      <section data-input-showcase style={shellStyle}>
-        <div style={groupStyle}>
-          <p style={labelStyle}>{english ? "States" : "状态"}</p>
-          <div style={rowStyle}>
-            <StateExample title="Default" state="default" />
-            <StateExample title="Focused" state="focused" />
-            <StateExample title="Typing" state="typing" value="Input" clearable />
-            <StateExample title="Complete" state="complete" value="Input" />
-            <StateExample title="Disabled filled" state="disabled-filled" value="Input" disabled />
-            <StateExample title="Disabled empty" state="disabled-empty" disabled />
-            <StateExample title={english ? "Error" : "错误"} label={english ? "Email" : "邮箱"} state="error" value="bob@" error={english ? "Enter a valid email address." : "请输入有效的邮箱地址。"} />
-          </div>
-        </div>
-
-        <div style={groupStyle}>
-          <p style={labelStyle}>{english ? "Search with leading icon" : "带图标的搜索框"}</p>
-          <Input
-            density="compact"
-            aria-label={english ? "Product search" : "商品搜索"}
-            placeholder={english ? "Search YAMI products" : "搜索 YAMI 商品"}
-            leadingIcon={<SearchIcon />}
-            fullWidth
-          />
-        </div>
-
-        <div style={groupStyle}>
-          <p style={labelStyle}>{globals.locale === "en" ? "Compact density" : "紧凑规格"}</p>
-          <div style={rowStyle}>
-            <Input density="compact" label={globals.locale === "en" ? "Promo code" : "折扣码"} placeholder="SAVE10" />
-            <Input density="compact" label={globals.locale === "en" ? "With error" : "错误状态"} defaultValue="BAD" error={globals.locale === "en" ? "Check your promo code." : "请检查折扣码后重试。"} clearable />
-          </div>
-        </div>
-
-        <div data-input-boundaries style={groupStyle}>
-          <p style={labelStyle}>{english ? "Validation edges" : "边界情况"}</p>
-          <Input label={english ? "Clearable input" : "可清空输入"} state="typing" defaultValue="SAVE10" clearable />
-          <div style={rowStyle}>
-            <Input label={english ? "Disabled with error" : "禁用与错误组合"} defaultValue="BAD" disabled error={english ? "Check your promo code." : "请检查折扣码后重试。"} />
-            <Input density="compact" label={english ? "Compact disabled with error" : "紧凑规格禁用与错误组合"} defaultValue="BAD" disabled error={english ? "Check your promo code." : "请检查折扣码后重试。"} />
-          </div>
-          <div style={rowStyle}>
-            <Input label={english ? "Long helper text" : "长辅助说明"} helperText={english ? `Help page: ${message}` : `帮助页面：${message}`} />
-            <Input density="compact" label={english ? "Long error text" : "长错误提示"} error={english ? `Unsupported URL: ${message}` : `不支持此网址：${message}`} />
-          </div>
-        </div>
-      </section>
-    )
-  },
+  render: (_args, { globals }) => (
+    <section data-input-showcase style={shellStyle}>
+      <InputDensityStates density="default" english={globals.locale === "en"} />
+      <InputDensityStates density="compact" english={globals.locale === "en"} />
+    </section>
+  ),
   play: async ({ canvasElement }) => {
     const showcase = canvasElement.querySelector<HTMLElement>("[data-input-showcase]")
     const fields = Array.from(canvasElement.querySelectorAll<HTMLElement>('[data-slot="input"]'))
@@ -263,6 +163,12 @@ export const Compact: Story = {
   render: (args, { globals }) => <Input {...args} label={args.label ?? (globals.locale === "en" ? "Promo code" : "折扣码")} />,
 }
 
+const supportingTextStyle = {
+  marginBlockStart: "var(--space-050)",
+  fontSize: "var(--font-size-caption-sm)",
+  lineHeight: "var(--line-height-caption-sm)",
+}
+
 function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }) {
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
@@ -276,7 +182,7 @@ function ActionInputDemo({ english, ...args }: InputProps & { english: boolean }
     <Input {...args} density="compact" aria-label={label} placeholder={english ? "e.g. SAVE10" : "例如 SAVE10"} value={value} error={error}
       action={{ label: english ? "Redeem" : "兑换", htmlType: "submit" }}
       onChange={(event) => { setValue(event.target.value); setError(""); setSubmitted("") }} />
-    {submitted && <p role="status">{english ? "Submitted: " : "已提交："}{submitted}</p>}
+    {submitted && <p role="status" style={supportingTextStyle}>{english ? "Submitted: " : "已提交："}{submitted}</p>}
   </form>
 }
 
@@ -293,7 +199,7 @@ export const ExternalValidation: Story = {
     return <div>
       <Input label={zh ? "邮箱" : "Email"} type="email" defaultValue="example"
         aria-invalid aria-describedby="external-email-error" />
-      <p id="external-email-error" style={{ color: "var(--text-error)" }}>
+      <p id="external-email-error" style={{ ...supportingTextStyle, color: "var(--text-error)" }}>
         {zh ? "请输入完整邮箱地址。" : "Enter a complete email address."}
       </p>
     </div>;

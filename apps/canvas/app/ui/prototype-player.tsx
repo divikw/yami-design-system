@@ -3,7 +3,7 @@
 import { PreviewNavigateMessageSchema } from "@yami/contracts";
 import { Cancel01Icon, Home01Icon, Layout01Icon, RefreshCcwIcon, ShoppingCart01Icon } from "@hugeicons/core-free-icons";
 import type { HeaderProps, ProductListItem } from "@yami/design-system";
-import { TabBar } from "@yami/design-system";
+import { TabBar, useDesktopViewport } from "@yami/design-system";
 import {
   CartPage, createCartPageFixture, createEcommerceHomeFixture, createProductDetailPageFixture,
   createSearchResultsFixture, createTopicLandingPageFixture, EcommerceHomeTemplate,
@@ -12,7 +12,8 @@ import {
 } from "@yami/prototypes";
 import { useRouter, useSearchParams } from "next/navigation";
 import { isValidElement, useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
-import { prototypeHref, prototypeProjects, type PrototypeProject } from "../lib/prototype-projects";
+import { H5HomeDraftHeader } from "../../../../packages/design-system/storybook/H5HeaderDrafts";
+import { prototypeHref, prototypeProjects, resolvePrototypeVariant, type PrototypeProject } from "../lib/prototype-projects";
 import { addPrototypeItem, emptyPrototypeSession, prototypeSessionKey, readPrototypeSession, type PrototypeSession } from "../lib/prototype-session";
 import { WorkbenchButton, WorkbenchIcon, WorkbenchLink, WorkbenchSelect } from "./workbench-controls";
 import "@yami/design-system/styles/base.css";
@@ -30,7 +31,7 @@ export function PrototypePlayer() {
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);
   const project = prototypeProjects.find((item) => item.id === (params.get("project") ?? prototypeProjects[0].id));
-  const variant = project?.variants.find((item) => item.id === (params.get("variant") ?? "current"));
+  const variant = resolvePrototypeVariant(project, params.get("variant"));
   if (!project || !variant) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><WorkbenchLink href="/design">返回工作台</WorkbenchLink></main>;
   if (!ready) return <main className="app-loading">正在打开原型…</main>;
   return <PrototypeExperience key={`${project.id}:${variant.id}`} project={project} variant={variant} />;
@@ -39,10 +40,13 @@ export function PrototypePlayer() {
 function PrototypeExperience({ project, variant }: { project: PrototypeProject; variant: PrototypeProject["variants"][number] }) {
   const params = useSearchParams();
   const router = useRouter();
-  const locale = params.get("locale") === "en" ? "en" : "zh";
+  const locale = variant.fixedLocale ?? (params.get("locale") === "en" ? "en" : "zh");
   const theme = params.get("theme") === "dark" ? "dark" : "light";
   const appPreview = params.get("previewMode") !== "h5";
-  const path = params.get("path") ?? "/";
+  const desktop = useDesktopViewport();
+  const homeHeader = desktop ? undefined : variant.homeHeader;
+  const showHomeNavigation = appPreview || Boolean(homeHeader);
+  const path = params.get("path") ?? project.pages[0]?.value ?? "/";
   const embedded = params.get("embedded") === "1";
   const sessionKey = prototypeSessionKey(project.id, variant.id);
   const [session, setSession] = useState(() => {
@@ -132,6 +136,15 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
     setResetVersion((value) => value + 1);
     setNotice("已重置当前方案的体验状态");
   }
+  function selectVariant(value: string) {
+    const href = prototypeHref(new URLSearchParams(params), path, value);
+    const fixedMode = resolvePrototypeVariant(project, value)?.fixedPreviewMode;
+    if (fixedMode && fixedMode !== params.get("previewMode")) {
+      window.location.replace(href);
+      return;
+    }
+    router.replace(href);
+  }
   function intercept(event: MouseEvent<HTMLDivElement>) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
@@ -143,18 +156,21 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
   }
 
   let content;
-  if (path === "/") content = <div className={appPreview ? "prototype-home" : undefined}>
-    <EcommerceHomeTemplate {...bind(fixtures.home)} header={header(fixtures.home.header)} />
-    {appPreview && <TabBar className="prototype-home-navigation" aria-label={locale === "zh" ? "App 导航" : "App navigation"} value="home" items={[
-      { value: "home", label: "YAMI", path: "/" },
-      { value: "shop", label: locale === "zh" ? "分类" : "Shop", path: "/search/all" },
-      { value: "community", label: locale === "zh" ? "社区" : "Community", path: "/show" },
-      { value: "cart", label: locale === "zh" ? "购物车" : "Cart", path: "/cart", badgeCount: session.cart.reduce((sum, item) => sum + item.quantity, 0) },
-      { value: "account", label: locale === "zh" ? "我的" : "Account", path: "/account" },
-    ].map(({ path: destination, ...item }) => ({
-      ...item, href: hrefFor(destination),
-      icon: <span className="prototype-home-navigation-icon" style={{ maskImage: `url("${homeNavigationIcons[item.value as keyof typeof homeNavigationIcons]}")` }} />,
-    }))} />}
+  if (path === "/") content = <div className={showHomeNavigation ? "prototype-home" : undefined}>
+    <EcommerceHomeTemplate {...bind(fixtures.home)} header={header(fixtures.home.header)}
+      headerContent={homeHeader && <H5HomeDraftHeader version={homeHeader} locale={locale} />} />
+    {showHomeNavigation && <div className="prototype-home-navigation" data-slot="tab-bar-container">
+      <TabBar inert={Boolean(homeHeader)} aria-label={`${appPreview ? "App" : "H5"} ${locale === "zh" ? "导航" : "navigation"}`} value="home" items={[
+        { value: "home", label: "YAMI", path: "/" },
+        { value: "shop", label: locale === "zh" ? "分类" : "Shop", path: "/search/all" },
+        { value: "community", label: locale === "zh" ? "社区" : "Community", path: "/show" },
+        { value: "cart", label: locale === "zh" ? "购物车" : "Cart", path: "/cart", badgeCount: session.cart.reduce((sum, item) => sum + item.quantity, 0) },
+        { value: "account", label: locale === "zh" ? "我的" : "Account", path: "/account" },
+      ].filter((item) => !homeHeader || item.value !== "community").map(({ path: destination, ...item }) => ({
+        ...item, href: hrefFor(destination),
+        icon: <span className="prototype-home-navigation-icon" style={{ maskImage: `url("${homeNavigationIcons[item.value as keyof typeof homeNavigationIcons]}")` }} />,
+      }))} />
+    </div>}
   </div>;
   else if (path === "/brands/anua" || path === "/brands/11712") content = <TopicLandingPage {...bind(fixtures.topic)} header={header(fixtures.topic.header)} />;
   else if (path.startsWith("/search/") || path.startsWith("/categories/")) {
@@ -196,7 +212,7 @@ function PrototypeExperience({ project, variant }: { project: PrototypeProject; 
     {!embedded && <div className="prototype-toolbar">
       <strong>{project.name}</strong>
       <WorkbenchSelect label="设计方案" options={project.variants.map((item) => ({ value: item.id, label: item.name }))} value={variant.id}
-        onValueChange={(value) => router.replace(prototypeHref(new URLSearchParams(params), path, value))} />
+        onValueChange={selectVariant} />
       <WorkbenchLink href={hrefFor("/")}><WorkbenchIcon icon={Home01Icon} />首页</WorkbenchLink>
       <WorkbenchLink href={hrefFor("/cart")}><WorkbenchIcon icon={ShoppingCart01Icon} />购物车</WorkbenchLink>
       <WorkbenchButton onClick={reset}><WorkbenchIcon icon={RefreshCcwIcon} />重置演示</WorkbenchButton>

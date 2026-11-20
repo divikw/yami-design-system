@@ -13,7 +13,7 @@ export function PlanCards({ locale }: { locale: "zh" | "en" }) {
   return <RadioGroup aria-label={zh ? "选择方案" : "Choose a plan"} value={plan} onValueChange={setPlan}>
     {plans.map(([value, title, hint]) => <label key={value} style={{
       display: "grid", gridTemplateColumns: "1fr auto", alignItems: "start",
-      gap: "var(--space-050) var(--space-150)", padding: "var(--space-200)",
+      gap: "var(--space-050) var(--space-150)", padding: "var(--space-100)",
       lineHeight: "var(--line-height-body-md)", borderRadius: "var(--radius-component-default)",
       border: "var(--stroke-default) solid", borderColor: value === plan ? "var(--text-primary)" : "var(--border-default)",
       cursor: "pointer",

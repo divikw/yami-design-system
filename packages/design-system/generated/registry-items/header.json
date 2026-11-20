@@ -493,6 +493,7 @@
       "--space-200",
       "--space-300",
       "--space-400",
+      "--space-500",
       "--space-600",
       "--stroke-default",
       "--stroke-thick",
@@ -565,7 +566,7 @@
       },
       "--font-size-caption-sm": {
         "property": "font-size",
-        "selector": ".categoryLabel, .categoryBadge"
+        "selector": ".categoryLabel, .categoryBadge, .mobileLocaleLabel"
       },
       "--font-size-link-md": {
         "property": "font-size",
@@ -596,5 +597,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "4d1304e1f50916513acf0627a38b07a319a396428b4ee905cea14c3474e1dbd3"
+  "contentDigest": "46f10ae3d77cd03709fd1d09cbacbee69b49187cac999ccbccebdb56f995c1a2"
 }
