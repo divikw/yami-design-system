@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "4.4.0",
-    "iron-session": "9.0.1"
+    "iron-session": "9.1.0"
   }
 }
