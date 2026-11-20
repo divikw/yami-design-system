@@ -37,10 +37,10 @@
   "composes": [],
   "props": {
     "mobileVariant": {
-      "type": "'default' | 'pdp'",
+      "type": "'default' | 'h5-home' | 'pdp'",
       "required": false,
       "default": "default",
-      "description": "Mobile navigation anatomy. pdp renders the single-row, top-sticky H5 PDP header throughout the mobile range below 1024px."
+      "description": "Mobile navigation below 1024px. h5-home lays out postal code and language side by side. pdp renders the single-row, top-sticky H5 PDP header."
     },
     "logo": {
       "type": "HeaderImage",
@@ -284,6 +284,7 @@
     "--space-200",
     "--space-300",
     "--space-400",
+    "--space-500",
     "--space-600"
   ],
   "tokenBindings": {
@@ -331,7 +332,7 @@
     },
     "--font-size-caption-sm": {
       "property": "font-size",
-      "selector": ".categoryLabel, .categoryBadge"
+      "selector": ".categoryLabel, .categoryBadge, .mobileLocaleLabel"
     },
     "--font-size-link-md": {
       "property": "font-size",

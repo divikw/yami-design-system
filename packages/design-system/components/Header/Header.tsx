@@ -133,6 +133,7 @@ export function Header({
   ref: forwardedRef,
   ...rest
 }: HeaderProps) {
+  const isH5Home = mobileVariant === 'h5-home'
   const [uncontrolledHallId, setUncontrolledHallId] = useState(() => halls[0]?.id)
   const isHallControlled = hallId !== undefined
   const activeHallId = isHallControlled ? hallId : uncontrolledHallId
@@ -232,7 +233,19 @@ export function Header({
               </a>
             )}
 
-            {inbox && (
+            {isH5Home && (
+              <a
+                className={styles.mobileAction}
+                href={locale.href}
+                data-slot="header-mobile-locale"
+                aria-label={`${locale.flag.alt} ${locale.label}`.trim()}
+              >
+                <ResponsiveImage source={locale.flag.src} alt="" width={24} height={24} />
+                <span className={styles.mobileLocaleLabel}>{locale.label}</span>
+              </a>
+            )}
+
+            {!isH5Home && inbox && (
               <a
                 className={styles.mobileAction}
                 href={inbox.href}
@@ -306,7 +319,7 @@ export function Header({
             onSubmit={onSearchSubmit}
             searchLabel={searchLabel}
             openHref={mobileSearchHref}
-            scanLabel={scanLabel}
+            scanLabel={isH5Home ? undefined : scanLabel}
             onScan={onScan}
           />
         </div>

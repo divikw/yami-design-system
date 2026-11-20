@@ -4,7 +4,8 @@ import { TopicLandingPage } from "./TopicLandingPage";
 import { createCampaignTopicLandingPageFixture } from "./campaign.fixtures";
 
 const meta = {
-  title: "YAMI/Pages/Topic Landing Page/Campaign",
+  id: "yami-pages-topic-landing-page-campaign",
+  title: "YAMI/Pages/Landing Pages/Topic Templates/Campaign",
   component: TopicLandingPage,
   parameters: {
     viewport: { defaultViewport: "yamiDesktopMd" },

@@ -16,6 +16,10 @@
   line-height: var(--line-height-body-md);
 }
 
+.settingSelect > [role="combobox"] {
+  padding-inline-end: var(--space-150);
+}
+
 .settingSelect > [role="combobox"]::after { content: none; }
 
 .settingSelectIcon {
@@ -337,6 +341,11 @@
   cursor: pointer;
 }
 
+.segment[data-disabled] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
 .segment[aria-checked="true"] {
   background: var(--surface-primary);
   color: var(--text-primary);
@@ -353,7 +362,7 @@
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .segment:hover {
+  .segment:not([data-disabled]):hover {
     color: var(--text-primary);
   }
 }

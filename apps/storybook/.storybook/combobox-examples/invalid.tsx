@@ -7,7 +7,7 @@ import {
 export function RequiredCity({ en = false }: { en?: boolean }) {
   const [city, setCity] = useState<string | null>(null);
   const cities = en ? ["Tokyo", "Seoul", "Shanghai", "Taipei"] : ["东京", "首尔", "上海", "台北"];
-  return <Field name="city" invalid={city === null}>
+  return <Field name="city" invalid={city === null} style={{ width: "100%" }}>
     <FieldLabel>{en ? "Delivery city (required)" : "配送城市（必填）"}</FieldLabel>
     <Combobox items={cities} value={city} onValueChange={setCity} required>
       <ComboboxInput placeholder={en ? "Search cities" : "搜索城市"} showClear

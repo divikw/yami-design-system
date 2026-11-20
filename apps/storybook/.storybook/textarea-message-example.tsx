@@ -4,7 +4,7 @@ import { Button, Field, FieldGroup, FieldLabel, Textarea } from "@yami/design-sy
 export function MessageForm({ locale }: { locale: "zh" | "en" }) {
   const [sent, setSent] = useState(false);
   const zh = locale === "zh";
-  return <form onChange={() => setSent(false)} onSubmit={event => {
+  return <form style={{ width: "100%" }} onChange={() => setSent(false)} onSubmit={event => {
     event.preventDefault();
     event.currentTarget.reset();
     setSent(true);

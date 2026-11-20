@@ -1,3 +1,9 @@
+.controls { overflow-x: auto; }
+:global([data-component-docs]) :global([data-yami-docs="usage"]) :is(p, li, th, td) > code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .stateSummary { display: flex; align-items: center; gap: var(--space-050); list-style: none; cursor: pointer; }
 .stateSummary::-webkit-details-marker { display: none; }
 .stateSummary > svg { flex-shrink: 0; }
@@ -5,9 +11,9 @@ details[open] > .stateSummary > svg { transform: rotate(90deg); }
 
 .storyPreview { display: grid; align-content: center; min-height: 252px; background: var(--surface-primary); }
 .storyPreview :global(.sbdocs-preview) { margin: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
-:is([data-example="lead"], [data-yami-docs="select"]) .storyPreview [data-story-block] > [data-name] {
+.storyPreview [data-story-block] > [data-name] {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
 }
-:is([data-example="lead"], [data-yami-docs="select"]) .storyPreview [data-story-block] > [data-name] > * { max-width: 100%; }
+.storyPreview [data-story-block] > [data-name] > * { max-inline-size: 100%; }

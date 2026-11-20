@@ -3,12 +3,41 @@ import { createRoot } from "react-dom/client";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { describe, expect, test } from "vitest";
 import { componentApiRows } from "../.storybook/component-docs-scope";
+import { getPropertiesPreviewDevices } from "../.storybook/properties-preview-devices";
 
 import {
   formatUsageMarkdown,
   loadUsageForTitle,
   UsageMarkdown,
 } from "../.storybook/component-docs";
+
+test("Properties offers the component's tagged App and H5 viewports in device order", () => {
+  const options = {
+    yamiDesktop: { styles: { width: "1024px", height: "768px" } },
+    yamiMobile: { styles: { width: "375px", height: "812px" } },
+  };
+  const stories = [
+    { name: "H5", viewport: "yamiMobile" },
+    { name: "PC", viewport: "yamiDesktop" },
+    { name: "APP", viewport: "yamiMobile" },
+    { name: "Mobile", viewport: "yamiMobile" },
+  ].map(({ name, viewport }) => ({
+    name,
+    tags: ["component-device"],
+    storyGlobals: { viewport: { value: viewport } },
+    parameters: { viewport: { options } },
+  }));
+
+  expect(getPropertiesPreviewDevices(stories)).toEqual([
+    { name: "PC", width: "1024px" },
+    { name: "App", width: "375px" },
+    { name: "H5", width: "375px" },
+  ]);
+  expect(getPropertiesPreviewDevices(stories.filter(story => story.name === "PC" || story.name === "Mobile"))).toEqual([
+    { name: "PC", width: "1024px" },
+    { name: "Mobile", width: "375px" },
+  ]);
+});
 
 describe("component docs usage content", () => {
   test("uses the public Pagination contract without marking mutually exclusive props as always required", () => {

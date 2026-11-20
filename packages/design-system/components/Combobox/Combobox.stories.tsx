@@ -30,11 +30,18 @@ export const Showcase: Story = {
   },
 };
 
+const densityPreviews: Story["render"] = (_, { globals }) => <div style={{ display: "grid", gap: "var(--space-200)", width: "min(100%, 320px)" }}>
+  <BasicCombobox en={globals.locale === "en"} density="default" />
+  <BasicCombobox en={globals.locale === "en"} density="compact" />
+</div>;
+
 export const PCPreview: Story = {
   name: "PC", tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  render: densityPreviews,
 };
 export const MobilePreview: Story = {
   name: "Mobile", tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: densityPreviews,
 };

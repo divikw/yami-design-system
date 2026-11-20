@@ -26,7 +26,18 @@
     "SelectGroupLabel",
     "SelectSeparator"
   ],
+  "composes": ["Field"],
   "props": {
+    "density": {
+      "type": "default | compact",
+      "required": false,
+      "description": "Default is 56px with an embedded label; compact is 40px with an external label on PC and Mobile."
+    },
+    "label": {
+      "type": "ReactNode",
+      "required": false,
+      "description": "Visible label. Its position follows the density."
+    },
     "value": {
       "type": "string | null",
       "required": false,
@@ -64,6 +75,7 @@
     }
   },
   "variants": {
+    "density": ["default", "compact"],
     "state": [
       "default",
       "focus-visible",
@@ -83,7 +95,9 @@
   },
   "tokens": [
     "--border-default",
-    "--button-disabled",
+    "--fill-tertiary",
+    "--color-black-400",
+    "--color-white-400",
     "--elevation-400-menu-panel",
     "--focus-ring",
     "--font-family-ios",
@@ -99,6 +113,9 @@
     "--space-050",
     "--space-100",
     "--space-150",
+    "--space-200",
+    "--space-250",
+    "--space-300",
     "--stroke-default",
     "--stroke-thick",
     "--surface-primary",
@@ -106,9 +123,14 @@
     "--text-disabled",
     "--text-primary",
     "--space-400",
-    "--space-500"
+    "--space-500",
+    "--space-600"
   ],
   "tokenBindings": {
+    "--fill-tertiary": {
+      "property": "background",
+      "selector": ".trigger[data-disabled]"
+    },
     "--surface-primary": {
       "property": "background",
       "selector": ".trigger, .content"
@@ -120,6 +142,14 @@
     "--border-default": {
       "property": "border-color",
       "selector": ".trigger, .content"
+    },
+    "--color-black-400": {
+      "property": "color",
+      "selector": ".trigger::after, .trigger[data-placeholder]:not([data-disabled])"
+    },
+    "--color-white-400": {
+      "property": "color",
+      "selector": ".dark .trigger::after, .dark .trigger[data-placeholder]:not([data-disabled])"
     },
     "--radius-component-default": {
       "property": "border-radius",
@@ -137,9 +167,25 @@
       "property": "outline-color",
       "selector": ".trigger:focus-visible"
     },
+    "--space-200": {
+      "property": "mask",
+      "selector": ".trigger::after"
+    },
+    "--space-250": {
+      "property": "width",
+      "selector": ".trigger::after"
+    },
+    "--space-300": {
+      "property": "padding-inline-end",
+      "selector": ".trigger"
+    },
     "--space-400": {
       "property": "min-height",
       "selector": ".item"
+    },
+    "--space-600": {
+      "property": "min-height",
+      "selector": ".trigger[data-density='default']"
     },
     "--space-500": {
       "property": "min-height",

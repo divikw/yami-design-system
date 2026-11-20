@@ -51,8 +51,8 @@
   .filled:hover:not(:disabled) {
     background: color-mix(
       in srgb,
-      var(--fill-secondary) 92%,
-      var(--text-primary) 8%
+      var(--fill-secondary) 96%,
+      var(--color-black-1000) 4%
     );
   }
 
@@ -63,8 +63,8 @@
   .outlined:hover:not(:disabled) {
     background: color-mix(
       in srgb,
-      var(--fill-primary) 92%,
-      var(--text-primary) 8%
+      var(--fill-primary) 96%,
+      var(--color-black-1000) 4%
     );
   }
 
@@ -84,6 +84,18 @@
 .icon > svg {
   display: block;
 }
+
+.dropdownArrow {
+  display: block;
+  width: var(--space-150);
+  height: var(--space-150);
+  background: currentColor;
+  color: var(--color-black-400);
+  mask: url("../../assets/icons/system/arrow-down.svg") center / contain no-repeat;
+}
+
+:global(.dark) .dropdownArrow { color: var(--color-white-400); }
+.chip:disabled .dropdownArrow { color: inherit; }
 
 .label {
   min-width: 0;
@@ -134,6 +146,10 @@
   cursor: pointer;
 }
 
+.menuPopup .optionRow {
+  padding-inline: var(--space-100);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .optionRow:hover {
     background: var(--fill-secondary);
@@ -167,6 +183,10 @@
   background: var(--fill-primary);
 }
 
+.menuPopup[data-slot="filter-chip-menu"] .menuFooter {
+  padding-inline: var(--space-100);
+}
+
 .clearButton {
   height: 40px;
   padding-inline: var(--space-150);
@@ -185,10 +205,6 @@
 
 .clearAction {
   text-decoration: underline;
-}
-
-.menuPopup[data-slot] {
-  border-radius: var(--radius-component-default);
 }
 
 .categoryPopup {

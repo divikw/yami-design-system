@@ -69,7 +69,10 @@
       "--border-default",
       "--border-focus",
       "--button-disabled",
+      "--color-black-1000",
       "--color-black-200",
+      "--color-black-400",
+      "--color-white-400",
       "--fill-primary",
       "--fill-secondary",
       "--focus-ring",
@@ -77,7 +80,6 @@
       "--font-size-body-md",
       "--font-weight-normal",
       "--line-height-body-md",
-      "--radius-component-default",
       "--radius-full",
       "--radius-sm",
       "--radius-tag-primary",
@@ -96,6 +98,18 @@
       "semantic-color-only"
     ],
     "tokenBindings": {
+      "--color-black-1000": {
+        "property": "background-color",
+        "selector": ".filled:hover:not(:disabled), .outlined:hover:not(:disabled)"
+      },
+      "--color-black-400": {
+        "property": "color",
+        "selector": ".dropdownArrow"
+      },
+      "--color-white-400": {
+        "property": "color",
+        "selector": ".dark .dropdownArrow"
+      },
       "--button-disabled": {
         "property": "background-color",
         "selector": ".chip:disabled"
@@ -128,13 +142,13 @@
         "property": "background-color",
         "selector": ".categoryToggle:hover"
       },
-      "--radius-component-default": {
-        "property": "border-radius",
-        "selector": ".menuPopup[data-slot]"
-      },
       "--radius-tag-primary": {
         "property": "border-radius",
         "selector": ".optionRow, .categoryRow"
+      },
+      "--space-100": {
+        "property": "padding-inline",
+        "selector": ".menuPopup .optionRow, .menuPopup[data-slot='filter-chip-menu'] .menuFooter"
       },
       "--radius-full": {
         "property": "border-radius",
@@ -159,5 +173,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "da2ea37e9e9df4c0d108fe5be39ecb707b231d26be507be3274d86d8c6edcf99"
+  "contentDigest": "2f9a05f3dde46321463e5061540be267660e662f89e74d4ec17f0a92dcfcd7d6"
 }

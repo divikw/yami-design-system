@@ -569,7 +569,7 @@ Base UI Input renders the native field. Both `onChange` and `onValueChange` are 
 
 Opt-in `action` composes a shared tertiary Button inside the field border, with underlined 14px action text and 14px value text. It preserves native form submission, disabled and error behavior. Ordinary inputs keep their current appearance; cart uses the option only on mobile. See [usage](./components/Input/usage.md).
 
-`density="compact"` is a code-defined short-input variant: external label, one value row, 48px Mobile / 40px PC. Default remains embedded-label 48px Mobile / 56px PC. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This meets the Web target-size baseline; larger targets remain a touch recommendation. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
+`density="compact"` is a code-defined short-input variant: external label, one value row, 40px on PC and Mobile. Default uses an embedded label and is 56px on PC and Mobile. By explicit product request, clear uses a 24×24px hit area and 20px icon in both densities, centered inside the field without an invisible extension. This meets the Web target-size baseline; larger targets remain a touch recommendation. / 紧凑规格用于折扣码等短输入，标签外置；清空点击区域为 24×24px，图标 20px，保留独立键盘焦点。
 
 |              |                                                                              |
 | ------------ | ---------------------------------------------------------------------------- |
@@ -852,11 +852,11 @@ YAMI switch with a 36×20px default track, a 28×16px small track and a 32px min
 
 ### Combobox — `components/Combobox/`
 
-Search and select one or more options with Base UI. The field and popup use the default component radius. The popup uses menu elevation and each option uses the tag radius. See [usage](./components/Combobox/usage.md) for grouped options, chips and form submission.
+Search and select one or more options with Base UI. Input and chip controls share 56px default and 40px compact minimum heights on PC and Mobile. Single-select embeds its label at default density and places it above the input at compact density. Both multi-select densities place the label above the control and grow as chips wrap. The field and popup use the default component radius. The popup uses menu elevation and each option uses the tag radius. See [usage](./components/Combobox/usage.md) for grouped options, chips and form submission.
 
 ### Select — `components/Select/`
 
-YAMI single-value select. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Select/usage.md) for composition, state and accessibility.
+YAMI single-value select with 56px embedded-label and 40px external-label trigger densities on PC and Mobile. Compose SelectTrigger, SelectValue, SelectContent and SelectItem for keyboard navigation, disabled options and native forms. Uses Base UI with existing YAMI semantic tokens. See [usage](./components/Select/usage.md) for composition, state and accessibility.
 
 ### Popover — `components/Popover/`
 
@@ -867,6 +867,8 @@ YAMI non-modal popover using the existing filter menu surface. Supports anchored
 Native multiline control with Base UI Field integration. Uses the YAMI form background and semantic state borders, `--radius-component-default`, and a separate `--focus-ring` outline. Omitting rows enables content sizing in supporting browsers, with a three-row fallback. Explicit rows retain native sizing. See [usage](./components/Textarea/usage.md).
 
 ### Field — `components/Field/`
+
+Choose one `density` for Input, Select and Combobox in the same form group, especially when they share a row. Use 56px with embedded labels or 40px with external labels on both PC and Mobile. Multi-select Combobox places its label above the control at both densities. Give each Field the same density so its control inherits the size. Supporting text and errors sit outside the control and can increase the overall Field height.
 
 Use FieldSet and FieldLegend for named groups and FieldGroup for stacked or responsive columns. Field also supports horizontal and container-responsive label layouts, choice cards, separators, and external error lists. Base UI field composition connects a control to its label, description, and validation message. Parts use `--space-050` spacing, caption typography, and semantic text and error colors. See [usage](./components/Field/usage.md).
 

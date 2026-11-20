@@ -16,6 +16,8 @@ const cities = ["上海", "东京", "首尔"];
 </Combobox>
 ```
 
+在 ComboboxInput 或 ComboboxChips 上传入 `density` 和 `label`。`default` 最低 56px，`compact` 最低 40px，PC 与移动端同高。单选 default 的标题在框内，compact 在框外。多选两档的标题都在框外，已选标签换行时控件会增高。控件可继承 Field 的规格，独立使用时省略 density 会采用 compact。
+
 单选搜索框和多选标签容器在 PC 和移动端的左右内边距均为 12px，聚焦描边为 2px。下拉箭头尺寸与 Select 一致。下拉面板圆角为 8px，选项圆角为 4px。
 
 使用方向键移动高亮，Enter 选择，Escape 收起。搜索提示使用 ComboboxInput 的 placeholder。用 FieldLabel 标识字段，并将 FieldError 放在 Combobox 后方显示校验错误。通过根组件的 disabled 或 required 控制整个字段。用 value 和 onValueChange 管理已选值，用 inputValue 和 onInputValueChange 管理搜索文本。
@@ -39,6 +41,8 @@ const cities = ["Shanghai", "Tokyo", "Seoul"];
   </ComboboxContent>
 </Combobox>
 ```
+
+Set `density` and `label` on ComboboxInput or ComboboxChips. The minimum height is 56px for `default` and 40px for `compact` on PC and Mobile. Single-select embeds its label at default density and places it above the control at compact density. Both multi-select densities place the label above the control and grow as chips wrap. Controls can inherit Field density and otherwise fall back to compact.
 
 Single-select inputs and multi-select chip containers use 12px horizontal padding and a 2px focus border on desktop and mobile. The dropdown chevron matches the Select chevron in size. The popup has an 8px radius and each option has a 4px radius.
 

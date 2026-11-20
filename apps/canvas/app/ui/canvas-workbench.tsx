@@ -10,15 +10,14 @@ import { isPhonePreviewPage, PhonePreviewShell } from "@yami/prototypes/phone-pr
 import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Component, ExternalLink, Link, Monitor, Moon, PanelLeft, RotateCcw, Smartphone, Sun, Tablet, type LucideIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent, type ReactElement, type RefObject } from "react";
-import { prototypeHref, prototypeProjects, prototypePageLabel } from "../lib/prototype-projects";
+import { prototypeHref, prototypeProjects, prototypePageLabel, resolvePrototypeVariant } from "../lib/prototype-projects";
 import { prototypeSessionKey } from "../lib/prototype-session";
 import styles from "./workbench-controls.module.css";
 
 type Locale = "zh" | "en";
 type Theme = "light" | "dark";
-const MIN_PREVIEW_WIDTH = 320;
+const MIN_PREVIEW_WIDTH = 360;
 const MAX_PREVIEW_WIDTH = 1920;
-const clampPreviewWidth = (width: number) => Math.max(MIN_PREVIEW_WIDTH, Math.min(MAX_PREVIEW_WIDTH, Math.round(width)));
 const STORYBOOK_URL = process.env.NEXT_PUBLIC_STORYBOOK_URL
   ?? (process.env.NODE_ENV === "production"
     ? "https://yds-storybook.vercel.app"
@@ -83,6 +82,7 @@ const localeOptions = [
   { value: "zh", label: "中文" },
   { value: "en", label: "English" },
 ] as const;
+const previewModeOptions = [{ value: "h5", label: "H5" }, { value: "app", label: "App" }] as const;
 const viewportOptions = [
   { value: "402", label: "手机", icon: Smartphone },
   { value: "768", label: "平板", icon: Tablet },
@@ -91,8 +91,10 @@ const viewportOptions = [
 
 interface WorkbenchSetting {
   label: string;
-  options: readonly { label: string; value: string; icon?: LucideIcon }[];
+  options: readonly { label: string; value: string; icon?: LucideIcon; disabled?: boolean }[];
   value: string;
+  valueLabel?: string;
+  disabled?: boolean;
   onValueChange: (value: string) => void;
 }
 
@@ -108,13 +110,13 @@ function WorkbenchTooltip({ label, children }: { label: string; children: ReactE
   </Tooltip>;
 }
 
-function WorkbenchSettingSelect({ label, options, value, onValueChange }: WorkbenchSetting) {
+function WorkbenchSettingSelect({ label, options, value, valueLabel, disabled, onValueChange }: WorkbenchSetting) {
   const container = useContext(WorkbenchOverlayContext);
   return <div className={styles.settingSelect}>
-    <Select items={options} value={value} onValueChange={(next) => { if (next !== null) onValueChange(next); }}>
+    <Select items={options} value={value} disabled={disabled} onValueChange={(next) => { if (next !== null) onValueChange(next); }}>
       <SelectLabel className={styles.label}>{label}</SelectLabel>
       <SelectTrigger data-value={value}>
-        <SelectValue />
+        <SelectValue>{valueLabel}</SelectValue>
         <ToolIcon icon={ChevronDown} className={styles.settingSelectIcon} />
       </SelectTrigger>
       <SelectContent container={container}>
@@ -134,7 +136,7 @@ function WorkbenchSettingSegments({ label, options, value, onValueChange }: Work
       onValueChange={(next) => { if (next !== null) onValueChange(next); }}>
       {options.map((option) => {
         const segment = <Radio.Root key={option.value} value={option.value} className={styles.segment} nativeButton render={<button type="button" />}
-          aria-label={option.icon ? option.label : undefined}>
+          aria-label={option.icon ? option.label : undefined} disabled={option.disabled}>
           {option.icon ? <ToolIcon icon={option.icon} /> : option.label}
         </Radio.Root>;
         return option.icon ? <WorkbenchTooltip key={option.value} label={option.label}>{segment}</WorkbenchTooltip> : segment;
@@ -148,11 +150,8 @@ function subscribeToWindowSize(onChange: () => void) {
   return () => window.removeEventListener("resize", onChange);
 }
 
-function getNarrowPreviewWidth() {
-  if (window.innerWidth > 860) return null;
-  // Account for the narrow canvas padding and the preview frame's border.
-  const availableWidth = document.documentElement.clientWidth - 18;
-  return Math.max(MIN_PREVIEW_WIDTH, Math.min(Number(viewportOptions[0].value), availableWidth));
+function isNarrowWorkbench() {
+  return window.innerWidth <= 860;
 }
 
 export function CanvasWorkbench() {
@@ -160,15 +159,15 @@ export function CanvasWorkbench() {
   const router = useRouter();
   const projectMode = params.has("project") || !params.has("direction");
   const project = prototypeProjects.find((item) => item.id === (params.get("project") ?? prototypeProjects[0].id));
-  const variant = project?.variants.find((item) => item.id === (params.get("variant") ?? "current"));
+  const variant = resolvePrototypeVariant(project, params.get("variant"));
   const activePages = projectMode && project ? project.pages : canvasPages;
   const [resetVersion, setResetVersion] = useState(0);
   const [shareStatus, setShareStatus] = useState("");
   const [workbenchTheme, setWorkbenchTheme] = useState<Theme>("light");
   const workbenchOverlays = useRef<HTMLDivElement>(null);
-  const narrowPreviewWidth = useSyncExternalStore(subscribeToWindowSize, getNarrowPreviewWidth, () => null);
+  const narrowWorkbench = useSyncExternalStore(subscribeToWindowSize, isNarrowWorkbench, () => false);
   const [sidebarOverride, setSidebarOverride] = useState<boolean | null>(null);
-  const sidebarCollapsed = sidebarOverride ?? (narrowPreviewWidth !== null);
+  const sidebarCollapsed = sidebarOverride ?? narrowWorkbench;
   const previewFrame = useRef<HTMLIFrameElement>(null);
   const [phoneFrame, setPhoneFrame] = useState<HTMLIFrameElement | null>(null);
   const attachPreviewFrame = useCallback((frame: HTMLIFrameElement | null) => {
@@ -187,7 +186,7 @@ export function CanvasWorkbench() {
   const storybookIndexRequested = useRef(false);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
-  const requestedPath = params.get("path") || "/";
+  const requestedPath = params.get("path") || activePages[0]?.value || "/";
   const pathResult = PreviewNavigateMessageSchema.safeParse({ type: "yami-design-system:v1:navigate", path: requestedPath });
   const path = pathResult.success ? pathResult.data.path : "/";
   const storyId = params.get("story") || "";
@@ -197,13 +196,19 @@ export function CanvasWorkbench() {
     ? "/brands/anua"
     : activePages.some((page) => page.value === path) ? path : "";
   const direction = params.get("direction") || "current";
-  const locale = (params.get("locale") === "en" ? "en" : "zh") as Locale;
+  const projectPreview = projectMode && !storyId ? variant : undefined;
+  const fixedLocale = projectPreview?.fixedLocale;
+  const locale: Locale = fixedLocale ?? (params.get("locale") === "en" ? "en" : "zh");
   const theme = (params.get("theme") === "dark" ? "dark" : "light") as Theme;
-  const previewMode = params.get("previewMode") === "h5" ? "h5" : "app";
+  const fixedPreviewMode = projectPreview?.fixedPreviewMode;
+  const previewMode = fixedPreviewMode ?? (params.get("previewMode") === "h5" ? "h5" : "app");
+  const maxPreviewWidth = projectPreview?.maxPreviewWidth ?? MAX_PREVIEW_WIDTH;
+  const clampPreviewWidth = (width: number) => Math.max(MIN_PREVIEW_WIDTH, Math.min(maxPreviewWidth, Math.round(width)));
   const requestedViewport = params.get("viewport");
   const viewport = requestedViewport && /^\d+$/.test(requestedViewport)
-    ? String(clampPreviewWidth(Number(requestedViewport))) : String(narrowPreviewWidth ?? viewportOptions[2].value);
-  const previewWidth = dragWidth ?? Number(viewport);
+    ? String(clampPreviewWidth(Number(requestedViewport)))
+    : viewportOptions[narrowWorkbench || variant?.homeHeader ? 0 : 2].value;
+  const previewWidth = clampPreviewWidth(dragWidth ?? Number(viewport));
   const deviceWidth = widthDraft?.trim() && Number.isFinite(Number(widthDraft))
     ? clampPreviewWidth(Number(widthDraft)) : previewWidth;
   const selectedDevice = deviceWidth < 768 ? "402" : deviceWidth < 1024 ? "768" : "1440";
@@ -219,20 +224,22 @@ export function CanvasWorkbench() {
     : null;
   const visibleImportedPages = currentImportedPage ? [...importedPages, currentImportedPage] : importedPages;
   const pageOptions = [
-    ...(projectMode && project && !activePages.some((page) => page.value === path) && !storyId ? [{ value: path, label: prototypePageLabel(path, project) }] : []),
     ...activePages,
-    ...visibleImportedPages.map((page) => ({ value: `storybook:${page.id}`, label: page.label })),
+    ...visibleImportedPages.filter((page) => !projectMode || page.id === storyId)
+      .map((page) => ({ value: `storybook:${page.id}`, label: page.label })),
   ];
+  const linkedPageLabel = projectMode && project && !storyId && !activePages.some((page) => page.value === path)
+    ? prototypePageLabel(path, project) : undefined;
   const selectedPage = storyId
     ? `storybook:${storyId}`
     : projectMode ? path : selectedCanvasPage;
 
-  const update = useCallback((next: Partial<{ path: string | null; story: string | null; direction: string; locale: Locale; theme: Theme; viewport: string; previewMode: string; project: string; variant: string }>, mode: "push" | "replace" = "replace") => {
+  const update = useCallback((next: Partial<{ path: string | null; story: string | null; direction: string; locale: Locale; theme: Theme; viewport: string | null; previewMode: string; project: string; variant: string | null }>, mode: "push" | "replace" = "replace") => {
     // Read the current URL so consecutive edits cannot overwrite pending settings.
     const query = new URLSearchParams(window.location.search);
     if (projectMode && project && variant) {
       if (!query.has("project")) query.set("project", project.id);
-      if (!query.has("variant")) query.set("variant", variant.id);
+      query.set("variant", variant.id);
       query.delete("direction");
     }
     for (const [key, value] of Object.entries(next)) {
@@ -392,6 +399,9 @@ export function CanvasWorkbench() {
     if (!project || !variant) return;
     try { sessionStorage.removeItem(prototypeSessionKey(project.id, variant.id)); }
     catch { setShareStatus("浏览器未允许重置存储，请重新打开演示。"); return; }
+    setWidthDraft(null);
+    setDragWidth(null);
+    update({ viewport: null });
     setResetVersion((value) => value + 1);
     setShareStatus("已重置当前方案");
   }
@@ -451,31 +461,38 @@ export function CanvasWorkbench() {
             {!projectMode && <div className="panel-heading"><span>页面管理</span></div>}
             {projectMode && project && variant ? <>
               <WorkbenchSettingSelect label="项目方案" options={prototypeProjects.map((item) => ({ value: item.id, label: item.name }))} value={project.id}
-                onValueChange={(value) => update({ project: value, variant: "current", path: "/", story: null }, "push")} />
+                onValueChange={(value) => update({
+                  project: value, variant: null, story: null,
+                  path: prototypeProjects.find((item) => item.id === value)?.pages[0]?.value ?? "/",
+                }, "push")} />
               <WorkbenchSettingSelect label="设计方案" options={project.variants.map((item) => ({ value: item.id, label: item.name }))} value={variant.id}
                 onValueChange={(value) => update({ variant: value, story: null })} />
-            </> : <ButtonLink variant="secondary" size="sm" href="/design?project=global-navigation&variant=current">打开项目原型</ButtonLink>}
+            </> : <ButtonLink variant="secondary" size="sm" href="/design?project=global-navigation">打开项目原型</ButtonLink>}
 
             <WorkbenchSettingSelect
               label="页面"
               options={selectedPage ? pageOptions : [{ value: "", label: "其他路径" }, ...pageOptions]}
               value={selectedPage}
+              valueLabel={linkedPageLabel}
               onValueChange={selectPage}
             />
             <WorkbenchSettingSelect
               label="语言"
-              options={localeOptions}
+              options={fixedLocale ? localeOptions.filter((option) => option.value === fixedLocale) : localeOptions}
               value={locale}
+              disabled={Boolean(fixedLocale)}
               onValueChange={(value) => update({ locale: value as Locale })}
             />
             <div className={styles.settingGroup}>
-              <WorkbenchSettingSegments label="设备" options={viewportOptions} value={selectedDevice}
+              <WorkbenchSettingSegments label="设备"
+                options={viewportOptions.map((option) => ({ ...option, disabled: Number(option.value) > maxPreviewWidth }))}
+                value={selectedDevice}
                 onValueChange={(value) => { setWidthDraft(null); setDragWidth(null); update({ viewport: value }); }} />
               <Input className={styles.widthInput} density="compact" fullWidth aria-label="宽度（px）" type="number"
-                min={MIN_PREVIEW_WIDTH} max={MAX_PREVIEW_WIDTH} step={1}
+                min={MIN_PREVIEW_WIDTH} max={maxPreviewWidth} step={1}
                 trailingIcon={<span className={styles.widthControls}>
                   <span className={styles.widthStepper}>
-                    <button type="button" className={styles.widthStep} aria-label="增大预览宽度" disabled={deviceWidth >= MAX_PREVIEW_WIDTH}
+                    <button type="button" className={styles.widthStep} aria-label="增大预览宽度" disabled={deviceWidth >= maxPreviewWidth}
                       onClick={() => commitPreviewWidth(deviceWidth + 1)}><ToolIcon icon={ChevronUp} /></button>
                     <button type="button" className={styles.widthStep} aria-label="减小预览宽度" disabled={deviceWidth <= MIN_PREVIEW_WIDTH}
                       onClick={() => commitPreviewWidth(deviceWidth - 1)}><ToolIcon icon={ChevronDown} /></button>
@@ -496,7 +513,10 @@ export function CanvasWorkbench() {
                 }} />
             </div>
             {selectedDevice === viewportOptions[0].value && <div className={styles.settingGroup}>
-              <WorkbenchSettingSegments label="预览模式" options={[{ value: "h5", label: "H5" }, { value: "app", label: "App" }]}
+              <WorkbenchSettingSegments label="预览模式"
+                options={previewModeOptions.map((option) => ({
+                  ...option, disabled: fixedPreviewMode !== undefined && option.value !== fixedPreviewMode,
+                }))}
                 value={previewMode} onValueChange={(value) => update({ previewMode: value })} />
             </div>}
             {storyId && <p className="prototype-description">Storybook 单页预览，未加入项目流程。</p>}
@@ -547,7 +567,7 @@ export function CanvasWorkbench() {
                   canGoBack, onBack: () => navigatePreview(-1),
                   onReload: () => { if (previewFrame.current) previewFrame.current.src = previewSrc; } }} />
               <div className="preview-resize-handle" role="separator" tabIndex={0} aria-label="调整预览宽度" aria-orientation="vertical"
-                aria-controls="canvas-preview" aria-valuemin={MIN_PREVIEW_WIDTH} aria-valuemax={MAX_PREVIEW_WIDTH} aria-valuenow={previewWidth}
+                aria-controls="canvas-preview" aria-valuemin={MIN_PREVIEW_WIDTH} aria-valuemax={maxPreviewWidth} aria-valuenow={previewWidth}
                 aria-valuetext={`${previewWidth} 像素`} title="拖动调整宽度；方向键微调，Shift 加速"
                 onPointerDown={startResize} onPointerMove={moveResize} onPointerUp={() => finishResize(true)}
                 onPointerCancel={() => finishResize(false)} onLostPointerCapture={() => finishResize(false)}
@@ -555,7 +575,7 @@ export function CanvasWorkbench() {
                   if (event.key === "Escape") { finishResize(false); return; }
                   const step = event.shiftKey ? 10 : 1;
                   const next = event.key === "ArrowLeft" ? previewWidth - step : event.key === "ArrowRight" ? previewWidth + step
-                    : event.key === "Home" ? MIN_PREVIEW_WIDTH : event.key === "End" ? MAX_PREVIEW_WIDTH : null;
+                    : event.key === "Home" ? MIN_PREVIEW_WIDTH : event.key === "End" ? maxPreviewWidth : null;
                   if (next === null) return;
                   event.preventDefault();
                   const width = clampPreviewWidth(next);

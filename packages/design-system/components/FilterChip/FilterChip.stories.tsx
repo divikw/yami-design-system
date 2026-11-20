@@ -4,14 +4,11 @@ import { userEvent, waitFor } from "storybook/test";
 
 import {
   FilterChip,
+  FilterChipDropdownIcon,
   FilterChipGroup,
   FilterChipMenu,
 } from "./FilterChip";
 
-const arrowDownUrl = new URL(
-  "../../assets/icons/system/arrow-down.svg",
-  import.meta.url,
-).href;
 const filterUrl = new URL(
   "../../assets/icons/action/filter.svg",
   import.meta.url,
@@ -58,7 +55,7 @@ const stackStyle: CSSProperties = {
   fontFamily: "var(--font-family-ios)",
 };
 
-const icon12 = <img src={arrowDownUrl} alt="" width={12} height={12} />;
+const icon12 = <FilterChipDropdownIcon />;
 
 function PopularFilterDemo() {
   const [selected, setSelected] = useState(false);
@@ -308,6 +305,9 @@ export const PopupMenus: Story = {
       if (!popup || getComputedStyle(popup).width !== "290px") {
         throw new Error("Single-select popup does not match the Figma width");
       }
+      if (getComputedStyle(popup).borderRadius !== "12px") {
+        throw new Error("FilterChip Popover must have 12px corner radii");
+      }
 
       const optionList = popup.querySelector<HTMLElement>(
         '[data-filter-chip-menu-options="true"]',
@@ -325,6 +325,11 @@ export const PopupMenus: Story = {
         optionListStyle.paddingLeft !== "8px"
       ) {
         throw new Error("FilterChip popup option list density is incorrect");
+      }
+
+      const firstOption = optionList.querySelector("label");
+      if (!firstOption || getComputedStyle(firstOption).paddingInline !== "8px") {
+        throw new Error("FilterChip popup option rows must have 8px inline padding");
       }
     });
 
@@ -370,7 +375,8 @@ export const PopupMenus: Story = {
       getComputedStyle(apply).flexGrow !== "0" ||
       footerStyle?.justifyContent !== "space-between" ||
       footerStyle?.paddingTop !== "8px" ||
-      footerStyle.paddingBottom !== "8px"
+      footerStyle.paddingBottom !== "8px" ||
+      footerStyle.paddingInline !== "8px"
     ) {
       throw new Error("Multiple-select footer sizing is incorrect");
     }

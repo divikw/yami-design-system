@@ -7,11 +7,11 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader,
 import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/base.css";
 
-function Demo({ controlled = false, blocked = false, disabled = false, long = false, onConfirm = () => {} }: { controlled?: boolean; blocked?: boolean; disabled?: boolean; long?: boolean; onConfirm?: () => void }) {
+function Demo({ controlled = false, blocked = false, disabled = false, long = false, keepMounted = false, onConfirm = () => {} }: { controlled?: boolean; blocked?: boolean; disabled?: boolean; long?: boolean; keepMounted?: boolean; onConfirm?: () => void }) {
   const [open, setOpen] = useState(false);
   return <AlertDialog open={controlled ? open : undefined} onOpenChange={(next, details) => { if (!next && blocked) details.cancel(); else setOpen(next); }}>
     <AlertDialogTrigger render={<Button />}>Open confirmation</AlertDialogTrigger>
-    <AlertDialogContent lang="en">
+    <AlertDialogContent lang="en" keepMounted={keepMounted}>
       <AlertDialogHeader><AlertDialogTitle>Delete address?</AlertDialogTitle><AlertDialogDescription>{long ? "This address will be permanently removed. ".repeat(150) : "This action cannot be undone."}</AlertDialogDescription></AlertDialogHeader>
       <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction disabled={disabled} onClick={onConfirm}>Confirm</AlertDialogAction></AlertDialogFooter>
     </AlertDialogContent>
@@ -68,6 +68,30 @@ test("controlled confirmation commits once; disabled actions and cancelled close
     await userEvent.keyboard("{Escape}"); expect(dialogElement()).not.toBeNull();
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     expect(dialogElement()).not.toBeNull();
+  } finally { cleanup(); }
+});
+
+test("keepMounted keeps the closed dialog and backdrop in the DOM and out of view", async () => {
+  const cleanup = mount(<Demo keepMounted />);
+  try {
+    await expect.poll(dialogElement).not.toBeNull();
+    const dialog = dialogElement()!;
+    const backdrop = dialog.parentElement!.previousElementSibling!;
+    expect(dialog.checkVisibility()).toBe(false);
+    expect(backdrop.checkVisibility()).toBe(false);
+
+    const trigger = page.getByRole("button", { name: "Open confirmation" });
+    await trigger.click();
+    await expect.element(page.getByRole("alertdialog", { name: "Delete address?" })).toBeVisible();
+    expect(backdrop.checkVisibility()).toBe(true);
+    const bounds = backdrop.getBoundingClientRect();
+    expect([bounds.x, bounds.y, bounds.width, bounds.height]).toEqual([0, 0, innerWidth, innerHeight]);
+
+    await userEvent.keyboard("{Escape}");
+    await expect.poll(() => dialog.checkVisibility()).toBe(false);
+    expect(backdrop.checkVisibility()).toBe(false);
+    expect(dialogElement()).toBe(dialog);
+    await expect.element(trigger).toHaveFocus();
   } finally { cleanup(); }
 });
 

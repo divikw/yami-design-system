@@ -25,6 +25,23 @@ function Demo() {
 
 const brands = ["SKIN1004", "COSRX", "Anua"];
 
+test("Drawer keeps its accessible name when the visual title is replaced", async () => {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    flushSync(() => root.render(<Drawer open title="Navigation menu" titleContent={<span>YAMI</span>}
+      closeLabel="Close navigation menu" onClose={() => {}}>
+      <p>Menu content</p>
+    </Drawer>));
+    const dialog = page.getByRole("dialog", { name: "Navigation menu", exact: true });
+    await expect.element(dialog).toBeVisible();
+    await expect.element(dialog.getByText("YAMI", { exact: true })).toBeVisible();
+  } finally {
+    root.unmount(); container.remove();
+  }
+});
+
 test("Drawer keeps its accessible description and divider in the fixed header while content scrolls", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");

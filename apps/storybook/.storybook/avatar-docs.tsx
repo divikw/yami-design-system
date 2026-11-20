@@ -48,6 +48,11 @@ function TeamAvatars({ members }: { members: Member[] }) {${withCount ? "\n  con
   ];
   return <ComponentGuide name="Avatar" slug="avatar" locale={locale}
     intro={zh ? "用于账户、评价作者和身份展示的圆形头像，支持图片回退和会员标识。" : "A circular image for accounts, review authors and identity, with image fallback and membership indicators."}
+    usageNote={zh ? "在账户或评论中展示头像。没有自定义图片时可省略 src。" : "Show a person's avatar in an account or review. Omit src to use the default image."}
+    practices={zh ? [["do", "同一头像组内使用相同尺寸，额外人数用 AvatarGroupCount 表示。"], ["avoid", "把静态头像本身当成可点击的账户入口。"]]
+      : [["do", "Use one size within an avatar group and show additional people with AvatarGroupCount."], ["avoid", "Treat the static avatar itself as an interactive account control."]]}
+    accessibility={zh ? ["头像单独出现时用 alt 标明人物。与可见姓名相邻时可用空 alt。", "用 aria-label 为头像组和人数计数说明含义。"]
+      : ["Name a standalone avatar with alt. An empty alt works beside the person's visible name.", "Use aria-label to explain an avatar group and its overflow count."]}
     previous={{ name: "AspectRatio", path: "yami-components-layout-aspectratio" }}
     next={{ name: "Badge", path: "yami-components-data-display-badge" }}
     composition={"Avatar\n├── Image (internal)\n├── Fallback (internal)\n└── MembershipIcon (optional, internal)\n\nAvatarGroup\n├── Avatar (one per person)\n└── AvatarGroupCount (optional)"} examples={examples}

@@ -3,9 +3,8 @@ import { ArrowLeft, ArrowRight, Check, Copy } from "lucide-react";
 import { DocsContext } from "@storybook/addon-docs/blocks";
 import { SyntaxHighlighter } from "storybook/internal/components";
 import { GLOBALS_UPDATED } from "storybook/internal/core-events";
-import { Button, ButtonGroup, ButtonLink, Tabs, TabsContent, TabsList, TabsTrigger } from "@yami/design-system";
+import { Button, ButtonGroup, ButtonLink } from "@yami/design-system";
 import { componentDocsName } from "./component-docs-names";
-import { usesBaseUI } from "./component-docs-scope";
 import { ComponentDocsPreview, type DocsPreviewMode } from "./component-docs-preview";
 import styles from "./component-docs-template.module.css";
 
@@ -37,36 +36,6 @@ export function CodeBlock({ code, locale, collapsible = false, language = "tsx" 
   </div>;
 }
 
-const installCommand = 'pnpm add "@yami/design-system@workspace:*"';
-const installDependency = '{\n  "dependencies": {\n    "@yami/design-system": "workspace:*"\n  }\n}';
-const installStyles = 'import "@yami/design-system/styles/fonts.css";\nimport "@yami/design-system/tokens.css";\nimport "@yami/design-system/styles/base.css";';
-
-function installationText(locale: Locale) {
-  return {
-    intro: locale === "zh" ? "当前组件通过 YAMI 工作区包提供。在同一 monorepo 的消费应用中添加依赖。" : "This component is provided by the YAMI workspace package. Add the dependency in a consuming app within the same monorepo.",
-    command: locale === "zh" ? "命令" : "Command",
-    manual: locale === "zh" ? "手动" : "Manual",
-    styles: locale === "zh" ? "在应用入口引入一次字体、令牌和基础样式。" : "Import fonts, tokens and base styles once in your application entry point.",
-  };
-}
-
-export function Installation({ locale }: { locale: Locale }) {
-  const { intro, command, manual, styles: stylesIntro } = installationText(locale);
-  return <>
-    <p>{intro}</p>
-    <Tabs defaultValue="command" className={styles.installationTabs}>
-      <TabsList variant="secondary" aria-label={locale === "zh" ? "安装方式" : "Installation method"}>
-        <TabsTrigger value="command">{command}</TabsTrigger>
-        <TabsTrigger value="manual">{manual}</TabsTrigger>
-      </TabsList>
-      <TabsContent value="command"><CodeBlock code={installCommand} language="bash" locale={locale} /></TabsContent>
-      <TabsContent value="manual"><CodeBlock code={installDependency} language="json" locale={locale} /></TabsContent>
-    </Tabs>
-    <p>{stylesIntro}</p>
-    <CodeBlock locale={locale} code={installStyles} />
-  </>;
-}
-
 export function DocsExampleCard({ code, locale, children, name }: { code?: string; locale: Locale; children: ReactNode; name?: string }) {
   return <div className={styles.example} data-example={name}>
     {children}
@@ -80,8 +49,8 @@ export function DocsExample({ code, locale, children, name, previewMode, preview
   </DocsExampleCard>;
 }
 
-export function DocsApiTable({ locale, rows }: { locale: Locale; rows: [string, string][] }) {
-  return <div className={styles.tableScroll}><table><thead><tr><th>{locale === "zh" ? "属性 / 部件" : "Prop / Part"}</th><th>{locale === "zh" ? "说明" : "Description"}</th></tr></thead><tbody>{rows.map(([name, description]) => <tr key={name}><td><code>{name}</code></td><td>{description}</td></tr>)}</tbody></table></div>;
+export function DocsApiTable({ locale, rows, partLabel = locale === "zh" ? "属性 / 部件" : "Prop / Part" }: { locale: Locale; rows: [string, string][]; partLabel?: string }) {
+  return <div className={styles.tableScroll}><table><thead><tr><th>{partLabel}</th><th>{locale === "zh" ? "说明" : "Description"}</th></tr></thead><tbody>{rows.map(([name, description]) => <tr key={name}><td><code>{name}</code></td><td>{description}</td></tr>)}</tbody></table></div>;
 }
 
 export function ComponentDocsTemplate({ name, slug, intro, previous, next, locale, children }: {
@@ -102,7 +71,7 @@ export function ComponentDocsTemplate({ name, slug, intro, previous, next, local
     context.channel.on(GLOBALS_UPDATED, sync);
     return () => context.channel.off(GLOBALS_UPDATED, sync);
   }, [context]);
-  return <article className={`sb-unstyled ${styles.page}`} lang={locale} data-yami-docs={slug} data-docs-layout={usesBaseUI(slug) ? "base-ui" : undefined}>
+  return <article className={`sb-unstyled ${styles.page}`} lang={locale} data-component-docs="" data-yami-docs={slug} data-docs-layout="">
     <header className={styles.header}>
       <div className={styles.titleRow}>
         <h1>{componentDocsName(name, locale)}</h1>

@@ -1,7 +1,8 @@
 "use client";
 
 import { Select as SelectPrimitive } from "@base-ui/react/select";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type ReactNode } from "react";
+import { forwardRef, useContext, useEffect, useId, useImperativeHandle, useRef, useState, type ReactNode } from "react";
+import { FieldDensityContext, type FieldDensity } from "../Field/density";
 import styles from "./Select.module.css";
 
 export const SelectValue = SelectPrimitive.Value;
@@ -46,10 +47,31 @@ export function Select({ value, defaultValue = null, onValueChange, inputRef, ..
 export type SelectTriggerProps = Omit<SelectPrimitive.Trigger.Props, "className" | "children"> & {
   className?: string;
   children?: ReactNode;
+  density?: FieldDensity;
+  label?: ReactNode;
 };
 
-export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(function SelectTrigger({ className, children, ...props }, ref) {
-  return <SelectPrimitive.Trigger {...props} ref={ref} className={className ?? styles.trigger}>{children}</SelectPrimitive.Trigger>;
+export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(function SelectTrigger({ className, children, density: densityProp, label, ...props }, ref) {
+  const fieldDensity = useContext(FieldDensityContext);
+  const density = densityProp ?? fieldDensity ?? "compact";
+  const labelId = useId();
+  const hasExternalLabel = label != null && density === "compact";
+  const hasInlineLabel = label != null && density === "default";
+  const triggerId = props.id ?? (hasExternalLabel ? `${labelId}-trigger` : undefined);
+  const accessibleLabel = label != null && props["aria-label"] == null && props["aria-labelledby"] == null
+    ? { "aria-labelledby": labelId }
+    : {};
+  const trigger = <SelectPrimitive.Trigger {...props} {...accessibleLabel} id={triggerId} ref={ref} data-density={density}
+    className={className ?? styles.trigger}>
+    {hasInlineLabel ? <span className={styles.textStack}>
+      <span id={labelId} className={styles.inlineLabel}>{label}</span>
+      <span className={styles.valueRow}>{children}</span>
+    </span> : children}
+  </SelectPrimitive.Trigger>;
+  return hasExternalLabel ? <div className={styles.labeledTrigger}>
+    <label id={labelId} htmlFor={triggerId} className={styles.externalLabel}>{label}</label>
+    {trigger}
+  </div> : trigger;
 });
 
 export type SelectContentProps = Omit<SelectPrimitive.Popup.Props, "className"> &

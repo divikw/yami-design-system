@@ -5,7 +5,8 @@ import { TopicLandingPage } from "./TopicLandingPage";
 import { createTopicKeywordLandingPageFixture } from "./topic.fixtures";
 
 const meta = {
-  title: "YAMI/Pages/Topic Landing Page/Topic",
+  id: "yami-pages-topic-landing-page-topic",
+  title: "YAMI/Pages/Landing Pages/Topic Templates/Topic",
   component: TopicLandingPage,
   parameters: {
     viewport: { defaultViewport: "yamiDesktopMd" },
@@ -121,42 +122,6 @@ export const Pc: Story = {
       );
     }
   } : undefined,
-};
-
-export const HeroLoading: Story = {
-  name: "Hero Loading — PC",
-  tags: ["!test", "!autodocs"],
-  play: async ({ canvasElement }) => {
-    const media = canvasElement.querySelector<HTMLElement>(
-      '[data-slot="theme-hero-media"]',
-    );
-    const image = media?.querySelector<HTMLImageElement>("img");
-    if (!media || !image) {
-      throw new Error("Matcha Topic Hero artwork did not render");
-    }
-
-    image.dataset.imageState = "pending";
-    await new Promise<void>((resolve) =>
-      requestAnimationFrame(() => resolve()),
-    );
-
-    if (import.meta.env.MODE !== "test") return;
-
-    const tokenProbe = document.createElement("span");
-    tokenProbe.style.backgroundColor = "var(--fill-tertiary)";
-    document.body.append(tokenProbe);
-    const placeholderColor = getComputedStyle(tokenProbe).backgroundColor;
-    tokenProbe.remove();
-    const mediaStyle = getComputedStyle(media);
-    if (
-      mediaStyle.backgroundColor !== placeholderColor ||
-      mediaStyle.borderRadius !== "8px"
-    ) {
-      throw new Error(
-        "PC ThemeHero loading simulation must show the tertiary gray placeholder with an 8px radius",
-      );
-    }
-  },
 };
 
 export const Mobile: Story = {

@@ -117,6 +117,7 @@ const baseFiles = [
   "SKILL.zh-CN.md",
   "principles/principles.ts",
   "components/index.ts",
+  "assets/icons/system/arrow-down.svg",
   "styles/base.css",
   "generated/tokens.css",
   "generated/tokens.json",

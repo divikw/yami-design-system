@@ -5,7 +5,7 @@
   gap: var(--space-050);
   width: 100%;
   min-width: 0;
-  min-height: var(--space-600);
+  min-height: var(--space-500);
   padding-inline: var(--space-150);
   border: 0;
   box-shadow: inset 0 0 0 var(--stroke-default) var(--border-default);
@@ -23,7 +23,7 @@
   box-shadow: inset 0 0 0 var(--stroke-thick) var(--border-attention);
 }
 .control:has(input:disabled), .chips:has(input:disabled) {
-  background: var(--fill-disabled);
+  background: var(--fill-tertiary);
   color: var(--text-disabled);
   cursor: not-allowed;
 }
@@ -37,31 +37,87 @@
   font: inherit;
   outline: none;
 }
-.control input::placeholder, .chips input::placeholder { color: var(--text-secondary); }
+.control input::placeholder, .chips input::placeholder { color: var(--color-black-400); }
+:global(.dark) .control input::placeholder, :global(.dark) .chips input::placeholder { color: var(--color-white-400); }
 .control input:disabled::placeholder, .chips input:disabled::placeholder { color: var(--text-disabled); }
-.control:has([data-slot="combobox-clear"]) [data-slot="combobox-trigger"] { display: none; }
-.chevron {
-  box-sizing: border-box;
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg);
+.control[data-density="default"], .chips[data-density="default"] {
+  min-height: calc(var(--space-600) + var(--space-100));
 }
+.labeledControl { display: grid; gap: var(--space-050); width: 100%; }
+.externalLabel, .inlineLabel {
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  color: var(--text-secondary);
+}
+.inlineLabel { font-size: var(--font-size-caption-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.textStack {
+  position: relative;
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  row-gap: var(--space-025);
+  padding-block-end: var(--space-025);
+}
+.control:not(:focus-within, :has(input:not(:placeholder-shown), input[aria-invalid="true"])) .textStack {
+  row-gap: 0;
+  padding-block-end: 0;
+}
+.control:not(:focus-within, :has(input:not(:placeholder-shown), input[aria-invalid="true"])) .inlineLabel {
+  font-size: var(--font-size-body-md);
+}
+.control:not(:focus-within, :has(input:not(:placeholder-shown), input[aria-invalid="true"])) .textStack input {
+  position: absolute;
+  inset-inline-start: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.control:has([data-slot="combobox-clear"]) [data-slot="combobox-trigger"] { display: none; }
+.triggerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-050);
+}
+.triggerLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chevron {
+  display: inline-block;
+  width: var(--space-200);
+  height: var(--space-200);
+  flex: none;
+  color: var(--color-black-400);
+  background: currentColor;
+  mask: url("../../assets/icons/system/arrow-down.svg") center / var(--space-200) no-repeat;
+}
+:global(.dark) .chevron { color: var(--color-white-400); }
+[data-disabled] .chevron { color: var(--text-disabled); }
+[data-popup-open] .chevron { transform: rotate(180deg); }
 .action {
   display: inline-grid;
   place-items: center;
   flex: none;
-  width: var(--space-400);
-  height: var(--space-400);
+  width: var(--space-300);
+  height: var(--space-300);
+  margin-inline-start: var(--space-050);
+  margin-inline-end: calc(-1 * var(--space-050));
   padding: 0;
   border: 0;
   border-radius: var(--radius-button-primary);
   color: inherit;
   background: transparent;
   cursor: pointer;
+}
+.action > .chevron {
+  width: var(--space-250);
+  height: var(--space-250);
+}
+.action > svg {
+  width: var(--space-200);
+  height: var(--space-200);
 }
 .action:disabled { cursor: not-allowed; }
 .action:focus-visible, .chip:focus-visible, .control:has(input[data-keyboard-focus]:focus-visible), .chips:has(input[data-keyboard-focus]:focus-visible) {
@@ -108,6 +164,7 @@
 }
 .separator { height: var(--stroke-default); margin-block: var(--space-050); background: var(--divider-default); }
 .chips { flex-wrap: wrap; padding-block: var(--space-050); }
+.chips[data-density="compact"]:has([data-combobox-chip]) { padding-inline: var(--space-100); }
 .chips input { min-width: min(8ch, 100%); }
 .chip {
   display: inline-flex;
@@ -120,12 +177,22 @@
   font-size: var(--font-size-caption-md);
   line-height: var(--line-height-caption-md);
 }
+.chips[data-density="default"] .chip {
+  padding-block: var(--space-050);
+  padding-inline-end: var(--space-050);
+}
+.chip > .action { margin-inline-start: 0; }
+[data-combobox-chip] > .action > svg {
+  width: var(--space-150);
+  height: var(--space-150);
+}
 @media (min-width: 1024px) {
-  .control, .chips { min-height: var(--space-500); }
   .item { min-height: var(--space-400); }
 }
 
 @media (forced-colors: active) {
   .control, .chips { outline: var(--stroke-default) solid ButtonText; }
   .control:focus-within, .chips:focus-within { outline: var(--stroke-thick) solid Highlight; }
+  .chevron { forced-color-adjust: none; background-color: ButtonText; }
+  [data-disabled] .chevron { background-color: GrayText; }
 }

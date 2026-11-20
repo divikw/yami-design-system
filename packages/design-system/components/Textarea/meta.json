@@ -28,7 +28,7 @@
   "tokens": [
     "--space-800", "--space-600", "--space-100", "--space-150", "--stroke-default",
     "--border-default", "--border-focus", "--border-attention", "--stroke-thick", "--space-025", "--focus-ring",
-    "--radius-component-default", "--fill-primary", "--fill-disabled",
+    "--radius-component-default", "--fill-primary", "--fill-tertiary",
     "--text-primary", "--text-secondary", "--text-disabled", "--font-family-ios",
     "--font-size-body-md", "--line-height-body-md"
   ],
@@ -46,7 +46,7 @@
     "--focus-ring": { "property": "outline", "selector": ".control:not([data-pointer-focus]):focus-visible" },
     "--radius-component-default": { "property": "border-radius", "selector": ".control" },
     "--fill-primary": { "property": "background", "selector": ".control" },
-    "--fill-disabled": { "property": "background", "selector": ".control:disabled" },
+    "--fill-tertiary": { "property": "background", "selector": ".control:disabled" },
     "--text-primary": { "property": "color", "selector": ".control" },
     "--text-secondary": { "property": "color", "selector": ".control::placeholder" },
     "--text-disabled": { "property": "color", "selector": ".control:disabled" },

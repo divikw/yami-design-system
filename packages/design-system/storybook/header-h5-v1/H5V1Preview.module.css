@@ -1,0 +1,220 @@
+.canvas {
+  min-block-size: 100dvh;
+  background: var(--background-primary);
+}
+
+.homeDraftHeader {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 21;
+}
+
+.homeDraftHeader[data-scrolled],
+.homeDraftHeader[data-scrolled] > header {
+  background: var(--background-primary);
+}
+
+.homeDraftHeader:not([data-scrolled]) > header:not(:has([data-popup-open])) {
+  background: transparent;
+}
+
+.header {
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  block-size: 56px;
+  padding-inline: var(--space-100);
+}
+
+.bar:has(> .menuButton) {
+  column-gap: var(--space-050);
+}
+
+.menuButton,
+.action {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--space-500);
+  block-size: var(--space-500);
+}
+
+.menuButton {
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-component-default);
+  background: var(--button-tertiary);
+  cursor: pointer;
+}
+
+.menuButton:active {
+  background: var(--button-tertiary-active);
+}
+
+.menuButton:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: var(--space-025);
+}
+
+.logo {
+  flex: none;
+}
+
+.logoLight,
+.icon {
+  display: block;
+}
+
+.logoDark,
+:global(.dark) .logoLight {
+  display: none;
+}
+
+:global(.dark) .logoDark {
+  display: block;
+}
+
+:global(.dark) .icon {
+  filter: invert(1);
+}
+
+.actions,
+.zipcode,
+.language {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.actions {
+  margin-inline-start: auto;
+}
+
+.zipcode,
+.language {
+  gap: var(--space-025);
+  min-block-size: var(--space-500);
+  padding-inline: var(--space-100);
+}
+
+.zipcode {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.language,
+.storefrontDescription {
+  font-size: var(--font-size-caption-sm);
+  line-height: var(--line-height-caption-sm);
+}
+
+.searchRow {
+  display: flex;
+  padding: 0 var(--space-100) var(--space-100);
+}
+
+:global([data-drawer-backdrop]):has(+ :global([data-drawer-viewport]) > .panel) {
+  background: var(--overlay-default);
+}
+
+:global([data-drawer-viewport]):has(> .panel) {
+  pointer-events: none;
+}
+
+.panel[data-drawer][data-swipe-direction="left"][role="dialog"] {
+  width: min(100vw, clamp(360px, calc(100vw - 56px), 400px));
+}
+
+.panel > :global([data-slot="drawer-header"]) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-050);
+  block-size: 56px;
+  padding: 0 var(--space-100);
+}
+
+.panel[data-drawer] > :global([data-slot="drawer-header"]) button {
+  width: var(--space-500);
+  height: var(--space-500);
+  border-radius: var(--radius-component-default);
+}
+
+.panel > :global([data-slot="drawer-header"]) button img {
+  content: url("./assets/close.svg");
+}
+
+.panel > :global([data-slot="drawer-header"]) .logo {
+  display: block;
+}
+
+.panelContent {
+  padding: var(--space-100);
+}
+
+.storefronts,
+.menuList {
+  display: grid;
+  gap: var(--space-025);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.storefronts {
+  gap: var(--space-100);
+  margin-block-end: var(--space-050);
+}
+
+.storefront {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) min(112px, 38%);
+  align-items: center;
+  min-block-size: var(--space-800);
+  overflow: hidden;
+  border-radius: var(--radius-component-default);
+  background: var(--fill-secondary);
+}
+
+.storefrontText {
+  display: grid;
+  gap: var(--space-025);
+  padding-inline: var(--space-150) var(--space-050);
+}
+
+.storefrontTitle,
+.menuItem {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-heading-sm);
+  font-weight: var(--font-weight-emphasize);
+  line-height: var(--line-height-heading-sm);
+}
+
+.storefrontDescription {
+  color: var(--text-secondary);
+}
+
+.artwork {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--space-800);
+  object-fit: cover;
+}
+
+.menuItem {
+  gap: var(--space-200);
+  min-block-size: var(--space-600);
+  padding-inline: var(--space-100);
+}
+
+.divider {
+  margin: var(--space-100);
+  border: 0;
+  border-block-start: var(--stroke-default) solid var(--divider-default);
+}

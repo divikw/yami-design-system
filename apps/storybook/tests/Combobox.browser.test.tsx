@@ -2,7 +2,7 @@ import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Combobox, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxInput, ComboboxItem, ComboboxList, Field, FieldLabel } from "@yami/design-system";
+import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxInput, ComboboxItem, ComboboxList, ComboboxValue, Field, FieldLabel } from "@yami/design-system";
 import { CityPopup } from "../.storybook/combobox-examples/popup";
 import "@yami/design-system/tokens.css";
 
@@ -47,8 +47,11 @@ test("single and multiple inputs use the 2px active stroke without moving their 
       <Combobox multiple items={["Tokyo"]}>
         <ComboboxChips><ComboboxChipsInput aria-label="Cities" /></ComboboxChips>
       </Combobox>
+      <Combobox multiple items={["Tokyo"]}>
+        <ComboboxChips density="default"><ComboboxChipsInput aria-label="Cities with default density" /></ComboboxChips>
+      </Combobox>
     </>));
-    for (const name of ["City", "Cities"]) {
+    for (const name of ["City", "Cities", "Cities with default density"]) {
       const input = page.getByRole("combobox", { name, exact: true });
       const element = input.element();
       const control = element.parentElement!;
@@ -69,6 +72,38 @@ test("single and multiple inputs use the 2px active stroke without moving their 
     const control = page.getByRole("combobox", { name: "City", exact: true }).element().parentElement!;
     expect(getComputedStyle(control).outlineStyle).toBe("solid");
     expect(getComputedStyle(control).boxShadow).toContain("0px 0px 0px 2px");
+  } finally {
+    root.unmount();
+    host.remove();
+  }
+});
+
+test("compact multi-select uses 8px inline padding only while chips are visible", async () => {
+  const host = document.createElement("div");
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    flushSync(() => root.render(<Combobox multiple items={["Tokyo"]}>
+      <ComboboxChips>
+        <ComboboxValue>{(cities: string[]) => cities.map(city =>
+          <ComboboxChip key={city} className="custom-chip" removeLabel={`Remove ${city}`}>{city}</ComboboxChip>
+        )}</ComboboxValue>
+        <ComboboxChipsInput aria-label="Search cities" />
+      </ComboboxChips>
+      <ComboboxContent><ComboboxList>{(city: string) =>
+        <ComboboxItem key={city} value={city}>{city}</ComboboxItem>
+      }</ComboboxList></ComboboxContent>
+    </Combobox>));
+    const chips = host.querySelector('[data-slot="combobox-chips"]')!;
+    const input = page.getByRole("combobox", { name: "Search cities" });
+    const padding = () => getComputedStyle(chips).paddingInline;
+    expect(padding()).toBe("12px");
+    await userEvent.fill(input, "Tok");
+    expect(padding()).toBe("12px");
+    await userEvent.click(page.getByRole("option", { name: "Tokyo" }));
+    await expect.poll(padding).toBe("8px");
+    await userEvent.click(page.getByRole("button", { name: "Remove Tokyo" }));
+    await expect.poll(padding).toBe("12px");
   } finally {
     root.unmount();
     host.remove();

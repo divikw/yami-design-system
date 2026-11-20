@@ -6,22 +6,29 @@ import styles from "./component-guide.module.css";
 export function AspectRatioDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
   const importCode = 'import { AspectRatio } from "@yami/design-system";';
-  const surface = '{ display: "grid", placeItems: "center", background: "var(--surface-secondary)", borderRadius: "var(--radius-surface-default)" }';
+  const surface = 'display: "grid", placeItems: "center", background: "var(--surface-secondary)", borderRadius: "var(--radius-surface-default)"';
   const surfaceStyle = { display: "grid", placeItems: "center", background: "var(--surface-secondary)", borderRadius: "var(--radius-surface-default)" };
+  const landscapeWidth = "min(100%, 320px)";
+  const squareWidth = "min(100%, 184px)";
   const examples: GuideExample[] = [
     { id: "basic", title: zh ? "基础用法" : "Basic", description: zh ? "比例为宽度除以高度；容器宽度变化时，高度自动按比例调整。" : "The ratio is width divided by height. Height follows the available width.",
-      code: `${importCode}\n\n<AspectRatio ratio={16 / 9} style={${surface}}>\n  16 : 9\n</AspectRatio>`,
-      preview: <AspectRatio ratio={16 / 9} style={surfaceStyle}>16 : 9</AspectRatio> },
+      code: `${importCode}\n\n<AspectRatio ratio={16 / 9} style={{ width: "${landscapeWidth}", ${surface} }}>\n  16 : 9\n</AspectRatio>`,
+      preview: <AspectRatio ratio={16 / 9} style={{ ...surfaceStyle, width: landscapeWidth }}>16 : 9</AspectRatio> },
     { id: "ratios", title: zh ? "常用比例" : "Ratios", description: zh ? "正方形、横向和竖向内容使用同一接口。外部布局决定宽度。" : "Square, landscape and portrait content use the same API. The surrounding layout sets the width.",
-      code: `${importCode}\n\n<div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--space-200)" }}>\n  <AspectRatio ratio={1} style={${surface}}>1 : 1</AspectRatio>\n  <AspectRatio ratio={16 / 9} style={${surface}}>16 : 9</AspectRatio>\n  <AspectRatio ratio={3 / 4} style={${surface}}>3 : 4</AspectRatio>\n</div>`,
+      code: `${importCode}\n\n<div style={{\n  display: "grid",\n  width: "min(100%, 400px)",\n  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",\n  gap: "var(--space-200)",\n  alignItems: "start",\n}}>\n  <AspectRatio ratio={1} style={{ ${surface} }}>1 : 1</AspectRatio>\n  <AspectRatio ratio={16 / 9} style={{ ${surface} }}>16 : 9</AspectRatio>\n  <AspectRatio ratio={3 / 4} style={{ ${surface} }}>3 : 4</AspectRatio>\n</div>`,
       preview: <div className={styles.ratios}>{[[1, "1 : 1"], [16 / 9, "16 : 9"], [3 / 4, "3 : 4"]].map(([ratio, label]) => <AspectRatio key={label} ratio={Number(ratio)} style={surfaceStyle}>{label}</AspectRatio>)}</div> },
     { id: "content", title: zh ? "自定义内容" : "Custom content", description: zh ? "组件只约束比例。内容布局、背景和图片裁切由调用方设置。" : "The component constrains the ratio. Callers control content layout, backgrounds and image cropping.",
-      code: `${importCode}\n\n<AspectRatio ratio={1} style={${surface}}>\n  <span>${zh ? "商品展示区域" : "Product media area"}</span>\n</AspectRatio>`,
-      preview: <AspectRatio ratio={1} style={surfaceStyle}><span>{zh ? "商品展示区域" : "Product media area"}</span></AspectRatio> },
+      code: `${importCode}\n\n<AspectRatio ratio={1} style={{ width: "${squareWidth}", ${surface} }}>\n  <span>${zh ? "商品展示区域" : "Product media area"}</span>\n</AspectRatio>`,
+      preview: <AspectRatio ratio={1} style={{ ...surfaceStyle, width: squareWidth }}><span>{zh ? "商品展示区域" : "Product media area"}</span></AspectRatio> },
   ];
   return <ComponentGuide name="AspectRatio" slug="aspectratio" locale={locale}
     usageCode={`${importCode}\n\n<AspectRatio ratio={16 / 9}>\n  ${zh ? "商品展示区域" : "Product media area"}\n</AspectRatio>`}
     intro={zh ? "按指定宽高比约束内容，适用于商品图片和媒体展示区域。" : "Constrain content to a width-to-height ratio for product images and media."}
+    usageNote={zh ? "为媒体容器传入宽度除以高度的值，例如 16 / 9。" : "Pass the media container's width divided by its height, such as 16 / 9."}
+    practices={zh ? [["do", "由外层布局设置宽度，让容器根据比例计算高度。"], ["avoid", "在同一容器上同时固定宽度和高度，抵消比例约束。"]]
+      : [["do", "Set the width in the surrounding layout and let the ratio determine the height."], ["avoid", "Fix both width and height on the same container and override its aspect ratio."]]}
+    accessibility={zh ? ["有信息的图片应提供描述性 alt。纯装饰图使用空 alt。"]
+      : ["Give informative images descriptive alt text. Use an empty alt for decorative images."]}
     previous={{ name: "AlertDialog", path: "yami-components-layout-alert-dialog" }}
     next={{ name: "Avatar", path: "yami-components-data-display-avatar" }} composition={"AspectRatio\n└── children"} examples={examples}
     apiNote={zh ? "YAMI 使用 Base UI useRender 渲染 div，比例由 CSS 管理。以下是当前公开接口。" : "YAMI uses Base UI useRender to render a div; CSS manages the ratio. The public API is listed below."}

@@ -13,17 +13,21 @@ copies that same address. A recipient does not need the author's local drafts.
 Links use the current host: localhost links require the local service; remote
 sharing requires deploying this code to the intended host first.
 
-The first project, `global-navigation`, has two demonstration variants using the
-existing text and image category menus. These are tool demonstrations, not an
-approved navigation redesign. Both reuse the maintained home, search, product,
-cart and Anua page compositions. Category routes use the search/list composition
-and fixture products; this is a simulated flow, not a live catalogue or checkout.
+The `global-navigation` project offers H5 V1 with a side drawer and H5 V2 with
+a storefront switcher on the mobile home page. Both use H5 previews, and H5 V2
+uses English. H5 V1 is the default, including for links to the retired `current`
+and `image-categories` variants. The project page
+picker lists the mobile home page. Preview navigation still supports the maintained
+search, product, cart and Anua page compositions. Category routes use the search/list
+composition and fixture products; this is a simulated flow, not a live catalogue or checkout.
 Unknown pages show an explicit out-of-scope screen.
 
-Preview mode is independent of width. App is the default for existing links;
-on phone widths it shows the system chrome and the page's App navigation.
-H5 phone previews show fixed Safari chrome, system status and home indicators,
-without App navigation. The page fills the phone behind transparent chrome,
+Preview mode is independent of width. App is the default when a preview has no
+fixed mode or mode parameter. On phone widths it shows the system chrome and
+the page's App navigation.
+H5 phone previews show fixed Safari chrome with system status and home indicators.
+The H5 V1 and V2 home pages show their four-item Tab Bar
+above the Safari toolbar. The page fills the phone behind transparent chrome,
 with 62px top and 86px bottom safe areas for sticky headers and checkout bars.
 The status area follows the page at the top and matches the navigation when
 scrolled; only Safari's floating controls carry a glass background.
@@ -38,7 +42,7 @@ Tablet/desktop and standalone H5 pages do not receive simulated Safari chrome.
 Example independent address:
 
 ```text
-/prototype?project=global-navigation&variant=image-categories&path=%2Fsearch%2Fmatcha&locale=en&theme=light
+/prototype?project=global-navigation&variant=h5-v2&path=%2Fsearch%2Fmatcha&locale=en&theme=light
 ```
 
 Project definitions are versioned in `app/lib/prototype-projects.ts`. To add a
@@ -65,7 +69,8 @@ Device width is exact in the workbench, with horizontal scrolling when needed;
 standalone previews adapt to the recipient's browser width.
 On narrow windows, the workbench opens with the sidebar collapsed and uses a
 phone preview width when the URL does not specify one.
-Drag the preview's right edge to resize between 320 and 1920 pixels. Width is
+Drag the preview's right edge to resize between 360 and 1920 pixels. H5 V1
+supports phone and tablet widths up to 1023 pixels. Width is
 updated live without reloading the embedded page, then saved to the workbench URL
 on release. The focused handle supports arrow keys (1px), Shift+arrow (10px),
 Home/End (bounds), and Escape (cancel). Device presets remain available.
@@ -73,7 +78,7 @@ The width field below the device presets reflects dragging and accepts exact
 pixel values. Enter or blur applies the value within the same bounds; Escape
 discards an edit. Back, standalone preview, share and reset actions sit above the
 canvas and remain available when the sidebar is collapsed.
-Device selection follows the width: phone 320–767px, tablet 768–1023px, desktop
+Device selection follows the width: phone 360–767px, tablet 768–1023px, desktop
 1024–1920px. Clicking a device uses its 402/768/1440px preset; custom widths and
 dragging always keep one device selected. The field displays its px unit inside.
 Back/forward controls use the project's preview-page history, preserving the

@@ -4,6 +4,7 @@ import { ActivityPageHeader } from '../ActivityPageHeader'
 import { Header } from './Header'
 import { HeaderCategoryRail } from './HeaderCategoryRail'
 import { HeaderSearch } from './HeaderSearch'
+import type { HeaderProps } from './Header.types'
 import type { HeaderLocale } from './fixtures'
 import { createHeaderCategories, createHeaderProps, headerStorefront } from './fixtures'
 import storyStyles from './Header.stories.module.css'
@@ -14,7 +15,7 @@ function localeFromGlobals(value: unknown): HeaderLocale {
 
 const meta = {
   id: 'yami-components-navigation-header',
-  title: 'YAMI/Modules/Header',
+  title: 'YAMI/Modules/Global/Header',
   component: Header,
   subcomponents: { HeaderSearch, HeaderCategoryRail, ActivityPageHeader },
   decorators: [
@@ -31,7 +32,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'YAMI Web header family for PC and H5. PC follows the production www.yami.com header with a utility row and category rail; H5 provides Home, PDP, and Activity Page forms. The Activity Page form is implemented by the focused ActivityPageHeader subcomponent. The EN and CN storefronts are separate CMS feeds — switch the toolbar language to compare. Native App navigation is separate and is not represented here.',
+          'YAMI storefront header for PC and mobile. PC follows the production www.yami.com header with a utility row and category rail. H5 provides Home, PDP, and Activity Page forms. The APP preview uses the Home layout with a dedicated search screen. The Activity Page form uses the ActivityPageHeader subcomponent. Switch the toolbar language to compare the EN and CN storefronts.',
       },
     },
   },
@@ -41,7 +42,9 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-type Storefront = (typeof headerStorefront)[HeaderLocale]
+function createH5HeaderProps(locale: HeaderLocale, mobileVariant: 'h5-home' | 'pdp' = 'h5-home'): HeaderProps {
+  return { ...createHeaderProps(locale), mobileVariant, inbox: undefined, scanLabel: '' }
+}
 
 /**
  * A brand slot holds a light and a dark lockup; `.dark` hides one. Assertions
@@ -59,7 +62,7 @@ function visibleLockup(canvasElement: HTMLElement, slot: string) {
  * `2725:151904`: a 56px brand bar over a 36px search row, and none of the PC
  * anatomy.
  */
-async function validateMobileBand(canvasElement: HTMLElement, site: Storefront) {
+async function validateH5Home(canvasElement: HTMLElement) {
   const bar = canvasElement.querySelector<HTMLElement>('[data-slot="header-mobile-bar"]')
   if (!bar) throw new Error('Mobile brand bar did not render')
   if (Math.round(bar.getBoundingClientRect().height) !== 56) {
@@ -92,19 +95,23 @@ async function validateMobileBand(canvasElement: HTMLElement, site: Storefront) 
   }
 
   const zip = canvasElement.querySelector<HTMLElement>('[data-slot="header-mobile-zipcode"]')
-  const inbox = canvasElement.querySelector<HTMLElement>('[data-slot="header-mobile-inbox"]')
-  if (!zip || !inbox) throw new Error('Mobile deliver-to and inbox entries did not render')
-  if (zip.hasAttribute('href') || inbox.hasAttribute('href')) {
-    throw new Error('Mobile entries must remain non-navigating until links are configured')
+  if (!zip) throw new Error('H5 deliver-to entry did not render')
+  if (zip.hasAttribute('href')) {
+    throw new Error('H5 deliver-to must remain non-navigating until its link is configured')
   }
-  for (const entry of [zip, inbox]) {
-    const box = entry.getBoundingClientRect()
-    if (Math.round(box.width) !== 40 || Math.round(box.height) !== 36) {
-      throw new Error(`Mobile action must be 40x36, got ${box.width}x${box.height}`)
-    }
+  const locale = canvasElement.querySelector<HTMLElement>('[data-slot="header-mobile-locale"]')
+  const flag = locale?.querySelector('img')
+  if (!locale || !flag || flag.width !== 24 || flag.height !== 24) {
+    throw new Error('H5 locale must show the flag at 24×24')
   }
-  if (!inbox.getAttribute('aria-label')?.includes(site.inbox)) {
-    throw new Error('Inbox must carry its localized accessible name')
+  const zipBox = zip.getBoundingClientRect()
+  const localeBox = locale.getBoundingClientRect()
+  if (zipBox.height !== 40 || localeBox.height !== 40 || zipBox.top !== localeBox.top ||
+      zipBox.right !== localeBox.left || getComputedStyle(zip).flexDirection !== 'row') {
+    throw new Error('H5 deliver-to and language must form one horizontal row of 40px actions')
+  }
+  if (canvasElement.querySelector('[data-slot="header-mobile-inbox"], [data-slot="header-search-scan"]')) {
+    throw new Error('H5 home must omit the inbox and visual-search controls')
   }
 
   const search = canvasElement.querySelector<HTMLElement>('[data-slot="header-search"]')
@@ -113,22 +120,6 @@ async function validateMobileBand(canvasElement: HTMLElement, site: Storefront) 
   }
   if (Math.round(search.getBoundingClientRect().height) !== 36) {
     throw new Error(`Mobile search field must be 36px, got ${search.getBoundingClientRect().height}px`)
-  }
-
-  // Visual search is mobile-only and consumes the DS camera icon, not the
-  // barcode `action/scan` glyph.
-  const scan = canvasElement.querySelector<HTMLElement>('[data-slot="header-search-scan"]')
-  if (!scan) throw new Error('Visual-search control did not render')
-  if (scan.getAttribute('aria-label') !== site.scanLabel) {
-    throw new Error('Visual-search control must carry its localized accessible name')
-  }
-  const scanIcon = scan.firstElementChild
-  if (!scanIcon || getComputedStyle(scanIcon).maskImage === 'none') {
-    throw new Error('Visual-search control must consume assets/icons/action/camera.svg')
-  }
-  const scanIconBox = scanIcon.getBoundingClientRect()
-  if (Math.round(scanIconBox.width) !== 20 || Math.round(scanIconBox.height) !== 20) {
-    throw new Error(`Visual-search icon must render at 20px, got ${scanIconBox.width}x${scanIconBox.height}`)
   }
 
   // Production ships no closing rule under the mobile header.
@@ -619,17 +610,17 @@ export const Mobile: Story = {
   globals: {
     viewport: { value: 'yamiMobile', isRotated: false },
   },
-  render: (_args, { globals }) => <Header {...createHeaderProps(localeFromGlobals(globals.locale))} />,
+  render: (_args, { globals }) => <Header {...createH5HeaderProps(localeFromGlobals(globals.locale))} />,
   parameters: {
     docs: {
       description: {
         story:
-          'H5 home navigation below `--breakpoints-desktop` (Figma `2725:151904`): a 56px brand bar carrying the Mobile lockup, deliver-to, and inbox, over a 36px search field with visual search. This is not the native App header.',
+          'H5 home navigation below `--breakpoints-desktop`: a 56px brand bar with the Mobile lockup plus adjacent deliver-to and language entries, over a 36px text search field.',
       },
     },
   },
-  play: async ({ canvasElement, globals }) => {
-    await validateMobileBand(canvasElement, headerStorefront[localeFromGlobals(globals.locale)])
+  play: async ({ canvasElement }) => {
+    await validateH5Home(canvasElement)
   },
 }
 
@@ -639,9 +630,9 @@ export const MobileChineseLocale: Story = {
     locale: 'zh',
     viewport: { value: 'yamiMobile', isRotated: false },
   },
-  render: () => <Header {...createHeaderProps('zh')} />,
+  render: () => <Header {...createH5HeaderProps('zh')} />,
   play: async ({ canvasElement }) => {
-    await validateMobileBand(canvasElement, headerStorefront.zh)
+    await validateH5Home(canvasElement)
   },
 }
 
@@ -651,12 +642,7 @@ export const PdpMobile: Story = {
     locale: 'en',
     viewport: { value: 'yamiMobile', isRotated: false },
   },
-  render: (_args, { globals }) => (
-    <Header
-      {...createHeaderProps(localeFromGlobals(globals.locale))}
-      mobileVariant="pdp"
-    />
-  ),
+  render: (_args, { globals }) => <Header {...createH5HeaderProps(localeFromGlobals(globals.locale), 'pdp')} />,
   play: async ({ canvasElement }) => {
     const header = canvasElement.querySelector<HTMLElement>('[data-slot="header"]')
     const band = canvasElement.querySelector<HTMLElement>('[data-slot="header-mobile"]')
@@ -722,15 +708,7 @@ export const H5ActivityPage: Story = {
   globals: {
     viewport: { value: 'yamiMobileLg', isRotated: false },
   },
-  render: (_args, { globals }) => {
-    const locale = localeFromGlobals(globals.locale)
-    return (
-      <ActivityPageHeader
-        locale={locale}
-        title={locale === 'zh' ? '活动专题' : 'Activity'}
-      />
-    )
-  },
+  render: (_args, { globals }) => renderActivityHeader(localeFromGlobals(globals.locale)),
   parameters: {
     controls: { disable: true },
     docs: {
@@ -740,6 +718,10 @@ export const H5ActivityPage: Story = {
       },
     },
   },
+}
+
+function renderActivityHeader(locale: HeaderLocale) {
+  return <ActivityPageHeader locale={locale} title={locale === 'zh' ? '活动专题' : 'Activity'} />
 }
 
 export const DarkTheme: Story = {
@@ -807,10 +789,53 @@ export const PCPreview: Story = {
   play: undefined,
 };
 
-export const MobilePreview: Story = {
+export const AppPreview: Story = {
   ...Mobile,
-  name: "Mobile",
+  name: "APP",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  args: { mobileVariant: 'default' },
+  argTypes: {
+    mobileVariant: {
+      name: 'APP layout',
+      options: ['default', 'pdp'],
+      control: { type: 'inline-radio', labels: { default: 'Home', pdp: 'PDP' } },
+    },
+  },
+  render: ({ mobileVariant }, { globals }) => {
+    const locale = localeFromGlobals(globals.locale)
+    return <Header
+      {...createHeaderProps(locale)}
+      mobileVariant={mobileVariant}
+      mobileSearchHref={`/iframe.html?id=yami-pages-search--mobile-discovery&viewMode=story&globals=locale%3A${locale}`}
+    />
+  },
+  parameters: {
+    controls: { include: ['APP layout'] },
+    docs: { description: { story: 'App home and product detail headers with a search entry that opens the dedicated mobile search screen.' } },
+  },
   play: undefined,
+};
+
+export const MobilePreview: StoryObj<{ mobileVariant: 'default' | 'pdp' | 'activity' }> = {
+  name: "H5",
+  tags: ["component-device", "dev", "autodocs", "!test"],
+  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  args: { mobileVariant: 'default' },
+  argTypes: {
+    mobileVariant: {
+      name: 'H5 layout',
+      options: ['default', 'pdp', 'activity'],
+      control: {
+        type: 'inline-radio',
+        labels: { default: 'Home', pdp: 'PDP', activity: 'Activity Page' },
+      },
+    },
+  },
+  parameters: { controls: { include: ['H5 layout'] } },
+  render: ({ mobileVariant }, { globals }) => {
+    const locale = localeFromGlobals(globals.locale)
+    if (mobileVariant === 'activity') return renderActivityHeader(locale)
+    return <Header {...createH5HeaderProps(locale, mobileVariant === 'pdp' ? 'pdp' : 'h5-home')} />
+  },
 };

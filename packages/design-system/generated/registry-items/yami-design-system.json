@@ -42,6 +42,10 @@
       "target": "components/index.ts"
     },
     {
+      "source": "assets/icons/system/arrow-down.svg",
+      "target": "assets/icons/system/arrow-down.svg"
+    },
+    {
       "source": "styles/base.css",
       "target": "styles/base.css"
     },
@@ -602,5 +606,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "a819ff6f3352d4ef9f764d580ad5da6c34c99d9f237b3e3d2a08b2ea05f75cb2"
+  "contentDigest": "f1fcdddd12f56615e46f62cc542eb752349afeffd596dd2767487b3789b60873"
 }

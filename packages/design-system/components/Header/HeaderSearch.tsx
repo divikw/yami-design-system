@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { ResponsiveImage } from '../ResponsiveImage'
 
 import styles from './Header.module.css'
@@ -52,10 +52,28 @@ export function HeaderSearch({
     onOpenChange?.(nextOpen)
   }
   const [recentCleared, setRecentCleared] = useState(false)
+  const [pointerFocus, setPointerFocus] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const panelId = useId()
   const query = value ?? draftValue
   const canOpenPanel = !isMobile && panel !== undefined
+
+  useEffect(() => {
+    const doc = inputRef.current?.ownerDocument
+    if (!isMobile || !doc) return
+
+    // Editable inputs can match :focus-visible even after a pointer click.
+    const onPointerDown = () => setPointerFocus(true)
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Tab' && !event.altKey && !event.ctrlKey && !event.metaKey) setPointerFocus(false)
+    }
+    doc.addEventListener('pointerdown', onPointerDown, true)
+    doc.addEventListener('keydown', onKeyDown, true)
+    return () => {
+      doc.removeEventListener('pointerdown', onPointerDown, true)
+      doc.removeEventListener('keydown', onKeyDown, true)
+    }
+  }, [isMobile, openHref])
 
   function updateValue(nextValue: string) {
     if (value === undefined) setDraftValue(nextValue)
@@ -188,6 +206,7 @@ export function HeaderSearch({
         ref={inputRef}
         className={styles.searchField}
         data-slot="header-search-field"
+        data-pointer-focus={isMobile && pointerFocus || undefined}
         name="q"
         type="search"
         autoComplete="off"

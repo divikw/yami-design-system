@@ -12,7 +12,7 @@ description: "Create, edit, fix, or migrate shared YAMI components in this repos
 ## 1. 确认范围、基线和影响
 
 - 阅读 [设计系统技能](../../../packages/design-system/SKILL.md)、[精简规范](../../../packages/design-system/DESIGN.compact.md) 和 [完整规范](../../../packages/design-system/DESIGN.md)。实际实现前，以完整规范中的当前 token、组件职责和规则为准。
-- 查阅 [Catalog](../../../packages/design-system/generated/catalog.json) 和 [组件目录](../../../packages/design-system/components)，确认需求不能通过已有组件或组合直接解决。页面级业务编排放在 `packages/prototypes/pages/`，不要塞入共享组件。
+- 实现页面、模块或 Storybook 草稿前，按交互职责查阅 [Catalog](../../../packages/design-system/generated/catalog.json)、Storybook Docs 和 [组件目录](../../../packages/design-system/components)，核对现有 YAMI 组件的公开导出与可配置项。优先用这些组件组合方案。缺少合适的 YAMI 组件时，可以直接使用 Base UI 完成所需的交互和效果，并在交付时告知用户用了哪个原语及缺失的封装。根据任务需要决定是否补齐共享封装。页面级业务编排放在 `packages/prototypes/pages/`，不要塞入共享组件。
 - 选择最接近的已维护组件，阅读其实现、CSS、`meta.json`、`usage.md`、`examples.tsx`、Story 和导出。布局组件可参考 [AspectRatio](../../../packages/design-system/components/AspectRatio)；受控交互可参考 [QuantitySelect](../../../packages/design-system/components/QuantitySelect)；成熟组合组件可参考 [ButtonGroup](../../../packages/design-system/components/ButtonGroup)。复制约定，不复制无关能力。
 - 检查工作区状态；编辑前用 `rg` 查找组件的公开导出、调用方、样式覆盖、Story、文档和测试，记录现有行为及可复核的 PC/Mobile 基线。迁移尤其关注组合模块、表单、弹层内使用和页面消费者。
 - 新增：确认现有组件不能满足需求；编辑：限定到请求的样式、行为或文档；迁移：核对新旧 props、默认值、事件、DOM/ref、受控状态和样式钩子的差异。默认保持既有契约；用户明确要求对齐新 API 时同步调用方和迁移说明，不机械保留旧接口。
@@ -38,6 +38,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 
 - 先查看 [共享包依赖](../../../packages/design-system/package.json)、锁文件和已安装 `@base-ui/react` 的 exports/类型/实现。需要查阅上游时使用 Base UI 官方文档及源码，并核对版本；“同步最新规则”不意味着自动升级依赖。
 - 交互和无障碍行为优先由 Base UI 原语管理；YAMI 管理视觉、token、尺寸和业务所需的公共接口。组合方式可参考 shadcn/ui 的 Base UI 版本，但不能把它的封装名称当作 Base UI 导出，也不照搬其视觉样式。
+- 调整组件交互时，优先通过 Base UI 的公开 API 修改 YAMI 封装。只有确认问题出在 Base UI 本身时，才考虑升级到包含修复的版本，或在修复发布前用 `pnpm patch` 维护临时补丁。
 - 没有对应原语时，按实际需要使用原生 HTML/CSS 或 Base UI 的 `useRender`/属性合并工具；参考现有 AspectRatio、Badge，不能虚构 `@base-ui/react/badge` 等入口。不要为静态展示强加状态层，不重新引入 UI SDK。
 - 使用 React、TypeScript 和项目已有基础组件；共享包不得依赖 Next.js、应用路由、Design Labs 或其他应用运行时。保留 Base UI 所需的事件、ref、ARIA 和 data 属性，避免二次维护同一套键盘、焦点或开关状态。
 - 公开 props 只覆盖已确定的使用场景；业务请求、商品数据获取、页面导航和异步业务状态由宿主负责。支持真实需要的 HTML 属性、ref、可访问名称与状态传递。
@@ -136,6 +137,8 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 ## 7. 按风险验证并交付
 
 先运行能发现本次回归的定向检查，再完成相应交付检查。不要用只匹配实现文字的断言代替行为验证，也不要为可逆的低影响样式调整新增冗余测试。
+
+验收页面、模块和 Storybook 草稿时，核对源码的实际导入。例如侧边抽屉复用 YAMI `Drawer`，锚定浮层复用 YAMI `Popover`。`pnpm check:boundaries` 检查页面源码、Story 和草稿辅助代码的 Base UI 直接导入，找到对应的 YAMI 导出时报错，缺少对应导出时提醒并允许通过。
 
 | 改动 | 验收重点 |
 | --- | --- |

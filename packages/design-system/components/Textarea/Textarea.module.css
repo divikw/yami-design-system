@@ -38,7 +38,7 @@
 }
 
 .control:disabled {
-  background: var(--fill-disabled);
+  background: var(--fill-tertiary);
   color: var(--text-disabled);
   cursor: not-allowed;
 }

@@ -40,7 +40,7 @@ figma.connect(Header, `${FIGMA_FILE}?node-id=5777-562353`, {
         { id: 'all', label: 'All' },
         { id: 'beauty', label: 'Beauty' },
       ]}
-      zipcode={{ code: '91789', label: 'Deliver to' }}
+      zipcode={{ code: '92821', label: 'Deliver to' }}
       categories={categories}
       searchPlaceholder="Best 300K Asian products to explore"
       account={{ label: 'Sign In / Sign Up', href: '/en/account' }}

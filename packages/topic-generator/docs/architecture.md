@@ -185,7 +185,7 @@ remains an explicit catalog-rule fallback.
 
 The active versioned refs `topic-landing/brand@2`, `topic-landing/topic@2`, and
 `topic-landing/campaign@2` map directly to the maintained Storybook variants under
-`YAMI/Pages/Topic Landing Page`. The corresponding page type is inferred only from a resolved
+`YAMI/Pages/Landing Pages/Topic Templates`. The corresponding page type is inferred only from a resolved
 ThemeIntent; Campaign therefore requires `activity` rather than a product or brand guess.
 The active page-specific `brand-relevance@2`, `topic-relevance@2`, and `campaign-relevance@2`
 routes consume `relevance/intent-themes@4`. ProductSelection supplies module-owned, verified

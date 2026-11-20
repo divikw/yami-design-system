@@ -2,8 +2,8 @@
  *
  * YAMI Input Field from Figma `↪ 表单输入 Forms`.
  * Visual contract:
- *   - Mobile field: 320 × 48, error row total 68
- *   - PC field:     320 × 56, error row total 77
+ *   - Default field: 320 × 56 on PC and Mobile
+ *   - Compact field: 320 × 40 on PC and Mobile
  *   - Embedded label + value stack, with responsive label/value typography
  */
 
@@ -25,7 +25,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height: var(--space-600);
+  height: calc(var(--space-600) + var(--space-100));
   gap: var(--space-100);
   padding-inline: var(--space-150);
 
@@ -66,6 +66,11 @@
   align-items: flex-start;
 }
 
+.root[data-floating="true"] .textStack:has(> .label) {
+  padding-block-end: var(--space-025);
+  row-gap: var(--space-025);
+}
+
 .label {
   max-width: 100%;
   overflow: hidden;
@@ -81,8 +86,6 @@
   font-size: var(--font-size-caption-sm);
 }
 
-.root[data-state="focused"] .label,
-.root[data-state="typing"] .label,
 .root[data-state="error"] .label {
   color: var(--text-primary);
 }
@@ -133,15 +136,24 @@
 }
 
 .control::placeholder {
-  color: var(--text-secondary);
+  color: var(--color-black-400);
+  font-size: var(--font-size-body-md);
+}
+
+:global(.dark) .control::placeholder {
+  color: var(--color-white-400);
 }
 
 .field:has(.clearButton) .control[type='search']::-webkit-search-cancel-button {
   display: none;
 }
 
-.control:disabled {
+.control:disabled,
+.control:disabled::placeholder {
   color: var(--text-secondary);
+}
+
+.control:disabled {
   cursor: not-allowed;
 }
 
@@ -192,21 +204,20 @@
   display: inline-flex;
   align-items: flex-start;
   gap: var(--space-050);
+  margin-block-start: var(--space-050);
   width: 100%;
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: var(--font-size-caption-md);
-  line-height: var(--line-height-caption-md);
+  font-size: var(--font-size-caption-sm);
+  line-height: var(--line-height-caption-sm);
   font-weight: var(--font-weight-normal);
 }
 
 .helperText {
-  margin-top: var(--space-050);
   color: var(--text-secondary);
 }
 
 .errorText {
-  margin-top: var(--space-050);
   color: var(--text-emphasis);
 }
 
@@ -216,7 +227,7 @@
   align-items: center;
   justify-content: center;
   width: 12px;
-  height: var(--line-height-caption-md);
+  height: var(--line-height-caption-sm);
   color: currentColor;
 }
 
@@ -227,21 +238,6 @@
 }
 
 @media (min-width: 1024px) {
-  .field {
-    height: 56px;
-  }
-
-  .control {
-    font-size: var(--font-size-body-xl);
-    line-height: var(--line-height-body-xl);
-  }
-
-  .errorText {
-    margin-top: var(--space-025);
-    font-size: 12px;
-    line-height: 1.6;
-  }
-
   .errorIcon {
     display: none;
   }
@@ -259,14 +255,8 @@
   line-height: var(--line-height-body-md);
 }
 
-.root[data-density="compact"] .errorText {
-  margin-top: var(--space-050);
-}
-
-@media (min-width: 1024px) {
-  .root[data-density="compact"] .field {
-    height: var(--space-500);
-  }
+.root[data-density="compact"] .field {
+  height: var(--space-500);
 }
 
 /* Opt-in action fields; the existing default and compact controls are unchanged. */

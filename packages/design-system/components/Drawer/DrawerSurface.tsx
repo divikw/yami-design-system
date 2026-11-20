@@ -14,6 +14,8 @@ export interface DrawerSurfaceProps extends Omit<ComponentPropsWithoutRef<"div">
   finalFocus?: Parts.Popup.Props["finalFocus"];
   open: boolean;
   title: string;
+  /** Custom visual title. The string title continues to name the dialog. */
+  titleContent?: ReactNode;
   /** Supporting copy stays with the title above the scrolling body. */
   description?: string;
   closeLabel: string;
@@ -29,7 +31,7 @@ export interface DrawerSurfaceProps extends Omit<ComponentPropsWithoutRef<"div">
 
 export function DrawerSurface({
   handle, modal = true,
-  open, title, description, closeLabel, onClose, back, size = "content", contentPadding = "default",
+  open, title, titleContent, description, closeLabel, onClose, back, size = "content", contentPadding = "default",
   initialFocus, finalFocus, footer, id: providedId, className, children, onClick, onKeyDown, "aria-describedby": ariaDescribedBy, "data-slot": slot = "drawer", ...rest
 }: DrawerSurfaceProps & { handle?: ReactNode; modal?: boolean | "trap-focus" }) {
   const generatedId = useId();
@@ -71,7 +73,8 @@ export function DrawerSurface({
               </Button>
             </div>
             <div className={styles.heading}>
-              <Parts.Title className={styles.title} id={`${id}-title`}>{title}</Parts.Title>
+              <Parts.Title className={styles.title} id={`${id}-title`}
+                aria-label={titleContent == null ? undefined : title}>{titleContent ?? title}</Parts.Title>
               {description && <Parts.Description className={styles.description} id={`${id}-description`} data-slot="drawer-description">{description}</Parts.Description>}
             </div>
           </header>

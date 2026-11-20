@@ -46,6 +46,7 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
     ["secondary", zh ? "次要" : "Secondary"],
     ["tertiary", zh ? "低强调" : "Tertiary"],
   ] as const;
+  const leadVariants = [...variants, ["destructive", deleteLabel] as const];
   const sizes = [
     ["sm", zh ? "小号" : "Small"],
     ["md", zh ? "中号" : "Medium"],
@@ -148,17 +149,35 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
 
   return <div id="component-playground">
     <ComponentGuide name="Button" slug="button" locale={locale}
-    usageCode={`${importButton}\n\n<Button>${continueLabel}</Button>`}
+      leadExample={{
+        code: rowCode(leadVariants.map(([variant, label]) => `<Button variant="${variant}">${label}</Button>`)),
+        preview: <div style={rowStyle}>{leadVariants.map(([variant, label]) => <Button key={variant} variant={variant}>{label}</Button>)}</div>,
+      }}
+      usageCode={`${importButton}\n\n<Button>${continueLabel}</Button>`}
+      usageNote={zh ? "用 Button 提交表单、保存设置或打开弹窗。跳转到其他页面时，使用 ButtonLink 或普通链接。" : "Use Button to submit a form, save settings, or open a dialog. Use ButtonLink or a plain link to navigate to another page."}
       intro={zh ? "用于保存、提交和打开弹层等操作。支持视觉层级、响应式尺寸和加载反馈。" : "Perform actions such as saving, submitting or opening an overlay, with visual variants, responsive sizes and loading feedback."}
       previous={{ name: "Breadcrumb", path: "yami-components-navigation-breadcrumb" }}
       next={{ name: "ButtonGroup", path: "yami-components-actions-button-group" }}
       legacyAnchors={legacyAnchors}
-      composition={"Button\n├── leftIcon (optional)\n├── children\n└── rightIcon (optional)"}
+      composition={[
+        ["children", zh ? "按钮文字。纯图标按钮在这里传入图标，并通过 aria-label 提供名称。" : "The button label. For an icon-only button, pass the icon here and give the button an aria-label."],
+        ["leftIcon", zh ? "可选图标，位于文字之前。" : "Optional icon before the label."],
+        ["rightIcon", zh ? "可选图标，位于文字之后。" : "Optional icon after the label."],
+      ]}
+      practices={zh ? [
+        ["do", "文案直接说明动作，例如「保存地址」或「移除商品」。"],
+        ["do", "会丢失数据或无法撤销的操作使用 destructive，并通过确认对话框说明后果。"],
+        ["avoid", "避免同屏使用多个 emphasis 操作。按任务优先级为其他操作选择层级。"],
+      ] : [
+        ["do", "Name the action in the label, such as “Save address” or “Remove item”."],
+        ["do", "Use destructive for actions that can delete data or cannot be undone. Explain the consequence in a confirmation dialog."],
+        ["avoid", "Avoid multiple emphasis actions on one screen. Choose other variants by task priority."],
+      ]}
       examples={examples}
       apiNote={zh ? "Button 基于 Base UI，输出原生 button。ButtonLink 输出原生 a。" : "Button uses Base UI and renders a native button. ButtonLink renders a native anchor."}
       api={[
         ["variant", zh ? "emphasis | primary | secondary | tertiary | destructive，默认 primary。" : "emphasis | primary | secondary | tertiary | destructive. Defaults to primary."],
-        ["form", zh ? "inline | full | icon，默认 inline。ButtonLink 支持 inline 和 full。" : "inline | full | icon. Defaults to inline. ButtonLink supports inline and full."],
+        ["form", zh ? "Button 和 ButtonLink 均支持 inline | full | icon，默认 inline。" : "Both Button and ButtonLink support inline | full | icon. Defaults to inline."],
         ["size", zh ? "sm | md | lg，默认 md。" : "sm | md | lg. Defaults to md."],
         ["inverse", zh ? "使用反色令牌，默认 false。" : "Use opposite-polarity tokens. Defaults to false."],
         ["children, leftIcon, rightIcon", zh ? "文字与前后图标。form=icon 时通过 children 传图标，并提供 aria-label。" : "Label and optional leading or trailing icons. For form=icon, pass the icon as children and supply aria-label."],
@@ -168,6 +187,15 @@ export function ButtonDocsPage({ locale }: { locale: DocsLocale }) {
         ["iconOnly, fullWidth", zh ? "兼容旧调用，仅在未指定 form 时生效，分别映射到 icon 和 full，iconOnly 优先。" : "Legacy props used when form is omitted. They map to icon and full respectively, with iconOnly taking precedence."],
         ["ref, className, style", zh ? "支持原生按钮属性、事件及 HTMLButtonElement ref。" : "Supports native button attributes, events and an HTMLButtonElement ref."],
         ["ButtonLink href", zh ? "链接目标，必填。支持原生链接属性和 HTMLAnchorElement ref。" : "Required destination. Supports native anchor attributes and an HTMLAnchorElement ref."],
+      ]}
+      accessibility={zh ? [
+        "按钮支持 Tab 聚焦，通过 Enter 或空格激活。链接通过 Enter 打开。",
+        "纯图标按钮和链接都需要 aria-label；标签应说明操作或目标。",
+        "disabled 和 loading 保留键盘焦点并阻止激活。loading 会立即设置 aria-busy。",
+      ] : [
+        "Press Tab to focus a button and Enter or Space to activate it. Use Enter to follow a link.",
+        "Give icon-only buttons and links an aria-label that names the action or destination.",
+        "Disabled and loading buttons remain focusable and block activation. Loading sets aria-busy immediately.",
       ]}
       reference={{ label: "Base UI Button", href: "https://base-ui.com/react/components/button" }} />
   </div>;

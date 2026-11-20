@@ -44,7 +44,12 @@ addons.register("yami/viewport-default", (api) => {
 
 addons.setConfig({
   sidebar: {
+    // Storybook includes generated Docs even when their stories omit the dev tag.
+    filters: {
+      legacyActivityHeader: (entry) => entry.id !== "yami-components-navigation-activity-page-header--docs",
+    },
     renderLabel: (entry) => {
+      if (entry.type === "docs" && entry.name === "Properties") return entry.name;
       if ("tags" in entry && entry.tags?.includes("component-device")) {
         return entry.type === "docs" ? "Docs" : entry.name;
       }

@@ -27,6 +27,7 @@
     "ComboboxChip",
     "ComboboxChips",
     "ComboboxChipsInput",
+    "ComboboxChipsProps",
     "ComboboxCollection",
     "ComboboxContent",
     "ComboboxContentProps",
@@ -43,7 +44,9 @@
     "ComboboxValue",
     "useComboboxAnchor"
   ],
-  "composes": [],
+  "composes": [
+    "Field"
+  ],
   "dependencies": {
     "runtime": [
       "react",
@@ -69,11 +72,13 @@
       "--border-attention",
       "--border-default",
       "--border-focus",
+      "--color-black-400",
+      "--color-white-400",
       "--divider-default",
       "--elevation-400-menu-panel",
-      "--fill-disabled",
       "--fill-primary",
       "--fill-secondary",
+      "--fill-tertiary",
       "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
@@ -89,6 +94,9 @@
       "--space-050",
       "--space-100",
       "--space-150",
+      "--space-200",
+      "--space-250",
+      "--space-300",
       "--space-400",
       "--space-500",
       "--space-600",
@@ -106,13 +114,21 @@
       "type-hierarchy"
     ],
     "tokenBindings": {
+      "--color-black-400": {
+        "property": "color",
+        "selector": ".chevron, .control input::placeholder, .chips input::placeholder"
+      },
+      "--color-white-400": {
+        "property": "color",
+        "selector": ".dark .chevron, .dark .control input::placeholder, .dark .chips input::placeholder"
+      },
       "--space-050": {
         "property": "gap",
-        "selector": ".control, .chips"
+        "selector": ".control, .chips, .triggerContent"
       },
       "--space-600": {
         "property": "min-height",
-        "selector": ".control, .chips"
+        "selector": ".control[data-density='default'], .chips[data-density='default']"
       },
       "--stroke-default": {
         "property": "box-shadow",
@@ -154,7 +170,7 @@
         "property": "box-shadow",
         "selector": ".control:has([aria-invalid=\"true\"]), .chips:has([aria-invalid=\"true\"])"
       },
-      "--fill-disabled": {
+      "--fill-tertiary": {
         "property": "background",
         "selector": ".control:has(input:disabled), .chips:has(input:disabled)"
       },
@@ -164,11 +180,23 @@
       },
       "--text-secondary": {
         "property": "color",
-        "selector": ".control input::placeholder, .chips input::placeholder"
+        "selector": ".externalLabel, .inlineLabel, .groupLabel"
       },
       "--space-400": {
+        "property": "min-height",
+        "selector": ".item"
+      },
+      "--space-300": {
         "property": "width",
         "selector": ".action"
+      },
+      "--space-250": {
+        "property": "width",
+        "selector": ".action > .chevron"
+      },
+      "--space-200": {
+        "property": "mask",
+        "selector": ".chevron"
       },
       "--radius-button-primary": {
         "property": "border-radius",
@@ -200,7 +228,7 @@
       },
       "--space-100": {
         "property": "padding-inline",
-        "selector": ".item"
+        "selector": ".item, .chips[data-density='compact']:has([data-combobox-chip])"
       },
       "--space-500": {
         "property": "min-height",
@@ -253,5 +281,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "dd401b870390efc4acbfed0859d29de520c78a08864172375a3c77da179dd591"
+  "contentDigest": "4ebe5f218fef6e04fd47691e36c185f14f2c2eed15e59ab4cf7c78e0a9c45ad2"
 }

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent, waitFor } from "storybook/test";
 
+import { TabBar } from "@yami/design-system";
 import {
   createProductListProducts,
   createProductListTabs,
@@ -10,6 +11,15 @@ import {
   createEcommerceHomeFixture,
   type EcommerceHomeLocale,
 } from "./fixtures";
+import styles from "./EcommerceHome.module.css";
+
+const navigationIcons = {
+  home: new URL("../../../design-system/assets/icons/tabbar/yami.svg", import.meta.url).href,
+  shop: new URL("../../../design-system/assets/icons/tabbar/shop.svg", import.meta.url).href,
+  community: new URL("../../../design-system/assets/icons/tabbar/community.svg", import.meta.url).href,
+  cart: new URL("../../../design-system/assets/icons/tabbar/cart-active.svg", import.meta.url).href,
+  account: new URL("../../../design-system/assets/icons/tabbar/account.svg", import.meta.url).href,
+};
 
 function localeFromGlobals(value: unknown): EcommerceHomeLocale {
   return value === "en" ? "en" : "zh";
@@ -25,7 +35,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "YAMI ecommerce homepage template. It composes the maintained Header, Hero Banner, Shortcut Rail, Product List, Social Media Gallery, Brand Product Rail, and Footer. Every section shrinks with the viewport; the footer is the sole exception and drops out below 1024px, having no mobile layout.",
+          "YAMI ecommerce homepage template. It composes the maintained Header, Hero Banner, Shortcut Rail, Product List, Social Media Gallery, Brand Product Rail, and Footer. The desktop footer appears at 1024px and above. The APP and H5 stories show their respective headers with the mobile TabBar.",
       },
       story: { inline: false, height: "1800px" },
     },
@@ -716,16 +726,59 @@ export const Pc: Story = {
   } : undefined,
 };
 
+function renderMobileHome(platform: "App" | "H5"): NonNullable<Story["render"]> {
+  return ({ headerContent }, { globals, parameters }) => {
+    const locale = localeFromGlobals(globals.locale);
+    const fixture = createEcommerceHomeFixture(locale);
+    const zh = locale === "zh";
+    const staticTabBar = parameters.staticHomeTabBar === true;
+    const storyHref = (id: string) => `./iframe.html?id=${id}&viewMode=story&globals=locale:${locale}`;
+    const destinations = [
+      { value: "home", label: "YAMI", href: "#home" },
+      { value: "shop", label: zh ? "分类" : "Shop", href: storyHref("yami-pages-search-results--mobile") },
+      { value: "community", label: zh ? "社区" : "Community", href: `https://www.yami.com/us/${locale}/show` },
+      { value: "cart", label: zh ? "购物车" : "Cart", href: storyHref("yami-pages-cart--mobile"), badgeCount: fixture.header.cart.count },
+      { value: "account", label: zh ? "我的" : "Account", href: `https://customer.yami.com/us/${locale}/orders` },
+    ] as const;
+
+    return (
+      <div className={styles.mobileStory} data-h5-home-draft={staticTabBar || undefined}>
+        <EcommerceHomeTemplate
+          {...fixture}
+          header={platform === "H5" ? { ...fixture.header, mobileVariant: "h5-home" } : fixture.header}
+          headerContent={headerContent}
+        />
+        <div className={styles.storyNavigation} data-slot="tab-bar-container">
+          <TabBar
+            aria-label={zh ? `${platform} 导航` : `${platform} navigation`}
+            value="home"
+            inert={staticTabBar}
+            items={destinations
+              .filter((item) => !staticTabBar || item.value !== "community")
+              .map((item) => ({
+                ...item,
+                icon: <span className={styles.storyNavigationIcon} style={{ maskImage: `url("${navigationIcons[item.value]}")` }} />,
+              }))}
+          />
+        </div>
+      </div>
+    );
+  };
+}
+
 export const Mobile: Story = {
   parameters: { viewport: { defaultViewport: "yamiMobile" } },
-  name: "Mobile",
+  name: "APP",
   globals: {
     ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiMobile", isRotated: false } } : {}),
   },
-  render: (_args, { globals }) => (
-    <EcommerceHomeTemplate
-      {...createEcommerceHomeFixture(localeFromGlobals(globals.locale))}
-    />
-  ),
+  render: renderMobileHome("App"),
   play: import.meta.env.MODE === "test" ? Pc.play : undefined,
 };
+
+export const H5 = {
+  parameters: Mobile.parameters,
+  globals: Mobile.globals,
+  name: "H5",
+  render: renderMobileHome("H5"),
+} satisfies Story;

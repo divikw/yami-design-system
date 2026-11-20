@@ -34,6 +34,11 @@ export function BadgeDocsPage({ locale }: { locale: DocsLocale }) {
   return <ComponentGuide name="Badge" slug="badge" locale={locale}
     usageCode={`${importCode}\n\n<Badge type="sale">${zh ? "促销" : "Sale"}</Badge>`}
     intro={zh ? "用于商品状态、促销和计数的小型标签，支持语义变体、颜色与尺寸。" : "A compact label for product status, promotions and counts, with semantic variants, colors and sizes."}
+    usageNote={zh ? "用简短文案说明商品状态。促销等常见场景可直接选用 type 预设。" : "Use a short label for product status. Choose a type preset for common cases such as a sale."}
+    practices={zh ? [["do", "写明徽章表示的状态或数量，优先使用对应业务预设。"], ["avoid", "把静态徽章当作可点击的筛选控件。"]]
+      : [["do", "State the status or count and choose the matching preset when available."], ["avoid", "Use a static badge as a clickable filter."]]}
+    accessibility={zh ? ["使用可读的文字或数字表达含义，避免只用颜色区分状态。"]
+      : ["Convey meaning with readable text or a count so color is supplementary."]}
     previous={{ name: "Avatar", path: "yami-components-data-display-avatar" }}
     next={{ name: "Breadcrumb", path: "yami-components-navigation-breadcrumb" }} composition={"Badge\n├── FlagPrefix (optional, internal)\n└── children"} examples={examples}
     apiNote={zh ? "YAMI 使用 Base UI useRender 渲染 span。公开属性如下；当前不提供 render / asChild 属性。" : "YAMI uses Base UI useRender to render a span. The public API is listed below; render / asChild are not exposed."}

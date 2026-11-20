@@ -65,6 +65,8 @@
   "design": {
     "tokens": [
       "--border-default",
+      "--color-black-400",
+      "--color-white-400",
       "--divider-default",
       "--elevation-400-menu-panel",
       "--fill-error-secondary",
@@ -95,6 +97,14 @@
       "token-exists"
     ],
     "tokenBindings": {
+      "--color-black-400": {
+        "property": "color",
+        "selector": ".chevron"
+      },
+      "--color-white-400": {
+        "property": "color",
+        "selector": ".dark .chevron"
+      },
       "--space-050": {
         "property": "padding",
         "selector": ".popup"
@@ -208,5 +218,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "6e443d907169859c1250df179b776b28cd518091774bb7cc93280ffb81308cf7"
+  "contentDigest": "ffa4d6303e566f066037192a654b74901aed0da01a283f31925edc5d05f65a43"
 }

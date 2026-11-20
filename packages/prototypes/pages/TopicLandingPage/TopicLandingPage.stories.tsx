@@ -6,7 +6,8 @@ import { TopicLandingPage } from "./TopicLandingPage";
 import { createTopicLandingPageFixture } from "./fixtures";
 
 const meta = {
-  title: "YAMI/Pages/Topic Landing Page/Brand",
+  id: "yami-pages-topic-landing-page-brand",
+  title: "YAMI/Pages/Landing Pages/Topic Templates/Brand",
   component: TopicLandingPage,
   parameters: {
     viewport: { defaultViewport: "yamiDesktopMd" },

@@ -2,6 +2,7 @@ import {
   Anchor,
   AnchorMdx,
   Canvas,
+  CodeOrSourceMdx,
   Controls,
   Description,
   DocsContext,
@@ -33,6 +34,7 @@ import { TooltipDocsPage } from "./tooltip-docs";
 import { FieldDocsPage } from "./field-docs";
 import { DropdownMenuDocsPage } from "./dropdown-menu-docs";
 import { DrawerDocsPage } from "./drawer-docs";
+import { DividerDocsPage } from "./divider-docs";
 import { DialogDocsPage } from "./dialog-docs";
 import { AccordionDocsPage } from "./accordion-docs";
 import { AspectRatioDocsPage } from "./aspect-ratio-docs";
@@ -48,10 +50,9 @@ import { ComboboxDocsPage } from "./combobox-docs";
 import { CheckboxDocsPage } from "./checkbox-docs";
 import { componentApiRows, usesBaseUI } from "./component-docs-scope";
 import { componentDocsName, normalizeComponentName } from "./component-docs-names";
-import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExample, DocsExampleCard, Installation, type DocsLocale } from "./component-docs-template";
-import type { GuideExample } from "./component-guide";
-import { tabsDocsExamples } from "./tabs-docs-examples";
-import { popoverDocsExamples } from "./popover-docs-examples";
+import { CodeBlock, ComponentDocsTemplate, DocsApiTable, DocsExampleCard, type DocsLocale } from "./component-docs-template";
+import { ComponentGuide } from "./component-guide";
+import { catalogComponentGuides } from "./catalog-component-guides";
 import { popoverApi } from "./popover-docs-api";
 import { localizeArgTypes, type DescriptionTranslations } from "./arg-descriptions";
 import styles from "./component-docs.module.css";
@@ -67,7 +68,7 @@ const usageModules = import.meta.glob(
 
 type DocsNeighbor = { name: string; path: string };
 type DocsNeighbors = { id: string; previous?: DocsNeighbor; next?: DocsNeighbor };
-const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { dropdownmenu: DropdownMenuDocsPage, alert: AlertDocsPage, toast: ToastDocsPage, navigationmenu: NavigationMenuDocsPage, progress: ProgressDocsPage, combobox: ComboboxDocsPage, spinner: SpinnerDocsPage, skeleton: SkeletonDocsPage, emptystate: EmptyStateDocsPage, slider: SliderDocsPage, textarea: TextareaDocsPage, tooltip: TooltipDocsPage, field: FieldDocsPage, drawer: DrawerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
+const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { dropdownmenu: DropdownMenuDocsPage, alert: AlertDocsPage, toast: ToastDocsPage, navigationmenu: NavigationMenuDocsPage, progress: ProgressDocsPage, combobox: ComboboxDocsPage, spinner: SpinnerDocsPage, skeleton: SkeletonDocsPage, emptystate: EmptyStateDocsPage, slider: SliderDocsPage, textarea: TextareaDocsPage, tooltip: TooltipDocsPage, field: FieldDocsPage, drawer: DrawerDocsPage, divider: DividerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
 
 function componentNameFromUsagePath(filePath: string) {
   return filePath.match(/\/components\/([^/]+)\/usage\.md$/)?.[1];
@@ -128,9 +129,13 @@ function UsageTable(props: ComponentProps<"table">) {
 export function UsageMarkdown({ children, locale }: { children: string; locale?: DocsLocale }) {
   const ids = new Set<string>();
   return <Markdown options={{
-    ...(locale && {
-      overrides: { ...HeadersMdx, a: AnchorMdx, table: UsageTable, pre: (props) => <UsageCode {...props} locale={locale} /> },
-    }),
+    overrides: {
+      ...HeadersMdx,
+      a: AnchorMdx,
+      code: CodeOrSourceMdx,
+      table: UsageTable,
+      ...(locale && { pre: (props) => <UsageCode {...props} locale={locale} /> }),
+    },
     slugify: (text) => {
       // Preserve Unicode letters while retaining existing ASCII heading URLs.
       const base = text.replace(/[^\p{L}\p{M}\p{N} -]/gu, "").replace(/ /g, "-").toLowerCase() || "section";
@@ -263,17 +268,19 @@ export function ComponentDocsPage() {
   const name = sourceTitle.trim().split(/\s*\/\s*/).at(-1) ?? sourceTitle;
   const componentKey = normalizeComponentName(name);
   const DocsPage = customDocsPages[componentKey];
+  const catalogGuide = catalogComponentGuides[componentKey]?.(language);
+  const hasCatalogGuide = Boolean(catalogGuide);
   const [neighbors, setNeighbors] = useState<DocsNeighbors>();
   const docsId = primaryStory.id.split("--")[0] + "--docs";
   const sharedDocs = usesBaseUI(componentKey) && hasDevicePreviews;
   useEffect(() => {
-    if (!sharedDocs || DocsPage || !/^YAMI\/Components\/[^/]+$/i.test(sourceTitle)) return;
+    if ((!sharedDocs && !hasCatalogGuide) || DocsPage || !/^YAMI\/Components\/[^/]+$/i.test(sourceTitle)) return;
     const controller = new AbortController();
     void fetch(new URL("index.json", window.location.href), { signal: controller.signal })
       .then((response) => response.json() as Promise<{ entries: Record<string, { type: string; id: string; title: string; tags?: string[] }> }>)
       .then(({ entries }) => {
         const siblings = Object.values(entries).filter((entry) => (
-          entry.type === "docs" && entry.tags?.includes("dev") && /^YAMI\/Components\/[^/]+$/i.test(entry.title)
+          entry.type === "docs" && entry.id.endsWith("--docs") && entry.tags?.includes("dev") && /^YAMI\/Components\/[^/]+$/i.test(entry.title)
         ));
         const index = siblings.findIndex((entry) => entry.id === docsId);
         if (index === -1) return;
@@ -285,49 +292,56 @@ export function ComponentDocsPage() {
       })
       .catch(() => { /* The Docs page still works if the sidebar index cannot be loaded. */ });
     return () => controller.abort();
-  }, [DocsPage, docsId, sharedDocs, sourceTitle]);
+  }, [DocsPage, docsId, hasCatalogGuide, sharedDocs, sourceTitle]);
   if (DocsPage) return <DocsPage locale={language} />;
+
+  if (catalogGuide) {
+    const specifications = showcase && componentStories.find((story) => story.moduleExport === showcase);
+    const customExamples = componentKey === "tabs" || componentKey === "popover";
+    const storyExamples = !customExamples && <>
+      {specifications && !documentedStates.some(({ id }) => id === "specifications") && <section>
+        <h3 id={`${componentKey}-specifications`}>{language === "zh" ? "规格与状态对照" : "Specifications and states"}</h3>
+        <StoryExample story={specifications} locale={language} name="specifications" />
+      </section>}
+      {stateExamples.filter(story => !documentedStates.some(entry => entry.story === story)).map(story => <StateExample key={story.id} story={story} locale={language} />)}
+      {documentedStates.map(({ story, title, id }) => <section key={story.id}>
+        <h3 id={`${componentKey}-${id}`}>{title}</h3>
+        <StoryExample story={story} locale={language} name={id} />
+      </section>)}
+    </>;
+    return <DocsContext.Provider value={localizedContext}>
+      <ComponentGuide {...catalogGuide} name={name} slug={componentKey} locale={language}
+        previous={neighbors?.id === docsId ? neighbors.previous : undefined}
+        next={neighbors?.id === docsId ? neighbors.next : undefined}
+        storyExamples={storyExamples} usageCode={catalogGuide.usageCode ?? catalogGuide.leadExample.code}
+        legacyAnchors={{ examples: ["component-specifications"], api: ["component-playground"] }}
+        api={componentKey === "popover" ? popoverApi[language] : componentApiRows(componentKey, sourceTitle, language, translations)}
+        apiNote={language === "zh" ? "属性及默认值以公开组件 API 为准。" : "These attributes and defaults come from the public component API."} />
+    </DocsContext.Provider>;
+  }
 
   if (sharedDocs) {
     const intro = translation?.description ?? preparedMeta.parameters.docs?.description?.component;
-    const installation = language === "zh" ? "安装" : "Installation";
     const api = language === "zh" ? "API 参考" : "API Reference";
-    const apiRows = componentKey === "popover"
-      ? popoverApi[language]
-      : componentApiRows(componentKey, sourceTitle, language, translations);
+    const apiRows = componentApiRows(componentKey, sourceTitle, language, translations);
     const lead = (playground && componentStories.find((story) => story.moduleExport === playground)) ?? primaryStory;
     const specifications = showcase && componentStories.find((story) => story.moduleExport === showcase);
-    const tabsGuide = componentKey === "tabs" ? tabsDocsExamples(language) : undefined;
-    const examples: GuideExample[] = tabsGuide?.examples ?? (componentKey === "popover" ? popoverDocsExamples(language) : []);
-    const instructions = <>
-      <section><h2 id={`${componentKey}-installation`}>{installation}</h2><Installation locale={language} /></section>
-      <section className={templateStyles.usage} data-yami-docs="usage">
-        {usage ? <UsageMarkdown locale={language}>{usage}</UsageMarkdown> : usageContent}
-      </section>
-    </>;
     return <DocsContext.Provider value={localizedContext}>
       <ComponentDocsTemplate name={name} slug={componentKey} intro={intro ? <Markdown>{intro}</Markdown> : <Description of="meta" />}
         locale={language}
         previous={neighbors?.id === docsId ? neighbors.previous : undefined}
         next={neighbors?.id === docsId ? neighbors.next : undefined}>
         <Anchor storyId={`primary--${lead.id}`}>
-          {tabsGuide ? <DocsExample name="lead" locale={language} code={tabsGuide.lead.code}>{tabsGuide.lead.preview}</DocsExample>
-            : <StoryExample story={lead} locale={language} name="lead" />}
+          <StoryExample story={lead} locale={language} name="lead" />
         </Anchor>
-        {!tabsGuide && instructions}
-        {examples.length > 0 ? examples.map(({ id, title, description, code, preview, previewBackground }, index) => (
-          <section key={id} id={index === 0 ? "component-specifications" : undefined}>
-            <h2 id={`${componentKey}-${id}`}>{title}</h2><p>{description}</p>
-            <DocsExample name={id} code={code} locale={language} previewMode={tabsGuide ? "viewport" : "document"} previewBackground={previewBackground}>
-              {tabsGuide ? <div style={{ display: "grid", justifyItems: "center" }}>{preview}</div> : preview}
-            </DocsExample>
-          </section>
-        )) : (playground || stateExamples.length > 0) && <section>
+        <section className={templateStyles.usage} data-yami-docs="usage">
+          {usage ? <UsageMarkdown locale={language}>{usage}</UsageMarkdown> : usageContent}
+        </section>
+        {(playground || stateExamples.length > 0) && <section>
           <h2 id="component-specifications">{language === "zh" ? "规格与状态对照" : "Specifications and states"}</h2>
           {specifications && specifications !== lead && <StoryExample story={specifications} locale={language} name="specifications" />}
           {stateExamples.filter(story => !documentedStates.some(entry => entry.story === story)).map((story) => <StateExample key={story.id} story={story} locale={language} />)}
         </section>}
-        {tabsGuide && instructions}
         {documentedStates.map(({ story, title, id }) => <section key={story.id}>
           <h2 id={`${componentKey}-${id}`}>{title}</h2>
           <StoryExample story={story} locale={language} name={id} />
@@ -341,8 +355,10 @@ export function ComponentDocsPage() {
   }
 
   const title = componentDocsName(name, language);
-  return (
-    <DocsContext.Provider value={localizedContext}>
+  const controls = <Controls of={playground} />;
+  const controlsBlock = usageLoader ? <div className={styles.controls}>{controls}</div> : controls;
+  const content = (
+    <>
       <Title>{title === name ? title : <span lang={language}>{title}</span>}</Title>
       <Subtitle />
       {translation?.description ? <Markdown>{translation.description}</Markdown> : <Description of="meta" />}
@@ -354,16 +370,21 @@ export function ComponentDocsPage() {
             <p><a href={`/?path=/story/${preparedMeta.parameters.docs.interactionStory}`} target="_top">{language === "zh" ? "体验保存、加载与完成反馈" : "Try saving, loading, and completion feedback"}</a></p>
           ) : null}
           <Canvas of={playground} story={{ autoplay: false }} />
-          <Controls of={playground} />
+          {controlsBlock}
           <h2 id="component-specifications">{language === "zh" ? "规格与状态对照" : "Specifications and states"}</h2>
           {showcase ? <Canvas of={showcase} story={{ autoplay: false }} /> : <Primary />}
           {stateExamples.map((story) => <StateExample key={story.id} story={story} />)}
         </>
       ) : (
-        <><Primary /><Controls /></>
+        <><Primary />{controlsBlock}</>
       )}
       {usageContent}
       {hasDevicePreviews || isSingleStory || preparedMeta.parameters.docs?.showStories === false ? null : <Stories />}
+    </>
+  );
+  return (
+    <DocsContext.Provider value={localizedContext}>
+      {usageLoader ? <div data-component-docs="">{content}</div> : content}
     </DocsContext.Provider>
   );
 }

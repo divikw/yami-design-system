@@ -1,10 +1,12 @@
 "use client";
 
 import { Combobox as Base } from "@base-ui/react/combobox";
-import { createContext, useContext, useEffect, useImperativeHandle, useReducer, useRef, useState, type ComponentPropsWithRef, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useId, useImperativeHandle, useReducer, useRef, useState, type ComponentPropsWithRef, type ReactNode } from "react";
+import { FieldDensityContext, type FieldDensity } from "../Field/density";
 import styles from "./Combobox.module.css";
 
 const KeyboardFocus = createContext(false);
+const ChipsLabelId = createContext<string | null>(null);
 
 export type ComboboxProps<Value, Multiple extends boolean | undefined = false, Item = Value> = Base.Root.Props<Value, Multiple, Item>;
 export function Combobox<Value, Multiple extends boolean | undefined = false, Item = Value>({
@@ -61,11 +63,19 @@ function Mark({ kind }: { kind: "clear" | "check" }) {
 }
 
 export function ComboboxTrigger({ children, ...props }: ComponentPropsWithRef<typeof Base.Trigger>) {
-  return <Base.Trigger data-slot="combobox-trigger" {...props}>{children}<span className={styles.chevron} aria-hidden="true" /></Base.Trigger>;
+  const chevron = <span className={styles.chevron} aria-hidden="true" />;
+  return <Base.Trigger data-slot="combobox-trigger" {...props}>
+    {children == null ? chevron : <span className={styles.triggerContent}>
+      <span className={styles.triggerLabel}>{children}</span>
+      {chevron}
+    </span>}
+  </Base.Trigger>;
 }
 
 export type ComboboxInputProps = Omit<ComponentPropsWithRef<typeof Base.Input>, "children"> & {
   children?: ReactNode;
+  density?: FieldDensity;
+  label?: ReactNode;
   showTrigger?: boolean;
   showClear?: boolean;
   triggerLabel?: string;
@@ -77,14 +87,27 @@ function EditableInput(props: ComponentPropsWithRef<typeof Base.Input>) {
   return <Base.Input data-slot="combobox-input" data-keyboard-focus={keyboardFocus || undefined} {...props} />;
 }
 
-export function ComboboxInput({ children, disabled, showTrigger = true, showClear = false,
-  triggerLabel = "Show options", clearLabel = "Clear selection", ...props }: ComboboxInputProps) {
-  return <Base.InputGroup className={styles.control}>
+export function ComboboxInput({ children, disabled, density: densityProp, label, id, placeholder, showTrigger = true,
+  showClear = false, triggerLabel = "Show options", clearLabel = "Clear selection", ...props }: ComboboxInputProps) {
+  const fieldDensity = useContext(FieldDensityContext);
+  const density = densityProp ?? fieldDensity ?? "compact";
+  const generatedId = useId();
+  const inputId = id ?? (label != null ? generatedId : undefined);
+  const hasInlineLabel = label != null && density === "default";
+  const input = <EditableInput disabled={disabled} {...props} id={inputId} placeholder={placeholder || (hasInlineLabel ? " " : placeholder)} />;
+  const group = <Base.InputGroup className={styles.control} data-density={density}>
     {children}
-    <EditableInput disabled={disabled} {...props} />
+    {hasInlineLabel ? <div className={styles.textStack}>
+      <label className={styles.inlineLabel} htmlFor={inputId}>{label}</label>
+      {input}
+    </div> : input}
     {showTrigger && <ComboboxTrigger className={styles.action} disabled={disabled} aria-label={triggerLabel} />}
     {showClear && <Base.Clear className={styles.action} data-slot="combobox-clear" disabled={disabled} aria-label={clearLabel}><Mark kind="clear" /></Base.Clear>}
   </Base.InputGroup>;
+  return label != null && density === "compact" ? <div className={styles.labeledControl}>
+    <label className={styles.externalLabel} htmlFor={inputId}>{label}</label>
+    {group}
+  </div> : group;
 }
 
 export type ComboboxContentProps = ComponentPropsWithRef<typeof Base.Popup> &
@@ -115,20 +138,37 @@ export function ComboboxSeparator({ className = styles.separator, ...props }: Co
   return <Base.Separator className={className} {...props} />;
 }
 
-export function ComboboxChips({ className = styles.chips, ...props }: ComponentPropsWithRef<typeof Base.Chips>) {
-  return <Base.Chips className={className} data-slot="combobox-chips" {...props} />;
+export type ComboboxChipsProps = ComponentPropsWithRef<typeof Base.Chips> & { density?: FieldDensity; label?: ReactNode };
+
+export function ComboboxChips({ className = styles.chips, children, density: densityProp, label, ...props }: ComboboxChipsProps) {
+  const fieldDensity = useContext(FieldDensityContext);
+  const density = densityProp ?? fieldDensity ?? "compact";
+  const labelId = useId();
+  const chips = <Base.Chips className={className} data-slot="combobox-chips" data-density={density} {...props}>
+    {children}
+  </Base.Chips>;
+  return <ChipsLabelId.Provider value={label != null ? labelId : null}>
+    {label != null ? <div className={styles.labeledControl}>
+      <span id={labelId} className={styles.externalLabel}>{label}</span>
+      {chips}
+    </div> : chips}
+  </ChipsLabelId.Provider>;
 }
 
 export function ComboboxChip({ children, showRemove = true, removeLabel = "Remove selection", className = styles.chip, ...props }:
   ComponentPropsWithRef<typeof Base.Chip> & { showRemove?: boolean; removeLabel?: string }) {
-  return <Base.Chip className={className} {...props}>
+  return <Base.Chip className={className} data-combobox-chip="" {...props}>
     <span>{children}</span>
     {showRemove && <Base.ChipRemove className={styles.action} aria-label={removeLabel}><Mark kind="clear" /></Base.ChipRemove>}
   </Base.Chip>;
 }
 
 export function ComboboxChipsInput(props: ComponentPropsWithRef<typeof Base.Input>) {
-  return <EditableInput {...props} />;
+  const labelId = useContext(ChipsLabelId);
+  const accessibleLabel = labelId && props["aria-label"] == null && props["aria-labelledby"] == null
+    ? { "aria-labelledby": labelId }
+    : {};
+  return <EditableInput {...props} {...accessibleLabel} />;
 }
 
 export function useComboboxAnchor() {

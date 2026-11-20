@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import type {
   BillboardProps,
@@ -43,6 +43,7 @@ export interface EcommerceHomeProps
   extends Omit<ComponentProps<"div">, "children"> {
   contentMaxWidth?: number | string;
   header: HeaderProps;
+  headerContent?: ReactNode;
   hero: HeroBannerProps;
   shortcutRail: ShortcutRailProps;
   sections: EcommerceHomeSection[];

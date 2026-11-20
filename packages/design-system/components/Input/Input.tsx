@@ -2,7 +2,7 @@
  * Input — YAMI single-line form field.
  *
  * Mirrors Figma `↪ 表单输入 Forms` / `Input Field`:
- *   - responsive platform sizing: Mobile 48px, PC 56px
+ *   - default 56px and compact 40px on PC and Mobile
  *   - embedded label, value row, optional clear action
  *   - states: default, focused, typing, complete, error, disabled-filled, disabled-empty
  *
@@ -21,6 +21,7 @@ import {
   type MouseEventHandler,
   type ReactNode,
   useCallback,
+  useContext,
   useEffect,
   useId,
   useRef,
@@ -28,6 +29,7 @@ import {
 } from 'react'
 
 import { Button } from '../Button'
+import { FieldDensityContext, type FieldDensity } from '../Field/density'
 import styles from './Input.module.css'
 
 export type InputState =
@@ -41,7 +43,7 @@ export type InputState =
   | 'disabled-empty'
 
 export type InputSize = 'responsive' | 'md' | 'lg'
-export type InputDensity = 'default' | 'compact'
+export type InputDensity = FieldDensity
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
   /** Embedded label by default; external label in compact density. */
@@ -55,9 +57,9 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
    * Product code usually lets focus/value/error/disabled derive the state.
    */
   state?: InputState
-  /** @deprecated Figma Input is responsive rather than size-tiered. Kept for backward compatibility. */
+  /** @deprecated Use density for the two supported field sizes. */
   size?: InputSize
-  /** Compact uses an external label and a single value row: Mobile 48px, PC 40px. */
+  /** Default is 56px with an embedded label. Compact is 40px with an external label. */
   density?: InputDensity
   /** Leading icon or text inside the field. Prefer currentColor SVGs from assets/icons. */
   leadingIcon?: ReactNode
@@ -134,7 +136,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     error,
     state,
     size = 'responsive',
-    density = 'default',
+    density: densityProp,
     leadingIcon,
     trailingIcon,
     action,
@@ -162,6 +164,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   },
   ref,
 ) {
+  const fieldDensity = useContext(FieldDensityContext)
+  const density = densityProp ?? fieldDensity ?? 'default'
   const autoId = useId()
   const inputId = id ?? autoId
   const helperId = `${inputId}-helper`

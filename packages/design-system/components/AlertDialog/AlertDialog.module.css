@@ -31,6 +31,11 @@
   outline: none;
 }
 
+.viewport[hidden],
+.content[hidden] {
+  display: none;
+}
+
 .content:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

@@ -1,17 +1,62 @@
 .positioner { z-index: 100; }
 
 .trigger {
+  position: relative;
   display: inline-flex; align-items: center; justify-content: space-between; gap: var(--space-100);
   box-sizing: border-box; min-width: 160px; min-height: var(--space-500); max-width: 100%; padding: var(--space-100) var(--space-150);
+  padding-inline-start: calc(var(--space-150) - var(--stroke-default));
+  padding-inline-end: calc(var(--space-100) + var(--space-300) + var(--space-100) - var(--stroke-default));
   border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-component-default);
   background: var(--surface-primary); color: var(--text-primary); font: inherit; font-family: var(--font-family-ios); cursor: pointer;
 }
-.trigger::after { content: ""; width: 6px; height: 6px; flex: 0 0 auto; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); }
-.trigger[data-popup-open]::after { transform: rotate(225deg); }
+.trigger[data-density="default"] {
+  min-height: calc(var(--space-600) + var(--space-100));
+  padding-block: var(--space-050);
+}
+.labeledTrigger { display: grid; gap: var(--space-050); min-width: 0; }
+.externalLabel, .inlineLabel {
+  font-family: var(--font-family-ios);
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  color: var(--text-secondary);
+}
+.textStack { display: grid; min-width: 0; gap: var(--space-025); padding-block-end: var(--space-025); text-align: start; }
+.inlineLabel { font-size: var(--font-size-caption-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trigger[data-placeholder]:not(:focus, [data-popup-open], [data-invalid], [aria-invalid="true"]) .textStack {
+  gap: 0;
+  padding-block-end: 0;
+}
+.trigger[data-placeholder]:not(:focus, [data-popup-open], [data-invalid], [aria-invalid="true"]) .inlineLabel {
+  font-size: var(--font-size-body-md);
+}
+.trigger[data-placeholder]:not(:focus, [data-popup-open], [data-invalid], [aria-invalid="true"]) .valueRow {
+  display: none;
+}
+.trigger::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: calc(var(--space-100) + var(--space-025) - var(--stroke-default));
+  width: var(--space-250);
+  height: var(--space-250);
+  background: currentColor;
+  color: var(--color-black-400);
+  mask: url("../../assets/icons/system/arrow-down.svg") center / var(--space-200) no-repeat;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+:global(.dark) .trigger::after { color: var(--color-white-400); }
+.trigger[data-popup-open]::after { transform: translateY(-50%) rotate(180deg); }
 .trigger:focus-visible { outline: var(--stroke-thick) solid var(--focus-ring); outline-offset: var(--space-025); }
-.trigger[data-placeholder] { color: var(--text-secondary); }
+.trigger[data-placeholder]:not([data-disabled]) { color: var(--color-black-400); }
+:global(.dark) .trigger[data-placeholder]:not([data-disabled]) { color: var(--color-white-400); }
 .trigger[aria-invalid="true"], .trigger[data-invalid] { border-color: var(--border-attention); }
-.trigger[data-disabled] { background: var(--button-disabled); color: var(--text-disabled); cursor: not-allowed; }
+.trigger[data-disabled] { background: var(--fill-tertiary); color: var(--text-disabled); cursor: not-allowed; }
+.trigger[data-disabled]::after { color: inherit; }
+@media (forced-colors: active) {
+  .trigger::after { forced-color-adjust: none; background-color: ButtonText; }
+  .trigger[data-disabled]::after { background-color: GrayText; }
+}
 .content { box-sizing: border-box; min-width: var(--anchor-width); max-width: var(--available-width); max-height: var(--available-height); overflow-y: auto; overscroll-behavior: contain; border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-component-default); background: var(--surface-primary); color: var(--text-primary); box-shadow: var(--elevation-400-menu-panel); padding: var(--space-050); font-family: var(--font-family-ios); font-size: var(--font-size-body-md); line-height: var(--line-height-body-md); outline: none; }
 .item { display: grid; grid-template-columns: minmax(0, 1fr) 12px; align-items: center; gap: var(--space-100); min-height: var(--space-400); border-radius: var(--radius-tag-primary); padding-inline: var(--space-100); cursor: pointer; outline: none; overflow-wrap: anywhere; }
 .item[data-highlighted] { background: var(--surface-secondary); }

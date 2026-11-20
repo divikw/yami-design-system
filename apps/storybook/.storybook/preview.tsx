@@ -45,12 +45,20 @@ const preview: Preview = {
     },
     options: {
       // Storybook extracts and evaluates this function as JavaScript.
-      storySort: ({ title: leftTitle = "" }, { title: rightTitle = "" }) => {
+      storySort: ({ id: leftId = "", title: leftTitle = "" }, { id: rightId = "", title: rightTitle = "" }) => {
+        if (leftTitle.startsWith("YAMI/components/") && leftTitle === rightTitle) {
+          const rank = (id = "") => id.endsWith("--docs") ? 0 : id.endsWith("--properties") ? 1 : 2;
+          return rank(leftId) - rank(rightId);
+        }
         const order = new Map([
           ["", ["YAMI"]],
-          ["YAMI", ["foundations", "primitives", "assets", "components", "modules", "pages"]],
-          ["YAMI/pages", ["ecommerce home", "topic landing page", "categories", "email templates", "search", "product detail", "search results"]],
-          ["YAMI/pages/topic landing page", ["brand", "topic", "campaign"]],
+          ["YAMI", ["快速开始", "foundations", "primitives", "assets", "components", "modules", "pages"]],
+          ["YAMI/modules", ["global"]],
+          ["YAMI/modules/global", ["header", "footer", "tab bar"]],
+          ["YAMI/pages", ["ecommerce home", "landing pages", "categories", "email templates", "search", "product detail", "search results"]],
+          ["YAMI/pages/landing pages", ["component index", "topic templates", "collection templates"]],
+          ["YAMI/pages/landing pages/topic templates", ["brand", "topic", "campaign"]],
+          ["YAMI/pages/landing pages/collection templates", ["brand", "topic", "campaign"]],
           ["YAMI/pages/product detail", ["docs", "beauty", "food", "beverage"]],
         ]);
         const left = leftTitle.split("/");

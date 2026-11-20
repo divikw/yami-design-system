@@ -52,6 +52,8 @@
       "--border-default",
       "--border-focus",
       "--button-disabled",
+      "--color-black-400",
+      "--color-white-400",
       "--focus-ring",
       "--font-family-ios",
       "--font-size-body-md",
@@ -80,6 +82,14 @@
       "no-custom-radii"
     ],
     "tokenBindings": {
+      "--color-black-400": {
+        "property": "color",
+        "selector": ".arrow"
+      },
+      "--color-white-400": {
+        "property": "color",
+        "selector": ".dark .arrow"
+      },
       "--space-150": {
         "property": "padding-inline",
         "selector": ".display, .input"
@@ -136,5 +146,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "794eb42bdfcd9cfe07f9cfbc22b8fa86749585b2b9c471b8bd2c481d84f17984"
+  "contentDigest": "1afaefd467292e7211768ba918f1937052fa80eeab36ac53038e213fca862400"
 }

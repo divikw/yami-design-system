@@ -11,7 +11,7 @@ export function ReportCard({ locale }: { locale: "zh" | "en" }) {
     ? ["每周汇总订单数量", "按品类查看销售趋势", "标出库存不足的商品"]
     : ["Review weekly order totals", "Track sales by category", "Identify items running low"];
 
-  return <Card size="sm" bordered style={{ maxWidth: "20rem", marginInline: "auto" }}>
+  return <Card size="sm" bordered style={{ width: "100%" }}>
     <CardHeader>
       <CardTitle>{zh ? "定期报告" : "Scheduled reports"}</CardTitle>
       <CardDescription style={{ margin: 0 }}>{zh ? "按周查看店铺经营摘要。" : "Get a weekly summary of store activity."}</CardDescription>

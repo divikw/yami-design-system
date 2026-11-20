@@ -105,11 +105,21 @@ function InvalidDemo({ en }: { en: boolean }) {
 }
 export const Invalid: Story = { render: (_, { globals }) => <InvalidDemo en={globals.locale === "en"} /> };
 
+const densityPreviews: Story["render"] = (args, { globals }) => {
+  const en = globals.locale === "en";
+  const label = en ? "Delivery" : "配送方式";
+  return <div style={{ display: "grid", gap: "var(--space-200)", width: "min(100%, 320px)" }}>
+    <DeliverySelect {...args} en={en} triggerProps={{ density: "default", label }} />
+    <DeliverySelect {...args} en={en} triggerProps={{ density: "compact", label }} />
+  </div>;
+};
+
 export const PCPreview: Story = {
   ...Showcase,
   name: "PC",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiDesktop", isRotated: false } },
+  render: densityPreviews,
   play: undefined,
 };
 
@@ -118,5 +128,6 @@ export const MobilePreview: Story = {
   name: "Mobile",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  render: densityPreviews,
   play: undefined,
 };

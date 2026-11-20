@@ -31,6 +31,7 @@ function cx(...classes: Array<string | false | null | undefined>) {
 export function EcommerceHomeTemplate({
   contentMaxWidth = 1920,
   header,
+  headerContent,
   hero,
   shortcutRail,
   sections,
@@ -245,7 +246,7 @@ export function EcommerceHomeTemplate({
       className={cx(styles.root, className)}
       data-slot="ecommerce-home"
     >
-      <StickyStorefrontHeader {...header} />
+      {headerContent ?? <StickyStorefrontHeader {...header} />}
 
       <main
         ref={mainRef}

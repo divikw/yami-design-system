@@ -399,7 +399,7 @@ for (const theme of ["light", "dark"]) {
       const label = container.querySelector("label")!;
       const field = container.querySelector<HTMLElement>('div[class*="field"]')!;
       const bounds = field.getBoundingClientRect();
-      expect(bounds.height).toBe(width < 1024 ? 48 : 40);
+      expect(bounds.height).toBe(40);
       expect(label.getBoundingClientRect().bottom).toBeLessThanOrEqual(bounds.top - 4);
       expect(field.contains(label)).toBe(false);
       await expect.element(page.elementLocator(input)).toHaveAccessibleName("Promo code");

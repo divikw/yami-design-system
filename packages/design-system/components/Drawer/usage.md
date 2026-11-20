@@ -16,6 +16,8 @@
 
 可选 `description` 显示在固定标题区内的分隔线上方，并关联弹层的 `aria-describedby`。不传此属性时保持原来的头部。
 
+用 `titleContent` 可在标题位置显示 Logo 等节点。`title` 仍提供弹层的无障碍名称。
+
 Drawer 使用 [shadcn 的 Base UI Drawer](https://ui.shadcn.com/docs/components/base/drawer) 结构，支持 Tab 循环、Esc、遮罩关闭、关闭后的焦点归还和背景滚动锁定。子页面用 back，Esc 返回上层。业务方维护 loading、error、empty 和选中内容；关闭会卸载正文。Storybook 示例跟随工具栏选择的浅色或深色主题。
 
 打开和关闭均为 200ms：PC 从右侧滑入/滑出，Mobile 从底部滑入/滑出；遮罩同时进行 150ms 淡入/淡出。使用原生 CSS 动画与现有 enter/exit 曲线，不依赖 Motion 运行时。退场期间保留最后一次打开的内容、模态锁和焦点，动画完成后才卸载并归还焦点；重新打开会取消待完成的关闭。`prefers-reduced-motion: reduce` 下取消动画并立即关闭。
@@ -37,6 +39,8 @@ For every drawer direction, the header and default body use 24px of padding on e
 Target the panel, backdrop, viewport, and scrolling body with `[data-drawer]`, `[data-drawer-backdrop]`, `[data-drawer-viewport]`, and `[data-drawer-content]`. The header, description, and footer use the `data-slot` values `drawer-header`, `drawer-description`, and `drawer-footer`.
 
 Use `swipeDirection` to select up, right, down or left. Override the side panel width or vertical panel height with style. Vertical drawers accept ascending `snapPoints` such as `[0.5, 0.75, 1]`. Set `defaultSnapPoint` or control the stop via `snapPoint` and `onSnapPointChange`. Snap points enable the handle by default. Use `showSwipeHandle` to display a grip independently. The bottom drawer centers a 100 × 6px grip 6px below its top edge, with a 44px-high drag target.
+
+Use `titleContent` to display a logo or other custom title content. The required `title` string supplies the dialog’s accessible name.
 
 Nested drawers own their open state separately. Close the child to resume the parent. Use `modal={false}` for background interaction, with `disablePointerDismissal` to keep the panel open. Use `modal="trap-focus"` to confine only keyboard focus.
 
