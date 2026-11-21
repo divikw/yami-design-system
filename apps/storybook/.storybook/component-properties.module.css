@@ -1,5 +1,16 @@
 .deviceTabs { width: 100%; }
 
+.stickyPreview {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  max-block-size: 60dvh;
+  overflow-y: auto;
+  background: var(--background-primary);
+}
+
+.stickyPreview + section .control :is(input, button) { scroll-margin-block-end: var(--space-100); }
+
 .previewPanel { position: relative; }
 
 .preview {

@@ -112,6 +112,7 @@
           "--divider-default",
           "--font-weight-emphasize",
           "--font-size-heading-sm",
+          "--font-size-heading-xs",
           "--line-height-heading-sm",
           "--space-600",
           "--space-150",
@@ -147,7 +148,11 @@
           },
           "--font-size-heading-sm": {
             "property": "font-size",
-            "selector": ".heading"
+            "selector": ".heading from 1024px"
+          },
+          "--font-size-heading-xs": {
+            "property": "font-size",
+            "selector": ".heading below 1024px"
           },
           "--line-height-heading-sm": {
             "property": "line-height",
@@ -6774,7 +6779,7 @@
             "type": "\"card\" | \"plain\"",
             "required": false,
             "default": "plain",
-            "description": "Outer spacing context. Plain is the default and removes outer padding; card adds 2px padding when placed over a visual background."
+            "description": "Plain is the default and removes outer padding. Card adds 2px padding and gives the product image a white background."
           },
           "image": {
             "type": "string",
@@ -6939,6 +6944,7 @@
         },
         "tokens": [
           "--fill-tertiary",
+          "--color-white-1000",
           "--border-default",
           "--stroke-default",
           "--text-primary",
@@ -6972,6 +6978,7 @@
           "--line-height-body-md",
           "--line-height-price-sm",
           "--line-height-strike-sm",
+          "--space-025",
           "--space-050",
           "--space-100"
         ],
@@ -6979,6 +6986,10 @@
           "--fill-tertiary": {
             "property": "background-color",
             "selector": ".imageWrap"
+          },
+          "--color-white-1000": {
+            "property": "background-color",
+            "selector": ".root[data-surface=\"card\"] .imageWrap:has(.image)"
           },
           "--border-default": {
             "property": "color",
@@ -7080,9 +7091,13 @@
             "property": "line-height",
             "selector": ".priceOriginal"
           },
+          "--space-025": {
+            "property": "column-gap",
+            "selector": ".ratingRow, .ratingSoldRow"
+          },
           "--space-050": {
             "property": "gap",
-            "selector": ".badgeStack, .ratingSoldRow, .sold, .promotions"
+            "selector": ".badgeStack, .sold, .promotions"
           },
           "--space-100": {
             "property": "padding",
@@ -10744,7 +10759,7 @@
         "category": "composite",
         "status": "experimental",
         "version": "0.8.1",
-        "description": "响应式主题展示模块，PC 双栏布局，Mobile 使用通栏图片与底部文字，支持可展开说明和关键词标签，默认不显示操作按钮。",
+        "description": "响应式主题展示模块，支持可展开说明和关键词标签。带图时 PC 使用双栏，Mobile 使用通栏图片；省略图片时显示紧凑的纯文字介绍。",
         "figma": {
           "nodeId": "1877:43111",
           "componentKey": null,
@@ -10797,18 +10812,17 @@
           "tagTone": {
             "type": "BadgeTone",
             "required": false,
-            "default": "dark",
-            "description": "标签明暗样式，默认 dark。"
+            "description": "标签明暗样式。带图时默认 dark，无图时默认使用主题色。"
           },
           "image": {
             "type": "ThemeHeroImage",
-            "required": true,
-            "description": "主题图片，包含替代文本、原始尺寸及可选裁切焦点。"
+            "required": false,
+            "description": "可选主题图片，包含替代文本、原始尺寸及裁切焦点。省略时显示纯文字介绍。"
           },
           "backgroundImageSrc": {
             "type": "string",
             "required": false,
-            "description": "可选的模糊背景图片，默认使用主题图片。"
+            "description": "带图布局的可选模糊背景图片，默认使用主题图片。"
           },
           "cta": {
             "type": "ThemeHeroCta",
@@ -10861,12 +10875,15 @@
           "--line-height-heading-sm",
           "--radius-md",
           "--radius-full",
+          "--space-400",
           "--space-100",
           "--space-200",
           "--space-300",
           "--space-600",
           "--stroke-default",
           "--surface-secondary",
+          "--surface-primary",
+          "--text-primary",
           "--focus-ring-inverse",
           "--focus-ring"
         ],
@@ -10913,11 +10930,23 @@
           },
           "--surface-secondary": {
             "property": "background",
-            "selector": ".root before artwork loads"
+            "selector": ".withImage"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".root.intro"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root.intro"
+          },
+          "--space-400": {
+            "property": "padding-block",
+            "selector": ".intro .container from 1024px"
           }
         },
         "accessibility": {
-          "role": "section with heading, descriptive copy, optional keyword list, image and optional action group",
+          "role": "section with heading, descriptive copy, optional keyword list, optional image and optional action group",
           "wcagLevel": "AA",
           "tapTargetMin": 44,
           "keyboardNav": [

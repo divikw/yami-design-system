@@ -145,7 +145,6 @@ const common: Record<string, Copy> = {
   skeletonCount: ["骨架占位项目的数量。", "Number of skeleton placeholder items."],
   count: ["示例中生成或展示的项目数量。", "Number of items generated or shown in the example."],
   onAddToCart: ["商品加购操作回调。", "Callback for adding a product to the cart."],
-  addButtonDisabled: ["禁用商品加购按钮。", "Disables the product add-to-cart button."],
   addButtonAriaLabel: ["加购按钮的无障碍名称。", "Accessible name of the add-to-cart button."],
   availability: ["商品库存状态；不可购买时隐藏加购入口。", "Product availability; unavailable products hide the purchase action."],
   availabilityLabel: ["库存状态提示文案。", "Availability status text."],

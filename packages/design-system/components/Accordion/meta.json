@@ -105,6 +105,7 @@
     "--divider-default",
     "--font-weight-emphasize",
     "--font-size-heading-sm",
+    "--font-size-heading-xs",
     "--line-height-heading-sm",
     "--space-600",
     "--space-150",
@@ -140,7 +141,11 @@
     },
     "--font-size-heading-sm": {
       "property": "font-size",
-      "selector": ".heading"
+      "selector": ".heading from 1024px"
+    },
+    "--font-size-heading-xs": {
+      "property": "font-size",
+      "selector": ".heading below 1024px"
     },
     "--line-height-heading-sm": {
       "property": "line-height",

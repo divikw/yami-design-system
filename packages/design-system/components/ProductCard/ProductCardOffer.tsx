@@ -14,7 +14,6 @@ interface ProductCardOfferProps {
   promotions?: ProductCardPromotion[];
   countdown?: ReactNode;
   onAddToCart?: MouseEventHandler<HTMLButtonElement>;
-  addButtonDisabled?: boolean;
   addButtonAriaLabel?: string;
 }
 
@@ -25,7 +24,6 @@ export function ProductCardOffer({
   promotions,
   countdown,
   onAddToCart,
-  addButtonDisabled = false,
   addButtonAriaLabel = "Add to cart",
 }: ProductCardOfferProps) {
   const price = (
@@ -57,7 +55,6 @@ export function ProductCardOffer({
               <ProductCardAddButton
                 aria-label={addButtonAriaLabel}
                 onClick={onAddToCart}
-              disabled={addButtonDisabled}
               />
             </span>
           </div>

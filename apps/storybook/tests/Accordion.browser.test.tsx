@@ -90,7 +90,7 @@ for (const theme of ["light", "dark"]) {
       await expect.element(trigger).toHaveAttribute("aria-controls", panel.id);
       expect(panel.getAttribute("aria-labelledby")).toBe(trigger.element().id);
       expect(trigger.element().getBoundingClientRect().height).toBe(44);
-      expect(getComputedStyle(item.firstElementChild!).fontSize).toBe("16px");
+      expect(getComputedStyle(item.firstElementChild!).fontSize).toBe(width < 1024 ? "14px" : "16px");
       expect(getComputedStyle(item).paddingTop).toBe(width < 1024 ? "0px" : "4px");
       expect(getComputedStyle(panel).paddingBottom).toBe(width < 1024 ? "0px" : "12px");
       expect(getComputedStyle(panel).marginBottom).toBe(width < 1024 ? "12px" : "0px");

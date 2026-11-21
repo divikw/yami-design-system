@@ -2,27 +2,132 @@ html, body, #storybook-root { min-height: 100%; }
 body { margin: 0; }
 [data-theme="dark"] { color-scheme: dark; }
 
-.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) {
+:root {
+  --yami-docs-preview-background: color-mix(in srgb, var(--surface-primary), var(--surface-secondary));
+}
+:root.dark {
+  --yami-docs-preview-background: var(--surface-secondary);
+}
+
+:is(.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]), .yami-docs-loading) {
   column-gap: var(--space-400);
   padding-inline: var(--space-300);
 }
 
-.sbdocs-content:has([data-component-docs]) {
+:is(.sbdocs-content:has([data-component-docs]), .yami-docs-loading__content) {
   max-inline-size: 880px;
 }
 
-.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom {
+:is(.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom, .yami-docs-loading__toc) {
   flex: 0 0 160px;
 }
 
 @media (width < 1280px) {
-  .sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom {
+  :is(.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) > .sbdocs-toc--custom, .yami-docs-loading__toc) {
     display: none;
   }
 }
 
+/* Use Storybook's preparing state so the placeholder follows its render and error lifecycle. */
+body.sb-show-preparing-docs > .sb-preparing-docs:not(.yami-docs-loading) {
+  display: none;
+}
+
+/* A cold Docs iframe shows the same shell until Storybook sets a render state. */
+body.sb-show-preparing-docs > .yami-docs-loading,
+[data-yami-docs-entry] body:not(
+  .sb-show-main, .sb-show-preparing-story, .sb-show-nopreview, .sb-show-errordisplay,
+  :has(> #storybook-root:not(:empty))
+) > .yami-docs-loading {
+  display: flex;
+}
+
+.yami-docs-loading {
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  min-block-size: 100vh;
+  padding-block: var(--space-800);
+  background-color: var(--background-primary);
+}
+
+.yami-docs-loading__content {
+  flex: 0 1 880px;
+  min-inline-size: 0;
+}
+
+.yami-docs-loading [data-slot="skeleton"] {
+  block-size: var(--space-150);
+  border-radius: var(--radius-tag-primary);
+}
+
+.yami-docs-loading__header { margin-block-end: var(--space-400); }
+.yami-docs-loading .yami-docs-loading__header > .yami-docs-loading__title {
+  inline-size: min(40%, 176px);
+  block-size: var(--line-height-heading-3xl);
+  border-radius: var(--radius-component-default);
+}
+.yami-docs-loading .yami-docs-loading__header > .yami-docs-loading__description {
+  inline-size: min(80%, 464px);
+  block-size: var(--line-height-body-xl);
+  margin-block-start: var(--space-100);
+}
+.yami-docs-loading__example {
+  overflow: hidden;
+  border: var(--stroke-default) solid var(--border-default);
+  border-radius: var(--radius-surface-default);
+  background-color: var(--yami-docs-preview-background);
+}
+
+.yami-docs-loading__preview,
+.yami-docs-loading__code,
+.yami-docs-loading__usage,
+.yami-docs-loading__toc { display: grid; gap: var(--space-150); }
+.yami-docs-loading__preview {
+  align-content: center;
+  min-block-size: var(--yami-docs-preview-height, 252px);
+  inline-size: min(72%, 400px);
+  margin-inline: auto;
+}
+.yami-docs-loading__preview > :last-child { inline-size: 75%; }
+.yami-docs-loading__code {
+  align-content: start;
+  box-sizing: border-box;
+  min-block-size: calc(120px + var(--stroke-default));
+  padding: var(--space-200);
+  border-block-start: var(--stroke-default) solid var(--border-default);
+  background-color: var(--surface-secondary);
+}
+.yami-docs-loading__code > :nth-child(1) { inline-size: 56%; }
+.yami-docs-loading__code > :nth-child(2) { inline-size: 36%; }
+.yami-docs-loading__code > :nth-child(3) { inline-size: 44%; }
+.yami-docs-loading__usage { margin-block-start: var(--space-600); }
+.yami-docs-loading__usage > :first-child { inline-size: var(--space-800); }
+.yami-docs-loading__usage > :last-child { inline-size: 65%; }
+.yami-docs-loading__toc > :nth-child(2) { inline-size: 76%; }
+.yami-docs-loading__toc > :nth-child(3) { inline-size: 84%; }
+
 @media (max-width: 600px) {
-  .sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]) {
+  body.sb-show-main:has(> #storybook-docs:not([hidden]) :is([data-docs-fonts-pending], [data-docs-preview-pending])) > .yami-docs-loading {
+    display: flex;
+    position: fixed;
+    inset: 0;
+  }
+  body.sb-show-main > #storybook-docs [data-docs-layout]:is([data-docs-fonts-pending], :has([data-docs-preview-pending])) {
+    visibility: hidden;
+  }
+  :is(.sbdocs-wrapper:has(> .sbdocs-content [data-component-docs]), .yami-docs-loading) {
     padding-inline: var(--space-200);
   }
+  .yami-docs-loading .yami-docs-loading__header > .yami-docs-loading__title {
+    block-size: calc(var(--yami-docs-title-lines, 1) * var(--line-height-heading-3xl));
+    mask-image: repeating-linear-gradient(to bottom,
+      black 0 calc(var(--line-height-heading-3xl) - var(--space-050)), transparent 0 var(--line-height-heading-3xl));
+  }
+  .yami-docs-loading .yami-docs-loading__header > .yami-docs-loading__description {
+    block-size: calc(var(--yami-docs-intro-lines, 2) * var(--line-height-body-xl));
+    mask-image: repeating-linear-gradient(to bottom,
+      black 0 calc(var(--line-height-body-xl) - var(--space-050)), transparent 0 var(--line-height-body-xl));
+  }
+  .yami-docs-loading__usage { margin-block-start: var(--space-400); }
 }

@@ -1,0 +1,11 @@
+{
+  "from": "0.1.0-candidate.4",
+  "to": "1.0.0-candidate.1",
+  "mcpFrom": "0.1.0-candidate.1",
+  "mcpTo": "0.1.0-candidate.9",
+  "changeType": "major",
+  "summary": "Removes addButtonDisabled from ProductCard and ProductListItem. Includes the storefront components and paired MCP knowledge.",
+  "migration": "Remove addButtonDisabled from card and list item data. Set availability to sold-out or delisted for unavailable products. Omit onAddToCart to hide quick add on an in-stock card. Install the paired component and MCP tarballs and restart the project MCP.",
+  "rollback": "Restore the previously delivered component and MCP tarballs and consumer lockfile. Restore the old ProductCard calls if needed, then restart the project MCP.",
+  "visualAndBehavior": "Verify that sold-out and delisted cards hide quick add and retain product details. The rating value, star, and review count use 2px spacing. Verify card image backgrounds, product rails, and storefront navigation on desktop and mobile."
+}

@@ -100,7 +100,7 @@ function withRetainedVisuals(
           image: {
             ...props.hero.image,
             src: heroAsset.url,
-            alt: heroAsset.altText?.text ?? props.hero.image.alt,
+            alt: heroAsset.altText?.text ?? props.hero.image?.alt ?? "",
             width: heroAsset.width,
             height: heroAsset.height,
             objectPosition: focalPointObjectPosition(heroAsset.focalPoint),

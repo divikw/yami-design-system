@@ -97,6 +97,10 @@
     padding-block-start: var(--space-050);
   }
 
+  .heading {
+    font-size: var(--font-size-heading-xs);
+  }
+
   .content {
     margin-block-end: var(--space-150);
     padding-block: 0;

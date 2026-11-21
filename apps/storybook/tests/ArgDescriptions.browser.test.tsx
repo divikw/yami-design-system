@@ -18,7 +18,7 @@ describe("shared component property descriptions", () => {
 
   test("resolves display names and nested module stories without affecting pages", () => {
     expect(componentForTitle("YAMI/modules/commerce/floating bars")).toBe("Billboard");
-    expect(componentForTitle("YAMI/modules/commerce/product list/PC")).toBe("ProductList");
+    expect(componentForTitle("YAMI/modules/product display/product list/PC")).toBe("ProductList");
     expect(componentForTitle("YAMI/components/layout/dialog/draft/v1")).toBe("Dialog");
     expect(componentForTitle("YAMI/assets/membership/membershipbadge")).toBe("MembershipBadge");
     expect(componentForTitle("YAMI/assets/membership/membershipicon")).toBe("MembershipIcon");

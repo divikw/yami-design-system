@@ -1,4 +1,4 @@
-import type { ThemeHeroProps } from "./ThemeHero.types";
+import type { ThemeHeroImage, ThemeHeroProps } from "./ThemeHero.types";
 
 const anuaHero = new URL("./assets/anua-hero.webp", import.meta.url).href;
 const anuaHeroAtmosphere = new URL(
@@ -6,7 +6,7 @@ const anuaHeroAtmosphere = new URL(
   import.meta.url,
 ).href;
 
-export function createThemeHeroProps(): ThemeHeroProps {
+export function createThemeHeroProps(): ThemeHeroProps & { image: ThemeHeroImage } {
   return {
     title: "Anua: Gentle yet Effective Korean Skincare",
     description:

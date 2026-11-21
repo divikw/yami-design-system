@@ -24,8 +24,8 @@ sourceRefs:
 
 | 项目 | 当前范围 |
 | --- | --- |
-| 组件包 | `@yami/design-system@0.2.0-candidate.4` |
-| 配套 MCP | `@yami/design-system-mcp@0.1.0-candidate.8`，精确绑定上述组件版本 |
+| 组件包 | `@yami/design-system@1.0.0-candidate.1` |
+| 配套 MCP | `@yami/design-system-mcp@0.1.0-candidate.9`，精确绑定上述组件版本 |
 | 接入 CLI（可选） | `yami-design-cli@0.1.0-candidate.1` |
 | 稳定组件 | Button（含 ButtonLink）、Input、Card、ProductCard、ProductList、HeroBanner、ShortcutRail、Billboard |
 | Beta 预览 | `@yami/design-system/components/Header`（含商城首页吸顶页头） |
@@ -62,8 +62,8 @@ for (const file of process.argv.slice(1)) {
 ```bash
 npm install --save-dev ./.artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz \
-  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
+  --design-package ./.artifacts/yami-design-system-1.0.0-candidate.1.tgz \
+  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.9.tgz \
   --locale zh --dry-run
 ```
 
@@ -82,8 +82,8 @@ CLI 不修改页面入口、全局 reset、AGENTS.md、客户端信任或全局�
 手动接入时，在消费项目根目录先安装组件包，再将同批 MCP 包加入开发依赖：
 
 ```bash
-npm install ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz
-npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz
+npm install ./.artifacts/yami-design-system-1.0.0-candidate.1.tgz
+npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.9.tgz
 ```
 
 将消费项目的 `package.json` 和 lockfile 一起提交，原始 tarball 保存在团队授权的产物位置。新机器或 CI 先取回并校验同一批文件，将它们放到 `file:` 引用记录的路径。使用项目内的相对路径便于在不同机器恢复。

@@ -11,9 +11,11 @@ import {
   Switch,
   RadioGroup,
   RadioGroupItem,
+  type FilterChipMenuOption,
 } from "@yami/design-system";
 
 import styles from "./AllFiltersDialog.module.css";
+import { ClearProductFiltersButton } from "./ProductFilterToolbar";
 import type {
   SearchResultsCategoryOption,
   SearchResultsCopy,
@@ -54,10 +56,9 @@ type ExpandableFilterSection =
   | "tags"
   | "seller";
 
-interface AllFiltersDialogProps {
+type AllFiltersDialogProps = {
   open: boolean;
   locale: SearchResultsLocale;
-  copy: SearchResultsCopy;
   resultCount: number;
   sort: AllFiltersSortValue;
   category: string;
@@ -71,18 +72,30 @@ interface AllFiltersDialogProps {
     menuValues: Record<string, string[]>;
   }) => void;
   onClear: () => void;
-}
+} & (
+  | { copy: SearchResultsCopy; catalog?: undefined }
+  | {
+      copy: Pick<SearchResultsCopy, "categoryOptions" | "clearFilters" | "filtersButton" | "showResults" | "sortLabel">;
+      catalog: {
+        categoryLabel: string;
+        inStockLabel: string;
+        priceLabel: string;
+        priceOptions: readonly FilterChipMenuOption[];
+        sortOptions: readonly (FilterChipMenuOption & { value: AllFiltersSortValue })[];
+      };
+    }
+);
 
-const sortValues: AllFiltersSortValue[] = [
-  "featured",
-  "best-seller",
-  "popularity",
-  "most-reviews",
-  "most-ratings",
-  "newest",
-  "price-high",
-  "price-low",
-];
+const searchSortLabels = [
+  ["featured", "sortFeatured"],
+  ["best-seller", "sortBestSeller"],
+  ["popularity", "sortPopularity"],
+  ["most-reviews", "sortMostReviews"],
+  ["most-ratings", "sortMostRatings"],
+  ["newest", "sortNewest"],
+  ["price-high", "sortPriceHigh"],
+  ["price-low", "sortPriceLow"],
+] as const;
 
 function findCategoryLabel(
   options: readonly SearchResultsCategoryOption[],
@@ -174,19 +187,13 @@ function CategoryTree({
   });
 }
 
-export function AllFiltersDialog({
-  open,
-  locale,
-  copy,
-  resultCount,
-  sort,
-  category,
-  fulfilled,
-  menuValues,
-  onClose,
-  onApply,
-  onClear,
-}: AllFiltersDialogProps) {
+export function AllFiltersDialog(props: AllFiltersDialogProps) {
+  const {
+    open, locale, copy, catalog, resultCount, sort, category, fulfilled,
+    menuValues, onClose, onApply, onClear,
+  } = props;
+  const searchCopy = props.catalog ? undefined : props.copy;
+  const filterMenus = searchCopy?.filterMenus;
   const desktop = useDesktopViewport();
   const Panel = desktop ? Dialog : Drawer;
   const mainRef = useRef<HTMLDivElement>(null);
@@ -216,32 +223,25 @@ export function AllFiltersDialog({
       priceLabel,
       tagsLabel,
       sellerLabel,
-    ] = copy.filterMenus;
+    ] = filterMenus ?? [];
     return {
-      category: categoryLabel ?? "Category",
+      category: catalog?.categoryLabel ?? categoryLabel ?? "Category",
       offers: offersLabel ?? "Offers",
-      inStock: inStockLabel ?? "In Stock",
+      inStock: catalog?.inStockLabel ?? inStockLabel ?? "In Stock",
       brand: brandLabel ?? "Brand",
       region: regionLabel ?? "Region",
-      price: priceLabel ?? "Price",
+      price: catalog?.priceLabel ?? priceLabel ?? "Price",
       tags: tagsLabel ?? "Tags",
       seller: sellerLabel ?? "Seller",
     };
-  }, [copy.filterMenus]);
+  }, [catalog?.categoryLabel, catalog?.inStockLabel, catalog?.priceLabel, filterMenus]);
+  const inStockKey = catalog ? "inStock" : labels.inStock;
 
-  const sortOptions = useMemo(
-    () => [
-      copy.sortFeatured,
-      copy.sortBestSeller,
-      copy.sortPopularity,
-      copy.sortMostReviews,
-      copy.sortMostRatings,
-      copy.sortNewest,
-      copy.sortPriceHigh,
-      copy.sortPriceLow,
-    ],
-    [copy]
-  );
+  const sortOptions = catalog?.sortOptions ?? searchSortLabels.map(([value, key]) => ({
+    value,
+    label: searchCopy?.[key] ?? "",
+  }));
+  const draftSortLabel = sortOptions.find((option) => option.value === draftSort)?.label;
 
   useEffect(() => {
     if (!open) return;
@@ -271,6 +271,16 @@ export function AllFiltersDialog({
 
   if (!open) return null;
 
+  function clearFilters() {
+    setDraftSort("featured");
+    setDraftCategory("");
+    setDraftFulfilled(false);
+    setDraftMenuValues({});
+    setMinimumPrice("");
+    setMaximumPrice("");
+    onClear();
+  }
+
   function toggleSection(section: string) {
     setExpanded((current) => {
       const next = new Set(current);
@@ -297,7 +307,7 @@ export function AllFiltersDialog({
       ? [
           {
             key: "sort",
-            label: sortOptions[sortValues.indexOf(draftSort)] ?? draftSort,
+            label: draftSortLabel ?? draftSort,
             onRemove: () => setDraftSort(sort),
           },
         ]
@@ -316,7 +326,9 @@ export function AllFiltersDialog({
     ...Object.entries(draftMenuValues).flatMap(([label, values]) =>
       values.map((option) => ({
         key: `${label}-${option}`,
-        label: option,
+        label: catalog && label === "price"
+          ? catalog.priceOptions.find(({ value }) => value === option)?.label ?? option
+          : (catalog && label === inStockKey ? labels.inStock : option),
         onRemove: () => toggleMultiple(label, option, false),
       }))
     ),
@@ -327,20 +339,26 @@ export function AllFiltersDialog({
     return labels[section];
   }
 
-  function renderMultipleOptions(label: string) {
+  function renderMultipleOptions(
+    label: string,
+    options: readonly FilterChipMenuOption[] = (searchCopy?.filterMenuOptions[label] ?? []).map(
+      (option) => ({ label: option, value: option }),
+    ),
+    valueKey = label,
+  ) {
     return (
       <div className={styles.optionGrid} role="group" aria-label={label}>
-        {(copy.filterMenuOptions[label] ?? []).map((option) => {
-          const checked = draftMenuValues[label]?.includes(option) ?? false;
+        {options.map((option) => {
+          const checked = draftMenuValues[valueKey]?.includes(option.value) ?? false;
           return (
-            <label className={styles.optionRow} key={option}>
+            <label className={styles.optionRow} key={option.value}>
               <Checkbox
                 checked={checked}
                 onCheckedChange={(nextChecked) =>
-                  toggleMultiple(label, option, Boolean(nextChecked))
+                  toggleMultiple(valueKey, option.value, Boolean(nextChecked))
                 }
               />
-              <span>{option}</span>
+              <span>{option.label}</span>
             </label>
           );
         })}
@@ -359,10 +377,10 @@ export function AllFiltersDialog({
           }
           aria-label={copy.sortLabel}
         >
-          {sortOptions.map((option, index) => (
-            <label className={styles.optionRow} key={sortValues[index]}>
-              <RadioGroupItem value={sortValues[index]} />
-              <span>{option}</span>
+          {sortOptions.map((option) => (
+            <label className={styles.optionRow} key={option.value}>
+              <RadioGroupItem value={option.value} />
+              <span>{option.label}</span>
             </label>
           ))}
         </RadioGroup>
@@ -411,6 +429,7 @@ export function AllFiltersDialog({
     }
 
     if (section === "price") {
+      if (catalog) return renderMultipleOptions(labels.price, catalog.priceOptions, "price");
       return (
         <div className={styles.priceFields}>
           <input
@@ -531,21 +550,7 @@ export function AllFiltersDialog({
           )}
 
           <footer className={styles.footer}>
-            <button
-              className={styles.clearButton}
-              type="button"
-              onClick={() => {
-                setDraftSort("featured");
-                setDraftCategory("");
-                setDraftFulfilled(false);
-                setDraftMenuValues({});
-                setMinimumPrice("");
-                setMaximumPrice("");
-                onClear();
-              }}
-            >
-              {copy.clearFilters}
-            </button>
+            <ClearProductFiltersButton onClick={clearFilters}>{copy.clearFilters}</ClearProductFiltersButton>
             <Button
               className={styles.applyButton}
               variant="primary"
@@ -575,55 +580,62 @@ export function AllFiltersDialog({
         </div>
       )}
       <div ref={mainRef} hidden={Boolean(mobileSection)}>
-        {renderSection(
-          "sort",
-          sortOptions[sortValues.indexOf(draftSort)]
-        )}
+        {renderSection("sort", draftSortLabel)}
 
         {renderSection(
           "category",
           findCategoryLabel(copy.categoryOptions, draftCategory)
         )}
 
-        <section className={styles.section}>
-          <Switch className={styles.switchRow} checked={draftFulfilled} onCheckedChange={setDraftFulfilled}>
-            <strong className={styles.fulfilledLabel}>
-              <img src={fulfilledIcon} alt="" width={24} height={24} />
-              {copy.fulfilledByYami}
-            </strong>
-          </Switch>
-        </section>
+        {!catalog && (
+          <section className={styles.section}>
+            <Switch className={styles.switchRow} checked={draftFulfilled} onCheckedChange={setDraftFulfilled}>
+              <strong className={styles.fulfilledLabel}>
+                <img src={fulfilledIcon} alt="" width={24} height={24} />
+                {searchCopy?.fulfilledByYami}
+              </strong>
+            </Switch>
+          </section>
+        )}
 
         <section className={styles.section}>
           <Switch className={styles.switchRow}
-            checked={draftMenuValues[labels.inStock]?.includes("in-stock") ?? false}
+            checked={draftMenuValues[inStockKey]?.includes("in-stock") ?? false}
             onCheckedChange={(checked) => setDraftMenuValues((current) => ({
-              ...current, [labels.inStock]: checked ? ["in-stock"] : [],
+              ...current, [inStockKey]: checked ? ["in-stock"] : [],
             }))}
           >
             <strong>{labels.inStock}</strong>
           </Switch>
         </section>
 
-        {(
-          ["offers", "brand", "region"] as const
-        ).map((section) =>
-          renderSection(
-            section,
-            draftMenuValues[getSectionLabel(section)]?.join(", ")
-          )
-        )}
-
-        {renderSection(
+        {catalog ? renderSection(
           "price",
-          draftMenuValues[labels.price]?.join(", ")
-        )}
+          catalog.priceOptions.filter(({ value }) => draftMenuValues.price?.includes(value))
+            .map(({ label }) => label).join(", "),
+        ) : (
+          <>
+            {(
+              ["offers", "brand", "region"] as const
+            ).map((section) =>
+              renderSection(
+                section,
+                draftMenuValues[getSectionLabel(section)]?.join(", ")
+              )
+            )}
 
-        {(["tags", "seller"] as const).map((section) =>
-          renderSection(
-            section,
-            draftMenuValues[getSectionLabel(section)]?.join(", ")
-          )
+            {renderSection(
+              "price",
+              draftMenuValues[labels.price]?.join(", ")
+            )}
+
+            {(["tags", "seller"] as const).map((section) =>
+              renderSection(
+                section,
+                draftMenuValues[getSectionLabel(section)]?.join(", ")
+              )
+            )}
+          </>
         )}
       </div>
     </Panel>
