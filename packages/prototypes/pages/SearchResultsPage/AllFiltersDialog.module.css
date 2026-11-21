@@ -276,17 +276,6 @@
   background: var(--fill-primary);
 }
 
-.clearButton {
-  height: 40px;
-  padding-inline: var(--space-150);
-  border: 0;
-  background: transparent;
-  color: var(--text-primary);
-  font: inherit;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
 .applyButton {
   min-width: 80px;
   flex: 0 0 auto;
@@ -295,7 +284,6 @@
 .sectionHeader:focus-visible,
 .expandButton:focus-visible,
 .switchRow:focus-visible,
-.clearButton:focus-visible,
 .priceFields button:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

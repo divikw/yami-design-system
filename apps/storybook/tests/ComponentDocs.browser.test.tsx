@@ -69,7 +69,7 @@ describe("component docs usage content", () => {
 
   test("resolves a spaced Storybook title to its component usage guide", async () => {
     const usage = await loadUsageForTitle(
-      "YAMI/Modules/Commerce/Product Card",
+      "YAMI/Modules/Product Display/Product Card",
     );
 
     expect(usage).toContain("# ProductCard — 使用说明");
@@ -112,7 +112,7 @@ describe("component docs usage content", () => {
   });
 
   test("keeps existing single-language guides available in either locale", async () => {
-    const title = "YAMI/Modules/Commerce/Product Card";
+    const title = "YAMI/Modules/Product Display/Product Card";
     expect(await loadUsageForTitle(title, "en")).toBe(await loadUsageForTitle(title, "zh"));
   });
 

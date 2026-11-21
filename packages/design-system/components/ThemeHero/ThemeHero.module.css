@@ -1,4 +1,4 @@
-.root {
+.withImage {
   --theme-hero-foreground: var(--color-white-1000);
   --button-primary-inverse: var(--color-white-1000);
   --button-primary-active-inverse: var(--color-neutral-100);
@@ -6,7 +6,10 @@
   --button-tertiary-active-inverse: var(--color-white-100);
   --text-primary: var(--color-black-1000);
   --text-primary-inverse: var(--color-white-1000);
+  background: var(--surface-secondary);
+}
 
+.root {
   position: relative;
   display: flex;
   align-items: center;
@@ -17,7 +20,6 @@
   padding: 0;
   overflow: hidden;
   color: var(--theme-hero-foreground);
-  background: var(--surface-secondary);
   font-family: var(--font-family-ios);
 }
 
@@ -155,7 +157,7 @@
   display: flex;
 }
 
-.tags .tagBadge[data-tone="dark"][data-color][data-emphasis] {
+:where(.withImage) .tags .tagBadge[data-tone="dark"][data-color][data-emphasis] {
   background-color: var(--color-black-200);
 }
 
@@ -359,6 +361,44 @@
     height: calc(100% + var(--space-500));
     max-height: none;
     object-fit: cover;
+  }
+}
+
+.root.intro {
+  height: auto;
+  min-height: 0;
+  color: var(--text-primary);
+  background: var(--surface-primary);
+}
+
+.intro .container {
+  display: block;
+  height: auto;
+  padding: var(--space-400) var(--layout-page-margin-default);
+}
+
+.intro .copy {
+  position: static;
+  height: auto;
+}
+
+.intro .description {
+  max-width: 72ch;
+  overflow-wrap: anywhere;
+}
+
+.intro :is(.descriptionToggle, .tags):focus-visible {
+  outline-color: var(--focus-ring);
+}
+
+@media (max-width: 1023.98px) {
+  .intro .container {
+    padding-block: var(--space-300);
+  }
+
+  .intro .copyContent {
+    box-sizing: border-box;
+    padding: 0;
   }
 }
 

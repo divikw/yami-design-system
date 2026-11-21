@@ -1,0 +1,13 @@
+.clearFilters[data-slot="button"] {
+  flex: 0 0 auto;
+  padding-inline: var(--space-100);
+  border-radius: 0;
+  font-weight: var(--font-weight-normal);
+  text-decoration: underline;
+  text-decoration-thickness: var(--stroke-default);
+  text-underline-offset: var(--space-025);
+}
+
+.clearFilters[data-slot="button"]:not([aria-disabled="true"]):is(:hover, :active) {
+  background-color: transparent;
+}

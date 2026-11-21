@@ -7,7 +7,7 @@ import {
   Tabs, TabsContent, TabsList, TabsTrigger,
 } from "@yami/design-system";
 import { getArgDescription, type DescriptionTranslations } from "./arg-descriptions";
-import { ComponentDocsPreview, type DocsPreviewMode } from "./component-docs-preview";
+import { ComponentDocsPreview, type DocsPreviewFullWidth, type DocsPreviewMode } from "./component-docs-preview";
 import { CodeBlock, ComponentDocsTemplate, DocsExampleCard, type DocsLocale } from "./component-docs-template";
 import { getPropertiesPreviewDevices } from "./properties-preview-devices";
 import styles from "./component-properties.module.css";
@@ -23,19 +23,24 @@ type PropertyField<T extends PropertyValues> = {
     type?: string;
     description?: string;
     placeholder?: string;
-    group?: { key: "name" | "required"; title: string };
-  } & (T[Key] extends boolean ? { kind: "switch" } : { kind: "text" } | {
+    group?: { key: "name" | "required" | "preview"; title: string };
+  } & (T[Key] extends boolean ? { kind: "switch" } : { kind: "text"; required?: boolean } | {
     kind: "select";
     options: readonly (T[Key] & string)[];
+    optionLabels?: Readonly<Record<T[Key] & string, string>>;
   });
 }[keyof T & string];
 
 export interface PropertiesDefinition<T extends PropertyValues> {
   slug: string;
   previewMode?: DocsPreviewMode;
+  fullWidth?: DocsPreviewFullWidth;
+  stickyPreview?: boolean;
   initialValues: (locale: DocsLocale) => T;
-  fields: (values: T, locale: DocsLocale) => readonly PropertyField<T>[];
-  example: (values: T, locale: DocsLocale, device?: DeviceName) => { preview: ReactNode; code: string };
+  fields: (values: T, locale: DocsLocale, device?: DeviceName) => readonly PropertyField<T>[];
+  example: (values: T, locale: DocsLocale, device?: DeviceName, update?: (patch: Partial<T>) => void) => {
+    preview: ReactNode; code: string; previewBackground?: string; fillContentWidth?: boolean;
+  };
 }
 
 export function jsxAttributes(props: Record<string, string | number | boolean | undefined>) {
@@ -51,15 +56,17 @@ export function jsxExample(imports: string, jsx: string, preview: ReactNode) {
   return { preview, code: `import { ${imports} } from "@yami/design-system";\n\n${jsx}` };
 }
 
-function PropertySelect({ name, options, value, onChange }: {
+function PropertySelect({ name, options, optionLabels, value, onChange }: {
   name: string;
   options: readonly string[];
+  optionLabels?: Readonly<Record<string, string>>;
   value: string;
   onChange: (value: string) => void;
 }) {
-  return <Select value={value} onValueChange={next => { if (next !== null) onChange(next); }}>
+  const items = options.map(option => ({ value: option, label: optionLabels?.[option] ?? option }));
+  return <Select items={items} value={value} onValueChange={next => { if (next !== null) onChange(next); }}>
     <SelectTrigger aria-label={name}><SelectValue /></SelectTrigger>
-    <SelectContent>{options.map(option => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
+    <SelectContent>{items.map(item => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
   </Select>;
 }
 
@@ -82,12 +89,13 @@ export function ComponentPropertiesPage<T extends PropertyValues>({ definition }
   const zh = locale === "zh";
   const { slug } = definition;
   const values = { ...definition.initialValues(locale), ...overrides };
-  const { preview, code } = definition.example(values, locale, device?.name);
+  const { preview, code, previewBackground, fillContentWidth } = definition.example(values, locale, device?.name,
+    patch => setOverrides(current => ({ ...current, ...patch })));
   const codeId = `${slug}-properties-jsx`;
   const codeLabel = showCode ? (zh ? "收起 JSX" : "Hide JSX") : (zh ? "查看 JSX" : "Show JSX");
   const translations = story.parameters.docs?.translations as DescriptionTranslations | undefined;
   const groups = new Map<string, { title: string; fields: PropertyField<T>[] }>();
-  for (const field of definition.fields(values, locale)) {
+  for (const field of definition.fields(values, locale, device?.name)) {
     const { key, title } = field.group ?? { key: "optional", title: zh ? "可选属性" : "Optional" };
     if (!groups.has(key)) groups.set(key, { title, fields: [] });
     groups.get(key)!.fields.push(field);
@@ -95,7 +103,9 @@ export function ComponentPropertiesPage<T extends PropertyValues>({ definition }
 
   const card = <DocsExampleCard locale={locale} name={`${slug}-properties-preview`}>
     <div className={styles.previewPanel}>
-      <ComponentDocsPreview mode={definition.previewMode} locale={locale} name={story.title.split("/").at(-1)} viewportWidth={device?.width} previewBackground="var(--surface-secondary)">
+      <ComponentDocsPreview mode={definition.previewMode} locale={locale} name={story.title.split("/").at(-1)}
+        viewportWidth={definition.fullWidth === "fluid" && device?.name === "PC" ? undefined : device?.width}
+        fullWidth={definition.fullWidth} fillContentWidth={fillContentWidth} previewBackground={previewBackground}>
         <div className={styles.preview}>{preview}</div>
       </ComponentDocsPreview>
       <Button className={styles.codeToggle} form="icon" size="sm" variant="tertiary" aria-label={codeLabel} title={codeLabel}
@@ -108,16 +118,23 @@ export function ComponentPropertiesPage<T extends PropertyValues>({ definition }
     </div>
   </DocsExampleCard>;
 
-  return <ComponentDocsTemplate name={zh ? "属性试用" : "Properties"} slug={slug} locale={locale}>
-    {devices.length > 1 ? <Tabs value={device?.name} onValueChange={setSelectedDevice}>
+  const devicePreview = devices.length > 1 ? <Tabs value={device?.name} onValueChange={setSelectedDevice}>
       <TabsList className={styles.deviceTabs} variant="secondary" aria-label={zh ? "预览设备" : "Preview device"}>
         {devices.map(({ name }) => <TabsTrigger key={name} value={name}>{name}</TabsTrigger>)}
       </TabsList>
       {devices.map(({ name }) => <TabsContent key={name} value={name}>
         {name === device?.name && card}
       </TabsContent>)}
-    </Tabs> : card}
-    <section>
+    </Tabs> : card;
+
+  return <ComponentDocsTemplate name={zh ? "属性试用" : "Properties"} slug={slug} locale={locale}>
+    {definition.stickyPreview ? <div className={styles.stickyPreview}>{devicePreview}</div> : devicePreview}
+    <section onFocus={definition.stickyPreview ? ({ currentTarget, target }) => {
+      const preview = currentTarget.previousElementSibling;
+      if (preview && currentTarget.contains(target) && target.getBoundingClientRect().top < preview.getBoundingClientRect().bottom) {
+        target.scrollIntoView({ block: "end" });
+      }
+    } : undefined}>
       <h2 id={`${slug}-properties`}>{zh ? "属性" : "Props"}</h2>
       {[...groups].map(([key, group]) => {
         const headingId = `${slug}-properties-${key}`;
@@ -139,8 +156,8 @@ export function ComponentPropertiesPage<T extends PropertyValues>({ definition }
                   </div>
                   <div className={styles.control}>
                     {field.kind === "switch" ? <Switch aria-label={label} checked={Boolean(values[field.key])} onCheckedChange={update} />
-                      : field.kind === "select" ? <PropertySelect name={label} options={field.options} value={String(values[field.key])} onChange={update} />
-                      : <Input density="compact" aria-label={label} placeholder={field.placeholder} value={String(values[field.key])} onChange={event => update(event.target.value)} />}
+                      : field.kind === "select" ? <PropertySelect name={label} options={field.options} optionLabels={field.optionLabels} value={String(values[field.key])} onChange={update} />
+                      : <Input density="compact" aria-label={label} placeholder={field.placeholder} required={field.required} value={String(values[field.key])} onChange={event => update(event.target.value)} />}
                   </div>
                 </dd>
               </div>;

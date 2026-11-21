@@ -53,8 +53,6 @@ interface ProductCardBaseProps {
   onAddToCart?: MouseEventHandler<HTMLButtonElement>;
   /** 加购按钮的无障碍名称。 */
   addButtonAriaLabel?: string;
-  /** 是否禁用加购按钮。 */
-  addButtonDisabled?: boolean;
   /** 库存状态；不可购买时隐藏加购按钮并显示状态文案。 */
   availability?: "available" | "sold-out" | "delisted";
   /** 本地化库存状态文案。 */

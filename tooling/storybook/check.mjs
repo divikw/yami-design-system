@@ -50,15 +50,16 @@ const docsEntries = entries.filter((entry) => entry.type === "docs");
 const docsComponentNames = new Set(docsEntries.map((entry) => normalizeComponentName(entry.title.split("/").at(-1))));
 const deviceStoryNames = {
   ActivityPageHeader: "",
-  Header: "docs,PC,APP,H5",
+  Header: "docs,Properties,PC,APP,H5",
   Footer: "docs,PC",
-  TabBar: "docs,APP,H5",
+  TabBar: "docs,Properties,APP,H5",
 };
 const componentsWithProperties = new Set([
   "Accordion", "Alert", "AlertDialog", "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
   "Card", "Checkbox", "Combobox", "Dialog", "Divider", "Drawer", "DropdownMenu", "EmptyState", "Field",
-  "FilterChip", "Input", "NavigationMenu", "Pagination", "Popover", "Progress", "RadioGroup", "Select",
-  "Skeleton", "Slider", "Spinner", "Switch", "Tabs", "Tag", "Textarea", "Toast", "Tooltip",
+  "FilterChip", "Header", "HorizontalScrollList", "Input", "NavigationMenu", "Pagination", "Popover", "ProductCard",
+  "ProductList", "Progress", "RadioGroup", "Select",
+  "Skeleton", "Slider", "Spinner", "Switch", "TabBar", "Tabs", "Tag", "Textarea", "Toast", "Tooltip",
 ]);
 for (const component of componentDocs) {
   if (docsEntries.some((entry) => path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath)) {

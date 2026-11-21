@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -10,6 +11,10 @@ import {
 } from "react";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   ActivityPageHeader,
   BrandProductRail,
   Footer,
@@ -20,12 +25,18 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
+  Tag,
   ThemeHero,
   ThemeProductList,
 } from "@yami/design-system";
 
 import styles from "./TopicLandingPage.module.css";
 import type { TopicLandingPageProps } from "./TopicLandingPage.types";
+import {
+  CollectionProductFilters,
+  createCollectionProductFilters,
+  filterCollectionProducts,
+} from "./CollectionProductFilters";
 
 const SECTION_REVEAL_ROOT_MARGIN = "0px 0px -40px 0px";
 const SCROLLABLE_OVERFLOW = /^(auto|scroll|overlay)$/;
@@ -68,6 +79,9 @@ export function TopicLandingPage({
   shortcutRail,
   standardRail,
   reviewList,
+  reviewsAfterProducts = false,
+  faq,
+  relatedKeywords,
   productRail,
   brandRail,
   waterfall,
@@ -76,7 +90,10 @@ export function TopicLandingPage({
   className,
   ...rest
 }: TopicLandingPageProps) {
+  const faqHeadingId = useId();
+  const relatedKeywordsHeadingId = useId();
   const mainRef = useRef<HTMLElement>(null);
+  const waterfallRef = useRef<HTMLDivElement>(null);
   const globalHeaderRef = useRef<HTMLDivElement>(null);
   const [globalHeaderHeight, setGlobalHeaderHeight] = useState(0);
   const initialViewportPrepared = useRef(false);
@@ -96,7 +113,13 @@ export function TopicLandingPage({
       waterfall.tabs?.find((tab) => !tab.disabled)?.value ??
       "",
   );
-  const [waterfallVisibleCounts, setWaterfallVisibleCounts] = useState<Record<string, number>>({});
+  const [waterfallPageCounts, setWaterfallPageCounts] = useState<Record<string, number>>({});
+  const [waterfallColumns, setWaterfallColumns] = useState(2);
+  const [collectionFilters, setCollectionFilters] = useState(() =>
+    createCollectionProductFilters(waterfall.catalogFilters
+      ? waterfall.productsByTab?.all ?? waterfall.products
+      : undefined),
+  );
   const [productRailTabValue, setProductRailTabValue] = useState(
     () =>
       productRail.value ??
@@ -119,20 +142,31 @@ export function TopicLandingPage({
   const {
     products: waterfallFallbackProducts,
     productsByTab: waterfallProductsByTab,
+    catalogFilters,
+    rowsPerPage,
     ...waterfallProps
   } = waterfall;
   const activeWaterfallTab = waterfall.value ?? waterfallTabValue;
-  const waterfallProducts =
+  const waterfallCategoryProducts =
     waterfallProductsByTab?.[activeWaterfallTab] ?? waterfallFallbackProducts;
-  const waterfallVisibleCount = waterfallVisibleCounts[activeWaterfallTab] ?? EXPLORE_MORE_PAGE_SIZE;
+  const waterfallProducts = useMemo(
+    () => catalogFilters
+      ? filterCollectionProducts(waterfallCategoryProducts, collectionFilters)
+      : waterfallCategoryProducts,
+    [catalogFilters, waterfallCategoryProducts, collectionFilters],
+  );
+  const waterfallPageSize = rowsPerPage === undefined
+    ? EXPLORE_MORE_PAGE_SIZE
+    : rowsPerPage * waterfallColumns;
+  const waterfallVisibleCount = (waterfallPageCounts[activeWaterfallTab] ?? 1) * waterfallPageSize;
   const visibleWaterfallProducts = useMemo(
     () => waterfallProducts.slice(0, waterfallVisibleCount),
     [waterfallProducts, waterfallVisibleCount],
   );
   const loadMoreWaterfallProducts = () => {
-    setWaterfallVisibleCounts((counts) => ({
+    setWaterfallPageCounts((counts) => ({
       ...counts,
-      [activeWaterfallTab]: (counts[activeWaterfallTab] ?? EXPLORE_MORE_PAGE_SIZE) + EXPLORE_MORE_PAGE_SIZE,
+      [activeWaterfallTab]: (counts[activeWaterfallTab] ?? 1) + 1,
     }));
   };
   const selectWaterfallTab = (value: string) => {
@@ -212,6 +246,27 @@ export function TopicLandingPage({
     return () => observer.disconnect();
   }, [showChrome]);
 
+  const showWaterfall = !hiddenModules.includes("explore-more");
+  useLayoutEffect(() => {
+    if (rowsPerPage === undefined || !showWaterfall) return;
+    const grid = waterfallRef.current?.querySelector<HTMLElement>('[data-slot="product-list-items"]');
+    if (!grid) return;
+
+    const updateColumns = () => {
+      if (!grid.clientWidth) return;
+      const tracks = getComputedStyle(grid).gridTemplateColumns;
+      setWaterfallColumns(tracks.trim().split(/\s+/).length);
+    };
+    updateColumns();
+    const observer = new ResizeObserver(updateColumns);
+    observer.observe(grid);
+    window.addEventListener("resize", updateColumns);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateColumns);
+    };
+  }, [rowsPerPage, showWaterfall]);
+
   useLayoutEffect(() => {
     const targetId = window.location.hash.slice(1);
     const matchingTab = primaryTabs.items.find(
@@ -225,6 +280,8 @@ export function TopicLandingPage({
     if (!primaryTabsElement) return;
     const scrollRoot = resolveTopicLandingScrollRoot(primaryTabsElement);
     const scrollTarget: EventTarget = scrollRoot;
+    const scrollElement = scrollRoot === window ? document.scrollingElement : scrollRoot as HTMLElement;
+    const lastTab = primaryTabs.items.at(-1);
 
     let animationFrame = 0;
     const updateActiveTab = () => {
@@ -233,6 +290,8 @@ export function TopicLandingPage({
         scrollRoot,
         globalHeaderHeight + primaryTabsElement.getBoundingClientRect().height,
       );
+      const maxScrollTop = scrollElement ? scrollElement.scrollHeight - scrollElement.clientHeight : 0;
+      const reachedPageEnd = maxScrollTop > 0 && maxScrollTop <= (scrollElement?.scrollTop ?? 0) + 1;
       const pendingValue = pendingPrimaryTabValueRef.current;
       if (pendingValue) {
         const pendingItem = primaryTabs.items.find(
@@ -248,8 +307,14 @@ export function TopicLandingPage({
           pendingSectionTop <= activationLine &&
           pendingSectionTop >= activationLine - 2;
 
-        if (!reachedPendingSection) return;
+        if (!reachedPendingSection && !(reachedPageEnd && pendingValue === lastTab?.value)) return;
         pendingPrimaryTabValueRef.current = null;
+      }
+
+      // The last section may be too short to reach the sticky tabs at the end of the page.
+      if (reachedPageEnd && lastTab && document.getElementById(lastTab.targetId)) {
+        setPrimaryTabValue(lastTab.value);
+        return;
       }
 
       let nextValue = primaryTabs.items[0]?.value ?? primaryTabs.defaultValue;
@@ -485,6 +550,17 @@ export function TopicLandingPage({
     };
   }, [activeWaterfallTab, visibleWaterfallProducts]);
 
+  const reviewsSection = reviewList && !hiddenModules.includes("reviews") ? (
+    <div
+      id="reviews"
+      className={styles.reviewList}
+      data-motion-reveal="scroll"
+      data-slot="topic-landing-review-list"
+    >
+      <ReviewList {...reviewList} />
+    </div>
+  ) : null;
+
   return (
     <div
       {...rest}
@@ -613,25 +689,36 @@ export function TopicLandingPage({
             />
           </div>
         )}
-        {reviewList && !hiddenModules.includes("reviews") && (
-          <div
-            id="reviews"
-            className={styles.reviewList}
-            data-motion-reveal="scroll"
-            data-slot="topic-landing-review-list"
-          >
-            <ReviewList {...reviewList} />
-          </div>
-        )}
-        {!hiddenModules.includes("explore-more") && (
+        {!reviewsAfterProducts && reviewsSection}
+        {showWaterfall && (
           <div
             id="product-list"
+            ref={waterfallRef}
             className={styles.waterfallAnchor}
             data-motion-reveal="scroll"
             data-slot="topic-landing-waterfall-section"
           >
             <ProductList
               {...waterfallProps}
+              {...(catalogFilters && {
+                tabs: undefined,
+                introContent: (
+                  <CollectionProductFilters
+                    locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
+                    categories={(waterfallProps.tabs ?? [])
+                      .filter(({ value, disabled }) => value !== "all" && value !== "complete-routine" && !disabled)
+                      .map(({ value, label }) => ({ value, label: String(label) }))}
+                    category={activeWaterfallTab === "all" ? "" : activeWaterfallTab}
+                    filters={collectionFilters}
+                    resultCount={waterfallProducts.length}
+                    onChange={(filters, category) => {
+                      selectWaterfallTab(category || "all");
+                      setCollectionFilters(filters);
+                      setWaterfallPageCounts({});
+                    }}
+                  />
+                ),
+              })}
               id={`explore-more-${activeWaterfallTab}`}
               products={visibleWaterfallProducts}
               value={activeWaterfallTab}
@@ -642,6 +729,34 @@ export function TopicLandingPage({
               data-page-slot="topic-landing-waterfall"
             />
           </div>
+        )}
+        {reviewsAfterProducts && reviewsSection}
+        {faq && faq.items.length > 0 && (
+          <section id="faq" className={styles.faq} aria-labelledby={faqHeadingId}>
+            <div className={styles.faqContainer}>
+              <h2 id={faqHeadingId} className={styles.faqHeading}>{faq.title}</h2>
+              <Accordion>
+                {faq.items.map(({ id, question, answer }) => (
+                  <AccordionItem key={id} value={id}>
+                    <AccordionTrigger>{question}</AccordionTrigger>
+                    <AccordionContent><p>{answer}</p></AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </section>
+        )}
+        {relatedKeywords && relatedKeywords.items.length > 0 && (
+          <section className={styles.relatedKeywords} aria-labelledby={relatedKeywordsHeadingId}>
+            <div className={styles.relatedKeywordsContainer}>
+              <h2 id={relatedKeywordsHeadingId} className={styles.relatedKeywordsHeading}>{relatedKeywords.title}</h2>
+              <ul className={styles.relatedKeywordsList} role="list">
+                {relatedKeywords.items.map((keyword) => (
+                  <li key={keyword}><Tag mode={relatedKeywords.mode}>{keyword}</Tag></li>
+                ))}
+              </ul>
+            </div>
+          </section>
         )}
       </main>
 

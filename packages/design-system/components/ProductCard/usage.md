@@ -6,7 +6,7 @@
 
 ## Storybook 预览
 
-保留 Docs、PC、Mobile。PC 与 Mobile 使用同一组件，通过 Controls 切换 presentation、surface 和 addButtonDisabled，并编辑商品字段。属性和选项使用英文，说明使用中文。
+保留 Docs、Properties、PC、Mobile。通过 Properties 切换 presentation、surface 和 availability，并编辑商品字段。
 
 长内容、销量自适应、形态矩阵等边界场景保留为隐藏测试。
 
@@ -26,7 +26,7 @@
 
 ## 背景与属性
 
-surface 默认 plain，去除外部内边距。card 适合背景上的商品卡片，保留 2px 内边距。
+surface 默认 plain，去除外部内边距。card 适合背景上的商品卡片，保留 2px 内边距，商品图使用白底。
 
 - 必填：href、title、priceCurrent。
 - image 与 imageAlt 配套；提供图片时必须提供替代文本。
@@ -35,7 +35,7 @@ surface 默认 plain，去除外部内边距。card 适合背景上的商品卡�
 - priceOriginal 用于划线原价，unitPrice 用于单位或组合价格。
 - ranking、rating、ratingCount、soldCount 用于排行、评分及销量；空间不足时隐藏无法完整显示的销量。
 - promotions 和 countdown 用于优惠及活动倒计时。
-- onAddToCart 省略时隐藏加购按钮；addButtonDisabled 禁用按钮，addButtonAriaLabel 提供无障碍名称。
+- 加购按钮在商品有货且提供 onAddToCart 时显示。addButtonAriaLabel 提供无障碍名称。
 
 ```tsx
 <ProductCard
@@ -47,14 +47,13 @@ surface 默认 plain，去除外部内边距。card 适合背景上的商品卡�
   priceOriginal="$19.99"
   presentation="rich"
   surface="plain"
-  addButtonDisabled={false}
   onAddToCart={() => addToCart(product.id)}
 />
 ```
 
 ## 加购按钮
 
-rich、minimal 的按钮位于图片右下角，compact 位于价格旁。独立按钮 ProductCardAddButton 使用 disabled 属性禁用；卡片内按钮使用 addButtonDisabled。
+rich、minimal 的按钮位于图片右下角，compact 位于价格旁。独立按钮 ProductCardAddButton 支持 disabled。
 
 Mobile 按钮视觉尺寸 40×40、图标 22px；PC 为 42×42、图标 24px；指针目标至少 44×44。PC 悬停及按下时使用强调红与白色图标。图片上的按钮背景不随页面明暗主题变化。
 

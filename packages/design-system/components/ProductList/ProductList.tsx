@@ -140,7 +140,7 @@ export function ProductList(props: ProductListProps) {
     const container = containerRef.current;
     if (!container || layout !== "rail" || leadingContent) return;
     const updateColumns = () => {
-      const width = container.getBoundingClientRect().width;
+      const width = parseFloat(getComputedStyle(container).width);
       const columns = width < 1024 ? 0 : width < 1200 ? 4 : width <= 1280 ? 5 : width <= 1440 ? 6 : width <= 1680 ? 7 : 8;
       container.dataset.railColumns = String(columns);
       container.style.setProperty("--product-list-columns", String(columns));
@@ -201,7 +201,10 @@ export function ProductList(props: ProductListProps) {
     if (headingAlign !== "center" || layout !== "rail" || !frame || !media) return;
     const updateArrowPosition = () => {
       const imageRect = media.getBoundingClientRect();
-      frame.style.setProperty("--rail-arrow-top", `${imageRect.top - frame.getBoundingClientRect().top + imageRect.height / 2}px`);
+      const frameRect = frame.getBoundingClientRect();
+      const scale = frameRect.width > 0 && frame.offsetWidth > 0 ? frameRect.width / frame.offsetWidth : 1;
+      const arrowTop = (imageRect.top - frameRect.top + imageRect.height / 2) / scale;
+      frame.style.setProperty("--rail-arrow-top", `${arrowTop}px`);
     };
     updateArrowPosition();
     const observer = new ResizeObserver(updateArrowPosition);
