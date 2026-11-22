@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { Skeleton } from "@yami/design-system";
 import styles from "./component-docs-template.module.css";
 
 const frameMarkup = "<!doctype html><html><head></head><body></body></html>";
@@ -20,7 +21,9 @@ export function ComponentDocsPreview({ mode = "viewport", children, name, locale
 
 function ViewportPreview({ children, name, locale, previewBackground, viewportWidth, fullWidth, fillContentWidth }: PreviewProps) {
   const [frameDocument, setFrameDocument] = useState<Document | null>(null);
-  const [leadReady, setLeadReady] = useState(false);
+  const [styledFrame, setStyledFrame] = useState<{ document: Document; status: "ready" | "error" }>();
+  const status = styledFrame?.document === frameDocument ? styledFrame.status : "loading";
+  const isLead = name === "lead";
   const viewportRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -38,23 +41,97 @@ function ViewportPreview({ children, name, locale, previewBackground, viewportWi
   }, [fullWidth, viewportWidth]);
 
   useLayoutEffect(() => {
+    const frame = frameRef.current;
+    if (!frameDocument || !frame) return;
+
+    const owner = frame.ownerDocument;
+    const root = owner.documentElement;
+    const head = frameDocument.head;
+    const base = frameDocument.createElement("base");
+    base.href = owner.baseURI;
+    base.target = "_parent";
+    head.prepend(base);
+    frameDocument.body.classList.add(styles.frameBody);
+
+    let stylesheetVersion = 0;
+    let copies = new Map<Element, { node: Element; loaded: Promise<boolean> }>();
+    const syncStyles = () => {
+      const next = new Map(Array.from(owner.head.querySelectorAll('style, link[rel="stylesheet"]'), (source) => {
+        const existing = copies.get(source);
+        if (existing?.node.isEqualNode(source)) return [source, existing] as const;
+
+        const node = source.cloneNode(true) as Element;
+        const loaded = node.tagName === "LINK" ? new Promise<boolean>((resolve) => {
+          node.addEventListener("load", () => resolve(true), { once: true });
+          node.addEventListener("error", () => resolve(false), { once: true });
+        }) : Promise.resolve(true);
+        return [source, { node, loaded }] as const;
+      }));
+
+      // Keep loaded links in place when Storybook adds or updates another head node.
+      for (const [source, copy] of copies) {
+        if (next.get(source) !== copy) copy.node.remove();
+      }
+      let sibling = base.nextSibling;
+      for (const { node } of next.values()) {
+        if (node !== sibling) head.insertBefore(node, sibling);
+        sibling = node.nextSibling;
+      }
+      copies = next;
+
+      const version = ++stylesheetVersion;
+      void Promise.all(Array.from(copies.values(), ({ loaded }) => loaded)).then(async (results) => {
+        if (version !== stylesheetVersion) return;
+        const loaded = results.every(Boolean);
+        if (loaded && isLead) {
+          // Resolve the fonts used by the preview before releasing the mobile Docs skeleton.
+          frameDocument.body.getBoundingClientRect();
+          await frameDocument.fonts.ready;
+        }
+        if (version !== stylesheetVersion) return;
+        const status = loaded ? "ready" : "error";
+        setStyledFrame(current => current?.document === frameDocument && current.status === status
+          ? current
+          : { document: frameDocument, status });
+      });
+    };
+    const syncTheme = () => {
+      const frameRoot = frameDocument.documentElement;
+      frameRoot.lang = root.lang;
+      frameRoot.dir = root.dir;
+      frameRoot.dataset.theme = root.dataset.theme ?? "light";
+      frameRoot.classList.toggle("dark", root.classList.contains("dark"));
+    };
+    syncTheme();
+    syncStyles();
+
+    const stylesObserver = new MutationObserver(syncStyles);
+    stylesObserver.observe(owner.head, { childList: true, subtree: true, characterData: true });
+    const themeObserver = new MutationObserver(syncTheme);
+    themeObserver.observe(root, { attributes: true, attributeFilter: ["class", "lang", "dir", "data-theme"] });
+    return () => {
+      stylesheetVersion++;
+      stylesObserver.disconnect();
+      themeObserver.disconnect();
+      base.remove();
+      for (const { node } of copies.values()) node.remove();
+    };
+  }, [frameDocument, isLead]);
+
+  useLayoutEffect(() => {
     const viewport = viewportRef.current;
     const frame = frameRef.current;
     const content = contentRef.current;
     if (!frameDocument || !viewport || !frame || !content) return;
 
-    const owner = frame.ownerDocument;
-    const root = owner.documentElement;
-    const base = frameDocument.createElement("base");
-    base.href = owner.baseURI;
-    base.target = "_parent";
-    let active = true;
-    let awaitingLeadStyles = name === "lead";
-    let stylesheetVersion = 0;
+    frameDocument.body.style.background = previewBackground ?? "";
+    if (status !== "ready") return;
+
+    const docsWindow = frame.ownerDocument.defaultView;
     const resize = () => {
       const width = viewport.clientWidth;
       if (fullWidth === true && !viewportWidth) {
-        const desktop = owner.defaultView?.matchMedia("(min-width: 1024px)").matches;
+        const desktop = docsWindow?.matchMedia("(min-width: 1024px)").matches;
         frame.style.width = desktop ? `${Math.max(width, 1024)}px` : "var(--breakpoints-mobile)";
       }
       if (!fullWidth) content.style.maxWidth = `${width}px`;
@@ -70,76 +147,38 @@ function ViewportPreview({ children, name, locale, previewBackground, viewportWi
         frame.style.transform = `scale(${scale})`;
       }
     };
-    const syncStyles = () => {
-      const styles = Array.from(
-        owner.head.querySelectorAll('style, link[rel="stylesheet"]'),
-        (node) => node.cloneNode(true) as HTMLElement,
-      );
-      if (awaitingLeadStyles) {
-        const version = ++stylesheetVersion;
-        // The lead preview can reflow again once the cloned stylesheets and fonts load.
-        const loads = styles.filter((node) => node.tagName === "LINK").map((link) =>
-          new Promise<void>((resolve) => {
-            link.addEventListener("load", () => resolve(), { once: true });
-            link.addEventListener("error", () => resolve(), { once: true });
-          }),
-        );
-        void Promise.all(loads).then(async () => {
-          if (!active || version !== stylesheetVersion) return;
-          resize();
-          await frameDocument.fonts.ready;
-          if (!active || version !== stylesheetVersion) return;
-          resize();
-          awaitingLeadStyles = false;
-          setLeadReady(true);
-        });
-      }
-      frameDocument.head.replaceChildren(base, ...styles);
-    };
-    const syncTheme = () => {
-      const frameRoot = frameDocument.documentElement;
-      frameRoot.lang = root.lang;
-      frameRoot.dir = root.dir;
-      frameRoot.dataset.theme = root.dataset.theme ?? "light";
-      frameRoot.classList.toggle("dark", root.classList.contains("dark"));
-    };
-    frameDocument.body.classList.add(styles.frameBody);
-    frameDocument.body.style.background = previewBackground ?? "";
-    syncTheme();
-    syncStyles();
     resize();
 
-    const stylesObserver = new MutationObserver(syncStyles);
-    stylesObserver.observe(owner.head, { childList: true, subtree: true, characterData: true });
-    const themeObserver = new MutationObserver(syncTheme);
-    themeObserver.observe(root, { attributes: true, attributeFilter: ["class", "lang", "dir", "data-theme"] });
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(viewport);
     resizeObserver.observe(content);
-    if (fullWidth) owner.defaultView?.addEventListener("resize", resize);
+    if (fullWidth) docsWindow?.addEventListener("resize", resize);
     return () => {
-      active = false;
-      stylesObserver.disconnect();
-      themeObserver.disconnect();
       resizeObserver.disconnect();
-      if (fullWidth) owner.defaultView?.removeEventListener("resize", resize);
+      if (fullWidth) docsWindow?.removeEventListener("resize", resize);
     };
-  }, [frameDocument, fullWidth, name, previewBackground, viewportWidth]);
+  }, [frameDocument, fullWidth, previewBackground, status, viewportWidth]);
 
   const label = locale === "zh" ? "示例预览" : "Example preview";
   return <>
-    <div className={styles.previewViewport} ref={viewportRef} data-full-width={fullWidth === true ? "" : undefined} style={{ background: previewBackground }}>
+    <div className={styles.previewViewport} ref={viewportRef} data-full-width={fullWidth === true ? "" : undefined}
+      aria-busy={status === "loading" || undefined} style={{ background: previewBackground }}>
       <iframe
         className={styles.previewFrame}
         ref={frameRef}
         title={`${label}${name ? ` · ${name}` : ""}`}
-        style={{ width: fullWidth === "fluid" ? `min(100%, ${viewportWidth ?? "100%"})` : viewportWidth }}
+        style={{ width: fullWidth === "fluid" ? `min(100%, ${viewportWidth ?? "100%"})` : viewportWidth,
+          visibility: status === "ready" ? undefined : "hidden" }}
         height={252}
         srcDoc={frameMarkup}
-        loading={name === "lead" ? "eager" : "lazy"}
-        data-docs-preview-pending={name === "lead" && !leadReady ? "" : undefined}
+        loading={isLead ? "eager" : "lazy"}
+        data-docs-preview-pending={isLead && status === "loading" ? "" : undefined}
         onLoad={(event) => setFrameDocument(event.currentTarget.contentDocument)}
       />
+      {status === "loading" && <Skeleton className={styles.previewPlaceholder} />}
+      {status === "error" && <div className={styles.previewError} role="status">
+        {locale === "zh" ? "预览样式加载失败，请刷新页面重试。" : "Preview styles failed to load. Refresh the page to try again."}
+      </div>}
     </div>
     {frameDocument && createPortal(
       <div ref={contentRef} className={`${styles.page} ${styles.frameContent}`} data-full-width={fullWidth ? "" : undefined}>
