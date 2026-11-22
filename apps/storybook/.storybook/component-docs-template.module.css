@@ -26,7 +26,10 @@
 .example { border: var(--stroke-default) solid var(--border-default); border-radius: var(--radius-surface-default); overflow: hidden; }
 .preview, .frameBody { background: var(--yami-docs-preview-background); }
 .preview { display: flow-root; }
-.previewViewport { display: flex; justify-content: center; overflow: clip; }
+.previewViewport { position: relative; display: flex; justify-content: center; overflow: clip; }
+.previewPlaceholder, .previewError { position: absolute; inset: 0; margin: auto; }
+.previewPlaceholder { inline-size: min(40%, 240px); block-size: var(--space-300); }
+.previewError { display: grid; place-items: center; padding: var(--space-200); color: var(--text-secondary); text-align: center; }
 .previewFrame { display: block; flex: none; width: 100vw; max-width: none; border: 0; }
 .previewViewport[data-full-width] { position: relative; min-block-size: 252px; }
 .previewViewport[data-full-width] .previewFrame { position: absolute; transform-origin: top left; }

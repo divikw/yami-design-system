@@ -535,6 +535,40 @@ test("automatic Docs previews follow the Storybook window and fixed previews fol
   }
 });
 
+test("viewport previews keep unstyled content hidden while styles load", async () => {
+  const host = document.createElement("div");
+  const source = document.createElement("link");
+  source.rel = "stylesheet";
+  source.href = "data:text/css,.preview-style-test%7Bcolor%3Ared%7D";
+  document.head.append(source);
+  document.body.append(host);
+  const root = createRoot(host);
+  const clone = source.cloneNode(true) as HTMLLinkElement;
+  clone.removeAttribute("href");
+  const cloneStyle = vi.spyOn(source, "cloneNode").mockReturnValue(clone);
+
+  try {
+    flushSync(() => root.render(<ComponentDocsPreview locale="en">
+      <span className="preview-style-test">Preview</span>
+    </ComponentDocsPreview>));
+    const frame = host.querySelector("iframe")!;
+    await expect.poll(() => clone.isConnected).toBe(true);
+    expect(getComputedStyle(frame).visibility).toBe("hidden");
+    expect(host.querySelector('[data-slot="skeleton"]')).not.toBeNull();
+
+    clone.href = source.href;
+    await expect.poll(() => getComputedStyle(frame).visibility).toBe("visible");
+    const example = frame.contentDocument!.querySelector(".preview-style-test")!;
+    expect(getComputedStyle(example).color).toBe("rgb(255, 0, 0)");
+    expect(host.querySelector('[data-slot="skeleton"]')).toBeNull();
+  } finally {
+    cloneStyle.mockRestore();
+    root.unmount();
+    source.remove();
+    host.remove();
+  }
+});
+
 test("standalone previews follow the Docs viewport while keeping their content inside the example", async () => {
   const host = document.createElement("div");
   const originalViewport = { width: innerWidth, height: innerHeight };
