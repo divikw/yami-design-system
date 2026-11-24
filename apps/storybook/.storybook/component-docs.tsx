@@ -34,7 +34,7 @@ import { TooltipDocsPage } from "./tooltip-docs";
 import { FieldDocsPage } from "./field-docs";
 import { HeaderDocsPage } from "./header-docs";
 import { TabBarDocsPage } from "./tab-bar-docs";
-import { HorizontalScrollListDocsPage, ProductCardDocsPage, ProductListDocsPage } from "./product-display-docs";
+import { CollectionCardDocsPage, HorizontalScrollListDocsPage, ProductCardDocsPage, ProductListDocsPage } from "./product-display-docs";
 import { DropdownMenuDocsPage } from "./dropdown-menu-docs";
 import { DrawerDocsPage } from "./drawer-docs";
 import { DividerDocsPage } from "./divider-docs";
@@ -73,6 +73,7 @@ type DocsNeighbor = { name: string; path: string };
 type DocsNeighbors = { id: string; previous?: DocsNeighbor; next?: DocsNeighbor };
 const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { dropdownmenu: DropdownMenuDocsPage, alert: AlertDocsPage, toast: ToastDocsPage, navigationmenu: NavigationMenuDocsPage, progress: ProgressDocsPage, combobox: ComboboxDocsPage, spinner: SpinnerDocsPage, skeleton: SkeletonDocsPage, emptystate: EmptyStateDocsPage, slider: SliderDocsPage, textarea: TextareaDocsPage, tooltip: TooltipDocsPage, field: FieldDocsPage, header: HeaderDocsPage, tabbar: TabBarDocsPage, drawer: DrawerDocsPage, divider: DividerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
 customDocsPages.horizontalscrolllist = HorizontalScrollListDocsPage;
+customDocsPages.collectioncard = CollectionCardDocsPage;
 customDocsPages.productcard = ProductCardDocsPage;
 customDocsPages.productlist = ProductListDocsPage;
 

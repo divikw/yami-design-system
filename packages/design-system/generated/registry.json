@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "f1fcdddd12f56615e46f62cc542eb752349afeffd596dd2767487b3789b60873"
+      "digest": "d1f02d873364bd841f6f785da4a7a02c8cbdc6bbd2ffb507f8d679b293795db6"
     },
     {
       "name": "accordion",
@@ -147,6 +147,15 @@
       "digest": "2786a8d2468a3f77b63ae91035d8044d99d65ae2b25c16fb373b72c0cc2389a6"
     },
     {
+      "name": "collection-card",
+      "title": "CollectionCard",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/collection-card.json",
+      "digest": "7983027a18eaf4a554570f096e8f2d3ebc1982de89ceb4927cbb189a1c7add0a"
+    },
+    {
       "name": "combobox",
       "title": "Combobox",
       "type": "component",
@@ -160,9 +169,9 @@
       "title": "Coupon",
       "type": "component",
       "status": "experimental",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "path": "registry-items/coupon.json",
-      "digest": "9f85a4826814d600c5b2c91e88d111c2c8a894ddc0718d66bc84d0c89375b86e"
+      "digest": "bdeae1a076f3c4af38ef7f9ed97d24cdfc1c86ed49e4d4dda183aa9df7a2ea5f"
     },
     {
       "name": "dialog",
@@ -252,7 +261,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "4342e56b11f27a5b3b5b16a2f8cf9cc80f4f1de0de310b17ff757d87e5e16ec1"
+      "digest": "65227bdd47bf88ead4a471472595799e4188e1f912d68cf5ab771cc81ffe3610"
     },
     {
       "name": "horizontal-scroll-list",
@@ -333,7 +342,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "aa4a00e249dbe046bca854bb43c26190cda7380576478d802f319c6b026cb59f"
+      "digest": "d4a2861f59f38d2712633a0cb677e90a84e01b18e0a541d46e44c13d69dbed5c"
     },
     {
       "name": "product-media-gallery",
@@ -387,7 +396,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "d7d493e2652390019023d3b6e1a6af0fa47fd27c7e3770c6c4fb7453fbb8ea32"
+      "digest": "15616336f9536265ac63f0f87404ae9fef19862499e3729e4be7b0794f489800"
     },
     {
       "name": "section-banner",
@@ -504,7 +513,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "3e66ed5e0e508d9d0edb014dd8a3e648a3bfb726e4e78743d3fc5177d1b21bfb"
+      "digest": "41bb327b7d6a5c03c2b0064f2fdf5a6115e1536d4711caff6ef15c9abd8f34c0"
     },
     {
       "name": "theme-product-list",

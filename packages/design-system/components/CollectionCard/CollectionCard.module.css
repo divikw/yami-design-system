@@ -1,0 +1,40 @@
+a.card {
+  container-type: inline-size;
+  min-inline-size: min(320px, 100%);
+  aspect-ratio: auto;
+  box-shadow: none;
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+}
+
+.card > div {
+  height: auto;
+}
+
+a.card[data-product-layout="strip"] {
+  min-inline-size: var(--collection-strip-min-width, 320px);
+}
+
+/* Keep the banner's 8:9 canvas for the two-row grid. */
+.card[data-product-layout="grid"] > div {
+  min-height: calc(100cqi * 9 / 8);
+}
+
+a.card [data-slot="hero-banner-copy"] {
+  padding-block-start: var(--space-100);
+}
+
+.card [data-slot="hero-banner-product"] {
+  --background-primary: var(--color-white-1000);
+  --fill-skeleton: var(--color-white-1000);
+  position: relative;
+}
+
+.card [data-slot="hero-banner-product"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--stroke-thick) solid var(--color-white-1000);
+  border-radius: inherit;
+  pointer-events: none;
+}

@@ -1,0 +1,233 @@
+[
+  {
+    "id": "1194226491",
+    "category": "makeup",
+    "brand": "Lilybyred",
+    "en": "Bloody Liar Coating Tint 02 Sweet Rose Apple",
+    "zh": "镜面唇釉 #02 Sweet Rose Apple",
+    "image": "https://cdn.yamibuy.net/item/70a3b2ff1ba3bfa320aa2e8072e5394b_300x300.webp",
+    "slug": "lilybyred-bloody-liar-coating-tint-26ad-02-sweet-rose-apple",
+    "price": "$12.19",
+    "originalPrice": "$23.39"
+  },
+  {
+    "id": "1194337511",
+    "category": "makeup",
+    "brand": "CLIO",
+    "en": "Crystal Glam Tint #36 Tender Fig",
+    "zh": "晶透水光唇釉 #36 Tender Fig",
+    "image": "https://cdn.yamibuy.net/item/8352703a5223980f08d54a4376a92e48_300x300.webp",
+    "slug": "crystal-glam-tint-36-fig-flesh-0-12-oz",
+    "price": "$14.99",
+    "originalPrice": "$16.99"
+  },
+  {
+    "id": "1023140441",
+    "category": "makeup",
+    "brand": "3CE",
+    "en": "Blur Water Tint #Double Wind",
+    "zh": "柔雾水感唇釉 Double Wind",
+    "image": "https://cdn.yamibuy.net/item/56d638d9c9911ede028c39c77be1afdf_300x300.webp",
+    "slug": "blur-water-tint-double-wind-4-6g",
+    "price": "$13.49",
+    "originalPrice": "$15.00"
+  },
+  {
+    "id": "1022190081",
+    "category": "moisturize",
+    "brand": "SKIN1004",
+    "en": "Centella Ampoule",
+    "zh": "马达加斯加积雪草安瓶 100 ml",
+    "image": "https://cdn.yamibuy.net/item/350c263b919448f7c13eae500a1242cf_300x300.webp",
+    "slug": "skin1004-madagascar-centella-ampoule-100ml",
+    "price": "$17.59",
+    "originalPrice": "$24.50"
+  },
+  {
+    "id": "1022190061",
+    "category": "cleanse",
+    "brand": "SKIN1004",
+    "en": "Centella Ampoule Foam",
+    "zh": "积雪草安瓶洁面泡沫 125 ml",
+    "image": "https://cdn.yamibuy.net/item/838b9b53eaee8020f71c57d48ab2db3a_300x300.webp",
+    "slug": "skin1004-madagascar-centella-ampoule-foam-125ml",
+    "price": "$12.19",
+    "originalPrice": "$15.00"
+  },
+  {
+    "id": "1022190131",
+    "category": "moisturize",
+    "brand": "SKIN1004",
+    "en": "Tone Brightening Capsule Ampoule",
+    "zh": "积雪草透亮胶囊安瓶 100 ml",
+    "image": "https://cdn.yamibuy.net/item/34d04925589b7c2995997e60dd559751_300x300.webp",
+    "slug": "skin1004-madagascar-centella-tone-brightening-capsule-ampoule-100ml",
+    "price": "$15.99",
+    "originalPrice": "$24.50"
+  },
+  {
+    "id": "1022503211",
+    "category": "moisturize",
+    "brand": "SKIN1004",
+    "en": "Centella Hyalu-Cica First Ampoule",
+    "zh": "玻尿酸积雪草安瓶 100 ml",
+    "image": "https://cdn.yamibuy.net/item/b08eca74ad1435a8391802409254b6ba_300x300.webp",
+    "slug": "madagascar-centella-hyalu-cica-first-ampoule-100ml",
+    "price": "$18.99",
+    "originalPrice": "$20.00"
+  },
+  {
+    "id": "1022431511",
+    "category": "sun",
+    "brand": "SKIN1004",
+    "en": "Centella Water-Fit Sun Serum, 50 ml",
+    "zh": "积雪草玻尿酸防晒精华 50 ml",
+    "image": "https://cdn.yamibuy.net/item/ccf569938cb9327aa09493796b17f64a_300x300.webp",
+    "slug": "skin1004-madagascar-centella-hyalu-cica-water-fit-sun-serum-50ml",
+    "price": "$13.59",
+    "originalPrice": "$18.00"
+  },
+  {
+    "id": "1180045951",
+    "category": "sun",
+    "brand": "SKIN1004",
+    "en": "Centella Water-Fit Sun Serum, 100 ml",
+    "zh": "积雪草玻尿酸防晒精华 100 ml",
+    "image": "https://cdn.yamibuy.net/item/8e3b01f61f5d5997f7ddae8b308b7255_300x300.webp",
+    "slug": "skin1004-madagascar-centella-hyalu-cica-water-fit-sun-serum-100ml",
+    "price": "$22.19",
+    "originalPrice": "$29.29"
+  },
+  {
+    "id": "1022685961",
+    "category": "sun",
+    "brand": "Torriden",
+    "en": "Dive In Watery Sun Serum",
+    "zh": "DIVE-IN 水感防晒精华",
+    "image": "https://cdn.yamibuy.net/item/7ff5c4a9f6e222d2f1339524bed0bd61_300x300.webp",
+    "slug": "dive-in-watery-sun-serum",
+    "price": "$17.24",
+    "originalPrice": "$29.00"
+  },
+  {
+    "id": "5196078061",
+    "category": "sun",
+    "brand": "Numbuzin",
+    "en": "No.3 No Filter Tone-Up Sun Serum #01 Blur Matte",
+    "zh": "3 号柔焦润色防晒精华 #01",
+    "image": "https://cdn.yamibuy.net/item/d45bd3e6d57a68860a1e47d99ae622eb_300x300.webp",
+    "slug": "no-3-no-filter-tone-up-sun-serum-spf50-pa-01-blur-matte-suit-for-oil-skin-50ml-1-69-fl-oz-beige-tinted-pore-blurring-sunscreen-primer-with-centella-ceramide-panthenol-soft-matte-finish",
+    "price": "$14.39",
+    "originalPrice": "$17.99"
+  },
+  {
+    "id": "1022138761",
+    "category": "tone",
+    "brand": "ROUND LAB",
+    "en": "1025 Dokdo Toner",
+    "zh": "1025 独岛爽肤水 200 ml",
+    "image": "https://cdn.yamibuy.net/item/b123d4c25cd35c97674d41bbc92070e8_300x300.webp",
+    "slug": "1025-dokdo-toner-200ml",
+    "price": "$12.49",
+    "originalPrice": "$15.99"
+  },
+  {
+    "id": "1030425321",
+    "category": "tone",
+    "brand": "Numbuzin",
+    "en": "No.9 NAD+ PDRN Glow Boosting Toner, 150 ml",
+    "zh": "9 号 NAD+ PDRN 光泽爽肤水 150 ml",
+    "image": "https://cdn.yamibuy.net/item/b54c10cabd414bfbb141aff5702f4118_300x300.webp",
+    "slug": "no-9-nad-pdrn-glow-boosting-toner-150ml",
+    "price": "$14.89",
+    "originalPrice": "$21.99"
+  },
+  {
+    "id": "1022215801",
+    "category": "tone",
+    "brand": "Beauty of Joseon",
+    "en": "Ginseng Essence Water",
+    "zh": "人参精华水 150 ml",
+    "image": "https://cdn.yamibuy.net/item/10fe9894a5db92a57f2da109bb79890a_300x300.webp",
+    "slug": "beauty-of-joesen-ginseng-essence-water-150ml",
+    "price": "$12.69",
+    "originalPrice": "$19.99"
+  },
+  {
+    "id": "1023242531",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "Juicy Lasting Tint #22 Pomelo Skin",
+    "zh": "果汁唇釉 #22 柚子色",
+    "image": "https://cdn.yamibuy.net/item/e26da8b05e62ec82cd9c4ff773db1c9d_300x300.webp",
+    "slug": "juicy-lasting-tint-22-pomelo-skin",
+    "price": "$6.99",
+    "originalPrice": "$13.69"
+  },
+  {
+    "id": "1194269981",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "The Juicy Lasting Tint #15 Bare Fig",
+    "zh": "果汁唇釉 #15 Bare Fig",
+    "image": "https://cdn.yamibuy.net/item/c4f6854f6778976d3ec15e877a17e01d_300x300.webp",
+    "slug": "rom-nd-the-juicy-lasting-tint-15-bare-fig",
+    "price": "$7.59",
+    "originalPrice": "$15.00"
+  },
+  {
+    "id": "1194270021",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "Juicy Lasting Tint #42 Soy Fig",
+    "zh": "果汁唇釉 #42 Soy Fig",
+    "image": "https://cdn.yamibuy.net/item/7725f7d93fa920e74f453adcade0a31e_300x300.webp",
+    "slug": "rom-nd-the-juicy-lasting-tint-42-soy-fig",
+    "price": "$7.59",
+    "originalPrice": "$15.00"
+  },
+  {
+    "id": "1194270001",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "The Juicy Lasting Tint #35 Earl Grey Lychee",
+    "zh": "果汁唇釉 #35 伯爵荔枝",
+    "image": "https://cdn.yamibuy.net/item/4d9083047867660fcdc54aa23459fda6_300x300.webp",
+    "slug": "rom-nd-the-juicy-lasting-tint-35-earl-grey-lychee",
+    "price": "$7.59",
+    "originalPrice": "$15.00"
+  },
+  {
+    "id": "1023657521",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "Blur Fudge Tint #13 Cooling Up",
+    "zh": "柔雾唇釉 #13 Cooling Up",
+    "image": "https://cdn.yamibuy.net/item/e30e87eed6cd1886c7b91b0876452f1f_300x300.webp",
+    "slug": "rom-nd-blur-fudge-tint-13-cooling-up",
+    "price": "$11.09",
+    "originalPrice": "$14.99"
+  },
+  {
+    "id": "1194270051",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "Lip Mate Pencil 04 Fig Breeze",
+    "zh": "唇线笔 #04 Fig Breeze",
+    "image": "https://cdn.yamibuy.net/item/939c818298b39970ddd6b7ce7c9fe119_300x300.webp",
+    "slug": "lip-mate-pencil-0-017oz-04-fig-breeze-matte-lip-liner",
+    "price": "$6.99",
+    "originalPrice": "$11.89"
+  },
+  {
+    "id": "1194270391",
+    "category": "makeup",
+    "brand": "rom&nd",
+    "en": "Han All Flat Brow #W1 Gentle Brown",
+    "zh": "扁头眉笔 #W1 自然棕",
+    "image": "https://cdn.yamibuy.net/item/142ab33f092fd642f44de2a22c4b1e12_300x300.webp",
+    "slug": "han-all-flat-brow-pencil-w1-gentle-brown-0-006-oz-natural-finish-long-lasting",
+    "price": "$7.59",
+    "originalPrice": "$10.80"
+  }
+]

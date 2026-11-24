@@ -121,6 +121,19 @@
   margin: 0;
 }
 
+/* Clamp rich copy separately so the disclosure stays reachable after linked text. */
+.descriptionText[data-rich="true"] {
+  display: block;
+  overflow: visible;
+}
+
+.description[data-expanded="false"] .descriptionText[data-rich="true"] > span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: inherit;
+}
+
 .descriptionToggle {
   position: relative;
   display: inline;

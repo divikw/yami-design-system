@@ -85,7 +85,7 @@ export function ThemeHero({
       const maxHeight = lineHeight * lineLimit + 1;
 
       if (descriptionString === null) {
-        setDescriptionCanExpand(element.scrollHeight > maxHeight);
+        setDescriptionCanExpand(copy.scrollHeight > maxHeight);
         setCollapsedDescription(null);
         return;
       }
@@ -225,12 +225,18 @@ export function ThemeHero({
               <div
                 ref={descriptionRef}
                 className={styles.descriptionText}
+                data-rich={descriptionString === null || undefined}
                 data-slot="theme-hero-description-text"
               >
                 <span
                   ref={descriptionCopyRef}
                   id={descriptionId}
                   data-slot="theme-hero-description-copy"
+                  onFocus={descriptionString === null && descriptionCanExpand ? (event) => {
+                    if (event.target.matches(":focus-visible")) {
+                      setDescriptionExpanded(true);
+                    }
+                  } : undefined}
                 >
                   {descriptionExpanded
                     ? description

@@ -4,6 +4,7 @@ import type {
   ThemeHeroProps,
   FooterProps,
   HeaderProps,
+  CollectionCardProps,
   ProductListItem,
   ProductListProps,
   ReviewListProps,
@@ -11,7 +12,7 @@ import type {
   TagMode,
   ThemeProductListProps,
 } from "@yami/design-system";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactElement } from "react";
 
 export interface TopicLandingPagePrimaryTab {
   value: string;
@@ -38,7 +39,9 @@ export type TopicLandingPageWaterfallProps = ProductListProps & {
   productsByTab?: Record<string, ProductListItem[]>;
   /** Use the catalog filter toolbar in place of the inline category tabs. */
   catalogFilters?: boolean;
-  /** Number of grid rows shown initially and added by each load-more action. */
+  /** Number of grid rows shown before loading more, overriding rowsPerPage for the first batch. */
+  initialRows?: number;
+  /** Number of grid rows added by each load-more action and shown initially by default. */
   rowsPerPage?: number;
 };
 
@@ -64,9 +67,12 @@ export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
   titleFontFamily?: "sans" | "serif";
   /** Hides online-only global chrome for self-contained offline delivery. */
   showChrome?: boolean;
+  /** Let the PC header scroll away and reveal it when scrolling toward the top. */
+  revealHeaderOnScrollUp?: boolean;
   activityHeader: ActivityPageHeaderProps;
   header: HeaderProps;
   hero: ThemeHeroProps;
+  couponSection?: { title: string; cards: readonly ReactElement[] };
   primaryTabs: TopicLandingPagePrimaryTabs;
   shortcutRail: ShortcutRailProps;
   standardRail?: ThemeProductListProps;
@@ -74,6 +80,12 @@ export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
   /** Place the review section after the product grid. */
   reviewsAfterProducts?: boolean;
   faq?: TopicLandingPageFaq;
+  relatedCollections?: {
+    title: string;
+    previousLabel: string;
+    nextLabel: string;
+    items: CollectionCardProps["item"][];
+  };
   relatedKeywords?: TopicLandingPageRelatedKeywords;
   productRail: TopicLandingPageProductRailProps;
   /** Optional brand collection rendered immediately after Popular Picks. */

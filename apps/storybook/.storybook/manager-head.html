@@ -1,6 +1,10 @@
 <script>
   const entryUrl = new URL(window.location.href);
-  if ((entryUrl.pathname === "/" || entryUrl.pathname === "/index.html") && !entryUrl.searchParams.get("path")) {
+  const storyPath = entryUrl.searchParams.get("path");
+  if (/^\/(?:docs|story)\/yami-pages-landing-page-collection-page-topic--(?:docs|pc|mobile)$/.test(storyPath)) {
+    entryUrl.searchParams.set("path", storyPath.replace("collection-page-topic--", "collection-page-brand--"));
+    window.history.replaceState(window.history.state, "", entryUrl);
+  } else if ((entryUrl.pathname === "/" || entryUrl.pathname === "/index.html") && !storyPath) {
     entryUrl.searchParams.set("path", "/story/yami-pages-ecommerce-home--pc");
     window.history.replaceState(window.history.state, "", entryUrl);
   }

@@ -90,7 +90,7 @@ ${docsLoadingHeightStyles()}
             : isComponent && entry.type === "story" ? [...(entry.tags ?? []), "!dev"] : entry.tags,
           title: flatComponent ? `YAMI/components/${sourceTitle.split("/").at(-1)}`
             : sourceTitle === undefined ? undefined : formatSidebarLabel(sourceTitle),
-          name: device ? name : formatSidebarLabel(name),
+          name: device || entry.tags?.includes("preserve-story-name") ? name : formatSidebarLabel(name),
         };
       });
     },

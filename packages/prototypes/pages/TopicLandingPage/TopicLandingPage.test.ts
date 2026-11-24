@@ -87,6 +87,17 @@ describe("TopicLandingPage Explore More pagination", () => {
     vi.unstubAllGlobals();
   });
 
+  it("omits coupon and related collection sections when they have no items", async () => {
+    await act(async () => root.render(createElement(TopicLandingPage, {
+      ...fixture,
+      showChrome: false,
+      couponSection: { title: "Empty coupons", cards: [] },
+      relatedCollections: { title: "Empty collections", previousLabel: "Previous", nextLabel: "Next", items: [] },
+    })));
+    expect(container.textContent).not.toContain("Empty coupons");
+    expect(container.textContent).not.toContain("Empty collections");
+  });
+
   it("initially shows at most 60 products and offers remaining products", async () => {
     await renderProducts(61);
     expect(visibleCount()).toBe(60);

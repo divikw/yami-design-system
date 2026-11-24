@@ -3,8 +3,9 @@
   min-width: 0;
   color: var(--text-primary);
   font-family: var(--font-family-ios);
-  cursor: pointer;
 }
+
+label.coupon { cursor: pointer; }
 
 .segment {
   position: relative;
@@ -71,5 +72,5 @@
 .coupon[data-disabled] .segment { background: var(--background-secondary); color: var(--text-disabled); }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .coupon:not([data-disabled]):hover .segment { background: var(--surface-secondary); }
+  label.coupon:not([data-disabled]):hover .segment { background: var(--surface-secondary); }
 }

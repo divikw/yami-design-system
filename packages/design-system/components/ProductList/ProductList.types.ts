@@ -150,7 +150,14 @@ type AtmosphericAppearanceProps = {
   backgroundImageMobile2x?: string;
 };
 
-export type ProductListProps = ProductListBaseProps &
+export type ProductListCustomRailProps = Omit<ProductListBaseProps, "products" | "layout"> &
+  StandardAppearanceProps & {
+    layout: "rail";
+    products?: never;
+    railItems: { id: string; content: ReactNode }[];
+  };
+
+export type ProductListProps = ProductListBaseProps & { railItems?: never } &
   (
     | StandardAppearanceProps
     | ThemedAppearanceProps

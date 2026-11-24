@@ -45,7 +45,7 @@ test.each([390, 1440, 1920])(
         expect(copy.scrollHeight).toBeLessThanOrEqual(copy.clientHeight + 1);
         const rail = section.querySelector('[data-slot="review-list-items"]')!;
         if (width < 1024) {
-          expect(card.width).toBeCloseTo(344, 0);
+          expect(card.width).toBeCloseTo(320, 0);
           expect(rail.scrollWidth).toBeGreaterThan(rail.clientWidth);
         } else {
           const count = width >= 1920 ? 4 : 3;

@@ -3,8 +3,8 @@
   "name": "Coupon",
   "category": "composite",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Controlled coupon selection card with a circular Checkbox, scope, optional validity, dashed divider and transparent ticket cutouts. Hosts own eligibility and saving.",
+  "version": "0.2.0",
+  "description": "Controlled coupon card with a claim button or a selection checkbox, scope and optional validity. The host manages claiming and checkout selection.",
   "figma": {
     "nodeId": null,
     "componentKey": null,
@@ -15,7 +15,8 @@
     "CouponProps"
   ],
   "composes": [
-    "Checkbox"
+    "Checkbox",
+    "Button"
   ],
   "props": {
     "title": {
@@ -32,7 +33,7 @@
     },
     "selected": {
       "type": "boolean",
-      "required": true
+      "required": false
     },
     "disabled": {
       "type": "boolean",
@@ -40,17 +41,21 @@
     },
     "onSelectedChange": {
       "type": "(selected: boolean) => void",
-      "required": true
+      "required": false
     },
     "className": {
       "type": "string",
+      "required": false
+    },
+    "claim": {
+      "type": "{ status: \"available\" | \"claiming\" | \"claimed\"; label: string; onClaim: () => void; useLink?: { href: string; label: string; target?: string } }",
       "required": false
     }
   },
   "rules": {
     "focus": {
       "ruleId": "focus-style",
-      "note": "Composes Checkbox keyboard focus; the whole label is clickable."
+      "note": "Selection uses whole-label Checkbox activation. Claiming uses a focusable Button."
     },
     "disabled": {
       "ruleId": "no-opacity-disabled",
@@ -116,9 +121,10 @@
     "keyboardNav": [
       "tab",
       "shift+tab",
-      "space"
+      "space",
+      "enter"
     ],
-    "ariaPattern": "Controlled Checkbox with a visible native label, title as accessible name and scope/validity as description."
+    "ariaPattern": "Selection uses a labeled Checkbox. The claim Button has localized state text and describes the coupon title and terms. Pending claims block activation. Claimed coupons may provide a native link to use the offer."
   },
   "dependencies": {
     "runtime": [
@@ -133,6 +139,6 @@
   ],
   "testing": {
     "interaction": "covered",
-    "rationale": "Storybook verifies full-label pointer activation, deselection and Space-key selection. Cart browser tests verify staged selection, saving and cancellation."
+    "rationale": "Storybook verifies selection by label, checkbox and keyboard, plus claim activation and pending/completed semantics. Cart tests cover saving and cancellation."
   }
 }

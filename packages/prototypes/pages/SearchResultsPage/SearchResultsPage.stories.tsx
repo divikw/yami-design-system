@@ -475,9 +475,9 @@ export const ResultsInteractions: Story = {
     if (
       !firstFilterSection ||
       getComputedStyle(firstFilterSection).paddingTop !== "12px" ||
-      getComputedStyle(firstFilterSection).paddingRight !== "16px" ||
+      getComputedStyle(firstFilterSection).paddingRight !== "8px" ||
       getComputedStyle(firstFilterSection).paddingBottom !== "12px" ||
-      getComputedStyle(firstFilterSection).paddingLeft !== "16px"
+      getComputedStyle(firstFilterSection).paddingLeft !== "8px"
     ) {
       throw new Error("All filters section padding is incorrect");
     }

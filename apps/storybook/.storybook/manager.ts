@@ -49,6 +49,7 @@ addons.setConfig({
       legacyActivityHeader: (entry) => entry.id !== "yami-components-navigation-activity-page-header--docs",
     },
     renderLabel: (entry) => {
+      if (entry.type === "story" && entry.tags?.includes("preserve-story-name")) return entry.name;
       if (entry.type === "docs" && entry.name === "Properties") return entry.name;
       if ("tags" in entry && entry.tags?.includes("component-device")) {
         return entry.type === "docs" ? "Docs" : entry.name;

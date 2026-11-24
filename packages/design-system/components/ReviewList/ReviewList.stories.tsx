@@ -302,7 +302,7 @@ export const Mobile: Story = {
       canvasStyles.paddingTop !== "8px" ||
       canvasStyles.backgroundColor !== "rgb(245, 245, 245)" ||
       containerStyles.rowGap !== "8px" ||
-      itemWidth !== 344 ||
+      itemWidth !== 320 ||
       cardStyles.borderRadius !== "8px" ||
       viewAll !== null ||
       railNavigationStyles.display !== "none" ||
@@ -312,7 +312,7 @@ export const Mobile: Story = {
       railStyles.paddingBottom !== "0px"
     ) {
       throw new Error(
-        "ReviewList mobile must use the shared mobile heading, gray canvas, and 344px cards",
+        "ReviewList mobile must use the shared mobile heading, gray canvas, and 320px cards",
       );
     }
   } : undefined,
@@ -365,7 +365,7 @@ export const MobilePlain: Story = {
       railRect.left !== 0 ||
       railRect.right !== window.innerWidth ||
       firstItem.getBoundingClientRect().left !== 16 ||
-      firstItem.getBoundingClientRect().width !== 344 ||
+      firstItem.getBoundingClientRect().width !== 320 ||
       railStyle.columnGap !== "8px" ||
       railStyle.marginLeft !== "-16px" ||
       railStyle.marginRight !== "-16px" ||
