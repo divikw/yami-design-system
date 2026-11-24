@@ -94,6 +94,7 @@
       "--button-disabled",
       "--color-amber-100",
       "--color-neutral-900",
+      "--color-white-1000",
       "--fill-tertiary",
       "--focus-ring",
       "--font-family-ios",
@@ -117,6 +118,7 @@
       "--product-card-add-surface-active-mobile",
       "--radius-component-default",
       "--radius-full",
+      "--space-025",
       "--space-050",
       "--space-100",
       "--stroke-default",
@@ -138,6 +140,10 @@
       "--fill-tertiary": {
         "property": "background-color",
         "selector": ".imageWrap"
+      },
+      "--color-white-1000": {
+        "property": "background-color",
+        "selector": ".root[data-surface=\"card\"] .imageWrap:has(.image)"
       },
       "--border-default": {
         "property": "color",
@@ -239,9 +245,13 @@
         "property": "line-height",
         "selector": ".priceOriginal"
       },
+      "--space-025": {
+        "property": "column-gap",
+        "selector": ".ratingRow, .ratingSoldRow"
+      },
       "--space-050": {
         "property": "gap",
-        "selector": ".badgeStack, .ratingSoldRow, .sold, .promotions"
+        "selector": ".badgeStack, .sold, .promotions"
       },
       "--space-100": {
         "property": "padding",
@@ -264,5 +274,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "ad0b3cdebc8278b41bcf8b72f0956a43b31c63dc585ee07aea85b8ffb3e536e8"
+  "contentDigest": "9605e3a575630773078de783ee2c55701296f618d77fc2d39d94727589c147e6"
 }

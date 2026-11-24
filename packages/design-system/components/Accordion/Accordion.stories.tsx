@@ -239,6 +239,7 @@ export const LongContent: Story = {
     await userEvent.click(trigger);
     const root = canvasElement.querySelector<HTMLElement>('[data-slot="accordion"]')!;
     await expect(root.scrollWidth).toBeLessThanOrEqual(root.clientWidth);
+    await expect(trigger).toHaveStyle({ fontSize: "14px", lineHeight: "20px" });
     await expect(canvasElement.querySelector('[data-slot="accordion-icon"]')).toHaveStyle({ width: "16px" });
   },
 };

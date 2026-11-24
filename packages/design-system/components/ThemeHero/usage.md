@@ -1,14 +1,20 @@
 # ThemeHero
 
-主题展示模块，组合标题、可展开说明、关键词标签和主题图片。Storybook 只提供 PC、Mobile 预览，默认不显示操作按钮。
+主题展示模块，组合标题、可展开说明、关键词标签和可选主题图片。默认不显示操作按钮。
 
 ## 内容
 
 标题建议控制在 PC 两行以内。说明默认在 PC 显示三行、Mobile 显示两行，超出后可通过展开和收起操作查看完整内容；使用 `descriptionExpandLabel` 和 `descriptionCollapseLabel` 提供本地化文案。
 
-`tags` 建议提供不超过三个关键词，以不可交互的 Badge 展示。`tagSize` 支持 sm、md，移动端统一使用 sm；`tagTone` 设置标签明暗样式。
+`tags` 建议提供不超过三个关键词，以不可交互的 Badge 展示。`tagSize` 支持 sm、md，移动端统一使用 sm。`tagTone` 设置标签明暗样式，带图时默认为 dark，无图时默认使用主题色。
 
 图片需提供原始宽高与有意义的替代文本。通过 `image.objectPosition` 设置焦点，保证不同尺寸下裁切合理。兼容性接口 `cta`、`secondaryCta` 仍可按需传入，默认示例不配置按钮。
+
+## 无图介绍 / Text-only introduction
+
+省略 `image` 即可显示随内容增高的单栏介绍。标题、说明和标签沿用同一套内容接口。
+
+Omit `image` for a single-column introduction that grows with its title, description and tags.
 
 ## 响应式布局
 

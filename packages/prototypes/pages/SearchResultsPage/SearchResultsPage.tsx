@@ -12,7 +12,6 @@ import {
 import {
   Button,
   FilterChip,
-  FilterChipCategoryMenu,
   FilterChipGroup,
   FilterChipMenu,
   Footer,
@@ -23,6 +22,12 @@ import {
 
 import styles from "./SearchResultsPage.module.css";
 import { AllFiltersDialog, type AllFiltersSortValue } from "./AllFiltersDialog";
+import {
+  ClearProductFiltersButton,
+  ProductCategoryFilter,
+  ProductFilterChevron,
+  ProductFilterToolbar,
+} from "./ProductFilterToolbar";
 import type {
   SearchResultsPageProps,
   SearchResultsRequestState,
@@ -30,22 +35,6 @@ import type {
 } from "./SearchResultsPage.types";
 
 const hotIcon = new URL("./assets/hot.svg", import.meta.url).href;
-const filterIcon = new URL(
-  "../../../design-system/assets/icons/action/filter.svg",
-  import.meta.url
-).href;
-const dropdownIcon = new URL(
-  "../../../design-system/assets/icons/system/arrow-down.svg",
-  import.meta.url
-).href;
-const expandIcon = new URL(
-  "../../../design-system/assets/icons/system/add.svg",
-  import.meta.url
-).href;
-const collapseIcon = new URL(
-  "../../../design-system/assets/icons/system/minus.svg",
-  import.meta.url
-).href;
 const fulfilledIcon = new URL(
   "../../../design-system/assets/logos/yami-icon-fill.svg",
   import.meta.url
@@ -392,40 +381,26 @@ export function SearchResultsPage({
             {filtersLoading ? (
               <FilterSkeleton widths={controlSkeletonWidths} />
             ) : (
-              <FilterChipGroup
+              <ProductFilterToolbar
                 className={styles.controlList}
                 data-search-results-control-list="true"
-              >
-                <div className={styles.filterControlMask}>
-                  <FilterChip
-                    className={styles.filterControl}
-                    data-search-results-filter-button="true"
-                    aria-label={copy.filtersButton}
-                    aria-haspopup="dialog"
-                    aria-controls={allFiltersOpen ? "all-filters" : undefined}
-                    selected={allFiltersOpen}
-                    leftIcon={
-                      <img src={filterIcon} alt="" width={16} height={16} />
-                    }
-                    onClick={() => setAllFiltersOpen(true)}
-                  >
-                    {copy.filtersButton}
-                  </FilterChip>
-                </div>
-
-                <FilterChipMenu
-                  className={styles.sortControl}
-                  label={copy.sortLabel}
-                  closeLabel={locale === "en" ? "Close sorting" : "关闭排序"}
-                  selectionMode="single"
-                  value={sort}
-                  onValueChange={(value) => {
+                filtersLabel={copy.filtersButton}
+                filtersOpen={allFiltersOpen}
+                onOpenFilters={() => setAllFiltersOpen(true)}
+                filterButtonClassName={styles.filterControl}
+                filterMaskClassName={styles.filterControlMask}
+                sort={{
+                  className: styles.sortControl,
+                  label: copy.sortLabel,
+                  closeLabel: locale === "en" ? "Close sorting" : "关闭排序",
+                  value: sort,
+                  onValueChange: (value) => {
                     const nextSort = value as SearchResultsSort;
                     if (!updateRequest({ sort: nextSort, page: 1 })) {
                       setLocalSort(nextSort);
                     }
-                  }}
-                  options={[
+                  },
+                  options: [
                     { label: copy.sortFeatured, value: "featured" },
                     { label: copy.sortBestSeller, value: "best-seller" },
                     { label: copy.sortPopularity, value: "popularity" },
@@ -434,18 +409,9 @@ export function SearchResultsPage({
                     { label: copy.sortNewest, value: "newest" },
                     { label: copy.sortPriceHigh, value: "price-high" },
                     { label: copy.sortPriceLow, value: "price-low" },
-                  ]}
-                  rightIcon={
-                    <img
-                      data-slot="search-results-dropdown-icon"
-                      src={dropdownIcon}
-                      alt=""
-                      width={12}
-                      height={12}
-                    />
-                  }
-                />
-
+                  ],
+                }}
+              >
                 <FilterChip
                   className={styles.fulfilledControl}
                   data-search-results-fulfilled-filter="true"
@@ -467,7 +433,7 @@ export function SearchResultsPage({
                 {copy.filterMenus.map((label) => {
                   if (label === (locale === "en" ? "Category" : "分类")) {
                     return (
-                      <FilterChipCategoryMenu
+                      <ProductCategoryFilter
                         key={label}
                         className={styles.menuControl}
                         label={label}
@@ -486,17 +452,6 @@ export function SearchResultsPage({
                         options={copy.categoryOptions}
                         clearLabel={copy.clearSelection}
                         applyLabel={copy.showResults(visibleResultCount)}
-                        rightIcon={
-                          <img
-                            data-slot="search-results-dropdown-icon"
-                            src={dropdownIcon}
-                            alt=""
-                            width={12}
-                            height={12}
-                          />
-                        }
-                        expandIcon={<img src={expandIcon} alt="" />}
-                        collapseIcon={<img src={collapseIcon} alt="" />}
                       />
                     );
                   }
@@ -546,30 +501,21 @@ export function SearchResultsPage({
                           value: option,
                         })
                       )}
-                      rightIcon={
-                        <img
-                          data-slot="search-results-dropdown-icon"
-                          src={dropdownIcon}
-                          alt=""
-                          width={12}
-                          height={12}
-                        />
-                      }
+                      rightIcon={<ProductFilterChevron />}
                     />
                   );
                 })}
 
                 {filterIds.length > 0 && (
-                  <button
+                  <ClearProductFiltersButton
                     className={styles.clear}
-                    data-slot="search-results-clear-filters"
-                    type="button"
+                    data-search-results-clear-filters="true"
                     onClick={() => setFilterIds([])}
                   >
                     {copy.clearFilters}
-                  </button>
+                  </ClearProductFiltersButton>
                 )}
-              </FilterChipGroup>
+              </ProductFilterToolbar>
             )}
           </section>
         </div>

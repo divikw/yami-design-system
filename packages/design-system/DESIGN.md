@@ -501,7 +501,7 @@ Inline disclosure extracted from ProductDetailPage's DetailDisclosure. / 从商�
 
 - Panels use shadcn/ui composition: `Accordion`, `AccordionItem`, `AccordionTrigger` and `AccordionContent`. The root uses Base UI's single expansion by default, `multiple` for simultaneous expansion, and `defaultValue` or controlled `value` / `onValueChange`.
 - `AccordionTrigger` includes Base UI Header (h3) internally. `disabled` on the root disables the group; on an item it disables that item. Disabled triggers keep a transparent background and use `--text-disabled` for text and icons.
-- Preserves the existing 16px title, 16px plus/minus icon, minimum 44px Web trigger and adjacent-panel separators. Semantic text/divider/disabled tokens adapt to Light and Dark; keyboard focus uses a 2px `--focus-ring` outline at 2px offset. No height animation or hover treatment.
+- Headings are 14px on Mobile and 16px from 1024px, with a 20px line height. The 16px plus/minus icon, minimum 44px Web trigger and adjacent-panel separators apply at all widths. Semantic text/divider/disabled tokens adapt to Light and Dark; keyboard focus uses a 2px `--focus-ring` outline at 2px offset. No height animation or hover treatment.
 - A native button controls a labelled content region. Long labels wrap and collapsed content leaves the focus order. Set `keepMounted` on Accordion to retain child state when collapsed. Page-specific mobile Drawer behavior remains host-owned.
 - Public exports: `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` and their Props types. Experimental, without an independent Figma binding. See [usage](./components/Accordion/usage.md).
 
@@ -730,7 +730,7 @@ Full-width theme storytelling module for a curated landing page.
 
 | Axis | Contract |
 | --- | --- |
-| **Composition** | Selectable heading and supporting copy sit beside semantic campaign artwork; the same source may repeat behind the module as a blurred decorative atmosphere. |
+| **Composition** | Selectable heading and supporting copy sit beside optional campaign artwork. Omit `image` for a compact, single-column introduction on a theme-aware surface. |
 | **Geometry** | Desktop is a flush 448px full-bleed band. Its centered 1440px two-column content container is flush vertically with 48px inline insets; the grid gap is excluded from each half-width track. |
 | **Responsive behavior** | Below 1024px, copy and artwork stack in DOM order while keeping the foreground image's intrinsic ratio. |
 | **Action** | One optional primary inverse Button follows the copy. The component does not introduce secondary actions or navigation chrome. |

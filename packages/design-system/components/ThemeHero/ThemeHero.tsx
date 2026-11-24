@@ -27,7 +27,7 @@ const DESCRIPTION_LINE_LIMIT = {
 
 /**
  * Theme storytelling hero with selectable copy, optional primary and secondary
- * actions, and a campaign image repeated as a blurred full-bleed atmosphere.
+ * actions and artwork. Without artwork it renders a compact introduction.
  */
 export function ThemeHero({
   title,
@@ -36,9 +36,9 @@ export function ThemeHero({
   descriptionCollapseLabel = "Less",
   tags,
   tagSize = "sm",
-  tagTone = "dark",
+  tagTone,
   image,
-  backgroundImageSrc = image.src,
+  backgroundImageSrc = image?.src,
   backgroundColor,
   cta,
   secondaryCta,
@@ -61,8 +61,9 @@ export function ThemeHero({
       ? String(description)
       : null;
   const imageColor = useImageBottomColor(
-    image.src,
+    image?.src ?? "",
     backgroundColor ?? "#000000",
+    Boolean(image),
   );
   const mobilePalette = heroBannerPalette(imageColor);
   const rootStyle = {
@@ -176,28 +177,29 @@ export function ThemeHero({
   return (
     <section
       {...rest}
-      className={cx(styles.root, className)}
-      style={rootStyle}
+      className={cx(styles.root, image ? styles.withImage : styles.intro, className)}
+      style={image ? rootStyle : style}
       data-slot="theme-hero"
-      data-mobile-foreground={mobilePalette.foreground}
+      data-mobile-foreground={image ? mobilePalette.foreground : undefined}
     >
-      <div
-        className={styles.atmosphere}
-        data-slot="theme-hero-atmosphere"
-        aria-hidden="true"
-      >
-        <img
-          src={backgroundImageSrc}
-          alt=""
-          loading="eager"
-          decoding="async"
-          fetchPriority="low"
-        />
-      </div>
-      <div
-        className={styles.scrim}
-        aria-hidden="true"
-      />
+      {image && (
+        <>
+          <div
+            className={styles.atmosphere}
+            data-slot="theme-hero-atmosphere"
+            aria-hidden="true"
+          >
+            <img
+              src={backgroundImageSrc}
+              alt=""
+              loading="eager"
+              decoding="async"
+              fetchPriority="low"
+            />
+          </div>
+          <div className={styles.scrim} aria-hidden="true" />
+        </>
+      )}
 
       <div className={styles.container} data-slot="theme-hero-container">
         <div className={styles.copy} data-slot="theme-hero-copy">
@@ -205,10 +207,12 @@ export function ThemeHero({
             className={styles.copyContent}
             data-slot="theme-hero-copy-content"
           >
-            <AdaptiveImageScrim
-              className={styles.mobileScrim}
-              data-slot="theme-hero-scrim"
-            />
+            {image && (
+              <AdaptiveImageScrim
+                className={styles.mobileScrim}
+                data-slot="theme-hero-scrim"
+              />
+            )}
             <h2 id={titleId} className={styles.title} data-slot="theme-hero-title">
               {title}
             </h2>
@@ -260,7 +264,8 @@ export function ThemeHero({
                     <Badge
                       className={styles.tagBadge}
                       size={tagSize}
-                      tone={tagTone}
+                      tone={tagTone ?? (image ? "dark" : undefined)}
+                      emphasis={image ? undefined : "secondary"}
                     >
                       {tag}
                     </Badge>
@@ -280,7 +285,7 @@ export function ThemeHero({
                     variant="primary"
                     form="inline"
                     size="md"
-                    inverse
+                    inverse={Boolean(image)}
                     data-action="primary"
                     disabled={cta.disabled}
                     aria-label={cta.ariaLabel}
@@ -299,7 +304,7 @@ export function ThemeHero({
                     variant="tertiary"
                     form="inline"
                     size="md"
-                    inverse
+                    inverse={Boolean(image)}
                     data-action="secondary"
                     disabled={secondaryCta.disabled}
                     aria-label={secondaryCta.ariaLabel}
@@ -314,22 +319,24 @@ export function ThemeHero({
           </div>
         </div>
 
-        <div className={styles.media} data-slot="theme-hero-media">
-          <img
-            ref={prepareProgressiveImage}
-            className={styles.image}
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined}
-            loading={imageLoading}
-            decoding="async"
-            fetchPriority={imageLoading === "eager" ? "high" : undefined}
-            onLoad={handleProgressiveImageLoad}
-            onError={handleProgressiveImageError}
-          />
-        </div>
+        {image && (
+          <div className={styles.media} data-slot="theme-hero-media">
+            <img
+              ref={prepareProgressiveImage}
+              className={styles.image}
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined}
+              loading={imageLoading}
+              decoding="async"
+              fetchPriority={imageLoading === "eager" ? "high" : undefined}
+              onLoad={handleProgressiveImageLoad}
+              onError={handleProgressiveImageError}
+            />
+          </div>
+        )}
       </div>
     </section>
   );

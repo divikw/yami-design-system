@@ -41,9 +41,10 @@ export interface ThemeHeroProps
   tags?: readonly string[];
   /** 关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。 */
   tagSize?: BadgeSize;
-  /** 标签明暗样式，默认 dark。 */
+  /** 标签明暗样式。带图时默认 dark，无图时默认使用主题色。 */
   tagTone?: BadgeTone;
-  image: ThemeHeroImage;
+  /** 主题图片。省略时显示纯文字介绍。 */
+  image?: ThemeHeroImage;
   /** 可选的模糊背景图片，默认使用主题图片。 */
   backgroundImageSrc?: string;
   /** 图片底边预采样颜色，用于移动端自适应遮罩。 */

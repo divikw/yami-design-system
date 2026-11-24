@@ -9,7 +9,7 @@ type ProductLocale = "zh" | "en";
 
 const meta = {
   id: "yami-components-commerce-productcard",
-  title: "YAMI/Modules/Commerce/Product Card",
+  title: "YAMI/Modules/Product Display/Product Card",
   component: ProductCard,
   decorators: [
     (Story, { args }) => (
@@ -34,7 +34,6 @@ const meta = {
   },
   args: {
     presentation: "rich",
-    addButtonDisabled: false,
     surface: "plain",
     image:
       "https://cdn.yamibuy.net/item/3ccf61fd74fd43320d647a1b8779a978_757x757.webp",
@@ -55,7 +54,6 @@ const meta = {
   },
   argTypes: {
     presentation: { options: ["rich", "minimal", "compact"], control: "radio", description: "展示形态：完整卡片、图片为主或横向商品行。" },
-    addButtonDisabled: { control: "boolean", description: "是否禁用卡片内的加购按钮。" },
     availability: { options: ["available", "sold-out", "delisted"], control: "radio", description: "库存状态；售完或下架时隐藏加购入口。" },
     surface: {
       options: ["card", "plain"],
@@ -208,7 +206,7 @@ export const Playground: Story = {
     const width = compact ? 480 : globals.viewport?.value === "yamiMobile" ? 152 : 200;
     return (
       <div style={{ width: `min(${width}px, 100%)` }}>
-        <ProductCard {...product} presentation={args.presentation} surface={args.surface} addButtonDisabled={args.addButtonDisabled} onAddToCart={() => {}} />
+        <ProductCard {...product} presentation={args.presentation} surface={args.surface} onAddToCart={() => {}} />
       </div>
     );
   },
@@ -356,10 +354,12 @@ export const AdaptiveSalesLabel: Story = {
     const wide = cardParts("wide-product-card");
     const narrow = cardParts("narrow-product-card");
     if (
-      getComputedStyle(wide.row).columnGap !== "2px" ||
-      getComputedStyle(wide.rating).columnGap !== "0px"
+      [wide, narrow].some(({ row, rating }) =>
+        getComputedStyle(row).columnGap !== "2px" ||
+        getComputedStyle(rating).columnGap !== "2px",
+      )
     ) {
-      throw new Error("ProductCard rating gaps must be 2px and 0px");
+      throw new Error("ProductCard rating and sales gaps must be 2px");
     }
     if (!isVisuallyInside(wide) || isVisuallyInside(narrow)) {
       throw new Error(
@@ -405,20 +405,13 @@ export const PresentationMatrix: Story = {
 
 export const DisabledAddButton: Story = {
   tags: ["!dev", "!autodocs"],
-  render: (_args, { globals }) => (
-    <div>
-      <ProductCardAddButton disabled />
-      {(["rich", "minimal", "compact"] as const).map((presentation) => (
-        <ProductCard key={presentation} {...getProduct(globals.locale)} presentation={presentation} addButtonDisabled onAddToCart={() => { throw new Error("Disabled quick add must not fire"); }} />
-      ))}
-    </div>
-  ),
+  render: () => <ProductCardAddButton disabled onClick={() => { throw new Error("Disabled quick add must not fire"); }} />,
   play: async ({ canvasElement }) => {
-    const buttons = canvasElement.querySelectorAll<HTMLButtonElement>("button");
-    if (buttons.length !== 4 || Array.from(buttons).some((button) => !button.disabled)) {
-      throw new Error("All ProductCard presentations must disable quick add");
+    const button = canvasElement.querySelector("button");
+    if (!button?.disabled) {
+      throw new Error("The standalone quick-add button must be disabled");
     }
-    buttons.forEach((button) => button.click());
+    button.click();
   },
 };
 

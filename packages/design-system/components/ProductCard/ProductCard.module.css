@@ -27,6 +27,10 @@
   border-radius: var(--radius-component-default);
 }
 
+.root[data-surface="card"] .imageWrap:has(.image) {
+  background-color: var(--color-white-1000);
+}
+
 .image {
   display: block;
   width: 100%;
@@ -343,7 +347,7 @@
 
 .ratingRow {
   flex: 0 0 auto;
-  gap: 0;
+  column-gap: var(--space-025);
   color: var(--text-primary);
 }
 

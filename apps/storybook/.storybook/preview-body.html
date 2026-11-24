@@ -1,0 +1,13 @@
+<script>
+  {
+    const query = new URLSearchParams(location.search);
+    const root = document.documentElement;
+    const globals = query.get("globals")?.split(";") ?? [];
+    root.dataset.yamiDocsLocale = globals.includes("locale:en") ? "en" : "zh";
+    if (query.get("viewMode") === "docs") {
+      root.dataset.yamiDocsEntry = "";
+      root.dataset.yamiDocsId = query.get("id") ?? "";
+      root.classList.toggle("dark", globals.includes("theme:dark"));
+    }
+  }
+</script>

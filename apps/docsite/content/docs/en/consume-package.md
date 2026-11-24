@@ -24,8 +24,8 @@ These are local candidates for the authorized environment. They are not publishe
 
 | Item | Current scope |
 | --- | --- |
-| Component package | `@yami/design-system@0.2.0-candidate.4` |
-| Companion MCP | `@yami/design-system-mcp@0.1.0-candidate.8`, bound to that exact component version |
+| Component package | `@yami/design-system@1.0.0-candidate.1` |
+| Companion MCP | `@yami/design-system-mcp@0.1.0-candidate.9`, bound to that exact component version |
 | Setup CLI (optional) | `yami-design-cli@0.1.0-candidate.1` |
 | Stable components | Button (including ButtonLink), Input, Card, ProductCard, ProductList, HeroBanner, ShortcutRail, Billboard |
 | Beta preview | `@yami/design-system/components/Header` (includes the sticky storefront header) |
@@ -62,8 +62,8 @@ Use the three verified tarballs from the consumer project root:
 ```bash
 npm install --save-dev ./.artifacts/yami-design-cli-0.1.0-candidate.1.tgz
 ./node_modules/.bin/yami-design-cli init \
-  --design-package ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz \
-  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz \
+  --design-package ./.artifacts/yami-design-system-1.0.0-candidate.1.tgz \
+  --mcp-package ./.artifacts/yami-design-system-mcp-0.1.0-candidate.9.tgz \
   --locale en --dry-run
 ```
 
@@ -82,8 +82,8 @@ The CLI does not modify application entry points, global resets, AGENTS.md, clie
 For manual setup, install the component package first, then add the paired MCP package as a development dependency. Run both commands from the consumer project root.
 
 ```bash
-npm install ./.artifacts/yami-design-system-0.2.0-candidate.4.tgz
-npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.8.tgz
+npm install ./.artifacts/yami-design-system-1.0.0-candidate.1.tgz
+npm install --save-dev ./.artifacts/yami-design-system-mcp-0.1.0-candidate.9.tgz
 ```
 
 Commit the consumer's `package.json` and lockfile together. Keep the original tarballs in the team's authorized artifact location. On a new machine or in CI, obtain and verify the same files, then place them at the paths recorded by the `file:` references. Use paths relative to the project so the layout can be reproduced on another machine.

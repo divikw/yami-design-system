@@ -5,7 +5,7 @@ import { DocsContext } from "@storybook/addon-docs/blocks";
 import { convert, ThemeProvider, themes } from "storybook/theming";
 import { expect, test, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import { Button, ButtonLink, Input, Pagination } from "@yami/design-system";
+import { Button, ButtonLink, Input, Pagination, ProductList } from "@yami/design-system";
 import { DialogExample } from "../../../packages/design-system/components/Dialog/examples";
 import { DrawerExample } from "../../../packages/design-system/components/Drawer/examples";
 import componentCatalog from "../../../packages/design-system/generated/catalog.json";
@@ -27,9 +27,13 @@ import { ComboboxDocsPage } from "../.storybook/combobox-docs";
 import { DividerDocsPage } from "../.storybook/divider-docs";
 import { ComponentDocsPreview } from "../.storybook/component-docs-preview";
 import { ComponentPropertiesPage } from "../.storybook/component-properties";
+import { headerProperties } from "../.storybook/header-properties";
+import { createHeaderCategories } from "../../../packages/design-system/components/Header/fixtures";
 import { alertDialogProperties } from "../.storybook/properties-examples";
+import { productCardProperties, productListProperties } from "../.storybook/product-display-properties";
 import { componentDocsName } from "../.storybook/component-docs-names";
-import { CodeBlock } from "../.storybook/component-docs-template";
+import { CodeBlock, DocsExampleCard } from "../.storybook/component-docs-template";
+import docsStyles from "../.storybook/component-docs-template.module.css";
 import "@yami/design-system/tokens.css";
 import "../.storybook/preview.css";
 
@@ -255,6 +259,140 @@ test("a primary ButtonLink keeps its button text color inside a docs preview", a
   } finally { root.unmount(); host.remove(); }
 });
 
+test("Docs underline spacing applies to prose while previews keep their own link styles", async () => {
+  const host = document.createElement("div");
+  host.className = docsStyles.page;
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    flushSync(() => root.render(<>
+      <p><a id="prose-link" href="#usage">Usage guide</a></p>
+      <DocsExampleCard locale="en"><a id="story-link" href="#details">Story link</a></DocsExampleCard>
+      <ComponentDocsPreview locale="en" mode="document">
+        <div style={{ textUnderlineOffset: "2px" }}><a id="document-link" href="#details">Document preview link</a></div>
+      </ComponentDocsPreview>
+      <ComponentDocsPreview locale="en">
+        <a href="#details"><span>Iframe preview link</span></a>
+      </ComponentDocsPreview>
+    </>));
+    const frame = host.querySelector("iframe")!;
+    const frameText = () => frame.contentDocument?.querySelector("a span");
+    await expect.poll(() => frameText()).toBeTruthy();
+    expect(getComputedStyle(host.querySelector("#prose-link")!).textUnderlineOffset).toBe("4px");
+    expect(getComputedStyle(host.querySelector("#story-link")!).textUnderlineOffset).toBe("auto");
+    expect(getComputedStyle(host.querySelector("#document-link")!).textUnderlineOffset).toBe("2px");
+    expect(getComputedStyle(frameText()!).textUnderlineOffset).toBe("auto");
+  } finally { root.unmount(); host.remove(); }
+});
+
+test("a ProductList heading keeps its desktop typography inside a Docs preview", async () => {
+  const host = document.createElement("div");
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    flushSync(() => root.render(
+      <ComponentDocsPreview locale="en" viewportWidth="1024px">
+        <ProductList title="Products" products={[]} />
+      </ComponentDocsPreview>,
+    ));
+    const frame = host.querySelector("iframe")!;
+    const title = () => frame.contentDocument?.querySelector('[data-slot="product-list-title"]');
+    await expect.poll(title).toBeTruthy();
+    const style = getComputedStyle(title()!);
+    expect(style.fontSize).toBe("24px");
+    expect(style.lineHeight).toBe("32px");
+    expect(style.marginBlockEnd).toBe("0px");
+  } finally { root.unmount(); host.remove(); }
+});
+
+test("the ProductList PC preview adapts its rail to the available width at actual size", async () => {
+  const host = document.createElement("div");
+  host.style.width = "640px";
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    const values = productListProperties.initialValues("en");
+    const { preview } = productListProperties.example(values, "en", "PC");
+    flushSync(() => root.render(
+      <ComponentDocsPreview locale="en" fullWidth={productListProperties.fullWidth}>
+        {preview}
+      </ComponentDocsPreview>,
+    ));
+    const frame = host.querySelector("iframe")!;
+    const rail = () => frame.contentDocument?.querySelector('[data-slot="product-list-items"]');
+    await expect.poll(rail).toBeTruthy();
+    for (const [width, columns] of [[880, 4], [640, 3], [400, 2], [320, 1]]) {
+      host.style.width = `${width}px`;
+      await expect.poll(() => frame.contentWindow?.innerWidth).toBe(width);
+      expect(frame.getBoundingClientRect().width).toBe(width);
+      await expect.poll(() => {
+        const list = frame.contentDocument!.querySelector('[data-slot="product-list"]')!;
+        const { top, bottom } = list.getBoundingClientRect();
+        return Math.abs(top - (frame.clientHeight - bottom));
+      }).toBeLessThan(1);
+      const railBounds = rail()!.getBoundingClientRect();
+      const cards = [...rail()!.querySelectorAll('[data-slot="product-list-item"]')];
+      expect(cards.filter(card => card.getBoundingClientRect().right <= railBounds.right + 0.5)).toHaveLength(columns);
+      const link = cards[0].querySelector<HTMLElement>('[data-slot="product-card-media-link"]')!;
+      expect(Math.abs(link.getBoundingClientRect().width - link.offsetWidth)).toBeLessThan(0.5);
+      expect(link.getBoundingClientRect()).toEqual(link.parentElement!.querySelector("img")!.getBoundingClientRect());
+      const next = frame.contentDocument!.querySelector<HTMLElement>('button[data-direction="right"]');
+      expect(next?.checkVisibility()).toBe(true);
+    }
+  } finally { root.unmount(); host.remove(); }
+});
+
+test("ProductCard Properties keeps the preview and focused fields visible while scrolling", async () => {
+  const host = document.createElement("div");
+  Object.assign(host.style, { height: "540px", overflowY: "auto" });
+  document.body.append(host);
+  const root = createRoot(host);
+  const context = {
+    componentStories: () => [{ title: "YAMI/ProductCard", tags: [], parameters: {} }],
+    getStoryContext: () => ({ userGlobals: { locale: "en" }, globals: { locale: "en" } }),
+    channel: { on: vi.fn(), off: vi.fn() },
+  } as unknown as ContextType<typeof DocsContext>;
+  try {
+    flushSync(() => root.render(<DocsContext.Provider value={context}><ComponentPropertiesPage definition={productCardProperties} /></DocsContext.Provider>));
+    const frame = host.querySelector("iframe")!;
+    const addButton = () => frame.contentDocument?.querySelector<HTMLButtonElement>('[data-slot="product-card-add-button"]');
+    await expect.poll(addButton).toBeTruthy();
+    host.scrollTop = host.scrollHeight;
+    const card = host.querySelector('[data-example="productcard-properties-preview"]')!;
+    expect(card.getBoundingClientRect().top).toBeCloseTo(host.getBoundingClientRect().top);
+    const availability = page.getByRole("combobox", { name: "Availability" });
+    await availability.click();
+    await page.getByRole("option", { name: "Sold out", exact: true }).click();
+    await expect.poll(addButton).toBeNull();
+    await availability.click();
+    await page.getByRole("option", { name: "Available", exact: true }).click();
+    await expect.poll(addButton).toBeTruthy();
+
+    const price = () => frame.contentDocument?.querySelector('[data-slot="product-card-price"]');
+    const onSale = page.getByRole("switch", { name: "On sale" });
+    const required = host.querySelector('#productcard-properties-required + dl')!;
+    const original = page.getByRole("textbox", { name: "Original price" });
+    expect(required.contains(onSale.element())).toBe(true);
+    expect(required.contains(original.element())).toBe(true);
+    await expect.element(original).toBeRequired();
+    await expect.poll(() => price()?.childElementCount).toBe(2);
+    const saleColor = getComputedStyle(price()!.firstElementChild!).color;
+    await onSale.click();
+    await expect.poll(() => price()?.childElementCount).toBe(1);
+    await expect.element(original).not.toBeInTheDocument();
+    expect(getComputedStyle(price()!.firstElementChild!).color).not.toBe(saleColor);
+    expect(frame.contentDocument?.querySelector('[data-slot="product-card-badges"]')).toBeNull();
+    await onSale.click();
+    await expect.poll(() => price()?.childElementCount).toBe(2);
+    expect(getComputedStyle(price()!.firstElementChild!).color).toBe(saleColor);
+
+    const firstField = page.getByRole("textbox", { name: "Brand name" }).element() as HTMLElement;
+    firstField.focus({ preventScroll: true });
+    expect(firstField.getBoundingClientRect().top).toBeGreaterThanOrEqual(card.getBoundingClientRect().bottom);
+    expect(firstField.getBoundingClientRect().bottom).toBeLessThanOrEqual(host.getBoundingClientRect().bottom);
+  } finally { root.unmount(); host.remove(); }
+});
+
 test("a Button on an inverse Docs surface keeps its inverse keyboard focus ring", async () => {
   const host = document.createElement("div");
   document.body.append(host);
@@ -300,6 +438,9 @@ test.each(["viewport", "document"] as const)("%s Docs previews center controls a
     const frame = host.querySelector("iframe");
     const input = () => (frame?.contentDocument ?? host).querySelector('[data-slot="input"]');
     await expect.poll(() => input()?.getBoundingClientRect().width).toBe(320);
+    const surface = getComputedStyle(host.firstElementChild!).backgroundColor;
+    expect(surface).toBe("color(srgb 0.980392 0.980392 0.980392)");
+    if (frame) expect(getComputedStyle(frame.contentDocument!.body).backgroundColor).toBe(surface);
     const area = input()!.parentElement!;
     const bounds = area.getBoundingClientRect();
     const field = input()!.getBoundingClientRect();
@@ -308,6 +449,55 @@ test.each(["viewport", "document"] as const)("%s Docs previews center controls a
   } finally {
     root.unmount();
     host.remove();
+  }
+});
+
+test("the Header preview fits the desktop layout and handles category keys in its iframe", async () => {
+  const originalViewport = { width: innerWidth, height: innerHeight };
+  const host = document.createElement("div");
+  host.style.width = "640px";
+  document.body.append(host);
+  const root = createRoot(host);
+  try {
+    const { preview } = headerProperties.example({ ...headerProperties.initialValues("en"), categoryMenu: true }, "en", "PC");
+    flushSync(() => root.render(
+      <ComponentDocsPreview locale="en" viewportWidth="1024px" fullWidth>{preview}</ComponentDocsPreview>,
+    ));
+    const frame = host.querySelector("iframe")!;
+    await expect.poll(() => frame.contentDocument?.querySelector('[data-slot="header-utility"]')?.checkVisibility()).toBe(true);
+    await expect.poll(() => frame.getBoundingClientRect().width).toBeCloseTo(640);
+    expect(frame.contentWindow?.innerWidth).toBe(1024);
+    const header = frame.contentDocument!.querySelector('[data-slot="header"]')!;
+    expect(header.getBoundingClientRect().width).toBe(1024);
+    const rail = header.querySelector('[data-slot="header-categories-list"]')!;
+    expect([...rail.querySelectorAll("[data-category-id]")].map((item) => item.getAttribute("data-category-id")))
+      .toEqual(createHeaderCategories("en").map(({ id }) => id));
+    expect(rail.querySelector('[data-category-id="summer-picks"] img')?.getAttribute("src"))
+      .toBe("./assets/header-categories/summer-picks.png");
+    expect([...rail.querySelectorAll('[data-slot="header-category-badges"]')].map((element) => element.textContent).join())
+      .toContain("999+");
+    const trigger = header.querySelector<HTMLButtonElement>("[data-category-trigger]")!;
+    const menu = () => header.querySelector('[data-slot="header-category-menu"]');
+    const keyboard = (key: string) => new frame.contentDocument!.defaultView!.KeyboardEvent("keydown", { key, bubbles: true });
+    flushSync(() => trigger.dispatchEvent(keyboard("ArrowDown")));
+    await expect.poll(menu).toBeTruthy();
+    const item = menu()!.querySelector("button")!;
+    await expect.poll(() => frame.contentDocument?.activeElement).toBe(item);
+    flushSync(() => item.dispatchEvent(keyboard("Escape")));
+    await expect.poll(menu).toBeNull();
+    expect(frame.contentDocument?.activeElement).toBe(trigger);
+
+    await page.viewport(900, 720);
+    flushSync(() => root.render(<ComponentDocsPreview locale="en" fullWidth>{preview}</ComponentDocsPreview>));
+    await expect.poll(() => frame.contentWindow?.innerWidth).toBe(402);
+    await expect.poll(() => frame.getBoundingClientRect().width).toBeCloseTo(402);
+    host.style.width = "330px";
+    await expect.poll(() => frame.getBoundingClientRect().width).toBeCloseTo(330);
+    expect(frame.contentWindow?.innerWidth).toBe(402);
+  } finally {
+    root.unmount();
+    host.remove();
+    await page.viewport(originalViewport.width, originalViewport.height);
   }
 });
 
@@ -345,6 +535,40 @@ test("automatic Docs previews follow the Storybook window and fixed previews fol
   }
 });
 
+test("viewport previews keep unstyled content hidden while styles load", async () => {
+  const host = document.createElement("div");
+  const source = document.createElement("link");
+  source.rel = "stylesheet";
+  source.href = "data:text/css,.preview-style-test%7Bcolor%3Ared%7D";
+  document.head.append(source);
+  document.body.append(host);
+  const root = createRoot(host);
+  const clone = source.cloneNode(true) as HTMLLinkElement;
+  clone.removeAttribute("href");
+  const cloneStyle = vi.spyOn(source, "cloneNode").mockReturnValue(clone);
+
+  try {
+    flushSync(() => root.render(<ComponentDocsPreview locale="en">
+      <span className="preview-style-test">Preview</span>
+    </ComponentDocsPreview>));
+    const frame = host.querySelector("iframe")!;
+    await expect.poll(() => clone.isConnected).toBe(true);
+    expect(getComputedStyle(frame).visibility).toBe("hidden");
+    expect(host.querySelector('[data-slot="skeleton"]')).not.toBeNull();
+
+    clone.href = source.href;
+    await expect.poll(() => getComputedStyle(frame).visibility).toBe("visible");
+    const example = frame.contentDocument!.querySelector(".preview-style-test")!;
+    expect(getComputedStyle(example).color).toBe("rgb(255, 0, 0)");
+    expect(host.querySelector('[data-slot="skeleton"]')).toBeNull();
+  } finally {
+    cloneStyle.mockRestore();
+    root.unmount();
+    source.remove();
+    host.remove();
+  }
+});
+
 test("standalone previews follow the Docs viewport while keeping their content inside the example", async () => {
   const host = document.createElement("div");
   const originalViewport = { width: innerWidth, height: innerHeight };
@@ -352,6 +576,7 @@ test("standalone previews follow the Docs viewport while keeping their content i
   document.body.append(host);
   const root = createRoot(host);
   const originalTheme = document.documentElement.getAttribute("data-theme");
+  const wasDark = document.documentElement.classList.contains("dark");
   try {
     flushSync(() => root.render(
       <>
@@ -369,6 +594,7 @@ test("standalone previews follow the Docs viewport while keeping their content i
     expect(first.contentWindow?.innerWidth).toBe(375);
     const canvasColor = (frame: HTMLIFrameElement) => getComputedStyle(frame.contentDocument!.body).backgroundColor;
     expect(canvasColor(first)).toBe(getComputedStyle(first.parentElement!).backgroundColor);
+    expect(canvasColor(second)).toBe("color(srgb 0.980392 0.980392 0.980392)");
     expect(canvasColor(first)).not.toBe(canvasColor(second));
     expect(second.contentWindow?.innerWidth).toBe(375);
     expect(host.getBoundingClientRect().width).toBe(300);
@@ -376,10 +602,15 @@ test("standalone previews follow the Docs viewport while keeping their content i
     expect(inputBounds.width).toBeLessThanOrEqual(300 - 2 * 16);
     expect(inputBounds.left + inputBounds.width / 2).toBeCloseTo(375 / 2, 0);
     document.documentElement.dataset.theme = "dark";
+    document.documentElement.classList.add("dark");
     await expect.poll(() => first.contentDocument?.documentElement.dataset.theme).toBe("dark");
+    await expect.poll(() => canvasColor(second)).toBe("rgb(57, 57, 57)");
+    expect(canvasColor(first)).toBe(getComputedStyle(first.parentElement!).backgroundColor);
+    expect(canvasColor(first)).not.toBe(canvasColor(second));
   } finally {
     if (originalTheme === null) document.documentElement.removeAttribute("data-theme");
     else document.documentElement.dataset.theme = originalTheme;
+    document.documentElement.classList.toggle("dark", wasDark);
     root.unmount();
     host.remove();
     await page.viewport(originalViewport.width, originalViewport.height);

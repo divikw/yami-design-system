@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, type ReactNode } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, Check, Copy } from "lucide-react";
 import { DocsContext } from "@storybook/addon-docs/blocks";
 import { SyntaxHighlighter } from "storybook/internal/components";
@@ -43,9 +43,13 @@ export function DocsExampleCard({ code, locale, children, name }: { code?: strin
   </div>;
 }
 
-export function DocsExample({ code, locale, children, name, previewMode, previewBackground }: { code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: DocsPreviewMode; previewBackground?: string }) {
+export function DocsExample({ code, locale, children, name, previewMode, previewBackground, fullWidth, fillContentWidth }: {
+  code: string; locale: Locale; children: ReactNode; name?: string; previewMode?: DocsPreviewMode;
+  previewBackground?: string; fullWidth?: boolean; fillContentWidth?: boolean;
+}) {
   return <DocsExampleCard code={code} locale={locale} name={name}>
-    <ComponentDocsPreview locale={locale} name={name} mode={previewMode} previewBackground={previewBackground}>{children}</ComponentDocsPreview>
+    <ComponentDocsPreview locale={locale} name={name} mode={previewMode} previewBackground={previewBackground}
+      fullWidth={fullWidth} fillContentWidth={fillContentWidth}>{children}</ComponentDocsPreview>
   </DocsExampleCard>;
 }
 
@@ -59,6 +63,19 @@ export function ComponentDocsTemplate({ name, slug, intro, previous, next, local
 }) {
   const context = useContext(DocsContext);
   const localeQuery = locale === "en" ? "&globals=locale:en" : "";
+  const headerRef = useRef<HTMLElement>(null);
+  const [fontsReady, setFontsReady] = useState(false);
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    // Lay out the text so its fonts are requested before reading FontFaceSet.ready.
+    header.getBoundingClientRect();
+    let active = true;
+    void header.ownerDocument.fonts.ready.then(() => {
+      if (active) setFontsReady(true);
+    });
+    return () => { active = false; };
+  }, []);
   // These examples render directly, so synchronize globals without a story decorator.
   useEffect(() => {
     const sync = ({ globals }: { globals: Record<string, unknown> }) => {
@@ -67,12 +84,15 @@ export function ComponentDocsTemplate({ name, slug, intro, previous, next, local
       root.classList.toggle("dark", globals.theme === "dark");
       root.lang = globals.locale === "en" ? "en" : "zh";
     };
-    sync({ globals: context.getStoryContext(context.componentStories()[0]).globals });
+    const story = context.componentStories()[0];
+    const globals = story ? context.getStoryContext(story).globals : context.channel.last(GLOBALS_UPDATED)?.[0]?.globals;
+    sync({ globals: globals ?? {} });
     context.channel.on(GLOBALS_UPDATED, sync);
     return () => context.channel.off(GLOBALS_UPDATED, sync);
   }, [context]);
-  return <article className={`sb-unstyled ${styles.page}`} lang={locale} data-component-docs="" data-yami-docs={slug} data-docs-layout="">
-    <header className={styles.header}>
+  return <article className={`sb-unstyled ${styles.page}`} lang={locale} data-component-docs="" data-yami-docs={slug} data-docs-layout=""
+    data-docs-fonts-pending={fontsReady ? undefined : ""}>
+    <header ref={headerRef} className={styles.header}>
       <div className={styles.titleRow}>
         <h1>{componentDocsName(name, locale)}</h1>
         {(previous || next) && <ButtonGroup className={styles.actions} aria-label={locale === "zh" ? "组件文档导航" : "Component docs navigation"}>

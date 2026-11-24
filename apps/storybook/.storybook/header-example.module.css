@@ -1,0 +1,5 @@
+.menuPreview { inline-size: 100%; }
+
+@media (min-width: 1024px) {
+  .menuPreview { min-block-size: 360px; }
+}

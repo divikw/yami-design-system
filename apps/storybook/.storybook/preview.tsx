@@ -1,12 +1,29 @@
 import { isPhonePreviewPage, PhonePreviewInsets } from "@yami/prototypes/phone-preview";
 import type { Preview } from "@storybook/react-vite";
+import { CURRENT_STORY_WAS_SET, GLOBALS_UPDATED } from "storybook/internal/core-events";
+import { addons } from "storybook/preview-api";
 import "@yami/design-system/styles/fonts.css";
-import "@yami/design-system/tokens.css";
 import "@yami/design-system/styles/base.css";
-import "./preview.css";
 
 import { ComponentDocsPage } from "./component-docs";
 import { TokenAnnotations } from "./token-annotations";
+
+if (typeof document !== "undefined") {
+  const channel = addons.getChannel();
+  const root = document.documentElement;
+  const select = ({ storyId, viewMode }: { storyId: string; viewMode: string }) => {
+    root.dataset.yamiDocsId = viewMode === "docs" ? storyId : "";
+  };
+  const localize = ({ globals }: { globals: Record<string, unknown> }) => {
+    root.dataset.yamiDocsLocale = globals.locale === "en" ? "en" : "zh";
+  };
+  channel.on(CURRENT_STORY_WAS_SET, select);
+  channel.on(GLOBALS_UPDATED, localize);
+  import.meta.hot?.dispose(() => {
+    channel.off(CURRENT_STORY_WAS_SET, select);
+    channel.off(GLOBALS_UPDATED, localize);
+  });
+}
 
 const YAMI_VIEWPORTS = {
   yamiMobileSm: { name: "YAMI Mobile-sm (360)", styles: { width: "360px", height: "800px" }, type: "mobile" as const },
@@ -46,15 +63,17 @@ const preview: Preview = {
     options: {
       // Storybook extracts and evaluates this function as JavaScript.
       storySort: ({ id: leftId = "", title: leftTitle = "" }, { id: rightId = "", title: rightTitle = "" }) => {
-        if (leftTitle.startsWith("YAMI/components/") && leftTitle === rightTitle) {
+        if (leftTitle === rightTitle && (leftTitle.startsWith("YAMI/components/") || leftTitle.startsWith("YAMI/modules/product display/") ||
+          ["YAMI/modules/global/header", "YAMI/modules/global/tab bar"].includes(leftTitle))) {
           const rank = (id = "") => id.endsWith("--docs") ? 0 : id.endsWith("--properties") ? 1 : 2;
           return rank(leftId) - rank(rightId);
         }
         const order = new Map([
           ["", ["YAMI"]],
           ["YAMI", ["快速开始", "foundations", "primitives", "assets", "components", "modules", "pages"]],
-          ["YAMI/modules", ["global"]],
+          ["YAMI/modules", ["global", "product display", "commerce"]],
           ["YAMI/modules/global", ["header", "footer", "tab bar"]],
+          ["YAMI/modules/product display", ["horizontal scroll list", "product card", "product list"]],
           ["YAMI/pages", ["ecommerce home", "landing pages", "categories", "email templates", "search", "product detail", "search results"]],
           ["YAMI/pages/landing pages", ["component index", "topic templates", "collection templates"]],
           ["YAMI/pages/landing pages/topic templates", ["brand", "topic", "campaign"]],

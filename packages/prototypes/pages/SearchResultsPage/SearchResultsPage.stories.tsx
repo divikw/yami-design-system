@@ -653,7 +653,7 @@ function assertMobilePopularRail(canvasElement: HTMLElement) {
     '[data-slot="search-results-pagination"]'
   );
   const clearFilters = canvasElement.querySelector<HTMLElement>(
-    '[data-slot="search-results-clear-filters"]'
+    "[data-search-results-clear-filters]"
   );
   if (!popularList || !productListContainer || !pagination) {
     throw new Error("Mobile search results layout is incomplete");
@@ -740,7 +740,7 @@ export const MobileInteractions: Story = {
     await userEvent.click(popularFilter);
     await waitFor(() => {
       const clearFilters = canvasElement.querySelector<HTMLElement>(
-        '[data-slot="search-results-clear-filters"]'
+        "[data-search-results-clear-filters]"
       );
       if (!clearFilters || getComputedStyle(clearFilters).display !== "none") {
         throw new Error("Mobile clear filters action must stay hidden");

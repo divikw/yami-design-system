@@ -1,0 +1,100 @@
+.list { padding: 0; }
+
+.pcProductList {
+  box-sizing: border-box;
+  width: 100%;
+  padding-inline: var(--space-200);
+  container: product-list-preview / inline-size;
+}
+
+@media (max-width: 1023.98px) and (hover: hover) and (pointer: fine) {
+  .pcProductList :global(a[data-slot="product-card-brand"]:hover > span),
+  .pcProductList :global([data-slot="product-card-title-link"]:hover > span) {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 1023.98px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .pcProductList :global([data-slot="product-card-image"]:hover img) {
+    transform: scale(1.03);
+  }
+}
+
+/* Keep desktop presentation in the PC tab when the preview card is narrower
+ * than the storefront breakpoint. The rail uses whole cards at every width. */
+@media (max-width: 1023.98px) {
+  .pcProductList :global([data-slot="product-list"]) {
+    --preview-rail-columns: 1;
+    margin-inline: 0;
+    border-radius: 0;
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-appearance="themed"]:not([data-plain-background])) {
+    border-radius: var(--radius-xl);
+  }
+
+  .pcProductList :global([data-slot="product-list"] [data-slot="product-list-container"]) {
+    padding: var(--space-400) clamp(var(--space-200), 5cqi, var(--space-600));
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-appearance="themed"]:not([data-plain-background]) [data-slot="product-list-container"]),
+  .pcProductList :global([data-slot="product-list"][data-appearance="atmospheric"] [data-slot="product-list-container"]) {
+    padding: var(--space-200);
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-appearance="atmospheric"] [data-slot="product-list-container"]) {
+    width: calc(100% - clamp(var(--space-400), 10cqi, 2 * var(--space-600)));
+    margin: var(--space-400) auto;
+  }
+
+  .pcProductList :global([data-slot="product-list-heading"]) {
+    padding: 0;
+  }
+
+  .pcProductList :global([data-slot="product-list-title"]) {
+    padding-block: var(--space-025);
+    font-size: var(--font-size-display-sm);
+    line-height: var(--line-height-display-sm);
+  }
+
+  .pcProductList :global([data-heading-align="center"] [data-slot="product-list-title"]) {
+    text-align: center;
+    white-space: normal;
+  }
+
+  .pcProductList :global([data-slot="rail-navigation"]) {
+    display: inline-flex;
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-layout="rail"] [data-slot="product-list-container"][data-rail-columns] [data-slot="product-list-items"]) {
+    width: 100%;
+    margin-inline: 0;
+    gap: var(--space-150);
+    padding: var(--space-050) 0 0;
+    scroll-padding-inline: 0;
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-layout="rail"] [data-slot="product-list-container"][data-rail-columns] [data-slot="product-list-item"]),
+  .pcProductList :global([data-slot="product-list"][data-layout="rail"] [data-slot="product-list-container"][data-rail-columns] [data-slot="product-list-skeleton-item"]) {
+    flex-basis: calc((100% - (var(--preview-rail-columns) - 1) * var(--space-150)) / var(--preview-rail-columns));
+    scroll-snap-stop: normal;
+  }
+
+  .pcProductList :global([data-slot="product-list"][data-layout="waterfall"] [data-slot="product-list-container"] [data-slot="product-list-items"]) {
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+    gap: var(--space-300) var(--space-200);
+    padding: var(--space-050) 0 0;
+  }
+
+  @container product-list-preview (min-width: 360px) {
+    .pcProductList :global([data-slot="product-list"]) { --preview-rail-columns: 2; }
+  }
+
+  @container product-list-preview (min-width: 560px) {
+    .pcProductList :global([data-slot="product-list"]) { --preview-rail-columns: 3; }
+  }
+
+  @container product-list-preview (min-width: 760px) {
+    .pcProductList :global([data-slot="product-list"]) { --preview-rail-columns: 4; }
+  }
+}

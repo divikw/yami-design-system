@@ -38,7 +38,6 @@ export function ProductCard({
   countdown,
   badges,
   onAddToCart,
-  addButtonDisabled = false,
   addButtonAriaLabel = "Add to cart",
   availability = "available",
   availabilityLabel = availability === "delisted" ? "No longer available" : "Sold out",
@@ -77,7 +76,6 @@ export function ProductCard({
             presentation === "compact" || availability !== "available" ? undefined : onAddToCart
           }
           addButtonAriaLabel={addButtonAriaLabel}
-          addButtonDisabled={addButtonDisabled}
           priceBadge={presentation === "minimal" ? priceCurrent : undefined}
           href={href}
           linkLabel={title}
@@ -104,7 +102,6 @@ export function ProductCard({
                 presentation === "compact" && availability === "available" ? onAddToCart : undefined
               }
               addButtonAriaLabel={addButtonAriaLabel}
-              addButtonDisabled={addButtonDisabled}
             />
             {availabilityContent}
           </div>

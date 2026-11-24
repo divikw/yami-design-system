@@ -43,7 +43,7 @@ pnpm pack:design-system-candidate
 在独立项目安装该 `.tgz`，不要使用指向 YAMI 源码的软链接或路径别名：
 
 ```bash
-npm install /absolute/path/to/yami-design-system-0.2.0-candidate.4.tgz
+npm install /absolute/path/to/yami-design-system-1.0.0-candidate.1.tgz
 ```
 
 候选包保留 `private: true`，避免被误发布；本地打包和安装仍然可用。

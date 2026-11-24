@@ -58,6 +58,7 @@
       "--font-family-ios",
       "--font-size-body-md",
       "--font-size-heading-sm",
+      "--font-size-heading-xs",
       "--font-weight-emphasize",
       "--font-weight-normal",
       "--line-height-body-md",
@@ -102,7 +103,11 @@
       },
       "--font-size-heading-sm": {
         "property": "font-size",
-        "selector": ".heading"
+        "selector": ".heading from 1024px"
+      },
+      "--font-size-heading-xs": {
+        "property": "font-size",
+        "selector": ".heading below 1024px"
       },
       "--line-height-heading-sm": {
         "property": "line-height",
@@ -169,5 +174,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "079e76647e1a5cbfa625c0dd0092d10eed709b9f2c9725ef947eb27c689baa3d"
+  "contentDigest": "ceaa2c9897bceac5eeae933a953352cb88368f343473bfce19150a3eed53f0d1"
 }

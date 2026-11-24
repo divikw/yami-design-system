@@ -793,7 +793,7 @@ export const AppPreview: Story = {
   ...Mobile,
   name: "APP",
   tags: ["component-device", "dev", "autodocs", "!test"],
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
   args: { mobileVariant: 'default' },
   argTypes: {
     mobileVariant: {
@@ -820,7 +820,7 @@ export const AppPreview: Story = {
 export const MobilePreview: StoryObj<{ mobileVariant: 'default' | 'pdp' | 'activity' }> = {
   name: "H5",
   tags: ["component-device", "dev", "autodocs", "!test"],
-  globals: { viewport: { value: "yamiMobile", isRotated: false } },
+  globals: { viewport: { value: "yamiMobileLg", isRotated: false } },
   args: { mobileVariant: 'default' },
   argTypes: {
     mobileVariant: {
