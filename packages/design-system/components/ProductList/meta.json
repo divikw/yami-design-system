@@ -13,6 +13,7 @@
   "exports": [
     "ProductList",
     "ProductListProps",
+    "ProductListCustomRailProps",
     "ProductListAppearance",
     "ProductListLayout",
     "ProductListMobileSurface",
@@ -21,6 +22,11 @@
   ],
   "composes": ["ProductCard", "Tabs", "Button", "Skeleton"],
   "props": {
+    "railItems": {
+      "type": "Array<{ id: string; content: ReactNode }>",
+      "required": false,
+      "description": "Use instead of products on a standard rail to supply custom cards inside the same responsive item slots."
+    },
     "title": {
       "type": "ReactNode",
       "required": true,
@@ -44,7 +50,7 @@
     },
     "products": {
       "type": "ProductListItem[]",
-      "required": true,
+      "required": "unless railItems is supplied",
       "description": "ProductCard data with a stable id for each item."
     },
     "leadingContent": {

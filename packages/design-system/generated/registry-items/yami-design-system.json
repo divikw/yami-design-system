@@ -84,6 +84,7 @@
     "button-group",
     "card",
     "checkbox",
+    "collection-card",
     "combobox",
     "coupon",
     "dialog",
@@ -606,5 +607,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "f1fcdddd12f56615e46f62cc542eb752349afeffd596dd2767487b3789b60873"
+  "contentDigest": "d1f02d873364bd841f6f785da4a7a02c8cbdc6bbd2ffb507f8d679b293795db6"
 }

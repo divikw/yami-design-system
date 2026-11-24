@@ -1,11 +1,15 @@
+import { CollectionCard } from "@yami/design-system";
+import { anuaCollection } from "../../../packages/design-system/components/CollectionCard/examples";
 import { ComponentGuide } from "./component-guide";
 import { componentApiRows } from "./component-docs-scope";
-import type { DocsLocale } from "./component-docs-template";
+import { ComponentDocsTemplate, DocsApiTable, DocsExample, type DocsLocale } from "./component-docs-template";
 import { horizontalScrollListExample, horizontalScrollListProperties, productCardProperties, productListProperties } from "./product-display-properties";
 
 const scrollList = { name: "Horizontal Scroll List", path: "yami-components-commerce-product-list-horizontal-scroll-list" };
 const productCard = { name: "Product Card", path: "yami-components-commerce-productcard" };
 const productList = { name: "Product List", path: "yami-components-commerce-product-list" };
+
+const collectionCard = { name: "Collection Card", path: "yami-modules-product-display-collection-card" };
 
 export function HorizontalScrollListDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
@@ -90,7 +94,7 @@ export function ProductListDocsPage({ locale }: { locale: DocsLocale }) {
   const zh = locale === "zh";
   const defaults = productListProperties.initialValues(locale);
   const lead = productListProperties.example(defaults, locale);
-  return <ComponentGuide name={productList.name} slug="productlist" locale={locale} previous={productCard} fullWidth
+  return <ComponentGuide name={productList.name} slug="productlist" locale={locale} previous={productCard} next={collectionCard} fullWidth
     intro={zh ? "用横向滚动或响应式网格展示商品集合。" : "Show a product collection in a horizontal rail or responsive grid."}
     leadExample={lead} usageCode={lead.code}
     usageNote={zh
@@ -124,4 +128,36 @@ export function ProductListDocsPage({ locale }: { locale: DocsLocale }) {
     api={componentApiRows("ProductList", "YAMI/Modules/Product Display/Product List", locale)}
     accessibility={[zh ? "列表以标题命名。活动横幅需要替代文本，加载时通过 aria-busy 公布状态。"
       : "The title names the list. Supply alt text for campaign banners. Loading is announced through aria-busy."]} />;
+}
+
+export function CollectionCardDocsPage({ locale }: { locale: DocsLocale }) {
+  const zh = locale === "zh";
+  const item = {
+    ...anuaCollection,
+    href: `./?path=/story/yami-pages-landing-page-collection-page-brand--pc&globals=locale:${locale}`,
+    target: "_top" as const,
+  };
+  const code = (products = anuaCollection.products) => `import { CollectionCard } from "@yami/design-system";\n\nconst item = ${JSON.stringify({ ...anuaCollection, products }, null, 2)};\n\n<CollectionCard item={item} />`;
+  return (
+    <ComponentDocsTemplate name={collectionCard.name} slug="collectioncard" locale={locale} previous={productList}
+      intro={zh ? "三张商品图排成一行，四张排成两行两列。点击整张卡片即可打开专辑。" : "Three product images form one row. Four form a two-by-two grid. The whole card links to the collection."}>
+      <DocsExample locale={locale} code={code()} name="lead" previewBackground="var(--background-primary)">
+        <div style={{ width: "min(360px, 100%)" }}><CollectionCard item={item} /></div>
+      </DocsExample>
+      <section>
+        <h2 id="collectioncard-single-row">{zh ? "单行三图" : "Single row of three"}</h2>
+        <DocsExample locale={locale} code={code(item.products.slice(0, 3))} name="single-row" previewBackground="var(--background-primary)">
+          <div style={{ width: "min(360px, 100%)" }}><CollectionCard item={{ ...item, products: item.products.slice(0, 3) }} /></div>
+        </DocsExample>
+      </section>
+      <section>
+        <h2 id="collectioncard-usage">{zh ? "用法" : "Usage"}</h2>
+        <p>{zh ? "卡片默认使用浅灰底色，由外层网格决定宽度。标题沿用 Banner 的单行样式，整张卡片链接到专辑。" : "The parent grid sets the width. The card uses the secondary surface and the same single-line title as the banner."}</p>
+      </section>
+      <section>
+        <h2 id="collectioncard-api">{zh ? "API 参考" : "API Reference"}</h2>
+        <DocsApiTable locale={locale} rows={[["item", zh ? "提供 id、title、href 和 products，可选 target。每张商品图包含 src 和 alt。" : "Supply id, title, href and products, plus an optional target. Each product image has a src and alt."]]} />
+      </section>
+    </ComponentDocsTemplate>
+  );
 }

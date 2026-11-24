@@ -31,7 +31,7 @@ import { SectionHeading } from "../SectionHeading";
 import { Tabs, TabsList, TabsTrigger } from "../Tabs";
 
 import styles from "./ProductList.module.css";
-import type { ProductListLayout, ProductListProps } from "./ProductList.types";
+import type { ProductListCustomRailProps, ProductListLayout, ProductListProps } from "./ProductList.types";
 
 const DEFAULT_SKELETON_COUNTS: Record<ProductListLayout, number> = {
   rail: 8,
@@ -82,7 +82,7 @@ function ProductListSkeleton({
   );
 }
 
-export function ProductList(props: ProductListProps) {
+export function ProductList(props: ProductListProps | ProductListCustomRailProps) {
   const {
     title,
     headingAlign = "start",
@@ -91,6 +91,7 @@ export function ProductList(props: ProductListProps) {
     introContent,
     titleFontFamily = "sans",
     products,
+    railItems,
     leadingContent,
     appearance = "standard",
     banner,
@@ -134,6 +135,7 @@ export function ProductList(props: ProductListProps) {
       : "plain";
   const productCardSurface =
     appearance === "standard" || isThemeProductList ? "plain" : "card";
+  const items = railItems ?? products;
   const containerRef = useRef<HTMLDivElement>(null);
   const railFrameRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -163,19 +165,19 @@ export function ProductList(props: ProductListProps) {
     scrollByPage,
   } = useHorizontalScrollList({
     enabled: layout === "rail" && !loading,
-    itemCount: products.length + (leadingContent ? 1 : 0),
+    itemCount: items.length + (leadingContent ? 1 : 0),
     minimumPageDistance: 150,
   });
   const firstTabValue = useMemo(
     () => tabs?.find((tab) => !tab.disabled)?.value,
     [tabs],
   );
-  const firstProductId = products[0]?.id;
+  const firstProductId = items[0]?.id;
   useLayoutEffect(() => {
     if (layout !== "rail" || !railRef.current) return;
     railRef.current.scrollLeft = 0;
     updateRailState();
-  }, [firstProductId, layout, products.length, updateRailState, value]);
+  }, [firstProductId, layout, items.length, updateRailState, value]);
 
   useLayoutEffect(() => {
     if (
@@ -400,7 +402,8 @@ export function ProductList(props: ProductListProps) {
             data-slot="product-list-items"
             role="list"
             tabIndex={layout === "rail" ? 0 : undefined}
-            aria-label={layout === "rail" ? "Products" : undefined}
+            aria-label={layout === "rail" && !railItems ? "Products" : undefined}
+            aria-labelledby={railItems ? titleId : undefined}
             onScroll={layout === "rail" ? updateRailState : undefined}
           >
           {leadingContent && (
@@ -416,7 +419,17 @@ export function ProductList(props: ProductListProps) {
           {loading ? (
             <ProductListSkeleton layout={layout} count={visibleCount} />
           ) : (
-            products.map(({ id, ...product }) => (
+            (railItems ?? products.map(({ id, ...product }) => ({
+              id,
+              content: (
+                <ProductCard
+                  {...(product as ProductCardProps)}
+                  presentation={presentation}
+                  surface={productCardSurface}
+                  onAddToCart={onAddToCart ? () => onAddToCart(id) : undefined}
+                />
+              ),
+            }))).map(({ id, content }) => (
               <div
                 key={id}
                 className={styles.item}
@@ -424,12 +437,7 @@ export function ProductList(props: ProductListProps) {
                 role="listitem"
                 data-image-window-item={layout === "rail" ? "true" : undefined}
               >
-                <ProductCard
-                  {...(product as ProductCardProps)}
-                  presentation={presentation}
-                  surface={productCardSurface}
-                  onAddToCart={onAddToCart ? () => onAddToCart(id) : undefined}
-                />
+                {content}
               </div>
             ))
           )}

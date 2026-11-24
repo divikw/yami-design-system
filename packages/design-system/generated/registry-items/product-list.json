@@ -57,6 +57,7 @@
   "exports": [
     "ProductList",
     "ProductListAppearance",
+    "ProductListCustomRailProps",
     "ProductListItem",
     "ProductListLayout",
     "ProductListMobileSurface",
@@ -165,5 +166,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "aa4a00e249dbe046bca854bb43c26190cda7380576478d802f319c6b026cb59f"
+  "contentDigest": "d4a2861f59f38d2712633a0cb677e90a84e01b18e0a541d46e44c13d69dbed5c"
 }

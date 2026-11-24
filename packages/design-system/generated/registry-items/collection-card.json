@@ -1,0 +1,95 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "collection-card",
+  "title": "CollectionCard",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A collection link using the HeroBanner products-only card layout with a 20px title.",
+  "source": "components/CollectionCard",
+  "files": [
+    {
+      "source": "components/CollectionCard/CollectionCard.module.css",
+      "target": "components/CollectionCard/CollectionCard.module.css"
+    },
+    {
+      "source": "components/CollectionCard/CollectionCard.tsx",
+      "target": "components/CollectionCard/CollectionCard.tsx"
+    },
+    {
+      "source": "components/CollectionCard/index.ts",
+      "target": "components/CollectionCard/index.ts"
+    }
+  ],
+  "exports": [
+    "CollectionCard",
+    "CollectionCardProps"
+  ],
+  "composes": [
+    "HeroBanner"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/CollectionCard/usage.md",
+    "stories": [
+      "components/CollectionCard/CollectionCard.stories.tsx"
+    ],
+    "examples": [
+      "components/CollectionCard/examples.tsx#AnuaCollectionCard"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--color-white-1000",
+      "--font-family-ios",
+      "--space-100",
+      "--stroke-thick",
+      "--text-primary"
+    ],
+    "rules": [],
+    "tokenBindings": {
+      "--space-100": {
+        "property": "padding-block-start",
+        "selector": "a.card [data-slot=\"hero-banner-copy\"]"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": "a.card"
+      },
+      "--font-family-ios": {
+        "property": "font-family",
+        "selector": "a.card"
+      },
+      "--color-white-1000": {
+        "property": "--background-primary, --fill-skeleton",
+        "selector": ".card [data-slot=\"hero-banner-product\"]"
+      },
+      "--stroke-thick": {
+        "property": "border",
+        "selector": ".card [data-slot=\"hero-banner-product\"]::after"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "role": "link",
+      "wcagLevel": "AA",
+      "tapTargetMin": 0,
+      "keyboardNav": [
+        "Tab",
+        "Enter"
+      ],
+      "ariaPattern": "link",
+      "notes": "One native link exposes the collection title; decorative product thumbnails are hidden from assistive technology."
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "7983027a18eaf4a554570f096e8f2d3ebc1982de89ceb4927cbb189a1c7add0a"
+}

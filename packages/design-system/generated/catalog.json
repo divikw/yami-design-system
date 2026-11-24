@@ -2840,6 +2840,88 @@
       }
     },
     {
+      "id": "CollectionCard",
+      "source": "components/CollectionCard",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "CollectionCard",
+        "category": "composite",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "A collection link using the HeroBanner products-only card layout with a 20px title.",
+        "figma": {
+          "nodeId": null,
+          "componentKey": null
+        },
+        "exports": [
+          "CollectionCard",
+          "CollectionCardProps"
+        ],
+        "composes": [
+          "HeroBanner"
+        ],
+        "props": {
+          "item": {
+            "type": "CollectionCardProps[\"item\"]",
+            "required": true,
+            "description": "Collection id, title, destination, optional target and product thumbnails."
+          }
+        },
+        "rules": {},
+        "tokens": [
+          "--text-primary",
+          "--font-family-ios",
+          "--space-100",
+          "--color-white-1000",
+          "--stroke-thick"
+        ],
+        "tokenBindings": {
+          "--space-100": {
+            "property": "padding-block-start",
+            "selector": "a.card [data-slot=\"hero-banner-copy\"]"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": "a.card"
+          },
+          "--font-family-ios": {
+            "property": "font-family",
+            "selector": "a.card"
+          },
+          "--color-white-1000": {
+            "property": "--background-primary, --fill-skeleton",
+            "selector": ".card [data-slot=\"hero-banner-product\"]"
+          },
+          "--stroke-thick": {
+            "property": "border",
+            "selector": ".card [data-slot=\"hero-banner-product\"]::after"
+          }
+        },
+        "accessibility": {
+          "role": "link",
+          "wcagLevel": "AA",
+          "tapTargetMin": 0,
+          "keyboardNav": [
+            "Tab",
+            "Enter"
+          ],
+          "ariaPattern": "link",
+          "notes": "One native link exposes the collection title; decorative product thumbnails are hidden from assistive technology."
+        },
+        "dependencies": {
+          "runtime": [
+            "react"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#AnuaCollectionCard"
+        ]
+      }
+    },
+    {
       "id": "Combobox",
       "source": "components/Combobox",
       "meta": {
@@ -3200,8 +3282,8 @@
         "name": "Coupon",
         "category": "composite",
         "status": "experimental",
-        "version": "0.1.0",
-        "description": "Controlled coupon selection card with a circular Checkbox, scope, optional validity, dashed divider and transparent ticket cutouts. Hosts own eligibility and saving.",
+        "version": "0.2.0",
+        "description": "Controlled coupon card with a claim button or a selection checkbox, scope and optional validity. The host manages claiming and checkout selection.",
         "figma": {
           "nodeId": null,
           "componentKey": null,
@@ -3212,7 +3294,8 @@
           "CouponProps"
         ],
         "composes": [
-          "Checkbox"
+          "Checkbox",
+          "Button"
         ],
         "props": {
           "title": {
@@ -3229,7 +3312,7 @@
           },
           "selected": {
             "type": "boolean",
-            "required": true
+            "required": false
           },
           "disabled": {
             "type": "boolean",
@@ -3237,17 +3320,21 @@
           },
           "onSelectedChange": {
             "type": "(selected: boolean) => void",
-            "required": true
+            "required": false
           },
           "className": {
             "type": "string",
+            "required": false
+          },
+          "claim": {
+            "type": "{ status: \"available\" | \"claiming\" | \"claimed\"; label: string; onClaim: () => void; useLink?: { href: string; label: string; target?: string } }",
             "required": false
           }
         },
         "rules": {
           "focus": {
             "ruleId": "focus-style",
-            "note": "Composes Checkbox keyboard focus; the whole label is clickable."
+            "note": "Selection uses whole-label Checkbox activation. Claiming uses a focusable Button."
           },
           "disabled": {
             "ruleId": "no-opacity-disabled",
@@ -3313,9 +3400,10 @@
           "keyboardNav": [
             "tab",
             "shift+tab",
-            "space"
+            "space",
+            "enter"
           ],
-          "ariaPattern": "Controlled Checkbox with a visible native label, title as accessible name and scope/validity as description."
+          "ariaPattern": "Selection uses a labeled Checkbox. The claim Button has localized state text and describes the coupon title and terms. Pending claims block activation. Claimed coupons may provide a native link to use the offer."
         },
         "dependencies": {
           "runtime": [
@@ -3330,7 +3418,7 @@
         ],
         "testing": {
           "interaction": "covered",
-          "rationale": "Storybook verifies full-label pointer activation, deselection and Space-key selection. Cart browser tests verify staged selection, saving and cancellation."
+          "rationale": "Storybook verifies selection by label, checkbox and keyboard, plus claim activation and pending/completed semantics. Cart tests cover saving and cancellation."
         }
       }
     },
@@ -7158,6 +7246,7 @@
         "exports": [
           "ProductList",
           "ProductListProps",
+          "ProductListCustomRailProps",
           "ProductListAppearance",
           "ProductListLayout",
           "ProductListMobileSurface",
@@ -7171,6 +7260,11 @@
           "Skeleton"
         ],
         "props": {
+          "railItems": {
+            "type": "Array<{ id: string; content: ReactNode }>",
+            "required": false,
+            "description": "Use instead of products on a standard rail to supply custom cards inside the same responsive item slots."
+          },
           "title": {
             "type": "ReactNode",
             "required": true,
@@ -7194,7 +7288,7 @@
           },
           "products": {
             "type": "ProductListItem[]",
-            "required": true,
+            "required": "unless railItems is supplied",
             "description": "ProductCard data with a stable id for each item."
           },
           "leadingContent": {

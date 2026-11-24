@@ -113,6 +113,7 @@ main.main[data-title-font-family="serif"]
     [data-slot="shortcut-rail-title"],
     [data-slot="product-list-title"],
     [data-slot="review-list-title"],
+    .couponHeading,
     .faqHeading,
     .relatedKeywordsHeading
   ) {
@@ -303,6 +304,20 @@ main.main[data-title-font-family="sans"]
     background: var(--surface-primary);
   }
 
+  .globalHeader.revealHeader {
+    top: calc(-1 * var(--topic-landing-header-height));
+  }
+
+  .globalHeader.revealHeader:is([data-scrolling-up], :focus-within, :has([aria-expanded="true"])) {
+    top: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .globalHeader.revealHeader {
+      transition: top 160ms ease-out;
+    }
+  }
+
   .waterfall [data-slot="product-list-load-more"] > button {
     height: var(--space-600);
   }
@@ -336,6 +351,11 @@ main.main[data-title-font-family="sans"]
   border-block-start: var(--stroke-default) solid var(--border-default);
 }
 
+.faq [data-slot="accordion-trigger"] {
+  padding-block: var(--space-100);
+}
+
+.couponContainer,
 .faqContainer,
 .relatedKeywordsContainer {
   width: 100%;
@@ -344,12 +364,74 @@ main.main[data-title-font-family="sans"]
   padding: var(--space-200) var(--layout-page-margin-default);
 }
 
+.couponSurface {
+  display: flex;
+  justify-content: safe center;
+  gap: var(--space-200);
+  overflow-x: auto;
+}
+
+.couponSurface > [data-slot="coupon"] {
+  flex: 0 0 min(416px, 100%);
+  grid-template-rows: auto 1fr;
+}
+
+.couponHeading,
 .faqHeading,
 .relatedKeywordsHeading {
   margin: 0 0 var(--space-100);
   font-size: var(--font-size-heading-xl);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-heading-xl);
+}
+
+.couponHeading {
+  padding-block: var(--space-025);
+  margin-block-end: var(--space-150);
+}
+
+.relatedCollections [data-slot="hero-banner-copy"] > span {
+  font-size: var(--font-size-heading-sm);
+}
+
+.fillRelatedCollections[data-layout="rail"] [data-slot="product-list-items"] > [data-slot="product-list-item"] {
+  flex-grow: 1;
+}
+
+.relatedCollections [data-slot="product-list-item"]:has(> [data-product-layout="strip"]) {
+  min-inline-size: min-content;
+}
+
+.relatedCollections [data-slot="product-list-item"]:only-child {
+  --collection-strip-min-width: 0px;
+}
+
+@media (width < 1024px) {
+  .couponSurface > [data-slot="coupon"]:not(:only-child) {
+    flex-basis: min(416px, calc(100% - var(--space-400)));
+  }
+
+  .relatedCollections [data-slot="product-list-container"] {
+    container: collection-rail / inline-size;
+  }
+
+  .relatedCollections [data-slot="product-list-item"] {
+    --collection-columns: 2;
+    min-inline-size: max(200px, calc((100% - (var(--collection-columns) - 1) * var(--space-100)) / var(--collection-columns)));
+  }
+
+  @container collection-rail (min-width: 616px) {
+    .relatedCollections [data-slot="product-list-item"] {
+      --collection-columns: 3;
+    }
+  }
+
+  /* Four 200px cards and three 8px gaps fit in 824px of content width. */
+  @container collection-rail (min-width: 824px) {
+    .relatedCollections [data-slot="product-list-item"] {
+      --collection-columns: 4;
+    }
+  }
 }
 
 .relatedKeywordsList {
@@ -361,7 +443,34 @@ main.main[data-title-font-family="sans"]
   list-style: none;
 }
 
+@media (width < 1024px) {
+  .relatedKeywordsViewport {
+    /* Fill up to three tag rows before flowing into another horizontal column. */
+    column-count: 1;
+    column-fill: auto;
+    column-gap: var(--space-100);
+    max-block-size: calc(3 * var(--space-400) + 2 * var(--space-100));
+    margin-block: var(--space-100);
+    overflow-x: auto;
+  }
+
+  .relatedKeywordsList {
+    padding: 0;
+  }
+
+  .relatedKeywordsList > li {
+    display: flex;
+    break-inside: avoid;
+  }
+}
+
 @media (min-width: 1024px) {
+  .couponSurface {
+    padding: var(--space-200);
+    background: var(--surface-secondary);
+  }
+
+  .couponContainer,
   .faqContainer,
   .relatedKeywordsContainer {
     padding-block: var(--space-400);
@@ -378,6 +487,7 @@ main.main[data-title-font-family="sans"]
     margin-block-end: 0;
   }
 
+  .couponHeading,
   .faqHeading,
   .relatedKeywordsHeading {
     font-size: var(--font-size-display-sm);

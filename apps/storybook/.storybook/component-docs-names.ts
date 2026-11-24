@@ -13,6 +13,7 @@ const chineseComponentNames = {
   ButtonGroup: "按钮组",
   Card: "卡片",
   Checkbox: "复选框",
+  CollectionCard: "专辑卡片",
   Combobox: "组合框",
   Coupon: "优惠券",
   Dialog: "对话框",

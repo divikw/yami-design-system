@@ -73,11 +73,10 @@ const preview: Preview = {
           ["YAMI", ["快速开始", "foundations", "primitives", "assets", "components", "modules", "pages"]],
           ["YAMI/modules", ["global", "product display", "commerce"]],
           ["YAMI/modules/global", ["header", "footer", "tab bar"]],
-          ["YAMI/modules/product display", ["horizontal scroll list", "product card", "product list"]],
+          ["YAMI/modules/product display", ["horizontal scroll list", "product card", "product list", "collection card"]],
           ["YAMI/pages", ["ecommerce home", "landing pages", "categories", "email templates", "search", "product detail", "search results"]],
           ["YAMI/pages/landing pages", ["component index", "topic templates", "collection templates"]],
           ["YAMI/pages/landing pages/topic templates", ["brand", "topic", "campaign"]],
-          ["YAMI/pages/landing pages/collection templates", ["brand", "topic", "campaign"]],
           ["YAMI/pages/product detail", ["docs", "beauty", "food", "beverage"]],
         ]);
         const left = leftTitle.split("/");

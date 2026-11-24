@@ -10,6 +10,7 @@ import { useImageBottomColor } from "./useImageBottomColor";
 export function HeroBannerProductsOnlyCard({
   item,
   borrowedSurface,
+  className,
 }: HeroBannerProductsOnlyCardProps) {
   const products = item.products.slice(0, 4);
   const productLayout = products.length === 4 ? "grid" : "strip";
@@ -32,8 +33,9 @@ export function HeroBannerProductsOnlyCard({
 
   return (
     <a
-      className={styles.card}
+      className={[styles.card, className].filter(Boolean).join(" ")}
       href={item.href}
+      target={item.target}
       style={style}
       data-slot="hero-banner-item"
       data-hero-banner-content="products-only"

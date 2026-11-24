@@ -19,6 +19,7 @@ import {
   BrandProductRail,
   Footer,
   Header,
+  CollectionCard,
   ProductList,
   ReviewList,
   ShortcutRail,
@@ -72,9 +73,11 @@ export function TopicLandingPage({
   contentMaxWidth = 1440,
   titleFontFamily = "serif",
   showChrome = true,
+  revealHeaderOnScrollUp = false,
   activityHeader,
   header,
   hero,
+  couponSection,
   primaryTabs,
   shortcutRail,
   standardRail,
@@ -82,6 +85,7 @@ export function TopicLandingPage({
   reviewsAfterProducts = false,
   faq,
   relatedKeywords,
+  relatedCollections,
   productRail,
   brandRail,
   waterfall,
@@ -90,6 +94,7 @@ export function TopicLandingPage({
   className,
   ...rest
 }: TopicLandingPageProps) {
+  const couponHeadingId = useId();
   const faqHeadingId = useId();
   const relatedKeywordsHeadingId = useId();
   const mainRef = useRef<HTMLElement>(null);
@@ -143,6 +148,7 @@ export function TopicLandingPage({
     products: waterfallFallbackProducts,
     productsByTab: waterfallProductsByTab,
     catalogFilters,
+    initialRows,
     rowsPerPage,
     ...waterfallProps
   } = waterfall;
@@ -158,7 +164,11 @@ export function TopicLandingPage({
   const waterfallPageSize = rowsPerPage === undefined
     ? EXPLORE_MORE_PAGE_SIZE
     : rowsPerPage * waterfallColumns;
-  const waterfallVisibleCount = (waterfallPageCounts[activeWaterfallTab] ?? 1) * waterfallPageSize;
+  const waterfallInitialSize = initialRows === undefined
+    ? waterfallPageSize
+    : initialRows * waterfallColumns;
+  const waterfallExtraPages = waterfallPageCounts[activeWaterfallTab] ?? 0;
+  const waterfallVisibleCount = waterfallInitialSize + waterfallExtraPages * waterfallPageSize;
   const visibleWaterfallProducts = useMemo(
     () => waterfallProducts.slice(0, waterfallVisibleCount),
     [waterfallProducts, waterfallVisibleCount],
@@ -166,7 +176,7 @@ export function TopicLandingPage({
   const loadMoreWaterfallProducts = () => {
     setWaterfallPageCounts((counts) => ({
       ...counts,
-      [activeWaterfallTab]: (counts[activeWaterfallTab] ?? 1) + 1,
+      [activeWaterfallTab]: (counts[activeWaterfallTab] ?? 0) + 1,
     }));
   };
   const selectWaterfallTab = (value: string) => {
@@ -246,9 +256,30 @@ export function TopicLandingPage({
     return () => observer.disconnect();
   }, [showChrome]);
 
-  const showWaterfall = !hiddenModules.includes("explore-more");
   useLayoutEffect(() => {
-    if (rowsPerPage === undefined || !showWaterfall) return;
+    const element = globalHeaderRef.current;
+    if (!revealHeaderOnScrollUp || !element || !globalHeaderHeight) return;
+    const scrollRoot = resolveTopicLandingScrollRoot(element);
+    const scrollElement = scrollRoot instanceof HTMLElement ? scrollRoot : document.scrollingElement;
+    if (!scrollElement) return;
+    let previousTop = scrollElement.scrollTop;
+    const updateHeader = () => {
+      const top = Math.max(0, Math.min(scrollElement.scrollTop, scrollElement.scrollHeight - scrollElement.clientHeight));
+      if (Math.abs(top - previousTop) < 4 && top > 0) return;
+      element.toggleAttribute("data-scrolling-up", top > 0 && top < previousTop);
+      previousTop = top;
+    };
+    scrollRoot.addEventListener("scroll", updateHeader, { passive: true });
+    return () => {
+      scrollRoot.removeEventListener("scroll", updateHeader);
+      element.removeAttribute("data-scrolling-up");
+    };
+  }, [globalHeaderHeight, revealHeaderOnScrollUp]);
+
+  const showWaterfall = !hiddenModules.includes("explore-more");
+  const measureWaterfallColumns = initialRows !== undefined || rowsPerPage !== undefined;
+  useLayoutEffect(() => {
+    if (!measureWaterfallColumns || !showWaterfall) return;
     const grid = waterfallRef.current?.querySelector<HTMLElement>('[data-slot="product-list-items"]');
     if (!grid) return;
 
@@ -265,7 +296,7 @@ export function TopicLandingPage({
       observer.disconnect();
       window.removeEventListener("resize", updateColumns);
     };
-  }, [rowsPerPage, showWaterfall]);
+  }, [measureWaterfallColumns, showWaterfall]);
 
   useLayoutEffect(() => {
     const targetId = window.location.hash.slice(1);
@@ -573,7 +604,7 @@ export function TopicLandingPage({
           <div className={styles.activityHeader} data-slot="topic-landing-activity-header">
             <ActivityPageHeader {...activityHeader} />
           </div>
-          <div ref={globalHeaderRef} className={styles.globalHeader} data-slot="topic-landing-global-header">
+          <div ref={globalHeaderRef} className={cx(styles.globalHeader, revealHeaderOnScrollUp && styles.revealHeader)} data-slot="topic-landing-global-header">
             <Header {...header} />
           </div>
         </>
@@ -599,6 +630,12 @@ export function TopicLandingPage({
             className={cx(styles.initialReveal, hero.className)}
             data-motion-reveal="initial"
           />
+        )}
+        {couponSection && couponSection.cards.length > 0 && (
+          <section className={styles.couponContainer} aria-labelledby={couponHeadingId}>
+            <h2 id={couponHeadingId} className={styles.couponHeading}>{couponSection.title}</h2>
+            <div className={styles.couponSurface}>{couponSection.cards}</div>
+          </section>
         )}
         {primaryTabs.items.length > 0 && (
           <div
@@ -746,15 +783,38 @@ export function TopicLandingPage({
             </div>
           </section>
         )}
+        {relatedCollections && relatedCollections.items.length > 0 && (
+          <ProductList
+            layout="rail"
+            mobileSurface="plain"
+            title={relatedCollections.title}
+            titleFontFamily={titleFontFamily}
+            previousLabel={relatedCollections.previousLabel}
+            nextLabel={relatedCollections.nextLabel}
+            className={relatedCollections.items.length < 4
+              ? `${styles.relatedCollections} ${styles.fillRelatedCollections}`
+              : styles.relatedCollections}
+            railItems={relatedCollections.items.map(item => ({
+              id: item.id,
+              content: (
+                <CollectionCard item={relatedCollections.items.length < 4
+                  ? { ...item, products: item.products.slice(0, 3) }
+                  : item} />
+              ),
+            }))}
+          />
+        )}
         {relatedKeywords && relatedKeywords.items.length > 0 && (
           <section className={styles.relatedKeywords} aria-labelledby={relatedKeywordsHeadingId}>
             <div className={styles.relatedKeywordsContainer}>
               <h2 id={relatedKeywordsHeadingId} className={styles.relatedKeywordsHeading}>{relatedKeywords.title}</h2>
-              <ul className={styles.relatedKeywordsList} role="list">
-                {relatedKeywords.items.map((keyword) => (
-                  <li key={keyword}><Tag mode={relatedKeywords.mode}>{keyword}</Tag></li>
-                ))}
-              </ul>
+              <div className={styles.relatedKeywordsViewport} role="group" aria-labelledby={relatedKeywordsHeadingId} tabIndex={0}>
+                <ul className={styles.relatedKeywordsList} role="list">
+                  {relatedKeywords.items.map((keyword) => (
+                    <li key={keyword}><Tag mode={relatedKeywords.mode}>{keyword}</Tag></li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </section>
         )}

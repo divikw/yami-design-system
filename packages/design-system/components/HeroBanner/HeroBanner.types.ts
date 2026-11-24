@@ -1,5 +1,6 @@
 import type {
   HTMLAttributes,
+  AnchorHTMLAttributes,
   ImgHTMLAttributes,
   ReactNode,
 } from "react";
@@ -45,6 +46,7 @@ export interface HeroBannerImageTextProductsItem extends HeroBannerItemBase {
 }
 
 export interface HeroBannerProductsOnlyItem extends HeroBannerItemBase {
+  target?: AnchorHTMLAttributes<HTMLAnchorElement>["target"];
   image?: never;
   title: ReactNode;
   description?: never;
@@ -84,6 +86,7 @@ export interface HeroBannerImageTextProductsCardProps
 
 export interface HeroBannerProductsOnlyCardProps
   extends HeroBannerCardProps<HeroBannerProductsOnlyItem> {
+  className?: string;
   /** 借用相邻卡片的背景。imageSrc 用于图片取色，color 用于取色完成前的回退；item.backgroundColor 优先。 */
   borrowedSurface?: { imageSrc?: ImageSource; color?: string };
 }

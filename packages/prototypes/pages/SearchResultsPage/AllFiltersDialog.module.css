@@ -1,4 +1,5 @@
 .panel[data-dialog] { width: min(560px, 100%); }
+.panel[data-dialog] [data-slot="dialog-header"] { padding-inline: 17px; }
 .panel[data-dialog][data-variant] :is([data-dialog-content], [data-slot="dialog-footer"]) { padding: 0; }
 
 .section {
@@ -6,7 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-025);
-  padding: var(--space-150) var(--space-200);
+  padding: var(--space-150) var(--space-100);
 }
 
 .section::after {
@@ -271,9 +272,13 @@
   align-items: center;
   gap: var(--space-100);
   justify-content: space-between;
-  padding: var(--space-150) var(--space-200) var(--space-150) var(--space-100);
+  padding: var(--space-150) var(--space-200);
   border-top: var(--stroke-default) solid var(--divider-default);
   background: var(--fill-primary);
+}
+
+.footer > .clearButton[data-slot="button"] {
+  padding-inline: 0;
 }
 
 .applyButton {
@@ -298,7 +303,6 @@
 
   .section {
     padding-block: var(--space-050);
-    padding-inline: var(--space-100);
   }
 
   .section::after {

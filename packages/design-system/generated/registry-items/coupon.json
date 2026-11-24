@@ -5,8 +5,8 @@
   "title": "Coupon",
   "type": "component",
   "status": "experimental",
-  "version": "0.1.0",
-  "description": "Controlled coupon selection card with a circular Checkbox, scope, optional validity, dashed divider and transparent ticket cutouts. Hosts own eligibility and saving.",
+  "version": "0.2.0",
+  "description": "Controlled coupon card with a claim button or a selection checkbox, scope and optional validity. The host manages claiming and checkout selection.",
   "source": "components/Coupon",
   "files": [
     {
@@ -18,6 +18,10 @@
       "target": "components/Coupon/Coupon.tsx"
     },
     {
+      "source": "components/Coupon/fixtures.ts",
+      "target": "components/Coupon/fixtures.ts"
+    },
+    {
       "source": "components/Coupon/index.ts",
       "target": "components/Coupon/index.ts"
     }
@@ -27,6 +31,7 @@
     "CouponProps"
   ],
   "composes": [
+    "Button",
     "Checkbox"
   ],
   "dependencies": {
@@ -108,11 +113,12 @@
       "keyboardNav": [
         "tab",
         "shift+tab",
-        "space"
+        "space",
+        "enter"
       ],
-      "ariaPattern": "Controlled Checkbox with a visible native label, title as accessible name and scope/validity as description."
+      "ariaPattern": "Selection uses a labeled Checkbox. The claim Button has localized state text and describes the coupon title and terms. Pending claims block activation. Claimed coupons may provide a native link to use the offer."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "9f85a4826814d600c5b2c91e88d111c2c8a894ddc0718d66bc84d0c89375b86e"
+  "contentDigest": "bdeae1a076f3c4af38ef7f9ed97d24cdfc1c86ed49e4d4dda183aa9df7a2ea5f"
 }

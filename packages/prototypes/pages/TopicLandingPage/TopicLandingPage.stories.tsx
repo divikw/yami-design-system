@@ -42,10 +42,11 @@ const meta = {
     ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createTopicLandingPageFixture(),
-  render: function Render(args, { globals, parameters }) {
+  render: function Render(args, { componentId, globals, parameters }) {
     const [notifications, setNotifications] = useState<ReadonlySet<string>>(() => new Set());
     const locale = globals.locale === "zh" ? "zh" : "en";
-    const localizedArgs = createTopicLandingPageFixture(locale);
+    const createFixture: typeof createTopicLandingPageFixture = parameters.createPageFixture ?? createTopicLandingPageFixture;
+    const localizedArgs = createFixture(locale);
     const faqByLocale = parameters.faqByLocale as Record<"en" | "zh", TopicLandingPageFaq> | undefined;
     const faq = faqByLocale?.[locale] ?? args.faq;
     const relatedKeywordsByLocale = parameters.relatedKeywordsByLocale as Record<"en" | "zh", TopicLandingPageRelatedKeywords> | undefined;
@@ -72,8 +73,10 @@ const meta = {
     return (
       <TopicLandingPage
         {...localizedArgs}
+        revealHeaderOnScrollUp={args.revealHeaderOnScrollUp}
         hero={{
           ...localizedArgs.hero,
+          style: args.hero.style,
           image: args.hero.image ? localizedArgs.hero.image : undefined,
           tags: args.hero.tags?.length ? localizedArgs.hero.tags : undefined,
           tagTone: args.hero.tagTone,
@@ -89,6 +92,7 @@ const meta = {
         waterfall={catalogFilters ? {
           ...localizedArgs.waterfall,
           catalogFilters,
+          initialRows: args.waterfall.initialRows,
           rowsPerPage: args.waterfall.rowsPerPage,
           loadMoreLabel: locale === "zh" ? "查看更多" : "View more",
           title: productTitle,
@@ -104,6 +108,9 @@ const meta = {
         hiddenModules={args.hiddenModules}
         reviewsAfterProducts={args.reviewsAfterProducts}
         faq={faq}
+        relatedCollections={parameters.createRelatedCollections?.(
+          componentId, locale, parameters.viewport?.defaultViewport === "yamiMobile" ? "mobile" : "pc",
+        ) ?? args.relatedCollections}
         relatedKeywords={relatedKeywords && {
           ...relatedKeywords,
           mode: relatedKeywords.mode ?? (globals.theme === "dark" ? "dark" : "light"),
@@ -1272,7 +1279,7 @@ export const Pc: Story = {
         reviewGap !== "8px" ||
         reviewItemsStyle.paddingTop !== "0px" ||
         reviewItemsStyle.paddingBottom !== "0px" ||
-        firstReviewCard.getBoundingClientRect().width !== 344 ||
+        firstReviewCard.getBoundingClientRect().width !== 320 ||
         getComputedStyle(firstReviewCard).borderRadius !== "8px"
       ) {
         throw new Error(

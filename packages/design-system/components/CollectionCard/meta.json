@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schema/component.json",
+  "name": "CollectionCard",
+  "category": "composite",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "A collection link using the HeroBanner products-only card layout with a 20px title.",
+  "figma": {
+    "nodeId": null,
+    "componentKey": null
+  },
+  "exports": [
+    "CollectionCard",
+    "CollectionCardProps"
+  ],
+  "composes": [
+    "HeroBanner"
+  ],
+  "props": {
+    "item": {
+      "type": "CollectionCardProps[\"item\"]",
+      "required": true,
+      "description": "Collection id, title, destination, optional target and product thumbnails."
+    }
+  },
+  "rules": {},
+  "tokens": [
+    "--text-primary",
+    "--font-family-ios",
+    "--space-100",
+    "--color-white-1000",
+    "--stroke-thick"
+  ],
+  "tokenBindings": {
+    "--space-100": {
+      "property": "padding-block-start",
+      "selector": "a.card [data-slot=\"hero-banner-copy\"]"
+    },
+    "--text-primary": {
+      "property": "color",
+      "selector": "a.card"
+    },
+    "--font-family-ios": {
+      "property": "font-family",
+      "selector": "a.card"
+    },
+    "--color-white-1000": {
+      "property": "--background-primary, --fill-skeleton",
+      "selector": ".card [data-slot=\"hero-banner-product\"]"
+    },
+    "--stroke-thick": {
+      "property": "border",
+      "selector": ".card [data-slot=\"hero-banner-product\"]::after"
+    }
+  },
+  "accessibility": {
+    "role": "link",
+    "wcagLevel": "AA",
+    "tapTargetMin": 0,
+    "keyboardNav": [
+      "Tab",
+      "Enter"
+    ],
+    "ariaPattern": "link",
+    "notes": "One native link exposes the collection title; decorative product thumbnails are hidden from assistive technology."
+  },
+  "dependencies": {
+    "runtime": [
+      "react"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "usageRef": "./usage.md",
+  "examples": [
+    "./examples.tsx#AnuaCollectionCard"
+  ]
+}

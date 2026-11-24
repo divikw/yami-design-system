@@ -550,7 +550,7 @@ export function AllFiltersDialog(props: AllFiltersDialogProps) {
           )}
 
           <footer className={styles.footer}>
-            <ClearProductFiltersButton onClick={clearFilters}>{copy.clearFilters}</ClearProductFiltersButton>
+            <ClearProductFiltersButton className={styles.clearButton} onClick={clearFilters}>{copy.clearFilters}</ClearProductFiltersButton>
             <Button
               className={styles.applyButton}
               variant="primary"

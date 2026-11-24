@@ -24,7 +24,7 @@ test.each([390, 1024, 1199, 1200, 1280, 1281, 1439, 1440, 1441, 1680, 1920])(
       const review = reviews.querySelector("li")!;
       if (width < 1024) {
         expect(product.getBoundingClientRect().width).toBeCloseTo(152, 0);
-        expect(review.getBoundingClientRect().width).toBeCloseTo(344, 0);
+        expect(review.getBoundingClientRect().width).toBeCloseTo(320, 0);
         expect(products.scrollWidth).toBeGreaterThan(products.clientWidth);
         expect(reviews.scrollWidth).toBeGreaterThan(reviews.clientWidth);
       } else {

@@ -1,6 +1,10 @@
 import { userEvent, waitFor, within } from "storybook/test";
 
-import type { TopicLandingPageFaq, TopicLandingPageRelatedKeywords } from "../TopicLandingPage/TopicLandingPage.types";
+import { createCollectionFaq } from "./collectionFaq.fixture";
+import { createCollectionPageFixture } from "./collectionPage.fixture";
+import { createRelatedCollections } from "./relatedCollections.fixture";
+import { resolveTopicLandingScrollRoot } from "../TopicLandingPage/TopicLandingPage";
+import type { TopicLandingPageRelatedKeywords } from "../TopicLandingPage/TopicLandingPage.types";
 import brandMeta, {
   Pc as BrandPc,
   Mobile as BrandMobile,
@@ -20,62 +24,52 @@ const soldOutProductIds = new Set([
   "3022589911",
   "1022281871",
 ]);
-const faqByLocale = {
-  zh: {
-    title: "常见问题",
-    items: [
-      {
-        id: "selection",
-        question: "这里有哪些 ANUA 护肤品？",
-        answer: "「编辑精选」收录了洁面、爽肤水与棉片、精华、乳液与面霜、防晒和面膜等商品。可以用「分类」缩小浏览范围。",
-      },
-      {
-        id: "budget",
-        question: "怎么按预算挑选商品？",
-        answer: "用「价格」选择一个或多个价格区间，再通过「排序方式」按价格从低到高或从高到低浏览。",
-      },
-      {
-        id: "stock",
-        question: "在哪里查看售完的商品？",
-        answer: "关闭「仅看有货」后，在默认的「精选」排序下，售完商品会排在列表末尾。卡片上有「到货通知」时，可以点击设置提醒。",
-      },
-      {
-        id: "reviews",
-        question: "怎么知道评价说的是哪款商品？",
-        answer: "「顾客评价」中的每条评价下方都标出了对应的商品名称和规格，例如鱼腥草洁面泡沫、舒缓爽肤水或烟酰胺精华。",
-      },
-    ],
+const faqByLocale = createCollectionFaq([
+  {
+    id: "selection",
+    question: { en: "Which ANUA skincare products are featured here?", zh: "这里有哪些 ANUA 护肤品？" },
+    answer: {
+      en: "Editor’s Picks includes cleansers, toners and pads, serums, moisturizers, sunscreens and masks. Use Category to narrow the list.",
+      zh: "「编辑精选」收录了洁面、爽肤水与棉片、精华、乳液与面霜、防晒和面膜等商品。可以用「分类」缩小浏览范围。",
+    },
   },
-  en: {
-    title: "Frequently Asked Questions",
-    items: [
-      {
-        id: "selection",
-        question: "Which ANUA skincare products are featured here?",
-        answer: "Editor’s Picks includes cleansers, toners and pads, serums, moisturizers, sunscreens and masks. Use Category to narrow the list.",
-      },
-      {
-        id: "budget",
-        question: "How can I shop within my budget?",
-        answer: "Choose one or more ranges under Price, then use Sort by to order products by price in either direction.",
-      },
-      {
-        id: "stock",
-        question: "Where can I find sold-out products?",
-        answer: "Turn off In Stock. With the default Featured sort, sold-out products appear at the end of the list. Select Notify me where available to set a restock alert.",
-      },
-      {
-        id: "reviews",
-        question: "How do I know which product a review is about?",
-        answer: "The name and size appear below each customer review. Look there for the exact Heartleaf cleanser, soothing toner or niacinamide serum the customer reviewed.",
-      },
-    ],
+  {
+    id: "budget",
+    question: { en: "How can I shop within my budget?", zh: "怎么按预算挑选商品？" },
+    answer: {
+      en: "Choose one or more ranges under Price, then use Sort by to order products by price in either direction.",
+      zh: "用「价格」选择一个或多个价格区间，再通过「排序方式」按价格从低到高或从高到低浏览。",
+    },
   },
-} satisfies Record<"en" | "zh", TopicLandingPageFaq>;
+  {
+    id: "stock",
+    question: { en: "Where can I find sold-out products?", zh: "在哪里查看售完的商品？" },
+    answer: {
+      en: "Turn off In Stock. With the default Featured sort, sold-out products appear at the end of the list. Select Notify me where available to set a restock alert.",
+      zh: "关闭「仅看有货」后，在默认的「精选」排序下，售完商品会排在列表末尾。卡片上有「到货通知」时，可以点击设置提醒。",
+    },
+  },
+  {
+    id: "reviews",
+    question: { en: "How do I know which product a review is about?", zh: "怎么知道评价说的是哪款商品？" },
+    answer: {
+      en: "The name and size appear below each customer review. Look there for the exact Heartleaf cleanser, soothing toner or niacinamide serum the customer reviewed.",
+      zh: "「顾客评价」中的每条评价下方都标出了对应的商品名称和规格，例如鱼腥草洁面泡沫、舒缓爽肤水或烟酰胺精华。",
+    },
+  },
+  {
+    id: "heartleaf",
+    question: { en: "Which Heartleaf cleansers can I compare?", zh: "鱼腥草系列有哪些洁面产品？" },
+    answer: {
+      en: "The collection includes the Heartleaf cleansing oil and Heartleaf cleansing foam.",
+      zh: "可以在「清洁与去角质」里比较鱼腥草清洁卸妆油和鱼腥草洁面泡沫。",
+    },
+  },
+]);
 
 const relatedKeywordsByLocale = {
   zh: {
-    title: "相关关键词",
+    title: "探索更多",
     items: [
       "ANUA 艾努雅", "韩系护肤", "鱼腥草护肤", "鱼腥草舒缓爽肤水", "鱼腥草清洁卸妆油",
       "深层清洁洁面泡沫", "烟酰胺 + 传明酸", "大米焕亮爽肤水", "玻尿酸补水", "神经酰胺护理",
@@ -83,7 +77,7 @@ const relatedKeywordsByLocale = {
     ],
   },
   en: {
-    title: "Related Keywords",
+    title: "Explore More",
     items: [
       "ANUA", "Korean Skincare", "Heartleaf Skincare", "Heartleaf Toner", "Cleansing Oil",
       "Pore Cleansing Foam", "Niacinamide + TXA", "Rice Toner", "Hyaluronic Acid", "Ceramides",
@@ -95,25 +89,38 @@ const relatedKeywordsByLocale = {
 export default {
   ...brandMeta,
   id: "yami-pages-landing-page-collection-page-brand",
-  title: "YAMI/Pages/Landing Pages/Collection Templates/Brand",
+  title: "YAMI/Pages/Landing Pages/Collection Templates/Anua",
   parameters: {
     ...brandMeta.parameters,
+    createPageFixture: createCollectionPageFixture,
+    createRelatedCollections,
     faqByLocale,
     relatedKeywordsByLocale,
     docs: {
       ...brandMeta.parameters.docs,
       description: {
         component:
-          "The Brand collection starts with a text introduction, then shows a filterable product list, customer reviews, frequently asked questions and related keywords.",
+          "This keyword collection uses Anua as its example, with a text introduction, a filterable product list, customer reviews, frequently asked questions, related collections and related keywords.",
       },
     },
   },
   args: {
     ...brandMeta.args,
-    hero: { ...brandMeta.args.hero, image: undefined, tags: undefined, tagTone: undefined },
+    revealHeaderOnScrollUp: true,
+    hero: {
+      ...brandMeta.args.hero,
+      image: undefined,
+      tags: undefined,
+      tagTone: undefined,
+      style: {
+        backgroundColor: "var(--background-secondary)",
+        minHeight: "clamp(10rem, 16dvw, 15rem)",
+      },
+    },
     waterfall: {
       ...brandMeta.args.waterfall,
       catalogFilters: true,
+      initialRows: 3,
       rowsPerPage: 6,
       products: brandMeta.args.waterfall.products.map((product) =>
         soldOutProductIds.has(product.id) ? { ...product, availability: "sold-out" as const } : product,
@@ -140,11 +147,27 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     throw new Error("Brand collection must omit category shortcuts, the routine section, and Popular Picks");
   }
   const products = main.querySelector<HTMLElement>("#product-list");
-  if (!products || hero.nextElementSibling !== products || main.querySelector('[data-slot="topic-landing-tabs"]')) {
-    throw new Error("The product list must follow the Brand introduction directly, without anchor navigation");
+  const coupons = hero.nextElementSibling;
+  if (!products || coupons?.querySelectorAll('[data-slot="coupon"]').length !== 2 || coupons.nextElementSibling !== products || main.querySelector('[data-slot="topic-landing-tabs"]')) {
+    throw new Error("The Brand introduction, coupons and product list must appear in order");
   }
   if (products.nextElementSibling?.id !== "reviews") {
     throw new Error("Customer reviews must follow the product list");
+  }
+  const header = canvasElement.querySelector<HTMLElement>('[data-slot="topic-landing-global-header"]')!;
+  const headerHeight = header.offsetHeight;
+  if (headerHeight) {
+    const scroller = resolveTopicLandingScrollRoot(header);
+    const top = scroller instanceof HTMLElement ? scroller.getBoundingClientRect().top + scroller.clientTop : 0;
+    scroller.scrollTo({ top: headerHeight * 4, behavior: "instant" });
+    await waitFor(() => {
+      if (header.getBoundingClientRect().bottom > top + 1) throw new Error("Scrolling down must hide the PC header");
+    });
+    scroller.scrollTo({ top: headerHeight * 3, behavior: "instant" });
+    await waitFor(() => {
+      if (Math.abs(header.getBoundingClientRect().top - top) > 1) throw new Error("Scrolling back up must reveal the PC header");
+    });
+    scroller.scrollTo({ top: 0, behavior: "instant" });
   }
   const maxWidth = typeof args.contentMaxWidth === "number"
     ? `${args.contentMaxWidth}px`
@@ -170,16 +193,28 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const keywordRegion = within(main).getByRole("region", { name: keywords.title });
   const keywordList = within(keywordRegion).getByRole("list");
   const tags = Array.from(keywordList.querySelectorAll('[data-slot="tag"]'));
-  if (faqRegion.nextElementSibling !== keywordRegion || main.lastElementChild !== keywordRegion ||
-      getComputedStyle(keywordList).flexWrap !== "wrap" || tags.length !== keywords.items.length ||
+  const collectionsRegion = within(main).getByRole("heading", { name: zh ? "相关专辑" : "Related Collections" }).closest("section");
+  if (!collectionsRegion || faqRegion.nextElementSibling !== collectionsRegion ||
+      collectionsRegion.querySelectorAll("a[href]").length !== 6 || collectionsRegion.nextElementSibling !== keywordRegion ||
+      main.lastElementChild !== keywordRegion ||
+      tags.length !== keywords.items.length ||
       tags.some((tag, index) => tag.textContent?.trim() !== keywords.items[index])) {
-    throw new Error("Related keywords must follow the FAQ as a wrapping list of localized Tags");
+    throw new Error("The FAQ must be followed by six related collections and then the localized keyword tags");
+  }
+  if (canvasElement.ownerDocument.defaultView?.matchMedia("(width < 1024px)").matches) {
+    const rows = new Set(tags.map(tag => tag.getBoundingClientRect().top));
+    if (rows.size > 3 || getComputedStyle(keywordList.parentElement!).overflowX !== "auto") {
+      throw new Error("Mobile keywords must scroll horizontally in at most three rows");
+    }
+  } else if (getComputedStyle(keywordList).flexWrap !== "wrap") {
+    throw new Error("Desktop keywords must wrap to the available width");
   }
   const productSection = within(products);
   const grid = productSection.getByRole("list");
   const renderedCount = () => within(grid).getAllByRole("listitem").length;
   const moreProducts = () => productSection.queryByRole("button", { name: zh ? "查看更多" : "View more", exact: true });
-  const pageSize = () => 6 * getComputedStyle(grid).gridTemplateColumns.split(" ").length;
+  const columns = () => getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length;
+  const initialSize = () => 3 * columns();
   const allCount = args.waterfall.products.length;
   const toolbar = productSection.getByRole("group", { name: zh ? "筛选" : "Filters", exact: true });
   const preview = within(canvasElement.ownerDocument.body);
@@ -191,16 +226,16 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     throw new Error("The catalog must begin with In Stock selected when products are sold out");
   }
   await waitFor(() => {
-    if (renderedCount() !== pageSize() || !moreProducts()) {
-      throw new Error("Brand must start with six rows of in-stock products and a View more button");
+    if (renderedCount() !== initialSize() || !moreProducts()) {
+      throw new Error("Brand must start with three rows of in-stock products and a View more button");
     }
   });
   await userEvent.click(inStock());
-  const batchSize = pageSize();
-  if (renderedCount() !== batchSize) {
+  const batchSize = 6 * columns();
+  if (renderedCount() !== initialSize()) {
     throw new Error("Changing stock filters must preserve the initial row limit");
   }
-  for (let shown = batchSize; shown < allCount; shown += batchSize) {
+  for (let shown = initialSize(); shown < allCount; shown += batchSize) {
     const moreButton = moreProducts();
     if (!moreButton) throw new Error("View more must stay available while products remain");
     await userEvent.click(moreButton);
@@ -238,9 +273,16 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   await userEvent.click(within(toolbar).getByRole("button", { name: zh ? "分类" : "Category" }));
   await userEvent.click(await preview.findByRole("radio", { name: zh ? "清洁与去角质" : "Cleanse & Peel" }));
   await userEvent.click(preview.getByRole("button", { name: zh ? "查看商品" : "Show products" }));
+  const categoryCount = args.waterfall.productsByTab?.["cleanse-peel"].length ?? 0;
   await waitFor(() => {
-    const shown = productSection.getAllByRole("listitem").length;
-    if (!shown || shown >= allCount || shown !== args.waterfall.productsByTab?.["cleanse-peel"].length ||
+    if (renderedCount() !== Math.min(categoryCount, initialSize())) {
+      throw new Error("Category filtering must restore the three-row preview");
+    }
+  });
+  const moreCategoryProducts = moreProducts();
+  if (moreCategoryProducts) await userEvent.click(moreCategoryProducts);
+  await waitFor(() => {
+    if (renderedCount() !== categoryCount ||
         moreProducts() ||
         soldOutCards().length !== 2 ||
         !notifyButtons().some((button) =>
@@ -250,7 +292,6 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     }
   });
 
-  const categoryCount = productSection.getAllByRole("listitem").length;
   await userEvent.click(inStock());
   await waitFor(() => {
     if (inStock().getAttribute("aria-pressed") !== "true" ||
@@ -263,8 +304,8 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   await userEvent.click(within(toolbar).getByRole("button", { name: zh ? "清除全部" : "Clear all" }));
   await waitFor(() => {
     if (inStock().getAttribute("aria-pressed") !== "false" ||
-        renderedCount() !== pageSize() || !moreProducts()) {
-      throw new Error("Clearing the filters must restore the six-row preview of the full product list");
+        renderedCount() !== initialSize() || !moreProducts()) {
+      throw new Error("Clearing the filters must restore the three-row preview of the full product list");
     }
   });
 
@@ -299,8 +340,8 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
 } : undefined;
 
-export const Pc = { ...BrandPc, name: "Brand — PC", play };
-export const Mobile = { ...BrandMobile, name: "Brand — Mobile", play };
+export const Pc = { ...BrandPc, name: "PC", tags: ["preserve-story-name"], play };
+export const Mobile = { ...BrandMobile, name: "Mobile", tags: ["preserve-story-name"], play };
 
 export const Chinese = {
   ...BrandChinese,
@@ -311,6 +352,7 @@ export const Chinese = {
 
 export const ChineseMobile = {
   ...BrandChineseMobile,
+  parameters: BrandMobile.parameters,
   name: "中文 Mobile",
   tags: ["!dev", "!autodocs"],
   play,

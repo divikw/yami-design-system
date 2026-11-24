@@ -595,7 +595,7 @@ Contextual modal for coupons and unavailable items. Uses Base UI Drawer with mod
 
 ### Coupon — `components/Coupon/`
 
-Controlled coupon selection card with title, scope and optional localized validity text. Composes Checkbox with a circular marker, transparent ticket cutouts and a dashed divider. The host owns eligibility, selection limits and saving; the cart commits its zero-or-one selection only on Save and discards drafts on dismissal. See [usage](./components/Coupon/usage.md).
+Controlled coupon card with title, scope and optional localized validity text. Claim mode uses a top-right Button with available, claiming and claimed states managed by the host. Selection mode composes Checkbox with a circular marker, transparent ticket cutouts and a dashed divider. The host owns eligibility, selection limits and saving; the cart commits its zero-or-one selection only on Save and discards drafts on dismissal. See [usage](./components/Coupon/usage.md).
 
 ### Alert — `components/Alert/`
 
@@ -649,6 +649,10 @@ Base UI modal for short forms, editing and general information on mobile and des
 | **API**               | Required numeric `ratio`; `1` is square, `16 / 9` is landscape.                                                              |
 | **Responsibility**    | Geometry only. Media semantics, cropping, loading states, backgrounds, radii, and overlays belong to the consumer.           |
 | **ProductCard usage** | The image area composes `AspectRatio ratio={1}` while retaining ProductCard-specific image, placeholder, and Badge behavior. |
+
+### CollectionCard — `components/CollectionCard/`
+
+A whole-card collection link with a 20px title and up to four product thumbnails on the secondary surface. The parent controls card width and section layout. [Usage](components/CollectionCard/usage.md).
 
 ### HorizontalScrollList — `components/HorizontalScrollList/`
 

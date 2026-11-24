@@ -107,6 +107,7 @@ const common: Record<string, Copy> = {
   mode: ["标签所在背景的浅色或深色模式。", "Light or dark mode of the surface behind the tag."],
   tier: ["会员等级，对应已注册的会员图标变体。", "Membership tier matching a registered membership icon variant."],
   membershipTier: ["头像上展示的会员等级标识。", "Membership-tier indicator displayed on the avatar."],
+  claim: ["领取模式的状态、操作文案、领取回调及使用链接。", "Claim status, action label, claim handler, and optional redemption link."],
   validity: ["优惠券有效期文案。", "Coupon validity-period text."],
   ratio: ["内容宽高比，例如 16 / 9。", "Content aspect ratio, such as 16 / 9."],
   strength: ["分割线强度：默认或强调。", "Divider strength: default or emphasis."],
@@ -127,6 +128,7 @@ const common: Record<string, Copy> = {
   expandLabel: ["展开内容按钮的无障碍名称。", "Accessible name for the expand control."],
   defaultExpandedId: ["初始展开项的唯一标识。", "Unique ID of the initially expanded item."],
   items: ["按展示顺序提供的项目数据列表。", "Item data in display order."],
+  railItems: ["横向列表中各项的标识和自定义内容。", "IDs and custom content for items in the horizontal rail."],
   item: ["单个展示项目的数据。", "Data for one displayed item."],
   products: ["商品数据列表，每件商品应有稳定的标识。", "Product data list; each product should have a stable identifier."],
   campaigns: ["品牌活动与推荐商品的数据列表。", "Brand campaign and recommended-product data."],
@@ -285,7 +287,7 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox Combobox Coupon Dialog Divider Drawer DropdownMenu EmptyState Field FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon NavigationMenu Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection Progress QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail Skeleton Slider SocialMediaGallery Spinner Switch TabBar Tabs Tag Textarea ThemeHero ThemeProductList Toast Tooltip TrendingSearches".split(" ");
+const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox CollectionCard Combobox Coupon Dialog Divider Drawer DropdownMenu EmptyState Field FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon NavigationMenu Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection Progress QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail Skeleton Slider SocialMediaGallery Spinner Switch TabBar Tabs Tag Textarea ThemeHero ThemeProductList Toast Tooltip TrendingSearches".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");
