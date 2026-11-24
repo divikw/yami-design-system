@@ -33,7 +33,7 @@
       "type": "\"card\" | \"plain\"",
       "required": false,
       "default": "plain",
-      "description": "Outer spacing context. Plain is the default and removes outer padding; card adds 2px padding when placed over a visual background."
+      "description": "Plain is the default and removes outer padding. Card adds 2px padding and gives the product image a white background."
     },
     "image": {
       "type": "string",
@@ -200,6 +200,7 @@
 
   "tokens": [
     "--fill-tertiary",
+    "--color-white-1000",
     "--border-default",
     "--stroke-default",
     "--text-primary",
@@ -233,6 +234,7 @@
     "--line-height-body-md",
     "--line-height-price-sm",
     "--line-height-strike-sm",
+    "--space-025",
     "--space-050",
     "--space-100"
   ],
@@ -241,6 +243,10 @@
     "--fill-tertiary": {
       "property": "background-color",
       "selector": ".imageWrap"
+    },
+    "--color-white-1000": {
+      "property": "background-color",
+      "selector": ".root[data-surface=\"card\"] .imageWrap:has(.image)"
     },
     "--border-default": {
       "property": "color",
@@ -336,9 +342,13 @@
       "property": "line-height",
       "selector": ".priceOriginal"
     },
+    "--space-025": {
+      "property": "column-gap",
+      "selector": ".ratingRow, .ratingSoldRow"
+    },
     "--space-050": {
       "property": "gap",
-      "selector": ".badgeStack, .ratingSoldRow, .sold, .promotions"
+      "selector": ".badgeStack, .sold, .promotions"
     },
     "--space-100": { "property": "padding", "selector": ".content" }
   },

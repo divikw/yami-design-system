@@ -47,7 +47,10 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
     : positioningColumnCount * 249
 
   useLayoutEffect(() => {
-    function measure() {
+    const headerNode = headerRef.current
+    const view = headerNode?.ownerDocument.defaultView
+    if (!headerNode || !view) return
+    const measure = () => {
       const header = headerRef.current?.getBoundingClientRect()
       const anchor = anchorRef.current?.getBoundingClientRect()
       if (!header || !anchor) return
@@ -56,19 +59,19 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
       // Align the second column after the 248px root column and 1px menu border.
       const left = Math.max(
         anchor.left,
-        Math.min(trigger.left - 249, window.innerWidth - positioningWidth - anchor.left),
+        Math.min(trigger.left - 249, view.innerWidth - positioningWidth - anchor.left),
       )
       setPosition({ top, left, scrimTop: Math.max(0, header.bottom) })
     }
     measure()
     const observer = new ResizeObserver(measure)
-    if (headerRef.current) observer.observe(headerRef.current)
-    window.addEventListener('resize', measure)
-    window.addEventListener('scroll', measure, true)
+    observer.observe(headerNode)
+    view.addEventListener('resize', measure)
+    view.addEventListener('scroll', measure, true)
     return () => {
       observer.disconnect()
-      window.removeEventListener('resize', measure)
-      window.removeEventListener('scroll', measure, true)
+      view.removeEventListener('resize', measure)
+      view.removeEventListener('scroll', measure, true)
     }
   }, [positioningWidth, headerRef, anchorRef, triggerElement])
 
@@ -112,13 +115,15 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
   useEffect(() => {
     const menu = menuRef.current!
     const trigger = triggerElement
-    if (!trigger) return undefined
+    const doc = menu.ownerDocument
+    const view = doc.defaultView
+    if (!trigger || !view) return undefined
     let closeTimer: ReturnType<typeof setTimeout> | undefined
     const triggerBounds = trigger.getBoundingClientRect()
     let previousPoint = { x: triggerBounds.left + triggerBounds.width / 2, y: triggerBounds.top + triggerBounds.height / 2 }
     let corridorOrigin: typeof previousPoint | undefined
     let inCorridor = false
-    const inside = (target: EventTarget | null) => target instanceof Node && (menu.contains(target) || trigger.contains(target))
+    const inside = (target: EventTarget | null) => target instanceof view.Node && (menu.contains(target) || trigger.contains(target))
     function cancelClose() {
       clearTimeout(closeTimer)
       closeTimer = undefined
@@ -128,7 +133,7 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
     function scheduleClose(delay: number) {
       clearTimeout(closeTimer)
       closeTimer = setTimeout(() => {
-        if (!keyboardMode.current) onClose(menu.contains(document.activeElement))
+        if (!keyboardMode.current) onClose(menu.contains(doc.activeElement))
       }, delay)
     }
     function towardsMenu(point: typeof previousPoint) {
@@ -178,8 +183,8 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
       }
     }
     // Hovering another parent can remove the focused child and return focus to body.
-    document.addEventListener('keydown', dismiss)
-    document.addEventListener('pointermove', move)
+    doc.addEventListener('keydown', dismiss)
+    doc.addEventListener('pointermove', move)
     for (const region of [menu, trigger]) {
       region.addEventListener('pointerenter', cancelClose)
       region.addEventListener('pointerleave', leave)
@@ -187,8 +192,8 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
     }
     return () => {
       cancelClose()
-      document.removeEventListener('keydown', dismiss)
-      document.removeEventListener('pointermove', move)
+      doc.removeEventListener('keydown', dismiss)
+      doc.removeEventListener('pointermove', move)
       for (const region of [menu, trigger]) {
         region.removeEventListener('pointerenter', cancelClose)
         region.removeEventListener('pointerleave', leave)
@@ -273,7 +278,7 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
         : null
       select(item, level)
       if (visibleChild) visibleChild.focus()
-      else requestAnimationFrame(() => menuRef.current?.querySelector<HTMLElement>(childSelector)?.focus())
+      else event.currentTarget.ownerDocument.defaultView?.requestAnimationFrame(() => menuRef.current?.querySelector<HTMLElement>(childSelector)?.focus())
     } else if (event.key === 'ArrowLeft' && level > 0) {
       event.preventDefault()
       menuRef.current?.querySelector<HTMLElement>(`[data-level="${level - 1}"] [aria-expanded="true"]`)?.focus()
@@ -304,7 +309,8 @@ export function HeaderCategoryMenu({ id, data, headerRef, anchorRef, triggerElem
         onPointerLeave={cancelSubmenuSelect}
         onBlur={(event) => {
           const next = event.relatedTarget
-          if (next instanceof Element && !event.currentTarget.contains(next) && next !== triggerElement && !next.closest('[data-slot="header-category-scrim"]')) onClose()
+          const OwnerElement = event.currentTarget.ownerDocument.defaultView?.Element
+          if (OwnerElement && next instanceof OwnerElement && !event.currentTarget.contains(next) && next !== triggerElement && !next.closest('[data-slot="header-category-scrim"]')) onClose()
         }}
       >
         {columns.slice(0, columnCount).map((items, level) => (

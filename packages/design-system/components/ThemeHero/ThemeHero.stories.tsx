@@ -14,8 +14,8 @@ const meta = {
     descriptionCollapseLabel: { description: "收起描述的本地化文案。" },
     tags: { description: "可选的简短关键词，以不可交互的 Badge 展示。" },
     tagSize: { description: "关键词标签尺寸，默认 sm；低于 1024px 时统一使用 sm。" },
-    tagTone: { description: "标签明暗样式，默认 dark。" },
-    image: { description: "主题图片，包含替代文本、原始尺寸及可选裁切焦点。" },
+    tagTone: { description: "标签明暗样式。带图时默认 dark，无图时默认使用主题色。" },
+    image: { description: "可选主题图片，含替代文本、原始尺寸及裁切焦点。省略时显示纯文字介绍。" },
     backgroundImageSrc: { description: "可选的模糊背景图片，默认使用主题图片。" },
     backgroundColor: { description: "图片底边预采样颜色，用于移动端自适应遮罩。" },
     cta: { description: "可选主操作按钮，默认不显示。" },
@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "主题展示模块，结合标题、可展开说明、关键词标签与主题图片。PC 为双栏布局，Mobile 将文字叠加在图片底部；默认不显示操作按钮。",
+          "主题展示模块，包含标题、可展开说明、关键词标签和可选图片。省略图片时显示紧凑的纯文字介绍。",
       },
       source: {
         language: "tsx",
@@ -599,3 +599,45 @@ export const MobilePreview: Story = {
 };
 
 export const Playground: Story = { tags: ["!dev", "!test"] };
+
+export const WithoutImage: Story = {
+  name: "无图介绍 / Text-only introduction",
+  args: { description: "Skin-friendly ingredients and targeted actives for simple daily care." },
+  render: (args, { globals }) => (
+    <ThemeHero
+      {...args}
+      {...(globals.locale === "zh" && {
+        title: "Anua：温和有效的韩系护肤",
+        description: "以温和亲肤成分结合针对性活性成分，为舒缓、补水、提亮与屏障护理提供简单清晰的日常方案。",
+        descriptionExpandLabel: "更多",
+        descriptionCollapseLabel: "收起",
+        tags: ["Heartleaf 鱼腥草", "温和日常配方", "针对性活性护理"],
+      })}
+      image={undefined}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: `import { ThemeHero } from "@yami/design-system";
+
+<ThemeHero
+  title="Anua: Gentle yet Effective Korean Skincare"
+  description="Skin-friendly ingredients and targeted actives for simple daily care."
+  tags={["Heartleaf Botanical", "Gentle Daily Formulas", "Targeted Active Care"]}
+/>`,
+      },
+    },
+  },
+  play: ({ canvasElement }) => {
+    const hero = canvasElement.querySelector<HTMLElement>('[data-slot="theme-hero"]');
+    if (
+      !hero?.querySelector("h2") ||
+      !hero.querySelector('[data-slot="theme-hero-description"]') ||
+      hero.querySelectorAll('[data-slot="badge"]').length !== 3 ||
+      hero.querySelector('img, [data-slot="theme-hero-scrim"]')
+    ) {
+      throw new Error("Text-only ThemeHero must show its copy and tags without artwork or a scrim");
+    }
+  },
+};

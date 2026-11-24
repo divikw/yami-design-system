@@ -128,26 +128,6 @@
   }
 }
 
-.clear:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.clear {
-  height: 36px;
-  flex: 0 0 auto;
-  padding-inline: var(--space-100);
-  color: var(--text-primary);
-  background: transparent;
-  border: 0;
-  font-family: inherit;
-  font-size: var(--font-size-body-md);
-  line-height: var(--line-height-body-md);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
-
 .results :global([data-slot="product-list-container"]) {
   max-width: var(--search-results-content-max-width);
 }

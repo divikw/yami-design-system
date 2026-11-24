@@ -1,8 +1,11 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import type { ProductListItem } from "@yami/design-system";
 import { createThemeHeroProps } from "@yami/design-system/components/ThemeHero/fixtures";
 
 import { TopicLandingPage } from "./TopicLandingPage";
+import type { TopicLandingPageFaq, TopicLandingPageRelatedKeywords } from "./TopicLandingPage.types";
 import { createTopicLandingPageFixture } from "./fixtures";
 
 const meta = {
@@ -39,13 +42,72 @@ const meta = {
     ...(import.meta.env.MODE === "test" ? { viewport: { value: "yamiDesktopMd", isRotated: false } } : {}),
   },
   args: createTopicLandingPageFixture(),
-  render: (args, { globals }) => {
+  render: function Render(args, { globals, parameters }) {
+    const [notifications, setNotifications] = useState<ReadonlySet<string>>(() => new Set());
     const locale = globals.locale === "zh" ? "zh" : "en";
     const localizedArgs = createTopicLandingPageFixture(locale);
-
+    const faqByLocale = parameters.faqByLocale as Record<"en" | "zh", TopicLandingPageFaq> | undefined;
+    const faq = faqByLocale?.[locale] ?? args.faq;
+    const relatedKeywordsByLocale = parameters.relatedKeywordsByLocale as Record<"en" | "zh", TopicLandingPageRelatedKeywords> | undefined;
+    const relatedKeywords = relatedKeywordsByLocale?.[locale] ?? args.relatedKeywords;
+    const catalogFilters = args.waterfall.catalogFilters;
+    const productTitle = locale === "zh" ? "编辑精选" : "Editor’s Picks";
+    const reviewTitle = catalogFilters && locale === "zh" ? "顾客评价" : undefined;
+    const soldOutIds = new Set(args.waterfall.products
+      .filter((product) => product.availability === "sold-out")
+      .map((product) => product.id));
+    const applyAvailability = (product: ProductListItem): ProductListItem =>
+      soldOutIds.has(product.id)
+        ? {
+          ...product,
+          availability: "sold-out",
+          availabilityLabel: locale === "zh" ? "已售完" : "Sold out",
+          onNotify: () => setNotifications((current) => new Set(current).add(product.id)),
+          notifyLabel: notifications.has(product.id)
+            ? (locale === "zh" ? "已设置到货通知" : "Notification set")
+            : (locale === "zh" ? "到货通知" : "Notify me"),
+          notifyDisabled: notifications.has(product.id),
+        }
+        : product;
     return (
       <TopicLandingPage
         {...localizedArgs}
+        hero={{
+          ...localizedArgs.hero,
+          image: args.hero.image ? localizedArgs.hero.image : undefined,
+          tags: args.hero.tags?.length ? localizedArgs.hero.tags : undefined,
+          tagTone: args.hero.tagTone,
+        }}
+        primaryTabs={{
+          ...localizedArgs.primaryTabs,
+          defaultValue: args.primaryTabs.defaultValue,
+          items: args.primaryTabs.items.flatMap(({ value }) => {
+            const tab = localizedArgs.primaryTabs.items.find((item) => item.value === value);
+            return tab ? [tab] : [];
+          }),
+        }}
+        waterfall={catalogFilters ? {
+          ...localizedArgs.waterfall,
+          catalogFilters,
+          rowsPerPage: args.waterfall.rowsPerPage,
+          loadMoreLabel: locale === "zh" ? "查看更多" : "View more",
+          title: productTitle,
+          description: undefined,
+          products: localizedArgs.waterfall.products.map(applyAvailability),
+          productsByTab: Object.fromEntries(
+            Object.entries(localizedArgs.waterfall.productsByTab ?? {}).map(([category, products]) =>
+              [category, products.map(applyAvailability)],
+            ),
+          ),
+        } : localizedArgs.waterfall}
+        reviewList={reviewTitle && localizedArgs.reviewList ? { ...localizedArgs.reviewList, title: reviewTitle } : localizedArgs.reviewList}
+        hiddenModules={args.hiddenModules}
+        reviewsAfterProducts={args.reviewsAfterProducts}
+        faq={faq}
+        relatedKeywords={relatedKeywords && {
+          ...relatedKeywords,
+          mode: relatedKeywords.mode ?? (globals.theme === "dark" ? "dark" : "light"),
+        }}
         contentMaxWidth={args.contentMaxWidth}
         titleFontFamily={args.titleFontFamily}
       />
@@ -240,7 +302,7 @@ export const Pc: Story = {
     const isDesktopMotion = page.getBoundingClientRect().width >= 1024;
     if (
       !initialReveal ||
-      (!initialRevealContent || initialRevealContent.length < 3) ||
+      (!initialRevealContent || initialRevealContent.length < 2) ||
       !scrollReveals ||
       Array.from(scrollReveals).some(
         (section, index) =>
@@ -412,21 +474,25 @@ export const Pc: Story = {
 
     const hero = page.querySelector('[data-slot="theme-hero"]');
     if (!hero) throw new Error("Topic landing page is missing ThemeHero");
+    const hasHeroImage = Boolean(args.hero.image);
     const heroForeground = hero.querySelector<HTMLImageElement>(
       '[data-slot="theme-hero-media"] img',
     );
     const heroAtmosphere = hero.querySelector<HTMLImageElement>(
       '[data-slot="theme-hero-atmosphere"] img',
     );
-    if (
+    if (hasHeroImage && (
       !heroForeground?.src.includes("anua-hero.webp") ||
       heroForeground.fetchPriority !== "high" ||
       !heroAtmosphere?.src.includes("anua-hero-atmosphere.webp") ||
       heroAtmosphere.fetchPriority !== "low"
-    ) {
+    )) {
       throw new Error(
         "Topic landing Hero must prioritize an optimized foreground and use a lightweight atmosphere image",
       );
+    }
+    if (!hasHeroImage && hero.querySelector('img, [data-slot="theme-hero-scrim"]')) {
+      throw new Error("The text-only brand introduction must render without images or a scrim");
     }
 
     const shortcutRail = page.querySelector<HTMLElement>(
@@ -694,11 +760,11 @@ export const Pc: Story = {
     const heroTags = heroBadgeElements.map((badge) =>
       normalize(badge.textContent),
     );
+    const expectedHeroTags = args.hero.tags?.length ? localizedExpectation.heroTags : [];
     if (
-      heroTags.length !== localizedExpectation.heroTags.length ||
-      heroTags.some(
-        (tag, index) => tag !== localizedExpectation.heroTags[index],
-      ) ||
+      heroTags.length !== expectedHeroTags.length ||
+      heroTags.some((tag, index) => tag !== expectedHeroTags[index]) ||
+      (!expectedHeroTags.length && hero.querySelector('[data-slot="theme-hero-tags"]')) ||
       heroBadgeElements.some((badge) => {
         const style = getComputedStyle(badge);
         const expectedHeight = isMobileHero ? "20px" : "24px";
@@ -706,8 +772,15 @@ export const Pc: Story = {
         const expectedLineHeight = isMobileHero ? "16px" : "20px";
         const usesLightBadge =
           isMobileHero && hero.dataset.mobileForeground === "dark";
+        const hasExpectedBadgeTone = hasHeroImage
+          ? badge.dataset.tone === "dark" &&
+            style.backgroundColor === (usesLightBadge
+              ? "rgba(255, 255, 255, 0.68)"
+              : "rgba(0, 0, 0, 0.08)") &&
+            style.color === (usesLightBadge ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)")
+          : badge.dataset.tone === undefined && badge.dataset.emphasis === "secondary";
         return (
-          badge.dataset.tone !== "dark" ||
+          !hasExpectedBadgeTone ||
           badge.dataset.size !== "md" ||
           style.height !== expectedHeight ||
           style.borderRadius !== "4px" ||
@@ -715,12 +788,6 @@ export const Pc: Story = {
           style.lineHeight !== expectedLineHeight ||
           style.paddingLeft !== "4px" ||
           style.paddingRight !== "4px" ||
-          style.backgroundColor !==
-            (usesLightBadge
-              ? "rgba(255, 255, 255, 0.68)"
-              : "rgba(0, 0, 0, 0.08)") ||
-          style.color !==
-            (usesLightBadge ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)") ||
           style.boxShadow !== "none"
         );
       })

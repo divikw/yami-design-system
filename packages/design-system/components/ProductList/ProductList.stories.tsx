@@ -1,6 +1,6 @@
 import baseMeta, * as examples from "./ProductList.story-examples";
 
-export default { ...baseMeta, id: "yami-components-commerce-product-list", title: "YAMI/Modules/Commerce/Product List" };
+export default { ...baseMeta, id: "yami-components-commerce-product-list", title: "YAMI/Modules/Product Display/Product List" };
 
 export const Showcase = { ...examples.Showcase, tags: ["!dev", "!autodocs"], play: examples.Showcase.play };
 

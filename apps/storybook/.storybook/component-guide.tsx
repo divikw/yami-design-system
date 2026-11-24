@@ -13,10 +13,11 @@ export interface GuideExample {
   code: string;
   preview: ReactNode;
   previewBackground?: string;
+  fillContentWidth?: boolean;
 }
 
 /** Content for the shared component documentation layout; demos use real YAMI components. */
-export function ComponentGuide({ name, slug, intro, previous, next, locale, composition, examples, leadExample, usageCode = examples[0].code, usageNote, practices, storyExamples, api, apiNote, accessibility, reference, legacyAnchors, previewMode }: {
+export function ComponentGuide({ name, slug, intro, previous, next, locale, composition, examples, leadExample, usageCode = examples[0].code, usageNote, practices, storyExamples, api, apiNote, accessibility, reference, legacyAnchors, previewMode, fullWidth }: {
   name: string;
   slug: string;
   intro: string;
@@ -25,7 +26,7 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   locale: DocsLocale;
   composition: string | [string, string][];
   examples: GuideExample[];
-  leadExample?: Pick<GuideExample, "code" | "preview" | "previewBackground">;
+  leadExample?: Pick<GuideExample, "code" | "preview" | "previewBackground" | "fillContentWidth">;
   usageCode?: string;
   usageNote?: string;
   storyExamples?: ReactNode;
@@ -36,6 +37,7 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   reference?: { label: string; href: string };
   legacyAnchors?: Record<string, readonly string[]>;
   previewMode?: DocsPreviewMode;
+  fullWidth?: boolean;
 }) {
   const zh = locale === "zh";
   const notes = componentGuideNotes(slug, locale);
@@ -46,7 +48,8 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
   const anchors = (section: string) => legacyAnchors?.[section]?.map((id) => <span className={styles.legacyAnchor} id={id} key={id} aria-hidden="true" />);
   const [imports, ...usage] = usageCode.split("\n\n");
   return <ComponentDocsTemplate name={name} slug={slug} intro={intro} previous={previous} next={next} locale={locale}>
-    <DocsExample key={`lead-${locale}`} locale={locale} code={lead.code} name="lead" previewMode={previewMode} previewBackground={lead.previewBackground}>{lead.preview}</DocsExample>
+    <DocsExample key={`lead-${locale}`} locale={locale} code={lead.code} name="lead" previewMode={previewMode} previewBackground={lead.previewBackground}
+      fullWidth={fullWidth} fillContentWidth={lead.fillContentWidth}>{lead.preview}</DocsExample>
     <section>{anchors("usage")}<h2 id={`${slug}-usage`}>{zh ? "用法" : "Usage"}</h2>
       {usageNote && <p>{usageNote}</p>}
       <CodeBlock locale={locale} code={imports} />
@@ -72,7 +75,8 @@ export function ComponentGuide({ name, slug, intro, previous, next, locale, comp
       {examples.map((example) => <section key={example.id} id={example.anchor}>
         {anchors(example.id)}
         <h3 id={`${slug}-${example.id}`}>{example.title}</h3><p>{example.description}</p>
-        <DocsExample key={`${example.id}-${locale}`} name={example.id} locale={locale} code={example.code} previewMode={previewMode} previewBackground={example.previewBackground}>{example.preview}</DocsExample>
+        <DocsExample key={`${example.id}-${locale}`} name={example.id} locale={locale} code={example.code} previewMode={previewMode} previewBackground={example.previewBackground}
+          fullWidth={fullWidth} fillContentWidth={example.fillContentWidth}>{example.preview}</DocsExample>
       </section>)}
       {storyExamples}
     </section>

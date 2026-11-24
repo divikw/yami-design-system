@@ -150,7 +150,8 @@ export function Header({
   const hasCategoryMenu = Boolean(categoryMenu?.items.length && categories.some((item) => item.id === categoryMenu.triggerId))
 
   useEffect(() => {
-    const desktop = window.matchMedia('(min-width: 1024px)')
+    const desktop = headerRef.current?.ownerDocument.defaultView?.matchMedia('(min-width: 1024px)')
+    if (!desktop) return
     const closeOnMobile = () => { if (!desktop.matches) setOverlay(null) }
     desktop.addEventListener('change', closeOnMobile)
     return () => desktop.removeEventListener('change', closeOnMobile)

@@ -1,7 +1,7 @@
 <!-- locale:zh -->
 # Accordion — 使用说明
 
-用于商品规格、营养成分、配料、免责声明及 FAQ 等可展开内容。样式抽取自商品详情页现有 DetailDisclosure：16px 标题、右侧 16px 加号／减号、相邻面板间的细分隔线，无卡片外框或阴影。尚未独立绑定 Figma 组件，成熟度为 experimental。
+用于商品规格、营养成分、配料、免责声明及 FAQ 等可展开内容。样式抽取自商品详情页现有 DetailDisclosure。标题在 Mobile 为 14px，1024px 起为 16px，行高均为 20px。右侧加号／减号为 16px，相邻面板间使用细分隔线，无卡片外框或阴影。尚未独立绑定 Figma 组件，成熟度为 experimental。
 
 ## 多面板组合
 
@@ -35,7 +35,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@y
 <!-- locale:en -->
 # Accordion — Usage
 
-An inline disclosure for specifications, nutrition, ingredients, disclaimers and FAQs. Extracted from the existing product-detail DetailDisclosure: a 16px heading, 16px plus/minus icon and fine separators between adjacent panels, with no card outline or shadow. Experimental; no independently verified Figma component binding.
+An inline disclosure for specifications, nutrition, ingredients, disclaimers and FAQs. Extracted from the existing product-detail DetailDisclosure. Headings use 14px on mobile and 16px from 1024px, with a 20px line height at both sizes. The 16px plus/minus icon and fine separators between adjacent panels remain, without a card outline or shadow. Experimental, with no independently verified Figma component binding.
 
 ## Grouped panels
 

@@ -4,6 +4,7 @@ import type {
   HeaderProps,
   ProductListItem,
   ProductListProps,
+  ThemeHeroImage,
 } from "@yami/design-system";
 import {
   createFooterAppLinks,
@@ -347,7 +348,9 @@ function createStandardRailProps(
 
 export function createTopicLandingPageFixture(
   locale: TopicLandingPageLocale = "en",
-): TopicLandingPageProps {
+): TopicLandingPageProps & {
+  hero: TopicLandingPageProps["hero"] & { image: ThemeHeroImage };
+} {
   const copy = pageCopy[locale];
   const header = createStorefrontHeader(locale);
   const hero = createThemeHeroProps();

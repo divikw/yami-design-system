@@ -5,3 +5,10 @@
     window.history.replaceState(window.history.state, "", entryUrl);
   }
 </script>
+<style>
+  /* Let the Docs iframe's own placeholder show through the startup overlay. */
+  :has(> #preview-loader):has(+ #storybook-preview-wrapper #storybook-preview-iframe[data-is-storybook="true"][src*="viewMode=docs"]) {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>

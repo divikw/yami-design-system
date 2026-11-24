@@ -27,7 +27,7 @@
       "status": "experimental",
       "version": "0.2.0",
       "path": "registry-items/accordion.json",
-      "digest": "079e76647e1a5cbfa625c0dd0092d10eed709b9f2c9725ef947eb27c689baa3d"
+      "digest": "ceaa2c9897bceac5eeae933a953352cb88368f343473bfce19150a3eed53f0d1"
     },
     {
       "name": "activity-page-header",
@@ -243,7 +243,7 @@
       "status": "beta",
       "version": "0.3.0",
       "path": "registry-items/header.json",
-      "digest": "46f10ae3d77cd03709fd1d09cbacbee69b49187cac999ccbccebdb56f995c1a2"
+      "digest": "26fbc81895c2c3c4e73ef1ca236b1adeae95489a07c6c66f1e4826405c6e5c29"
     },
     {
       "name": "hero-banner",
@@ -261,7 +261,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/horizontal-scroll-list.json",
-      "digest": "e5cf283d265ca50b4fada5c3246b6b90a92876ef8a1c9f5264c41f58285fcff7"
+      "digest": "447a6f5950f54a15eb17ca561673e6b0938e0b64b29adbd4a69678dfb311535c"
     },
     {
       "name": "input",
@@ -324,7 +324,7 @@
       "status": "stable",
       "version": "0.3.2",
       "path": "registry-items/product-card.json",
-      "digest": "ad0b3cdebc8278b41bcf8b72f0956a43b31c63dc585ee07aea85b8ffb3e536e8"
+      "digest": "9605e3a575630773078de783ee2c55701296f618d77fc2d39d94727589c147e6"
     },
     {
       "name": "product-list",
@@ -333,7 +333,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "39c29bde56e698e6f342a115e04d6391e85a3613bf923488c7220af609de3715"
+      "digest": "aa4a00e249dbe046bca854bb43c26190cda7380576478d802f319c6b026cb59f"
     },
     {
       "name": "product-media-gallery",
@@ -504,7 +504,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "ae3f4a30f5df3b950aaabbf04017a1bb8a3885a02beabbbf2c4c7659e3792e59"
+      "digest": "3e66ed5e0e508d9d0edb014dd8a3e648a3bfb726e4e78743d3fc5177d1b21bfb"
     },
     {
       "name": "theme-product-list",
