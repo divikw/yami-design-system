@@ -4,6 +4,7 @@ import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.s
 export default {
   ...createBeautyKeywordMeta(collection, {
     title: { en: "SKIN1004", zh: "SKIN1004" },
+    faqSubject: { en: "SKIN1004 skincare", zh: "SKIN1004 护肤品" },
     description: {
       en: "Explore SKIN1004’s Madagascar Centella line, from cleansing foam and ampoules to Water-Fit Sun Serum. Choose a single bottle or a duo for your daily routine.",
       zh: "从洁面泡沫、安瓶到水感防晒精华，按护肤步骤浏览 SKIN1004 的马达加斯加积雪草系列。日常防晒单支、双支装都能在这里找到。",

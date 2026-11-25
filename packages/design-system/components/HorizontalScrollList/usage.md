@@ -8,19 +8,67 @@ the square surface and 8px item/edge spacing over the caller-provided background
 or keep the default `surface="plain"` for a transparent rail. Both surfaces use
 8px item and edge spacing on mobile. Plain desktop item geometry stays caller-owned.
 
+## Scroll boundaries
+
+For a mobile list that reaches the page edges, expand the scroll container
+through the page section's inline padding. Apply the same inset inside the
+scroll container so the first item aligns with the heading at rest and the
+last item has breathing room at the end. Items can cross the inset as they
+scroll. For a list inside a card or dialog, keep the scroll container within
+the host's intended boundary.
+
+Use the markup and styles together in a full-width section. Pass your products
+as `ProductCard` props and match the section's existing inline padding token.
+
 ```tsx
-<HorizontalScrollList
-  as="ul"
-  aria-label="Featured products"
-  className={styles.list}
->
-  {products.map((product) => (
-    <li key={product.id} className={styles.item}>
-      <ProductCard {...product} />
-    </li>
-  ))}
-</HorizontalScrollList>
+<section className={styles.section}>
+  <h2>Featured products</h2>
+  <HorizontalScrollList as="ul" aria-label="Featured products" className={styles.list}>
+    {products.map((product) => (
+      <li key={product.id} className={styles.item}>
+        <ProductCard {...product} />
+      </li>
+    ))}
+  </HorizontalScrollList>
+</section>
 ```
+
+```css
+.section {
+  padding-inline: var(--layout-page-margin-default);
+}
+
+.list {
+  display: flex;
+  gap: var(--space-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  flex: 0 0 min(16rem, 100%);
+  min-inline-size: 0;
+  scroll-snap-align: start;
+}
+
+@media (width < 1024px) {
+  .section > .list[data-surface="plain"] {
+    inline-size: calc(100% + 2 * var(--layout-page-margin-default));
+    margin-inline: calc(-1 * var(--layout-page-margin-default));
+    padding-inline: var(--layout-page-margin-default);
+    scroll-padding-inline: var(--layout-page-margin-default);
+  }
+}
+```
+
+## Verification
+
+Open the actual page or host at a narrow viewport where the list overflows.
+
+- Check the visible clipping edge at rest and while scrolling. It should align with the intended page or host edge. Check where the first item starts relative to the heading.
+- Scroll to each end. The first and last items should be fully visible at their respective ends, with room for their focus indicators. Check that the page itself has no horizontal overflow.
+- Verify touch or trackpad scrolling and keyboard access. Check snap positions and paging controls when the design uses them.
 
 ## Paging controls
 

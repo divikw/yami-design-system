@@ -51,6 +51,7 @@ export type TopicLandingPageProductRailProps = ProductListProps & {
 
 export interface TopicLandingPageFaq {
   title: string;
+  description?: string;
   items: readonly { id: string; question: string; answer: string }[];
 }
 

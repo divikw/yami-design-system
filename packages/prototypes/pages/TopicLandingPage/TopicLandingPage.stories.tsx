@@ -1280,7 +1280,7 @@ export const Pc: Story = {
         reviewItemsStyle.paddingTop !== "0px" ||
         reviewItemsStyle.paddingBottom !== "0px" ||
         firstReviewCard.getBoundingClientRect().width !== 320 ||
-        getComputedStyle(firstReviewCard).borderRadius !== "8px"
+        getComputedStyle(firstReviewCard).borderRadius !== "12px"
       ) {
         throw new Error(
           "Topic landing page ReviewList mobile layout must match the shared ReviewList/ProductList geometry",
@@ -1289,7 +1289,7 @@ export const Pc: Story = {
     } else {
       if (
         reviewGap !== "16px" ||
-        getComputedStyle(firstReviewCard).borderRadius !== "8px"
+        getComputedStyle(firstReviewCard).borderRadius !== "12px"
       ) {
         throw new Error(
           "Topic landing page ReviewList desktop must preserve its 16px gap and desktop radius",

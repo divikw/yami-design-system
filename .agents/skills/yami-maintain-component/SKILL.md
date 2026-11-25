@@ -44,8 +44,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 - 公开 props 只覆盖已确定的使用场景；业务请求、商品数据获取、页面导航和异步业务状态由宿主负责。支持真实需要的 HTML 属性、ref、可访问名称与状态传递。
 - 优先消费现有语义 token；需要新增 token 时修改 `tokens/**/*.tokens.json` 的源文件，再生成产物，不手改 `generated/tokens.css`。
 - 遵循完整规范的语义颜色、字号、圆角、触达尺寸、键盘焦点和禁用状态。导航使用真实链接，操作使用按钮。移动端保留按下/焦点反馈，不引入桌面鼠标 hover 效果。
-- 填写或搜索提示使用输入框内的 `placeholder`，例如“可填写楼层、门牌等信息”或“搜索城市”。校验错误显示在对应输入框下方，并与控件关联。中英文文档示例、Storybook 预览和可复制代码均遵循此规则。
-- 选择 YAMI `Input` 规格时，有框内浮动标题就通过 `label` 提供标题，使用默认规格（可省略 `density`）。框内只有填写或搜索提示时，使用 `density="compact"` 和 `placeholder`，并通过外部标签或 `aria-label` 提供可访问名称。Storybook 中英文文档、PC 和移动端示例以及可复制代码均按此规则选择规格。
+- 调整表单时，按 [Input 用法](../../../packages/design-system/components/Input/usage.md)和 [Field 用法](../../../packages/design-system/components/Field/usage.md)选择规格、标签、填写提示及校验反馈。让实际组件、Storybook 预览和可复制代码遵循同一契约。
 - 覆盖必要的长文本、窄容器、禁用、加载、空状态等边界；仅实现该组件实际拥有的状态，不替宿主增加业务流程。
 
 ## 3. 同步真实契约、示例和文档
@@ -84,25 +83,20 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 
 ### Docs
 
-先读 [模板接入说明](../../../apps/storybook/.storybook/component-docs-template.md)，以当前模板源码为准，避免在技能中维护第二份尺寸和颜色规范。
+涉及 Docs 时，按[模板接入说明](../../../apps/storybook/.storybook/component-docs-template.md)处理章节、相邻导航、设备预览、背景、代码块和文档样式。
 
-- 常规页面复用 [ComponentGuide](../../../apps/storybook/.storybook/component-guide.tsx)，参考 [AspectRatio Docs](../../../apps/storybook/.storybook/aspect-ratio-docs.tsx)。特殊组合内容参考 [Accordion Docs](../../../apps/storybook/.storybook/accordion-docs.tsx)，仍使用 [ComponentDocsTemplate](../../../apps/storybook/.storybook/component-docs-template.tsx) 及其 `DocsExample`、`CodeBlock`、`Installation`、`DocsApiTable`。
-- 新增或明确重做 Docs 时接入共享模板，并在 [Docs 路由](../../../apps/storybook/.storybook/component-docs.tsx) 注册。局部组件修复不顺带迁移其他文档。章节采用简介与主示例、安装、用法、组合结构、必要示例、API；只展示真实支持的能力。
+- 常规页面复用 [ComponentGuide](../../../apps/storybook/.storybook/component-guide.tsx)，参考 [AspectRatio Docs](../../../apps/storybook/.storybook/aspect-ratio-docs.tsx)。需要自定义章节时，使用 [ComponentDocsTemplate](../../../apps/storybook/.storybook/component-docs-template.tsx) 及其 `DocsExample`、`CodeBlock`、`DocsApiTable`，参考 [CollectionCard Docs](../../../apps/storybook/.storybook/product-display-docs.tsx)。
+- 新增或明确重做 Docs 时接入共享模板，并在 [Docs 路由](../../../apps/storybook/.storybook/component-docs.tsx) 注册。局部组件修复按影响范围更新示例，保留已有 URL、锚点及入口。
 - 使用公开导出的 YAMI 组件，确保示例代码与预览、API 表格一致。文案提供中英文并复用全局 locale/theme；需要更新属性说明时同步 [属性说明字典](../../../apps/storybook/.storybook/arg-descriptions.ts)。
-- 演示组件在反色表面上的效果时，在示例的 `previewBackground` 设置 `var(--surface-inverse)`，由模板铺满代码块上方的展示区。组件按自身布局显示，可复制代码展示调用方如何设置同一背景。参考 [Button 的反色示例](../../../apps/storybook/.storybook/button-docs.tsx)。
-- 同时比较多种背景适配样式时，按组件契约配对前景与底色。例如 Badge 的深色款放在浅底，浅色款放在深底，描边款沿用对应底色。参考 [Badge 的背景适配示例](../../../apps/storybook/.storybook/badge-docs.tsx)。
-- 按侧栏顺序配置上一/下一组件和真实 Story ID；首尾仅省略不存在的方向。保留已有 URL、锚点及入口。
-- 所有 Docs 示例直接展示组件，随 Docs 视口响应。设备对比统一使用侧栏的 PC、Mobile Stories，主示例和章节示例均不添加设备切换控件。
-- 全局弹层采用[模板的文档预览模式](../../../apps/storybook/.storybook/component-docs-template.md#预览模式)，打开后检查遮罩覆盖范围和关闭后的焦点恢复。
-- 沿用模板的代码折叠、复制、固定行号、隐藏横向滚动条、圆角、表格描边、按钮反馈和响应式样式，不另写一套。文档图标沿用 Lucide 16px / 2px 线宽，不改变真实组件图标。文档布局断点不能替代组件设备断点。
-- YAMI 组件按中文、英文的从左到右布局交付。核对 shadcn/ui 或 Base UI 时，除非用户明确要求 RTL，否则跳过 RTL 专属 API、配置、Story、文档示例和验收项。保留底层原语的原生行为。
-- 不增加 Overview/Properties 页签、框架切换栏、RTL 章节或 Storybook Controls；需要演示属性时使用真实组件示例。不要把 Storybook Source 再套进模板代码块形成嵌套。
+- 特定背景示例按组件契约配对前景与底色，参考 [Button 反色示例](../../../apps/storybook/.storybook/button-docs.tsx)和 [Badge 背景示例](../../../apps/storybook/.storybook/badge-docs.tsx)。全局弹层使用[文档预览模式](../../../apps/storybook/.storybook/component-docs-template.md#预览模式)。
+- 组件、文档示例和 Storybook 验收遵循设计系统的[语言与方向规则](../../../packages/design-system/SKILL.zh-CN.md#语言与方向)。
+- 保留已接入的 Properties 入口。新增属性试用时，按[模板接入 Properties](../../../apps/storybook/.storybook/component-docs-template.md#接入-properties)，用同一份属性值渲染真实组件并生成代码。代码示例使用模板的代码块。
 
 ### Stories
 
 - [main.ts](../../../apps/storybook/.storybook/main.ts) 自动发现 `components/**/*.stories.tsx`；基础组件使用平铺 `YAMI/Components/<Name>`，商业组合模块沿用 `YAMI/Modules/Commerce/...`。`meta.json.category` 与侧栏分组分开维护。
 - canonical Story 绑定 `component`，使用 `Meta<typeof Component>`、`StoryObj<typeof meta>`，保留真实 `Showcase` 供契约、Registry 和交互测试使用。现有 Playground/测试 Story 按需要保留，不作为额外可见入口。
-- 可见入口为 **Docs、PC、Mobile**；参考 [Select Stories](../../../packages/design-system/components/Select/Select.stories.tsx) 的设备预览：`component-device`、`dev`、`autodocs`、`!test` tags，`globals.viewport` 使用现有 `yamiDesktop`/`yamiMobile`，`play: undefined`。隐藏的行为 Story 继续参与测试。不要让预览一打开就自动执行交互。
+- 可见入口依次为 **Docs、Properties（已接入时）、PC、Mobile**。参考 [Select Stories](../../../packages/design-system/components/Select/Select.stories.tsx) 的设备预览：`component-device`、`dev`、`autodocs`、`!test` tags，`globals.viewport` 使用现有 `yamiDesktop`/`yamiMobile`，`play: undefined`。隐藏的行为 Story 继续参与测试。不要让预览一打开就自动执行交互。
 - 保留组件名的大小写以及现有 `meta.id`、Story 导出和 URL；不要为调整显示名称批量改名。草稿组件按现有 Draft/version 约定处理，不能借草稿豁免公开组件的文档与验收。
 - `play` 验证可观察行为，Portal 按实际挂载位置查询。PC/Mobile 页面复用全局语言、主题和 viewport，不另建平行状态。
 
@@ -136,7 +130,7 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 
 ## 7. 按风险验证并交付
 
-先运行能发现本次回归的定向检查，再完成相应交付检查。不要用只匹配实现文字的断言代替行为验证，也不要为可逆的低影响样式调整新增冗余测试。
+按[改动范围选择检查](../../../packages/design-system/SKILL.zh-CN.md#验证产物)。先验证可观察行为，优先复用能发现本次回归的定向检查。
 
 验收页面、模块和 Storybook 草稿时，核对源码的实际导入。例如侧边抽屉复用 YAMI `Drawer`，锚定浮层复用 YAMI `Popover`。`pnpm check:boundaries` 检查页面源码、Story 和草稿辅助代码的 Base UI 直接导入，找到对应的 YAMI 导出时报错，缺少对应导出时提醒并允许通过。
 
@@ -144,13 +138,17 @@ CSS 文件只在有组件样式时创建；只有真实设计绑定需要维护�
 | --- | --- |
 | 新增组件 | 公共包导入、契约/注册、Docs/PC/Mobile 入口、核心状态与边界 |
 | 样式/尺寸 | PC/Mobile 实际页面、长文本与窄容器、明暗主题、受影响消费者；对比原基线 |
+| 标题与内容间距 | 按[模块间距规则](../../../packages/design-system/SKILL.zh-CN.md#模块间距)核对容器的 gap、间距 Token，以及受影响视口中的实际距离 |
 | 行为/API/底层迁移 | 受控与非受控、默认值/事件、禁用与只读、键盘和焦点；表单组件检查提交值、校验及 reset；浮层检查 Portal、碰撞、滚动锁定、Escape 层级与焦点恢复；只检查组件实际支持的行为 |
-| Docs/模板 | 中英文、明暗主题和窄屏；代码展开/收起、复制代码、安装切换、上一/下一导航、API 表格；涉及模态和设备预览时执行[打开态验收](../../../apps/storybook/.storybook/component-docs-template.md#模态示例验收)；共享模板修改检查所有已接入页面 |
-| 仅技能说明 | 技能格式、入口引用和本地链接、规则与当前源码的一致性；不要求组件构建、生成或 Changeset |
+| Docs/模板 | 按 [Docs 验收](../../../apps/storybook/.storybook/component-docs-template.md#docs-验收)检查单组件文档或共享模板的接入页面与交互 |
+| 仅工作区技能（`.agents/skills/`） | 检查技能格式、入口引用、本地链接及规则与当前源码的一致性 |
+| 包内技能（`packages/design-system/SKILL*.md`）或组件 `usage.md` | 检查文档链接和示例。Registry 记录这些文件的摘要，依次执行 `pnpm generate:registry`、`pnpm generate:migration-map` 和 `pnpm check:generated` |
 
 涉及示例背景时，在宽屏和窄屏的 Docs 中分别检查浅色和深色主题。检查背景是否从展示区边缘连续覆盖到 iframe 内，内容是否因额外容器而挤压或换行，以及各款文字和描边在对应底色上是否清晰。
 
-组件逻辑/语义使用 `packages/design-system/tests/`；真实布局、键盘、浮层和响应式使用 Story `play` 或 `apps/storybook/tests/`。底层迁移和 API 改动还要验证实际调用模块/页面；单个组件 Story 通过不能代替消费者回归。行为预期以已安装 Base UI 的实际契约为准，不把焦点与选择等不同状态混为一谈。
+涉及横向滚动布局时，在实际宿主中执行[窄屏验收](../../../packages/design-system/components/HorizontalScrollList/usage.md#verification)。
+
+组件逻辑与语义使用 `packages/design-system/tests/`。真实布局、键盘、浮层和响应式使用 Story `play` 或 `apps/storybook/tests/`。共享交互改动、底层迁移和 API 改动按[改动范围规则](../../../packages/design-system/SKILL.zh-CN.md#验证产物)复验实际调用模块或页面。行为预期以已安装 Base UI 的实际契约为准，分别核对焦点、选择等状态。
 
 定向测试通过现有命令追加真实文件路径：
 
@@ -160,18 +158,9 @@ pnpm --filter @yami/storybook exec vitest run --project=browser <test-file>
 pnpm --filter @yami/storybook exec vitest run --project=storybook <story-file>
 ```
 
-共享组件新增、API 或底层迁移交付执行以下检查；局部样式/Docs 编辑运行定向测试及受影响的契约、生成、构建检查。若任务明确要求完整 review/发布，执行完整检查流程，不能用局部通过替代。
-
-```sh
-pnpm check:design-system-contracts
-pnpm check:generated
-pnpm validate
-pnpm --filter @yami/storybook build
-pnpm check:docgen
-pnpm changeset:status
-```
-
-`check:docgen` 必须在本次 Storybook 构建后执行；完整 Storybook/浏览器回归用 `pnpm test:storybook`，沿用脚本的隔离安排。先查当前 package scripts，避免使用已失效的命令。
+- 契约或生成产物受影响时，按需运行 `pnpm check:design-system-contracts` 或 `pnpm check:generated`。两项均已包含在 `pnpm validate` 中。
+- 涉及 Storybook 构建产物或 Docgen 时，先运行 `pnpm --filter @yami/storybook build`，再执行 `pnpm check:docgen`。需完整 Storybook 浏览器回归时运行 `pnpm test:storybook`。
+- 涉及 Changeset 时按第 6 节验证；发布验收以[版本维护指南](../../../docs/maintainers/zh/maintain-releases.md)为准。
 
 有 UI 改动时实际打开受影响的 Docs、PC 和 Mobile 页面，确认运行服务来自当前工作区及当前代码。检查点击、键盘、禁用、展开/关闭和响应式等相关状态，以及共享改动影响的页面；只需覆盖本次相关行为。构建通过不等于视觉或交互验收通过；没有变更前证据时，不声称“与原版完全一致”。
 

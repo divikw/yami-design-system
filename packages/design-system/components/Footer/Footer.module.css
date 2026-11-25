@@ -62,8 +62,19 @@
   margin-top: var(--space-400);
 }
 
-.groupTitle {
-  margin: 0 0 var(--space-050);
+.group {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-050);
+}
+
+.masthead :is(.groupTitle, .sideTitle, .appTitle) {
+  padding: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.masthead .groupTitle {
   color: var(--text-primary);
   font-size: var(--font-size-heading-sm);
   font-weight: var(--font-weight-normal);
@@ -108,8 +119,7 @@
   background: var(--surface-secondary);
 }
 
-.sideTitle {
-  margin: 0;
+.masthead .sideTitle {
   color: var(--text-primary);
   font-size: var(--font-size-heading-2xl);
   font-weight: var(--font-weight-normal);
@@ -229,8 +239,7 @@
   background: var(--surface-secondary);
 }
 
-.appTitle {
-  margin: 0;
+.masthead .appTitle {
   color: var(--text-primary);
   font-size: var(--font-size-heading-2xl);
   font-weight: var(--font-weight-normal);

@@ -94,6 +94,14 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 
 每个 `meta.json` 声明属性、变体、`tokenBindings`（哪个选择器的哪个属性读取哪个 Token）、使用的规则和无障碍要求。
 
+## 语言与方向
+
+YAMI 页面、组件和 Storybook 的中文与英文默认使用从左到右布局。对齐 shadcn/ui 或 Base UI 时，仅在用户明确要求的情况下加入 RTL 专属 API、配置、Story、示例、Docs 章节或验收测试。保留底层原语的原生行为。
+
+## 模块间距
+
+模块标题与内容上下排列时，由两者共用的 Flex 或 Grid 容器通过 `row-gap` 或 `gap` 控制垂直间距。按布局选用现有间距 Token，将相邻边上的子元素外边距设为零，由 gap 决定实际距离。内容与模块边缘的留白由容器的 `padding` 控制。
+
 ## 按行为选择操作入口
 
 - 保存、提交、打开弹窗或生成收据使用 Button；导航和已有文件的直接下载需要按钮外观时，使用带真实 `href` 的 ButtonLink；文字导航使用普通链接。Button 没有 `href`、`as` 或 `asChild` API，不使用点击回调重定向来模拟链接。
@@ -101,29 +109,22 @@ purpose: 为使用 YAMI 品牌制作界面的 AI 提供规范入口。
 - 修正视觉时保留用户的标签、目标地址和操作含义，不能为统一外观把“查看订单”替换成“打印订单”。视觉层级按业务优先级选择，并非每张卡片都需要主按钮或红色强调按钮。
 - ButtonLink 共享 Button 样式并渲染原生链接，保留链接的激活方式和浏览器操作。支持 inline/full 形态，没有 loading/disabled API；导航不可用时显示静态说明。不在页面中复制 Button 的私有 CSS。具体示例见上述组件用法文档。
 
-## Storybook 与 Registry 使用约定
+## 原型中的 Storybook 与 Registry
 
-为 AI 生成原型时，以维护中的 Storybook 作为视觉依据，Registry v2 提供确定性的内部源码分发契约。YAMI 借鉴 shadcn 的结构化分发与 AI 发现思路，通过自有包、Registry、Skill 和 MCP 实现；shadcn CLI/Registry 兼容不列入后续计划。当前范围与实施顺序见 [`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md)。
-
-- 先读取注入的 `Storybook Catalog Source of Truth` 部分，通过标题和标准导出确认哪些 YAMI 素材与组件正用于生成任务。
-- 再读取 [`generated/registry.json`](./generated/registry.json) 和 [`generated/registry-items/`](./generated/registry-items/)，了解条目名称、源码与目标文件、依赖、设计规则、质量证据、内容摘要和设计系统基础包。
-- 只有同时具有目录定义和维护中 Storybook Story 的组件，才能声明其产物基于组件目录。写在 `DESIGN.md` 中但尚未进入 Storybook 的组件可作为设计参考，不作为主要生成目标。
-- 启用检查要求所使用的目录组件具有本地 Registry 条目，并包含对应的 Storybook `Showcase`；否则产物仍为草稿，标记为 `registry_story_missing:<Component>`。
-- 基于目录交付时，优先使用 `renderRecipeArtifact`。自由编写的 HTML 仅供参考，并需说明未组件化的原因。
+- 在生成的 [Catalog](./generated/catalog.json) 中找组件，核对[公开导出](./components/index.ts)，以维护中的 Storybook Story 为视觉和交互依据。
+- 只有依赖的组件同时有目录契约和维护中的 Story，才把原型描述为基于组件目录。仅在规范中列出的组件可作设计参考，交付时说明原型中自行实现的部分。
+- 内部源码分发使用 [Registry v2](./generated/registry.json) 及其[条目](./generated/registry-items/)核对文件映射、依赖、设计约束和内容摘要。分发范围见 [ADR 009](../../docs/adr/009-agent-ready-contracts-and-distribution.md)。
 
 ---
 
 ## 验证产物
 
-生成完成后，在 YAMI 设计系统仓库根目录执行：
+按改动范围选择检查，从仓库根目录执行。
 
-```bash
-pnpm validate
-```
-
-此命令检查代码风格、类型、设计原则、文档与 Token 及目录的一致性、生成文件、包边界、按钮使用检查和测试。15 条原则的自动覆盖程度不同，通过检查不代表完整设计审查。`check:button-usage` 检查明确误用与静态可确定的分组契约；动态回调、计算属性、视觉层级和命中区裁切仍需检查。界面变更还需运行相关 Storybook／浏览器测试并检查布局。Skill 评估验证引用和预写样例，不会让 AI 执行提示词。
-
-无需 Design Labs 运行环境，也可通过 [`principles/index.ts`](./principles/index.ts) 使用设计原则校验器。
+- **页面或局部 UI 改动。** 在实际 Storybook 或页面预览验证受影响的行为，并运行相关定向检查。核对受影响宽度下的布局、焦点和裁切。
+- **共享组件交互改动。** 运行相关 Storybook 或浏览器测试，并在实际调用模块或页面复验。焦点、键盘、Portal 和滚动等行为改动均适用，包括公开 API 保持原样的情况。
+- **文档或技能改动。** 检查链接、可运行示例及依赖改动文件的生成产物。
+- **新增共享组件、公共 API 变更、底层迁移或跨包改动。** 运行 `pnpm validate`，并验收受影响的消费者。用户要求完整实现验证时也使用该命令。同时运行适用的浏览器检查，Storybook 产物受影响时还需构建 Storybook。
 
 ---
 
@@ -145,10 +146,11 @@ Canvas 和 Storybook 通过公开导出使用该包；页面原型负责页面�
 
 1. **先匹配现有页面。** 对于商品列表、详情、搜索、首页或活动页，先查看 [`../prototypes/pages/`](../prototypes/pages/)，优先复用最接近的维护页面组合。
 2. **先读取使用组件的契约。** 修改或组合组件前，阅读 `meta.json`、`usage.md`、相关 Story 和公开导出，不能只看属性表。操作类组件须阅读 [Button 用法](./components/Button/usage.md) 和 [ButtonGroup 用法](./components/ButtonGroup/usage.md)。不要重新定义 `tokenBindings`。
+   实现横向列表前，先确定滚动区域的边界。移动端贴屏幕边缘的列表把内容留白放进滚动容器。卡片或弹层内的列表沿用宿主边界。参考[横向列表布局示例](./components/HorizontalScrollList/usage.md#scroll-boundaries)。
 3. **使用语义别名。** 使用 `--text-emphasis`，而不是 `--color-red-500`；使用 `--button-primary`，而不是 `--color-black-900`。组件侧别名位于 `generated/tokens.css` 的 `/* Semantic Aliases */` 部分。
 4. **需要独立使用时，复制快速开始代码。** 从 [`DESIGN.md → 快速开始`](./DESIGN.md) 将 CSS 或 Tailwind v4 代码复制到新项目中。
 5. **拒绝错误做法。** 对照 [`DESIGN.md → AI 常见错误做法`](./DESIGN.md)；有疑问时，拒绝该做法并说明原因。
-6. **最后验证。** 宣布完成前运行 `pnpm validate`。
+6. **最后验证。** 按[改动范围选择检查](#验证产物)。涉及横向列表时，在实际页面预览中执行[窄屏验收](./components/HorizontalScrollList/usage.md#verification)。
 
 ---
 

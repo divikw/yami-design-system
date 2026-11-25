@@ -33,7 +33,7 @@
     "FooterSubscribe",
     "FooterSubscribeProps"
   ],
-  "composes": [],
+  "composes": ["SectionHeading"],
   "props": {
     "columns": {
       "type": "FooterColumn[]",
@@ -265,7 +265,7 @@
     "notes": "PC only. The footer has a 1024px minimum width. At 1920px the masthead is 50/50 with four link columns; at 1440px it is 50/50 with a two-by-two link grid; at 1024px the link panel is full width above two side-by-side right bands. Below 1024px the page scrolls horizontally; the mobile footer is a separate component."
   },
   "dependencies": {
-    "runtime": ["react"],
+    "runtime": ["react", "./SectionHeading"],
     "peer": [],
     "devOnly": []
   },

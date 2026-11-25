@@ -23,6 +23,7 @@
  * See meta.json for the structured spec, usage.md for narrative.
  */
 
+import { SectionHeading } from '../SectionHeading'
 import { FooterAppButton } from './FooterAppButton'
 import styles from './Footer.module.css'
 import { FooterSubscribe } from './FooterSubscribe'
@@ -61,9 +62,7 @@ export function Footer({
             <div key={column.id} className={styles.column} data-slot="footer-column">
               {column.groups.map((group) => (
                 <div key={group.id} className={styles.group} data-slot="footer-group">
-                  <h3 className={styles.groupTitle} data-slot="footer-group-title">
-                    {group.title}
-                  </h3>
+                  <SectionHeading as="h3" slot="footer-group" title={group.title} titleClassName={styles.groupTitle} />
                   <ul className={styles.groupList}>
                     {group.links.map((link) => (
                       <li key={link.id}>
@@ -87,9 +86,7 @@ export function Footer({
           {hasKeepInTouch ? (
             <section className={styles.keepInTouch} data-slot="footer-keep-in-touch">
               {subscribe ? (
-                <h2 className={styles.sideTitle} data-slot="footer-side-title">
-                  {subscribe.title}
-                </h2>
+                <SectionHeading slot="footer-side" title={subscribe.title} titleClassName={styles.sideTitle} />
               ) : null}
 
               {socialLinks.length > 0 ? (
@@ -135,9 +132,7 @@ export function Footer({
           {hasAppBand ? (
             <section className={styles.appBand} data-slot="footer-app-band">
               {appTitle ? (
-                <h2 className={styles.appTitle} data-slot="footer-app-title">
-                  {appTitle}
-                </h2>
+                <SectionHeading slot="footer-app" title={appTitle} titleClassName={styles.appTitle} />
               ) : null}
               {appLinks.length > 0 ? (
                 <div className={styles.appRow} data-slot="footer-app-row">

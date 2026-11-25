@@ -8,6 +8,7 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { heroBannerPalette } from "../HeroBanner/imageColor";
 import { useImageBottomColor } from "../HeroBanner/useImageBottomColor";
+import { SectionHeading } from "../SectionHeading";
 import {
   handleProgressiveImageError,
   handleProgressiveImageLoad,
@@ -213,9 +214,14 @@ export function ThemeHero({
                 data-slot="theme-hero-scrim"
               />
             )}
-            <h2 id={titleId} className={styles.title} data-slot="theme-hero-title">
-              {title}
-            </h2>
+            <SectionHeading
+              id={titleId}
+              title={title}
+              slot="theme-hero-section"
+              titleSlot="theme-hero-title"
+              className={styles.titleHeading}
+              titleClassName={styles.title}
+            />
             <div
               className={styles.description}
               data-slot="theme-hero-description"

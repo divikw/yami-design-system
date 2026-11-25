@@ -163,7 +163,7 @@ export const Showcase: Story = {
       starStyles.width !== "16px" ||
       starStyles.height !== "16px" ||
       cardStyles.paddingTop !== "12px" ||
-      cardStyles.borderRadius !== "8px" ||
+      cardStyles.borderRadius !== "12px" ||
       !reviewStyles ||
       reviewStyles.fontSize !== "14px" ||
       reviewStyles.height !== "60px" ||
@@ -303,7 +303,7 @@ export const Mobile: Story = {
       canvasStyles.backgroundColor !== "rgb(245, 245, 245)" ||
       containerStyles.rowGap !== "8px" ||
       itemWidth !== 320 ||
-      cardStyles.borderRadius !== "8px" ||
+      cardStyles.borderRadius !== "12px" ||
       viewAll !== null ||
       railNavigationStyles.display !== "none" ||
       railStyles.paddingLeft !== "8px" ||

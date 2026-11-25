@@ -15,7 +15,7 @@ const claimLabels = {
   zh: { available: "领取", claiming: "领取中", claimed: "已领取" },
 };
 
-function usePreviewClaim(en: boolean, validDays: number, useHref: string) {
+function usePreviewClaim(en: boolean, validDays: number, useHref: string | null) {
   const [status, setStatus] = useState<ClaimStatus>("available");
   const [expiresAt, setExpiresAt] = useState<Date>();
   useEffect(() => {
@@ -36,7 +36,7 @@ function usePreviewClaim(en: boolean, validDays: number, useHref: string) {
       status,
       label: claimLabels[en ? "en" : "zh"][status],
       onClaim: () => setStatus("claiming"),
-      useLink: { href: useHref, label: en ? "Use now" : "去使用", target: useHref.startsWith("#") ? undefined : "_blank" },
+      useLink: useHref === null ? undefined : { href: useHref, label: en ? "Use now" : "去使用", target: useHref.startsWith("#") ? undefined : "_blank" },
     },
   };
 }
@@ -47,7 +47,7 @@ export function NewUserCouponExample({
   description = en ? "Valid on Yami-fulfilled items. Exclusions apply." : "亚米自营商品通用，特殊商品除外",
   disabled,
   useHref = `https://www.yamibuy.com/${en ? "en" : "zh"}`,
-}: Partial<Pick<CouponProps, "title" | "description" | "disabled">> & { en: boolean; useHref?: string }) {
+}: Partial<Pick<CouponProps, "title" | "description" | "disabled">> & { en: boolean; useHref?: string | null }) {
   const { claim, expiryLabel } = usePreviewClaim(en, 7, useHref);
   const validity = expiryLabel ?? (en ? "New users only. Valid for 7 days after claiming." : "仅限新用户, 领取后7天内有效");
   return (
@@ -61,7 +61,7 @@ export function NewUserCouponExample({
   );
 }
 
-export function AppShippingCouponExample({ en, useHref }: { en: boolean; useHref: string }) {
+export function AppShippingCouponExample({ en, useHref }: { en: boolean; useHref: string | null }) {
   const { claim, expiryLabel } = usePreviewClaim(en, 30, useHref);
   return (
     <Coupon

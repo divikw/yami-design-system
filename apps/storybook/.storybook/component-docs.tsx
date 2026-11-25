@@ -47,6 +47,7 @@ import { BreadcrumbDocsPage } from "./breadcrumb-docs";
 import { ButtonDocsPage } from "./button-docs";
 import { ButtonGroupDocsPage } from "./button-group-docs";
 import { CardDocsPage } from "./card-docs";
+import { CouponDocsPage } from "./coupon-docs";
 import { SwitchDocsPage } from "./switch-docs";
 import { RadioGroupDocsPage } from "./radio-group-docs";
 import { ComboboxDocsPage } from "./combobox-docs";
@@ -74,6 +75,7 @@ type DocsNeighbors = { id: string; previous?: DocsNeighbor; next?: DocsNeighbor 
 const customDocsPages: Partial<Record<string, ComponentType<{ locale: DocsLocale }>>> = { dropdownmenu: DropdownMenuDocsPage, alert: AlertDocsPage, toast: ToastDocsPage, navigationmenu: NavigationMenuDocsPage, progress: ProgressDocsPage, combobox: ComboboxDocsPage, spinner: SpinnerDocsPage, skeleton: SkeletonDocsPage, emptystate: EmptyStateDocsPage, slider: SliderDocsPage, textarea: TextareaDocsPage, tooltip: TooltipDocsPage, field: FieldDocsPage, header: HeaderDocsPage, tabbar: TabBarDocsPage, drawer: DrawerDocsPage, divider: DividerDocsPage, dialog: DialogDocsPage, alertdialog: AlertDialogDocsPage, accordion: AccordionDocsPage, aspectratio: AspectRatioDocsPage, avatar: AvatarDocsPage, badge: BadgeDocsPage, breadcrumb: BreadcrumbDocsPage, button: ButtonDocsPage, buttongroup: ButtonGroupDocsPage, card: CardDocsPage, checkbox: CheckboxDocsPage, radiogroup: RadioGroupDocsPage, switch: SwitchDocsPage };
 customDocsPages.horizontalscrolllist = HorizontalScrollListDocsPage;
 customDocsPages.collectioncard = CollectionCardDocsPage;
+customDocsPages.coupon = CouponDocsPage;
 customDocsPages.productcard = ProductCardDocsPage;
 customDocsPages.productlist = ProductListDocsPage;
 

@@ -20,19 +20,21 @@ import {
   Footer,
   Header,
   CollectionCard,
+  HorizontalScrollList,
   ProductList,
   ReviewList,
+  SectionHeading,
   ShortcutRail,
   Tabs,
   TabsList,
   TabsTrigger,
-  Tag,
   ThemeHero,
   ThemeProductList,
 } from "@yami/design-system";
 
 import styles from "./TopicLandingPage.module.css";
 import type { TopicLandingPageProps } from "./TopicLandingPage.types";
+import { RelatedKeywords } from "./RelatedKeywords";
 import {
   CollectionProductFilters,
   createCollectionProductFilters,
@@ -42,6 +44,7 @@ import {
 const SECTION_REVEAL_ROOT_MARGIN = "0px 0px -40px 0px";
 const SCROLLABLE_OVERFLOW = /^(auto|scroll|overlay)$/;
 const EXPLORE_MORE_PAGE_SIZE = 60;
+const COLLECTION_FILTER_MIN_PRODUCTS = 12;
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -96,7 +99,7 @@ export function TopicLandingPage({
 }: TopicLandingPageProps) {
   const couponHeadingId = useId();
   const faqHeadingId = useId();
-  const relatedKeywordsHeadingId = useId();
+  const faqDescriptionId = `${faqHeadingId}-description`;
   const mainRef = useRef<HTMLElement>(null);
   const waterfallRef = useRef<HTMLDivElement>(null);
   const globalHeaderRef = useRef<HTMLDivElement>(null);
@@ -120,11 +123,6 @@ export function TopicLandingPage({
   );
   const [waterfallPageCounts, setWaterfallPageCounts] = useState<Record<string, number>>({});
   const [waterfallColumns, setWaterfallColumns] = useState(2);
-  const [collectionFilters, setCollectionFilters] = useState(() =>
-    createCollectionProductFilters(waterfall.catalogFilters
-      ? waterfall.productsByTab?.all ?? waterfall.products
-      : undefined),
-  );
   const [productRailTabValue, setProductRailTabValue] = useState(
     () =>
       productRail.value ??
@@ -152,14 +150,19 @@ export function TopicLandingPage({
     rowsPerPage,
     ...waterfallProps
   } = waterfall;
-  const activeWaterfallTab = waterfall.value ?? waterfallTabValue;
+  const allWaterfallProducts = waterfallProductsByTab?.all ?? waterfallFallbackProducts;
+  const showCatalogFilters = catalogFilters && allWaterfallProducts.length >= COLLECTION_FILTER_MIN_PRODUCTS;
+  const [collectionFilters, setCollectionFilters] = useState(() =>
+    createCollectionProductFilters(catalogFilters ? allWaterfallProducts : undefined),
+  );
+  const activeWaterfallTab = waterfall.value ?? (catalogFilters && !showCatalogFilters ? "all" : waterfallTabValue);
   const waterfallCategoryProducts =
     waterfallProductsByTab?.[activeWaterfallTab] ?? waterfallFallbackProducts;
   const waterfallProducts = useMemo(
-    () => catalogFilters
+    () => showCatalogFilters
       ? filterCollectionProducts(waterfallCategoryProducts, collectionFilters)
       : waterfallCategoryProducts,
-    [catalogFilters, waterfallCategoryProducts, collectionFilters],
+    [showCatalogFilters, waterfallCategoryProducts, collectionFilters],
   );
   const waterfallPageSize = rowsPerPage === undefined
     ? EXPLORE_MORE_PAGE_SIZE
@@ -595,7 +598,7 @@ export function TopicLandingPage({
   return (
     <div
       {...rest}
-      className={cx(styles.root, className)}
+      className={cx(styles.root, catalogFilters && styles.collection, className)}
       data-slot="topic-landing-page"
       style={{ ...rest.style, "--topic-landing-header-height": `${globalHeaderHeight}px` } as CSSProperties}
     >
@@ -633,8 +636,10 @@ export function TopicLandingPage({
         )}
         {couponSection && couponSection.cards.length > 0 && (
           <section className={styles.couponContainer} aria-labelledby={couponHeadingId}>
-            <h2 id={couponHeadingId} className={styles.couponHeading}>{couponSection.title}</h2>
-            <div className={styles.couponSurface}>{couponSection.cards}</div>
+            <SectionHeading id={couponHeadingId} title={couponSection.title} slot="coupon" />
+            <HorizontalScrollList className={styles.couponSurface} role="group" aria-labelledby={couponHeadingId}>
+              {couponSection.cards}
+            </HorizontalScrollList>
           </section>
         )}
         {primaryTabs.items.length > 0 && (
@@ -739,7 +744,7 @@ export function TopicLandingPage({
               {...waterfallProps}
               {...(catalogFilters && {
                 tabs: undefined,
-                introContent: (
+                introContent: showCatalogFilters ? (
                   <CollectionProductFilters
                     locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
                     categories={(waterfallProps.tabs ?? [])
@@ -754,7 +759,7 @@ export function TopicLandingPage({
                       setWaterfallPageCounts({});
                     }}
                   />
-                ),
+                ) : undefined,
               })}
               id={`explore-more-${activeWaterfallTab}`}
               products={visibleWaterfallProducts}
@@ -769,9 +774,21 @@ export function TopicLandingPage({
         )}
         {reviewsAfterProducts && reviewsSection}
         {faq && faq.items.length > 0 && (
-          <section id="faq" className={styles.faq} aria-labelledby={faqHeadingId}>
+          <section
+            id="faq"
+            className={styles.faq}
+            aria-labelledby={faqHeadingId}
+            aria-describedby={faq.description ? faqDescriptionId : undefined}
+          >
             <div className={styles.faqContainer}>
-              <h2 id={faqHeadingId} className={styles.faqHeading}>{faq.title}</h2>
+              <SectionHeading
+                id={faqHeadingId}
+                title={faq.title}
+                description={faq.description}
+                descriptionId={faqDescriptionId}
+                className={styles.faqIntro}
+                slot="faq"
+              />
               <Accordion>
                 {faq.items.map(({ id, question, answer }) => (
                   <AccordionItem key={id} value={id}>
@@ -805,18 +822,7 @@ export function TopicLandingPage({
           />
         )}
         {relatedKeywords && relatedKeywords.items.length > 0 && (
-          <section className={styles.relatedKeywords} aria-labelledby={relatedKeywordsHeadingId}>
-            <div className={styles.relatedKeywordsContainer}>
-              <h2 id={relatedKeywordsHeadingId} className={styles.relatedKeywordsHeading}>{relatedKeywords.title}</h2>
-              <div className={styles.relatedKeywordsViewport} role="group" aria-labelledby={relatedKeywordsHeadingId} tabIndex={0}>
-                <ul className={styles.relatedKeywordsList} role="list">
-                  {relatedKeywords.items.map((keyword) => (
-                    <li key={keyword}><Tag mode={relatedKeywords.mode}>{keyword}</Tag></li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
+          <RelatedKeywords {...relatedKeywords} />
         )}
       </main>
 

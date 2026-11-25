@@ -98,7 +98,7 @@
     },
     "radius": {
       "ruleId": "no-custom-radii",
-      "note": "Review cards use the component radius, product footers use the tag radius, and product thumbnails use half the tag radius for the compact 2px treatment."
+      "note": "Review cards use the 12px surface radius, product footers use the tag radius, and product thumbnails use half the tag radius for the compact 2px treatment."
     },
     "motion": {
       "ruleId": "elevation-on-press",
@@ -118,7 +118,6 @@
     "--stroke-default",
     "--stroke-thick",
     "--radius-surface-default",
-    "--radius-component-default",
     "--radius-tag-primary",
     "--layout-page-margin-card",
     "--font-family-ios",

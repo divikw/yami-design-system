@@ -45,3 +45,30 @@ test.each([390, 1024, 1199, 1200, 1280, 1281, 1439, 1440, 1441, 1680, 1920])(
     }
   },
 );
+
+test("keeps a long keyword readable on mobile without a horizontal scroll area", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await page.viewport(320, 900);
+    flushSync(() => root.render(<TopicLandingPage
+      {...createTopicKeywordLandingPageFixture("en")}
+      showChrome={false}
+      relatedKeywords={{ title: "Explore more", items: ["Ingredient".repeat(12)] }}
+    />));
+
+    const region = page.getByRole("region", { name: "Explore more" });
+    const list = region.getByRole("list").element();
+    const tag = list.querySelector('[data-slot="tag"]')!;
+    expect(tag.getBoundingClientRect().width).toBeLessThanOrEqual(list.clientWidth);
+    expect(tag.getBoundingClientRect().height).toBeGreaterThan(32);
+    expect(list.scrollWidth).toBe(list.clientWidth);
+    expect(list.parentElement?.tabIndex).toBe(-1);
+  } finally {
+    root.unmount();
+    container.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});

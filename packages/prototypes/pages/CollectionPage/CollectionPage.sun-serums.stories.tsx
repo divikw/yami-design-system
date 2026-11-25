@@ -4,6 +4,7 @@ import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.s
 export default {
   ...createBeautyKeywordMeta(collection, {
     title: { en: "Sun Serums", zh: "防晒精华" },
+    faqSubject: { en: "sun serums", zh: "防晒精华" },
     description: {
       en: "Compare Korean sun serums, including SKIN1004’s Water-Fit formula, Torriden’s DIVE-IN Watery Sun Serum and Numbuzin’s tinted No.3.",
       zh: "从 SKIN1004 积雪草水感防晒精华、Torriden DIVE-IN 水感系列，到 Numbuzin 3 号润色款，按质地、色调与容量挑选日间防晒。",

@@ -27,6 +27,18 @@ Reusable copy templates across the YAMI product. Each pattern has rationale + ca
 | "Category Browsing" | "Shop by Category · 按分类购物" |
 | "Current Promotions" | "Today's Deals · 今日特惠" |
 
+## Collection FAQ descriptions
+
+Place one sentence below the FAQ heading. Use the brand and product category or the collection’s
+shopping topic for `{subject}`. Keep the canonical brand name and casing in both locales, and
+localize the category or shopping topic. Match the subject to the questions in the section.
+In Chinese, insert a space before a subject that starts with a Latin letter or digit.
+
+| Locale | Template | ANUA example |
+|---|---|---|
+| EN | We answer everything you want to know about shopping for {subject} online. | We answer everything you want to know about shopping for ANUA skincare online. |
+| 简体中文 | 关于在线选购{subject}，你想知道的，我们都为你解答。 | 关于在线选购 ANUA 护肤品，你想知道的，我们都为你解答。 |
+
 ## Error states
 
 **Pattern**: "what happened" + "what to do", in one or two short sentences.

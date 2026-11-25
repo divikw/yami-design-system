@@ -5,6 +5,7 @@ import styles from "./SectionHeading.module.css";
 export type SectionHeadingProps = {
   /** Links the heading to the section it labels. */
   id?: string;
+  as?: "h2" | "h3";
   title: ReactNode;
   /** Center stacks the title and supporting copy with shared spacing. */
   align?: "start" | "center";
@@ -12,6 +13,7 @@ export type SectionHeadingProps = {
   mobileAlign?: "start" | "center";
   /** Optional supporting copy rendered beside the title, or below it when centered. */
   description?: ReactNode;
+  descriptionId?: string;
   /** Shown below 1024px in place of `title`; omit to use one title at every width. */
   mobileTitle?: ReactNode;
   /** Below 1024px: 20px normal; 16px Chinese 600 / English 500 via lang. Desktop: 24px. */
@@ -34,6 +36,8 @@ export type SectionHeadingProps = {
    * against, so each section keeps the ones it already published.
    */
   slot?: string;
+  /** Preserves an existing title slot when the wrapping slots use a different prefix. */
+  titleSlot?: string;
   titleFontFamily?: "sans" | "serif";
   className?: string;
   titleClassName?: string;
@@ -49,10 +53,12 @@ export type SectionHeadingProps = {
  */
 export function SectionHeading({
   id,
+  as: Heading = "h2",
   title,
   align = "start",
   mobileAlign = align,
   description,
+  descriptionId,
   mobileTitle,
   mobileTitleSize = 20,
   viewAllHref,
@@ -60,6 +66,7 @@ export function SectionHeading({
   centeredTitleLink = false,
   actions,
   slot,
+  titleSlot,
   titleFontFamily = "sans",
   className,
   titleClassName,
@@ -82,14 +89,14 @@ export function SectionHeading({
       data-description={description ? "true" : undefined}
     >
       <div className={styles.copy} data-slot={slotName("copy")}>
-        <h2
+        <Heading
           id={id}
           className={join(
             styles.title,
             titleFontFamily === "serif" ? styles.titleSerif : undefined,
             titleClassName,
           )}
-          data-slot={slotName("title")}
+          data-slot={titleSlot ?? slotName("title")}
           data-section-heading-title="true"
           data-mobile-title-size={mobileTitleSize}
         >
@@ -109,9 +116,10 @@ export function SectionHeading({
               <span className={styles.titleMobile}>{mobileTitle}</span>
             </>
           )}
-        </h2>
+        </Heading>
         {description ? (
           <p
+            id={descriptionId}
             className={join(styles.description, descriptionClassName)}
             data-slot={slotName("description")}
           >

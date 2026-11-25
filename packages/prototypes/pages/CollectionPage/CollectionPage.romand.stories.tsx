@@ -4,6 +4,7 @@ import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.s
 export default {
   ...createBeautyKeywordMeta(collection, {
     title: { en: "rom&nd", zh: "rom&nd" },
+    faqSubject: { en: "rom&nd makeup", zh: "rom&nd 彩妆" },
     description: {
       en: "Find your rom&nd shade among glossy Juicy Lasting Tints, soft matte Blur Fudge Tint and Glasting Melting Balm. Lip and brow pencils round out the collection.",
       zh: "从杏仁玫瑰色的果汁唇釉到柔雾唇釉和水光润唇膏，按喜欢的妆效挑选 rom&nd 唇色，也可以搭配唇线笔和眉笔。",

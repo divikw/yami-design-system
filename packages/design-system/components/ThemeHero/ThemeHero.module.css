@@ -78,13 +78,23 @@
   display: none;
 }
 
-.title {
+.root .titleHeading {
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+.root .title {
   width: 100%;
   margin: 0;
+  padding: 0;
+  overflow: visible;
+  color: inherit;
   font-family: var(--font-family-serif);
   font-size: var(--font-size-display-xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-display-xl);
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 
@@ -285,7 +295,7 @@
     z-index: 1;
   }
 
-  .title {
+  .root .title {
     font-size: var(--font-size-display-sm);
     line-height: var(--line-height-display-sm);
   }

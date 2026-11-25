@@ -59,6 +59,14 @@ export const Interaction: Story = {
   tags: ["!dev"],
   play: async ({ canvasElement, globals }) => {
     const canvas = within(canvasElement);
+    for (const coupon of canvasElement.querySelectorAll('[data-slot="coupon"]')) {
+      const header = coupon.firstElementChild!;
+      const styles = getComputedStyle(header);
+      await expect(styles.minBlockSize).toBe("56px");
+      await expect(styles.paddingInlineStart).toBe("16px");
+      await expect(styles.paddingInlineEnd).toBe("16px");
+      await expect(header.getBoundingClientRect().height).toBeGreaterThanOrEqual(56);
+    }
     const checkbox = canvas.getByRole("checkbox");
     const selectionCard = checkbox.closest("label")!;
     await userEvent.click(within(selectionCard).getByText(/亚米自营商品通用|Valid on Yami/));

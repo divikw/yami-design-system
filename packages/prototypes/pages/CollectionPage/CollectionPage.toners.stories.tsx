@@ -4,6 +4,7 @@ import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.s
 export default {
   ...createBeautyKeywordMeta(collection, {
     title: { en: "Toners", zh: "爽肤水" },
+    faqSubject: { en: "toners", zh: "爽肤水" },
     description: {
       en: "Discover Korean toners, from ANUA’s heartleaf and milky rice formulas to ROUND LAB’s Dokdo Toner and Beauty of Joseon’s Ginseng Essence Water.",
       zh: "从 ANUA 的鱼腥草爽肤水和大米乳状爽肤水，到 ROUND LAB 的独岛爽肤水和朝鲜美人的人参精华水，按喜欢的品牌与质地挑选。",
