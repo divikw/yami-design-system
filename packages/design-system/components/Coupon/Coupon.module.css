@@ -21,9 +21,9 @@ label.coupon { cursor: pointer; }
   display: flex;
   align-items: center;
   gap: var(--space-150);
-  min-height: var(--space-600);
-  padding: var(--space-100) var(--space-200);
-  padding-right: var(--space-150);
+  min-block-size: calc(var(--space-600) + var(--space-100));
+  padding-block: var(--space-100);
+  padding-inline: var(--space-200);
   border-bottom-style: dashed;
   mask-image: radial-gradient(circle at left bottom, transparent var(--space-100), black var(--space-100)), radial-gradient(circle at right bottom, transparent var(--space-100), black var(--space-100));
 }
@@ -39,6 +39,25 @@ label.coupon { cursor: pointer; }
 
 .coupon .selector::before { border-radius: var(--radius-button-primary); }
 
+.claimStatus {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-050);
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-body-md);
+}
+
+.claimStatus > svg {
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+.coupon:not([data-disabled]) .claimStatus { color: var(--text-secondary); }
+
 .details {
   display: grid;
   gap: var(--space-100);
@@ -50,8 +69,6 @@ label.coupon { cursor: pointer; }
   line-height: var(--line-height-body-md);
   mask-image: radial-gradient(circle at left top, transparent var(--space-100), black var(--space-100)), radial-gradient(circle at right top, transparent var(--space-100), black var(--space-100));
 }
-
-.validity { font-size: var(--font-size-caption-sm); line-height: var(--line-height-caption-md); }
 
 .segment::before, .segment::after {
   position: absolute;

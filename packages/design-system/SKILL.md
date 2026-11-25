@@ -92,7 +92,13 @@ The generated [`catalog.json`](./generated/catalog.json) is the current componen
 
 Each `meta.json` declares props, variants, `tokenBindings` (which property of which selector reads which token), rules consumed, and a11y profile.
 
-YAMI component and Storybook locales are Chinese and English, both left-to-right. When comparing with shadcn/ui or Base UI, omit RTL-specific APIs, configuration, examples, Docs sections, and acceptance tests unless explicitly requested. Keep the underlying primitive’s native behavior.
+## Languages and direction
+
+Use left-to-right layouts for Chinese and English YAMI pages, components, and Storybook. When aligning with shadcn/ui or Base UI, add RTL-specific APIs, configuration, stories, examples, Docs sections, or acceptance tests only when explicitly requested. Preserve the underlying primitive’s native behavior.
+
+## Module spacing
+
+For a module heading stacked above its content, set the vertical spacing on their shared flex or grid container with `row-gap` or `gap`. Use the existing spacing token for each layout. Set the child margins along the shared edge to zero so the gap controls the full distance. Use container padding for spacing between the content and the module edges.
 
 ## Choose actions by behavior
 
@@ -101,47 +107,28 @@ YAMI component and Storybook locales are Chinese and English, both left-to-right
 - Preserve the user's labels, destinations, and actions when repairing visuals. Do not turn “View order” into “Print order” to make an example easier to style. Choose visual priority from the business task; not every card needs a primary or emphasis button.
 - ButtonLink shares Button styles and renders a native anchor. Preserve native link activation and browser actions. It supports inline/full forms and has no loading/disabled API; render static content when navigation is unavailable. Do not copy private Button CSS into pages. Detailed examples belong in the usage documents above.
 
-## Storybook + registry consumption contract
+## Storybook and Registry for prototypes
 
-For AI prototype generation, Storybook is the maintained visual source of truth
-and Registry v2 is the deterministic internal source-distribution contract.
-YAMI borrows shadcn's structured distribution and AI-discovery ideas through its
-own package, Registry, Skill and MCP; shadcn CLI/Registry compatibility is outside
-the roadmap. See [`ADR 009`](../../docs/adr/009-agent-ready-contracts-and-distribution.md)
-for the current scope and follow-up order.
-
-- First consume the injected `Storybook Catalog Source of Truth` section. Its
-  titles and canonical exports tell you which YAMI assets/components are
-  actively maintained for generation.
-- Then consume [`generated/registry.json`](./generated/registry.json) and
-  [`generated/registry-items/`](./generated/registry-items/) for item names,
-  source/target files, dependencies, design rules, quality evidence, content
-  digests, and the design-system base package.
-- Only claim catalog-backed output for components that have both a catalog
-  contract and a maintained Storybook story. Components documented in
-  `DESIGN.md` but not yet listed in Storybook are available as design guidance,
-  not as primary recipe targets.
-- Activation checks require used catalog components to be backed by a local
-  registry item that includes their Storybook `Showcase`; otherwise the output
-  remains a draft with `registry_story_missing:<Component>`.
-- Prefer `renderRecipeArtifact` for catalog-backed delivery. Free-form HTML is
-  reference-only and must say why it is not componentized.
+- Find components in the generated [Catalog](./generated/catalog.json). Verify
+  the [public exports](./components/index.ts), then use maintained Storybook
+  stories as the reference for appearance and interaction.
+- Describe a prototype as catalog-backed only when the components it relies on
+  have Catalog contracts and maintained stories. Use spec-only components as
+  design references and identify prototype-specific implementations in handoff.
+- For internal source distribution, use [Registry v2](./generated/registry.json)
+  and its [item records](./generated/registry-items/) for file mappings,
+  dependencies, design constraints, and digests. See [ADR 009](../../docs/adr/009-agent-ready-contracts-and-distribution.md).
 
 ---
 
 ## Validate your output
 
-After generating, run from the Yami Design System repository root:
+Choose checks for the scope of the change and run them from the repository root.
 
-```bash
-pnpm validate
-```
-
-This command verifies lint, types, design principles, documentation/token/catalog
-consistency, generated artifacts, package boundaries, Button usage checks, and tests. The 15 principle checks have different coverage; a pass is not a complete design review. `check:button-usage` checks explicit misuse and statically known group contracts. Dynamic callbacks, computed props, visual hierarchy, and hit-area clipping still need review. Run the affected Storybook/browser tests and inspect relevant layouts when UI changes. Skill evaluation verifies references and fixtures; it does not run an AI against the prompts.
-
-Principle validators remain available from
-[`principles/index.ts`](./principles/index.ts) without a Design Labs runtime.
+- **Page-only or localized UI changes.** Check the affected behavior in the actual Storybook or page preview and run relevant targeted checks. Verify layout, focus, and clipping at the affected viewport sizes.
+- **Shared component interaction changes.** Run relevant Storybook or browser tests and verify the changed behavior in actual consuming modules or pages. Apply this to changes in focus, keyboard handling, portals, and scrolling, including changes that preserve the public API.
+- **Documentation and skill changes.** Check links, runnable examples, and any generated artifacts that depend on the edited files.
+- **New shared components, public API changes, primitive migrations, or changes spanning packages.** Run `pnpm validate` and verify affected consumers. Use the same repository-wide command when full implementation validation is requested. Also run the applicable browser checks and build Storybook when its output is affected.
 
 ---
 
@@ -165,10 +152,11 @@ When the user asks for a YAMI page or component:
 
 1. **Match the request to an existing page.** For PLP, PDP, search, home, or campaign work, inspect [`../prototypes/pages/`](../prototypes/pages/) and reuse the closest maintained page composition before adding a new one.
 2. **Read the used component contracts.** Inspect `meta.json`, `usage.md`, the relevant Story, and public exports before editing or composing components; metadata alone does not define usage boundaries. For actions, follow [Button usage](./components/Button/usage.md) and [ButtonGroup usage](./components/ButtonGroup/usage.md). Never re-declare `tokenBindings`.
+   For horizontal lists, identify the intended scroll boundary before styling. A mobile page-edge list extends to the page edges and keeps the content inset inside the scroll container. A list inside a card or dialog uses the host's boundary. Follow the [horizontal list layout example](./components/HorizontalScrollList/usage.md#scroll-boundaries).
 3. **Reach for semantic aliases, not raw tokens.** Use `--text-emphasis` (not `--color-red-500`), `--button-primary` (not `--color-black-900`). Component-side aliasing is in `generated/tokens.css` under `/* Semantic Aliases */`.
 4. **Copy the Quick Start CSS / Tailwind v4 block** from [`DESIGN.md → Quick Start`](./DESIGN.md) into a fresh project if you need a standalone consumption surface.
 5. **Refuse the Anti-patterns** in [`DESIGN.md → Anti-patterns AI agents repeatedly produce`](./DESIGN.md). When in doubt: refuse and explain.
-6. **Final step:** run `pnpm validate` before declaring done.
+6. **Verify the result.** Follow the [checks for the scope of the change](#validate-your-output). For horizontal lists, use the [narrow-viewport checks](./components/HorizontalScrollList/usage.md#verification) in the actual page preview.
 
 ---
 

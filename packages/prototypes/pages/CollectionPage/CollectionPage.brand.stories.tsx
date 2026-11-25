@@ -5,6 +5,7 @@ import { createCollectionPageFixture } from "./collectionPage.fixture";
 import { createRelatedCollections } from "./relatedCollections.fixture";
 import { resolveTopicLandingScrollRoot } from "../TopicLandingPage/TopicLandingPage";
 import type { TopicLandingPageRelatedKeywords } from "../TopicLandingPage/TopicLandingPage.types";
+import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
 import brandMeta, {
   Pc as BrandPc,
   Mobile as BrandMobile,
@@ -24,7 +25,7 @@ const soldOutProductIds = new Set([
   "3022589911",
   "1022281871",
 ]);
-const faqByLocale = createCollectionFaq([
+const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤品" }, [
   {
     id: "selection",
     question: { en: "Which ANUA skincare products are featured here?", zh: "这里有哪些 ANUA 护肤品？" },
@@ -92,7 +93,7 @@ export default {
   title: "YAMI/Pages/Landing Pages/Collection Templates/Anua",
   parameters: {
     ...brandMeta.parameters,
-    createPageFixture: createCollectionPageFixture,
+    createPageFixture: (locale: TopicLandingPageLocale) => createCollectionPageFixture(locale, { showCouponUseLinks: false }),
     createRelatedCollections,
     faqByLocale,
     relatedKeywordsByLocale,
@@ -143,6 +144,17 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
       hero.querySelector('img, [data-slot="theme-hero-tags"]')) {
     throw new Error("Brand collection must open with a title and description");
   }
+  const sectionTitles = canvasElement.querySelectorAll("main h2, footer h2, footer h3");
+  for (const title of sectionTitles) {
+    if (!title.matches("[data-section-heading] > div > [data-section-heading-title]")) {
+      throw new Error("Collection module and footer titles must share the SectionHeading structure");
+    }
+    const headingRow = title.closest("[data-section-heading]")!;
+    const headingStyle = getComputedStyle(headingRow);
+    if (headingStyle.paddingBlockStart !== "2px" || headingStyle.paddingBlockEnd !== "2px") {
+      throw new Error("Collection heading rows must have 2px of padding above and below");
+    }
+  }
   if (main.querySelector("#explore, #shop, #popular-picks")) {
     throw new Error("Brand collection must omit category shortcuts, the routine section, and Popular Picks");
   }
@@ -150,6 +162,12 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const coupons = hero.nextElementSibling;
   if (!products || coupons?.querySelectorAll('[data-slot="coupon"]').length !== 2 || coupons.nextElementSibling !== products || main.querySelector('[data-slot="topic-landing-tabs"]')) {
     throw new Error("The Brand introduction, coupons and product list must appear in order");
+  }
+  const couponPanel = coupons.querySelector<HTMLElement>('[data-horizontal-scroll-list="true"]');
+  const desktop = canvasElement.ownerDocument.defaultView?.matchMedia("(min-width: 1024px)").matches;
+  if (!couponPanel || getComputedStyle(coupons).rowGap !== (desktop ? "16px" : "12px") ||
+      getComputedStyle(couponPanel).paddingBlockStart !== (desktop ? "16px" : "0px")) {
+    throw new Error("The coupon heading gap must sit outside the coupon panel and preserve its top inset");
   }
   if (products.nextElementSibling?.id !== "reviews") {
     throw new Error("Customer reviews must follow the product list");
@@ -184,6 +202,14 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const faqCopy = faqByLocale[zh ? "zh" : "en"];
   const faqRegion = within(main).getByRole("region", { name: faqCopy.title });
   const faq = within(faqRegion);
+  const descriptionCopy = zh
+    ? "关于在线选购 ANUA 护肤品，你想知道的，我们都为你解答。"
+    : "We answer everything you want to know about shopping for ANUA skincare online.";
+  const faqDescription = faq.getByText(descriptionCopy, { exact: true });
+  if (faqDescription.previousElementSibling !== faq.getByRole("heading", { name: faqCopy.title, level: 2 }) ||
+      faqRegion.getAttribute("aria-describedby") !== faqDescription.id) {
+    throw new Error("The localized FAQ description must follow the section heading");
+  }
   const faqQuestions = faq.getAllByRole("button");
   if (products.nextElementSibling?.nextElementSibling !== faqRegion ||
       faqQuestions.length !== faqCopy.items.length || faqQuestions.some((item) => item.getAttribute("aria-expanded") !== "false")) {
@@ -202,9 +228,18 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     throw new Error("The FAQ must be followed by six related collections and then the localized keyword tags");
   }
   if (canvasElement.ownerDocument.defaultView?.matchMedia("(width < 1024px)").matches) {
-    const rows = new Set(tags.map(tag => tag.getBoundingClientRect().top));
-    if (rows.size > 3 || getComputedStyle(keywordList.parentElement!).overflowX !== "auto") {
-      throw new Error("Mobile keywords must scroll horizontally in at most three rows");
+    const bounds = tags.map(tag => tag.getBoundingClientRect());
+    const rows = new Set(bounds.map(tag => tag.top));
+    const scroller = keywordList.parentElement!;
+    const scrolls = scroller.dataset.horizontalScrollList === "true";
+    const narrow = canvasElement.ownerDocument.defaultView.matchMedia("(width <= 477px)").matches;
+    if (keywordList.children.length !== tags.length || rows.size > 3 ||
+        (narrow && !scrolls) ||
+        (scrolls && (rows.size !== 3 || getComputedStyle(scroller).overflowX !== "auto" ||
+          scroller.scrollWidth <= scroller.clientWidth)) ||
+        bounds.some((tag, index) => index > 0 &&
+          tag.top === bounds[index - 1].top && Math.abs(tag.left - bounds[index - 1].right - 8) > 1)) {
+      throw new Error("Mobile keywords must use a single list with up to three rows and 8px gaps");
     }
   } else if (getComputedStyle(keywordList).flexWrap !== "wrap") {
     throw new Error("Desktop keywords must wrap to the available width");
@@ -337,6 +372,17 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   await faq.findByText(faqCopy.items[1].answer);
   if (faqQuestions[0].getAttribute("aria-expanded") !== "false") {
     throw new Error("Opening another FAQ must collapse the first answer");
+  }
+
+  const [newUserCoupon, appShippingCoupon] = coupons.querySelectorAll<HTMLElement>('[data-slot="coupon"]');
+  const claimLabel = zh ? "领取" : "Claim";
+  const claimedLabel = zh ? "已领取" : "Claimed";
+  await userEvent.click(within(newUserCoupon).getByRole("button", { name: claimLabel, exact: true }));
+  await within(newUserCoupon).findByText(claimedLabel, { exact: true });
+  await userEvent.click(within(appShippingCoupon).getByRole("button", { name: claimLabel, exact: true }));
+  await within(appShippingCoupon).findByText(claimedLabel, { exact: true });
+  if (coupons.querySelector("a[href]")) {
+    throw new Error("Claimed Anua coupons must show status text");
   }
 } : undefined;
 

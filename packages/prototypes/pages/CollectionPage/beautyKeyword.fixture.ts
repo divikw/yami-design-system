@@ -13,6 +13,7 @@ type Copy = Record<TopicLandingPageLocale, string>;
 interface Keyword {
   title: Copy;
   description: Copy;
+  faqSubject: Copy;
   groups: { value: string; label: Copy; ids: string[] }[];
   faq: CollectionFaqEntries;
 }
@@ -90,7 +91,7 @@ export function createBeautyKeywordMeta<T extends CollectionMeta>(collection: T,
       ...collection.parameters,
       createPageFixture,
       docs: { ...collection.parameters.docs, description: { component: keyword.description.en } },
-      faqByLocale: createCollectionFaq(keyword.faq),
+      faqByLocale: createCollectionFaq(keyword.faqSubject, keyword.faq),
       relatedKeywordsByLocale: { en: related("en"), zh: related("zh") },
     },
   };

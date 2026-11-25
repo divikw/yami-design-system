@@ -18,7 +18,8 @@
   ],
   "composes": [
     "Badge",
-    "Button"
+    "Button",
+    "SectionHeading"
   ],
   "props": {
     "title": {
@@ -207,7 +208,8 @@
     "runtime": [
       "react",
       "Badge",
-      "Button"
+      "Button",
+      "./SectionHeading"
     ],
     "peer": [],
     "devOnly": []

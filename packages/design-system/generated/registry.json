@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "d1f02d873364bd841f6f785da4a7a02c8cbdc6bbd2ffb507f8d679b293795db6"
+      "digest": "8efea2e3680549f67645de82dd582bb517132dbeac6c57a53cdc838ffade2d8b"
     },
     {
       "name": "accordion",
@@ -171,7 +171,7 @@
       "status": "experimental",
       "version": "0.2.0",
       "path": "registry-items/coupon.json",
-      "digest": "bdeae1a076f3c4af38ef7f9ed97d24cdfc1c86ed49e4d4dda183aa9df7a2ea5f"
+      "digest": "dbc8e1a625c6054a3780f2b1a76f88fd8e9d0c0e1141fed89bae2ab86882fb08"
     },
     {
       "name": "dialog",
@@ -243,7 +243,7 @@
       "status": "beta",
       "version": "0.1.0",
       "path": "registry-items/footer.json",
-      "digest": "151b640506ff0f5d5c2c3aa1808102bfd8e3f608179de331f8bc792d72cc68cd"
+      "digest": "fe969b13f34a23d6e3f6f805c29218a5270a0317a7f6cc2d24c7c10f0bafafc5"
     },
     {
       "name": "header",
@@ -270,7 +270,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/horizontal-scroll-list.json",
-      "digest": "447a6f5950f54a15eb17ca561673e6b0938e0b64b29adbd4a69678dfb311535c"
+      "digest": "8d5ffda44989dc60cf121906ccbf3179db9127c589d0d6a04e96642fd432b065"
     },
     {
       "name": "input",
@@ -396,7 +396,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "15616336f9536265ac63f0f87404ae9fef19862499e3729e4be7b0794f489800"
+      "digest": "c87afe4bd9ef38997a3cc1a59787688d44639a584d57df7e9c1044617963a291"
     },
     {
       "name": "section-banner",
@@ -513,7 +513,7 @@
       "status": "experimental",
       "version": "0.8.1",
       "path": "registry-items/theme-hero.json",
-      "digest": "41bb327b7d6a5c03c2b0064f2fdf5a6115e1536d4711caff6ef15c9abd8f34c0"
+      "digest": "6fb2d7c6e1f8ffe812be7ae34c8e9415ec32c2e0926d7aa62771d4b1236f370e"
     },
     {
       "name": "theme-product-list",

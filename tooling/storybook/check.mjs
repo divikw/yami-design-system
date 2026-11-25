@@ -56,7 +56,7 @@ const deviceStoryNames = {
 };
 const componentsWithProperties = new Set([
   "Accordion", "Alert", "AlertDialog", "AspectRatio", "Avatar", "Badge", "Breadcrumb", "Button", "ButtonGroup",
-  "Card", "Checkbox", "Combobox", "Dialog", "Divider", "Drawer", "DropdownMenu", "EmptyState", "Field",
+  "Card", "Checkbox", "Combobox", "Coupon", "Dialog", "Divider", "Drawer", "DropdownMenu", "EmptyState", "Field",
   "FilterChip", "Header", "HorizontalScrollList", "Input", "NavigationMenu", "Pagination", "Popover", "ProductCard",
   "ProductList", "Progress", "RadioGroup", "Select",
   "Skeleton", "Slider", "Spinner", "Switch", "TabBar", "Tabs", "Tag", "Textarea", "Toast", "Tooltip",

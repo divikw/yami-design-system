@@ -105,7 +105,6 @@
       "--layout-page-margin-card",
       "--line-height-body-md",
       "--line-height-caption-md",
-      "--radius-component-default",
       "--radius-surface-default",
       "--radius-tag-primary",
       "--space-025",
@@ -146,5 +145,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "15616336f9536265ac63f0f87404ae9fef19862499e3729e4be7b0794f489800"
+  "contentDigest": "c87afe4bd9ef38997a3cc1a59787688d44639a584d57df7e9c1044617963a291"
 }

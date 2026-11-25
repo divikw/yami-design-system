@@ -3350,13 +3350,13 @@
           "--border-default",
           "--font-family-ios",
           "--font-size-body-md",
-          "--font-size-caption-sm",
           "--font-size-heading-sm",
           "--font-weight-emphasize",
+          "--font-weight-normal",
           "--line-height-body-md",
-          "--line-height-caption-md",
           "--line-height-heading-sm",
           "--radius-button-primary",
+          "--space-050",
           "--space-100",
           "--space-150",
           "--space-200",
@@ -3383,7 +3383,7 @@
           },
           "--text-secondary": {
             "property": "color",
-            "selector": ".details"
+            "selector": ".details, .coupon:not([data-disabled]) .claimStatus"
           },
           "--text-disabled": {
             "property": "color",
@@ -3403,7 +3403,7 @@
             "space",
             "enter"
           ],
-          "ariaPattern": "Selection uses a labeled Checkbox. The claim Button has localized state text and describes the coupon title and terms. Pending claims block activation. Claimed coupons may provide a native link to use the offer."
+          "ariaPattern": "Selection uses a labeled Checkbox. The claim Button describes the coupon title and terms. Pending claims block activation. Claim updates are announced politely. Claimed coupons show localized status text with a decorative checkmark or a native link to use the offer."
         },
         "dependencies": {
           "runtime": [
@@ -4822,7 +4822,9 @@
           "FooterSubscribe",
           "FooterSubscribeProps"
         ],
-        "composes": [],
+        "composes": [
+          "SectionHeading"
+        ],
         "props": {
           "columns": {
             "type": "FooterColumn[]",
@@ -5065,7 +5067,8 @@
         },
         "dependencies": {
           "runtime": [
-            "react"
+            "react",
+            "./SectionHeading"
           ],
           "peer": [],
           "devOnly": []
@@ -8546,7 +8549,7 @@
           },
           "radius": {
             "ruleId": "no-custom-radii",
-            "note": "Review cards use the component radius, product footers use the tag radius, and product thumbnails use half the tag radius for the compact 2px treatment."
+            "note": "Review cards use the 12px surface radius, product footers use the tag radius, and product thumbnails use half the tag radius for the compact 2px treatment."
           },
           "motion": {
             "ruleId": "elevation-on-press",
@@ -8566,7 +8569,6 @@
           "--stroke-default",
           "--stroke-thick",
           "--radius-surface-default",
-          "--radius-component-default",
           "--radius-tag-primary",
           "--layout-page-margin-card",
           "--font-family-ios",
@@ -10867,7 +10869,8 @@
         ],
         "composes": [
           "Badge",
-          "Button"
+          "Button",
+          "SectionHeading"
         ],
         "props": {
           "title": {
@@ -11056,7 +11059,8 @@
           "runtime": [
             "react",
             "Badge",
-            "Button"
+            "Button",
+            "./SectionHeading"
           ],
           "peer": [],
           "devOnly": []

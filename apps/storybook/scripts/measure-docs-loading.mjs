@@ -1,13 +1,16 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { chromium } from "@playwright/test";
 
-const baseUrl = process.argv[2] ?? "http://127.0.0.1:6006";
+const [, , baseUrl = "http://127.0.0.1:6006", docsId] = process.argv;
 const output = new URL("../.storybook/docs-loading-heights.json", import.meta.url);
 const { entries } = await fetch(new URL("/index.json", baseUrl)).then((response) => response.json());
 const jobs = Object.values(entries)
-  .filter(({ type, name, title }) => type === "docs" && name === "docs" &&
-    (title.startsWith("YAMI/components/") || title.startsWith("YAMI/modules/product display/")))
+  .filter(({ type, name, title, id }) => type === "docs" && name === "docs" && (docsId
+    ? id === docsId
+    : title.startsWith("YAMI/components/") || title.startsWith("YAMI/modules/product display/") ||
+      id === "yami-components-commerce-coupon--docs"))
   .flatMap(({ id }) => ["zh", "en"].map((locale) => ({ id, locale })));
+if (docsId && jobs.length === 0) throw new Error(`No Docs entry found for ${docsId}`);
 
 const firstWidth = 320;
 const lastWidth = 600;
@@ -18,7 +21,8 @@ const checkpoints = [...new Set([
 const defaultSize = "1,2,252";
 
 const browser = await chromium.launch();
-const profiles = new Map();
+const profiles = new Map(docsId ? Object.entries(JSON.parse(await readFile(output, "utf8"))) : []);
+if (docsId) profiles.delete(docsId);
 
 async function measure({ id, locale }) {
   const page = await browser.newPage({ viewport: { width: firstWidth, height: 900 }, reducedMotion: "reduce" });
@@ -106,7 +110,7 @@ try {
       `    "${locale}": ${JSON.stringify(rows)}`).join(",\n")}\n  }`;
   });
   await writeFile(output, `{\n${lines.join(",\n")}\n}\n`);
-  console.log(`Measured responsive Docs layouts from ${firstWidth} to ${lastWidth}px for ${profiles.size} components.`);
+  console.log(`Measured responsive Docs layouts from ${firstWidth} to ${lastWidth}px for ${docsId ?? `${profiles.size} components`}.`);
 } finally {
   await browser.close();
 }

@@ -50,13 +50,15 @@
   ],
   "composes": [
     "Badge",
-    "Button"
+    "Button",
+    "SectionHeading"
   ],
   "dependencies": {
     "runtime": [
       "react",
       "Badge",
-      "Button"
+      "Button",
+      "./SectionHeading"
     ],
     "peer": [],
     "devOnly": []
@@ -183,5 +185,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "41bb327b7d6a5c03c2b0064f2fdf5a6115e1536d4711caff6ef15c9abd8f34c0"
+  "contentDigest": "6fb2d7c6e1f8ffe812be7ae34c8e9415ec32c2e0926d7aa62771d4b1236f370e"
 }

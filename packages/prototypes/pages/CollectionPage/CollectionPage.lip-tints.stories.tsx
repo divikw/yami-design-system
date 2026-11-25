@@ -4,6 +4,7 @@ import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.s
 export default {
   ...createBeautyKeywordMeta(collection, {
     title: { en: "Lip Tints", zh: "唇釉" },
+    faqSubject: { en: "lip tints", zh: "唇釉" },
     description: {
       en: "Shop Korean lip tints by finish, from rom&nd Almond Rose and CLIO Tender Fig to the soft blur of 3CE Double Wind.",
       zh: "按妆效挑选韩系唇釉。喜欢水光感，可以比较 rom&nd 的杏仁玫瑰色和 CLIO 的 Tender Fig；想要柔雾妆感，则可以看看 3CE 的 Double Wind。",

@@ -95,10 +95,13 @@
     "FooterSubscribe",
     "FooterSubscribeProps"
   ],
-  "composes": [],
+  "composes": [
+    "SectionHeading"
+  ],
   "dependencies": {
     "runtime": [
-      "react"
+      "react",
+      "./SectionHeading"
     ],
     "peer": [],
     "devOnly": []
@@ -260,5 +263,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "151b640506ff0f5d5c2c3aa1808102bfd8e3f608179de331f8bc792d72cc68cd"
+  "contentDigest": "fe969b13f34a23d6e3f6f805c29218a5270a0317a7f6cc2d24c7c10f0bafafc5"
 }

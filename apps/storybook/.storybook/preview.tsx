@@ -64,7 +64,7 @@ const preview: Preview = {
       // Storybook extracts and evaluates this function as JavaScript.
       storySort: ({ id: leftId = "", title: leftTitle = "" }, { id: rightId = "", title: rightTitle = "" }) => {
         if (leftTitle === rightTitle && (leftTitle.startsWith("YAMI/components/") || leftTitle.startsWith("YAMI/modules/product display/") ||
-          ["YAMI/modules/global/header", "YAMI/modules/global/tab bar"].includes(leftTitle))) {
+          ["YAMI/modules/global/header", "YAMI/modules/global/tab bar", "YAMI/modules/commerce/coupon"].includes(leftTitle))) {
           const rank = (id = "") => id.endsWith("--docs") ? 0 : id.endsWith("--properties") ? 1 : 2;
           return rank(leftId) - rank(rightId);
         }
@@ -74,6 +74,7 @@ const preview: Preview = {
           ["YAMI/modules", ["global", "product display", "commerce"]],
           ["YAMI/modules/global", ["header", "footer", "tab bar"]],
           ["YAMI/modules/product display", ["horizontal scroll list", "product card", "product list", "collection card"]],
+          ["YAMI/modules/commerce", ["floating bars", "brand product rail", "coupon"]],
           ["YAMI/pages", ["ecommerce home", "landing pages", "categories", "email templates", "search", "product detail", "search results"]],
           ["YAMI/pages/landing pages", ["component index", "topic templates", "collection templates"]],
           ["YAMI/pages/landing pages/topic templates", ["brand", "topic", "campaign"]],

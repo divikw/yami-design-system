@@ -73,7 +73,7 @@ export default {
       ...collectionMeta.parameters.docs,
       description: { component: "A Korean beauty collection spanning skincare, sun care and makeup." },
     },
-    faqByLocale: createCollectionFaq([
+    faqByLocale: createCollectionFaq({ en: "Korean beauty products", zh: "韩系美妆产品" }, [
       {
         id: "categories",
         question: { en: "Where can I find cleansing balms and face washes?", zh: "在哪里找卸妆膏和洁面乳？" },

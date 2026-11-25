@@ -56,13 +56,13 @@
       "--border-default",
       "--font-family-ios",
       "--font-size-body-md",
-      "--font-size-caption-sm",
       "--font-size-heading-sm",
       "--font-weight-emphasize",
+      "--font-weight-normal",
       "--line-height-body-md",
-      "--line-height-caption-md",
       "--line-height-heading-sm",
       "--radius-button-primary",
+      "--space-050",
       "--space-100",
       "--space-150",
       "--space-200",
@@ -94,7 +94,7 @@
       },
       "--text-secondary": {
         "property": "color",
-        "selector": ".details"
+        "selector": ".details, .coupon:not([data-disabled]) .claimStatus"
       },
       "--text-disabled": {
         "property": "color",
@@ -116,9 +116,9 @@
         "space",
         "enter"
       ],
-      "ariaPattern": "Selection uses a labeled Checkbox. The claim Button has localized state text and describes the coupon title and terms. Pending claims block activation. Claimed coupons may provide a native link to use the offer."
+      "ariaPattern": "Selection uses a labeled Checkbox. The claim Button describes the coupon title and terms. Pending claims block activation. Claim updates are announced politely. Claimed coupons show localized status text with a decorative checkmark or a native link to use the offer."
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "bdeae1a076f3c4af38ef7f9ed97d24cdfc1c86ed49e4d4dda183aa9df7a2ea5f"
+  "contentDigest": "dbc8e1a625c6054a3780f2b1a76f88fd8e9d0c0e1141fed89bae2ab86882fb08"
 }
