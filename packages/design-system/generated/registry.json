@@ -18,7 +18,7 @@
       "status": "alpha",
       "version": "0.1.0",
       "path": "registry-items/yami-design-system.json",
-      "digest": "8efea2e3680549f67645de82dd582bb517132dbeac6c57a53cdc838ffade2d8b"
+      "digest": "6a7533b9e6b569bbfa603df671dd72ff0329219a9153749ceea5a153904755e0"
     },
     {
       "name": "accordion",
@@ -417,6 +417,15 @@
       "digest": "5548c572c2b9a105fec219404f9e116aef1ff1a93a484b9a53edf51f1f6c2a9d"
     },
     {
+      "name": "service-commitment",
+      "title": "ServiceCommitment",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/service-commitment.json",
+      "digest": "6f0f3ac58cd700f38b41070ca55730e59fda85f04f6dd9334e771f3b67b00ba9"
+    },
+    {
       "name": "shortcut-rail",
       "title": "ShortcutRail",
       "type": "component",
@@ -550,6 +559,15 @@
       "version": "0.1.0",
       "path": "registry-items/trending-searches.json",
       "digest": "a6456a0d743973432ed65bbda921cae90282f3e60c7ffd1983875256ba2d04d7"
+    },
+    {
+      "name": "user-reviews",
+      "title": "UserReviews",
+      "type": "component",
+      "status": "experimental",
+      "version": "0.1.0",
+      "path": "registry-items/user-reviews.json",
+      "digest": "5a28a324a1d96c8827e3bbdce031235500a6dd40c0c13ad1211fde8b957da776"
     }
   ]
 }

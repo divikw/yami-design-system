@@ -24,12 +24,14 @@ import {
   ProductList,
   ReviewList,
   SectionHeading,
+  ServiceCommitment,
   ShortcutRail,
   Tabs,
   TabsList,
   TabsTrigger,
   ThemeHero,
   ThemeProductList,
+  UserReviews,
 } from "@yami/design-system";
 
 import styles from "./TopicLandingPage.module.css";
@@ -88,6 +90,8 @@ export function TopicLandingPage({
   reviewsAfterProducts = false,
   faq,
   relatedKeywords,
+  appReviews,
+  serviceCommitment,
   relatedCollections,
   productRail,
   brandRail,
@@ -823,6 +827,19 @@ export function TopicLandingPage({
         )}
         {relatedKeywords && relatedKeywords.items.length > 0 && (
           <RelatedKeywords {...relatedKeywords} />
+        )}
+        {appReviews && (
+          <UserReviews
+            {...appReviews}
+            className={cx(styles.appReviews, appReviews.className)}
+            titleFontFamily={appReviews.titleFontFamily ?? titleFontFamily}
+          />
+        )}
+        {serviceCommitment && (
+          <ServiceCommitment
+            {...serviceCommitment}
+            className={cx(styles.serviceCommitment, serviceCommitment.className)}
+          />
         )}
       </main>
 

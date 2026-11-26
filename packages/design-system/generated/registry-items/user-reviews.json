@@ -1,0 +1,162 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "user-reviews",
+  "title": "UserReviews",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Homepage app download links and a responsive panel of curated user reviews.",
+  "source": "components/UserReviews",
+  "files": [
+    {
+      "source": "components/UserReviews/assets/app-store.png",
+      "target": "components/UserReviews/assets/app-store.png"
+    },
+    {
+      "source": "components/UserReviews/assets/download-qr-en.png",
+      "target": "components/UserReviews/assets/download-qr-en.png"
+    },
+    {
+      "source": "components/UserReviews/assets/download-qr-zh.png",
+      "target": "components/UserReviews/assets/download-qr-zh.png"
+    },
+    {
+      "source": "components/UserReviews/assets/google-play.svg",
+      "target": "components/UserReviews/assets/google-play.svg"
+    },
+    {
+      "source": "components/UserReviews/assets/review-bubble.svg",
+      "target": "components/UserReviews/assets/review-bubble.svg"
+    },
+    {
+      "source": "components/UserReviews/fixtures.ts",
+      "target": "components/UserReviews/fixtures.ts"
+    },
+    {
+      "source": "components/UserReviews/index.ts",
+      "target": "components/UserReviews/index.ts"
+    },
+    {
+      "source": "components/UserReviews/UserReviews.module.css",
+      "target": "components/UserReviews/UserReviews.module.css"
+    },
+    {
+      "source": "components/UserReviews/UserReviews.stories.module.css",
+      "target": "components/UserReviews/UserReviews.stories.module.css"
+    },
+    {
+      "source": "components/UserReviews/UserReviews.tsx",
+      "target": "components/UserReviews/UserReviews.tsx"
+    }
+  ],
+  "exports": [
+    "UserReview",
+    "UserReviews",
+    "UserReviewsProps"
+  ],
+  "composes": [
+    "Card",
+    "Divider",
+    "SectionHeading"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "./Card",
+      "./Divider",
+      "./SectionHeading"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/UserReviews/usage.md",
+    "stories": [
+      "components/UserReviews/UserReviews.stories.tsx"
+    ],
+    "examples": [
+      "components/UserReviews/examples.tsx#UserReviewsExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--border-default",
+      "--divider-emphasis",
+      "--fill-inverse",
+      "--fill-primary",
+      "--focus-ring",
+      "--font-family-ios",
+      "--font-family-serif",
+      "--font-size-body-md",
+      "--font-size-body-xl",
+      "--font-size-display-md",
+      "--font-size-display-sm",
+      "--font-size-heading-xl",
+      "--font-weight-emphasize",
+      "--font-weight-semibold",
+      "--line-height-body-md",
+      "--line-height-body-xl",
+      "--line-height-display-md",
+      "--line-height-display-sm",
+      "--line-height-heading-xl",
+      "--radius-component-default",
+      "--radius-surface-default",
+      "--radius-surface-sheet",
+      "--radius-tag-primary",
+      "--space-025",
+      "--space-050",
+      "--space-100",
+      "--space-150",
+      "--space-200",
+      "--space-300",
+      "--space-400",
+      "--space-600",
+      "--stroke-default",
+      "--stroke-thick",
+      "--surface-primary",
+      "--surface-secondary",
+      "--text-primary",
+      "--text-secondary"
+    ],
+    "rules": [
+      "focus-style",
+      "no-custom-radii",
+      "tap-target"
+    ],
+    "tokenBindings": {
+      "--surface-secondary": {
+        "property": "background",
+        "selector": ".panel"
+      },
+      "--surface-primary": {
+        "property": "background",
+        "selector": ".reviewCard::before"
+      },
+      "--radius-surface-default": {
+        "property": "border-radius",
+        "selector": ".panel"
+      },
+      "--radius-surface-sheet": {
+        "property": "border-radius",
+        "selector": ".reviewGrid .reviewCard"
+      },
+      "--radius-component-default": {
+        "property": "border-radius",
+        "selector": ".qrLink"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "structure": "Named section with a heading, native download links, and a static review region with lists and block quotes.",
+      "tapTargetMin": 24,
+      "keyboardNav": [
+        "Tab",
+        "Enter"
+      ]
+    },
+    "interactionCoverage": "covered"
+  },
+  "contentDigest": "5a28a324a1d96c8827e3bbdce031235500a6dd40c0c13ad1211fde8b957da776"
+}

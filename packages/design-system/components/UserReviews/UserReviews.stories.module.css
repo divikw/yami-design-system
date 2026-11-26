@@ -1,0 +1,10 @@
+.preview {
+  padding-block: var(--space-300);
+  padding-inline: var(--layout-page-margin-default);
+}
+
+@media (min-width: 1024px) {
+  .preview {
+    padding-block: var(--space-400);
+  }
+}

@@ -114,6 +114,7 @@
     "review-list",
     "section-banner",
     "select",
+    "service-commitment",
     "shortcut-rail",
     "skeleton",
     "slider",
@@ -128,7 +129,8 @@
     "theme-product-list",
     "toast",
     "tooltip",
-    "trending-searches"
+    "trending-searches",
+    "user-reviews"
   ],
   "dependencies": {
     "runtime": [
@@ -607,5 +609,5 @@
     },
     "interactionCoverage": "not-applicable"
   },
-  "contentDigest": "8efea2e3680549f67645de82dd582bb517132dbeac6c57a53cdc838ffade2d8b"
+  "contentDigest": "6a7533b9e6b569bbfa603df671dd72ff0329219a9153749ceea5a153904755e0"
 }

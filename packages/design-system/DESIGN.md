@@ -788,6 +788,14 @@ PC global site footer. **PC only** — the mobile footer stacks differently and 
 | **App buttons** | 246 × 40 `--surface-inverse` pills exported standalone as `FooterAppButton`, so app-download modules outside the footer reuse the control without lifting the landmark. Badge artwork is a **caller-supplied** image slot — the Apple and Google marks are licensed and stay out of the DS bundle. |
 | **Structure** | Social glyphs are decorative (empty alt) and their anchors name themselves; payment marks carry the scheme name as alt because no visible label repeats it. Legal entries may override their accessible name via `ariaLabel` where the visible label under-describes the target. Column links and social glyphs keep production's visual size and gain transparent 44px hit areas rather than growing their rows (a component-level touch enhancement; rule `tap-target` does not require 44px layout height). |
 
+### UserReviews — `components/UserReviews/`
+
+Homepage app download module with native App Store and Google Play links, a linked QR code, and ordered groups of user reviews. Review tiles compose Card and use the theme-aware surface, text, focus, and spacing tokens. Containers under 640px show only the download panel with 16px padding. See the [bilingual usage guide](./components/UserReviews/usage.md) for the public API and responsive behavior.
+
+### ServiceCommitment — `components/ServiceCommitment/`
+
+Bottom service commitments strip with localized copy, filled icons, and a top divider. The centered content area has an 80px minimum height. Below 928px of usable width in Chinese and 1120px in English, items wrap into centered rows with 16px between items and 8px between rows. See the [bilingual usage guide](./components/ServiceCommitment/usage.md).
+
 ### ShortcutRail — `components/ShortcutRail/` _(composite: composes Button)_
 
 Responsive shortcut navigation for homepage and discovery surfaces.

@@ -1,0 +1,134 @@
+{
+  "$schema": "../../schema/registry-item.json",
+  "schemaVersion": 2,
+  "name": "service-commitment",
+  "title": "ServiceCommitment",
+  "type": "component",
+  "status": "experimental",
+  "version": "0.1.0",
+  "description": "Bottom service commitments strip with localized benefits and filled icons.",
+  "source": "components/ServiceCommitment",
+  "files": [
+    {
+      "source": "components/ServiceCommitment/assets/authentic.svg",
+      "target": "components/ServiceCommitment/assets/authentic.svg"
+    },
+    {
+      "source": "components/ServiceCommitment/assets/returns.svg",
+      "target": "components/ServiceCommitment/assets/returns.svg"
+    },
+    {
+      "source": "components/ServiceCommitment/assets/same-day.svg",
+      "target": "components/ServiceCommitment/assets/same-day.svg"
+    },
+    {
+      "source": "components/ServiceCommitment/assets/shipping.svg",
+      "target": "components/ServiceCommitment/assets/shipping.svg"
+    },
+    {
+      "source": "components/ServiceCommitment/assets/us.svg",
+      "target": "components/ServiceCommitment/assets/us.svg"
+    },
+    {
+      "source": "components/ServiceCommitment/index.ts",
+      "target": "components/ServiceCommitment/index.ts"
+    },
+    {
+      "source": "components/ServiceCommitment/ServiceCommitment.module.css",
+      "target": "components/ServiceCommitment/ServiceCommitment.module.css"
+    },
+    {
+      "source": "components/ServiceCommitment/ServiceCommitment.tsx",
+      "target": "components/ServiceCommitment/ServiceCommitment.tsx"
+    }
+  ],
+  "exports": [
+    "ServiceCommitment",
+    "ServiceCommitmentProps"
+  ],
+  "composes": [
+    "Divider"
+  ],
+  "dependencies": {
+    "runtime": [
+      "react",
+      "./Divider"
+    ],
+    "peer": [],
+    "devOnly": []
+  },
+  "documentation": {
+    "usage": "components/ServiceCommitment/usage.md",
+    "stories": [
+      "components/ServiceCommitment/ServiceCommitment.stories.tsx"
+    ],
+    "examples": [
+      "components/ServiceCommitment/examples.tsx#ServiceCommitmentExample"
+    ]
+  },
+  "design": {
+    "tokens": [
+      "--background-primary",
+      "--border-default",
+      "--font-family-ios",
+      "--font-size-body-md",
+      "--font-size-body-xl",
+      "--font-weight-emphasize",
+      "--layout-page-margin-default",
+      "--line-height-heading-md",
+      "--space-050",
+      "--space-100",
+      "--space-1000",
+      "--space-200",
+      "--space-250",
+      "--space-300",
+      "--space-400",
+      "--space-500",
+      "--stroke-default",
+      "--text-primary"
+    ],
+    "rules": [
+      "numerals-font",
+      "semantic-color-only"
+    ],
+    "tokenBindings": {
+      "--background-primary": {
+        "property": "background",
+        "selector": ".root"
+      },
+      "--text-primary": {
+        "property": "color",
+        "selector": ".root"
+      },
+      "--space-050": {
+        "property": "column-gap",
+        "selector": ".benefit"
+      },
+      "--space-200": {
+        "property": "column-gap",
+        "selector": ".list below 928px"
+      },
+      "--space-1000": {
+        "property": "min-block-size",
+        "selector": ".container"
+      },
+      "--space-250": {
+        "property": "block-size",
+        "selector": ".icon below 928px"
+      },
+      "--space-300": {
+        "property": "block-size",
+        "selector": ".icon from 928px"
+      }
+    }
+  },
+  "quality": {
+    "accessibility": {
+      "structure": "Named list with decorative icons and dividers.",
+      "tapTargetMin": 0,
+      "keyboardNav": []
+    },
+    "interactionCoverage": "not-applicable"
+  },
+  "contentDigest": "6f0f3ac58cd700f38b41070ca55730e59fda85f04f6dd9334e771f3b67b00ba9"
+}
