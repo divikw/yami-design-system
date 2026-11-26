@@ -46,6 +46,8 @@ const fulfilledIcon = new URL(
 
 export type AllFiltersSortValue = SearchResultsSort;
 
+const collectionFilterSnapPoints = [0.6, 1];
+
 type ExpandableFilterSection =
   | "sort"
   | "category"
@@ -513,18 +515,23 @@ export function AllFiltersDialog(props: AllFiltersDialogProps) {
     <Panel
       className={styles.panel}
       open={open}
+      lang={locale}
       id="all-filters"
       data-slot="all-filters-dialog"
       title={mobileSection ? getSectionLabel(mobileSection) : copy.filtersButton}
       closeLabel={locale === "zh" ? "关闭筛选" : "Close filters"}
       onClose={onClose}
-      {...(!desktop && { size: "content" as const, contentPadding: "none" as const, back: mobileSection ? {
-        label: locale === "zh" ? "返回全部筛选" : "Back to all filters",
-        onClick: () => setMobileSection(null),
-      } : undefined })}
+      {...(!desktop && {
+        ...(catalog ? { snapPoints: collectionFilterSnapPoints } : { size: "content" as const }),
+        contentPadding: "none" as const,
+        back: mobileSection ? {
+          label: locale === "zh" ? "返回全部筛选" : "Back to all filters",
+          onClick: () => setMobileSection(null),
+        } : undefined,
+      })}
       footer={
         <>
-          {selectedTags.length > 0 && (
+          {!mobileSection && selectedTags.length > 0 && (
             <div
               className={styles.selectedTags}
               aria-label={locale === "zh" ? "已选筛选" : "Selected filters"}

@@ -75,6 +75,10 @@
   row-gap: var(--space-200);
 }
 
+.downloadOptions > :is(.mobileIcon, .mobileDownload) {
+  display: none;
+}
+
 .storeDetails {
   display: grid;
   justify-self: stretch;
@@ -149,6 +153,12 @@
 .qrLink img {
   inline-size: 80px;
   block-size: auto;
+}
+
+@container user-reviews (928px <= width < 1824px) {
+  .qrLink img {
+    inline-size: 100px;
+  }
 }
 
 .reviewPane {
@@ -236,10 +246,19 @@
     line-height: var(--line-height-heading-xl);
   }
 
-  .stores {
-    justify-content: center;
+  .downloadOptions > .mobileDownload {
+    display: inline-flex;
   }
 
+  .downloadOptions > .mobileIcon {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    margin-block: var(--space-100);
+  }
+
+  .qrLink,
+  .storeDetails,
   .reviewPane {
     display: none;
   }
@@ -289,10 +308,6 @@
     inset-block: calc(-1 * var(--space-025));
   }
 
-  .root:lang(zh) .qrLink img {
-    inline-size: 100px;
-  }
-
   .reviewViewport {
     max-block-size: calc(var(--user-reviews-panel-height) - 2 * var(--space-300));
   }
@@ -309,11 +324,5 @@
 
   .reviewGrid:has(> :nth-child(3)) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@container user-reviews (min-width: 1824px) {
-  .root:lang(zh) .qrLink img {
-    inline-size: 80px;
   }
 }

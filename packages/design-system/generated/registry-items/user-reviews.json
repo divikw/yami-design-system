@@ -14,12 +14,8 @@
       "target": "components/UserReviews/assets/app-store.png"
     },
     {
-      "source": "components/UserReviews/assets/download-qr-en.png",
-      "target": "components/UserReviews/assets/download-qr-en.png"
-    },
-    {
-      "source": "components/UserReviews/assets/download-qr-zh.png",
-      "target": "components/UserReviews/assets/download-qr-zh.png"
+      "source": "components/UserReviews/assets/download-qr.png",
+      "target": "components/UserReviews/assets/download-qr.png"
     },
     {
       "source": "components/UserReviews/assets/google-play.svg",
@@ -28,6 +24,10 @@
     {
       "source": "components/UserReviews/assets/review-bubble.svg",
       "target": "components/UserReviews/assets/review-bubble.svg"
+    },
+    {
+      "source": "components/UserReviews/assets/yami-app-icon.webp",
+      "target": "components/UserReviews/assets/yami-app-icon.webp"
     },
     {
       "source": "components/UserReviews/fixtures.ts",
@@ -56,6 +56,7 @@
     "UserReviewsProps"
   ],
   "composes": [
+    "Button",
     "Card",
     "Divider",
     "SectionHeading"
@@ -63,6 +64,7 @@
   "dependencies": {
     "runtime": [
       "react",
+      "./Button",
       "./Card",
       "./Divider",
       "./SectionHeading"
@@ -158,5 +160,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "5a28a324a1d96c8827e3bbdce031235500a6dd40c0c13ad1211fde8b957da776"
+  "contentDigest": "f7dbbd796dd24ffbdadc123f315759cd027ac5f737577190836e56b11824ccd6"
 }

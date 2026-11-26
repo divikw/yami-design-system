@@ -18,6 +18,8 @@ test("applies the mobile download and PC review layouts at their container break
     const title = download.querySelector("h2")!;
     const benefits = download.querySelector("header p")!;
     const downloadOptions = download.lastElementChild!;
+    const mobileDownload = downloadOptions.querySelector('[data-slot="button-link"]')!;
+    const mobileIcon = downloadOptions.querySelector('img[width="80"]')!;
     const qr = downloadOptions.querySelector('[aria-label="下载亚米 App"]')!;
     const qrImage = qr.querySelector("img")!;
     const appStore = downloadOptions.querySelector(`a[href="${userReviewsExamples.zh.download.appStore.href}"]`)!;
@@ -37,29 +39,26 @@ test("applies the mobile download and PC review layouts at their container break
       container.style.width = `${width}px`;
       const column = download.getBoundingClientRect();
       const center = column.left + column.width / 2;
-      for (const element of [title, benefits, qr, caption]) {
+      for (const element of [title, benefits, mobileIcon, mobileDownload]) {
         const bounds = element.getBoundingClientRect();
         expect(bounds.left + bounds.width / 2).toBeCloseTo(center, 0);
       }
-      const [firstStore, secondStore] = storeLinks.map((link) => link.getBoundingClientRect());
-      expect((firstStore.left + secondStore.right) / 2).toBeCloseTo(center, 0);
-      expect(getComputedStyle(caption).textAlign).toBe("center");
       expect(getComputedStyle(title).fontSize).toBe("20px");
       expect(getComputedStyle(title).lineHeight).toBe("28px");
       expect(reviews.getClientRects()).toHaveLength(0);
       expect(getComputedStyle(panel).padding).toBe("16px");
       expect(getComputedStyle(download).padding).toBe("8px 0px");
-      expect(qr.getBoundingClientRect().top - title.closest("header")!.getBoundingClientRect().bottom).toBeCloseTo(16);
-      expect(new Set([...downloadCopy, ...storeLinks].map((element) => getComputedStyle(element).fontSize))).toEqual(new Set(["14px"]));
-      expect(getComputedStyle(qr).borderRadius).toBe("8px");
-      expect(getComputedStyle(qr).padding).toBe("8px");
-      expect(qrImage.getBoundingClientRect().width).toBe(80);
-      expect(qrImage.getBoundingClientRect().height).toBe(80);
-      expect(qr.getBoundingClientRect().bottom).toBeLessThan(appStore.getBoundingClientRect().top);
-      expect(caption.getBoundingClientRect().top - stores.getBoundingClientRect().bottom).toBeCloseTo(8);
-      expect(storeDetails.getBoundingClientRect().width).toBeCloseTo(download.getBoundingClientRect().width);
+      const iconBounds = mobileIcon.getBoundingClientRect();
+      const buttonBounds = mobileDownload.getBoundingClientRect();
+      expect(iconBounds.top - title.closest("header")!.getBoundingClientRect().bottom).toBeCloseTo(24);
+      expect([iconBounds.width, iconBounds.height]).toEqual([80, 80]);
+      expect(buttonBounds.top - iconBounds.bottom).toBeCloseTo(24);
+      expect(buttonBounds.height).toBe(40);
+      expect(document.elementFromPoint(center, buttonBounds.top - 1)).toBe(mobileDownload);
+      expect(qr.getClientRects()).toHaveLength(0);
+      expect(storeDetails.getClientRects()).toHaveLength(0);
       const links = Array.from(section.querySelectorAll("a")).filter((link) => link.getClientRects().length > 0);
-      expect(links).toHaveLength(3);
+      expect(links).toEqual([mobileDownload]);
     }
 
     for (const [width, columns] of [[640, 1], [900, 1], [927, 1], [928, 2], [1183, 2], [1184, 3]] as const) {
@@ -67,6 +66,8 @@ test("applies the mobile download and PC review layouts at their container break
       const columnBounds = Array.from(reviews.querySelectorAll("ul"), (list) => list.getBoundingClientRect());
       const columnPositions = new Set(columnBounds.map((bounds) => bounds.left));
       expect(columnPositions.size).toBe(columns);
+      expect(mobileDownload.getClientRects()).toHaveLength(0);
+      expect(mobileIcon.getClientRects()).toHaveLength(0);
       expect(getComputedStyle(reviews).overflow).toBe("clip");
       reviews.scrollTop = 32;
       expect(reviews.scrollTop).toBe(0);
@@ -102,7 +103,7 @@ test("applies the mobile download and PC review layouts at their container break
       }
     }
 
-    for (const [width, before, after] of [[343, 16, 8], [1184, 2, 2]] as const) {
+    for (const [width, before, after] of [[640, 16, 8], [1184, 2, 2]] as const) {
       container.style.width = `${width}px`;
       for (const link of storeLinks) {
         const bounds = link.getBoundingClientRect();
@@ -118,7 +119,7 @@ test("applies the mobile download and PC review layouts at their container break
   }
 });
 
-test("routes the QR download links to the corresponding language", async () => {
+test("shares the desktop QR and opens the localized mobile download page", async () => {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -129,11 +130,28 @@ test("routes the QR download links to the corresponding language", async () => {
       flushSync(() => root.render(<UserReviews {...userReviewsExamples[locale]} />));
       const link = container.querySelector<HTMLAnchorElement>(`a[aria-label="${label}"]`)!;
       const image = link.querySelector("img")!;
-      expect(link.href).toBe(`https://www.yami.com/us/${locale}/download`);
+      const mobileLink = container.querySelector<HTMLAnchorElement>('[data-slot="button-link"]')!;
+      const mobileIcon = container.querySelector<HTMLImageElement>('img[width="80"]')!;
+      expect(link.href).toBe("https://www.yami.com/us/zh/download");
+      expect(mobileLink.textContent).toBe(label);
+      expect(mobileLink.href).toBe(`https://www.yami.com/us/${locale}/download`);
       await image.decode();
+      await mobileIcon.decode();
       sources.push(image.src);
+      for (const [width, size] of [[640, 80], [927, 80], [928, 100], [1823, 100], [1824, 80]]) {
+        container.style.width = `${width}px`;
+        const bounds = image.getBoundingClientRect();
+        expect(bounds.width).toBe(size);
+        expect(bounds.height).toBe(size);
+      }
     }
-    expect(new Set(sources).size).toBe(2);
+    expect(new Set(sources).size).toBe(1);
+
+    const { appStore, googlePlay, qr } = userReviewsExamples.en.download;
+    flushSync(() => root.render(<UserReviews {...userReviewsExamples.en} download={{ appStore, googlePlay, qr }} />));
+    container.style.width = "375px";
+    const fallback = container.querySelector<HTMLAnchorElement>('[data-slot="button-link"]')!;
+    expect(fallback.href).toBe(qr.href);
   } finally {
     root.unmount();
     container.remove();

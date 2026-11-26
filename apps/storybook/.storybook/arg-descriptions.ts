@@ -386,7 +386,7 @@ const overrides: Record<string, Record<string, Copy>> = {
   },
   Header: { locale: ["页头语言／地区入口配置，包含文案和切换行为。", "Header language/region entry configuration with labels and switching behavior."] },
   UserReviews: {
-    download: ["应用商店链接、图标、下载二维码及对应链接。", "App store links and icons, the download QR image, and its corresponding URL."],
+    download: ["应用商店链接、图标、二维码和对应链接，以及可选的移动下载地址和 App 图标。", "App store links and icons, the QR image and its corresponding URL, and an optional mobile download URL and app icon."],
     reviewColumns: ["按展示顺序排列的评价组，每条包含唯一标识、评价正文和署名。", "Review groups in display order. Each review has a unique ID, quote, and author."],
     titleStyle: ["标题字号方案：display 为独立展示字号，section 跟随共享模块标题。", "Heading scale: display uses the standalone scale, and section follows the shared section heading."],
   },

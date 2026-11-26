@@ -17,14 +17,14 @@ test.each([390, 1224])("shows collection filters from 12 products at %ipx", asyn
     ...product,
     availability: index === 0 ? "sold-out" as const : "available" as const,
   }));
-  const renderCollection = (count: number) => {
+  const renderCollection = (count: number, catalogFilters: true | "brand" = true) => {
     const all = products.slice(0, count);
     flushSync(() => root.render(<TopicLandingPage
       {...fixture}
       showChrome={false}
       waterfall={{
         ...fixture.waterfall,
-        catalogFilters: true,
+        catalogFilters,
         products: all,
         productsByTab: { all },
         defaultValue: "all",
@@ -51,6 +51,12 @@ test.each([390, 1224])("shows collection filters from 12 products at %ipx", asyn
     expect(toolbar()).toBeNull();
     expect(cards()).toHaveLength(11);
     expect(soldOutCard()).not.toBeNull();
+
+    renderCollection(5, "brand");
+    expect(toolbar()).not.toBeNull();
+    await expect.element(page.getByRole("button", { name: "Brand", exact: true })).toBeVisible();
+    expect(page.getByRole("button", { name: /^(Filters|Category)$/ }).elements()).toHaveLength(0);
+    expect(cards()).toHaveLength(4);
   } finally {
     root.unmount();
     container.remove();

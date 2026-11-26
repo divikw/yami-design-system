@@ -264,8 +264,18 @@ test("Drawer child view returns to its parent without closing the dialog and kee
     flushSync(() => root.render(<ChildDemo />));
     await page.getByRole("button", { name: "Open filters" }).click();
     expect(getComputedStyle(document.querySelector<HTMLElement>("[data-drawer-content]")!).padding).toBe("8px");
+    const surface = document.querySelector("[data-drawer]")!;
+    const close = page.getByRole("button", { name: "Close filters" }).element();
+    const closeBounds = close.getBoundingClientRect();
+    const rightInset = surface.getBoundingClientRect().right - closeBounds.right;
     await page.getByRole("button", { name: "Brand" }).click();
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Back to filters");
+    const back = page.getByRole("button", { name: "Back to filters" }).element();
+    const backBounds = back.getBoundingClientRect();
+    expect([backBounds.width, backBounds.height]).toEqual([closeBounds.width, closeBounds.height]);
+    expect(backBounds.left - surface.getBoundingClientRect().left).toBeCloseTo(rightInset, 2);
+    expect(back.querySelector("img")!.getBoundingClientRect().width).toBe(24);
+    expect(getComputedStyle(back, "::before").width).toBe("44px");
     expect(page.getByRole("checkbox").elements()).toHaveLength(3);
     await page.getByRole("checkbox", { name: "SKIN1004" }).click();
     await page.getByRole("checkbox", { name: "COSRX" }).click();

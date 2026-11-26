@@ -12,7 +12,7 @@
 
 嵌套 Drawer 分别管理打开状态，关闭子抽屉会回到父抽屉。传 `modal={false}` 可与背景交互，配合 `disablePointerDismissal` 可在操作背景时保持打开。`modal="trap-focus"` 仅限制键盘焦点。
 
-标题栏和默认正文的四边内边距一致。视口宽度达到 1024px 时用 24px，更窄时用 16px。四个打开方向均遵循此规则。关闭图标按 24px 图标框对齐标题栏内边缘，按钮圆角 4px，透明热区 44 × 44px。正文字号为 16px，移动端底部兼顾安全区。
+标题栏和默认正文的四边内边距一致。视口宽度达到 1024px 时用 24px，更窄时用 16px。四个打开方向均遵循此规则。返回按钮靠左，关闭按钮靠右，均使用 24px 图标框、4px 按钮圆角和 44 × 44px 透明热区。正文字号为 16px，移动端底部兼顾安全区。
 
 可选 `description` 显示在固定标题区内的分隔线上方，并关联弹层的 `aria-describedby`。不传此属性时保持原来的头部。
 
@@ -34,7 +34,7 @@ Show additional content or a contextual task on the current page. At 1024px and 
 
 Required props: open, title, closeLabel and onClose. Children own business content; footer stays outside scrolling content. Use `size="content"` for short content. Use Dialog for centered desktop details.
 
-For every drawer direction, the header and default body use 24px of padding on each side at viewport widths of at least 1024px, and 16px below. The 24px Close icon aligns to the header inset with a 4px radius and a 44px hit area. Body text is 16px, with mobile bottom safe-area clearance.
+For every drawer direction, the header and default body use 24px of padding on each side at viewport widths of at least 1024px, and 16px below. Back aligns to the left and Close to the right. Both use a 24px icon box, a 4px button radius, and a 44px hit area. Body text is 16px, with mobile bottom safe-area clearance.
 
 Target the panel, backdrop, viewport, and scrolling body with `[data-drawer]`, `[data-drawer-backdrop]`, `[data-drawer-viewport]`, and `[data-drawer-content]`. The header, description, and footer use the `data-slot` values `drawer-header`, `drawer-description`, and `drawer-footer`.
 

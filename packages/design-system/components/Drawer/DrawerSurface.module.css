@@ -53,12 +53,7 @@
   justify-content: flex-start;
 }
 
-.actions[data-back] .navigationButton {
-  width: var(--space-400);
-  height: var(--space-400);
-}
-
-.actions:not([data-back]) .navigationButton {
+.actions .navigationButton {
   border-radius: var(--radius-sm);
   width: var(--space-300);
   height: var(--space-300);

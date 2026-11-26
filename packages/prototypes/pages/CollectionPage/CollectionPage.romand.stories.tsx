@@ -19,8 +19,8 @@ export default {
         id: "selection",
         question: { en: "Where can I find Almond Rose?", zh: "杏仁玫瑰色是哪一支？" },
         answer: {
-          en: "Look for Juicy Lasting Tint #14 Almond Rose under Lip tints.",
-          zh: "在「唇釉」中选择果汁唇釉 #14 杏仁玫瑰。",
+          en: "Look for Juicy Lasting Tint #14 Almond Rose in Editor’s Picks.",
+          zh: "在「编辑精选」里找果汁唇釉 #14 杏仁玫瑰。",
         },
       },
       {
@@ -35,16 +35,16 @@ export default {
         id: "pencil",
         question: { en: "Which pencil can I use to line my lips?", zh: "想勾勒唇线，可以搭配哪支笔？" },
         answer: {
-          en: "Under Lip & brow pencils, choose the Lip Mate Pencil in #04 Fig Breeze.",
-          zh: "选择「唇线笔与眉笔」里的 #04 Fig Breeze 唇线笔。",
+          en: "Look for the Lip Mate Pencil in #04 Fig Breeze.",
+          zh: "可以选择 #04 Fig Breeze 唇线笔。",
         },
       },
       {
         id: "balm",
         question: { en: "Which lip color comes in a balm stick?", zh: "想要膏状的有色润唇产品，可以选哪款？" },
         answer: {
-          en: "Look under Tinted balm for Glasting Melting Lip Balm in shade #06.",
-          zh: "在「有色润唇膏」里可以找到 #06 水光润唇膏。",
+          en: "Look for Glasting Melting Lip Balm in shade #06.",
+          zh: "可以选择 #06 水光润唇膏。",
         },
       },
       {

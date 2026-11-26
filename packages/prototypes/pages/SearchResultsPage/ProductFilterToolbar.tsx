@@ -72,7 +72,7 @@ export function ProductCategoryFilter(props: FilterChipCategoryMenuProps) {
 interface ProductFilterToolbarProps extends FilterChipGroupProps {
   filtersLabel: string;
   filtersOpen: boolean;
-  onOpenFilters: () => void;
+  onOpenFilters?: () => void;
   filterButtonClassName?: string;
   filterMaskClassName?: string;
   sort: Omit<FilterChipSingleMenuProps, "selectionMode" | "rightIcon">;
@@ -91,7 +91,7 @@ export function ProductFilterToolbar({
 }: ProductFilterToolbarProps) {
   return (
     <FilterChipGroup {...rest}>
-      <div className={filterMaskClassName}>
+      {onOpenFilters && <div className={filterMaskClassName}>
         <FilterChip
           className={filterButtonClassName}
           data-search-results-filter-button="true"
@@ -104,7 +104,7 @@ export function ProductFilterToolbar({
         >
           {filtersLabel}
         </FilterChip>
-      </div>
+      </div>}
       <FilterChipMenu {...sort} selectionMode="single" rightIcon={<ProductFilterChevron />} />
       {children}
     </FilterChipGroup>

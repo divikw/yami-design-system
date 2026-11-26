@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { ButtonLink } from "../Button";
 import { Card } from "../Card";
 import { Divider } from "../Divider";
 import { SectionHeading, type SectionHeadingProps } from "../SectionHeading";
@@ -33,6 +34,10 @@ export interface UserReviewsProps extends SectionDividerProps {
     appStore: { href: string; iconSrc: string };
     googlePlay: { href: string; iconSrc: string };
     qr: { href: string; src: string };
+    /** Mobile download destination. Defaults to the QR link destination. */
+    mobileHref?: string;
+    /** App icon displayed above the mobile download button. */
+    mobileIconSrc?: string;
   };
   reviewColumns: readonly (readonly UserReview[])[];
   locale?: "zh" | "en";
@@ -101,6 +106,16 @@ export function UserReviews({
                 </div>
                 <p>{content.qrCaption}</p>
               </div>
+              {download.mobileIconSrc && (
+                <img className={styles.mobileIcon} src={download.mobileIconSrc} alt="" width={80} height={80} />
+              )}
+              <ButtonLink
+                className={styles.mobileDownload}
+                href={download.mobileHref ?? download.qr.href}
+                size="md"
+              >
+                {content.download}
+              </ButtonLink>
             </div>
           </div>
 

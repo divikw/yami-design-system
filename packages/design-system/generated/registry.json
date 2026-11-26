@@ -171,7 +171,7 @@
       "status": "experimental",
       "version": "0.2.0",
       "path": "registry-items/coupon.json",
-      "digest": "dbc8e1a625c6054a3780f2b1a76f88fd8e9d0c0e1141fed89bae2ab86882fb08"
+      "digest": "85fc0295acde14c8a3501def33839a80b0d44004753aa3e0b8dafeb2102ad89a"
     },
     {
       "name": "dialog",
@@ -198,7 +198,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/drawer.json",
-      "digest": "e4f550ea0266cc7829e795a6d0def8c8bf6b961075148ca55fe2cf60eb0ea594"
+      "digest": "59d5d03ac5e1d05f0a946cc54cf28fd402abdcbb1e38ab8b946747d7c93bc831"
     },
     {
       "name": "dropdown-menu",
@@ -567,7 +567,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/user-reviews.json",
-      "digest": "5a28a324a1d96c8827e3bbdce031235500a6dd40c0c13ad1211fde8b957da776"
+      "digest": "f7dbbd796dd24ffbdadc123f315759cd027ac5f737577190836e56b11824ccd6"
     }
   ]
 }
