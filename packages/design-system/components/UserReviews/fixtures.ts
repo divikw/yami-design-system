@@ -8,13 +8,21 @@ const googlePlay = {
   href: "https://play.google.com/store/apps/details?id=com.yamibuy.yamiapp",
   iconSrc: new URL("./assets/google-play.svg", import.meta.url).href,
 };
+const qr = {
+  href: "https://www.yami.com/us/zh/download",
+  src: new URL("./assets/download-qr.png", import.meta.url).href,
+};
+const mobileIconSrc = new URL("./assets/yami-app-icon.webp", import.meta.url).href;
+
 export const userReviewsExamples = {
   zh: {
     locale: "zh",
     download: {
       appStore,
       googlePlay,
-      qr: { href: "https://www.yami.com/us/zh/download", src: new URL("./assets/download-qr-zh.png", import.meta.url).href },
+      qr,
+      mobileHref: qr.href,
+      mobileIconSrc,
     },
     reviewColumns: [
       [
@@ -53,7 +61,9 @@ export const userReviewsExamples = {
     download: {
       appStore,
       googlePlay,
-      qr: { href: "https://www.yami.com/us/en/download", src: new URL("./assets/download-qr-en.png", import.meta.url).href },
+      qr,
+      mobileHref: "https://www.yami.com/us/en/download",
+      mobileIconSrc,
     },
     reviewColumns: [
       [

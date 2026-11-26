@@ -4,6 +4,7 @@ import { NestedDrawers } from "./drawer-nested-example";
 import nestedSource from "./drawer-nested-example.tsx?raw";
 import { ResponsivePanel } from "./drawer-responsive-example";
 import responsiveSource from "./drawer-responsive-example.tsx?raw";
+import responsiveStyles from "./drawer-responsive-example.module.css?raw";
 import { ComponentGuide, type GuideExample } from "./component-guide";
 import type { DocsLocale } from "./component-docs-template";
 import styles from "./component-guide.module.css";
@@ -46,7 +47,7 @@ function DrawerExample() {
     example("swipe-handle", zh ? "拖动手柄" : "Swipe handle", zh ? "向下拖动面板顶部的手柄可以关闭抽屉。" : "Drag the handle at the top of the panel down to dismiss it.", { swipeDirection: "down", size: "content", showSwipeHandle: true }, 'swipeDirection="down" size="content" showSwipeHandle'),
     { id: "nested", title: zh ? "嵌套抽屉" : "Nested drawers", description: zh ? "填写备注后打开详情。关闭内层抽屉，焦点回到父面板的入口，备注仍然保留。" : "Enter a note and open the details. Closing the inner drawer restores focus to its opener and preserves the note.", preview: row(<NestedDrawers lang={locale} />), code: nestedSource.trim() + `\n\n<NestedDrawers lang="${locale}" />` },
     example("snap-points", zh ? "多档停靠" : "Snap points", zh ? "拖动手柄，在半屏、四分之三屏和可用全高之间切换。也可聚焦手柄后按方向键。" : "Drag between half, three-quarter and full available height, or focus the handle and use the arrow keys.", { swipeDirection: "down", snapPoints: [0.5, 0.75, 1] }, 'swipeDirection="down" snapPoints={[0.5, 0.75, 1]}'),
-    { id: "responsive", title: zh ? "响应式组合" : "Responsive dialog", description: zh ? "桌面端打开居中的 Dialog，移动端打开可从半屏拖到全屏的 Drawer。" : "Use a centered Dialog on desktop and a bottom Drawer with half and full snap points on mobile.", preview: row(<ResponsivePanel lang={locale} />), code: responsiveSource.trim() + `\n\n<ResponsivePanel lang="${locale}" />` },
+    { id: "responsive", title: zh ? "响应式组合" : "Responsive dialog", description: zh ? "桌面端打开居中的 Dialog，移动端打开可从半屏拖到全屏的 Drawer。" : "Use a centered Dialog on desktop and a bottom Drawer with half and full snap points on mobile.", preview: row(<ResponsivePanel lang={locale} />), code: responsiveSource.trim() + `\n\n<ResponsivePanel lang="${locale}" />\n\n/* drawer-responsive-example.module.css\n${responsiveStyles.trim()}\n*/` },
   ];
   return <ComponentGuide name="Drawer" slug="drawer" locale={locale} previewMode="document"
     intro={zh ? "在当前页面展示补充内容。抽屉在桌面端从右侧打开，在移动端从底部打开。" : "Show additional content on the current page. The drawer opens from the right on desktop and from the bottom on mobile."}

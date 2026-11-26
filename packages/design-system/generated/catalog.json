@@ -11909,7 +11909,7 @@
           "fileKey": "MHQHWiNXDr06jybKwJNVvs",
           "nodeId": "792:104395",
           "componentKey": null,
-          "notes": "Desktop source section. Mobile shows only the download panel."
+          "notes": "Desktop source section. Mobile uses an optional app icon and a single download button."
         },
         "exports": [
           "UserReviews",
@@ -11917,6 +11917,7 @@
           "UserReview"
         ],
         "composes": [
+          "Button",
           "Card",
           "Divider",
           "SectionHeading"
@@ -11925,7 +11926,7 @@
           "download": {
             "type": "UserReviewsProps['download']",
             "required": true,
-            "description": "Store URLs and icon sources, along with the QR image and its equivalent link."
+            "description": "Store URLs and icon sources, the QR image and its equivalent link, and an optional mobile download URL and app icon."
           },
           "reviewColumns": {
             "type": "readonly (readonly UserReview[])[]",
@@ -12051,6 +12052,7 @@
         "dependencies": {
           "runtime": [
             "react",
+            "./Button",
             "./Card",
             "./Divider",
             "./SectionHeading"

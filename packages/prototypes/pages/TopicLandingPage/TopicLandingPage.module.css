@@ -403,6 +403,10 @@ main.main[data-title-font-family="sans"]
   scroll-snap-stop: always;
 }
 
+.collection .couponSurface > [data-slot="coupon"] {
+  min-inline-size: 320px;
+}
+
 .collection .couponSurface > [data-slot="coupon"]:not([data-disabled]) [data-slot="coupon-claim-status"] {
   color: var(--text-primary);
 }

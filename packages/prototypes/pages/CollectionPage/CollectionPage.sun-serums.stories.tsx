@@ -51,8 +51,8 @@ export default {
         id: "format",
         question: { en: "Where can I compare a sun serum with a sun stick?", zh: "想比较防晒精华和防晒棒，去哪里看？" },
         answer: {
-          en: "Open SKIN1004 under Related Collections, then choose Sun care to see the serum and stick together.",
-          zh: "打开下方「相关专辑」中的 SKIN1004，在「日常防晒」里可以同时看到防晒精华和防晒棒。",
+          en: "Open SKIN1004 under Related Collections to see the sun serum and sun stick together.",
+          zh: "打开下方「相关专辑」中的 SKIN1004，即可比较防晒精华和防晒棒。",
         },
       },
     ],

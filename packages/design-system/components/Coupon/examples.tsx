@@ -45,17 +45,17 @@ export function NewUserCouponExample({
   en,
   title = en ? "Save 10%" : "立享 10% OFF",
   description = en ? "Valid on Yami-fulfilled items. Exclusions apply." : "亚米自营商品通用，特殊商品除外",
+  validity: unclaimedValidity = en ? "New users only. Valid for 7 days after claiming." : "仅限新用户, 领取后7天内有效",
   disabled,
   useHref = `https://www.yamibuy.com/${en ? "en" : "zh"}`,
-}: Partial<Pick<CouponProps, "title" | "description" | "disabled">> & { en: boolean; useHref?: string | null }) {
+}: Partial<Pick<CouponProps, "title" | "description" | "validity" | "disabled">> & { en: boolean; useHref?: string | null }) {
   const { claim, expiryLabel } = usePreviewClaim(en, 7, useHref);
-  const validity = expiryLabel ?? (en ? "New users only. Valid for 7 days after claiming." : "仅限新用户, 领取后7天内有效");
   return (
     <Coupon
       title={title}
       description={description}
       disabled={disabled}
-      validity={validity}
+      validity={expiryLabel ?? unclaimedValidity}
       claim={claim}
     />
   );

@@ -1,0 +1,3 @@
+.dialog [data-slot="dialog-header"] {
+  border-block-end: var(--stroke-default) solid var(--divider-default);
+}

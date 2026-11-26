@@ -35,16 +35,16 @@ export default {
         id: "foam",
         question: { en: "Which product is the face wash?", zh: "哪一款是洁面用的？" },
         answer: {
-          en: "Look under Cleansing foam for Centella Ampoule Foam in the 125 ml tube.",
-          zh: "在「洁面泡沫」里找 125 ml 的积雪草安瓶洁面泡沫，英文品名是 Centella Ampoule Foam。",
+          en: "Look for Centella Ampoule Foam in the 125 ml tube.",
+          zh: "可以找 125 ml 的积雪草安瓶洁面泡沫，英文品名是 Centella Ampoule Foam。",
         },
       },
       {
         id: "sun-stick",
         question: { en: "Is there a stick sunscreen?", zh: "有棒状防晒吗？" },
         answer: {
-          en: "Yes. Look under Sun care for the Centella Hyalu-Cica Sun Stick.",
-          zh: "有，在「日常防晒」里可以找到积雪草玻尿酸防晒棒。",
+          en: "Yes. Look for the Centella Hyalu-Cica Sun Stick in Editor’s Picks.",
+          zh: "有，在「编辑精选」里可以找到积雪草玻尿酸防晒棒。",
         },
       },
       {

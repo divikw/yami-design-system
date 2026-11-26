@@ -790,7 +790,7 @@ PC global site footer. **PC only** — the mobile footer stacks differently and 
 
 ### UserReviews — `components/UserReviews/`
 
-Homepage app download module with native App Store and Google Play links, a linked QR code, and ordered groups of user reviews. Review tiles compose Card and use the theme-aware surface, text, focus, and spacing tokens. Containers under 640px show only the download panel with 16px padding. See the [bilingual usage guide](./components/UserReviews/usage.md) for the public API and responsive behavior.
+Homepage app download module with native App Store and Google Play links, a linked QR code, and ordered groups of user reviews. Review tiles compose Card and use the theme-aware surface, text, focus, and spacing tokens. Containers under 640px show a single ButtonLink for app downloads with 16px panel padding. See the [bilingual usage guide](./components/UserReviews/usage.md) for the public API and responsive behavior.
 
 ### ServiceCommitment — `components/ServiceCommitment/`
 

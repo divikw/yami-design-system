@@ -26,8 +26,8 @@ export default {
         id: "matte",
         question: { en: "Which shades can I compare for a matte finish?", zh: "想要柔雾妆效，可以比较哪两支？" },
         answer: {
-          en: "Under Matte tints, compare rom&nd #13 Cooling Up with 3CE Double Wind.",
-          zh: "在「柔雾唇釉」中可以比较 rom&nd 的 #13 Cooling Up 和 3CE 的 Double Wind。",
+          en: "Compare rom&nd #13 Cooling Up with 3CE Double Wind in Editor’s Picks.",
+          zh: "可以在「编辑精选」里比较 rom&nd 的 #13 Cooling Up 和 3CE 的 Double Wind。",
         },
       },
       {
@@ -50,8 +50,8 @@ export default {
         id: "lip-liner",
         question: { en: "Where can I find a lip liner to pair with a tint?", zh: "想给唇釉搭配唇线笔，去哪里找？" },
         answer: {
-          en: "Open rom&nd under Related Collections and choose Lip & brow pencils to find the #04 Fig Breeze Lip Mate Pencil.",
-          zh: "打开下方「相关专辑」中的 rom&nd，在「唇线笔与眉笔」里可以找到 #04 Fig Breeze 唇线笔。",
+          en: "Open rom&nd under Related Collections and look for the #04 Fig Breeze Lip Mate Pencil.",
+          zh: "打开下方「相关专辑」中的 rom&nd，即可查看 #04 Fig Breeze 唇线笔。",
         },
       },
     ],

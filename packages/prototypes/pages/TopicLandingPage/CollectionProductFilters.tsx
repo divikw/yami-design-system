@@ -30,6 +30,7 @@ const priceBands = [
 
 const copy = {
   en: {
+    brand: "Brand",
     category: "Category",
     inStock: "In Stock",
     price: "Price",
@@ -44,6 +45,7 @@ const copy = {
     empty: "No products match these filters.",
   },
   zh: {
+    brand: "品牌",
     category: "分类",
     inStock: "仅看有货",
     price: "价格",
@@ -61,6 +63,7 @@ const copy = {
 
 export interface CollectionProductFilterState {
   sort: AllFiltersSortValue;
+  brands: string[];
   prices: string[];
   inStock: boolean;
 }
@@ -74,6 +77,7 @@ export function createCollectionProductFilters(
 ): CollectionProductFilterState {
   return {
     sort: "featured",
+    brands: [],
     prices: [],
     inStock: products.some((product) => !isInStock(product)),
   };
@@ -88,9 +92,12 @@ function priceOf(product: ProductListItem) {
 
 export function filterCollectionProducts(
   products: ProductListItem[],
-  { prices, sort, inStock }: CollectionProductFilterState,
+  { brands, prices, sort, inStock }: CollectionProductFilterState,
 ) {
-  const stockMatches = inStock ? products.filter(isInStock) : products;
+  const brandMatches = brands.length > 0
+    ? products.filter(({ brand }) => typeof brand === "string" && brands.includes(brand))
+    : products;
+  const stockMatches = inStock ? brandMatches.filter(isInStock) : brandMatches;
   const bands = priceBands.filter(({ value }) => prices.includes(value));
   const filtered = bands.length ? stockMatches.filter((product) => {
     const price = priceOf(product);
@@ -114,6 +121,7 @@ export function filterCollectionProducts(
 
 interface CollectionProductFiltersProps {
   locale: "en" | "zh";
+  brandOptions?: string[];
   categories: FilterChipCategoryOption[];
   category: string;
   filters: CollectionProductFilterState;
@@ -123,6 +131,7 @@ interface CollectionProductFiltersProps {
 
 export function CollectionProductFilters({
   locale,
+  brandOptions,
   categories,
   category,
   filters,
@@ -131,7 +140,7 @@ export function CollectionProductFilters({
 }: CollectionProductFiltersProps) {
   const [open, setOpen] = useState(false);
   const text = copy[locale];
-  const { prices, sort, inStock } = filters;
+  const { brands, prices, sort, inStock } = filters;
   const dialogValues = useMemo(() => ({
     price: prices,
     inStock: inStock ? ["in-stock"] : [],
@@ -154,7 +163,7 @@ export function CollectionProductFilters({
         aria-label={text.filtersButton}
         filtersLabel={text.filtersButton}
         filtersOpen={open}
-        onOpenFilters={() => setOpen(true)}
+        onOpenFilters={brandOptions ? undefined : () => setOpen(true)}
         sort={{
           label: text.sortLabel,
           value: sort,
@@ -162,15 +171,30 @@ export function CollectionProductFilters({
           onValueChange: (value) => onChange({ ...filters, sort: value as AllFiltersSortValue }, category),
         }}
       >
-        <ProductCategoryFilter
-          label={text.category}
-          options={categories}
-          value={category}
-          onValueChange={(value) => onChange(filters, value)}
-          closeLabel={locale === "zh" ? "关闭分类" : "Close category"}
-          clearLabel={text.clearSelection}
-          applyLabel={text.apply}
-        />
+        {brandOptions === undefined && (
+          <ProductCategoryFilter
+            label={text.category}
+            options={categories}
+            value={category}
+            onValueChange={(value) => onChange(filters, value)}
+            closeLabel={locale === "zh" ? "关闭分类" : "Close category"}
+            clearLabel={text.clearSelection}
+            applyLabel={text.apply}
+          />
+        )}
+        {brandOptions && brandOptions.length > 0 && (
+          <FilterChipMenu
+            label={text.brand}
+            selectionMode="multiple"
+            value={brands}
+            options={brandOptions.map((brand) => ({ value: brand, label: brand }))}
+            onValueChange={(value) => onChange({ ...filters, brands: value }, category)}
+            closeLabel={locale === "zh" ? "关闭品牌筛选" : "Close brand filters"}
+            clearLabel={text.clearSelection}
+            applyLabel={text.apply}
+            rightIcon={<ProductFilterChevron />}
+          />
+        )}
         <FilterChip
           selected={inStock}
           onClick={() => onChange({ ...filters, inStock: !inStock }, category)}
@@ -188,12 +212,12 @@ export function CollectionProductFilters({
           applyLabel={text.apply}
           rightIcon={<ProductFilterChevron />}
         />
-        {(category || prices.length > 0 || inStock || sort !== "featured") && (
+        {(category || brands.length > 0 || prices.length > 0 || inStock || sort !== "featured") && (
           <ClearProductFiltersButton onClick={reset}>{text.clearFilters}</ClearProductFiltersButton>
         )}
       </ProductFilterToolbar>
       {resultCount === 0 && <p className={styles.collectionFilterStatus} role="status">{text.empty}</p>}
-      <AllFiltersDialog
+      {!brandOptions && <AllFiltersDialog
         open={open}
         locale={locale}
         copy={{
@@ -217,13 +241,14 @@ export function CollectionProductFilters({
         onClear={reset}
         onApply={({ sort, category, menuValues }) => {
           onChange({
+            ...filters,
             sort,
             prices: menuValues.price ?? [],
             inStock: menuValues.inStock?.includes("in-stock") ?? false,
           }, category);
           closeDialog();
         }}
-      />
+      />}
     </>
   );
 }

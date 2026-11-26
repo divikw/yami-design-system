@@ -1,5 +1,6 @@
+import { userEvent, waitFor, within } from "storybook/test";
+
 import { createCollectionFaq } from "./collectionFaq.fixture";
-import type { ProductListItem } from "@yami/design-system";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
 import { createBeautyReviews } from "./beautyKeyword.fixture";
@@ -23,14 +24,7 @@ const introByLocale = {
 
 function createKBeautyFixture(locale: TopicLandingPageLocale = "en") {
   const page = createCollectionPageFixture(locale);
-  const productsByTab: Record<string, ProductListItem[]> = Object.fromEntries(
-    categories.map(({ value }) => [value, []]),
-  );
-  const products = catalog.map((item): ProductListItem => {
-    const product = localizedBeautyProduct(item, locale);
-    productsByTab[item.category].push(product);
-    return product;
-  });
+  const products = catalog.map((item) => localizedBeautyProduct(item, locale));
   return {
     ...page,
     activityHeader: { ...page.activityHeader, title: "K-Beauty" },
@@ -43,8 +37,8 @@ function createKBeautyFixture(locale: TopicLandingPageLocale = "en") {
     waterfall: {
       ...page.waterfall,
       products,
-      productsByTab: { ...productsByTab, all: products },
-      tabs: categories.map(({ value, ...label }) => ({ value, label: label[locale] })),
+      productsByTab: { all: products },
+      tabs: undefined,
       defaultValue: "all",
     },
   };
@@ -78,16 +72,16 @@ export default {
         id: "categories",
         question: { en: "Where can I find cleansing balms and face washes?", zh: "在哪里找卸妆膏和洁面乳？" },
         answer: {
-          en: "Choose Cleansers under Category to browse cleansing balms, gel cleansers and foaming washes together.",
-          zh: "在「分类」里选「洁面与卸妆」，可以一起看卸妆膏、凝胶洁面乳和洁面泡沫。",
+          en: "Use Brand to find cleansing balms and face washes from Beauty of Joseon, ANUA and COSRX.",
+          zh: "在「品牌」里选择 Beauty of Joseon、ANUA 或 COSRX，即可查看这些品牌的卸妆膏和洁面产品。",
         },
       },
       {
         id: "makeup",
         question: { en: "Which makeup products are in this collection?", zh: "这个专辑里有哪些彩妆？" },
         answer: {
-          en: "Choose Makeup to see rom&nd lip tint and balm alongside foundation and concealer. Look for the shade number in each product name.",
-          zh: "选择「彩妆」，可以查看 rom&nd 唇釉和润唇膏，以及粉底和遮瑕液。色号标在商品名称里。",
+          en: "Filter by rom&nd for lip tint and balm, JUNG SAEM MOOL for foundation, or ABOUT TONE for concealer. Look for the shade number in each product name.",
+          zh: "选 rom&nd 可查看唇釉和润唇膏，选 JUNG SAEM MOOL 可查看粉底，选 ABOUT TONE 可查看遮瑕液。色号标在商品名称里。",
         },
       },
       {
@@ -110,8 +104,8 @@ export default {
         id: "sheet-masks",
         question: { en: "Which MEDIHEAL sheet masks are featured?", zh: "MEDIHEAL 面膜有哪些款？" },
         answer: {
-          en: "Under Sheet masks, look for MEDIHEAL’s madecassoside, vitamin C and collagen serum masks.",
-          zh: "「面膜」分类收录了 MEDIHEAL 的积雪草苷、维生素 C 和胶原蛋白精华面膜。",
+          en: "Choose MEDIHEAL under Brand to find its madecassoside, vitamin C and collagen serum masks.",
+          zh: "在「品牌」里选择 MEDIHEAL，可查看积雪草苷、维生素 C 和胶原蛋白精华面膜。",
         },
       },
     ]),
@@ -122,10 +116,42 @@ export default {
   },
 };
 
-export const Pc = { name: "PC", tags: ["preserve-story-name"] };
+const play: typeof AnuaMobile.play = import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
+  const zh = globals.locale === "zh";
+  const products = canvasElement.querySelector("#explore-more-all")!;
+  const toolbar = within(products).getByRole("group", { name: zh ? "筛选" : "Filters", exact: true });
+  const filters = within(toolbar);
+  if (filters.queryByRole("button", { name: zh ? /^(筛选|分类)$/ : /^(Filters|Category)$/ })) {
+    throw new Error("K-Beauty must show Brand in place of the all-filters and category controls");
+  }
+
+  const displayedBrands = () => new Set(Array.from(products.querySelectorAll('[data-slot="product-card-brand"]'),
+    (brand) => brand.textContent?.trim()));
+  const brandLabel = zh ? "品牌" : "Brand";
+  const brandFilter = filters.getByRole("button", { name: brandLabel, exact: true });
+  await userEvent.click(brandFilter);
+  const preview = within(canvasElement.ownerDocument.body);
+  const brandMenu = within(await preview.findByRole("dialog", { name: brandLabel, exact: true }));
+  await userEvent.click(brandMenu.getByRole("checkbox", { name: "ANUA", exact: true }));
+  await userEvent.click(brandMenu.getByRole("checkbox", { name: "SKIN1004", exact: true }));
+  await userEvent.click(brandMenu.getByRole("button", { name: zh ? "查看商品" : "Show products", exact: true }));
+  await waitFor(() => {
+    const brands = displayedBrands();
+    if (brands.size !== 2 || !brands.has("ANUA") || !brands.has("SKIN1004")) {
+      throw new Error("Selecting multiple brands must show products from both brands only");
+    }
+  });
+  await userEvent.click(await filters.findByRole("button", { name: zh ? "清除全部" : "Clear all", exact: true }));
+  await waitFor(() => {
+    if (!displayedBrands().has("Beauty of Joseon")) throw new Error("Clear all must reset the brand filter");
+  });
+} : undefined;
+
+export const Pc = { name: "PC", tags: ["preserve-story-name"], play };
 export const Mobile = {
   name: "Mobile",
   tags: ["preserve-story-name"],
   parameters: AnuaMobile.parameters,
   globals: AnuaMobile.globals,
+  play,
 };

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Dialog, Drawer, useDesktopViewport } from "@yami/design-system";
+import styles from "./drawer-responsive-example.module.css";
 
 export function ResponsivePanel({ lang = "zh" }: { lang?: "zh" | "en" }) {
   const [open, setOpen] = useState(false);
@@ -9,6 +10,6 @@ export function ResponsivePanel({ lang = "zh" }: { lang?: "zh" | "en" }) {
   const body = <p>{zh ? "按 Escape 或点击关闭按钮返回页面。" : "Press Escape or use the close button to return to the page."}</p>;
   return <>
     <Button size={desktop ? "md" : "sm"} onClick={() => setOpen(true)}>{zh ? "打开" : "Open"}</Button>
-    {desktop ? <Dialog {...props}>{body}</Dialog> : <Drawer {...props} size="half">{body}</Drawer>}
+    {desktop ? <Dialog {...props} className={styles.dialog}>{body}</Dialog> : <Drawer {...props} size="half">{body}</Drawer>}
   </>;
 }

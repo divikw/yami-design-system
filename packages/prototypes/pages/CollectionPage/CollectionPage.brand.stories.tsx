@@ -1,5 +1,4 @@
 import { userEvent, waitFor, within } from "storybook/test";
-import { userReviewsExamples } from "@yami/design-system/components/UserReviews/fixtures";
 
 import { createCollectionFaq } from "./collectionFaq.fixture";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
@@ -31,8 +30,8 @@ const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤�
     id: "selection",
     question: { en: "Which ANUA skincare products are featured here?", zh: "这里有哪些 ANUA 护肤品？" },
     answer: {
-      en: "Editor’s Picks includes cleansers, toners and pads, serums, moisturizers, sunscreens and masks. Use Category to narrow the list.",
-      zh: "「编辑精选」收录了洁面、爽肤水与棉片、精华、乳液与面霜、防晒和面膜等商品。可以用「分类」缩小浏览范围。",
+      en: "Editor’s Picks includes cleansers, toners and pads, serums, moisturizers, sunscreens and masks.",
+      zh: "「编辑精选」收录了洁面、爽肤水与棉片、精华、乳液与面霜、防晒和面膜等商品。",
     },
   },
   {
@@ -64,7 +63,7 @@ const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤�
     question: { en: "Which Heartleaf cleansers can I compare?", zh: "鱼腥草系列有哪些洁面产品？" },
     answer: {
       en: "The collection includes the Heartleaf cleansing oil and Heartleaf cleansing foam.",
-      zh: "可以在「清洁与去角质」里比较鱼腥草清洁卸妆油和鱼腥草洁面泡沫。",
+      zh: "可以在「编辑精选」里比较鱼腥草清洁卸妆油和鱼腥草洁面泡沫。",
     },
   },
 ]);
@@ -95,20 +94,19 @@ export default {
   parameters: {
     ...brandMeta.parameters,
     createPageFixture: (locale: TopicLandingPageLocale) => {
-      const fixture = createCollectionPageFixture(locale, { showCouponUseLinks: false });
+      const fixture = createCollectionPageFixture(locale, {
+        showCouponUseLinks: false,
+        newUserCouponCopy: locale === "en" ? {
+          title: "10% OFF Your First Order",
+          validity: "Valid for 7 days after claiming.",
+        } : undefined,
+      });
       return {
         ...fixture,
         couponSection: {
           ...fixture.couponSection,
-          title: locale === "zh" ? "新人优惠" : fixture.couponSection.title,
+          title: locale === "zh" ? "新人优惠" : "Welcome Offers",
         },
-        appReviews: {
-          ...userReviewsExamples[locale],
-          dividerPosition: "top",
-          dividerVariant: "gray",
-          titleStyle: "section",
-        },
-        serviceCommitment: { locale },
       };
     },
     createRelatedCollections,
@@ -137,7 +135,7 @@ export default {
     },
     waterfall: {
       ...brandMeta.args.waterfall,
-      catalogFilters: true,
+      catalogFilters: "brand" as const,
       initialRows: 3,
       rowsPerPage: 6,
       products: brandMeta.args.waterfall.products.map((product) =>
@@ -184,7 +182,7 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const desktop = canvasElement.ownerDocument.defaultView?.matchMedia("(min-width: 1024px)").matches;
   const couponHeading = within(coupons).getByRole("heading", {
     level: 2,
-    name: globals.locale === "zh" ? "新人优惠" : "Coupons",
+    name: globals.locale === "zh" ? "新人优惠" : "Welcome Offers",
   });
   const firstCoupon = coupons.querySelector('[data-slot="coupon"]')!;
   if (!couponPanel || getComputedStyle(coupons).rowGap !== (desktop ? "16px" : "12px") ||
@@ -252,9 +250,23 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     throw new Error("The FAQ must be followed by six related collections and then the localized keyword tags");
   }
   if (!appReviews || appReviews !== keywordRegion.nextElementSibling ||
-      appReviews.lang !== (zh ? "zh" : "en") || within(appReviews).getAllByRole("link").length !== 3 ||
+      appReviews.lang !== (zh ? "zh" : "en") ||
       appReviews.dataset.dividerPosition !== "top" || appReviews.dataset.dividerVariant !== "gray") {
     throw new Error("The app download module must follow the keyword tags");
+  }
+  const appReviewsContainer = appReviews.querySelector('[data-slot="user-reviews-container"]')!;
+  const containerStyle = getComputedStyle(appReviewsContainer);
+  const contentWidth = appReviewsContainer.clientWidth -
+    parseFloat(containerStyle.paddingInlineStart) - parseFloat(containerStyle.paddingInlineEnd);
+  const downloadLinks = within(appReviews).getAllByRole("link");
+  if (contentWidth < 640) {
+    const downloadLabel = zh ? "下载亚米 App" : "Download the Yami app";
+    if (downloadLinks.length !== 1 ||
+        within(appReviews).getByRole("link", { name: downloadLabel }).getAttribute("href") !== `https://www.yami.com/us/${zh ? "zh" : "en"}/download`) {
+      throw new Error("The mobile app download module must show one localized download button");
+    }
+  } else if (downloadLinks.length !== 3) {
+    throw new Error("The desktop app download module must show the QR and both store links");
   }
   const serviceCommitment = within(main).getByRole("list", { name: zh ? "服务承诺" : "Service commitments" });
   const serviceCommitmentModule = appReviews.nextElementSibling;
@@ -301,6 +313,10 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const initialSize = () => 3 * columns();
   const allCount = args.waterfall.products.length;
   const toolbar = productSection.getByRole("group", { name: zh ? "筛选" : "Filters", exact: true });
+  const toolbarControls = within(toolbar);
+  if (toolbarControls.queryByRole("button", { name: zh ? /^(筛选|分类)$/ : /^(Filters|Category)$/ })) {
+    throw new Error("ANUA must use Brand in place of the all-filters and category controls");
+  }
   const preview = within(canvasElement.ownerDocument.body);
   const inStock = () => within(toolbar).getByRole("button", { name: zh ? "仅看有货" : "In Stock", exact: true });
   const soldOutCards = () => Array.from(products.querySelectorAll(
@@ -319,14 +335,17 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   if (renderedCount() !== initialSize()) {
     throw new Error("Changing stock filters must preserve the initial row limit");
   }
-  for (let shown = initialSize(); shown < allCount; shown += batchSize) {
-    const moreButton = moreProducts();
-    if (!moreButton) throw new Error("View more must stay available while products remain");
-    await userEvent.click(moreButton);
-    if (renderedCount() !== Math.min(shown + batchSize, allCount)) {
-      throw new Error("View more must reveal up to six additional rows per click");
+  const loadRemainingProducts = async () => {
+    for (let shown = initialSize(); shown < allCount; shown += batchSize) {
+      const moreButton = moreProducts();
+      if (!moreButton) throw new Error("View more must stay available while products remain");
+      await userEvent.click(moreButton);
+      if (renderedCount() !== Math.min(shown + batchSize, allCount)) {
+        throw new Error("View more must reveal up to six additional rows per click");
+      }
     }
-  }
+  };
+  await loadRemainingProducts();
   const cards = Array.from(products.querySelectorAll('[data-slot="product-card"]'));
   if (moreProducts()) throw new Error("View more must disappear when all products are shown");
   if (inStock().getAttribute("aria-pressed") !== "false" || cards.length !== allCount ||
@@ -354,25 +373,26 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
   await userEvent.click(notifyButtons()[0]);
 
-  await userEvent.click(within(toolbar).getByRole("button", { name: zh ? "分类" : "Category" }));
-  await userEvent.click(await preview.findByRole("radio", { name: zh ? "清洁与去角质" : "Cleanse & Peel" }));
-  await userEvent.click(preview.getByRole("button", { name: zh ? "查看商品" : "Show products" }));
-  const categoryCount = args.waterfall.productsByTab?.["cleanse-peel"].length ?? 0;
+  const brandLabel = zh ? "品牌" : "Brand";
+  const brandFilter = toolbarControls.getByRole("button", { name: brandLabel, exact: true });
+  await userEvent.click(brandFilter);
+  const brandMenu = within(await preview.findByRole("dialog", { name: brandLabel, exact: true }));
+  await userEvent.click(brandMenu.getByRole("checkbox", { name: "ANUA", exact: true }));
+  await userEvent.click(brandMenu.getByRole("button", { name: zh ? "查看商品" : "Show products" }));
   await waitFor(() => {
-    if (renderedCount() !== Math.min(categoryCount, initialSize())) {
-      throw new Error("Category filtering must restore the three-row preview");
+    if (brandFilter.getAttribute("aria-pressed") !== "true" || renderedCount() !== initialSize() || !moreProducts()) {
+      throw new Error("Brand filtering must restore the three-row preview");
     }
   });
-  const moreCategoryProducts = moreProducts();
-  if (moreCategoryProducts) await userEvent.click(moreCategoryProducts);
+  await loadRemainingProducts();
   await waitFor(() => {
-    if (renderedCount() !== categoryCount ||
+    if (renderedCount() !== allCount ||
         moreProducts() ||
-        soldOutCards().length !== 2 ||
+        soldOutCards().length !== soldOutProductIds.size ||
         !notifyButtons().some((button) =>
           button.textContent?.trim() === notifiedLabel && button.getAttribute("aria-disabled") === "true",
         )) {
-      throw new Error("Category filtering must preserve sold-out and subscribed states");
+      throw new Error("Brand filtering must preserve sold-out and subscribed states");
     }
   });
 
@@ -380,8 +400,8 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   await waitFor(() => {
     if (inStock().getAttribute("aria-pressed") !== "true" ||
         soldOutCards().length !== 0 ||
-        productSection.getAllByRole("listitem").length !== categoryCount - 2) {
-      throw new Error("In Stock must hide sold-out cards within the selected category");
+        renderedCount() !== Math.min(initialSize(), allCount - soldOutProductIds.size)) {
+      throw new Error("In Stock must hide sold-out cards within the selected brand");
     }
   });
 
@@ -424,10 +444,15 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
 
   const [newUserCoupon, appShippingCoupon] = coupons.querySelectorAll<HTMLElement>('[data-slot="coupon"]');
+  if (!zh) {
+    within(newUserCoupon).getByText("10% OFF Your First Order", { exact: true });
+    within(newUserCoupon).getByText("Valid for 7 days after claiming.", { exact: true });
+  }
   const claimLabel = zh ? "领取" : "Claim";
   const claimedLabel = zh ? "已领取" : "Claimed";
   await userEvent.click(within(newUserCoupon).getByRole("button", { name: claimLabel, exact: true }));
   await within(newUserCoupon).findByText(claimedLabel, { exact: true });
+  await within(newUserCoupon).findByText(zh ? /^可用至 / : /^Valid until /);
   await userEvent.click(within(appShippingCoupon).getByRole("button", { name: claimLabel, exact: true }));
   await within(appShippingCoupon).findByText(claimedLabel, { exact: true });
   if (coupons.querySelector("a[href]")) {

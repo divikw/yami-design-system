@@ -17,7 +17,9 @@ export function UserReviewsDocsPage({ locale }: { locale: DocsLocale }) {
   download={{
     appStore: { href: "${appStore.href}", iconSrc: "/assets/app-store.png" },
     googlePlay: { href: "${googlePlay.href}", iconSrc: "/assets/google-play.svg" },
-    qr: { href: "${qr.href}", src: "/assets/download-qr-${locale}.png" },
+    qr: { href: "${qr.href}", src: "/assets/download-qr.png" },
+    mobileHref: "${example.download.mobileHref}",
+    mobileIconSrc: "/assets/yami-app-icon.webp",
   }}
   reviewColumns={${JSON.stringify(example.reviewColumns, null, 2).replace(/\n/g, "\n  ")}}
 />`;
@@ -35,8 +37,8 @@ export function UserReviewsDocsPage({ locale }: { locale: DocsLocale }) {
       <section>
         <h2 id="user-reviews-layout">{zh ? "响应式布局" : "Responsive layout"}</h2>
         <p>{zh
-          ? "容器宽度小于 640px 时仅显示下载区，面板内边距为 16px。640px 起，下载区在左，右侧显示一列评价，面板内边距为 24px。容器宽度达到 928px 和 1184px 时，右侧分别最多显示两列和三列。桌面评价卡片内边距为 12px。"
-          : "Containers under 640px show only the download panel with 16px padding. From 640px, downloads sit on the left and one review column sits on the right, with 24px panel padding. The right side shows up to two columns from 928px and three from 1184px of container width. Desktop review cards use 12px padding."}</p>
+          ? "容器宽度小于 640px 时，下载区显示 App 图标和单个下载按钮，面板内边距为 16px。640px 起，左侧显示二维码和商店链接，右侧显示一列评价，面板内边距为 24px。容器宽度达到 928px 和 1184px 时，右侧分别最多显示两列和三列。桌面评价卡片内边距为 12px。"
+          : "Containers under 640px show the app icon and a single download button with 16px panel padding. From 640px, the QR code and store links sit on the left and one review column sits on the right, with 24px panel padding. The right side shows up to two columns from 928px and three from 1184px of container width. Desktop review cards use 12px padding."}</p>
         <p>{zh
           ? "评价采用底部渐隐的静态预览。二维码链接和应用商店入口支持键盘访问。"
           : "Reviews appear in a static preview with a bottom fade. The QR link and both store links are keyboard accessible."}</p>
@@ -44,7 +46,7 @@ export function UserReviewsDocsPage({ locale }: { locale: DocsLocale }) {
       <section>
         <h2 id="user-reviews-api">{zh ? "API 参考" : "API Reference"}</h2>
         <DocsApiTable locale={locale} rows={[
-          ["download", zh ? "必填。应用商店链接、图标，以及二维码图片和对应链接。示例中的图片路径可换成调用方的素材路径。" : "Required. Store URLs and icons, a QR image, and its corresponding URL. Replace the example image paths with your own assets."],
+          ["download", zh ? "必填。提供应用商店链接、图标、二维码及其链接。可用 mobileIconSrc 设置移动端 App 图标。移动按钮使用 mobileHref，省略时使用二维码链接。" : "Required. Supplies store links and icons, a QR image, and its link. Set mobileIconSrc for the mobile app icon. The mobile button uses mobileHref or falls back to the QR link."],
           ["reviewColumns", zh ? "必填。按顺序排好的评价组，每条评价包含 id、quote 和 author。" : "Required. Ordered review groups with an id, quote, and author for each review."],
           ["locale", zh ? "模块文案语言。支持 zh（默认）和 en。" : "Language for the built-in copy. Accepts zh (default) and en."],
           ["titleStyle", zh ? "标题字号方案。display 为独立展示字号，section 与共享模块标题一致。" : "Title scale. Display is the standalone default. Section follows the shared heading scale."],

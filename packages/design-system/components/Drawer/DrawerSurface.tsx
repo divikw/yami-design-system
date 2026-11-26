@@ -69,7 +69,7 @@ export function DrawerSurface({
           <header className={styles.header} data-slot="drawer-header">
             <div className={styles.actions} data-back={hasBack || undefined}>
               <Button ref={navigationRef} className={styles.navigationButton} variant="tertiary" form="icon" size="sm" aria-label={back?.label ?? closeLabel} onClick={back?.onClick ?? onClose}>
-                <img src={back ? backIcon : closeIcon} alt="" width={back ? 20 : 24} height={back ? 20 : 24} />
+                <img src={back ? backIcon : closeIcon} alt="" width={24} height={24} />
               </Button>
             </div>
             <div className={styles.heading}>

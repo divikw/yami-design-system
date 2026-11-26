@@ -126,6 +126,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: var(--space-025);
+}
+
+.optionGrid,
+.mobileSectionContent :is(.categoryList, .categoryBranch) {
   row-gap: var(--space-050);
 }
 
@@ -227,6 +231,37 @@
   gap: var(--space-050);
   padding: var(--space-100) var(--space-200);
   background: var(--fill-secondary);
+}
+
+.panel[data-snap-points] {
+  container: filter-drawer / size;
+}
+
+.panel[data-snap-points] > [data-slot="drawer-header"] {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-100);
+  padding-block-end: var(--space-150);
+}
+
+.panel[data-snap-points] .selectedTags {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.panel[data-snap-points] .selectedTag {
+  flex: none;
+}
+
+@container filter-drawer (height < 240px) {
+  .panel > [data-slot="drawer-header"] {
+    padding-block-start: var(--space-100);
+  }
+
+  .panel .selectedTags,
+  .panel .footer {
+    padding-block: var(--space-050);
+  }
 }
 
 .selectedTag {

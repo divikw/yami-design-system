@@ -155,11 +155,18 @@ export function TopicLandingPage({
     ...waterfallProps
   } = waterfall;
   const allWaterfallProducts = waterfallProductsByTab?.all ?? waterfallFallbackProducts;
-  const showCatalogFilters = catalogFilters && allWaterfallProducts.length >= COLLECTION_FILTER_MIN_PRODUCTS;
+  const showCatalogFilters = catalogFilters && allWaterfallProducts.length >= (
+    catalogFilters === "brand" ? 1 : COLLECTION_FILTER_MIN_PRODUCTS
+  );
+  const brandOptions = useMemo(() => catalogFilters === "brand"
+    ? [...new Set(allWaterfallProducts.flatMap(({ brand }) => typeof brand === "string" && brand.trim() ? [brand] : []))]
+    : undefined, [catalogFilters, allWaterfallProducts]);
   const [collectionFilters, setCollectionFilters] = useState(() =>
     createCollectionProductFilters(catalogFilters ? allWaterfallProducts : undefined),
   );
-  const activeWaterfallTab = waterfall.value ?? (catalogFilters && !showCatalogFilters ? "all" : waterfallTabValue);
+  const activeWaterfallTab = catalogFilters === "brand" ? "all" : (
+    waterfall.value ?? (catalogFilters && !showCatalogFilters ? "all" : waterfallTabValue)
+  );
   const waterfallCategoryProducts =
     waterfallProductsByTab?.[activeWaterfallTab] ?? waterfallFallbackProducts;
   const waterfallProducts = useMemo(
@@ -751,6 +758,7 @@ export function TopicLandingPage({
                 introContent: showCatalogFilters ? (
                   <CollectionProductFilters
                     locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
+                    brandOptions={brandOptions}
                     categories={(waterfallProps.tabs ?? [])
                       .filter(({ value, disabled }) => value !== "all" && value !== "complete-routine" && !disabled)
                       .map(({ value, label }) => ({ value, label: String(label) }))}

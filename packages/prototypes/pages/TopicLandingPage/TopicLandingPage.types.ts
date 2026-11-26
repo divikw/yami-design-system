@@ -39,8 +39,8 @@ export type TopicLandingPageModuleId =
 
 export type TopicLandingPageWaterfallProps = ProductListProps & {
   productsByTab?: Record<string, ProductListItem[]>;
-  /** Use the catalog filter toolbar in place of the inline category tabs. */
-  catalogFilters?: boolean;
+  /** Use catalog filters in place of category tabs. "brand" shows a brand filter and omits the category and all-filters entries. */
+  catalogFilters?: boolean | "brand";
   /** Number of grid rows shown before loading more, overriding rowsPerPage for the first batch. */
   initialRows?: number;
   /** Number of grid rows added by each load-more action and shown initially by default. */
