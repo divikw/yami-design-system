@@ -5572,7 +5572,6 @@
           "--surface-secondary",
           "--color-white-1000",
           "--text-primary",
-          "--border-default",
           "--focus-ring",
           "--divider-default",
           "--divider-emphasis",
@@ -8563,7 +8562,7 @@
           "--text-secondary",
           "--text-emphasis",
           "--fill-disabled",
-          "--border-default",
+          "--divider-default",
           "--focus-ring",
           "--divider-emphasis",
           "--stroke-default",
@@ -8943,12 +8942,12 @@
         "category": "composite",
         "status": "experimental",
         "version": "0.1.0",
-        "description": "Bottom service commitments strip with localized benefits and filled icons.",
+        "description": "Localized service commitments strip with an optional mobile carousel.",
         "figma": {
           "fileKey": "MHQHWiNXDr06jybKwJNVvs",
           "nodeId": "1181:159271",
           "componentKey": "17de6ea715438313cac63eca8fe94e7db162b00e",
-          "notes": "Position=Bottom, Style=2 - Gray supplies the filled icons. English labels follow the five-item YAMI English homepage strip."
+          "notes": "Position=Bottom, Style=2 - Gray supplies the filled icons."
         },
         "exports": [
           "ServiceCommitment",
@@ -8963,6 +8962,12 @@
             "required": false,
             "default": "zh",
             "description": "Language for the built-in service commitments."
+          },
+          "mobileCarousel": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Cycle through one centered benefit at a time on mobile."
           },
           "className": {
             "type": "string",
@@ -8980,11 +8985,10 @@
         },
         "tokens": [
           "--background-primary",
-          "--border-default",
+          "--divider-default",
           "--text-primary",
           "--font-family-ios",
           "--font-size-body-md",
-          "--font-size-body-xl",
           "--font-weight-emphasize",
           "--line-height-heading-md",
           "--layout-page-margin-default",
@@ -8992,7 +8996,6 @@
           "--space-100",
           "--space-200",
           "--space-250",
-          "--space-300",
           "--space-400",
           "--space-500",
           "--space-1000",
@@ -9007,7 +9010,7 @@
             "property": "color",
             "selector": ".root"
           },
-          "--space-050": {
+          "--space-100": {
             "property": "column-gap",
             "selector": ".benefit"
           },
@@ -9021,17 +9024,17 @@
           },
           "--space-250": {
             "property": "block-size",
-            "selector": ".icon below 928px"
-          },
-          "--space-300": {
-            "property": "block-size",
-            "selector": ".icon from 928px"
+            "selector": ".icon"
           }
         },
         "accessibility": {
           "structure": "Named list with decorative icons and dividers.",
           "tapTargetMin": 0,
-          "keyboardNav": []
+          "keyboardNav": [
+            "Tab",
+            "ArrowUp",
+            "ArrowDown"
+          ]
         },
         "dependencies": {
           "runtime": [
@@ -9046,8 +9049,8 @@
           "./examples.tsx#ServiceCommitmentExample"
         ],
         "testing": {
-          "interaction": "not-applicable",
-          "rationale": "The strip presents static benefits with no interactive controls."
+          "interaction": "covered",
+          "rationale": "Browser tests cover mobile rotation, keyboard focus and the desktop layout."
         }
       }
     },
@@ -9158,7 +9161,7 @@
           "--surface-primary",
           "--surface-secondary",
           "--text-primary",
-          "--border-default",
+          "--divider-default",
           "--divider-emphasis",
           "--focus-ring",
           "--stroke-default",
@@ -11923,6 +11926,24 @@
           "SectionHeading"
         ],
         "props": {
+          "padding": {
+            "type": "boolean",
+            "required": false,
+            "default": "true",
+            "description": "Apply responsive page padding around the download panel."
+          },
+          "version": {
+            "type": "\"v1\" | \"v2\"",
+            "required": false,
+            "default": "v1",
+            "description": "Show review columns in V1 or the Yami product box image in V2."
+          },
+          "imageLayout": {
+            "type": "\"balanced\" | \"image-first\" | \"compact\"",
+            "required": false,
+            "default": "balanced",
+            "description": "Layout for the V2 image, download links, and heading."
+          },
           "download": {
             "type": "UserReviewsProps['download']",
             "required": true,
@@ -11930,7 +11951,7 @@
           },
           "reviewColumns": {
             "type": "readonly (readonly UserReview[])[]",
-            "required": true,
+            "required": false,
             "description": "Ordered review groups. Each review has a unique id, quote, and author."
           },
           "locale": {
@@ -11982,6 +12003,7 @@
         },
         "tokens": [
           "--border-default",
+          "--divider-default",
           "--divider-emphasis",
           "--fill-inverse",
           "--fill-primary",
@@ -11995,6 +12017,7 @@
           "--font-size-heading-xl",
           "--font-weight-emphasize",
           "--font-weight-semibold",
+          "--layout-page-margin-default",
           "--line-height-body-md",
           "--line-height-body-xl",
           "--line-height-display-md",

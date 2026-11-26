@@ -80,7 +80,7 @@ customDocsPages.collectioncard = CollectionCardDocsPage;
 customDocsPages.coupon = CouponDocsPage;
 customDocsPages.productcard = ProductCardDocsPage;
 customDocsPages.productlist = ProductListDocsPage;
-customDocsPages.userreviews = UserReviewsDocsPage;
+customDocsPages.appdownload = UserReviewsDocsPage;
 customDocsPages.servicecommitment = ServiceCommitmentDocsPage;
 
 function componentNameFromUsagePath(filePath: string) {
@@ -102,6 +102,7 @@ function getUsageLoaderForTitle(title: string) {
     ? segments.at(-2) ?? title
     : segments.at(-1) ?? title;
   const normalizedName = normalizeComponentName(componentName);
+  if (normalizedName === "appdownload") return usageByComponent.get("userreviews");
   return usageByComponent.get(normalizedName === "floatingbars" ? "billboard" : normalizedName);
 }
 

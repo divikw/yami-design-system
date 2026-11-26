@@ -95,11 +95,11 @@
   }
 
   .root[data-mobile-surface="plain"][data-divider-position="top"] {
-    border-top: var(--stroke-default) solid var(--border-default);
+    border-top: var(--stroke-default) solid var(--divider-default);
   }
 
   .root[data-mobile-surface="plain"][data-divider-position="bottom"] {
-    border-bottom: var(--stroke-default) solid var(--border-default);
+    border-bottom: var(--stroke-default) solid var(--divider-default);
   }
 
   .root[data-mobile-surface="plain"][data-divider-position="top"][data-divider-variant="black"] {
@@ -120,11 +120,11 @@
 
 @media (min-width: 1024px) {
   .root[data-divider-position="top"] {
-    border-top: var(--stroke-default) solid var(--border-default);
+    border-top: var(--stroke-default) solid var(--divider-default);
   }
 
   .root[data-divider-position="bottom"] {
-    border-bottom: var(--stroke-default) solid var(--border-default);
+    border-bottom: var(--stroke-default) solid var(--divider-default);
   }
 
   .root[data-divider-position="top"][data-divider-variant="black"] {

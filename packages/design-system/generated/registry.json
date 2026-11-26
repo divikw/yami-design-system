@@ -99,7 +99,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/brand-product-rail.json",
-      "digest": "de463061a28bf7e01b82b2f5fb7500c272e01fa58af9e3b4bbb4c8f94f568ccd"
+      "digest": "c9fb9a95c22f45ad2500d21c682ab40a9236ce96d05742029781b10b433e189f"
     },
     {
       "name": "breadcrumb",
@@ -261,7 +261,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/hero-banner.json",
-      "digest": "65227bdd47bf88ead4a471472595799e4188e1f912d68cf5ab771cc81ffe3610"
+      "digest": "45ef0e8fd36f11b94d95ecb0c0aeb791aac6f234e23d7fdb7854b1266378e104"
     },
     {
       "name": "horizontal-scroll-list",
@@ -342,7 +342,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/product-list.json",
-      "digest": "d4a2861f59f38d2712633a0cb677e90a84e01b18e0a541d46e44c13d69dbed5c"
+      "digest": "8c12a009fc032793e5ad6c8d0be597dbcd71398a405e7d0a04d7266801fa426a"
     },
     {
       "name": "product-media-gallery",
@@ -396,7 +396,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/review-list.json",
-      "digest": "c87afe4bd9ef38997a3cc1a59787688d44639a584d57df7e9c1044617963a291"
+      "digest": "e3559c436d1578cd75b20af7efac397e0cb38ecb3e38001a0b3011f353a85778"
     },
     {
       "name": "section-banner",
@@ -423,7 +423,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/service-commitment.json",
-      "digest": "6f0f3ac58cd700f38b41070ca55730e59fda85f04f6dd9334e771f3b67b00ba9"
+      "digest": "2dd4648d93e64704fcd76b194cabf310016c9e1d85f8fc987ebd1809c4d97829"
     },
     {
       "name": "shortcut-rail",
@@ -432,7 +432,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/shortcut-rail.json",
-      "digest": "00f05f97d256755129cbd1df01cf0804a1130e7869eaa3b9bb6b0e24ca29c231"
+      "digest": "b62758aae186c5cfea4f548c41460e70f86f21acd0a3c0bf90284f76a4007613"
     },
     {
       "name": "skeleton",
@@ -558,7 +558,7 @@
       "status": "stable",
       "version": "0.1.0",
       "path": "registry-items/trending-searches.json",
-      "digest": "a6456a0d743973432ed65bbda921cae90282f3e60c7ffd1983875256ba2d04d7"
+      "digest": "e70454b06c636138f4d7db8ae3b747c1e2ba8887b6ef1e8a8a33a1339fc2a35e"
     },
     {
       "name": "user-reviews",
@@ -567,7 +567,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/user-reviews.json",
-      "digest": "f7dbbd796dd24ffbdadc123f315759cd027ac5f737577190836e56b11824ccd6"
+      "digest": "6aec29c3e540b4d9ec39ea2911deb76cff5c330bf040e5b44e45205fd2ce3835"
     }
   ]
 }

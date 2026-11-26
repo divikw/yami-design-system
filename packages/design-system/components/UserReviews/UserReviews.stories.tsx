@@ -5,13 +5,14 @@ import { userReviewsExamples } from "./fixtures";
 import styles from "./UserReviews.stories.module.css";
 
 const meta = {
-  title: "YAMI/Modules/Commerce/User Reviews",
+  id: "yami-modules-commerce-user-reviews",
+  title: "YAMI/Modules/Commerce/App Download",
   component: UserReviews,
   parameters: { layout: "fullscreen", controls: { disable: true } },
-  args: userReviewsExamples.zh,
+  args: { ...userReviewsExamples.zh, version: "v1", imageLayout: "balanced" },
   render: (args, { globals }) => (
     <div className={styles.preview}>
-      <UserReviews {...(globals.locale === "en" ? userReviewsExamples.en : args)} />
+      <UserReviews {...args} {...userReviewsExamples[globals.locale === "en" ? "en" : "zh"]} />
     </div>
   ),
 } satisfies Meta<typeof UserReviews>;
@@ -56,4 +57,17 @@ export const MobilePreview: Story = {
   name: "Mobile",
   tags: ["component-device", "dev", "autodocs", "!test"],
   globals: { viewport: { value: "yamiMobile", isRotated: false } },
+};
+
+export const V2: Story = {
+  name: "V2",
+  tags: ["!dev", "!autodocs"],
+  args: { version: "v2" },
+  play: async ({ canvasElement, globals }) => {
+    const canvas = within(canvasElement);
+    const locale = globals.locale === "en" ? "en" : "zh";
+    const image = canvas.getByRole("img", { name: locale === "en" ? /open Yami box/ : /亚米商品箱/ });
+    await expect(image).toBeVisible();
+    await expect(canvas.queryByRole("region", { name: locale === "en" ? "User reviews" : "用户评价" })).toBeNull();
+  },
 };

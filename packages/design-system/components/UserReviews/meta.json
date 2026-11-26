@@ -14,6 +14,24 @@
   "exports": ["UserReviews", "UserReviewsProps", "UserReview"],
   "composes": ["Button", "Card", "Divider", "SectionHeading"],
   "props": {
+    "padding": {
+      "type": "boolean",
+      "required": false,
+      "default": "true",
+      "description": "Apply responsive page padding around the download panel."
+    },
+    "version": {
+      "type": "\"v1\" | \"v2\"",
+      "required": false,
+      "default": "v1",
+      "description": "Show review columns in V1 or the Yami product box image in V2."
+    },
+    "imageLayout": {
+      "type": "\"balanced\" | \"image-first\" | \"compact\"",
+      "required": false,
+      "default": "balanced",
+      "description": "Layout for the V2 image, download links, and heading."
+    },
     "download": {
       "type": "UserReviewsProps['download']",
       "required": true,
@@ -21,7 +39,7 @@
     },
     "reviewColumns": {
       "type": "readonly (readonly UserReview[])[]",
-      "required": true,
+      "required": false,
       "description": "Ordered review groups. Each review has a unique id, quote, and author."
     },
     "locale": {
@@ -67,6 +85,7 @@
   },
   "tokens": [
     "--border-default",
+    "--divider-default",
     "--divider-emphasis",
     "--fill-inverse",
     "--fill-primary",
@@ -80,6 +99,7 @@
     "--font-size-heading-xl",
     "--font-weight-emphasize",
     "--font-weight-semibold",
+    "--layout-page-margin-default",
     "--line-height-body-md",
     "--line-height-body-xl",
     "--line-height-display-md",

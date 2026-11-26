@@ -6,7 +6,7 @@
   "type": "component",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Bottom service commitments strip with localized benefits and filled icons.",
+  "description": "Localized service commitments strip with an optional mobile carousel.",
   "source": "components/ServiceCommitment",
   "files": [
     {
@@ -69,10 +69,9 @@
   "design": {
     "tokens": [
       "--background-primary",
-      "--border-default",
+      "--divider-default",
       "--font-family-ios",
       "--font-size-body-md",
-      "--font-size-body-xl",
       "--font-weight-emphasize",
       "--layout-page-margin-default",
       "--line-height-heading-md",
@@ -81,7 +80,6 @@
       "--space-1000",
       "--space-200",
       "--space-250",
-      "--space-300",
       "--space-400",
       "--space-500",
       "--stroke-default",
@@ -100,7 +98,7 @@
         "property": "color",
         "selector": ".root"
       },
-      "--space-050": {
+      "--space-100": {
         "property": "column-gap",
         "selector": ".benefit"
       },
@@ -114,11 +112,7 @@
       },
       "--space-250": {
         "property": "block-size",
-        "selector": ".icon below 928px"
-      },
-      "--space-300": {
-        "property": "block-size",
-        "selector": ".icon from 928px"
+        "selector": ".icon"
       }
     }
   },
@@ -126,9 +120,13 @@
     "accessibility": {
       "structure": "Named list with decorative icons and dividers.",
       "tapTargetMin": 0,
-      "keyboardNav": []
+      "keyboardNav": [
+        "Tab",
+        "ArrowUp",
+        "ArrowDown"
+      ]
     },
-    "interactionCoverage": "not-applicable"
+    "interactionCoverage": "missing"
   },
-  "contentDigest": "6f0f3ac58cd700f38b41070ca55730e59fda85f04f6dd9334e771f3b67b00ba9"
+  "contentDigest": "2dd4648d93e64704fcd76b194cabf310016c9e1d85f8fc987ebd1809c4d97829"
 }

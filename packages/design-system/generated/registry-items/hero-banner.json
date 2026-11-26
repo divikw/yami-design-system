@@ -184,7 +184,6 @@
   "design": {
     "tokens": [
       "--background-primary",
-      "--border-default",
       "--color-white-1000",
       "--divider-default",
       "--divider-emphasis",
@@ -262,5 +261,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "65227bdd47bf88ead4a471472595799e4188e1f912d68cf5ab771cc81ffe3610"
+  "contentDigest": "45ef0e8fd36f11b94d95ecb0c0aeb791aac6f234e23d7fdb7854b1266378e104"
 }

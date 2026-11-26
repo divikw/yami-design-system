@@ -35,7 +35,8 @@ import {
 } from "@yami/design-system";
 
 import styles from "./TopicLandingPage.module.css";
-import type { TopicLandingPageProps } from "./TopicLandingPage.types";
+import type { CollectionModuleDividers, TopicLandingPageProps } from "./TopicLandingPage.types";
+import { createCollectionHeroGallery } from "./CollectionHeroGallery";
 import { RelatedKeywords } from "./RelatedKeywords";
 import {
   CollectionProductFilters,
@@ -50,6 +51,24 @@ const COLLECTION_FILTER_MIN_PRODUCTS = 12;
 
 function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
+}
+
+const dividerClasses = {
+  top: styles.dividerTop,
+  bottom: styles.dividerBottom,
+  both: styles.dividerBoth,
+  none: styles.dividerNone,
+};
+
+type ModuleDivider = CollectionModuleDividers[keyof CollectionModuleDividers];
+
+function dividerClass(position: ModuleDivider) {
+  return position && dividerClasses[position];
+}
+
+// Components with a single-edge API draw the bottom edge of a two-sided divider.
+function componentDivider(position: ModuleDivider) {
+  return position === "both" ? "bottom" : position;
 }
 
 export function resolveTopicLandingScrollRoot(
@@ -75,6 +94,7 @@ export function getTopicLandingActivationLine(
 }
 
 export function TopicLandingPage({
+  moduleDividers = {},
   contentMaxWidth = 1440,
   titleFontFamily = "serif",
   showChrome = true,
@@ -106,8 +126,9 @@ export function TopicLandingPage({
   const faqDescriptionId = `${faqHeadingId}-description`;
   const mainRef = useRef<HTMLElement>(null);
   const waterfallRef = useRef<HTMLDivElement>(null);
+  const activityHeaderRef = useRef<HTMLDivElement>(null);
   const globalHeaderRef = useRef<HTMLDivElement>(null);
-  const [globalHeaderHeight, setGlobalHeaderHeight] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const initialViewportPrepared = useRef(false);
   const primaryTabsRef = useRef<HTMLDivElement>(null);
   const pendingPrimaryTabValueRef = useRef<string | null>(null);
@@ -261,18 +282,22 @@ export function TopicLandingPage({
   }));
 
   useLayoutEffect(() => {
-    const element = globalHeaderRef.current;
-    const updateHeight = () => setGlobalHeaderHeight(element?.getBoundingClientRect().height ?? 0);
+    const desktop = globalHeaderRef.current;
+    const mobile = catalogFilters ? activityHeaderRef.current : null;
+    const updateHeight = () => setHeaderHeight(
+      (desktop?.getBoundingClientRect().height ?? 0) || mobile?.getBoundingClientRect().height || 0,
+    );
     updateHeight();
-    if (!element) return;
+    if (!desktop) return;
     const observer = new ResizeObserver(updateHeight);
-    observer.observe(element);
+    observer.observe(desktop);
+    if (mobile) observer.observe(mobile);
     return () => observer.disconnect();
-  }, [showChrome]);
+  }, [catalogFilters, showChrome]);
 
   useLayoutEffect(() => {
     const element = globalHeaderRef.current;
-    if (!revealHeaderOnScrollUp || !element || !globalHeaderHeight) return;
+    if (!revealHeaderOnScrollUp || !element?.offsetHeight) return;
     const scrollRoot = resolveTopicLandingScrollRoot(element);
     const scrollElement = scrollRoot instanceof HTMLElement ? scrollRoot : document.scrollingElement;
     if (!scrollElement) return;
@@ -288,7 +313,7 @@ export function TopicLandingPage({
       scrollRoot.removeEventListener("scroll", updateHeader);
       element.removeAttribute("data-scrolling-up");
     };
-  }, [globalHeaderHeight, revealHeaderOnScrollUp]);
+  }, [headerHeight, revealHeaderOnScrollUp]);
 
   const showWaterfall = !hiddenModules.includes("explore-more");
   const measureWaterfallColumns = initialRows !== undefined || rowsPerPage !== undefined;
@@ -333,7 +358,7 @@ export function TopicLandingPage({
       animationFrame = 0;
       const activationLine = getTopicLandingActivationLine(
         scrollRoot,
-        globalHeaderHeight + primaryTabsElement.getBoundingClientRect().height,
+        headerHeight + primaryTabsElement.getBoundingClientRect().height,
       );
       const maxScrollTop = scrollElement ? scrollElement.scrollHeight - scrollElement.clientHeight : 0;
       const reachedPageEnd = maxScrollTop > 0 && maxScrollTop <= (scrollElement?.scrollTop ?? 0) + 1;
@@ -406,7 +431,7 @@ export function TopicLandingPage({
       window.removeEventListener("resize", scheduleUpdate);
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
     };
-  }, [globalHeaderHeight, primaryTabs.defaultValue, primaryTabs.items]);
+  }, [headerHeight, primaryTabs.defaultValue, primaryTabs.items]);
 
   useLayoutEffect(() => {
     if (waterfall.value !== undefined) return;
@@ -602,24 +627,57 @@ export function TopicLandingPage({
       data-motion-reveal="scroll"
       data-slot="topic-landing-review-list"
     >
-      <ReviewList {...reviewList} />
+      <ReviewList
+        {...reviewList}
+        dividerPosition={componentDivider(moduleDividers.reviewList) ?? reviewList.dividerPosition}
+        className={cx(reviewList.className, dividerClass(moduleDividers.reviewList))}
+      />
     </div>
   ) : null;
+
+  const collectionIntro = Boolean(catalogFilters && !hero.image);
+  const heroGallery = useMemo(
+    () => collectionIntro ? createCollectionHeroGallery(allWaterfallProducts) : null,
+    [collectionIntro, allWaterfallProducts],
+  );
+  const heroIntro = (
+    <ThemeHero
+      {...hero}
+      imageLoading="eager"
+      style={heroGallery ? { ...hero.style, backgroundColor: "transparent", minHeight: 0 } : hero.style}
+      className={cx(styles.initialReveal, collectionIntro && !heroGallery && styles.collectionIntro, hero.className, !heroGallery && dividerClass(moduleDividers.hero))}
+      data-motion-reveal="initial"
+    />
+  );
 
   return (
     <div
       {...rest}
       className={cx(styles.root, catalogFilters && styles.collection, className)}
       data-slot="topic-landing-page"
-      style={{ ...rest.style, "--topic-landing-header-height": `${globalHeaderHeight}px` } as CSSProperties}
+      style={{
+        ...rest.style,
+        "--topic-landing-header-height": `${headerHeight}px`,
+        "--topic-landing-content-max-width": contentMaxWidthValue,
+      } as CSSProperties}
     >
+      {serviceCommitment && (
+        <ServiceCommitment
+          mobileCarousel={Boolean(catalogFilters)}
+          {...serviceCommitment}
+          className={cx(styles.serviceCommitment, serviceCommitment.className, dividerClass(moduleDividers.serviceCommitment))}
+        />
+      )}
       {showChrome && (
         <>
-          <div className={styles.activityHeader} data-slot="topic-landing-activity-header">
-            <ActivityPageHeader {...activityHeader} />
+          <div ref={activityHeaderRef} className={styles.activityHeader} data-slot="topic-landing-activity-header">
+            <ActivityPageHeader
+              {...activityHeader}
+              className={cx(activityHeader.className, dividerClass(moduleDividers.header ?? (catalogFilters ? "bottom" : undefined)))}
+            />
           </div>
           <div ref={globalHeaderRef} className={cx(styles.globalHeader, revealHeaderOnScrollUp && styles.revealHeader)} data-slot="topic-landing-global-header">
-            <Header {...header} />
+            <Header {...header} className={cx(header.className, dividerClass(moduleDividers.header))} />
           </div>
         </>
       )}
@@ -631,26 +689,23 @@ export function TopicLandingPage({
         data-motion-ready="true"
         data-content-max-width={contentMaxWidthValue}
         data-title-font-family={titleFontFamily}
-        style={
-          {
-            "--topic-landing-content-max-width": contentMaxWidthValue,
-          } as CSSProperties
-        }
       >
-        {!hiddenModules.includes("hero") && (
-          <ThemeHero
-            {...hero}
-            imageLoading="eager"
-            className={cx(styles.initialReveal, hero.className)}
-            data-motion-reveal="initial"
-          />
-        )}
+        {!hiddenModules.includes("hero") && (heroGallery ? (
+          <div className={cx(styles.galleryHero, dividerClass(moduleDividers.hero))} data-slot="collection-gallery-hero">
+            <div className={styles.galleryHeroInner}>
+              {heroIntro}
+              {heroGallery}
+            </div>
+          </div>
+        ) : heroIntro)}
         {couponSection && couponSection.cards.length > 0 && (
-          <section className={styles.couponContainer} aria-labelledby={couponHeadingId}>
-            <SectionHeading id={couponHeadingId} title={couponSection.title} slot="coupon" />
-            <HorizontalScrollList className={styles.couponSurface} role="group" aria-labelledby={couponHeadingId}>
-              {couponSection.cards}
-            </HorizontalScrollList>
+          <section className={dividerClass(moduleDividers.couponSection)} aria-labelledby={couponHeadingId}>
+            <div className={styles.couponContainer}>
+              <SectionHeading id={couponHeadingId} title={couponSection.title} slot="coupon" />
+              <HorizontalScrollList className={styles.couponSurface} role="group" aria-labelledby={couponHeadingId}>
+                {couponSection.cards}
+              </HorizontalScrollList>
+            </div>
           </section>
         )}
         {primaryTabs.items.length > 0 && (
@@ -753,6 +808,7 @@ export function TopicLandingPage({
           >
             <ProductList
               {...waterfallProps}
+              dividerPosition={componentDivider(moduleDividers.waterfall) ?? waterfallProps.dividerPosition}
               {...(catalogFilters && {
                 tabs: undefined,
                 introContent: showCatalogFilters ? (
@@ -779,7 +835,7 @@ export function TopicLandingPage({
               onValueChange={selectWaterfallTab}
               hasMore={visibleWaterfallProducts.length < waterfallProducts.length}
               onLoadMore={loadMoreWaterfallProducts}
-              className={styles.waterfall}
+              className={cx(styles.waterfall, dividerClass(moduleDividers.waterfall))}
               data-page-slot="topic-landing-waterfall"
             />
           </div>
@@ -788,7 +844,7 @@ export function TopicLandingPage({
         {faq && faq.items.length > 0 && (
           <section
             id="faq"
-            className={styles.faq}
+            className={cx(styles.faq, dividerClass(moduleDividers.faq))}
             aria-labelledby={faqHeadingId}
             aria-describedby={faq.description ? faqDescriptionId : undefined}
           >
@@ -816,13 +872,12 @@ export function TopicLandingPage({
           <ProductList
             layout="rail"
             mobileSurface="plain"
+            dividerPosition={componentDivider(moduleDividers.relatedCollections)}
             title={relatedCollections.title}
             titleFontFamily={titleFontFamily}
             previousLabel={relatedCollections.previousLabel}
             nextLabel={relatedCollections.nextLabel}
-            className={relatedCollections.items.length < 4
-              ? `${styles.relatedCollections} ${styles.fillRelatedCollections}`
-              : styles.relatedCollections}
+            className={cx(styles.relatedCollections, relatedCollections.items.length < 4 && styles.fillRelatedCollections, dividerClass(moduleDividers.relatedCollections))}
             railItems={relatedCollections.items.map(item => ({
               id: item.id,
               content: (
@@ -834,24 +889,19 @@ export function TopicLandingPage({
           />
         )}
         {relatedKeywords && relatedKeywords.items.length > 0 && (
-          <RelatedKeywords {...relatedKeywords} />
+          <RelatedKeywords {...relatedKeywords} className={dividerClass(moduleDividers.relatedKeywords)} />
         )}
         {appReviews && (
           <UserReviews
             {...appReviews}
-            className={cx(styles.appReviews, appReviews.className)}
+            dividerPosition={componentDivider(moduleDividers.appReviews) ?? appReviews.dividerPosition}
+            className={cx(styles.appReviews, appReviews.className, dividerClass(moduleDividers.appReviews))}
             titleFontFamily={appReviews.titleFontFamily ?? titleFontFamily}
-          />
-        )}
-        {serviceCommitment && (
-          <ServiceCommitment
-            {...serviceCommitment}
-            className={cx(styles.serviceCommitment, serviceCommitment.className)}
           />
         )}
       </main>
 
-      {showChrome && <Footer {...footer} />}
+      {showChrome && <Footer {...footer} className={cx(footer.className, dividerClass(moduleDividers.footer))} />}
     </div>
   );
 }

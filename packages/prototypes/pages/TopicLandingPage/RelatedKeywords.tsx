@@ -48,7 +48,7 @@ function getScrollLayout(widths: number[], available: number, gap: number) {
   };
 }
 
-export function RelatedKeywords({ title, items, mode }: TopicLandingPageRelatedKeywords) {
+export function RelatedKeywords({ title, items, mode, className }: TopicLandingPageRelatedKeywords & { className?: string }) {
   const headingId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -83,7 +83,7 @@ export function RelatedKeywords({ title, items, mode }: TopicLandingPageRelatedK
   }, [items]);
 
   return (
-    <section className={styles.relatedKeywords} aria-labelledby={headingId}>
+    <section className={[styles.relatedKeywords, className].filter(Boolean).join(" ")} aria-labelledby={headingId}>
       <div ref={containerRef} className={styles.relatedKeywordsContainer}>
         <SectionHeading id={headingId} title={title} slot="related-keywords" />
         <HorizontalScrollList
@@ -101,9 +101,13 @@ export function RelatedKeywords({ title, items, mode }: TopicLandingPageRelatedK
           >
             {items.map((keyword, index) => {
               const inlineSize = layout?.rowEnds.get(index);
+              const label = typeof keyword === "string" ? keyword : keyword.label;
+              const tag = <Tag mode={mode}>{label}</Tag>;
               return (
-                <li key={keyword} style={inlineSize === undefined ? undefined : { inlineSize }}>
-                  <Tag mode={mode}>{keyword}</Tag>
+                <li key={typeof keyword === "string" ? label : keyword.href} style={inlineSize === undefined ? undefined : { inlineSize }}>
+                  {typeof keyword === "string" ? tag : (
+                    <a className={styles.relatedKeywordLink} href={keyword.href} target={keyword.target}>{tag}</a>
+                  )}
                 </li>
               );
             })}

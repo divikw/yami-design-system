@@ -100,7 +100,8 @@ In Light, YAMI's product surfaces sit on a pure white canvas (`#FFFFFF`) with ne
 
 | Token                | Value              | Role                                                                              |
 | -------------------- | ------------------ | --------------------------------------------------------------------------------- |
-| `--color-black-200`  | `rgba(0,0,0,0.08)` | `--border-default`, `--divider-default` — almost hairline                         |
+| `--color-black-100`  | `rgba(0,0,0,0.04)` | `--divider-default`                                                                |
+| `--color-black-200`  | `rgba(0,0,0,0.08)` | `--border-default`                                                                 |
 | `--color-black-400`  | `rgba(0,0,0,0.29)` | `--text-disabled`, `--divider-subtle`                                             |
 | `--color-black-600`  | `rgba(0,0,0,0.55)` | `--text-secondary`                                                                |
 | `--color-black-700`  | `rgba(0,0,0,0.68)` | `--overlay-scrim` _(modal backdrop — the only gradient-adjacent surface allowed)_ |

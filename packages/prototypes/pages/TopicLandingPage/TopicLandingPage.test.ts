@@ -9,6 +9,7 @@ import {
   resolveTopicLandingScrollRoot,
   TopicLandingPage,
 } from "./TopicLandingPage";
+import { createCollectionHeroGallery } from "./CollectionHeroGallery";
 import { createTopicLandingPageFixture } from "./fixtures";
 
 describe("TopicLandingPage scroll root", () => {
@@ -39,6 +40,21 @@ describe("TopicLandingPage scroll root", () => {
 
     expect(getTopicLandingActivationLine(scrollContainer, 56)).toBe(174);
     expect(getTopicLandingActivationLine(window, 56)).toBe(57);
+  });
+});
+
+describe("collection Hero selection", () => {
+  it("requires twelve distinct featured products with a main image", () => {
+    const sample = createTopicLandingPageFixture("en").waterfall.products[0];
+    const eligible = Array.from({ length: 11 }, (_, i) => ({ ...sample, id: String(i) }));
+    const catalog = [
+      ...eligible,
+      eligible[0],
+      { ...sample, id: "missing-image", image: " " },
+      { ...sample, id: "sold-out", availability: "sold-out" as const },
+    ];
+    expect(createCollectionHeroGallery(catalog)).toBeNull();
+    expect(createCollectionHeroGallery([...catalog, { ...sample, id: "twelfth" }])).not.toBeNull();
   });
 });
 

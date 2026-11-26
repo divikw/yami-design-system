@@ -12,7 +12,7 @@ export function ServiceCommitmentDocsPage({ locale }: { locale: DocsLocale }) {
       name="Service Commitment"
       slug="service-commitment"
       locale={locale}
-      intro={zh ? "在页尾展示免运费、配送、正品和退换承诺。" : "Show shipping, delivery, authenticity, and returns commitments at the bottom of a page."}
+      intro={zh ? "按页面语言展示配送等服务承诺。" : "Show localized shipping and service commitments."}
     >
       <DocsExample name="lead" locale={locale} code={code} fillContentWidth previewBackground="var(--background-primary)">
         <ServiceCommitment locale={locale} />
@@ -24,7 +24,8 @@ export function ServiceCommitmentDocsPage({ locale }: { locale: DocsLocale }) {
       <section>
         <h2 id="service-commitment-api">{zh ? "API 参考" : "API Reference"}</h2>
         <DocsApiTable locale={locale} rows={[
-          ["locale", zh ? "支持 zh（默认）和 en，均显示五项。" : "Both zh (default) and en display five commitments."],
+          ["locale", zh ? "中文（默认）显示五项，英文显示四项。" : "Chinese (default) displays five commitments. English displays four."],
+          ["mobileCarousel", zh ? "开启后，宽度低于 1024px 时在 36px 高的栏内逐条轮播。键盘聚焦时暂停，启用减少动态效果时可手动滚动。" : "Below 1024px, cycle through one benefit at a time in a 36px strip. Keyboard focus pauses autoplay. Reduced motion uses manual scrolling."],
           ["className", zh ? "用于页面布局的外层类名。" : "Optional class for page layout."],
         ]} />
       </section>

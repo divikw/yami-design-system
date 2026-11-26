@@ -6,6 +6,8 @@ import { SectionHeading, type SectionHeadingProps } from "../SectionHeading";
 import type { SectionDividerProps } from "../sectionDivider.types";
 import styles from "./UserReviews.module.css";
 
+const shoppingImage = new URL("./assets/app-download-shopping.webp", import.meta.url).href;
+
 const copy = {
   zh: {
     title: "下载5星好评的App",
@@ -13,6 +15,7 @@ const copy = {
     download: "下载亚米 App",
     qrCaption: "扫码下载 APP，随时随地逛亚米",
     reviews: "用户评价",
+    shoppingImageAlt: "打开的亚米商品箱中装着食品、洗护用品、纸尿裤和厨房小家电。",
   },
   en: {
     title: "Download the 5-Star Rated App",
@@ -20,6 +23,7 @@ const copy = {
     download: "Download the Yami app",
     qrCaption: "Shop on the go. Get the app.",
     reviews: "User reviews",
+    shoppingImageAlt: "An open Yami box filled with food, personal care products, diapers, and a kitchen appliance.",
   },
 };
 
@@ -39,7 +43,11 @@ export interface UserReviewsProps extends SectionDividerProps {
     /** App icon displayed above the mobile download button. */
     mobileIconSrc?: string;
   };
-  reviewColumns: readonly (readonly UserReview[])[];
+  /** Apply responsive page padding around the panel. Defaults to true. */
+  padding?: boolean;
+  version?: "v1" | "v2";
+  imageLayout?: "balanced" | "image-first" | "compact";
+  reviewColumns?: readonly (readonly UserReview[])[];
   locale?: "zh" | "en";
   titleStyle?: "display" | "section";
   titleFontFamily?: SectionHeadingProps["titleFontFamily"];
@@ -48,7 +56,10 @@ export interface UserReviewsProps extends SectionDividerProps {
 
 export function UserReviews({
   download,
-  reviewColumns,
+  version = "v1",
+  imageLayout = "balanced",
+  padding = true,
+  reviewColumns = [],
   locale = "zh",
   titleStyle = "display",
   titleFontFamily = "sans",
@@ -69,8 +80,8 @@ export function UserReviews({
       aria-labelledby={titleId}
       lang={locale}
     >
-      <div className={styles.container} data-slot="user-reviews-container">
-        <div className={styles.panel}>
+      <div className={styles.container} data-slot="user-reviews-container" data-padding={padding}>
+        <div className={styles.panel} data-version={version} data-image-layout={version === "v2" ? imageLayout : undefined}>
           <div className={styles.download}>
             <header className={styles.heading}>
               {titleStyle === "section" ? (
@@ -119,7 +130,9 @@ export function UserReviews({
             </div>
           </div>
 
-          {columns.length > 0 && (
+          {version === "v2" ? (
+            <img className={styles.shoppingImage} src={shoppingImage} alt={content.shoppingImageAlt} width={1000} height={1000} />
+          ) : columns.length > 0 && (
             <div className={styles.reviewPane}>
               <div className={styles.reviewViewport} role="region" aria-label={content.reviews}>
                 <div className={styles.reviewGrid}>

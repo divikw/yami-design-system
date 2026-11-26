@@ -59,7 +59,7 @@ const componentsWithProperties = new Set([
   "Card", "Checkbox", "Combobox", "Coupon", "Dialog", "Divider", "Drawer", "DropdownMenu", "EmptyState", "Field",
   "FilterChip", "Header", "HorizontalScrollList", "Input", "NavigationMenu", "Pagination", "Popover", "ProductCard",
   "ProductList", "Progress", "RadioGroup", "Select",
-  "Skeleton", "Slider", "Spinner", "Switch", "TabBar", "Tabs", "Tag", "Textarea", "Toast", "Tooltip",
+  "Skeleton", "Slider", "Spinner", "Switch", "TabBar", "Tabs", "Tag", "Textarea", "Toast", "Tooltip", "UserReviews",
 ]);
 for (const component of componentDocs) {
   if (docsEntries.some((entry) => path.resolve(root, "apps/storybook", entry.importPath) === component.storyPath)) {

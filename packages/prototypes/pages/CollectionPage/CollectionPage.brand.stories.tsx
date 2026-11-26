@@ -2,10 +2,11 @@ import { userEvent, waitFor, within } from "storybook/test";
 
 import { createCollectionFaq } from "./collectionFaq.fixture";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
-import { createRelatedCollections } from "./relatedCollections.fixture";
+import { createRelatedCollectionSections } from "./relatedCollections.fixture";
 import { resolveTopicLandingScrollRoot } from "../TopicLandingPage/TopicLandingPage";
-import type { TopicLandingPageRelatedKeywords } from "../TopicLandingPage/TopicLandingPage.types";
+import type { CollectionModuleDividers } from "../TopicLandingPage/TopicLandingPage.types";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
+import type { ProductListItem } from "@yami/design-system";
 import brandMeta, {
   Pc as BrandPc,
   Mobile as BrandMobile,
@@ -25,6 +26,10 @@ const soldOutProductIds = new Set([
   "3022589911",
   "1022281871",
 ]);
+function withAnuaAvailability(product: ProductListItem): ProductListItem {
+  return soldOutProductIds.has(product.id) ? { ...product, availability: "sold-out" } : product;
+}
+
 const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤品" }, [
   {
     id: "selection",
@@ -68,26 +73,7 @@ const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤�
   },
 ]);
 
-const relatedKeywordsByLocale = {
-  zh: {
-    title: "探索更多",
-    items: [
-      "ANUA 艾努雅", "韩系护肤", "鱼腥草护肤", "鱼腥草舒缓爽肤水", "鱼腥草清洁卸妆油",
-      "深层清洁洁面泡沫", "烟酰胺 + 传明酸", "大米焕亮爽肤水", "玻尿酸补水", "神经酰胺护理",
-      "PDRN 精华", "舒缓棉片", "日常防晒", "补水面膜", "肌肤屏障护理",
-    ],
-  },
-  en: {
-    title: "Explore More",
-    items: [
-      "ANUA", "Korean Skincare", "Heartleaf Skincare", "Heartleaf Toner", "Cleansing Oil",
-      "Pore Cleansing Foam", "Niacinamide + TXA", "Rice Toner", "Hyaluronic Acid", "Ceramides",
-      "PDRN Serum", "Toner Pads", "Daily Sunscreen", "Sheet Masks", "Barrier Care",
-    ],
-  },
-} satisfies Record<"en" | "zh", TopicLandingPageRelatedKeywords>;
-
-export default {
+const meta = {
   ...brandMeta,
   id: "yami-pages-landing-page-collection-page-brand",
   title: "YAMI/Pages/Landing Pages/Collection Templates/Anua",
@@ -103,15 +89,26 @@ export default {
       });
       return {
         ...fixture,
+        appReviews: { ...fixture.appReviews, version: "v2" as const },
+        moduleDividers: {
+          hero: "none",
+          couponSection: "bottom",
+          waterfall: "bottom",
+          reviewList: "bottom",
+          faq: "bottom",
+          relatedCollections: "bottom",
+          relatedKeywords: "bottom",
+          appReviews: "none",
+          serviceCommitment: "none",
+        } satisfies CollectionModuleDividers,
         couponSection: {
           ...fixture.couponSection,
           title: locale === "zh" ? "新人优惠" : "Welcome Offers",
         },
       };
     },
-    createRelatedCollections,
+    createRelatedCollectionSections,
     faqByLocale,
-    relatedKeywordsByLocale,
     docs: {
       ...brandMeta.parameters.docs,
       description: {
@@ -129,8 +126,8 @@ export default {
       tags: undefined,
       tagTone: undefined,
       style: {
-        backgroundColor: "var(--background-secondary)",
-        minHeight: "clamp(10rem, 16dvw, 15rem)",
+        backgroundColor: "var(--background-primary)",
+        minHeight: "clamp(10rem, 16dvw, var(--collection-hero-max-height, 15rem))",
       },
     },
     waterfall: {
@@ -138,9 +135,7 @@ export default {
       catalogFilters: "brand" as const,
       initialRows: 3,
       rowsPerPage: 6,
-      products: brandMeta.args.waterfall.products.map((product) =>
-        soldOutProductIds.has(product.id) ? { ...product, availability: "sold-out" as const } : product,
-      ),
+      products: brandMeta.args.waterfall.products.map(withAnuaAvailability),
     },
     hiddenModules: Object.values(removedSections),
     reviewsAfterProducts: true,
@@ -150,6 +145,8 @@ export default {
     },
   },
 };
+
+export default meta;
 
 const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ canvasElement, args, globals }) => {
   const main = canvasElement.querySelector<HTMLElement>('[data-slot="topic-landing-main"]');
@@ -174,7 +171,11 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     throw new Error("Brand collection must omit category shortcuts, the routine section, and Popular Picks");
   }
   const products = main.querySelector<HTMLElement>("#product-list");
-  const coupons = hero.nextElementSibling;
+  const galleryHero = hero.closest('[data-slot="collection-gallery-hero"]');
+  if (galleryHero?.querySelectorAll('img:not([alt=""])').length !== 12) {
+    throw new Error("Anua must show twelve featured products in its Hero gallery");
+  }
+  const coupons = galleryHero.nextElementSibling;
   if (!products || coupons?.querySelectorAll('[data-slot="coupon"]').length !== 2 || coupons.nextElementSibling !== products || main.querySelector('[data-slot="topic-landing-tabs"]')) {
     throw new Error("The Brand introduction, coupons and product list must appear in order");
   }
@@ -185,11 +186,20 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     name: globals.locale === "zh" ? "新人优惠" : "Welcome Offers",
   });
   const firstCoupon = coupons.querySelector('[data-slot="coupon"]')!;
-  if (!couponPanel || getComputedStyle(coupons).rowGap !== (desktop ? "16px" : "12px") ||
-      getComputedStyle(couponPanel).paddingBlockStart !== "0px" ||
-      getComputedStyle(couponPanel).backgroundColor !== "rgba(0, 0, 0, 0)" ||
+  if (!couponPanel || getComputedStyle(couponPanel.parentElement!).rowGap !== (desktop ? "16px" : "12px") ||
+      getComputedStyle(couponPanel).paddingBlockStart !== (desktop ? "16px" : "0px")) {
+    throw new Error("The coupon list must use the responsive section spacing");
+  }
+  if (desktop) {
+    const panel = couponPanel.getBoundingClientRect();
+    const leftInset = firstCoupon.getBoundingClientRect().left - panel.left;
+    const rightInset = panel.right - couponPanel.lastElementChild!.getBoundingClientRect().right;
+    if (Math.abs(leftInset - rightInset) > 1 || getComputedStyle(couponPanel).backgroundColor === "rgba(0, 0, 0, 0)") {
+      throw new Error("Desktop coupons must be centered on the panel background");
+    }
+  } else if (getComputedStyle(couponPanel).backgroundColor !== "rgba(0, 0, 0, 0)" ||
       Math.abs(firstCoupon.getBoundingClientRect().left - couponHeading.getBoundingClientRect().left) > 1) {
-    throw new Error("The coupon list must use a transparent surface and align with the heading");
+    throw new Error("Mobile coupons must align with the heading on a transparent surface");
   }
   if (products.nextElementSibling?.id !== "reviews") {
     throw new Error("Customer reviews must follow the product list");
@@ -237,21 +247,23 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
       faqQuestions.length !== faqCopy.items.length || faqQuestions.some((item) => item.getAttribute("aria-expanded") !== "false")) {
     throw new Error("Brand FAQs must start collapsed after customer reviews");
   }
-  const keywords = relatedKeywordsByLocale[zh ? "zh" : "en"];
-  const keywordRegion = within(main).getByRole("region", { name: keywords.title });
+  const keywordRegion = within(main).getByRole("region", { name: zh ? "探索更多" : "Explore More" });
   const keywordList = within(keywordRegion).getByRole("list");
   const tags = Array.from(keywordList.querySelectorAll('[data-slot="tag"]'));
   const collectionsRegion = within(main).getByRole("heading", { name: zh ? "相关专辑" : "Related Collections" }).closest("section");
+  const keywordLinks = within(keywordRegion).getAllByRole<HTMLAnchorElement>("link");
+  const cardLinks = Array.from(collectionsRegion?.querySelectorAll<HTMLAnchorElement>("a[href]") ?? []);
   const appReviews = main.querySelector<HTMLElement>('[data-slot="user-reviews"]');
   if (!collectionsRegion || faqRegion.nextElementSibling !== collectionsRegion ||
-      collectionsRegion.querySelectorAll("a[href]").length !== 6 || collectionsRegion.nextElementSibling !== keywordRegion ||
-      tags.length !== keywords.items.length ||
-      tags.some((tag, index) => tag.textContent?.trim() !== keywords.items[index])) {
+      cardLinks.length !== 6 || collectionsRegion.nextElementSibling !== keywordRegion ||
+      tags.length !== cardLinks.length || keywordLinks.length !== cardLinks.length ||
+      keywordLinks.some((link, i) => link.href !== cardLinks[i].href || link.target !== "_top" ||
+        link.textContent?.trim() !== cardLinks[i].querySelector('[data-slot="hero-banner-copy"]')?.textContent?.trim())) {
     throw new Error("The FAQ must be followed by six related collections and then the localized keyword tags");
   }
   if (!appReviews || appReviews !== keywordRegion.nextElementSibling ||
       appReviews.lang !== (zh ? "zh" : "en") ||
-      appReviews.dataset.dividerPosition !== "top" || appReviews.dataset.dividerVariant !== "gray") {
+      appReviews.dataset.dividerPosition !== "none") {
     throw new Error("The app download module must follow the keyword tags");
   }
   const appReviewsContainer = appReviews.querySelector('[data-slot="user-reviews-container"]')!;
@@ -259,7 +271,7 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const contentWidth = appReviewsContainer.clientWidth -
     parseFloat(containerStyle.paddingInlineStart) - parseFloat(containerStyle.paddingInlineEnd);
   const downloadLinks = within(appReviews).getAllByRole("link");
-  if (contentWidth < 640) {
+  if (!desktop || contentWidth < 640) {
     const downloadLabel = zh ? "下载亚米 App" : "Download the Yami app";
     if (downloadLinks.length !== 1 ||
         within(appReviews).getByRole("link", { name: downloadLabel }).getAttribute("href") !== `https://www.yami.com/us/${zh ? "zh" : "en"}/download`) {
@@ -268,19 +280,20 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   } else if (downloadLinks.length !== 3) {
     throw new Error("The desktop app download module must show the QR and both store links");
   }
-  const serviceCommitment = within(main).getByRole("list", { name: zh ? "服务承诺" : "Service commitments" });
-  const serviceCommitmentModule = appReviews.nextElementSibling;
+  const serviceCommitment = within(canvasElement).getByRole("list", { name: zh ? "服务承诺" : "Service commitments" });
+  const serviceCommitmentModule = serviceCommitment.closest('[data-slot="service-commitment"]');
   const commitmentCopy = within(serviceCommitment).getAllByRole("listitem").map((item) => item.textContent);
   const expectedCommitmentCopy = zh
     ? ["满$49免运费", "从美国发货", "当日送达*", "正品保证", "无忧退换"]
-    : ["Free shipping from the US over $49", "Ships from the United States", "Same-day delivery*", "100% authentic ( & trendy! )", "Worry-Free Returns"];
+    : ["Free Shipping on Orders $49+ *", "Delivered from our U.S. warehouses *", "Same-Day Delivery *", "Official Brand Partnerships"];
   if (commitmentCopy.join("|") !== expectedCommitmentCopy.join("|")) {
-    throw new Error("Service commitments must display the localized copy in homepage order");
+    throw new Error("Service commitments must display the expected labels in order for each language");
   }
-  if (!serviceCommitmentModule?.contains(serviceCommitment) || serviceCommitmentModule !== main.lastElementChild ||
+  if (!serviceCommitmentModule || serviceCommitmentModule !== main.parentElement?.firstElementChild || appReviews !== main.lastElementChild ||
       main.nextElementSibling?.getAttribute("data-slot") !== "footer" ||
-      getComputedStyle(serviceCommitmentModule).borderBlockStartWidth !== "1px") {
-    throw new Error("The localized service commitments must follow app reviews and precede the footer");
+      getComputedStyle(serviceCommitmentModule).borderBlockStartWidth !== "0px" ||
+      getComputedStyle(serviceCommitmentModule).borderBlockEndWidth !== "0px") {
+    throw new Error("Service commitments must precede the navigation without dividers, and app downloads must precede the footer");
   }
   const appTitle = getComputedStyle(within(appReviews).getByRole("heading", { level: 2 }));
   const keywordTitle = getComputedStyle(within(keywordRegion).getByRole("heading", { level: 2 }));
@@ -293,9 +306,7 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
     const rows = new Set(bounds.map(tag => tag.top));
     const scroller = keywordList.parentElement!;
     const scrolls = scroller.dataset.horizontalScrollList === "true";
-    const narrow = canvasElement.ownerDocument.defaultView.matchMedia("(width <= 477px)").matches;
     if (keywordList.children.length !== tags.length || rows.size > 3 ||
-        (narrow && !scrolls) ||
         (scrolls && (rows.size !== 3 || getComputedStyle(scroller).overflowX !== "auto" ||
           scroller.scrollWidth <= scroller.clientWidth)) ||
         bounds.some((tag, index) => index > 0 &&
@@ -462,6 +473,23 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
 
 export const Pc = { ...BrandPc, name: "PC", tags: ["preserve-story-name"], play };
 export const Mobile = { ...BrandMobile, name: "Mobile", tags: ["preserve-story-name"], play };
+
+function appDownloadLayoutStory(name: string, imageLayout: "image-first" | "compact") {
+  return {
+    name,
+    parameters: {
+      createPageFixture: (locale: TopicLandingPageLocale) => {
+        const page = meta.parameters.createPageFixture(locale);
+        return { ...page, appReviews: { ...page.appReviews, imageLayout } };
+      },
+    },
+  };
+}
+
+export const AppDownloadImageFirst = appDownloadLayoutStory("App Download · Image first", "image-first");
+export const AppDownloadCompact = appDownloadLayoutStory("App Download · Compact", "compact");
+
+export const ProductGallery = { name: "Product Gallery", tags: ["!dev", "!autodocs"] };
 
 export const Chinese = {
   ...BrandChinese,

@@ -64,7 +64,7 @@ const preview: Preview = {
       // Storybook extracts and evaluates this function as JavaScript.
       storySort: ({ id: leftId = "", title: leftTitle = "" }, { id: rightId = "", title: rightTitle = "" }) => {
         if (leftTitle === rightTitle && (leftTitle.startsWith("YAMI/components/") || leftTitle.startsWith("YAMI/modules/product display/") ||
-          ["YAMI/modules/global/header", "YAMI/modules/global/tab bar", "YAMI/modules/commerce/coupon"].includes(leftTitle))) {
+          ["YAMI/modules/global/header", "YAMI/modules/global/tab bar", "YAMI/modules/commerce/coupon", "YAMI/modules/commerce/app download"].includes(leftTitle))) {
           const rank = (id = "") => id.endsWith("--docs") ? 0 : id.endsWith("--properties") ? 1 : 2;
           return rank(leftId) - rank(rightId);
         }
