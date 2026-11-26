@@ -5,7 +5,8 @@ import type { ProductListItem } from "@yami/design-system";
 import { createThemeHeroProps } from "@yami/design-system/components/ThemeHero/fixtures";
 
 import { TopicLandingPage } from "./TopicLandingPage";
-import type { TopicLandingPageFaq, TopicLandingPageRelatedKeywords } from "./TopicLandingPage.types";
+import type { TopicLandingPageFaq } from "./TopicLandingPage.types";
+import type { createRelatedCollectionSections } from "../CollectionPage/relatedCollections.fixture";
 import { createTopicLandingPageFixture } from "./fixtures";
 
 const meta = {
@@ -49,8 +50,9 @@ const meta = {
     const localizedArgs = createFixture(locale);
     const faqByLocale = parameters.faqByLocale as Record<"en" | "zh", TopicLandingPageFaq> | undefined;
     const faq = faqByLocale?.[locale] ?? args.faq;
-    const relatedKeywordsByLocale = parameters.relatedKeywordsByLocale as Record<"en" | "zh", TopicLandingPageRelatedKeywords> | undefined;
-    const relatedKeywords = relatedKeywordsByLocale?.[locale] ?? args.relatedKeywords;
+    const createRelatedSections: typeof createRelatedCollectionSections | undefined = parameters.createRelatedCollectionSections;
+    const sections = createRelatedSections?.(componentId, locale, parameters.viewport?.defaultViewport === "yamiMobile" ? "mobile" : "pc");
+    const relatedKeywords = sections?.relatedKeywords ?? args.relatedKeywords;
     const catalogFilters = args.waterfall.catalogFilters;
     const productTitle = locale === "zh" ? "编辑精选" : "Editor’s Picks";
     const reviewTitle = catalogFilters && locale === "zh" ? "顾客评价" : undefined;
@@ -73,6 +75,7 @@ const meta = {
     return (
       <TopicLandingPage
         {...localizedArgs}
+        moduleDividers={{ ...localizedArgs.moduleDividers, ...args.moduleDividers }}
         revealHeaderOnScrollUp={args.revealHeaderOnScrollUp}
         hero={{
           ...localizedArgs.hero,
@@ -108,9 +111,7 @@ const meta = {
         hiddenModules={args.hiddenModules}
         reviewsAfterProducts={args.reviewsAfterProducts}
         faq={faq}
-        relatedCollections={parameters.createRelatedCollections?.(
-          componentId, locale, parameters.viewport?.defaultViewport === "yamiMobile" ? "mobile" : "pc",
-        ) ?? args.relatedCollections}
+        relatedCollections={sections?.relatedCollections ?? args.relatedCollections}
         relatedKeywords={relatedKeywords && {
           ...relatedKeywords,
           mode: relatedKeywords.mode ?? (globals.theme === "dark" ? "dark" : "light"),

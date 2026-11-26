@@ -4,12 +4,12 @@
   "category": "composite",
   "status": "experimental",
   "version": "0.1.0",
-  "description": "Bottom service commitments strip with localized benefits and filled icons.",
+  "description": "Localized service commitments strip with an optional mobile carousel.",
   "figma": {
     "fileKey": "MHQHWiNXDr06jybKwJNVvs",
     "nodeId": "1181:159271",
     "componentKey": "17de6ea715438313cac63eca8fe94e7db162b00e",
-    "notes": "Position=Bottom, Style=2 - Gray supplies the filled icons. English labels follow the five-item YAMI English homepage strip."
+    "notes": "Position=Bottom, Style=2 - Gray supplies the filled icons."
   },
   "exports": ["ServiceCommitment", "ServiceCommitmentProps"],
   "composes": ["Divider"],
@@ -19,6 +19,12 @@
       "required": false,
       "default": "zh",
       "description": "Language for the built-in service commitments."
+    },
+    "mobileCarousel": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Cycle through one centered benefit at a time on mobile."
     },
     "className": {
       "type": "string",
@@ -32,11 +38,10 @@
   },
   "tokens": [
     "--background-primary",
-    "--border-default",
+    "--divider-default",
     "--text-primary",
     "--font-family-ios",
     "--font-size-body-md",
-    "--font-size-body-xl",
     "--font-weight-emphasize",
     "--line-height-heading-md",
     "--layout-page-margin-default",
@@ -44,7 +49,6 @@
     "--space-100",
     "--space-200",
     "--space-250",
-    "--space-300",
     "--space-400",
     "--space-500",
     "--space-1000",
@@ -53,16 +57,15 @@
   "tokenBindings": {
     "--background-primary": { "property": "background", "selector": ".root" },
     "--text-primary": { "property": "color", "selector": ".root" },
-    "--space-050": { "property": "column-gap", "selector": ".benefit" },
+    "--space-100": { "property": "column-gap", "selector": ".benefit" },
     "--space-200": { "property": "column-gap", "selector": ".list below 928px" },
     "--space-1000": { "property": "min-block-size", "selector": ".container" },
-    "--space-250": { "property": "block-size", "selector": ".icon below 928px" },
-    "--space-300": { "property": "block-size", "selector": ".icon from 928px" }
+    "--space-250": { "property": "block-size", "selector": ".icon" }
   },
   "accessibility": {
     "structure": "Named list with decorative icons and dividers.",
     "tapTargetMin": 0,
-    "keyboardNav": []
+    "keyboardNav": ["Tab", "ArrowUp", "ArrowDown"]
   },
   "dependencies": {
     "runtime": ["react", "./Divider"],
@@ -72,7 +75,7 @@
   "usageRef": "./usage.md",
   "examples": ["./examples.tsx#ServiceCommitmentExample"],
   "testing": {
-    "interaction": "not-applicable",
-    "rationale": "The strip presents static benefits with no interactive controls."
+    "interaction": "covered",
+    "rationale": "Browser tests cover mobile rotation, keyboard focus and the desktop layout."
   }
 }

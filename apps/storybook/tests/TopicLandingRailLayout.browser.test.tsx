@@ -46,7 +46,7 @@ test.each([390, 1024, 1199, 1200, 1280, 1281, 1439, 1440, 1441, 1680, 1920])(
   },
 );
 
-test("keeps a long keyword readable on mobile without a horizontal scroll area", async () => {
+test("keeps a long collection link readable on mobile without a horizontal scroll area", async () => {
   const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
@@ -56,10 +56,12 @@ test("keeps a long keyword readable on mobile without a horizontal scroll area",
     flushSync(() => root.render(<TopicLandingPage
       {...createTopicKeywordLandingPageFixture("en")}
       showChrome={false}
-      relatedKeywords={{ title: "Explore more", items: ["Ingredient".repeat(12)] }}
+      relatedKeywords={{ title: "Explore more", items: [{ label: "Ingredient".repeat(12), href: "/collections/ingredients" }] }}
     />));
 
     const region = page.getByRole("region", { name: "Explore more" });
+    const link = region.getByRole("link", { name: "Ingredient".repeat(12) }).element();
+    expect(link.getAttribute("href")).toBe("/collections/ingredients");
     const list = region.getByRole("list").element();
     const tag = list.querySelector('[data-slot="tag"]')!;
     expect(tag.getBoundingClientRect().width).toBeLessThanOrEqual(list.clientWidth);

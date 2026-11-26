@@ -94,7 +94,7 @@
   },
   "design": {
     "tokens": [
-      "--border-default",
+      "--divider-default",
       "--divider-emphasis",
       "--fill-disabled",
       "--focus-ring",
@@ -145,5 +145,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "c87afe4bd9ef38997a3cc1a59787688d44639a584d57df7e9c1044617963a291"
+  "contentDigest": "e3559c436d1578cd75b20af7efac397e0cb38ecb3e38001a0b3011f353a85778"
 }

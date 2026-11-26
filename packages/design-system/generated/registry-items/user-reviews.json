@@ -10,6 +10,10 @@
   "source": "components/UserReviews",
   "files": [
     {
+      "source": "components/UserReviews/assets/app-download-shopping.webp",
+      "target": "components/UserReviews/assets/app-download-shopping.webp"
+    },
+    {
       "source": "components/UserReviews/assets/app-store.png",
       "target": "components/UserReviews/assets/app-store.png"
     },
@@ -84,6 +88,7 @@
   "design": {
     "tokens": [
       "--border-default",
+      "--divider-default",
       "--divider-emphasis",
       "--fill-inverse",
       "--fill-primary",
@@ -97,6 +102,7 @@
       "--font-size-heading-xl",
       "--font-weight-emphasize",
       "--font-weight-semibold",
+      "--layout-page-margin-default",
       "--line-height-body-md",
       "--line-height-body-xl",
       "--line-height-display-md",
@@ -160,5 +166,5 @@
     },
     "interactionCoverage": "covered"
   },
-  "contentDigest": "f7dbbd796dd24ffbdadc123f315759cd027ac5f737577190836e56b11824ccd6"
+  "contentDigest": "6aec29c3e540b4d9ec39ea2911deb76cff5c330bf040e5b44e45205fd2ce3835"
 }

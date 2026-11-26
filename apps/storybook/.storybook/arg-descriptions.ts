@@ -291,6 +291,7 @@ const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRat
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");
+names.set("appdownload", "UserReviews");
 
 const overrides: Record<string, Record<string, Copy>> = {
   Combobox: {
@@ -385,7 +386,13 @@ const overrides: Record<string, Record<string, Copy>> = {
     title: ["商品标题，最多显示两行，超出省略。", "Product title, truncated after two lines."],
   },
   Header: { locale: ["页头语言／地区入口配置，包含文案和切换行为。", "Header language/region entry configuration with labels and switching behavior."] },
+  ServiceCommitment: {
+    mobileCarousel: ["在移动端逐条轮播服务承诺。", "Cycle through one service commitment at a time on mobile."],
+  },
   UserReviews: {
+    version: ["选择评价版或商品配图版下载模块。", "Choose the reviews or shopping image version of the download module."],
+    imageLayout: ["选择商品配图版在桌面的图片与下载区布局。", "Set the desktop arrangement of the shopping image and download options in V2."],
+    padding: ["在卡片与模块边缘之间使用页面内边距。", "Apply page padding between the card and the module edges."],
     download: ["应用商店链接、图标、二维码和对应链接，以及可选的移动下载地址和 App 图标。", "App store links and icons, the QR image and its corresponding URL, and an optional mobile download URL and app icon."],
     reviewColumns: ["按展示顺序排列的评价组，每条包含唯一标识、评价正文和署名。", "Review groups in display order. Each review has a unique ID, quote, and author."],
     titleStyle: ["标题字号方案：display 为独立展示字号，section 跟随共享模块标题。", "Heading scale: display uses the standalone scale, and section follows the shared section heading."],

@@ -8,15 +8,6 @@ import collectionMeta, { Mobile as AnuaMobile } from "./CollectionPage.brand.sto
 import { localizedBeautyProduct } from "./localizedBeautyProduct";
 import catalog from "./k-beauty.products.json";
 
-const categories = [
-  { value: "cleanse", en: "Cleansers", zh: "洁面与卸妆" },
-  { value: "tone", en: "Toners & pads", zh: "爽肤水与棉片" },
-  { value: "moisturize", en: "Serums & creams", zh: "精华与面霜" },
-  { value: "sun", en: "Sun care", zh: "防晒" },
-  { value: "mask", en: "Sheet masks", zh: "面膜" },
-  { value: "makeup", en: "Makeup", zh: "彩妆" },
-] as const;
-
 const introByLocale = {
   zh: "探索韩系护肤与彩妆，从 ANUA 的鱼腥草爽肤水、SKIN1004 的积雪草防晒精华，认识韩国品牌常用的护肤成分。彩妆可以从 rom&nd 的果汁唇釉入手，用一抹透亮的杏仁玫瑰色，给日常妆容添点气色。",
   en: "Explore the ingredients behind Korean skincare with ANUA’s heartleaf toner and SKIN1004’s centella sun serum. For a sheer, glossy touch of color, finish your everyday look with a swipe of rom&nd’s Juicy Lasting Tint in Almond Rose.",
@@ -109,10 +100,6 @@ export default {
         },
       },
     ]),
-    relatedKeywordsByLocale: {
-      zh: { title: "探索更多", items: ["ANUA", "SKIN1004", "rom&nd", ...categories.map(category => category.zh)] },
-      en: { title: "Explore More", items: ["ANUA", "SKIN1004", "rom&nd", ...categories.map(category => category.en)] },
-    },
   },
 };
 

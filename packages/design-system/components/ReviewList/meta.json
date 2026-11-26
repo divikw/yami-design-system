@@ -112,7 +112,7 @@
     "--text-secondary",
     "--text-emphasis",
     "--fill-disabled",
-    "--border-default",
+    "--divider-default",
     "--focus-ring",
     "--divider-emphasis",
     "--stroke-default",

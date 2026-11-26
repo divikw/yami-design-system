@@ -1,17 +1,19 @@
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { expect, test } from "vitest";
+import { page } from "vitest/browser";
 import { UserReviews, type UserReviewsProps } from "@yami/design-system/components/UserReviews";
 import { userReviewsExamples } from "@yami/design-system/components/UserReviews/fixtures";
 import "@yami/design-system/tokens.css";
 
-test("applies the mobile download and PC review layouts at their container breakpoints", () => {
+test("switches at the desktop viewport breakpoint and fits narrower containers", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
 
   try {
-    flushSync(() => root.render(<UserReviews {...userReviewsExamples.zh} />));
+    flushSync(() => root.render(<UserReviews {...userReviewsExamples.zh} padding={false} />));
     const section = container.querySelector('[data-slot="user-reviews"]')!;
     const panel = section.querySelector('[data-slot="user-reviews-container"]')!.firstElementChild!;
     const download = panel.firstElementChild!;
@@ -35,7 +37,8 @@ test("applies the mobile download and PC review layouts at their container break
     expect(storeDetails.parentElement).toBe(downloadOptions);
     expect(caption.parentElement).toBe(storeDetails);
 
-    for (const width of [343, 459, 639]) {
+    await page.viewport(1023, 900);
+    for (const width of [343, 459, 639, 991]) {
       container.style.width = `${width}px`;
       const column = download.getBoundingClientRect();
       const center = column.left + column.width / 2;
@@ -60,6 +63,11 @@ test("applies the mobile download and PC review layouts at their container break
       const links = Array.from(section.querySelectorAll("a")).filter((link) => link.getClientRects().length > 0);
       expect(links).toEqual([mobileDownload]);
     }
+
+    await page.viewport(1024, 900);
+    container.style.width = "639px";
+    expect(mobileDownload.getClientRects()).toHaveLength(1);
+    expect(qr.getClientRects()).toHaveLength(0);
 
     for (const [width, columns] of [[640, 1], [900, 1], [927, 1], [928, 2], [1183, 2], [1184, 3]] as const) {
       container.style.width = `${width}px`;
@@ -116,18 +124,21 @@ test("applies the mobile download and PC review layouts at their container break
   } finally {
     root.unmount();
     container.remove();
+    await page.viewport(viewport.width, viewport.height);
   }
 });
 
 test("shares the desktop QR and opens the localized mobile download page", async () => {
+  const viewport = { width: innerWidth, height: innerHeight };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
 
   try {
+    await page.viewport(1440, 900);
     const sources = [];
     for (const [locale, label] of [["zh", "下载亚米 App"], ["en", "Download the Yami app"]] as const) {
-      flushSync(() => root.render(<UserReviews {...userReviewsExamples[locale]} />));
+      flushSync(() => root.render(<UserReviews {...userReviewsExamples[locale]} padding={false} />));
       const link = container.querySelector<HTMLAnchorElement>(`a[aria-label="${label}"]`)!;
       const image = link.querySelector("img")!;
       const mobileLink = container.querySelector<HTMLAnchorElement>('[data-slot="button-link"]')!;
@@ -155,6 +166,7 @@ test("shares the desktop QR and opens the localized mobile download page", async
   } finally {
     root.unmount();
     container.remove();
+    await page.viewport(viewport.width, viewport.height);
   }
 });
 
@@ -165,13 +177,17 @@ test("supports the shared section divider positions and treatments", () => {
   const cases: [Partial<UserReviewsProps>, string, string][] = [
     [{}, "1px", "0px"],
     [{ dividerPosition: "bottom", dividerVariant: "black" }, "0px", "2px"],
-    [{ dividerPosition: "none" }, "0px", "0px"],
+    [{ dividerPosition: "none", padding: false }, "0px", "0px"],
   ];
 
   try {
     for (const [divider, startWidth, endWidth] of cases) {
       flushSync(() => root.render(<UserReviews {...userReviewsExamples.zh} {...divider} />));
       const style = getComputedStyle(container.firstElementChild!);
+      const inset = getComputedStyle(container.querySelector('[data-slot="user-reviews-container"]')!);
+      const expectedPadding = divider.padding === false ? "0px" : matchMedia("(min-width: 1024px)").matches ? "32px" : "16px";
+      expect(inset.paddingBlockStart).toBe(expectedPadding);
+      expect(inset.paddingBlockEnd).toBe(expectedPadding);
       expect(style.borderBlockStartWidth).toBe(startWidth);
       expect(style.borderBlockEndWidth).toBe(endWidth);
     }

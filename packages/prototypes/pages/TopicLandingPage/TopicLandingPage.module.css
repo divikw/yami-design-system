@@ -14,12 +14,75 @@
   box-sizing: border-box;
 }
 
+.collection .activityHeader {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-primary);
+}
+
+.collection {
+  --collection-section-padding: var(--space-300);
+}
+
 .globalHeader {
   display: none;
 }
 
 .main {
   width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .collectionIntro {
+    --collection-hero-max-height: 12rem;
+    text-align: center;
+  }
+
+  .collectionIntro [data-slot="theme-hero-copy"] {
+    align-items: center;
+  }
+}
+
+.galleryHero {
+  background: var(--surface-secondary);
+}
+
+.galleryHeroInner {
+  display: grid;
+  align-items: center;
+  /* The section heading contributes the remaining 2px above the title. */
+  row-gap: calc(var(--space-300) - var(--space-025));
+  max-width: var(--topic-landing-content-max-width);
+  margin-inline: auto;
+  padding: var(--collection-section-padding) var(--layout-page-margin-default);
+}
+
+.galleryHeroInner [data-slot="theme-hero-container"] {
+  padding: 0;
+}
+
+@media (width < 1024px) {
+  .galleryHeroInner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 0;
+  }
+
+  .galleryHeroInner > [data-slot="theme-hero"] {
+    grid-row: 2;
+    padding-inline: var(--layout-page-margin-default);
+  }
+
+  .galleryHeroInner [data-slot="theme-hero-copy-content"] {
+    padding-block: var(--space-100);
+  }
+}
+
+@media (min-width: 1024px) {
+  .galleryHeroInner {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--space-600);
+  }
 }
 
 .main:has(> .primaryTabs) {
@@ -353,7 +416,24 @@ main.main[data-title-font-family="sans"]
 
 .faq,
 .relatedKeywords {
-  border-block-start: var(--stroke-default) solid var(--border-default);
+  border-block-start: var(--stroke-default) solid var(--divider-default);
+}
+
+/* A configured module owns its full-width outer rule. Inner card and row borders stay local. */
+.root :is(.dividerTop, .dividerBottom, .dividerBoth, .dividerNone) {
+  --module-rule: var(--stroke-default) solid var(--divider-default);
+  border-block: 0;
+}
+
+.root [data-divider-variant="black"] {
+  --module-rule: var(--stroke-thick) solid var(--divider-emphasis);
+}
+
+.root :is(.dividerTop, .dividerBoth) { border-block-start: var(--module-rule); }
+.root :is(.dividerBottom, .dividerBoth) { border-block-end: var(--module-rule); }
+
+.root [data-slot="header"]:is(.dividerTop, .dividerBottom, .dividerBoth, .dividerNone)::after {
+  content: none;
 }
 
 .faq [data-slot="accordion-trigger"] {
@@ -362,12 +442,28 @@ main.main[data-title-font-family="sans"]
 
 .couponContainer,
 .faqContainer,
-.relatedKeywordsContainer,
-.appReviews > [data-slot="user-reviews-container"] {
+.relatedKeywordsContainer {
   width: 100%;
   max-width: var(--topic-landing-content-max-width);
   margin-inline: auto;
   padding: var(--space-200) var(--layout-page-margin-default);
+}
+
+.appReviews > [data-slot="user-reviews-container"] {
+  margin-inline: auto;
+  max-inline-size: var(--topic-landing-content-max-width);
+}
+
+.collection .serviceCommitment {
+  background: var(--brand-tertiary);
+}
+
+.collection .serviceCommitment [data-slot="service-commitment-list"] {
+  --service-commitment-gap: var(--space-200);
+}
+
+.collection .serviceCommitment [data-slot="service-commitment-list"] > li {
+  flex: none;
 }
 
 .serviceCommitment > [data-slot="service-commitment-container"] {
@@ -429,6 +525,18 @@ main.main[data-title-font-family="sans"]
 .collection .main > [data-slot="theme-hero"] :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-copy-content"]),
 .collection .main .faqIntro [data-slot="faq-copy"] {
   row-gap: var(--topic-landing-description-gap);
+}
+
+.collection .main > [data-slot="theme-hero"] > [data-slot="theme-hero-container"],
+.collection .main :is(
+  .couponContainer,
+  .faqContainer,
+  .relatedKeywordsContainer,
+  [data-slot="product-list-container"],
+  [data-slot="review-list-container"],
+  [data-slot="user-reviews-container"][data-padding="true"]
+) {
+  padding-block: var(--collection-section-padding);
 }
 
 .collection [data-slot="topic-landing-waterfall-section"] [data-slot="product-list-container"],
@@ -503,6 +611,18 @@ main.main[data-title-font-family="sans"]
   list-style: none;
 }
 
+.relatedKeywordLink {
+  display: inline-flex;
+  max-inline-size: 100%;
+  border-radius: var(--radius-button-primary);
+  text-decoration: none;
+}
+
+.relatedKeywordLink:focus-visible {
+  outline: var(--stroke-thick) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--stroke-thick));
+}
+
 .relatedKeywordsList [data-slot="tag"] {
   max-inline-size: 100cqi;
   min-block-size: var(--tag-height);
@@ -539,21 +659,30 @@ main.main[data-title-font-family="sans"]
     --topic-landing-description-gap: var(--space-100);
   }
 
-  .couponContainer > .couponSurface {
-    align-items: flex-start;
+  .collection {
+    --collection-section-padding: var(--space-500);
   }
 
-  :where(.root:not(.collection)) .couponContainer > .couponSurface {
+  .couponContainer > .couponSurface {
+    align-items: flex-start;
     justify-content: safe center;
     padding: var(--space-200);
     border-radius: var(--radius-surface-default);
     background: var(--surface-secondary);
   }
 
+  .collection .serviceCommitment > [data-slot="service-commitment-container"] {
+    min-block-size: var(--space-500);
+    padding-block: var(--space-100);
+  }
+
+  .collection .serviceCommitment [data-slot="service-commitment-list"] {
+    column-gap: var(--space-400);
+  }
+
   .couponContainer,
   .faqContainer,
-  .relatedKeywordsContainer,
-  .appReviews > [data-slot="user-reviews-container"] {
+  .relatedKeywordsContainer {
     padding-block: var(--space-400);
   }
 

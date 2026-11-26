@@ -1,5 +1,6 @@
 export { TopicLandingPage } from "./TopicLandingPage";
 export type {
+  CollectionModuleDividers,
   TopicLandingPagePrimaryTab,
   TopicLandingPagePrimaryTabs,
   TopicLandingPageModuleId,

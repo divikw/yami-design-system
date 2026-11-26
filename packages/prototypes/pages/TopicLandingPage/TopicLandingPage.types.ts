@@ -14,7 +14,7 @@ import type {
   ThemeProductListProps,
   UserReviewsProps,
 } from "@yami/design-system";
-import type { HTMLAttributes, ReactElement } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactElement } from "react";
 
 export interface TopicLandingPagePrimaryTab {
   value: string;
@@ -59,11 +59,19 @@ export interface TopicLandingPageFaq {
 
 export interface TopicLandingPageRelatedKeywords {
   title: string;
-  items: readonly string[];
+  items: readonly (string | { label: string; href: string; target?: AnchorHTMLAttributes<HTMLAnchorElement>["target"] })[];
   mode?: TagMode;
 }
 
+export type CollectionModuleDividers = Partial<Record<
+  "header" | "hero" | "couponSection" | "waterfall" | "reviewList" | "faq" |
+  "relatedCollections" | "relatedKeywords" | "appReviews" | "serviceCommitment" | "footer",
+  NonNullable<ProductListProps["dividerPosition"]> | "both"
+>>;
+
 export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
+  /** Outer divider placement for each collection module. Omitted entries retain the component default. */
+  moduleDividers?: CollectionModuleDividers;
   /** Maximum width shared by every content container inside main. Numbers are treated as pixels. */
   contentMaxWidth?: number | string;
   /** Font family shared by collection content headings inside main. */
@@ -92,7 +100,7 @@ export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
   relatedKeywords?: TopicLandingPageRelatedKeywords;
   /** App download panel and app reviews shown after the related keywords. */
   appReviews?: UserReviewsProps;
-  /** Service commitments shown before the footer, after app reviews when present. */
+  /** Service commitments shown at the top of the page, above the navigation. */
   serviceCommitment?: ServiceCommitmentProps;
   productRail: TopicLandingPageProductRailProps;
   /** Optional brand collection rendered immediately after Popular Picks. */

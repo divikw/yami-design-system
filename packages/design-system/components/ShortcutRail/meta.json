@@ -100,7 +100,7 @@
     "--surface-primary",
     "--surface-secondary",
     "--text-primary",
-    "--border-default",
+    "--divider-default",
     "--divider-emphasis",
     "--focus-ring",
     "--stroke-default",

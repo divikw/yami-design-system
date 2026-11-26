@@ -101,7 +101,6 @@
     "--surface-secondary",
     "--color-white-1000",
     "--text-primary",
-    "--border-default",
     "--focus-ring",
     "--divider-default",
     "--divider-emphasis",

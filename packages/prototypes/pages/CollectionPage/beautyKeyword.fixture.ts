@@ -75,10 +75,6 @@ export function createBeautyKeywordMeta<T extends CollectionMeta>(collection: T,
     };
   }
   const fixture = createPageFixture();
-  const related = (locale: TopicLandingPageLocale) => ({
-    title: locale === "zh" ? "探索更多" : "Explore More",
-    items: ["K-Beauty", ...keyword.groups.map(group => group.label[locale])],
-  });
   return {
     ...collection,
     args: {
@@ -92,7 +88,6 @@ export function createBeautyKeywordMeta<T extends CollectionMeta>(collection: T,
       createPageFixture,
       docs: { ...collection.parameters.docs, description: { component: keyword.description.en } },
       faqByLocale: createCollectionFaq(keyword.faqSubject, keyword.faq),
-      relatedKeywordsByLocale: { en: related("en"), zh: related("zh") },
     },
   };
 }
