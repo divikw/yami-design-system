@@ -46,6 +46,8 @@ import { BadgeDocsPage } from "./badge-docs";
 import { BreadcrumbDocsPage } from "./breadcrumb-docs";
 import { ButtonDocsPage } from "./button-docs";
 import { ButtonGroupDocsPage } from "./button-group-docs";
+import { UserReviewsDocsPage } from "./user-reviews-docs";
+import { ServiceCommitmentDocsPage } from "./service-commitment-docs";
 import { CardDocsPage } from "./card-docs";
 import { CouponDocsPage } from "./coupon-docs";
 import { SwitchDocsPage } from "./switch-docs";
@@ -78,6 +80,8 @@ customDocsPages.collectioncard = CollectionCardDocsPage;
 customDocsPages.coupon = CouponDocsPage;
 customDocsPages.productcard = ProductCardDocsPage;
 customDocsPages.productlist = ProductListDocsPage;
+customDocsPages.userreviews = UserReviewsDocsPage;
+customDocsPages.servicecommitment = ServiceCommitmentDocsPage;
 
 function componentNameFromUsagePath(filePath: string) {
   return filePath.match(/\/components\/([^/]+)\/usage\.md$/)?.[1];

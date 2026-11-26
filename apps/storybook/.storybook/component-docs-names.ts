@@ -60,6 +60,8 @@ const chineseComponentNames = {
   Toast: "轻提示",
   Tooltip: "工具提示",
   TrendingSearches: "热门搜索",
+  UserReviews: "用户评价",
+  ServiceCommitment: "服务承诺",
 };
 
 export function normalizeComponentName(value: string) {

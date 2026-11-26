@@ -1,4 +1,5 @@
 import { userEvent, waitFor, within } from "storybook/test";
+import { userReviewsExamples } from "@yami/design-system/components/UserReviews/fixtures";
 
 import { createCollectionFaq } from "./collectionFaq.fixture";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
@@ -93,7 +94,23 @@ export default {
   title: "YAMI/Pages/Landing Pages/Collection Templates/Anua",
   parameters: {
     ...brandMeta.parameters,
-    createPageFixture: (locale: TopicLandingPageLocale) => createCollectionPageFixture(locale, { showCouponUseLinks: false }),
+    createPageFixture: (locale: TopicLandingPageLocale) => {
+      const fixture = createCollectionPageFixture(locale, { showCouponUseLinks: false });
+      return {
+        ...fixture,
+        couponSection: {
+          ...fixture.couponSection,
+          title: locale === "zh" ? "新人优惠" : fixture.couponSection.title,
+        },
+        appReviews: {
+          ...userReviewsExamples[locale],
+          dividerPosition: "top",
+          dividerVariant: "gray",
+          titleStyle: "section",
+        },
+        serviceCommitment: { locale },
+      };
+    },
     createRelatedCollections,
     faqByLocale,
     relatedKeywordsByLocale,
@@ -101,7 +118,7 @@ export default {
       ...brandMeta.parameters.docs,
       description: {
         component:
-          "This keyword collection uses Anua as its example, with a text introduction, a filterable product list, customer reviews, frequently asked questions, related collections and related keywords.",
+          "This keyword collection uses Anua as its example, with a text introduction, a filterable product list, customer reviews, frequently asked questions, related collections, related keywords, Yami app downloads and service commitments.",
       },
     },
   },
@@ -165,9 +182,16 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
   const couponPanel = coupons.querySelector<HTMLElement>('[data-horizontal-scroll-list="true"]');
   const desktop = canvasElement.ownerDocument.defaultView?.matchMedia("(min-width: 1024px)").matches;
+  const couponHeading = within(coupons).getByRole("heading", {
+    level: 2,
+    name: globals.locale === "zh" ? "新人优惠" : "Coupons",
+  });
+  const firstCoupon = coupons.querySelector('[data-slot="coupon"]')!;
   if (!couponPanel || getComputedStyle(coupons).rowGap !== (desktop ? "16px" : "12px") ||
-      getComputedStyle(couponPanel).paddingBlockStart !== (desktop ? "16px" : "0px")) {
-    throw new Error("The coupon heading gap must sit outside the coupon panel and preserve its top inset");
+      getComputedStyle(couponPanel).paddingBlockStart !== "0px" ||
+      getComputedStyle(couponPanel).backgroundColor !== "rgba(0, 0, 0, 0)" ||
+      Math.abs(firstCoupon.getBoundingClientRect().left - couponHeading.getBoundingClientRect().left) > 1) {
+    throw new Error("The coupon list must use a transparent surface and align with the heading");
   }
   if (products.nextElementSibling?.id !== "reviews") {
     throw new Error("Customer reviews must follow the product list");
@@ -220,12 +244,37 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   const keywordList = within(keywordRegion).getByRole("list");
   const tags = Array.from(keywordList.querySelectorAll('[data-slot="tag"]'));
   const collectionsRegion = within(main).getByRole("heading", { name: zh ? "相关专辑" : "Related Collections" }).closest("section");
+  const appReviews = main.querySelector<HTMLElement>('[data-slot="user-reviews"]');
   if (!collectionsRegion || faqRegion.nextElementSibling !== collectionsRegion ||
       collectionsRegion.querySelectorAll("a[href]").length !== 6 || collectionsRegion.nextElementSibling !== keywordRegion ||
-      main.lastElementChild !== keywordRegion ||
       tags.length !== keywords.items.length ||
       tags.some((tag, index) => tag.textContent?.trim() !== keywords.items[index])) {
     throw new Error("The FAQ must be followed by six related collections and then the localized keyword tags");
+  }
+  if (!appReviews || appReviews !== keywordRegion.nextElementSibling ||
+      appReviews.lang !== (zh ? "zh" : "en") || within(appReviews).getAllByRole("link").length !== 3 ||
+      appReviews.dataset.dividerPosition !== "top" || appReviews.dataset.dividerVariant !== "gray") {
+    throw new Error("The app download module must follow the keyword tags");
+  }
+  const serviceCommitment = within(main).getByRole("list", { name: zh ? "服务承诺" : "Service commitments" });
+  const serviceCommitmentModule = appReviews.nextElementSibling;
+  const commitmentCopy = within(serviceCommitment).getAllByRole("listitem").map((item) => item.textContent);
+  const expectedCommitmentCopy = zh
+    ? ["满$49免运费", "从美国发货", "当日送达*", "正品保证", "无忧退换"]
+    : ["Free shipping from the US over $49", "Ships from the United States", "Same-day delivery*", "100% authentic ( & trendy! )", "Worry-Free Returns"];
+  if (commitmentCopy.join("|") !== expectedCommitmentCopy.join("|")) {
+    throw new Error("Service commitments must display the localized copy in homepage order");
+  }
+  if (!serviceCommitmentModule?.contains(serviceCommitment) || serviceCommitmentModule !== main.lastElementChild ||
+      main.nextElementSibling?.getAttribute("data-slot") !== "footer" ||
+      getComputedStyle(serviceCommitmentModule).borderBlockStartWidth !== "1px") {
+    throw new Error("The localized service commitments must follow app reviews and precede the footer");
+  }
+  const appTitle = getComputedStyle(within(appReviews).getByRole("heading", { level: 2 }));
+  const keywordTitle = getComputedStyle(within(keywordRegion).getByRole("heading", { level: 2 }));
+  if (appTitle.fontSize !== keywordTitle.fontSize || appTitle.lineHeight !== keywordTitle.lineHeight ||
+      appTitle.fontFamily !== keywordTitle.fontFamily || appTitle.fontWeight !== keywordTitle.fontWeight) {
+    throw new Error("The app download title must match the collection section headings");
   }
   if (canvasElement.ownerDocument.defaultView?.matchMedia("(width < 1024px)").matches) {
     const bounds = tags.map(tag => tag.getBoundingClientRect());

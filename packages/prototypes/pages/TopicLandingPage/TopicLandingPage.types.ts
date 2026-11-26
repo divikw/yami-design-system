@@ -8,9 +8,11 @@ import type {
   ProductListItem,
   ProductListProps,
   ReviewListProps,
+  ServiceCommitmentProps,
   ShortcutRailProps,
   TagMode,
   ThemeProductListProps,
+  UserReviewsProps,
 } from "@yami/design-system";
 import type { HTMLAttributes, ReactElement } from "react";
 
@@ -64,7 +66,7 @@ export interface TopicLandingPageRelatedKeywords {
 export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
   /** Maximum width shared by every content container inside main. Numbers are treated as pixels. */
   contentMaxWidth?: number | string;
-  /** Font family shared by the hero title and every module title inside main. */
+  /** Font family shared by collection content headings inside main. */
   titleFontFamily?: "sans" | "serif";
   /** Hides online-only global chrome for self-contained offline delivery. */
   showChrome?: boolean;
@@ -88,6 +90,10 @@ export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
     items: CollectionCardProps["item"][];
   };
   relatedKeywords?: TopicLandingPageRelatedKeywords;
+  /** App download panel and app reviews shown after the related keywords. */
+  appReviews?: UserReviewsProps;
+  /** Service commitments shown before the footer, after app reviews when present. */
+  serviceCommitment?: ServiceCommitmentProps;
   productRail: TopicLandingPageProductRailProps;
   /** Optional brand collection rendered immediately after Popular Picks. */
   brandRail?: BrandProductRailProps;

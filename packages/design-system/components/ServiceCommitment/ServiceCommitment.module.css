@@ -1,0 +1,106 @@
+.root {
+  inline-size: 100%;
+  border-block-start: var(--stroke-default) solid var(--border-default);
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-ios);
+  font-weight: var(--font-weight-emphasize);
+  line-height: var(--line-height-heading-md);
+}
+
+.container {
+  container: service-commitment / inline-size;
+  display: grid;
+  align-items: center;
+  box-sizing: border-box;
+  max-inline-size: 1440px;
+  min-block-size: var(--space-1000);
+  margin-inline: auto;
+  padding: var(--space-200) var(--layout-page-margin-default);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: safe center;
+  font-size: var(--font-size-body-md);
+  gap: var(--space-100) var(--space-200);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+  margin-block: 0;
+  margin-inline: auto;
+  padding: 0;
+  list-style: none;
+}
+
+.item,
+.benefit {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.benefit {
+  align-items: center;
+  column-gap: var(--space-050);
+  overflow-wrap: anywhere;
+}
+
+.icon {
+  display: block;
+  flex: none;
+  block-size: var(--space-250);
+  inline-size: auto;
+}
+
+.item > .separator {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-block: var(--space-400);
+  }
+}
+
+@container service-commitment (min-width: 928px) {
+  .list {
+    --service-commitment-gap: var(--space-200);
+    flex-wrap: nowrap;
+    gap: var(--service-commitment-gap);
+  }
+
+  .list:lang(zh) {
+    font-size: var(--font-size-body-xl);
+  }
+
+  .item {
+    gap: var(--service-commitment-gap);
+  }
+
+  .icon {
+    block-size: var(--space-300);
+  }
+
+  .item > .separator {
+    display: block;
+  }
+}
+
+/* The five English labels need more room for a single row with dividers. */
+@container service-commitment (928px <= width < 1120px) {
+  .list:lang(en) {
+    flex-wrap: wrap;
+    row-gap: var(--space-100);
+  }
+
+  .item:lang(en) > .separator {
+    display: none;
+  }
+}
+
+@container service-commitment (min-width: 1280px) {
+  .list {
+    --service-commitment-gap: var(--space-500);
+  }
+}

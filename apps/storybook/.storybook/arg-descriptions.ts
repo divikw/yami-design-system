@@ -287,7 +287,7 @@ const common: Record<string, Copy> = {
 
 // Only maintained components/modules participate; unrelated page props keep
 // their authored descriptions. Resolve nested story folders and display aliases.
-const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox CollectionCard Combobox Coupon Dialog Divider Drawer DropdownMenu EmptyState Field FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon NavigationMenu Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection Progress QuantitySelect RadioGroup ReviewList SectionBanner Select ShortcutRail Skeleton Slider SocialMediaGallery Spinner Switch TabBar Tabs Tag Textarea ThemeHero ThemeProductList Toast Tooltip TrendingSearches".split(" ");
+const componentNames = "Accordion Alert AlertDialog ActivityPageHeader AspectRatio Avatar Badge Billboard BrandProductRail Breadcrumb Button ButtonGroup Card Checkbox CollectionCard Combobox Coupon Dialog Divider Drawer DropdownMenu EmptyState Field FilterChip Footer Header HeroBanner HorizontalScrollList Input MembershipBadge MembershipIcon NavigationMenu Pagination Popover ProductCard ProductList ProductMediaGallery ProductReviewSection Progress QuantitySelect RadioGroup ReviewList SectionBanner Select ServiceCommitment ShortcutRail Skeleton Slider SocialMediaGallery Spinner Switch TabBar Tabs Tag Textarea ThemeHero ThemeProductList Toast Tooltip TrendingSearches UserReviews".split(" ");
 const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, "").toLowerCase();
 const names = new Map(componentNames.map(name => [normalize(name), name]));
 names.set("floatingbars", "Billboard");
@@ -385,6 +385,11 @@ const overrides: Record<string, Record<string, Copy>> = {
     title: ["商品标题，最多显示两行，超出省略。", "Product title, truncated after two lines."],
   },
   Header: { locale: ["页头语言／地区入口配置，包含文案和切换行为。", "Header language/region entry configuration with labels and switching behavior."] },
+  UserReviews: {
+    download: ["应用商店链接、图标、下载二维码及对应链接。", "App store links and icons, the download QR image, and its corresponding URL."],
+    reviewColumns: ["按展示顺序排列的评价组，每条包含唯一标识、评价正文和署名。", "Review groups in display order. Each review has a unique ID, quote, and author."],
+    titleStyle: ["标题字号方案：display 为独立展示字号，section 跟随共享模块标题。", "Heading scale: display uses the standalone scale, and section follows the shared section heading."],
+  },
   Input: {
     size: ["已弃用的兼容属性；用 density 选择输入框规格。", "Deprecated compatibility prop; use density to set input sizing."],
     onValueChange: ["接收输入值和 Base UI 事件详情。", "Receives the input value and Base UI event details."],

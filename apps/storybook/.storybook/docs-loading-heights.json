@@ -85,5 +85,12 @@
   "yami-components-navigation-tabs--docs": {
     "en": [[320,1,3,300],[367,1,2,300]],
     "zh": [[320,1,2,300]]
+  },
+  "yami-modules-commerce-service-commitment--docs": {
+    "en": [[320,2,3,273],[334,1,3,273],[341,1,3,252],[363,1,2,252]]
+  },
+  "yami-modules-commerce-user-reviews--docs": {
+    "en": [[320,1,2,413],[379,1,2,393],[385,1,2,365]],
+    "zh": [[320,1,2,365],[353,1,2,345]]
   }
 }

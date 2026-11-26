@@ -362,11 +362,16 @@ main.main[data-title-font-family="sans"]
 
 .couponContainer,
 .faqContainer,
-.relatedKeywordsContainer {
+.relatedKeywordsContainer,
+.appReviews > [data-slot="user-reviews-container"] {
   width: 100%;
   max-width: var(--topic-landing-content-max-width);
   margin-inline: auto;
   padding: var(--space-200) var(--layout-page-margin-default);
+}
+
+.serviceCommitment > [data-slot="service-commitment-container"] {
+  max-inline-size: var(--topic-landing-content-max-width);
 }
 
 :is(.couponContainer, .faqContainer, .relatedKeywordsContainer) {
@@ -396,6 +401,10 @@ main.main[data-title-font-family="sans"]
   grid-template-rows: auto 1fr;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+.collection .couponSurface > [data-slot="coupon"]:not([data-disabled]) [data-slot="coupon-claim-status"] {
+  color: var(--text-primary);
 }
 
 .main :is([data-slot="coupon-title"], [data-slot="faq-title"], [data-slot="related-keywords-title"]) {
@@ -527,6 +536,10 @@ main.main[data-title-font-family="sans"]
   }
 
   .couponContainer > .couponSurface {
+    align-items: flex-start;
+  }
+
+  :where(.root:not(.collection)) .couponContainer > .couponSurface {
     justify-content: safe center;
     padding: var(--space-200);
     border-radius: var(--radius-surface-default);
@@ -535,7 +548,8 @@ main.main[data-title-font-family="sans"]
 
   .couponContainer,
   .faqContainer,
-  .relatedKeywordsContainer {
+  .relatedKeywordsContainer,
+  .appReviews > [data-slot="user-reviews-container"] {
     padding-block: var(--space-400);
   }
 

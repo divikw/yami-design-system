@@ -8935,6 +8935,123 @@
       }
     },
     {
+      "id": "ServiceCommitment",
+      "source": "components/ServiceCommitment",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "ServiceCommitment",
+        "category": "composite",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Bottom service commitments strip with localized benefits and filled icons.",
+        "figma": {
+          "fileKey": "MHQHWiNXDr06jybKwJNVvs",
+          "nodeId": "1181:159271",
+          "componentKey": "17de6ea715438313cac63eca8fe94e7db162b00e",
+          "notes": "Position=Bottom, Style=2 - Gray supplies the filled icons. English labels follow the five-item YAMI English homepage strip."
+        },
+        "exports": [
+          "ServiceCommitment",
+          "ServiceCommitmentProps"
+        ],
+        "composes": [
+          "Divider"
+        ],
+        "props": {
+          "locale": {
+            "type": "\"zh\" | \"en\"",
+            "required": false,
+            "default": "zh",
+            "description": "Language for the built-in service commitments."
+          },
+          "className": {
+            "type": "string",
+            "required": false,
+            "description": "Optional class for page layout."
+          }
+        },
+        "rules": {
+          "color": {
+            "ruleId": "semantic-color-only"
+          },
+          "numerals": {
+            "ruleId": "numerals-font"
+          }
+        },
+        "tokens": [
+          "--background-primary",
+          "--border-default",
+          "--text-primary",
+          "--font-family-ios",
+          "--font-size-body-md",
+          "--font-size-body-xl",
+          "--font-weight-emphasize",
+          "--line-height-heading-md",
+          "--layout-page-margin-default",
+          "--space-050",
+          "--space-100",
+          "--space-200",
+          "--space-250",
+          "--space-300",
+          "--space-400",
+          "--space-500",
+          "--space-1000",
+          "--stroke-default"
+        ],
+        "tokenBindings": {
+          "--background-primary": {
+            "property": "background",
+            "selector": ".root"
+          },
+          "--text-primary": {
+            "property": "color",
+            "selector": ".root"
+          },
+          "--space-050": {
+            "property": "column-gap",
+            "selector": ".benefit"
+          },
+          "--space-200": {
+            "property": "column-gap",
+            "selector": ".list below 928px"
+          },
+          "--space-1000": {
+            "property": "min-block-size",
+            "selector": ".container"
+          },
+          "--space-250": {
+            "property": "block-size",
+            "selector": ".icon below 928px"
+          },
+          "--space-300": {
+            "property": "block-size",
+            "selector": ".icon from 928px"
+          }
+        },
+        "accessibility": {
+          "structure": "Named list with decorative icons and dividers.",
+          "tapTargetMin": 0,
+          "keyboardNav": []
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "./Divider"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#ServiceCommitmentExample"
+        ],
+        "testing": {
+          "interaction": "not-applicable",
+          "rationale": "The strip presents static benefits with no interactive controls."
+        }
+      }
+    },
+    {
       "id": "ShortcutRail",
       "source": "components/ShortcutRail",
       "meta": {
@@ -11776,6 +11893,179 @@
         "examples": [
           "./examples.tsx#TrendingSearchesExample"
         ]
+      }
+    },
+    {
+      "id": "UserReviews",
+      "source": "components/UserReviews",
+      "meta": {
+        "$schema": "../../schema/component.json",
+        "name": "UserReviews",
+        "category": "composite",
+        "status": "experimental",
+        "version": "0.1.0",
+        "description": "Homepage app download links and a responsive panel of curated user reviews.",
+        "figma": {
+          "fileKey": "MHQHWiNXDr06jybKwJNVvs",
+          "nodeId": "792:104395",
+          "componentKey": null,
+          "notes": "Desktop source section. Mobile shows only the download panel."
+        },
+        "exports": [
+          "UserReviews",
+          "UserReviewsProps",
+          "UserReview"
+        ],
+        "composes": [
+          "Card",
+          "Divider",
+          "SectionHeading"
+        ],
+        "props": {
+          "download": {
+            "type": "UserReviewsProps['download']",
+            "required": true,
+            "description": "Store URLs and icon sources, along with the QR image and its equivalent link."
+          },
+          "reviewColumns": {
+            "type": "readonly (readonly UserReview[])[]",
+            "required": true,
+            "description": "Ordered review groups. Each review has a unique id, quote, and author."
+          },
+          "locale": {
+            "type": "\"zh\" | \"en\"",
+            "required": false,
+            "default": "zh",
+            "description": "Language for the built-in copy. Review text and assets are supplied by the caller."
+          },
+          "titleStyle": {
+            "type": "\"display\" | \"section\"",
+            "required": false,
+            "default": "display",
+            "description": "Use the standalone display scale or the shared section heading scale."
+          },
+          "titleFontFamily": {
+            "type": "\"sans\" | \"serif\"",
+            "required": false,
+            "default": "sans",
+            "description": "Font family for the download title."
+          },
+          "dividerPosition": {
+            "type": "\"top\" | \"bottom\" | \"none\"",
+            "required": false,
+            "default": "top",
+            "description": "Edge of the outer section that draws a divider."
+          },
+          "dividerVariant": {
+            "type": "\"gray\" | \"black\"",
+            "required": false,
+            "default": "gray",
+            "description": "Gray draws the 1px structural divider. Black draws the 2px emphasis divider."
+          },
+          "className": {
+            "type": "string",
+            "required": false,
+            "description": "Additional class on the outer section for page composition."
+          }
+        },
+        "rules": {
+          "shape": {
+            "ruleId": "no-custom-radii"
+          },
+          "focus": {
+            "ruleId": "focus-style"
+          },
+          "targets": {
+            "ruleId": "tap-target"
+          }
+        },
+        "tokens": [
+          "--border-default",
+          "--divider-emphasis",
+          "--fill-inverse",
+          "--fill-primary",
+          "--focus-ring",
+          "--font-family-ios",
+          "--font-family-serif",
+          "--font-size-body-md",
+          "--font-size-body-xl",
+          "--font-size-display-md",
+          "--font-size-display-sm",
+          "--font-size-heading-xl",
+          "--font-weight-emphasize",
+          "--font-weight-semibold",
+          "--line-height-body-md",
+          "--line-height-body-xl",
+          "--line-height-display-md",
+          "--line-height-display-sm",
+          "--line-height-heading-xl",
+          "--radius-component-default",
+          "--radius-surface-default",
+          "--radius-surface-sheet",
+          "--radius-tag-primary",
+          "--space-025",
+          "--space-050",
+          "--space-100",
+          "--space-150",
+          "--space-200",
+          "--space-300",
+          "--space-400",
+          "--space-600",
+          "--stroke-default",
+          "--stroke-thick",
+          "--surface-primary",
+          "--surface-secondary",
+          "--text-primary",
+          "--text-secondary"
+        ],
+        "tokenBindings": {
+          "--surface-secondary": {
+            "property": "background",
+            "selector": ".panel"
+          },
+          "--surface-primary": {
+            "property": "background",
+            "selector": ".reviewCard::before"
+          },
+          "--radius-surface-default": {
+            "property": "border-radius",
+            "selector": ".panel"
+          },
+          "--radius-surface-sheet": {
+            "property": "border-radius",
+            "selector": ".reviewGrid .reviewCard"
+          },
+          "--radius-component-default": {
+            "property": "border-radius",
+            "selector": ".qrLink"
+          }
+        },
+        "accessibility": {
+          "structure": "Named section with a heading, native download links, and a static review region with lists and block quotes.",
+          "tapTargetMin": 24,
+          "keyboardNav": [
+            "Tab",
+            "Enter"
+          ]
+        },
+        "dependencies": {
+          "runtime": [
+            "react",
+            "./Card",
+            "./Divider",
+            "./SectionHeading"
+          ],
+          "peer": [],
+          "devOnly": []
+        },
+        "usageRef": "./usage.md",
+        "examples": [
+          "./examples.tsx#UserReviewsExample"
+        ],
+        "testing": {
+          "interaction": "covered",
+          "rationale": "The Showcase checks all three link destinations and the download links' keyboard focus order."
+        }
       }
     }
   ]
