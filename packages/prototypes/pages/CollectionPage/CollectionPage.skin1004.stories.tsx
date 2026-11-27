@@ -1,8 +1,9 @@
+import topicMeta from "../TopicLandingPage/TopicLandingPage.stories";
 import { createBeautyKeywordMeta } from "./beautyKeyword.fixture";
-import collection, { Mobile as CollectionMobile } from "./CollectionPage.brand.stories";
+import { collectionMobile } from "./collectionTemplate";
 
 export default {
-  ...createBeautyKeywordMeta(collection, {
+  ...createBeautyKeywordMeta(topicMeta, {
     title: { en: "SKIN1004", zh: "SKIN1004" },
     faqSubject: { en: "SKIN1004 skincare", zh: "SKIN1004 护肤品" },
     description: {
@@ -62,9 +63,4 @@ export default {
 };
 
 export const Pc = { name: "PC", tags: ["preserve-story-name"] };
-export const Mobile = {
-  name: "Mobile",
-  tags: ["preserve-story-name"],
-  parameters: CollectionMobile.parameters,
-  globals: CollectionMobile.globals,
-};
+export const Mobile = { ...collectionMobile, name: "Mobile", tags: ["preserve-story-name"] };

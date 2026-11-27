@@ -8,6 +8,7 @@ import {
   useState,
   type CSSProperties,
   type MouseEvent,
+  type ReactNode,
 } from "react";
 
 import {
@@ -24,6 +25,7 @@ import {
   ProductList,
   ReviewList,
   SectionHeading,
+  Skeleton,
   ServiceCommitment,
   ShortcutRail,
   Tabs,
@@ -62,6 +64,10 @@ const dividerClasses = {
 
 type ModuleDivider = CollectionModuleDividers[keyof CollectionModuleDividers];
 
+function LoadingHeading({ children }: { children: ReactNode }) {
+  return <span className={styles.loadingHeading}>{children}<Skeleton /></span>;
+}
+
 function dividerClass(position: ModuleDivider) {
   return position && dividerClasses[position];
 }
@@ -94,6 +100,7 @@ export function getTopicLandingActivationLine(
 }
 
 export function TopicLandingPage({
+  collectionLoading = false,
   moduleDividers = {},
   contentMaxWidth = 1440,
   titleFontFamily = "serif",
@@ -446,7 +453,96 @@ export function TopicLandingPage({
 
   useLayoutEffect(() => {
     const main = mainRef.current;
-    if (!main) return;
+    if (!main || collectionLoading) return;
+
+    const initialLoad = !initialViewportPrepared.current;
+    initialViewportPrepared.current = true;
+    const scrollRoot = resolveTopicLandingScrollRoot(main);
+    const rootBounds = scrollRoot === window
+      ? { top: 0, bottom: window.innerHeight }
+      : (scrollRoot as HTMLElement).getBoundingClientRect();
+    const inViewport = (element: HTMLElement) => {
+      const bounds = element.getBoundingClientRect();
+      return bounds.bottom > Math.max(0, rootBounds.top) &&
+        bounds.top < Math.min(window.innerHeight, rootBounds.bottom) &&
+        bounds.right > 0 && bounds.left < window.innerWidth;
+    };
+    if (initialLoad) {
+      main.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
+        if (!inViewport(image)) return;
+        image.loading = "eager";
+        image.dataset.initialImage = image.complete && image.naturalWidth > 0
+          ? "cached"
+          : "pending";
+      });
+    }
+
+    if (catalogFilters === "brand") {
+      const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const scrollEntranceDistance = 16;
+      const enter = (content: HTMLElement, distance: number) => {
+        content.dataset.collectionEntered = "true";
+        if (motion.matches || content.matches(":focus-within")) return;
+        content.animate(
+          [{ opacity: 0, transform: `translateY(${distance}px)` }, { opacity: 1, transform: "none" }],
+          { id: "collection-entrance", duration: 240, easing: "ease-out" },
+        );
+      };
+      const pending = new Map<HTMLElement, HTMLElement>();
+      let frame = 0;
+      const revealVisible = () => {
+        frame = 0;
+        const bottom = scrollRoot instanceof HTMLElement
+          ? Math.min(window.innerHeight, scrollRoot.getBoundingClientRect().bottom)
+          : window.innerHeight;
+        for (const [content, title] of pending) {
+          // Leave room for the starting offset so the entire title is readable on entry.
+          const bounds = title.getBoundingClientRect();
+          const trigger = title === content ? bounds.top : bounds.bottom;
+          if (trigger + scrollEntranceDistance > bottom) continue;
+          pending.delete(content);
+          resize.unobserve(content);
+          enter(content, scrollEntranceDistance);
+        }
+      };
+      const scheduleReveal = () => {
+        if (pending.size && !frame) frame = requestAnimationFrame(revealVisible);
+      };
+      const resize = new ResizeObserver(scheduleReveal);
+      for (const section of main.children) {
+        const content = section.querySelector<HTMLElement>(
+          ':scope > [data-slot="theme-hero-container"], ' +
+          ':scope > [data-slot="product-list"] > [data-slot="product-list-container"], ' +
+          ':scope > [data-slot="review-list"] > [data-slot="review-list-container"]',
+        ) ?? section.firstElementChild;
+        if (!(content instanceof HTMLElement) || content.dataset.collectionEntered === "true") continue;
+        if (initialLoad && inViewport(content)) {
+          enter(content, 8);
+          continue;
+        }
+        content.dataset.collectionEntered = "pending";
+        pending.set(content, content.querySelector<HTMLElement>("[data-section-heading-title]") ?? content);
+        resize.observe(content);
+      }
+      scrollRoot.addEventListener("scroll", scheduleReveal, { passive: true });
+      window.addEventListener("resize", scheduleReveal);
+      scheduleReveal();
+      const stopMotion = () => {
+        if (!motion.matches) return;
+        main.getAnimations({ subtree: true })
+          .filter(animation => animation.id === "collection-entrance")
+          .forEach(animation => animation.cancel());
+      };
+      motion.addEventListener("change", stopMotion);
+      return () => {
+        resize.disconnect();
+        scrollRoot.removeEventListener("scroll", scheduleReveal);
+        window.removeEventListener("resize", scheduleReveal);
+        cancelAnimationFrame(frame);
+        for (const content of pending.keys()) delete content.dataset.collectionEntered;
+        motion.removeEventListener("change", stopMotion);
+      };
+    }
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -500,19 +596,8 @@ export function TopicLandingPage({
 
     // Start every first-screen content fade together, independently of image
     // decoding and the observers used for later scroll reveals.
-    if (!initialViewportPrepared.current) {
-      initialViewportPrepared.current = true;
-      const scrollRoot = resolveTopicLandingScrollRoot(main);
-      const rootBounds = scrollRoot === window
-        ? { top: 0, bottom: window.innerHeight }
-        : (scrollRoot as HTMLElement).getBoundingClientRect();
-      const inInitialViewport = (element: HTMLElement) => {
-        const bounds = element.getBoundingClientRect();
-        return bounds.bottom > Math.max(0, rootBounds.top) &&
-          bounds.top < Math.min(window.innerHeight, rootBounds.bottom) &&
-          bounds.right > 0 && bounds.left < window.innerWidth;
-      };
-      revealTargets.filter(inInitialViewport).forEach((target) => {
+    if (initialLoad) {
+      revealTargets.filter(inViewport).forEach((target) => {
         const targets = waterfallRowByTrigger.get(target) ?? [target];
         targets.forEach((element) => {
           element.dataset.motionInitial = "true";
@@ -530,13 +615,6 @@ export function TopicLandingPage({
         '[data-slot="theme-hero-copy-content"] > :not([data-adaptive-image-scrim]), [data-slot="theme-hero-media"], [data-slot="topic-landing-tabs-container"]',
       ).forEach((element) => {
         element.dataset.initialFade = "true";
-      });
-      main.querySelectorAll<HTMLImageElement>("img").forEach((image) => {
-        if (!inInitialViewport(image)) return;
-        image.loading = "eager";
-        image.dataset.initialImage = image.complete && image.naturalWidth > 0
-          ? "cached"
-          : "pending";
       });
     }
 
@@ -618,9 +696,9 @@ export function TopicLandingPage({
         delete target.dataset.motionDirection;
       });
     };
-  }, [activeWaterfallTab, visibleWaterfallProducts]);
+  }, [activeWaterfallTab, catalogFilters, collectionLoading, visibleWaterfallProducts]);
 
-  const reviewsSection = reviewList && !hiddenModules.includes("reviews") ? (
+  const reviewsSection = !collectionLoading && reviewList && !hiddenModules.includes("reviews") ? (
     <div
       id="reviews"
       className={styles.reviewList}
@@ -637,12 +715,14 @@ export function TopicLandingPage({
 
   const collectionIntro = Boolean(catalogFilters && !hero.image);
   const heroGallery = useMemo(
-    () => collectionIntro ? createCollectionHeroGallery(allWaterfallProducts) : null,
-    [collectionIntro, allWaterfallProducts],
+    () => collectionIntro ? createCollectionHeroGallery(allWaterfallProducts, collectionLoading) : null,
+    [collectionIntro, allWaterfallProducts, collectionLoading],
   );
   const heroIntro = (
     <ThemeHero
       {...hero}
+      inert={collectionLoading || hero.inert}
+      aria-hidden={collectionLoading || hero["aria-hidden"]}
       imageLoading="eager"
       style={heroGallery ? { ...hero.style, backgroundColor: "transparent", minHeight: 0 } : hero.style}
       className={cx(styles.initialReveal, collectionIntro && !heroGallery && styles.collectionIntro, hero.className, !heroGallery && dividerClass(moduleDividers.hero))}
@@ -686,7 +766,8 @@ export function TopicLandingPage({
         ref={mainRef}
         className={styles.main}
         data-slot="topic-landing-main"
-        data-motion-ready="true"
+        aria-busy={collectionLoading || undefined}
+        data-motion-ready={catalogFilters === "brand" ? undefined : "true"}
         data-content-max-width={contentMaxWidthValue}
         data-title-font-family={titleFontFamily}
       >
@@ -701,9 +782,14 @@ export function TopicLandingPage({
         {couponSection && couponSection.cards.length > 0 && (
           <section className={dividerClass(moduleDividers.couponSection)} aria-labelledby={couponHeadingId}>
             <div className={styles.couponContainer}>
-              <SectionHeading id={couponHeadingId} title={couponSection.title} slot="coupon" />
-              <HorizontalScrollList className={styles.couponSurface} role="group" aria-labelledby={couponHeadingId}>
-                {couponSection.cards}
+              <SectionHeading id={couponHeadingId} title={collectionLoading ? <LoadingHeading>{couponSection.title}</LoadingHeading> : couponSection.title} slot="coupon" />
+              <HorizontalScrollList className={styles.couponSurface} inert={collectionLoading || undefined} role="group" aria-labelledby={couponHeadingId}>
+                {collectionLoading ? couponSection.cards.map(card => (
+                  <div data-slot="coupon" key={card.key} className={styles.loadingCoupon}>
+                    <div aria-hidden="true">{card}</div>
+                    <Skeleton />
+                  </div>
+                )) : couponSection.cards}
               </HorizontalScrollList>
             </div>
           </section>
@@ -811,7 +897,11 @@ export function TopicLandingPage({
               dividerPosition={componentDivider(moduleDividers.waterfall) ?? waterfallProps.dividerPosition}
               {...(catalogFilters && {
                 tabs: undefined,
-                introContent: showCatalogFilters ? (
+                introContent: collectionLoading ? (
+                  <div className={styles.loadingFilters} aria-hidden="true">
+                    {[0, 1, 2, 3].map(index => <Skeleton key={index} />)}
+                  </div>
+                ) : showCatalogFilters ? (
                   <CollectionProductFilters
                     locale={rest.lang?.startsWith("zh") ? "zh" : "en"}
                     brandOptions={brandOptions}
@@ -829,6 +919,11 @@ export function TopicLandingPage({
                   />
                 ) : undefined,
               })}
+              {...(collectionLoading && {
+                loading: true,
+                skeletonCount: visibleWaterfallProducts.length || waterfallInitialSize,
+                title: <LoadingHeading>{waterfallProps.title}</LoadingHeading>,
+              })}
               id={`explore-more-${activeWaterfallTab}`}
               products={visibleWaterfallProducts}
               value={activeWaterfallTab}
@@ -841,7 +936,7 @@ export function TopicLandingPage({
           </div>
         )}
         {reviewsAfterProducts && reviewsSection}
-        {faq && faq.items.length > 0 && (
+        {!collectionLoading && faq && faq.items.length > 0 && (
           <section
             id="faq"
             className={cx(styles.faq, dividerClass(moduleDividers.faq))}
@@ -868,7 +963,7 @@ export function TopicLandingPage({
             </div>
           </section>
         )}
-        {relatedCollections && relatedCollections.items.length > 0 && (
+        {!collectionLoading && relatedCollections && relatedCollections.items.length > 0 && (
           <ProductList
             layout="rail"
             mobileSurface="plain"
@@ -888,10 +983,10 @@ export function TopicLandingPage({
             }))}
           />
         )}
-        {relatedKeywords && relatedKeywords.items.length > 0 && (
+        {!collectionLoading && relatedKeywords && relatedKeywords.items.length > 0 && (
           <RelatedKeywords {...relatedKeywords} className={dividerClass(moduleDividers.relatedKeywords)} />
         )}
-        {appReviews && (
+        {!collectionLoading && appReviews && (
           <UserReviews
             {...appReviews}
             dividerPosition={componentDivider(moduleDividers.appReviews) ?? appReviews.dividerPosition}
@@ -901,7 +996,7 @@ export function TopicLandingPage({
         )}
       </main>
 
-      {showChrome && <Footer {...footer} className={cx(footer.className, dividerClass(moduleDividers.footer))} />}
+      {showChrome && !collectionLoading && <Footer {...footer} className={cx(footer.className, dividerClass(moduleDividers.footer))} />}
     </div>
   );
 }

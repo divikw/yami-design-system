@@ -8967,7 +8967,7 @@
             "type": "boolean",
             "required": false,
             "default": false,
-            "description": "Cycle through one centered benefit at a time on mobile."
+            "description": "Cycle through centered rows of benefits that fit the available mobile width."
           },
           "className": {
             "type": "string",
@@ -9010,9 +9010,13 @@
             "property": "color",
             "selector": ".root"
           },
+          "--space-050": {
+            "property": "column-gap",
+            "selector": ".benefit below 1024px"
+          },
           "--space-100": {
             "property": "column-gap",
-            "selector": ".benefit"
+            "selector": ".benefit from 1024px"
           },
           "--space-200": {
             "property": "column-gap",

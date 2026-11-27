@@ -423,7 +423,7 @@
       "status": "experimental",
       "version": "0.1.0",
       "path": "registry-items/service-commitment.json",
-      "digest": "2dd4648d93e64704fcd76b194cabf310016c9e1d85f8fc987ebd1809c4d97829"
+      "digest": "4a6e0f865c08fd34945f213a3845594ff3f75aa77c4dd65b4c6f4c4314738b6a"
     },
     {
       "name": "shortcut-rail",

@@ -70,6 +70,8 @@ export type CollectionModuleDividers = Partial<Record<
 >>;
 
 export interface TopicLandingPageProps extends HTMLAttributes<HTMLDivElement> {
+  /** Show the collection placeholders while its content is being prepared. */
+  collectionLoading?: boolean;
   /** Outer divider placement for each collection module. Omitted entries retain the component default. */
   moduleDividers?: CollectionModuleDividers;
   /** Maximum width shared by every content container inside main. Numbers are treated as pixels. */

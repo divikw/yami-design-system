@@ -98,9 +98,13 @@
         "property": "color",
         "selector": ".root"
       },
+      "--space-050": {
+        "property": "column-gap",
+        "selector": ".benefit below 1024px"
+      },
       "--space-100": {
         "property": "column-gap",
-        "selector": ".benefit"
+        "selector": ".benefit from 1024px"
       },
       "--space-200": {
         "property": "column-gap",
@@ -128,5 +132,5 @@
     },
     "interactionCoverage": "missing"
   },
-  "contentDigest": "2dd4648d93e64704fcd76b194cabf310016c9e1d85f8fc987ebd1809c4d97829"
+  "contentDigest": "4a6e0f865c08fd34945f213a3845594ff3f75aa77c4dd65b4c6f4c4314738b6a"
 }

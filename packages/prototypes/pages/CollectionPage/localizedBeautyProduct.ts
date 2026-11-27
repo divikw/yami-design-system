@@ -1,6 +1,9 @@
 import type { ProductListItem } from "@yami/design-system";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
-import type catalog from "./k-beauty.products.json";
+import selections from "./beauty-keywords.products.json";
+import catalog from "./k-beauty.products.json";
+
+export const beautyProductsById = new Map([...catalog, ...selections].map(item => [item.id, item]));
 
 export function localizedBeautyProduct(item: (typeof catalog)[number], locale: TopicLandingPageLocale): ProductListItem {
   const title = item[locale];

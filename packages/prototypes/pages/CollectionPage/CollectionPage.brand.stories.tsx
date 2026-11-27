@@ -2,25 +2,18 @@ import { userEvent, waitFor, within } from "storybook/test";
 
 import { createCollectionFaq } from "./collectionFaq.fixture";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
-import { createRelatedCollectionSections } from "./relatedCollections.fixture";
+import { collectionMobile, createCollectionMeta } from "./collectionTemplate";
 import { resolveTopicLandingScrollRoot } from "../TopicLandingPage/TopicLandingPage";
-import type { CollectionModuleDividers } from "../TopicLandingPage/TopicLandingPage.types";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
 import type { ProductListItem } from "@yami/design-system";
-import brandMeta, {
+import topicMeta, {
   Pc as BrandPc,
-  Mobile as BrandMobile,
   Chinese as BrandChinese,
   ChineseMobile as BrandChineseMobile,
   CustomContentWidth as BrandCustomContentWidth,
   SansTitles as BrandSansTitles,
 } from "../TopicLandingPage/TopicLandingPage.stories";
 
-const removedSections = {
-  explore: "shortcuts",
-  shop: "start-here",
-  "popular-picks": "popular-picks",
-} as const;
 const soldOutProductIds = new Set([
   "1022446461",
   "3022589911",
@@ -73,82 +66,22 @@ const faqByLocale = createCollectionFaq({ en: "ANUA skincare", zh: "ANUA 护肤�
   },
 ]);
 
-const meta = {
-  ...brandMeta,
+function createAnuaFixture(locale: TopicLandingPageLocale) {
+  const page = createCollectionPageFixture(locale);
+  return {
+    ...page,
+    waterfall: { ...page.waterfall, products: page.waterfall.products.map(withAnuaAvailability) },
+  };
+}
+
+export default {
+  ...createCollectionMeta(topicMeta, createAnuaFixture, faqByLocale, "An ANUA skincare collection with product picks, customer reviews and related collections."),
   id: "yami-pages-landing-page-collection-page-brand",
   title: "YAMI/Pages/Landing Pages/Collection Templates/Anua",
-  parameters: {
-    ...brandMeta.parameters,
-    createPageFixture: (locale: TopicLandingPageLocale) => {
-      const fixture = createCollectionPageFixture(locale, {
-        showCouponUseLinks: false,
-        newUserCouponCopy: locale === "en" ? {
-          title: "10% OFF Your First Order",
-          validity: "Valid for 7 days after claiming.",
-        } : undefined,
-      });
-      return {
-        ...fixture,
-        appReviews: { ...fixture.appReviews, version: "v2" as const },
-        moduleDividers: {
-          hero: "none",
-          couponSection: "bottom",
-          waterfall: "bottom",
-          reviewList: "bottom",
-          faq: "bottom",
-          relatedCollections: "bottom",
-          relatedKeywords: "bottom",
-          appReviews: "none",
-          serviceCommitment: "none",
-        } satisfies CollectionModuleDividers,
-        couponSection: {
-          ...fixture.couponSection,
-          title: locale === "zh" ? "新人优惠" : "Welcome Offers",
-        },
-      };
-    },
-    createRelatedCollectionSections,
-    faqByLocale,
-    docs: {
-      ...brandMeta.parameters.docs,
-      description: {
-        component:
-          "This keyword collection uses Anua as its example, with a text introduction, a filterable product list, customer reviews, frequently asked questions, related collections, related keywords, Yami app downloads and service commitments.",
-      },
-    },
-  },
-  args: {
-    ...brandMeta.args,
-    revealHeaderOnScrollUp: true,
-    hero: {
-      ...brandMeta.args.hero,
-      image: undefined,
-      tags: undefined,
-      tagTone: undefined,
-      style: {
-        backgroundColor: "var(--background-primary)",
-        minHeight: "clamp(10rem, 16dvw, var(--collection-hero-max-height, 15rem))",
-      },
-    },
-    waterfall: {
-      ...brandMeta.args.waterfall,
-      catalogFilters: "brand" as const,
-      initialRows: 3,
-      rowsPerPage: 6,
-      products: brandMeta.args.waterfall.products.map(withAnuaAvailability),
-    },
-    hiddenModules: Object.values(removedSections),
-    reviewsAfterProducts: true,
-    primaryTabs: {
-      ...brandMeta.args.primaryTabs,
-      items: [],
-    },
-  },
 };
 
-export default meta;
-
 const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ canvasElement, args, globals }) => {
+  await within(canvasElement).findByRole("main", { busy: false });
   const main = canvasElement.querySelector<HTMLElement>('[data-slot="topic-landing-main"]');
   const hero = main?.querySelector('[data-slot="theme-hero"]');
   if (!main || !hero?.querySelector("h2") ||
@@ -181,6 +114,10 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
   const couponPanel = coupons.querySelector<HTMLElement>('[data-horizontal-scroll-list="true"]');
   const desktop = canvasElement.ownerDocument.defaultView?.matchMedia("(min-width: 1024px)").matches;
+  const heroCopy = hero.querySelector('[data-slot="theme-hero-copy-content"]')!;
+  if (getComputedStyle(heroCopy).rowGap !== (desktop ? "8px" : "4px")) {
+    throw new Error("The gallery introduction must use the collection title-to-description spacing");
+  }
   const couponHeading = within(coupons).getByRole("heading", {
     level: 2,
     name: globals.locale === "zh" ? "新人优惠" : "Welcome Offers",
@@ -209,14 +146,14 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   if (headerHeight) {
     const scroller = resolveTopicLandingScrollRoot(header);
     const top = scroller instanceof HTMLElement ? scroller.getBoundingClientRect().top + scroller.clientTop : 0;
-    scroller.scrollTo({ top: headerHeight * 4, behavior: "instant" });
-    await waitFor(() => {
-      if (header.getBoundingClientRect().bottom > top + 1) throw new Error("Scrolling down must hide the PC header");
-    });
-    scroller.scrollTo({ top: headerHeight * 3, behavior: "instant" });
-    await waitFor(() => {
-      if (Math.abs(header.getBoundingClientRect().top - top) > 1) throw new Error("Scrolling back up must reveal the PC header");
-    });
+    for (const scrollTop of [headerHeight * 4, headerHeight * 3]) {
+      scroller.scrollTo({ top: scrollTop, behavior: "instant" });
+      await waitFor(() => {
+        if (Math.abs(header.getBoundingClientRect().top - top) > 1) {
+          throw new Error("The PC header must stay pinned while scrolling in either direction");
+        }
+      });
+    }
     scroller.scrollTo({ top: 0, behavior: "instant" });
   }
   const maxWidth = typeof args.contentMaxWidth === "number"
@@ -228,6 +165,12 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
 
   const zh = globals.locale === "zh";
+  const reviewedProducts = Array.from(main.querySelectorAll<HTMLAnchorElement>("#reviews a[href]"));
+  const expectedIds = ["1022446461", "1022281871", "1022446351"];
+  if (reviewedProducts.length !== expectedIds.length || reviewedProducts.some((link, index) =>
+    !link.href.startsWith(`https://www.yami.com/us/${zh ? "zh" : "en"}/p/`) || !link.href.endsWith(`/${expectedIds[index]}`))) {
+    throw new Error("Each ANUA review must link to the matching product in the current language");
+  }
   if (zh && !within(main).getByRole("heading", { name: "顾客评价", level: 2 }).closest("#reviews")) {
     throw new Error("The Chinese review heading must read 顾客评价");
   }
@@ -471,23 +414,8 @@ const play: typeof BrandPc.play = import.meta.env.MODE === "test" ? async ({ can
   }
 } : undefined;
 
-export const Pc = { ...BrandPc, name: "PC", tags: ["preserve-story-name"], play };
-export const Mobile = { ...BrandMobile, name: "Mobile", tags: ["preserve-story-name"], play };
-
-function appDownloadLayoutStory(name: string, imageLayout: "image-first" | "compact") {
-  return {
-    name,
-    parameters: {
-      createPageFixture: (locale: TopicLandingPageLocale) => {
-        const page = meta.parameters.createPageFixture(locale);
-        return { ...page, appReviews: { ...page.appReviews, imageLayout } };
-      },
-    },
-  };
-}
-
-export const AppDownloadImageFirst = appDownloadLayoutStory("App Download · Image first", "image-first");
-export const AppDownloadCompact = appDownloadLayoutStory("App Download · Compact", "compact");
+export const Pc = { name: "PC", tags: ["preserve-story-name"], play };
+export const Mobile = { ...collectionMobile, name: "Mobile", tags: ["preserve-story-name"], play };
 
 export const ProductGallery = { name: "Product Gallery", tags: ["!dev", "!autodocs"] };
 
@@ -500,7 +428,7 @@ export const Chinese = {
 
 export const ChineseMobile = {
   ...BrandChineseMobile,
-  parameters: BrandMobile.parameters,
+  parameters: collectionMobile.parameters,
   name: "中文 Mobile",
   tags: ["!dev", "!autodocs"],
   play,

@@ -4,7 +4,8 @@ import { createCollectionFaq } from "./collectionFaq.fixture";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
 import { createBeautyReviews } from "./beautyKeyword.fixture";
-import collectionMeta, { Mobile as AnuaMobile } from "./CollectionPage.brand.stories";
+import { collectionMobile, createCollectionMeta } from "./collectionTemplate";
+import topicMeta, { type Pc as TopicPc } from "../TopicLandingPage/TopicLandingPage.stories";
 import { localizedBeautyProduct } from "./localizedBeautyProduct";
 import catalog from "./k-beauty.products.json";
 
@@ -35,75 +36,57 @@ function createKBeautyFixture(locale: TopicLandingPageLocale = "en") {
   };
 }
 
-const fixture = createKBeautyFixture();
+const faqByLocale = createCollectionFaq({ en: "Korean beauty products", zh: "韩系美妆产品" }, [
+  {
+    id: "categories",
+    question: { en: "Where can I find cleansing balms and face washes?", zh: "在哪里找卸妆膏和洁面乳？" },
+    answer: {
+      en: "Use Brand to find cleansing balms and face washes from Beauty of Joseon, ANUA and COSRX.",
+      zh: "在「品牌」里选择 Beauty of Joseon、ANUA 或 COSRX，即可查看这些品牌的卸妆膏和洁面产品。",
+    },
+  },
+  {
+    id: "makeup",
+    question: { en: "Which makeup products are in this collection?", zh: "这个专辑里有哪些彩妆？" },
+    answer: {
+      en: "Filter by rom&nd for lip tint and balm, JUNG SAEM MOOL for foundation, or ABOUT TONE for concealer. Look for the shade number in each product name.",
+      zh: "选 rom&nd 可查看唇釉和润唇膏，选 JUNG SAEM MOOL 可查看粉底，选 ABOUT TONE 可查看遮瑕液。色号标在商品名称里。",
+    },
+  },
+  {
+    id: "brands",
+    question: { en: "Where can I browse one brand at a time?", zh: "想集中看一个品牌，有哪些专辑？" },
+    answer: {
+      en: "Under Related Collections, choose ANUA, SKIN1004 or rom&nd to open that brand’s collection.",
+      zh: "在下方的「相关专辑」里选择 ANUA、SKIN1004 或 rom&nd，即可查看该品牌的商品。",
+    },
+  },
+  {
+    id: "sun-care",
+    question: { en: "Which sunscreen formats are featured?", zh: "这里有哪些不同形态的防晒？" },
+    answer: {
+      en: "Compare SKIN1004’s sun serum and sun stick with Beauty of Joseon’s Relief Sun Aqua-fresh Sunscreen.",
+      zh: "可以比较 SKIN1004 的防晒精华和防晒棒，以及朝鲜美人的清爽水感防晒乳。",
+    },
+  },
+  {
+    id: "sheet-masks",
+    question: { en: "Which MEDIHEAL sheet masks are featured?", zh: "MEDIHEAL 面膜有哪些款？" },
+    answer: {
+      en: "Choose MEDIHEAL under Brand to find its madecassoside, vitamin C and collagen serum masks.",
+      zh: "在「品牌」里选择 MEDIHEAL，可查看积雪草苷、维生素 C 和胶原蛋白精华面膜。",
+    },
+  },
+]);
 
 export default {
-  ...collectionMeta,
+  ...createCollectionMeta(topicMeta, createKBeautyFixture, faqByLocale, "A Korean beauty collection spanning skincare, sun care and makeup."),
   id: "yami-pages-landing-page-collection-page-k-beauty",
   title: "YAMI/Pages/Landing Pages/Collection Templates/K-Beauty",
-  args: {
-    ...collectionMeta.args,
-    activityHeader: fixture.activityHeader,
-    hero: {
-      ...collectionMeta.args.hero,
-      title: fixture.hero.title,
-      description: introByLocale.en,
-    },
-    waterfall: { ...collectionMeta.args.waterfall, ...fixture.waterfall },
-  },
-  parameters: {
-    ...collectionMeta.parameters,
-    createPageFixture: createKBeautyFixture,
-    docs: {
-      ...collectionMeta.parameters.docs,
-      description: { component: "A Korean beauty collection spanning skincare, sun care and makeup." },
-    },
-    faqByLocale: createCollectionFaq({ en: "Korean beauty products", zh: "韩系美妆产品" }, [
-      {
-        id: "categories",
-        question: { en: "Where can I find cleansing balms and face washes?", zh: "在哪里找卸妆膏和洁面乳？" },
-        answer: {
-          en: "Use Brand to find cleansing balms and face washes from Beauty of Joseon, ANUA and COSRX.",
-          zh: "在「品牌」里选择 Beauty of Joseon、ANUA 或 COSRX，即可查看这些品牌的卸妆膏和洁面产品。",
-        },
-      },
-      {
-        id: "makeup",
-        question: { en: "Which makeup products are in this collection?", zh: "这个专辑里有哪些彩妆？" },
-        answer: {
-          en: "Filter by rom&nd for lip tint and balm, JUNG SAEM MOOL for foundation, or ABOUT TONE for concealer. Look for the shade number in each product name.",
-          zh: "选 rom&nd 可查看唇釉和润唇膏，选 JUNG SAEM MOOL 可查看粉底，选 ABOUT TONE 可查看遮瑕液。色号标在商品名称里。",
-        },
-      },
-      {
-        id: "brands",
-        question: { en: "Where can I browse one brand at a time?", zh: "想集中看一个品牌，有哪些专辑？" },
-        answer: {
-          en: "Under Related Collections, choose ANUA, SKIN1004 or rom&nd to open that brand’s collection.",
-          zh: "在下方的「相关专辑」里选择 ANUA、SKIN1004 或 rom&nd，即可查看该品牌的商品。",
-        },
-      },
-      {
-        id: "sun-care",
-        question: { en: "Which sunscreen formats are featured?", zh: "这里有哪些不同形态的防晒？" },
-        answer: {
-          en: "Compare SKIN1004’s sun serum and sun stick with Beauty of Joseon’s Relief Sun Aqua-fresh Sunscreen.",
-          zh: "可以比较 SKIN1004 的防晒精华和防晒棒，以及朝鲜美人的清爽水感防晒乳。",
-        },
-      },
-      {
-        id: "sheet-masks",
-        question: { en: "Which MEDIHEAL sheet masks are featured?", zh: "MEDIHEAL 面膜有哪些款？" },
-        answer: {
-          en: "Choose MEDIHEAL under Brand to find its madecassoside, vitamin C and collagen serum masks.",
-          zh: "在「品牌」里选择 MEDIHEAL，可查看积雪草苷、维生素 C 和胶原蛋白精华面膜。",
-        },
-      },
-    ]),
-  },
 };
 
-const play: typeof AnuaMobile.play = import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
+const play: typeof TopicPc.play = import.meta.env.MODE === "test" ? async ({ canvasElement, globals }) => {
+  await within(canvasElement).findByRole("main", { busy: false });
   const zh = globals.locale === "zh";
   const products = canvasElement.querySelector("#explore-more-all")!;
   const toolbar = within(products).getByRole("group", { name: zh ? "筛选" : "Filters", exact: true });
@@ -135,10 +118,4 @@ const play: typeof AnuaMobile.play = import.meta.env.MODE === "test" ? async ({ 
 } : undefined;
 
 export const Pc = { name: "PC", tags: ["preserve-story-name"], play };
-export const Mobile = {
-  name: "Mobile",
-  tags: ["preserve-story-name"],
-  parameters: AnuaMobile.parameters,
-  globals: AnuaMobile.globals,
-  play,
-};
+export const Mobile = { ...collectionMobile, name: "Mobile", tags: ["preserve-story-name"], play };

@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import type { ProductListItem } from "@yami/design-system";
 import { createThemeHeroProps } from "@yami/design-system/components/ThemeHero/fixtures";
 
 import { TopicLandingPage } from "./TopicLandingPage";
-import type { TopicLandingPageFaq } from "./TopicLandingPage.types";
-import type { createRelatedCollectionSections } from "../CollectionPage/relatedCollections.fixture";
+import type { TopicLandingPageFaq, TopicLandingPageProps } from "./TopicLandingPage.types";
 import { createTopicLandingPageFixture } from "./fixtures";
+
+import CollectionPageContent from "../CollectionPage/CollectionPageContent";
 
 const meta = {
   id: "yami-pages-topic-landing-page-brand",
@@ -44,80 +44,60 @@ const meta = {
   },
   args: createTopicLandingPageFixture(),
   render: function Render(args, { componentId, globals, parameters }) {
-    const [notifications, setNotifications] = useState<ReadonlySet<string>>(() => new Set());
     const locale = globals.locale === "zh" ? "zh" : "en";
-    const createFixture: typeof createTopicLandingPageFixture = parameters.createPageFixture ?? createTopicLandingPageFixture;
-    const localizedArgs = createFixture(locale);
+    const createFixture: (locale: "en" | "zh") => TopicLandingPageProps = parameters.createPageFixture ?? createTopicLandingPageFixture;
+    const localized = useMemo(() => createFixture(locale), [createFixture, locale]);
     const faqByLocale = parameters.faqByLocale as Record<"en" | "zh", TopicLandingPageFaq> | undefined;
-    const faq = faqByLocale?.[locale] ?? args.faq;
-    const createRelatedSections: typeof createRelatedCollectionSections | undefined = parameters.createRelatedCollectionSections;
-    const sections = createRelatedSections?.(componentId, locale, parameters.viewport?.defaultViewport === "yamiMobile" ? "mobile" : "pc");
-    const relatedKeywords = sections?.relatedKeywords ?? args.relatedKeywords;
     const catalogFilters = args.waterfall.catalogFilters;
-    const productTitle = locale === "zh" ? "编辑精选" : "Editor’s Picks";
-    const reviewTitle = catalogFilters && locale === "zh" ? "顾客评价" : undefined;
-    const soldOutIds = new Set(args.waterfall.products
-      .filter((product) => product.availability === "sold-out")
-      .map((product) => product.id));
-    const applyAvailability = (product: ProductListItem): ProductListItem =>
-      soldOutIds.has(product.id)
-        ? {
-          ...product,
-          availability: "sold-out",
-          availabilityLabel: locale === "zh" ? "已售完" : "Sold out",
-          onNotify: () => setNotifications((current) => new Set(current).add(product.id)),
-          notifyLabel: notifications.has(product.id)
-            ? (locale === "zh" ? "已设置到货通知" : "Notification set")
-            : (locale === "zh" ? "到货通知" : "Notify me"),
-          notifyDisabled: notifications.has(product.id),
-        }
-        : product;
+    const page: TopicLandingPageProps = {
+      ...localized,
+      moduleDividers: { ...localized.moduleDividers, ...args.moduleDividers },
+      revealHeaderOnScrollUp: args.revealHeaderOnScrollUp,
+      hero: {
+        ...localized.hero,
+        style: args.hero.style,
+        image: args.hero.image ? localized.hero.image : undefined,
+        tags: args.hero.tags?.length ? localized.hero.tags : undefined,
+        tagTone: args.hero.tagTone,
+      },
+      primaryTabs: {
+        ...localized.primaryTabs,
+        defaultValue: args.primaryTabs.defaultValue,
+        items: args.primaryTabs.items.flatMap(({ value }) => {
+          const tab = localized.primaryTabs.items.find(item => item.value === value);
+          return tab ? [tab] : [];
+        }),
+      },
+      waterfall: catalogFilters ? {
+        ...localized.waterfall,
+        catalogFilters,
+        initialRows: args.waterfall.initialRows,
+        rowsPerPage: args.waterfall.rowsPerPage,
+        loadMoreLabel: locale === "zh" ? "查看更多" : "View more",
+        title: locale === "zh" ? "编辑精选" : "Editor’s Picks",
+        description: undefined,
+      } : localized.waterfall,
+      reviewList: catalogFilters && locale === "zh" && localized.reviewList
+        ? { ...localized.reviewList, title: "顾客评价" } : localized.reviewList,
+      hiddenModules: args.hiddenModules,
+      reviewsAfterProducts: args.reviewsAfterProducts,
+      faq: faqByLocale?.[locale] ?? args.faq,
+      relatedCollections: args.relatedCollections,
+      relatedKeywords: args.relatedKeywords && {
+        ...args.relatedKeywords,
+        mode: args.relatedKeywords.mode ?? (globals.theme === "dark" ? "dark" : "light"),
+      },
+      contentMaxWidth: args.contentMaxWidth,
+      titleFontFamily: args.titleFontFamily,
+    };
+    if (!parameters.createPageFixture) return <TopicLandingPage {...page} />;
     return (
-      <TopicLandingPage
-        {...localizedArgs}
-        moduleDividers={{ ...localizedArgs.moduleDividers, ...args.moduleDividers }}
-        revealHeaderOnScrollUp={args.revealHeaderOnScrollUp}
-        hero={{
-          ...localizedArgs.hero,
-          style: args.hero.style,
-          image: args.hero.image ? localizedArgs.hero.image : undefined,
-          tags: args.hero.tags?.length ? localizedArgs.hero.tags : undefined,
-          tagTone: args.hero.tagTone,
-        }}
-        primaryTabs={{
-          ...localizedArgs.primaryTabs,
-          defaultValue: args.primaryTabs.defaultValue,
-          items: args.primaryTabs.items.flatMap(({ value }) => {
-            const tab = localizedArgs.primaryTabs.items.find((item) => item.value === value);
-            return tab ? [tab] : [];
-          }),
-        }}
-        waterfall={catalogFilters ? {
-          ...localizedArgs.waterfall,
-          catalogFilters,
-          initialRows: args.waterfall.initialRows,
-          rowsPerPage: args.waterfall.rowsPerPage,
-          loadMoreLabel: locale === "zh" ? "查看更多" : "View more",
-          title: productTitle,
-          description: undefined,
-          products: localizedArgs.waterfall.products.map(applyAvailability),
-          productsByTab: Object.fromEntries(
-            Object.entries(localizedArgs.waterfall.productsByTab ?? {}).map(([category, products]) =>
-              [category, products.map(applyAvailability)],
-            ),
-          ),
-        } : localizedArgs.waterfall}
-        reviewList={reviewTitle && localizedArgs.reviewList ? { ...localizedArgs.reviewList, title: reviewTitle } : localizedArgs.reviewList}
-        hiddenModules={args.hiddenModules}
-        reviewsAfterProducts={args.reviewsAfterProducts}
-        faq={faq}
-        relatedCollections={sections?.relatedCollections ?? args.relatedCollections}
-        relatedKeywords={relatedKeywords && {
-          ...relatedKeywords,
-          mode: relatedKeywords.mode ?? (globals.theme === "dark" ? "dark" : "light"),
-        }}
-        contentMaxWidth={args.contentMaxWidth}
-        titleFontFamily={args.titleFontFamily}
+      <CollectionPageContent
+        page={page}
+        componentId={componentId}
+        locale={locale}
+        device={parameters.viewport?.defaultViewport === "yamiMobile" ? "mobile" : "pc"}
+        mode={globals.theme === "dark" ? "dark" : "light"}
       />
     );
   },
