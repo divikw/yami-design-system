@@ -13,6 +13,7 @@ import {
   type ButtonHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
+  type RefObject,
 } from "react"
 
 import styles from "./Tabs.module.css"
@@ -64,6 +65,7 @@ export interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
 interface TabsContextValue {
   value: TabsValue | undefined
   setValue: (value: TabsValue) => void
+  focusActivatedValue: RefObject<TabsValue | null>
   orientation: TabsOrientation
   activationMode: TabsActivationMode
   baseId: string
@@ -143,12 +145,14 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
 ) {
   const generatedId = useId()
   const [internalValue, setInternalValue] = useState<TabsValue | undefined>(defaultValue)
+  const focusActivatedValue = useRef<TabsValue | null>(null)
   const selectedValue = value ?? internalValue
   const baseId = id ?? generatedId
 
   const context = useMemo<TabsContextValue>(
     () => ({
       value: selectedValue,
+      focusActivatedValue,
       orientation,
       activationMode,
       baseId,
@@ -174,7 +178,10 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs(
         data-orientation={orientation}
         orientation={orientation}
         value={selectedValue ?? null}
-        onValueChange={(next) => context.setValue(next)}
+        onValueChange={(next, details) => {
+          if (details.event.type === "focusin") focusActivatedValue.current = next
+          context.setValue(next)
+        }}
       >
         {children}
       </BaseTabs.Root>
@@ -313,7 +320,6 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
   ref,
 ) {
   const context = useTabsContext("TabsTrigger")
-  const selectedOnPress = useRef<boolean | undefined>(undefined)
   const selected = context.value === value
   const tabId = getTabId(context.baseId, value)
   const panelId = getPanelId(context.baseId, value)
@@ -355,20 +361,25 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(funct
         <button {...props} aria-controls={controls ?? (props["aria-controls"] ? panelId : undefined)} />
       )}
       onPointerDown={(event) => {
-        selectedOnPress.current = selected
+        context.focusActivatedValue.current = null
         onPointerDown?.(event)
       }}
       onClick={(event) => {
+        const activatedOnFocus = event.detail !== 0 && context.focusActivatedValue.current === value
+        context.focusActivatedValue.current = null
         onClick?.(event)
 
         if (event.defaultPrevented) {
           event.preventBaseUIHandler()
           return
         }
-        // Base UI skips reselecting an active tab; YAMI consumers can use it to reveal a section again.
-        // Focus can activate a new tab between pointerdown and click.
-        if (selected && (event.detail === 0 || selectedOnPress.current !== false)) context.setValue(value)
-        selectedOnPress.current = undefined
+        if (activatedOnFocus) {
+          // The owner may still be processing the focus activation when the click arrives.
+          event.preventBaseUIHandler()
+        } else if (selected) {
+          // A scroll listener can select the tab during the press. The click still navigates.
+          context.setValue(value)
+        }
         const tab = event.currentTarget
         tab.ownerDocument.defaultView?.requestAnimationFrame(() => revealTab(tab, context.orientation))
       }}
