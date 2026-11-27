@@ -5,7 +5,8 @@
   gap: var(--space-100);
 }
 
-.button {
+/* Override the composed Button size and fill in either stylesheet order. */
+button.button {
   position: relative;
   isolation: isolate;
   width: calc(var(--space-400) + var(--space-050));
@@ -31,7 +32,7 @@
   z-index: 1;
 }
 
-.button:not([aria-disabled="true"]):active {
+button.button:not([aria-disabled="true"]):active {
   background-color: var(--color-white-900);
 }
 
@@ -40,7 +41,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .button:not([aria-disabled="true"]):hover {
+  button.button:not([aria-disabled="true"]):hover {
     background-color: var(--color-white-900);
   }
 
@@ -49,7 +50,7 @@
   }
 }
 
-.button[aria-disabled="true"] {
+button.button[aria-disabled="true"] {
   background-color: var(--color-white-900);
 }
 
