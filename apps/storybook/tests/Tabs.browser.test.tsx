@@ -301,6 +301,21 @@ test("controlled state follows its owner and supports external panels", async ()
   expect(getComputedStyle(tabs[0]!).outlineWidth).toBe("2px");
 });
 
+test("a click still activates a tab selected by its owner during the press", async () => {
+  const change = vi.fn();
+  const render = (value: string) => flushSync(() => root.render(
+    <Tabs value={value} onValueChange={change}>
+      <TabsList aria-label="Sections">
+        <TabsTrigger value="one">One</TabsTrigger>
+        <TabsTrigger value="two" onPointerDown={() => render("two")}>Two</TabsTrigger>
+      </TabsList>
+    </Tabs>,
+  ));
+  render("one");
+  await page.getByRole("tab", { name: "Two" }).click();
+  expect(change.mock.calls).toEqual([["two"]]);
+});
+
 test.each([
   { variant: "primary", verticalHeight: 44, horizontalHeight: 56, horizontalGap: 24 },
   { variant: "secondary", verticalHeight: 40, horizontalHeight: 40, horizontalGap: 16 },
@@ -436,6 +451,24 @@ test("skeleton lists expose no interactive tabs", () => {
   expect(skeleton).toHaveAttribute("aria-hidden", "true");
   expect(skeleton.children).toHaveLength(3);
   expect(container.querySelector('[role="tab"]')).toBeNull();
+});
+
+test("a pointer press requests a controlled focus activation once while the owner defers selection", async () => {
+  const change = vi.fn();
+  flushSync(() => root.render(
+    <Tabs value="one" onValueChange={change}>
+      <TabsList aria-label="Sections" activateOnFocus>
+        <TabsTrigger value="one">One</TabsTrigger>
+        <TabsTrigger value="two">Two</TabsTrigger>
+      </TabsList>
+    </Tabs>,
+  ));
+  const two = page.getByRole("tab", { name: "Two" });
+  await two.click();
+  expect(change.mock.calls).toEqual([["two"]]);
+  await expect.element(two).toHaveAttribute("aria-selected", "false");
+  await two.click();
+  expect(change.mock.calls).toEqual([["two"], ["two"]]);
 });
 
 test("supports Base UI focus activation, non-looping lists and opt-in panel unmounting", async () => {

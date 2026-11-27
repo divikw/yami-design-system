@@ -44,6 +44,7 @@ test.each(fixtures.flatMap(([name, createFixture]) => [
     await page.elementLocator(header).hover({ position: { x: header.getBoundingClientRect().width - 1, y: 1 } });
     await expect.poll(() => header.querySelector('[data-slot="header-category-menu"]')).toBeNull();
     await page.getByRole("tab", { name: fixture.primaryTabs.items[1]!.label, exact: true }).click();
+    expect(window.location.hash).toBe(`#${target.id}`);
     await expect.poll(() => Math.abs(target.getBoundingClientRect().top - tabs.getBoundingClientRect().bottom)).toBeLessThan(2);
     const scrollTop = nested ? container.getBoundingClientRect().top + container.clientTop : 0;
     expect(header.getBoundingClientRect().top).toBeCloseTo(scrollTop, 1);
