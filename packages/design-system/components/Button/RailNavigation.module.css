@@ -5,14 +5,17 @@
   gap: var(--space-100);
 }
 
-/* Override the composed Button size and fill in either stylesheet order. */
-button.button {
+.button {
   position: relative;
   isolation: isolate;
   width: calc(var(--space-400) + var(--space-050));
+  box-shadow: inset 0 0 0 var(--stroke-default) var(--border-default);
+}
+
+/* Override the composed Button height and fill in either stylesheet order. */
+button.button {
   height: calc(var(--space-400) + var(--space-050));
   background-color: var(--color-white-900);
-  box-shadow: inset 0 0 0 var(--stroke-default) var(--border-default);
 }
 
 .button::after {

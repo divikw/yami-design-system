@@ -117,7 +117,7 @@
       "status": "stable",
       "version": "0.3.0",
       "path": "registry-items/button.json",
-      "digest": "3d6f8c16462b8114da72653d4d80398442125b134e310e2e310cf811e0673d5d"
+      "digest": "2ac2dd301de7940e8bdce6151c8fce6f48679b90d11c6344bbba1f48c8d72fb5"
     },
     {
       "name": "button-group",
