@@ -6,12 +6,14 @@ import {
   Button, ButtonLink, Input, RadioGroup, Select, SelectContent, SelectItem, SelectLabel, SelectList,
   SelectTrigger, SelectValue, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
 } from "@yami/design-system";
+import { storybookViewportForWidth } from "@yami/prototypes/viewports";
 import { isPhonePreviewPage, PhonePreviewShell } from "@yami/prototypes/phone-preview";
 import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Component, ExternalLink, Link, Monitor, Moon, PanelLeft, RotateCcw, Smartphone, Sun, Tablet, type LucideIcon } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent, type ReactElement, type RefObject } from "react";
-import { prototypeHref, prototypeProjects, prototypePageLabel, resolvePrototypeVariant } from "../lib/prototype-projects";
+import { isDesignStoryId, prototypeHref, prototypeProjects, prototypePageLabel, resolvePrototypeVariant } from "../lib/prototype-projects";
 import { prototypeSessionKey } from "../lib/prototype-session";
+import { DesignIssues, DesignUnavailable } from "./design-availability";
 import styles from "./workbench-controls.module.css";
 
 type Locale = "zh" | "en";
@@ -22,7 +24,6 @@ const STORYBOOK_URL = process.env.NEXT_PUBLIC_STORYBOOK_URL
   ?? (process.env.NODE_ENV === "production"
     ? "https://yds-storybook.vercel.app"
     : "http://localhost:6006");
-const STORYBOOK_PAGE_PREFIX = "YAMI/Pages/";
 const WORKBENCH_THEME_KEY = "yami-workbench-theme";
 const WorkbenchOverlayContext = createContext<RefObject<HTMLDivElement | null> | undefined>(undefined);
 
@@ -47,31 +48,6 @@ function loadPreviewHistory(scope: string, page: string): PreviewHistory {
     }
   } catch { /* Start a fresh page history if storage is unavailable or invalid. */ }
   return { scope, entries: [page], index: 0 };
-}
-
-function readStorybookPages(payload: unknown): StorybookPage[] {
-  if (!payload || typeof payload !== "object") return [];
-  const entries = (payload as { entries?: unknown }).entries;
-  if (!entries || typeof entries !== "object") return [];
-
-  const grouped = new Map<string, { id: string; name: string; title: string }[]>();
-  for (const entry of Object.values(entries)) {
-    if (!entry || typeof entry !== "object") continue;
-    const { id, name, title, type } = entry as Record<string, unknown>;
-    if (type !== "story" || typeof id !== "string" || typeof name !== "string" || typeof title !== "string" || !title.toLowerCase().startsWith(STORYBOOK_PAGE_PREFIX.toLowerCase())) continue;
-    grouped.set(title, [...(grouped.get(title) ?? []), { id, name, title }]);
-  }
-
-  return [...grouped.values()]
-    .map((stories) => {
-      const story = stories.find((item) => /(^|—|\s)PC$/i.test(item.name)) ?? stories[0];
-      return {
-        id: story.id,
-        label: story.title.slice(STORYBOOK_PAGE_PREFIX.length).replaceAll("/", " / "),
-        title: story.title,
-      };
-    })
-    .sort((a, b) => a.label.localeCompare(b.label));
 }
 
 const canvasPages = [
@@ -157,8 +133,24 @@ function isNarrowWorkbench() {
 export function CanvasWorkbench() {
   const params = useSearchParams();
   const router = useRouter();
-  const projectMode = params.has("project") || !params.has("direction");
-  const project = prototypeProjects.find((item) => item.id === (params.get("project") ?? prototypeProjects[0].id));
+  const incomingStory = params.get("story");
+  if (incomingStory) {
+    for (const project of prototypeProjects) {
+      const variant = project.variants.find((item) => item.storyId === incomingStory);
+      if (!variant) continue;
+      const query = new URLSearchParams(params);
+      query.delete("story");
+      query.delete("direction");
+      query.set("project", project.id);
+      query.set("variant", variant.id);
+      if (variant.fixedLocale) query.set("locale", variant.fixedLocale);
+      if (variant.fixedPreviewMode) query.set("previewMode", variant.fixedPreviewMode);
+      redirect(`/design?${query}`);
+    }
+  }
+  const unavailableDesign = !!incomingStory && isDesignStoryId(incomingStory);
+  const projectMode = !incomingStory && (params.has("project") || !params.has("direction"));
+  const project = prototypeProjects.find((item) => item.id === (params.get("project") ?? prototypeProjects[0]?.id));
   const variant = resolvePrototypeVariant(project, params.get("variant"));
   const activePages = projectMode && project ? project.pages : canvasPages;
   const [resetVersion, setResetVersion] = useState(0);
@@ -181,9 +173,8 @@ export function CanvasWorkbench() {
   const [resizing, setResizing] = useState(false);
   const previewHistory = useRef<PreviewHistory | null>(null);
   const pendingPreviewNavigation = useRef(false);
-  const [storybookPages, setStorybookPages] = useState<StorybookPage[]>([]);
+  const [checkedStory, setCheckedStory] = useState<{ id: string; status: "available" | "missing" | "unverified" } | null>(null);
   const [importedPages, setImportedPages] = useState<StorybookPage[]>([]);
-  const storybookIndexRequested = useRef(false);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
   const requestedPath = params.get("path") || activePages[0]?.value || "/";
@@ -207,8 +198,12 @@ export function CanvasWorkbench() {
   const requestedViewport = params.get("viewport");
   const viewport = requestedViewport && /^\d+$/.test(requestedViewport)
     ? String(clampPreviewWidth(Number(requestedViewport)))
-    : viewportOptions[narrowWorkbench || variant?.homeHeader ? 0 : 2].value;
+    : viewportOptions[narrowWorkbench || variant?.fixedPreviewMode === "h5" ? 0 : 2].value;
   const previewWidth = clampPreviewWidth(dragWidth ?? Number(viewport));
+  const storybookId = storyId || projectPreview?.storyId;
+  const storybookHref = storybookId
+    ? `${STORYBOOK_URL}/?${new URLSearchParams({ path: `/story/${storybookId}`, globals: `locale:${locale};theme:${theme};viewport.value:${storybookViewportForWidth(previewWidth)}` })}`
+    : STORYBOOK_URL;
   const deviceWidth = widthDraft?.trim() && Number.isFinite(Number(widthDraft))
     ? clampPreviewWidth(Number(widthDraft)) : previewWidth;
   const selectedDevice = deviceWidth < 768 ? "402" : deviceWidth < 1024 ? "768" : "1440";
@@ -218,14 +213,9 @@ export function CanvasWorkbench() {
     ? "path"
     : previousPreviewState.current.direction !== direction ? "direction" : "none";
 
-  const selectedStorybookPage = storybookPages.find((page) => page.id.split("--")[0] === storyId.split("--")[0]);
-  const currentImportedPage = storyId && !importedPages.some((page) => page.id === storyId)
-    ? selectedStorybookPage ? { ...selectedStorybookPage, id: storyId } : { id: storyId, label: "Storybook 页面", title: storyId }
-    : null;
-  const visibleImportedPages = currentImportedPage ? [...importedPages, currentImportedPage] : importedPages;
   const pageOptions = [
     ...activePages,
-    ...visibleImportedPages.filter((page) => !projectMode || page.id === storyId)
+    ...importedPages.filter((page) => !projectMode || page.id === storyId)
       .map((page) => ({ value: `storybook:${page.id}`, label: page.label })),
   ];
   const linkedPageLabel = projectMode && project && !storyId && !activePages.some((page) => page.value === path)
@@ -368,24 +358,32 @@ export function CanvasWorkbench() {
     else setDragWidth(null);
   }
 
-  const loadStorybookPages = useCallback(async () => {
-    if (storybookIndexRequested.current) return;
-    storybookIndexRequested.current = true;
-    try {
-      const response = await fetch(`${STORYBOOK_URL}/index.json`);
-      if (!response.ok) return;
-      const pages = readStorybookPages(await response.json());
-      setStorybookPages(pages);
-      if (storyId) {
-        const selectedStory = pages.find((page) => page.id === storyId);
-        if (selectedStory) setImportedPages((current) => current.some((page) => page.id === storyId) ? current : [...current, selectedStory]);
-      }
-    } catch { /* The direct preview can still use its fallback label. */ }
-  }, [storyId]);
-
   useEffect(() => {
-    if (storyId) void loadStorybookPages();
-  }, [storyId, loadStorybookPages]);
+    if (!storyId || unavailableDesign) return;
+    const controller = new AbortController();
+    async function checkStory() {
+      try {
+        const response = await fetch(`${STORYBOOK_URL}/index.json`, { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error(`Storybook index HTTP ${response.status}`);
+        const { entries } = await response.json();
+        const entry = entries[storyId];
+        if (controller.signal.aborted) return;
+        // Visible native designs were resolved above. Never embed a hidden or conflicting design.
+        if (entry?.type !== "story" || /^YAMI\/design\//i.test(entry.title)) {
+          setCheckedStory({ id: storyId, status: "missing" });
+          return;
+        }
+        const label = entry.title.replace(/^YAMI\/pages\//i, "").replaceAll("/", " / ");
+        const page = { id: storyId, label, title: entry.title };
+        setImportedPages((current) => [...current.filter((item) => item.id !== storyId), page]);
+        setCheckedStory({ id: storyId, status: "available" });
+      } catch {
+        if (!controller.signal.aborted) setCheckedStory({ id: storyId, status: "unverified" });
+      }
+    }
+    void checkStory();
+    return () => controller.abort();
+  }, [storyId, unavailableDesign]);
 
   function selectPage(value: string) {
     if (value.startsWith("storybook:")) {
@@ -428,7 +426,12 @@ export function CanvasWorkbench() {
     } catch { /* The theme remains active for the current page. */ }
   }
 
-  if (projectMode && (!project || !variant)) return <main className="prototype-unavailable"><h1>找不到这个原型方案</h1><ButtonLink href="/design" variant="secondary" size="sm">返回工作台</ButtonLink></main>;
+  if (unavailableDesign) return <DesignUnavailable />;
+  if (storyId && checkedStory?.id !== storyId) return <main className="app-loading">正在核对 Storybook 链接…</main>;
+  if (storyId && checkedStory?.status === "missing") return <DesignUnavailable />;
+  if (projectMode && (!project || !variant)) {
+    return <DesignUnavailable empty={!prototypeProjects.length && !params.has("project") && !params.has("variant")} />;
+  }
 
   const showProjectActions = projectMode && !storyId;
   const sidebarToggleLabel = sidebarCollapsed ? "展开侧边栏" : "收起侧边栏";
@@ -458,6 +461,7 @@ export function CanvasWorkbench() {
       <section className="canvas-grid" data-sidebar-collapsed={sidebarCollapsed || undefined}>
         <aside className={`control-panel${chromeThemeClass}`} id="workbench-sidebar" hidden={sidebarCollapsed}>
           <div className="control-panel-settings">
+            <DesignIssues />
             {!projectMode && <div className="panel-heading"><span>页面管理</span></div>}
             {projectMode && project && variant ? <>
               <WorkbenchSettingSelect label="项目方案" options={prototypeProjects.map((item) => ({ value: item.id, label: item.name }))} value={project.id}
@@ -467,7 +471,7 @@ export function CanvasWorkbench() {
                 }, "push")} />
               <WorkbenchSettingSelect label="设计方案" options={project.variants.map((item) => ({ value: item.id, label: item.name }))} value={variant.id}
                 onValueChange={(value) => update({ variant: value, story: null })} />
-            </> : <ButtonLink variant="secondary" size="sm" href="/design?project=global-navigation">打开项目原型</ButtonLink>}
+            </> : <ButtonLink variant="secondary" size="sm" href="/design">打开项目原型</ButtonLink>}
 
             <WorkbenchSettingSelect
               label="页面"
@@ -519,10 +523,11 @@ export function CanvasWorkbench() {
                 }))}
                 value={previewMode} onValueChange={(value) => update({ previewMode: value })} />
             </div>}
-            {storyId && <p className="prototype-description">Storybook 单页预览，未加入项目流程。</p>}
+            {storyId && <p className="prototype-description">{checkedStory?.status === "unverified"
+              ? "暂时无法核对 Storybook 链接，正在尝试直接预览。" : "Storybook 单页预览，未加入项目流程。"}</p>}
             {storyId && <div className="path-readout"><span>Storybook Story</span><code>{storyId}</code></div>}
           </div>
-          <a className="control-panel-storybook" href={STORYBOOK_URL} target="_blank" rel="noreferrer">
+          <a className="control-panel-storybook" href={storybookHref} target="_blank" rel="noreferrer">
             <ToolIcon icon={Component} />
             <span>Storybook</span>
           </a>
@@ -562,7 +567,7 @@ export function CanvasWorkbench() {
             <div className="preview-frame-wrap" style={{ width: `${previewWidth}px`, boxSizing: "content-box" }}>
               <iframe key={previewSrc} id="canvas-preview" ref={attachPreviewFrame} title="YAMI 原型预览" src={previewSrc} />
               <PhonePreviewShell frame={phoneFrame} theme={theme} mode={previewMode}
-                enabled={!storyId || isPhonePreviewPage(visibleImportedPages.find((page) => page.id === storyId)?.title ?? "")}
+                enabled={!storyId || isPhonePreviewPage(importedPages.find((page) => page.id === storyId)?.title ?? "")}
                 safari={{ address: phoneFrame ? new URL(phoneFrame.src).host : "", openHref: projectMode && !storyId ? shareHref : previewSrc,
                   canGoBack, onBack: () => navigatePreview(-1),
                   onReload: () => { if (previewFrame.current) previewFrame.current.src = previewSrc; } }} />

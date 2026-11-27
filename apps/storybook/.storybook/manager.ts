@@ -26,11 +26,16 @@ addons.register("yami/control-descriptions", (api) => {
 
 // Story defaults apply on entry; subsequent toolbar changes remain editable.
 addons.register("yami/viewport-default", (api) => {
+  const entry = new URLSearchParams(window.location.search);
+  const entryPath = entry.get("path");
+  let keepEntryViewport = entry.get("globals")?.split(";").some((part) => /^viewport(?:\.value)?:/.test(part));
   let appliedStoryId: string | undefined;
   const applyDefault = (id: string) => {
     const viewport = api.getParameters(id, "viewport");
     if (id === appliedStoryId || !viewport?.defaultViewport) return;
     appliedStoryId = id;
+    if (keepEntryViewport && entryPath === `/story/${id}`) return;
+    keepEntryViewport = false;
     api.updateGlobals({ viewport: { value: viewport.defaultViewport, isRotated: false } });
   };
   api.on(STORY_CHANGED, (id: string) => {
@@ -49,6 +54,8 @@ addons.setConfig({
       legacyActivityHeader: (entry) => entry.id !== "yami-components-navigation-activity-page-header--docs",
     },
     renderLabel: (entry) => {
+      if (("title" in entry && entry.title.startsWith("YAMI/design/")) ||
+        ("parent" in entry && /^yami-design(?:-|$)/.test(entry.parent ?? ""))) return entry.name;
       if (entry.type === "story" && entry.tags?.includes("preserve-story-name")) return entry.name;
       if (entry.type === "docs" && entry.name === "Properties") return entry.name;
       if ("tags" in entry && entry.tags?.includes("component-device")) {

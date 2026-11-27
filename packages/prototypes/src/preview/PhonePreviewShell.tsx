@@ -128,6 +128,6 @@ export function PhonePreviewShell({ frame, enabled = true, theme = "light", mode
 
 /** Page folders can also contain isolated component stories and email previews. */
 export function isPhonePreviewPage(title: string) {
-  return /^YAMI\/pages\//i.test(title)
+  return /^YAMI\/(pages|design)\//i.test(title)
     && !/\/(components|email templates)(\/|$)/i.test(title);
 }

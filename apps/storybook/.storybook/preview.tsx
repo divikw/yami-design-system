@@ -1,6 +1,7 @@
+import { YAMI_VIEWPORTS } from "@yami/prototypes/viewports";
 import { isPhonePreviewPage, PhonePreviewInsets } from "@yami/prototypes/phone-preview";
 import type { Preview } from "@storybook/react-vite";
-import { CURRENT_STORY_WAS_SET, GLOBALS_UPDATED } from "storybook/internal/core-events";
+import { CURRENT_STORY_WAS_SET, GLOBALS_UPDATED, STORY_MISSING, STORY_PREPARED } from "storybook/internal/core-events";
 import { addons } from "storybook/preview-api";
 import "@yami/design-system/styles/fonts.css";
 import "@yami/design-system/styles/base.css";
@@ -19,24 +20,40 @@ if (typeof document !== "undefined") {
   };
   channel.on(CURRENT_STORY_WAS_SET, select);
   channel.on(GLOBALS_UPDATED, localize);
+  if (import.meta.hot) {
+    // A moved file can leave Vite's import map one update behind Storybook's index.
+    const key = "yami-last-design-story";
+    const rememberFile = ({ id, parameters }: { id: string; parameters: { fileName?: string } }) => {
+      if (!parameters.fileName?.includes("/prototypes/design/")) return;
+      try { sessionStorage.setItem(key, JSON.stringify([id, parameters.fileName])); } catch { /* Optional HMR recovery. */ }
+    };
+    const retryMovedFile = async (id: string) => {
+      try {
+        const saved = sessionStorage.getItem(key);
+        if (!saved) return;
+        const [previousId, previousFile] = JSON.parse(saved);
+        if (id !== previousId) return;
+        const response = await fetch("./index.json", { cache: "no-store" });
+        if (!response.ok) return;
+        const entry = (await response.json()).entries[id];
+        if (!entry?.importPath.includes("/prototypes/design/") || entry.importPath === previousFile) return;
+        if (new URLSearchParams(location.search).get("id") !== id || sessionStorage.getItem(key) !== saved) return;
+        sessionStorage.removeItem(key);
+        location.reload();
+      } catch { /* Keep Storybook's error if the index or storage is unavailable. */ }
+    };
+    channel.on(STORY_PREPARED, rememberFile);
+    channel.on(STORY_MISSING, retryMovedFile);
+    import.meta.hot.dispose(() => {
+      channel.off(STORY_PREPARED, rememberFile);
+      channel.off(STORY_MISSING, retryMovedFile);
+    });
+  }
   import.meta.hot?.dispose(() => {
     channel.off(CURRENT_STORY_WAS_SET, select);
     channel.off(GLOBALS_UPDATED, localize);
   });
 }
-
-const YAMI_VIEWPORTS = {
-  yamiMobileSm: { name: "YAMI Mobile-sm (360)", styles: { width: "360px", height: "800px" }, type: "mobile" as const },
-  yamiMobile: { name: "YAMI Mobile (375)", styles: { width: "375px", height: "812px" }, type: "mobile" as const },
-  yamiMobileLg: { name: "YAMI Mobile-lg (402)", styles: { width: "402px", height: "844px" }, type: "mobile" as const },
-  yamiMobileXl: { name: "YAMI Mobile-xl (480)", styles: { width: "480px", height: "900px" }, type: "mobile" as const },
-  yamiTablet: { name: "YAMI Tablet (768)", styles: { width: "768px", height: "1024px" }, type: "tablet" as const },
-  yamiDesktop: { name: "YAMI Desktop (1024)", styles: { width: "1024px", height: "768px" }, type: "desktop" as const },
-  yamiDesktopMd: { name: "YAMI Desktop-md (1280)", styles: { width: "1280px", height: "800px" }, type: "desktop" as const },
-  yamiDesktopLg: { name: "YAMI Desktop-lg (1440)", styles: { width: "1440px", height: "900px" }, type: "desktop" as const },
-  yamiDesktopWide: { name: "YAMI Desktop-wide (1680)", styles: { width: "1680px", height: "1050px" }, type: "desktop" as const },
-  yamiDesktopXl: { name: "YAMI Desktop-xl (1920)", styles: { width: "1920px", height: "1080px" }, type: "desktop" as const }
-};
 
 const preview: Preview = {
   tags: ["autodocs"],
@@ -70,7 +87,7 @@ const preview: Preview = {
         }
         const order = new Map([
           ["", ["YAMI"]],
-          ["YAMI", ["快速开始", "foundations", "primitives", "assets", "components", "modules", "pages"]],
+          ["YAMI", ["快速开始", "foundations", "primitives", "assets", "components", "modules", "pages", "design"]],
           ["YAMI/modules", ["global", "product display", "commerce"]],
           ["YAMI/modules/global", ["header", "footer", "tab bar"]],
           ["YAMI/modules/product display", ["horizontal scroll list", "product card", "product list", "collection card"]],
@@ -107,7 +124,10 @@ const preview: Preview = {
         root.dataset.locale = context.globals.locale;
       }
 
-      return <><PhonePreviewInsets enabled={context.viewMode === "story" && isPhonePreviewPage(context.title)} /><TokenAnnotations /><Story /></>;
+      return <><PhonePreviewInsets enabled={context.viewMode === "story" && isPhonePreviewPage(context.title)} /><TokenAnnotations />
+        {context.title.toLowerCase().startsWith("yami/design/")
+          ? <Story args={{ ...context.args, locale: context.globals.locale, theme: context.globals.theme }} />
+          : <Story />}</>;
     }
   ]
 };

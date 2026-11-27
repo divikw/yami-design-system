@@ -1,39 +1,12 @@
-export interface PrototypeProject {
-  id: string;
-  name: string;
-  description: string;
-  variants: {
-    id: string;
-    name: string;
-    categoryMenu: "text" | "images";
-    description: string;
-    homeHeader?: "v1" | "v2";
-    fixedLocale?: "en" | "zh";
-    fixedPreviewMode?: "h5" | "app";
-    maxPreviewWidth?: number;
-  }[];
-  pages: { value: string; label: string }[];
-}
+import { legacyVariantTarget, prototypeProjects, type PrototypeProject } from "@yami/prototypes/design";
 
-// Versioned with the pages: shared links never depend on an author's local drafts.
-export const prototypeProjects: PrototypeProject[] = [{
-  id: "global-navigation",
-  name: "全局导航",
-  description: "导航流程演示 · 使用示例商品，不产生真实订单",
-  variants: [
-    { id: "h5-v1", name: "H5 V1 · 侧边导航", categoryMenu: "text", description: "移动首页使用 V1 左侧抽屉导航。", homeHeader: "v1", fixedPreviewMode: "h5", maxPreviewWidth: 1023 },
-    { id: "h5-v2", name: "H5 V2 · 商城切换", categoryMenu: "text", description: "移动首页使用 V2 商城切换入口。", homeHeader: "v2", fixedLocale: "en", fixedPreviewMode: "h5" },
-  ],
-  pages: [
-    { value: "/", label: "Ecommerce Home" },
-  ],
-}];
+export { prototypeProjects, type PrototypeProject };
+export { designIssues, isDesignStoryId } from "@yami/prototypes/design";
 
 export function resolvePrototypeVariant(project: PrototypeProject | undefined, id: string | null) {
-  if (!id || (project?.id === "global-navigation" && (id === "current" || id === "image-categories"))) {
-    return project?.variants[0];
-  }
-  return project?.variants.find((variant) => variant.id === id);
+  if (!id) return project?.variants[0];
+  const target = legacyVariantTarget(project?.id, id) ?? id;
+  return project?.variants.find((variant) => variant.id === target);
 }
 
 export function prototypeHref(params: URLSearchParams, path: string, variant?: string) {
@@ -42,12 +15,13 @@ export function prototypeHref(params: URLSearchParams, path: string, variant?: s
     const value = params.get(key);
     if (value) query.set(key, value);
   }
-  const projectId = params.get("project") ?? prototypeProjects[0].id;
+  const projectId = params.get("project") ?? prototypeProjects[0]?.id;
   const project = prototypeProjects.find((item) => item.id === projectId);
   const requestedVariant = variant ?? params.get("variant");
   const selectedVariant = resolvePrototypeVariant(project, requestedVariant);
-  query.set("project", projectId);
-  query.set("variant", selectedVariant?.id ?? requestedVariant ?? prototypeProjects[0].variants[0].id);
+  if (projectId) query.set("project", projectId);
+  const variantId = selectedVariant?.id ?? requestedVariant;
+  if (variantId) query.set("variant", variantId);
   if (selectedVariant?.fixedLocale) query.set("locale", selectedVariant.fixedLocale);
   if (selectedVariant?.fixedPreviewMode) query.set("previewMode", selectedVariant.fixedPreviewMode);
   query.set("path", path);

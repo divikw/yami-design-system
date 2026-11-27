@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { userEvent, waitFor } from "storybook/test";
 
-import { TabBar } from "@yami/design-system";
+import { MobileHomePreview } from "./MobileHomePreview";
 import {
   createProductListProducts,
   createProductListTabs,
@@ -11,15 +11,6 @@ import {
   createEcommerceHomeFixture,
   type EcommerceHomeLocale,
 } from "./fixtures";
-import styles from "./EcommerceHome.module.css";
-
-const navigationIcons = {
-  home: new URL("../../../design-system/assets/icons/tabbar/yami.svg", import.meta.url).href,
-  shop: new URL("../../../design-system/assets/icons/tabbar/shop.svg", import.meta.url).href,
-  community: new URL("../../../design-system/assets/icons/tabbar/community.svg", import.meta.url).href,
-  cart: new URL("../../../design-system/assets/icons/tabbar/cart-active.svg", import.meta.url).href,
-  account: new URL("../../../design-system/assets/icons/tabbar/account.svg", import.meta.url).href,
-};
 
 function localeFromGlobals(value: unknown): EcommerceHomeLocale {
   return value === "en" ? "en" : "zh";
@@ -727,43 +718,10 @@ export const Pc: Story = {
 };
 
 function renderMobileHome(platform: "App" | "H5"): NonNullable<Story["render"]> {
-  return ({ headerContent }, { globals, parameters }) => {
-    const locale = localeFromGlobals(globals.locale);
-    const fixture = createEcommerceHomeFixture(locale);
-    const zh = locale === "zh";
-    const staticTabBar = parameters.staticHomeTabBar === true;
-    const storyHref = (id: string) => `./iframe.html?id=${id}&viewMode=story&globals=locale:${locale}`;
-    const destinations = [
-      { value: "home", label: "YAMI", href: "#home" },
-      { value: "shop", label: zh ? "分类" : "Shop", href: storyHref("yami-pages-search-results--mobile") },
-      { value: "community", label: zh ? "社区" : "Community", href: `https://www.yami.com/us/${locale}/show` },
-      { value: "cart", label: zh ? "购物车" : "Cart", href: storyHref("yami-pages-cart--mobile"), badgeCount: fixture.header.cart.count },
-      { value: "account", label: zh ? "我的" : "Account", href: `https://customer.yami.com/us/${locale}/orders` },
-    ] as const;
-
-    return (
-      <div className={styles.mobileStory} data-h5-home-draft={staticTabBar || undefined}>
-        <EcommerceHomeTemplate
-          {...fixture}
-          header={platform === "H5" ? { ...fixture.header, mobileVariant: "h5-home" } : fixture.header}
-          headerContent={headerContent}
-        />
-        <div className={styles.storyNavigation} data-slot="tab-bar-container">
-          <TabBar
-            aria-label={zh ? `${platform} 导航` : `${platform} navigation`}
-            value="home"
-            inert={staticTabBar}
-            items={destinations
-              .filter((item) => !staticTabBar || item.value !== "community")
-              .map((item) => ({
-                ...item,
-                icon: <span className={styles.storyNavigationIcon} style={{ maskImage: `url("${navigationIcons[item.value]}")` }} />,
-              }))}
-          />
-        </div>
-      </div>
-    );
-  };
+  return ({ headerContent }, { globals, parameters }) => (
+    <MobileHomePreview platform={platform} locale={localeFromGlobals(globals.locale)}
+      headerContent={headerContent} staticTabBar={parameters.staticHomeTabBar === true} />
+  );
 }
 
 export const Mobile: Story = {

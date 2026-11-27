@@ -27,7 +27,7 @@ const southeastAsiaIcon = new URL('./header-h5-v1/assets/southeast-asia.png', im
 const zipcodeIcon = new URL('./header-h5-v1/assets/zipcode.svg', import.meta.url).href
 const chevronIcon = new URL('./header-h5-v2/assets/chevron.svg', import.meta.url).href
 
-export function H5HomeDraftHeader({ version, locale }: { version: 'v1' | 'v2'; locale: HeaderLocale }) {
+export function H5HomeDraftHeader({ version, locale, categoryHref }: { version: 'v1' | 'v2'; locale: HeaderLocale; categoryHref?: string }) {
   const wrapper = useRef<HTMLDivElement>(null)
   const [layout, setLayout] = useState<'home' | 'listing'>('home')
 
@@ -43,7 +43,7 @@ export function H5HomeDraftHeader({ version, locale }: { version: 'v1' | 'v2'; l
   return (
     <div ref={wrapper} className={styles.homeDraftHeader} data-slot="sticky-storefront-header">
       {version === 'v1'
-        ? <H5V1Header layout="home" locale={locale} />
+        ? <H5V1Header layout="home" locale={locale} categoryHref={categoryHref} />
         : <H5V2Header layout={layout} locale={locale} onStorefrontChange={setLayout} />}
     </div>
   )
@@ -54,8 +54,8 @@ const storefronts = [
   { layout: 'listing', artwork: beautyArtwork, en: ['Beauty', 'Get inspired by top beauty trends'], zh: ['美妆', '探索热门美妆趋势'] },
 ] as const
 
-const shoppingEntries = [
-  { icon: categoriesIcon, en: 'Shop by Categories', zh: '按分类浏览' },
+const shoppingEntries = (categoryHref?: string) => [
+  { icon: categoriesIcon, en: 'Shop by Categories', zh: '按分类浏览', href: categoryHref },
   { icon: bestSellersIcon, en: 'Best Sellers', zh: '热销榜单' },
   { icon: giftIcon, en: 'Gifts', zh: '礼品' },
 ]
@@ -77,15 +77,15 @@ function MobileLogo({ locale }: { locale: HeaderLocale }) {
   )
 }
 
-function MenuEntries({ entries, locale }: { entries: typeof shoppingEntries; locale: HeaderLocale }) {
+function MenuEntries({ entries, locale }: { entries: { icon: string; en: string; zh: string; href?: string }[]; locale: HeaderLocale }) {
   return (
     <ul className={styles.menuList} role="list">
-      {entries.map((entry) => (
-        <li className={styles.menuItem} key={entry.en}>
-          <img className={styles.icon} src={entry.icon} alt="" width={24} height={24} />
-          {entry[locale]}
+      {entries.map((entry) => {
+        const content = <><img className={styles.icon} src={entry.icon} alt="" width={24} height={24} />{entry[locale]}</>
+        return <li key={entry.en} className={entry.href ? undefined : styles.menuItem}>
+          {entry.href ? <a href={entry.href} target="_self" className={styles.menuItem}>{content}</a> : content}
         </li>
-      ))}
+      })}
     </ul>
   )
 }
@@ -122,7 +122,7 @@ function StorefrontCard({ entry, locale, v1 }: { entry: typeof storefronts[numbe
   )
 }
 
-export function H5V1Header({ layout, locale }: { layout: 'home' | 'beauty' | 'standard' | 'content'; locale: HeaderLocale }) {
+export function H5V1Header({ layout, locale, categoryHref }: { layout: 'home' | 'beauty' | 'standard' | 'content'; locale: HeaderLocale; categoryHref?: string }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButton = useRef<HTMLButtonElement>(null)
   const menuId = useId()
@@ -201,7 +201,7 @@ export function H5V1Header({ layout, locale }: { layout: 'home' | 'beauty' | 'st
               </li>
             ))}
           </ul>
-          <MenuEntries entries={shoppingEntries} locale={locale} />
+          <MenuEntries entries={shoppingEntries(categoryHref)} locale={locale} />
           <hr className={styles.divider} />
           <MenuEntries entries={regionEntries} locale={locale} />
         </div>
