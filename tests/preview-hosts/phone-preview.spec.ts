@@ -1,5 +1,112 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test("resolves every visible design story to a native workbench variant", async ({ request, page }) => {
+  const index = await request.get("http://localhost:6006/index.json");
+  expect(index.ok()).toBe(true);
+  const { entries } = await index.json() as { entries: Record<string, { id: string; type: string; importPath: string; tags: string[] }> };
+  const stories = Object.values(entries).filter((entry) => entry.type === "story" && entry.tags.includes("dev") && entry.importPath.includes("/prototypes/design/"));
+  expect(stories.length).toBeGreaterThan(0);
+  for (const { id } of stories) {
+    await page.goto(`/design?story=${encodeURIComponent(id)}`);
+    await expect(page).toHaveURL((url) => url.searchParams.has("project") && url.searchParams.has("variant") && !url.searchParams.has("story"));
+    const href = await page.getByRole("link", { name: "Storybook", exact: true }).getAttribute("href");
+    expect(new URL(href!).searchParams.get("path")).toBe(`/story/${id}`);
+  }
+});
+
+test("shows an unavailable design for a deleted story link without mounting unrelated controls", async ({ page }) => {
+  await page.goto("/design?story=former-custom-story-id");
+  await expect(page.getByRole("heading", { name: "找不到这个原型方案" })).toBeVisible();
+  await expect(page.locator("#canvas-preview")).toHaveCount(0);
+  await expect(page.getByRole("combobox", { name: "项目方案" })).toHaveCount(0);
+  await page.getByRole("link", { name: "返回工作台" }).click();
+  await expect(page.getByRole("combobox", { name: "项目方案" })).toBeVisible();
+});
+
+test("rejects a removed design locally and still previews an external story when the index returns 401", async ({ page }) => {
+  await page.route("**/index.json", route => route.request().frame() === page.mainFrame()
+    ? route.fulfill({ status: 401, headers: { "Access-Control-Allow-Origin": "*" } }) : route.continue());
+  await page.goto("/design?story=yami-design-removed--draft");
+  await expect(page.getByRole("heading", { name: "找不到这个原型方案" })).toBeVisible();
+  await expect(page.locator("#canvas-preview")).toHaveCount(0);
+
+  await page.goto("/design?story=yami-pages-cart--mobile");
+  await expect(page.frameLocator("#canvas-preview").locator('[data-slot="cart-page"]')).toBeVisible();
+});
+
+test("opens each workbench design at its matching interactive Storybook entry", async ({ page, context }) => {
+  await page.goto("/design?project=global-navigation&viewport=402&locale=zh");
+  const picker = page.getByRole("combobox", { name: "设计方案", exact: true });
+  for (const [name, trigger] of [
+    ["H5 V1 · 侧边导航", "打开导航菜单"],
+    ["H5 V2 · 商城切换", "Switch storefront"],
+  ]) {
+    await picker.click();
+    await page.getByRole("option", { name, exact: true }).click();
+    await expect(page.frameLocator("#canvas-preview").getByRole("button", { name: trigger })).toBeVisible();
+    const popup = context.waitForEvent("page");
+    await page.getByRole("link", { name: "Storybook", exact: true }).click();
+    const story = await popup;
+    await expect(story.getByRole("link", { name, exact: true })).toBeVisible();
+    const preview = story.frameLocator("#storybook-preview-iframe");
+    await preview.getByRole("button", { name: trigger }).click();
+    await expect(preview.getByRole("dialog")).toBeVisible();
+    if (trigger === "Switch storefront") {
+      const native = page.frameLocator("#canvas-preview");
+      await native.getByRole("button", { name: trigger }).click();
+      for (const frame of [native, preview]) {
+        await frame.getByRole("dialog").getByRole("button", { name: /Beauty/ }).click();
+        await expect(frame.locator('[data-slot="sticky-storefront-header"] > header')).toHaveAttribute("data-layout", "listing");
+      }
+    }
+    await story.close();
+  }
+});
+
+test("browses categories and returns to V1 in both hosts", async ({ page, context }) => {
+  await page.goto("/design?story=yami-design-global-navigation--h5-v1&locale=zh&viewport=402");
+  const popup = context.waitForEvent("page");
+  await page.getByRole("link", { name: "Storybook", exact: true }).click();
+  const story = await popup;
+  for (const frame of [page.frameLocator("#canvas-preview"), story.frameLocator("#storybook-preview-iframe")]) {
+    const trigger = frame.getByRole("button", { name: "打开导航菜单" });
+    await trigger.click();
+    await frame.getByRole("link", { name: "按分类浏览" }).click();
+    await expect(frame.locator('[data-slot="search-results-page"]')).toBeVisible();
+    await expect(frame.getByRole("dialog")).toHaveCount(0);
+    await frame.getByRole("link", { name: "返回", exact: true }).click();
+    await expect(trigger).toBeVisible();
+  }
+});
+
+test("resolves a V2 story link to the native project and its fixed language and mode", async ({ page }) => {
+  await page.goto("/design?story=yami-design-global-navigation--h5-v2&locale=zh&previewMode=app&viewport=402");
+  await expect(page.getByRole("combobox", { name: "设计方案" })).toHaveText("H5 V2 · 商城切换");
+  await expect(page.getByRole("combobox", { name: "语言", exact: true })).toHaveText("English");
+  await expect(page.getByRole("radio", { name: "H5", exact: true })).toBeChecked();
+  await expect(page.locator("#canvas-preview")).toHaveAttribute("src", /\/prototype\?.*variant=h5-v2/);
+  await expect(page.frameLocator("#canvas-preview").getByRole("button", { name: "Switch storefront" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "独立预览" })).toHaveAttribute("href", /variant=h5-v2/);
+});
+
+for (const width of [402, 768, 806, 1440]) {
+  test(`preserves the ${width}px workbench viewport in Storybook`, async ({ page, context }) => {
+    await page.setViewportSize({ width: 1900, height: 1100 });
+    await page.goto(`/design?project=global-navigation&variant=h5-v2&viewport=${width}`);
+    const trigger = { name: "Switch storefront" };
+    await expect(page.locator("#canvas-preview")).toHaveCSS("width", `${width}px`);
+    const popup = context.waitForEvent("page");
+    await page.getByRole("link", { name: "Storybook", exact: true }).click();
+    const story = await popup;
+    const preview = story.frameLocator("#storybook-preview-iframe");
+    await expect(preview.locator('[data-slot="ecommerce-home"]')).toBeVisible();
+    await expect.poll(() => preview.locator("body").evaluate(() => window.innerWidth)).toBe(width);
+    const expectedCount = width < 1024 ? 1 : 0;
+    await expect(preview.getByRole("button", trigger)).toHaveCount(expectedCount);
+    await expect(page.frameLocator("#canvas-preview").getByRole("button", trigger)).toHaveCount(expectedCount);
+  });
+}
+
 test("matches the phone status bar to the V2 header while the storefront switcher is open", async ({ page }) => {
   for (const mode of ["app", "h5"]) {
     await page.goto(`/design?project=global-navigation&variant=h5-v2&viewport=360&previewMode=${mode}`);

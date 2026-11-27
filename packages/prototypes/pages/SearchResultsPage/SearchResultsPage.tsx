@@ -250,7 +250,7 @@ export function SearchResultsPage({
           className={styles.mobileHeaderAction}
           data-slot="search-results-mobile-back"
           href={mobileBackHref}
-          target={mobileBackHref ? "_top" : undefined}
+          target={mobileBackHref ? (mobileBackHref.startsWith("#") ? "_self" : "_top") : undefined}
           aria-label={locale === "zh" ? "返回" : "Back"}
           onClick={(event) => {
             if (mobileBackHref) return;

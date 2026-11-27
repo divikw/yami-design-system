@@ -5,5 +5,5 @@
     "incremental": true,
     "paths": { "@/*": ["./*"] }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../../packages/prototypes/design/**/*.ts", "../../packages/prototypes/design/**/*.tsx", ".next/types/**/*.ts"]
 }

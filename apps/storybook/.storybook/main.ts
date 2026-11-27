@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileFunction } from "node:vm";
 import { storyNameFromExport } from "storybook/internal/csf";
+import { designTitle } from "../../../packages/prototypes/design/title.ts";
 import { formatSidebarLabel } from "./sidebar-label.ts";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -58,6 +59,7 @@ const config: StorybookConfig = {
   stories: [
     "../../../packages/design-system/*.stories.@(ts|tsx|mdx)",
     "../../../packages/design-system/components/**/*.stories.@(ts|tsx|mdx)",
+    "../../../packages/prototypes/design/**/*.stories.@(ts|tsx)",
     "../../../packages/prototypes/pages/**/*.stories.@(ts|tsx|mdx)",
     "../docs/**/*.mdx"
   ],
@@ -74,7 +76,11 @@ ${docsLoadingHeightStyles()}
   experimental_indexers: async (indexers = []) => indexers.map((indexer) => ({
     ...indexer,
     createIndex: async (fileName, options) => {
-      const entries = await indexer.createIndex(fileName, options);
+      const designRoot = path.join(root, "packages/prototypes/design");
+      const isDesign = fileName.startsWith(designRoot + path.sep);
+      const entries = await indexer.createIndex(fileName, isDesign ? {
+        ...options, makeTitle: (title) => designTitle(path.relative(designRoot, fileName).split(path.sep).join("/"), title),
+      } : options);
       const isComponent = fileName.includes("/design-system/components/");
       const isDevice = (entry: (typeof entries)[number]) => entry.tags?.includes("component-device") ?? false;
       // Autodocs inherits the first indexed story's tags, so start with a visible device.
@@ -88,9 +94,9 @@ ${docsLoadingHeightStyles()}
           ...entry,
           tags: device ? entry.tags?.filter((tag) => tag !== "play-fn")
             : isComponent && entry.type === "story" ? [...(entry.tags ?? []), "!dev"] : entry.tags,
-          title: flatComponent ? `YAMI/components/${sourceTitle.split("/").at(-1)}`
+          title: isDesign ? sourceTitle : flatComponent ? `YAMI/components/${sourceTitle.split("/").at(-1)}`
             : sourceTitle === undefined ? undefined : formatSidebarLabel(sourceTitle),
-          name: device || entry.tags?.includes("preserve-story-name") ? name : formatSidebarLabel(name),
+          name: isDesign || device || entry.tags?.includes("preserve-story-name") ? name : formatSidebarLabel(name),
         };
       });
     },

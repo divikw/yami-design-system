@@ -399,6 +399,9 @@ importers:
       react-dom:
         specifier: 19.3.1
         version: 19.3.1(react@19.3.1)
+      storybook:
+        specifier: 10.6.7
+        version: 10.6.7(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.1)
     devDependencies:
       '@types/react':
         specifier: 19.3.0
@@ -409,9 +412,6 @@ importers:
       happy-dom:
         specifier: 21.0.4
         version: 21.0.4
-      storybook:
-        specifier: 10.6.7
-        version: 10.6.7(@types/react@19.3.0)(prettier@2.8.8)(react@19.3.1)
       typescript:
         specifier: 7.0.2
         version: 7.0.2

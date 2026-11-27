@@ -3459,7 +3459,7 @@
       "sourceSha256": "225ba1253425bc2cb3483aa1af46662650e028799adeffabfda4cd06da2d16be",
       "disposition": "migrated",
       "destination": "packages/prototypes/pages/EcommerceHome/EcommerceHome.stories.tsx",
-      "destinationSha256": "2c31e59079064c468c508380d511ea298320ae7da87202f8c54731d8111a68bd"
+      "destinationSha256": "63febd7653e29345bee0f263fdd101f49875760c806eeb40a63fa3773fb41d0c"
     },
     {
       "source": "pages/EcommerceHome/EcommerceHome.tsx",

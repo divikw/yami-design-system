@@ -45,12 +45,43 @@ Example independent address:
 /prototype?project=global-navigation&variant=h5-v2&path=%2Fsearch%2Fmatcha&locale=en&theme=light
 ```
 
-Project definitions are versioned in `app/lib/prototype-projects.ts`. To add a
-project, register its stable ID, variants and page entry points there; connect
-its page compositions and variant behavior in `app/ui/prototype-player.tsx`.
-Creating a definition alone does not implement new page types. Keep shared page
-code in `@yami/prototypes` and component states in Storybook. There is no drag
-and drop editor or server-side project database.
+Design projects live in `packages/prototypes/design/`. Each named story in a
+project's story file defines one variant for both the Storybook sidebar and the
+workbench picker. Both hosts use the variant’s render function, the project’s
+render function, or the project’s component, in that order.
+Design render functions receive the same variant arguments, locale and theme as props. The
+workbench supplies navigation links and session data, and its Storybook link
+opens the selected variant at the current preview width. Design story IDs
+opened at `/design?story=<story-id>` resolve to the native project and variant.
+
+Add a `*.stories.tsx` or `*.stories.ts` file anywhere under
+`packages/prototypes/design/`, including subfolders. Both hosts discover it
+automatically. Without an explicit title, the path relative to the design folder
+determines the title under `YAMI/design/`. Export each variant as a named story object. A minimal `checkout.stories.tsx` looks like this.
+
+```tsx
+export default { title: "YAMI/design/Checkout" };
+
+export const FirstDraft = {
+  render: () => <h1>Checkout</h1>,
+};
+```
+
+This creates the Checkout project with a First Draft variant. Share links use
+`project=checkout&variant=first-draft`. Keep the title and export name stable,
+or provide explicit IDs as in `global-navigation.stories.tsx`. That file also
+shows how to supply page labels, variant descriptions and preview settings.
+With inferred IDs, renaming the source of an ID changes its link. Set
+`parameters.project.id` and variant `args.id` for stable workbench links.
+Set the CSF meta `id` and variant `parameters.__id` to keep Storybook links
+stable across title and export renames. The workbench reports conflicting
+project, variant and Story IDs with their source files and excludes ambiguous entries.
+Global Navigation reserves the variant IDs `current` and `image-categories` for
+links to H5 V1. Use the `yami-design-` prefix for custom Story IDs that should
+still be recognizable as design links after deleting their project, even when
+the Storybook index is unavailable.
+Both pickers honor the Storybook `dev` tag, including `!dev` for hidden variants.
+Connect additional flow pages in `app/ui/prototype-player.tsx`.
 
 ## Experience state
 
