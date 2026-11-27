@@ -33,6 +33,12 @@ import { createStartHereProps } from "./startHere.fixture";
 
 export type TopicLandingPageLocale = "en" | "zh";
 
+const reviewedProductIds: Record<string, string> = {
+  "vien-cleansing-foam": "1022446461",
+  "the-toner-review": "1022281871",
+  "nguyen-dark-spots-review": "1022446351",
+};
+
 const standardRailImages = [
   new URL(
     "./assets/popular-picks/01-heartleaf-cleansing-foam.webp",
@@ -350,6 +356,7 @@ export function createTopicLandingPageFixture(
   locale: TopicLandingPageLocale = "en",
 ): TopicLandingPageProps & {
   hero: TopicLandingPageProps["hero"] & { image: ThemeHeroImage };
+  reviewList: NonNullable<TopicLandingPageProps["reviewList"]>;
 } {
   const copy = pageCopy[locale];
   const header = createStorefrontHeader(locale);
@@ -443,7 +450,7 @@ export function createTopicLandingPageFixture(
           ...review.product,
           imageAlt: copy.reviewProductNames[index],
           name: copy.reviewProductNames[index],
-          href: review.product.href?.replace("/en/", `/${locale}/`),
+          href: waterfall.products.find(({ id }) => id === reviewedProductIds[review.id])?.href,
         } : undefined,
       })),
       mobileSurface: "plain",

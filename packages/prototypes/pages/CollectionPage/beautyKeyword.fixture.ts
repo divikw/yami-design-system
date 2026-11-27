@@ -1,12 +1,10 @@
 import type { ProductListItem, ReviewCardProps } from "@yami/design-system";
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
-import type { TopicLandingPageProps } from "../TopicLandingPage/TopicLandingPage.types";
+import { createCollectionMeta, type CollectionStoryBase } from "./collectionTemplate";
 import { createCollectionPageFixture } from "./collectionPage.fixture";
 import { createCollectionFaq, type CollectionFaqEntries } from "./collectionFaq.fixture";
 import reviews from "./beauty-reviews.json";
-import selections from "./beauty-keywords.products.json";
-import catalog from "./k-beauty.products.json";
-import { localizedBeautyProduct } from "./localizedBeautyProduct";
+import { beautyProductsById, localizedBeautyProduct } from "./localizedBeautyProduct";
 
 type Copy = Record<TopicLandingPageLocale, string>;
 
@@ -17,8 +15,6 @@ interface Keyword {
   groups: { value: string; label: Copy; ids: string[] }[];
   faq: CollectionFaqEntries;
 }
-
-export const beautyProductsById = new Map([...catalog, ...selections].map(item => [item.id, item]));
 
 // Each excerpt comes from the linked Yami product’s public review data.
 export function createBeautyReviews(products: ProductListItem[], locale: TopicLandingPageLocale): ReviewCardProps[] {
@@ -42,12 +38,7 @@ export function createBeautyReviews(products: ProductListItem[], locale: TopicLa
   });
 }
 
-type CollectionMeta = {
-  args: Pick<TopicLandingPageProps, "hero" | "waterfall">;
-  parameters: { docs: object };
-};
-
-export function createBeautyKeywordMeta<T extends CollectionMeta>(collection: T, keyword: Keyword) {
+export function createBeautyKeywordMeta<T extends CollectionStoryBase>(topicMeta: T, keyword: Keyword) {
   function createPageFixture(locale: TopicLandingPageLocale = "en") {
     const page = createCollectionPageFixture(locale);
     const groups = keyword.groups.map(group => ({
@@ -74,20 +65,5 @@ export function createBeautyKeywordMeta<T extends CollectionMeta>(collection: T,
       },
     };
   }
-  const fixture = createPageFixture();
-  return {
-    ...collection,
-    args: {
-      ...collection.args,
-      activityHeader: fixture.activityHeader,
-      hero: { ...collection.args.hero, title: fixture.hero.title, description: fixture.hero.description },
-      waterfall: { ...collection.args.waterfall, ...fixture.waterfall },
-    },
-    parameters: {
-      ...collection.parameters,
-      createPageFixture,
-      docs: { ...collection.parameters.docs, description: { component: keyword.description.en } },
-      faqByLocale: createCollectionFaq(keyword.faqSubject, keyword.faq),
-    },
-  };
+  return createCollectionMeta(topicMeta, createPageFixture, createCollectionFaq(keyword.faqSubject, keyword.faq), keyword.description.en);
 }

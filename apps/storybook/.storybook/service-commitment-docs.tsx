@@ -25,7 +25,7 @@ export function ServiceCommitmentDocsPage({ locale }: { locale: DocsLocale }) {
         <h2 id="service-commitment-api">{zh ? "API 参考" : "API Reference"}</h2>
         <DocsApiTable locale={locale} rows={[
           ["locale", zh ? "中文（默认）显示五项，英文显示四项。" : "Chinese (default) displays five commitments. English displays four."],
-          ["mobileCarousel", zh ? "开启后，宽度低于 1024px 时在 36px 高的栏内逐条轮播。键盘聚焦时暂停，启用减少动态效果时可手动滚动。" : "Below 1024px, cycle through one benefit at a time in a 36px strip. Keyboard focus pauses autoplay. Reduced motion uses manual scrolling."],
+          ["mobileCarousel", zh ? "低于 1024px 时，承诺项按可用宽度分行，在 36px 高的栏内居中展示。超过一行时每 3 秒切换一行。键盘聚焦时暂停，启用减少动态效果时可手动滚动。" : "Below 1024px, benefits wrap into centered rows in a 36px strip. Multiple rows advance every three seconds. Keyboard focus pauses autoplay. With reduced motion, scroll manually."],
           ["className", zh ? "用于页面布局的外层类名。" : "Optional class for page layout."],
         ]} />
       </section>

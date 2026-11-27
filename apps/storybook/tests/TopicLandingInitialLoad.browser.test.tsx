@@ -92,3 +92,77 @@ test("a cached first-screen image has no additional fade", async () => {
     container.remove();
   }
 });
+
+test("brand collection modules enter once, including inside a scrolling preview", async () => {
+  const host = document.body.appendChild(document.createElement("div"));
+  host.style.cssText = "height: 400px; overflow-y: auto";
+  const root = createRoot(host);
+  const fixture = createTopicLandingPageFixture("en");
+  try {
+    flushSync(() => root.render(
+      <TopicLandingPage {...fixture} showChrome={false} waterfall={{ ...fixture.waterfall, catalogFilters: "brand" }} />
+    ));
+    const main = host.querySelector("main")!;
+    const entrances = () => main.getAnimations({ subtree: true }).filter(animation => animation.id === "collection-entrance");
+    const initial = entrances();
+    expect(initial.length).toBeGreaterThan(0);
+    expect(initial.every(animation => animation.effect?.getTiming().duration === 240)).toBe(true);
+    const last = main.lastElementChild!;
+    const content = last.querySelector<HTMLElement>('[data-collection-entered="pending"]')!;
+    const title = content.querySelector<HTMLElement>("[data-section-heading-title]")!;
+    const nextPaint = () => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    // Let nearby content-visibility sections lay out before measuring the title.
+    host.scrollTop += last.getBoundingClientRect().top - host.getBoundingClientRect().bottom - 250;
+    await nextPaint();
+    // A strip of visible padding or a partly visible title must not consume the entrance.
+    host.scrollTop += title.getBoundingClientRect().top - host.getBoundingClientRect().bottom + 4;
+    await nextPaint();
+    expect(content.dataset.collectionEntered).toBe("pending");
+    host.scrollTop += title.getBoundingClientRect().height + 16;
+    await expect.poll(() => content.dataset.collectionEntered).toBe("true");
+    entrances().forEach(animation => animation.finish());
+    host.scrollTop = 0;
+    await nextPaint();
+    last.scrollIntoView({ block: "start" });
+    await nextPaint();
+    expect(last.getAnimations({ subtree: true }).filter(animation => animation.id === "collection-entrance")).toHaveLength(0);
+  } finally {
+    root.unmount();
+    host.remove();
+  }
+});
+
+test.each([375, 833, 1280])("collection loading uses the product grid's own placeholders at %ipx", async width => {
+  const viewport = { width: innerWidth, height: innerHeight };
+  const host = document.body.appendChild(document.createElement("div"));
+  const root = createRoot(host);
+  const fixture = createTopicLandingPageFixture("zh");
+  const render = (loading: boolean) => flushSync(() => root.render(
+    <TopicLandingPage {...fixture}
+      collectionLoading={loading}
+      showChrome={false}
+      hero={{ ...fixture.hero, image: undefined }}
+      primaryTabs={{ ...fixture.primaryTabs, items: [] }}
+      hiddenModules={["shortcuts", "start-here", "popular-picks"]}
+      waterfall={{ ...fixture.waterfall, catalogFilters: "brand", initialRows: 3 }}
+    />
+  ));
+  try {
+    await page.viewport(width, 812);
+    render(true);
+    expect(host.querySelector('main[aria-busy="true"]')).not.toBeNull();
+    const skeletons = host.querySelectorAll('[data-slot="product-list-skeleton-item"]');
+    expect(skeletons.length).toBeGreaterThan(0);
+    expect(host.querySelector('[data-slot="product-card"]')).toBeNull();
+    expect(host.querySelector('[data-slot="collection-gallery-hero"] img')).toBeNull();
+
+    render(false);
+    expect(host.querySelector('main[aria-busy="true"], [data-slot="product-list-skeleton-item"]')).toBeNull();
+    expect(host.querySelectorAll('[data-slot="product-card"]')).toHaveLength(skeletons.length);
+    expect(host.querySelector('[data-slot="collection-gallery-hero"] img')).not.toBeNull();
+  } finally {
+    root.unmount();
+    host.remove();
+    await page.viewport(viewport.width, viewport.height);
+  }
+});

@@ -34,7 +34,7 @@ const commitments = {
 export interface ServiceCommitmentProps {
   /** Language for the built-in service commitments. Defaults to zh. */
   locale?: "zh" | "en";
-  /** Cycle through one centered benefit at a time on mobile. */
+  /** Cycle through centered rows of benefits that fit the available mobile width. */
   mobileCarousel?: boolean;
   /** Optional class for page layout. */
   className?: string;
@@ -51,32 +51,43 @@ export function ServiceCommitment({ locale = "zh", mobileCarousel = false, class
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let timer: number | undefined;
     let transitions: Animation[] = [];
+    const benefits = Array.from(list.querySelectorAll<HTMLElement>(`.${styles.benefit}`));
     function syncPlayback() {
       window.clearInterval(timer);
       transitions.forEach(animation => animation.cancel());
-      if (mobile.matches) list.tabIndex = 0;
+      const canScroll = mobile.matches && list.scrollHeight > list.clientHeight;
+      if (canScroll) list.tabIndex = 0;
       else list.removeAttribute("tabindex");
-      if (!mobile.matches || reducedMotion.matches) return;
+      if (!canScroll || reducedMotion.matches) return;
       timer = window.setInterval(() => {
-        if (!mobile.matches || reducedMotion.matches || document.hidden || list.matches(":focus-within, :active") || !list.clientHeight) return;
+        if (document.hidden || list.matches(":focus-within, :active") || !list.clientHeight) return;
         transitions.forEach(animation => animation.cancel());
         const height = list.clientHeight;
-        if (Math.round(list.scrollTop / height) >= items.length) list.scrollTop = 0;
-        const current = Math.max(0, Math.round(list.scrollTop / height));
-        list.scrollTo({ top: (current + 1) * height, behavior: "instant" });
-        // Animate the labels while the native scroll position stays snapped to the new item.
-        transitions = [list.children[current], list.children[current + 1]].map(item =>
-          item.querySelector(`.${styles.benefit}`)!.animate(
-            [{ transform: `translateY(${height}px)` }, { transform: "translateY(0)" }],
+        const rowCount = Math.round(list.scrollHeight / height);
+        const current = Math.round(list.scrollTop / height);
+        const next = (current + 1) % rowCount;
+        list.scrollTo({ top: next * height, behavior: "instant" });
+        transitions = [];
+        for (const benefit of benefits) {
+          const row = Math.round(benefit.parentElement!.offsetTop / height);
+          if (row !== current && row !== next) continue;
+          // Move the outgoing row through the top edge even when looping back to the first row.
+          const start = row === next ? height : (next - current) * height;
+          transitions.push(benefit.animate(
+            [{ transform: `translateY(${start}px)` }, { transform: `translateY(${start - height}px)` }],
             { duration: 700, easing: "ease-in-out" },
-          ),
-        );
+          ));
+        }
       }, 3000);
     }
+    const observer = new ResizeObserver(syncPlayback);
+    observer.observe(list);
+    benefits.forEach(benefit => observer.observe(benefit));
     syncPlayback();
     mobile.addEventListener("change", syncPlayback);
     reducedMotion.addEventListener("change", syncPlayback);
     return () => {
+      observer.disconnect();
       window.clearInterval(timer);
       transitions.forEach(animation => animation.cancel());
       mobile.removeEventListener("change", syncPlayback);
@@ -89,8 +100,8 @@ export function ServiceCommitment({ locale = "zh", mobileCarousel = false, class
     <div className={[styles.root, mobileCarousel && styles.mobileCarousel, className].filter(Boolean).join(" ")} lang={locale} data-slot="service-commitment">
       <div className={styles.container} data-slot="service-commitment-container">
         <ul ref={listRef} key={locale} className={styles.list} data-slot="service-commitment-list" role="list" aria-label={titles[locale]}>
-          {(mobileCarousel ? [...items, items[0]] : items).map((commitment, index) => (
-            <li className={styles.item} key={index === items.length ? "loop-start" : commitment.icon} aria-hidden={index === items.length || undefined}>
+          {items.map((commitment, index) => (
+            <li className={styles.item} key={commitment.icon}>
               {index > 0 && <Divider className={styles.separator} orientation="vertical" />}
               <span className={styles.benefit}>
                 <img className={styles.icon} src={icons[commitment.icon]} alt="" />

@@ -1,6 +1,6 @@
 import type { TopicLandingPageLocale } from "../TopicLandingPage/fixtures";
 import type { TopicLandingPageProps } from "../TopicLandingPage/TopicLandingPage.types";
-import { beautyProductsById } from "./beautyKeyword.fixture";
+import { beautyProductsById } from "./localizedBeautyProduct";
 
 const collections = [
   { id: "k-beauty", en: "K-Beauty", zh: "K-Beauty", products: ["5022432061", "1022281871", "1022431511", "1194269971"] },
@@ -9,7 +9,7 @@ const collections = [
   { id: "romand", en: "rom&nd", zh: "rom&nd", products: ["1194269971", "1023244621", "1194270051", "1194270391"] },
   { id: "toners", en: "Toners", zh: "爽肤水", products: ["1022281871", "1022138761", "1030425321", "1022215801"] },
   { id: "sun-serums", en: "Sun Serums", zh: "防晒精华", products: ["1022431511", "1022685961", "5196078061", "1180045951"] },
-  { id: "lip-tints", en: "Lip Tints", zh: "唇釉", products: ["1194269971", "1194337511", "1194226491", "1023140441"] },
+  { id: "lip-tints", en: "Lip Tints", zh: "唇釉", relatedIds: ["k-beauty", "brand", "romand"], products: ["1194269971", "1194337511", "1194226491", "1023140441"] },
 ];
 
 type Device = "pc" | "mobile";
@@ -21,9 +21,10 @@ export function createRelatedCollectionSections(
   locale: TopicLandingPageLocale,
   device: Device,
 ) {
-  const related = currentComponentId === storyId("lip-tints")
-    ? collections.filter(collection => ["k-beauty", "brand", "romand"].includes(collection.id))
-    : collections.filter(collection => storyId(collection.id) !== currentComponentId);
+  const current = collections.find(collection => storyId(collection.id) === currentComponentId);
+  const related = collections.filter(collection =>
+    collection !== current && (current?.relatedIds?.includes(collection.id) ?? true),
+  );
   const items = related.map(collection => ({
     id: collection.id,
     title: collection[locale],

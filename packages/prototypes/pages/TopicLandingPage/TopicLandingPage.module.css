@@ -21,6 +21,14 @@
   background: var(--surface-primary);
 }
 
+/* The collection name remains the page heading for screen readers. */
+.collection .activityHeader [data-slot="activity-page-header-title"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  clip-path: inset(50%);
+}
+
 .collection {
   --collection-section-padding: var(--space-300);
 }
@@ -33,14 +41,17 @@
   width: 100%;
 }
 
+.collectionIntro {
+  text-align: center;
+}
+
+.collectionIntro [data-slot="theme-hero-copy"] {
+  align-items: center;
+}
+
 @media (min-width: 1024px) {
   .collectionIntro {
     --collection-hero-max-height: 12rem;
-    text-align: center;
-  }
-
-  .collectionIntro [data-slot="theme-hero-copy"] {
-    align-items: center;
   }
 }
 
@@ -63,6 +74,10 @@
 }
 
 @media (width < 1024px) {
+  .collection .main [data-slot="theme-hero-description"] {
+    max-width: none;
+  }
+
   .galleryHeroInner {
     grid-template-columns: minmax(0, 1fr);
     padding-inline: 0;
@@ -522,7 +537,7 @@ main.main[data-title-font-family="sans"]
   font-size: var(--font-size-heading-sm);
 }
 
-.collection .main > [data-slot="theme-hero"] :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-copy-content"]),
+.collection .main [data-slot="theme-hero"] :is([data-slot="theme-hero-copy"], [data-slot="theme-hero-copy-content"]),
 .collection .main .faqIntro [data-slot="faq-copy"] {
   row-gap: var(--topic-landing-description-gap);
 }
@@ -602,6 +617,12 @@ main.main[data-title-font-family="sans"]
   }
 }
 
+@media (768px <= width < 1024px) {
+  .collection .couponSurface > [data-slot="coupon"] {
+    flex: 1 0 0;
+  }
+}
+
 .relatedKeywordsList {
   display: flex;
   flex-wrap: wrap;
@@ -660,6 +681,10 @@ main.main[data-title-font-family="sans"]
   }
 
   .collection {
+    --collection-section-padding: var(--space-400);
+  }
+
+  .collection .main > :is(.galleryHero, [data-slot="theme-hero"]) {
     --collection-section-padding: var(--space-500);
   }
 
@@ -780,6 +805,12 @@ main.main[data-title-font-family="sans"]
   }
 }
 
+@media screen and (prefers-reduced-motion: no-preference) {
+  .collection [data-collection-entered="pending"]:not(:focus-within) {
+    opacity: 0;
+  }
+}
+
 /* Content moves together; section backgrounds, sticky position and height stay fixed. */
 .main [data-initial-fade="true"] {
   animation: initial-content-fade 350ms ease-out backwards;
@@ -800,4 +831,65 @@ main.main[data-title-font-family="sans"]
   .main [data-initial-fade="true"] {
     animation: none;
   }
+}
+
+.loadingHeading {
+  position: relative;
+  color: transparent;
+}
+
+.loadingHeading > [data-slot="skeleton"] {
+  position: absolute;
+  inset: 15% 0;
+}
+
+/* Keep the measured title and clamped description in flow under their placeholders. */
+.main[aria-busy="true"] [data-slot="theme-hero-title"],
+.main[aria-busy="true"] [data-slot="theme-hero-description"] {
+  position: relative;
+  visibility: hidden;
+}
+
+.main[aria-busy="true"] :is([data-slot="theme-hero-title"], [data-slot="theme-hero-description"])::after {
+  content: "";
+  position: absolute;
+  inset: 0.15lh 0 0;
+  visibility: visible;
+  inline-size: min(7em, 100%);
+  background: repeating-linear-gradient(to bottom, var(--fill-skeleton) 0 0.7lh, transparent 0.7lh 1lh);
+  border-radius: var(--radius-component-default);
+}
+
+.main[aria-busy="true"] [data-slot="theme-hero-description"]::after {
+  inline-size: min(32em, 100%);
+}
+
+.main[aria-busy="true"] .collectionIntro :is([data-slot="theme-hero-title"], [data-slot="theme-hero-description"])::after {
+  margin-inline: auto;
+}
+
+.loadingCoupon {
+  position: relative;
+}
+
+.loadingCoupon > [aria-hidden="true"] {
+  visibility: hidden;
+}
+
+.loadingCoupon > [data-slot="skeleton"] {
+  position: absolute;
+  inset: 0;
+}
+
+.loadingFilters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  padding-block: var(--space-050);
+}
+
+.loadingFilters > span {
+  inline-size: var(--space-800);
+  block-size: calc(var(--space-400) + var(--space-050));
+  border-radius: var(--radius-full);
 }

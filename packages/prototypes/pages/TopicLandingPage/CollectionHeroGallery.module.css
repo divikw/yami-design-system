@@ -56,6 +56,10 @@
   isolation: isolate;
 }
 
+.galleryPlaceholder {
+  height: 100%;
+}
+
 .galleryTile img {
   display: block;
   width: 100%;

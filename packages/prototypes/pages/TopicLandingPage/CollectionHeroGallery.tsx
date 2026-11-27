@@ -1,9 +1,9 @@
-import type { ProductListItem } from "@yami/design-system";
+import { Skeleton, type ProductListItem } from "@yami/design-system";
 
 import { createCollectionProductFilters, filterCollectionProducts } from "./CollectionProductFilters";
 import styles from "./CollectionHeroGallery.module.css";
 
-export function createCollectionHeroGallery(products: ProductListItem[]) {
+export function createCollectionHeroGallery(products: ProductListItem[], loading = false) {
   const featured = filterCollectionProducts(products, createCollectionProductFilters(products));
   const selected = new Map<string, { id: string; src: string; alt: string }>();
   for (const { id, image, imageAlt } of featured) {
@@ -25,7 +25,7 @@ export function createCollectionHeroGallery(products: ProductListItem[]) {
             <div key={copy} className={styles.galleryGroup} aria-hidden={copy > 0 || undefined}>
               {row.map(({ id, src, alt }) => (
                 <div key={id} className={styles.galleryTile}>
-                  <img src={src} alt={copy > 0 ? "" : alt} />
+                  {loading ? <Skeleton className={styles.galleryPlaceholder} /> : <img src={src} alt={copy > 0 ? "" : alt} />}
                 </div>
               ))}
             </div>
